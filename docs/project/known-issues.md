@@ -1,6 +1,6 @@
 # Known Issues and Risks
 
-Updated 2026-10-30. No product bug backlog exists because runtime implementation has not started.
+Updated 2026-10-30. M1a is implemented; provider access and full feature validation remain open.
 
 | ID | Evidence / risk | Effect and mitigation | Owner / milestone |
 | --- | --- | --- | --- |
@@ -13,6 +13,7 @@ Updated 2026-10-30. No product bug backlog exists because runtime implementation
 | R-007 | Alias ambiguity, unknown stat/slot IDs and score corrections | Dated aliases, unresolved queue, unknown-rule blocks, exact Decimal rules, replay/reconciliation tests | Core/Data / M1 |
 | R-008 | Auth choice and deployment capacity are open | Keep provider-independent server sessions and portable local storage; select before the relevant milestone | Owner/Engineering / M2/release |
 | R-009 | Normal command isolation is unavailable in this session | Local command runner reported missing `bwrap`; scoped host execution used for file preparation and validation. This is an execution environment issue, not an Arbit dependency | Environment / current session |
+| R-011 | Native worktree helper cannot recognize Linux checkout; global Corepack cache points into Windows | Dedicated feature branch and pinned npm-exec tooling; no global installation changes | Environment / current session |
 | R-010 | Proposed SLO/model gates are unmeasured | Treat as budgets/policies; release evidence must contain actual results, not inferred success from architecture | Engineering / relevant milestone |
 
 Add discovered bugs with a reproduction, affected requirement, expected behavior, observed result, evidence and next step. Do not put secrets or raw member payloads in this file.

@@ -4,7 +4,9 @@
 
 ## Current state
 
-The initial planning foundation and documentation scaffold are present. There is no running application, installed product dependency, connected private ESPN session, or trained model. The architecture and design choices below are **proposed**, not owner-approved or implemented. FFA is ESPN league **1729878439**, season **2026**. Deployment preference: portable and local-first.
+Architecture and the recommended stack were approved by the owner on 2026-10-30. **M1a runtime/core/snapshot foundation is implemented:** pinned workspaces, exact scoring, temporal identity resolution, PostgreSQL migrations/snapshots/outbox, durable job leases, a guarded synthetic worker path and health-only API. FFA is ESPN league **1729878439**, season **2026**. Deployment preference: portable and local-first.
+
+No frontend UI, member authentication, live league synchronization or trained model exists yet. The owner authorizes additional dependencies, especially UX/UI, and requires deliberate, high-quality design and engineering. Begin with the [local development guide](docs/engineering/local-development.md) for installation, tests and the synthetic smoke path.
 
 ## Start here
 
@@ -20,7 +22,7 @@ The initial planning foundation and documentation scaffold are present. There is
 
 The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-30-foundation.md).
 
-## Verify the foundation
+## Verify the foundation and runtime
 
 Requires Python 3.12 or later; no third-party packages or network access:
 
@@ -28,9 +30,9 @@ Requires Python 3.12 or later; no third-party packages or network access:
 python3 scripts/validate_foundation.py
 ```
 
-`make check` runs the same check if Make is available. The check verifies document paths, required deliverables, requirement coverage, configuration, JSON contract examples, and design-token contrast. It does not validate provider availability, model quality, authentication, or an application build. CI runs the same foundation check.
+`make check` runs the same check if Make is available. For runtime checks, install frozen dependencies, run `make db-up`, then `make runtime-check`; see the local development guide. The check verifies document paths, required deliverables, requirement coverage, configuration, JSON contract examples, and design-token contrast. It does not validate provider availability, model quality, authentication, or an application build. CI includes the foundation check and a separate PostgreSQL-backed runtime workflow.
 
-## Proposed runtime layout
+## Runtime layout
 
 ```text
 apps/web/           React and TypeScript desktop/PWA client
@@ -43,6 +45,6 @@ packages/          API schemas and design tokens
 infra/             Local and deployment configuration, added with runtime
 ```
 
-These directories contain responsibility guides rather than pretend implementations. Start with the roadmap's M1 provider/scoring proof, then generate runtime projects using the selected versions and commit their lockfiles. No Nx dependency is selected for this small mixed-language workspace.
+The Python services/core/data libraries and native workspaces now contain the first runtime slice; the web and analytical Model directories remain future work. No Nx dependency is selected for this small mixed-language workspace.
 
 Provider capabilities and limitations are recorded with sources in the [research register](docs/research/source-register.md). Do not put ESPN cookies, passwords, raw league-member data, or downloaded datasets in Git.

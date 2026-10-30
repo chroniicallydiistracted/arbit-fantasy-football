@@ -13,7 +13,11 @@
       "milestone": "M0",
       "spec": "docs/product/product-specification.md",
       "acceptance": "Configuration fixes ESPN league 1729878439 and season 2026; no multi-league product workflow.",
-      "status": "specified"
+      "status": "verified",
+      "evidence": [
+        "Owner architecture approval 2026-10-30",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "CTX-002",
@@ -460,7 +464,11 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Aliases separate human/NFL team/DST/fantasy entities and unresolved identities cannot silently merge.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "M1a subset only; remaining provider/full-product gates stay open",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "DATA-006",
@@ -474,7 +482,11 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Partial sync cannot replace current state; replay is idempotent and freshness failures visible.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "M1a subset only; remaining provider/full-product gates stay open",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "DATA-007",
@@ -488,7 +500,11 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Decimal scoring reconciles tested rules with ESPN; unknown rules block affected advice.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "M1a subset only; remaining provider/full-product gates stay open",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "UX-001",
@@ -547,7 +563,11 @@
       "milestone": "M0",
       "spec": "docs/architecture/system-architecture.md",
       "acceptance": "Architecture compares alternatives, labels proposal status and records unresolved provider/hosting decisions.",
-      "status": "specified"
+      "status": "verified",
+      "evidence": [
+        "Owner architecture approval 2026-10-30",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "ENG-002",
@@ -559,7 +579,11 @@
       "milestone": "M1",
       "spec": "docs/architecture/system-architecture.md",
       "acceptance": "Core has no provider imports; generated clients/contracts prevent duplicate wire/scoring logic.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "M1a subset only; remaining provider/full-product gates stay open",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "ENG-003",
@@ -570,7 +594,11 @@
       "milestone": "M2",
       "spec": "docs/engineering/agentic-development-standard.md",
       "acceptance": "Appropriate unit/integration/browser/operational checks and budgets evidenced at each release gate.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "M1a subset only; remaining provider/full-product gates stay open",
+        "docs/project/handoffs/2026-10-30-m1a.md"
+      ]
     },
     {
       "id": "ENG-004",

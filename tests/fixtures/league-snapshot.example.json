@@ -1,0 +1,24 @@
+{
+  "synthetic": true,
+  "snapshot": {
+    "league_id": "1729878439",
+    "season": 2026,
+    "observed_at": "2026-10-30T00:00:00Z",
+    "complete": true,
+    "rules_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "manifest_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "teams": [
+      "00000000-0000-4000-8000-000000000001"
+    ],
+    "roster": [
+      {
+        "entity_id": "00000000-0000-4000-8000-000000000003",
+        "team_id": "00000000-0000-4000-8000-000000000001",
+        "slot": "synthetic-slot"
+      }
+    ],
+    "available": [
+      "00000000-0000-4000-8000-000000000004"
+    ]
+  }
+}

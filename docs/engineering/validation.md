@@ -2,11 +2,15 @@
 
 ## Available now
 
-`python3 scripts/validate_foundation.py` (or `make check`) is the only repository check currently implemented. Python 3.12+ standard library only. CI runs the same command on documentation, schemas, tokens, configuration and the scaffold. It checks local Markdown targets, required artifacts, source-brief checksum, requirement-to-milestone/spec mapping, the declared contract-example subset, league configuration and declared token contrast pairs. External URL reachability is not a deterministic CI check.
+`python3 scripts/validate_foundation.py` (or `make check`) remains the dependency-free artifact check. Python 3.12+ standard library only. CI runs the same command on documentation, schemas, tokens, configuration and the scaffold. It checks local Markdown targets, required artifacts, source-brief checksum, requirement-to-milestone/spec mapping, the declared contract-example subset, league configuration and declared token contrast pairs. External URL reachability is not a deterministic CI check.
 
-The contract-example checker supports the schema keywords actually used by these local schemas; it is not a complete JSON Schema implementation. Runtime bootstrap must add a standards-compliant validator/code generator and contract tests before consuming contracts in production. Foundation success is not an application build, provider integration proof, full accessibility audit, or model-quality result.
+The contract-example checker supports the schema keywords actually used by these local schemas; it is not a complete JSON Schema implementation. M1a adds full Draft 2020-12 AJV validation through `pnpm check:contracts`. OpenAPI business contracts/code generation follow with authenticated API features. Foundation success is not an application build, provider integration proof, full accessibility audit, or model-quality result.
 
-## Runtime validation to add at M1/M2
+## Runtime checks available now
+
+After frozen installs and `make db-up`, `make runtime-check` runs foundation checks, Ruff lint/format, strict mypy, AJV contract examples and all pytest tests, including real PostgreSQL migration/snapshot/job/health integration. See [local development](local-development.md). The current verified baseline is 43 tests before final branch review. CI is configured to run the same checks with an isolated database, but has not been remotely executed in this session.
+
+## Feature validation gates across M1/M2 and later milestones
 
 | Change | Required meaningful evidence |
 | --- | --- |
@@ -21,7 +25,7 @@ The contract-example checker supports the schema keywords actually used by these
 | Archive | Finalization/tie/multiweek playoff and correction fixtures; original rule/name history; inaugural empty state |
 | Deployment | Image/dependency/migration checks, readiness, backup restore, rollback, secrets handling and measured load/freshness budgets |
 
-Introduce commands only when their tool/config/test suites exist. First runtime slices should provide `uv run pytest`, formatting/lint/type checks and an aggregate check; the web slice adds real pnpm scripts. Use lockfile-frozen installs in CI. Fixtures must be sanitized or clearly synthetic and never include member contact information or cookies. Network smoke tests require a deliberately configured local environment and do not run on untrusted pull requests.
+Introduce commands only when their tool/config/test suites exist. M1a provides `uv run pytest`, lint/format/type checks, native JS contract validation and `make runtime-check`; web application checks arrive with the web slice. Use lockfile-frozen installs in CI. Fixtures must be sanitized or clearly synthetic and never include member contact information or cookies. Network smoke tests require a deliberately configured local environment and do not run on untrusted pull requests.
 
 ## Verification report format
 

@@ -1,5 +1,14 @@
 # Development Changelog
 
+## 2026-10-30 — M1a runtime/core/snapshot implementation
+
+- Recorded owner architecture/stack approval, dependency authorization and explicit UX/UI quality requirement.
+- Added pinned Python/pnpm workspaces, frozen lockfiles, PostgreSQL image and reproducible local/check commands.
+- Implemented fixed FFA config, temporal identities, exact rule-based scoring, migrations, atomic snapshots/outbox and lease-fenced durable jobs.
+- Added synthetic-only worker composition and health/readiness-only API; no private data routes or production auth bypass.
+- Verified 43 tests, including real database concurrency/retry/fencing/correction cases and service path; actual loopback HTTP smoke passed.
+- Added runtime CI and updated documentation. Final branch review/verification details are in the M1a handoff. No real FFA access, frontend UI, model, push or deployment is claimed.
+
 ## 2026-10-30 — Initial planning foundation
 
 - Preserved owner brief unchanged and recorded FFA league 1729878439 / season 2026 / portable local-first preference.

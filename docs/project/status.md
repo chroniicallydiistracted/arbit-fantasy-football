@@ -1,42 +1,34 @@
 # Project Status
 
-Updated **2026-10-30**. Phase: **initial product and architecture foundation**.
+Updated **2026-10-30**. Phase: **M1 data/runtime foundation**.
 
-## Owner-confirmed context
+## Confirmed context
 
-Arbit serves FFA ESPN league **1729878439**, season **2026**. Deployment preference is **portable and local-first**. The owner's previous Gridiron asset URL patterns are not yet available. The original brief is preserved with checksum metadata.
+FFA ESPN league **1729878439**, season **2026**. Owner approved the architecture/stack and additional dependencies, especially UX/UI. Deployment remains portable and local-first. High-quality, deliberate product design and engineering are required. Exact owner Gridiron asset links are still unavailable.
 
-## What exists
+## Current implementation
 
-The seven initial deliverables have a prepared artifact set: formal product and feature specifications; 57 traceable requirements; system/data/API/model specifications; proposed design system and semantic tokens; vendor-independent agent standards; phased roadmap and first runtime/core implementation plan; directories, JSON schemas and synthetic contract example, local validation and CI configuration. Four ADRs record proposed architecture decisions. See [README](../../README.md) for entry points.
+M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification currently has **43 passing tests**, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. Final branch review is pending.
 
-**Runtime status:** no application, dependencies, migrations, real league sync, authentication, trained model or deployed environment. Module directories contain responsibility guides. Architecture and visual choices remain proposed; no owner approval is implied by creating them. Foundation tooling validates artifacts, not the eventual product.
+No frontend UI, real FFA sync, member authentication, persisted cross-provider mappings, football model or deployment exists yet. Scoring evidence uses explicit synthetic rules; actual FFA settings remain unverified. Private access previously returned unauthenticated HTTP 401.
 
 ## Milestones
 
 | Milestone | State |
 | --- | --- |
-| M0 foundation artifacts | Verified locally and ready for review; runtime/ADR adoption remains pending |
-| M1 runtime/data/identity/rules | Planned; first implementation plan ready; live FFA access unresolved |
+| M0 foundation | Delivered; architecture/stack accepted by owner |
+| M1a runtime/core/snapshot | Implemented and locally tested; final review pending |
+| M1b FFA access/capability inventory | Next; secure local authorized access needed |
+| M1c–e normalization/crosswalks/statistical sources | Planned |
 | M2 application/auth/Front Office/PWA | Not started |
-| M3 shared Model/Scout | Not started |
+| M3 Model/Scout | Not started |
 | M4 Lineup/waivers | Not started |
 | M5 trade/Draft | Not started |
-| M6 rich Live | Not started |
-| M7 Archive/integrated refinement | Not started |
+| M6 Live | Not started |
+| M7 Archive/refinement | Not started |
 
-## Source observations
+## Repository and verification
 
-Unauthenticated FFA settings GET returned **401**; actual settings/private access are unverified. Public ESPN NFL scoreboard JSON was observed and one completed-game summary returned **200** with drives/scoring-play fields. These are bounded research observations, not complete integration tests. nflverse/Sleeper/technology docs and likely Gridiron sites were researched; source-specific gaps remain in the [research register](../research/source-register.md).
+Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m1a-foundation`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
 
-## Active work and next step
-
-Foundation artifact validation and the independent builder check are complete. No runtime implementation is active. After architecture review, record runtime/ADR adoption, then execute [M1a plan](../superpowers/plans/2026-10-30-data-foundation.md) for configuration/core/snapshot infrastructure; address authorized FFA access in M1b. Do not substitute synthetic proof for actual scoring/roster integration. All open inputs and owners are in [decision register](decision-register.md); issues in [known issues](known-issues.md).
-
-## Verification evidence
-
-`python3 scripts/validate_foundation.py` passed: 41 Markdown documents, eight JSON artifacts, 57 requirements and 24 token contrast pairs. Nine temporary-copy negative checks correctly rejected broken artifacts and were removed. The owner brief matches the attachment byte-for-byte. Fresh builder review reported no material planning gaps. Local Git repository initialized on `main`; no commit or remote exists. CI configuration is present but has not run on a hosting service. Full application/provider/model validation is not yet applicable.
-
-## Latest continuity records
-
-[Foundation handoff](handoffs/2026-10-30-foundation.md) · [Changelog](changelog.md) · [Roadmap](roadmap.md). Update this file at each meaningful handoff; do not rely on chat memory.
+Latest [M1a handoff](handoffs/2026-10-30-m1a.md) records tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.

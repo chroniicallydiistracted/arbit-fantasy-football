@@ -14,7 +14,12 @@ arbit-api = { workspace = true }
 arbit-worker = { workspace = true }
 
 [dependency-groups]
-dev = ["pytest>=8,<10", "ruff>=0.14,<1", "mypy>=1.18,<2", "httpx>=0.28,<1", "jsonschema[format]>=4.25,<5", "types-jsonschema>=4,<5"]
+dev = [
+    "pytest>=8,<10",
+    "ruff>=0.14,<1",
+    "mypy>=1.18,<2",
+    "httpx2>=2.16.0",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["libs/arbit-core/tests", "services/api/tests", "tests/integration", "tests/contracts"]

@@ -1,6 +1,6 @@
 # Arbit Architecture Specification
 
-Version 0.1 · 2026-10-30 · **Proposed, not yet adopted as runtime implementation.**
+Version 0.1 · 2026-10-30 · **Architecture and recommended stack accepted by owner 2026-10-30. M1a core/runtime slice implemented; full feature implementation is staged.**
 
 ## Decisions and rationale
 

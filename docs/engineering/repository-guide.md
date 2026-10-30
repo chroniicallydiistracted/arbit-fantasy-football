@@ -2,7 +2,7 @@
 
 ## Current versus planned contents
 
-This is a documentation-first scaffold. Responsibility READMEs reserve coherent runtime locations; they do not claim a running app. Current executable tooling is the Python-standard-library foundation validator. JSON schemas/examples and design tokens are initial reviewable contracts. Product dependencies, package manifests, migrations, generated API types and application runtime are added by the first implementation slices, with exact versions and frozen lockfiles.
+M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. Web/Model directories remain future work. Initial contract schemas and design tokens are reviewable artifacts; no frontend UI or real FFA sync is claimed. [Local development](local-development.md) describes runnable commands.
 
 | Path | Responsibility |
 | --- | --- |
@@ -32,12 +32,12 @@ This is a documentation-first scaffold. Responsibility READMEs reserve coherent 
 
 Core imports no data/model/service/provider module. Data imports core; Model imports core and normalized data contracts, not HTTP provider response types. API/worker compose these modules. Web imports public generated contracts and tokens; no Python/provider/secret dependency. Advisors are policy modules under the shared Model ownership and use core constraints; Front Office composes their outputs. Feature UI can be lazy-loaded by route.
 
-Use one pnpm JS workspace and one uv Python workspace if the proposal is adopted. Internal JS packages initially export source; no independent publication workflow is needed. Python library directories use distributable import packages under `src/` at bootstrap. No root `package.json` or Python runtime `pyproject.toml` exists yet because no product dependencies have been chosen or installed. Do not add artificial build/test targets that pass without executing real checks.
+Use one pnpm JS workspace and one uv Python workspace if the proposal is adopted. Internal JS packages initially export source; no independent publication workflow is needed. Python library directories use distributable import packages under `src/` at bootstrap. Root/member package manifests and pnpm/uv lockfiles now define the runtime; pure core/data libraries and service imports are installed from the workspace. Do not add artificial build/test targets that pass without executing real checks.
 
 ## Local tasks
 
-`python3 scripts/validate_foundation.py` works now. `make check` is optional shorthand. Follow [M1a plan](../superpowers/plans/2026-10-30-data-foundation.md) to add real local API/worker/PostgreSQL/contract tooling. Data downloads go in ignored local storage with manifest references; approved fixtures are small and sanitized. Keep `.env.example` empty of secrets; supply local runtime secrets only through ignored configuration.
+`python3 scripts/validate_foundation.py` and `make check` verify artifacts; `make runtime-check` adds lint/types/contracts and PostgreSQL-backed tests. Follow [M1a plan](../superpowers/plans/2026-10-30-data-foundation.md) to add real local API/worker/PostgreSQL/contract tooling. Data downloads go in ignored local storage with manifest references; approved fixtures are small and sanitized. Keep `.env.example` empty of secrets; supply local runtime secrets only through ignored configuration.
 
 ## Source control and publication
 
-Repository initialization is local only; there is no configured remote, hosted CI run or deployment. No commit is required merely to review the proposals. When implementation starts, use small traceable commits and task/handoff records. Root `.gitignore` excludes credentials, caches, build outputs, local data and model artifacts. Add any future licensing/distribution choice explicitly; the owner has not selected an open-source license.
+The owner published the initialized repository and pushed baseline commit `cab6bd8` to main. Development is on `codex/m1a-foundation`; no new branch push, merge or deployment is implied by local development. No commit is required merely to review the proposals. When implementation starts, use small traceable commits and task/handoff records. Root `.gitignore` excludes credentials, caches, build outputs, local data and model artifacts. Add any future licensing/distribution choice explicitly; the owner has not selected an open-source license.
