@@ -8,7 +8,7 @@ FFA ESPN league **1729878439**, season **2026**. Owner approved the architecture
 
 ## Current implementation
 
-M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification currently has **43 passing tests**, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. Final branch review is pending.
+M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification currently has **45 passing tests**, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. Fresh branch review completed; two important isolation/queue findings were fixed with RED→GREEN regressions and no deferred findings.
 
 No frontend UI, real FFA sync, member authentication, persisted cross-provider mappings, football model or deployment exists yet. Scoring evidence uses explicit synthetic rules; actual FFA settings remain unverified. Private access previously returned unauthenticated HTTP 401.
 
@@ -17,7 +17,7 @@ No frontend UI, real FFA sync, member authentication, persisted cross-provider m
 | Milestone | State |
 | --- | --- |
 | M0 foundation | Delivered; architecture/stack accepted by owner |
-| M1a runtime/core/snapshot | Implemented and locally tested; final review pending |
+| M1a runtime/core/snapshot | Implemented, reviewed and locally verified |
 | M1b FFA access/capability inventory | Next; secure local authorized access needed |
 | M1c–e normalization/crosswalks/statistical sources | Planned |
 | M2 application/auth/Front Office/PWA | Not started |

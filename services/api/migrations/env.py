@@ -3,11 +3,14 @@
 import os
 
 from alembic import context
-from sqlalchemy import create_engine
+from sqlalchemy import Connection, create_engine, text
 
 
-def run(connection):
-    context.configure(connection=connection)
+def run(connection: Connection) -> None:
+    schema = connection.scalar(text("SELECT current_schema()"))
+    if not isinstance(schema, str):
+        raise RuntimeError("A current database schema is required for migrations")
+    context.configure(connection=connection, version_table_schema=schema)
     with context.begin_transaction():
         context.run_migrations()
 
@@ -22,7 +25,7 @@ else:
         raise RuntimeError("ARBIT_DATABASE_URL is required for migration execution")
     engine = create_engine(url, hide_parameters=True)
     try:
-        with engine.connect() as connection:
+        with engine.begin() as connection:
             run(connection)
     finally:
         engine.dispose()

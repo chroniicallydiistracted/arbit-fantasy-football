@@ -8,7 +8,7 @@ The contract-example checker supports the schema keywords actually used by these
 
 ## Runtime checks available now
 
-After frozen installs and `make db-up`, `make runtime-check` runs foundation checks, Ruff lint/format, strict mypy, AJV contract examples and all pytest tests, including real PostgreSQL migration/snapshot/job/health integration. See [local development](local-development.md). The current verified baseline is 43 tests before final branch review. CI is configured to run the same checks with an isolated database, but has not been remotely executed in this session.
+After frozen installs and `make db-up`, `make runtime-check` runs foundation checks, Ruff lint/format, strict mypy, AJV contract examples and all pytest tests, including real PostgreSQL migration/snapshot/job/health integration. See [local development](local-development.md). The current verified baseline is 45 tests after final branch review and its two regression fixes. CI is configured to run the same checks with an isolated database, but has not been remotely executed in this session.
 
 ## Feature validation gates across M1/M2 and later milestones
 

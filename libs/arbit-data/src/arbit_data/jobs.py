@@ -112,13 +112,21 @@ class JobQueue:
         if not worker_id:
             raise ValueError("worker identity is required")
         with self.uow.engine.begin() as connection:
-            connection.execute(
-                update(job)
+            # Maintenance must obey the same nonblocking claim semantics as useful work.
+            exhausted = (
+                select(job.c.id)
                 .where(
                     job.c.status == "running",
                     job.c.lease_until <= now,
                     job.c.attempts >= job.c.max_attempts,
                 )
+                .order_by(job.c.lease_until, job.c.id)
+                .limit(100)
+                .with_for_update(skip_locked=True)
+            )
+            connection.execute(
+                update(job)
+                .where(job.c.id.in_(exhausted))
                 .values(
                     status="failed",
                     lease_token=None,

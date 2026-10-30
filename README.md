@@ -20,7 +20,7 @@ No frontend UI, member authentication, live league synchronization or trained mo
 | Implementation roadmap | [Roadmap](docs/project/roadmap.md) and [first implementation plan](docs/superpowers/plans/2026-10-30-data-foundation.md) |
 | Repository and workspace scaffold | [Repository guide](docs/engineering/repository-guide.md) |
 
-The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-30-foundation.md).
+The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-30-m1a.md).
 
 ## Verify the foundation and runtime
 

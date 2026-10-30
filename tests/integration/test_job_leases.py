@@ -77,3 +77,30 @@ def test_heartbeat_extends_live_lease_but_cannot_revive_expired_lease(uow):
     assert queue.claim_job("other", now + timedelta(seconds=11)) is None
     with pytest.raises(LeaseLostError):
         queue.heartbeat(job.id, lease.lease_token, now + timedelta(seconds=19))
+
+
+def test_locked_exhausted_row_does_not_block_unrelated_ready_work(uow):
+    from arbit_data.db import UnitOfWork
+    from arbit_data.jobs import JobQueue
+    from arbit_data.schema import job
+    from sqlalchemy import create_engine, select, text
+
+    queue = JobQueue(uow, max_attempts=1, lease_seconds=10)
+    now = datetime.now(UTC)
+    exhausted = queue.enqueue("fixture", "fixture://exhausted", "exhausted", now)
+    queue.claim_job("old-worker", now)
+    ready = queue.enqueue("fixture", "fixture://ready", "ready", now)
+    with uow.engine.begin() as locker:
+        schema = locker.scalar(text("SELECT current_schema()"))
+        locker.execute(select(job.c.id).where(job.c.id == exhausted.id).with_for_update())
+        bounded_engine = create_engine(
+            uow.engine.url,
+            connect_args={"options": f"-csearch_path={schema} -cstatement_timeout=500"},
+        )
+        try:
+            claimed = JobQueue(UnitOfWork(bounded_engine)).claim_job(
+                "other-worker", now + timedelta(seconds=11)
+            )
+            assert claimed.id == ready.id
+        finally:
+            bounded_engine.dispose()

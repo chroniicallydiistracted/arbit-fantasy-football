@@ -1,3 +1,3 @@
 # Local-first infrastructure
 
-Planned local Compose services: web/proxy, API, worker, PostgreSQL and a private file volume; S3-compatible storage and managed DB optional later. No deployment, container build or paid service exists. Add pinned images, health checks, migrations, backup/restore and rollback configuration in the runtime milestones.
+M1a includes digest-pinned PostgreSQL 18 Compose configuration on loopback port 55439 and idempotent local test/fixture database initialization. Named-volume data is preserved. API/worker container images, reverse proxy, remote object storage and deployment/backups remain later work. No paid or production service is provisioned. See [local development](../docs/engineering/local-development.md) and the operations runbook; do not delete volumes casually.

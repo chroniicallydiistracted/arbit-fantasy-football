@@ -29,7 +29,7 @@ Provider/asset research can proceed before feature implementation. Archive UI co
 
 **Outputs:** preserved owner brief; product/feature requirements; architecture/data/API/model/design specs; proposed ADRs and source research; cross-agent governance; structured directories; local foundation validation and CI; roadmap and first implementation plan.
 
-**Gate:** all seven initial deliverables linked; all original sections traced; configuration reflects confirmed league/season/local-first preference; internal links and artifact validation pass; independent builder check issues addressed; unresolved provider/auth/asset/hosting decisions explicitly recorded. Runtime choices remain proposed for review. No runtime readiness or integration claim follows from this gate.
+**Gate:** all seven initial deliverables linked; all original sections traced; configuration reflects confirmed league/season/local-first preference; internal links and artifact validation pass; independent builder check issues addressed; unresolved provider/auth/asset/hosting decisions explicitly recorded. Owner approved the runtime architecture/stack on 2026-10-30; implementation proceeds through the later gates. No runtime readiness or integration claim follows from this gate.
 
 ## M1 — Runtime, data integration, identity and scoring
 

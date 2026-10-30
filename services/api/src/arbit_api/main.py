@@ -7,7 +7,7 @@ from arbit_core.config import load_league_config
 from arbit_data.db import SCHEMA_REVISION
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from sqlalchemy import Engine, create_engine, text
+from sqlalchemy import Engine, String, Uuid, column, create_engine, select, table, text
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
 from arbit_api.settings import RuntimeSettings
@@ -53,12 +53,19 @@ def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None
         code = "DATABASE_NOT_CONFIGURED"
         if database is not None:
             try:
+                code = "SCHEMA_NOT_READY"
                 with database.connect() as connection:
-                    revision = connection.scalar(text("SELECT version_num FROM alembic_version"))
-                    connection.execute(text("SELECT id FROM league_snapshot LIMIT 0"))
-                if revision == SCHEMA_REVISION:
-                    return JSONResponse({"status": "ready"}, headers=headers)
-                code = "SCHEMA_MISMATCH"
+                    schema = connection.scalar(text("SELECT current_schema()"))
+                    if isinstance(schema, str):
+                        version_table = table(
+                            "alembic_version", column("version_num", String), schema=schema
+                        )
+                        snapshot_table = table("league_snapshot", column("id", Uuid), schema=schema)
+                        revision = connection.scalar(select(version_table.c.version_num))
+                        connection.execute(select(snapshot_table.c.id).limit(0))
+                        if revision == SCHEMA_REVISION:
+                            return JSONResponse({"status": "ready"}, headers=headers)
+                        code = "SCHEMA_MISMATCH"
             except OperationalError:
                 code = "DATABASE_UNAVAILABLE"
             except SQLAlchemyError:

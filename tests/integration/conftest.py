@@ -21,7 +21,7 @@ def engine():
     with admin.begin() as connection:
         connection.execute(text(f'CREATE SCHEMA "{schema}"'))
     isolated = create_engine(
-        url, hide_parameters=True, connect_args={"options": f"-csearch_path={schema},public"}
+        url, hide_parameters=True, connect_args={"options": f"-csearch_path={schema}"}
     )
     try:
         yield isolated
