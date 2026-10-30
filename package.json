@@ -1,0 +1,9 @@
+{
+  "name": "arbit",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {"node": ">=24 <25"},
+  "scripts": {"check:contracts": "node scripts/validate-contracts.mjs"},
+  "devDependencies": {"ajv": "8.20.0", "ajv-formats": "3.0.1"}
+}

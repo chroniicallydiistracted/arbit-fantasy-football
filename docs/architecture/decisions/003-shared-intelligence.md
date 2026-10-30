@@ -1,6 +1,6 @@
 # ADR-003: One scoring and intelligence foundation
 
-Status: Proposed · 2026-10-30 · Adoption pending.
+Status: Accepted · 2026-10-30 · Owner approved architecture and recommended stack in chat.
 
 ## Context
 
@@ -17,3 +17,5 @@ Platform projections or per-feature scoring/rankings create incoherent advice an
 ## Evidence
 
 M1 supported-rule reconciliation; M3 reproducible model/backtest release; M4 legal optimizer; M5 calibrated or labeled scenario/feasibility policies. Related: DATA-007, MD-001–004, DR-004, TR-003; [Model specification](../model-specification.md).
+
+Adoption record: owner stated “Architecture passed” and “I approve your recommended stack” on 2026-10-30. Original proposal retained above; implementation evidence is recorded in runtime handoffs.

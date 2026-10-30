@@ -1,6 +1,6 @@
 # Decisions, Inputs and Open Questions
 
-Updated 2026-10-30. Proposed technical choices are agent recommendations; they have not been represented as owner-approved.
+Updated 2026-10-30. Architecture and recommended stack approved by the owner on 2026-10-30; additional development dependencies are authorized, especially for UX/UI work.
 
 ## Confirmed product decisions
 
@@ -10,18 +10,19 @@ Updated 2026-10-30. Proposed technical choices are agent recommendations; they h
 | OWN-002 | ESPN league ID `1729878439`, season `2026` | Owner reply 2026-10-30 |
 | OWN-003 | Portable, local-first proposal | Owner reply 2026-10-30 |
 | OWN-004 | Owner's prior Gridiron direct asset URL patterns are not yet available | Owner reply 2026-10-30 |
+| OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
 
-## Proposed architecture decisions
+## Accepted architecture decisions
 
 | Record | Proposal | Status / adoption point |
 | --- | --- | --- |
-| [ADR-001](../architecture/decisions/001-modular-runtime.md) | React client + modular Python API/worker, native workspace tools | Proposed; record adoption before runtime bootstrap |
-| [ADR-002](../architecture/decisions/002-data-and-identity.md) | PostgreSQL + versioned Parquet, explicit aliases and immutable publication | Proposed; M1 data implementation |
-| [ADR-003](../architecture/decisions/003-shared-intelligence.md) | Shared exact scoring and point-in-time evaluated models; no fabricated probabilities | Proposed; M1 scoring and M3 model implementation |
-| [ADR-004](../architecture/decisions/004-access-live-and-pwa.md) | Separate invite/OIDC auth, server-only ESPN read access, SSE, static-only PWA caching | Proposed; M1 integration/M2 authentication |
+| [ADR-001](../architecture/decisions/001-modular-runtime.md) | React client + modular Python API/worker, native workspace tools | Accepted by owner 2026-10-30 |
+| [ADR-002](../architecture/decisions/002-data-and-identity.md) | PostgreSQL + versioned Parquet, explicit aliases and immutable publication | Accepted; M1 data implementation |
+| [ADR-003](../architecture/decisions/003-shared-intelligence.md) | Shared exact scoring and point-in-time evaluated models; no fabricated probabilities | Accepted; M1 scoring and M3 model implementation |
+| [ADR-004](../architecture/decisions/004-access-live-and-pwa.md) | Separate invite/OIDC auth, server-only ESPN read access, SSE, static-only PWA caching | Accepted; M1 integration/M2 authentication |
 
-Local documentation/contract/token scaffold does not adopt a runtime or commit to hosting. Exact dependency versions are resolved and locked when the runtime is bootstrapped.
+Owner approval adopts these runtime choices. Hosting remains portable/local-first and no paid hosting is provisioned. Exact dependency versions are resolved and locked when the runtime is bootstrapped.
 
 ## Open inputs and decision rules
 

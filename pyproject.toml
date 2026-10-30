@@ -1,0 +1,36 @@
+[project]
+name = "arbit-workspace"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["arbit-core", "arbit-data", "arbit-api", "arbit-worker"]
+
+[tool.uv.workspace]
+members = ["libs/arbit-core", "libs/arbit-data", "services/api", "services/worker"]
+
+[tool.uv.sources]
+arbit-core = { workspace = true }
+arbit-data = { workspace = true }
+arbit-api = { workspace = true }
+arbit-worker = { workspace = true }
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.14,<1", "mypy>=1.18,<2", "httpx>=0.28,<1", "jsonschema[format]>=4.25,<5", "types-jsonschema>=4,<5"]
+
+[tool.pytest.ini_options]
+testpaths = ["libs/arbit-core/tests", "services/api/tests", "tests/integration", "tests/contracts"]
+addopts = "-ra --strict-markers"
+markers = ["integration: requires dedicated PostgreSQL test database"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+include = ["libs/**/*.py", "services/**/*.py", "tests/**/*.py", "scripts/validate_contracts.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["arbit_core", "arbit_data", "arbit_api", "arbit_worker"]

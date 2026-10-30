@@ -1,6 +1,6 @@
 # ADR-002: Versioned data and canonical aliases
 
-Status: Proposed · 2026-10-30 · Adoption pending.
+Status: Accepted · 2026-10-30 · Owner approved architecture and recommended stack in chat.
 
 ## Context
 
@@ -17,3 +17,5 @@ One PostgreSQL table for every PBP feature would mix serving and bulk analytics 
 ## Evidence
 
 M1 must prove completeness/pagination, alias uniqueness, ambiguous-name handling, duplicate snapshot replay, correction publication, manifest checksums and restore semantics. Related: DATA-001/002/005/006; [data architecture](../data-architecture.md).
+
+Adoption record: owner stated “Architecture passed” and “I approve your recommended stack” on 2026-10-30. Original proposal retained above; implementation evidence is recorded in runtime handoffs.

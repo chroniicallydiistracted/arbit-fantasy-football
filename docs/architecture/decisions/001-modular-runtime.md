@@ -1,6 +1,6 @@
 # ADR-001: Modular runtime with React and Python
 
-Status: Proposed · 2026-10-30 · Owner: architecture proposal; adoption pending.
+Status: Accepted · 2026-10-30 · Owner: project owner; approved in chat before runtime bootstrap.
 
 ## Context
 
@@ -17,3 +17,5 @@ Next.js or another React framework provides routing/SSR conventions, but still r
 ## Adoption and evidence
 
 Record architecture review and adopt before runtime installation. Pin Node 24 LTS target, Python 3.12 baseline, package manager/dependency/image versions after compatibility checks. Prove local API/worker/DB path and generate contracts before feature work. Related: ENG-001/002, OWN-003; [system architecture](../system-architecture.md).
+
+Adoption record: owner stated “Architecture passed” and “I approve your recommended stack” on 2026-10-30. Original proposal retained above; implementation evidence is recorded in runtime handoffs.

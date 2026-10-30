@@ -1,6 +1,6 @@
 # ADR-004: Separate access, provider sync and safe live delivery
 
-Status: Proposed · 2026-10-30 · Adoption pending.
+Status: Accepted · 2026-10-30 · Owner approved architecture and recommended stack in chat.
 
 ## Context
 
@@ -17,3 +17,5 @@ Unrestricted team selection is not identity verification. Custom passwords add r
 ## Evidence
 
 M2 auth/CSRF/binding/revocation and offline-cache negatives; M6 reconnect/expired cursor/correction/full-slate tests. OIDC provider still needs owner selection. Related: ENG-004, UX-004, LV-005; [system architecture](../system-architecture.md), [operations](../../engineering/security-and-operations.md).
+
+Adoption record: owner stated “Architecture passed” and “I approve your recommended stack” on 2026-10-30. Original proposal retained above; implementation evidence is recorded in runtime handoffs.
