@@ -1,0 +1,1134 @@
+ARBIT
+
+FFA Fantasy Football Companion
+
+Product Vision, Requirements & Agentic Development Handoff
+
+Document Version: 1.0
+Project Name: Arbit
+League: FFA — Family Football Association
+Application Type: Desktop Web Application + Progressive Web App (PWA)
+Development Status: Initial Planning & Architecture
+Primary Audience: FFA League Members
+Document Purpose: Foundational project brief for Agentic AI software development
+
+⸻
+
+1. PROJECT OVERVIEW
+
+1.1 Product Vision
+
+Arbit is a comprehensive, data-driven Fantasy Football companion application designed specifically for the Family Football Association (FFA), a private family ESPN Fantasy Football redraft league.
+
+The goal is to create a premium-quality, deeply analytical web application that functions as an all-in-one fantasy football management, research, and decision-support platform.
+
+Arbit should act as an intelligent advisor across virtually every responsibility, activity, and strategic decision involved in fantasy football.
+
+Rather than serving as a basic fantasy football dashboard or simply displaying information already available through ESPN, Arbit should transform extensive football data into actionable, contextually relevant insights.
+
+The application should provide advanced analysis, recommendations, projections, interactive visualizations, and personalized management tools that help FFA members make informed decisions throughout the season.
+
+This includes the draft, weekly lineup management, waiver wire acquisitions, trade negotiations, player research, live NFL games, league matchups, and historical league performance.
+
+Arbit’s central purpose is to turn comprehensive football data into useful fantasy football intelligence.
+
+1.2 Core Product Principles
+
+Development should be guided by the following principles:
+
+1. Data-driven intelligence: Statistical evidence and analytical models should form the foundation of Arbit’s recommendations.
+2. League-specific context: Recommendations must account for FFA’s actual league configuration, scoring settings, roster requirements, teams, and player availability.
+3. Comprehensive analysis: Arbit should utilize the full breadth of relevant football statistics rather than relying solely on basic statistics, conventional fantasy rankings, or third-party fantasy projections.
+4. Actionable recommendations: The application should explain what actions are worth considering and provide supporting evidence for its conclusions.
+5. Unified intelligence: Features should share underlying data, analytical systems, player evaluations, and league context rather than functioning as disconnected tools.
+6. High-quality user experience: Arbit should feel like a polished, cohesive, purpose-built product with a comprehensive design system.
+7. Maintainable architecture: Development must emphasize consistency, documentation, modularity, and long-term maintainability.
+8. Agentic development continuity: Any authorized AI coding agent should be able to understand the project’s current architecture, implementation history, decisions, and outstanding work through standardized project documentation.
+
+⸻
+
+2. PRODUCT IDENTITY & NAMING
+
+2.1 Official Identity
+
+Product Name: Arbit
+
+Descriptive Subtitle: FFA Fantasy Football Companion
+
+Primary Management Workspace: Front Office
+
+The name Arbit is derived from the linguistic family of arbiter, reflecting judgment, evaluation, and decision-making.
+
+The product should retain Arbit as its independent identity rather than making FFA part of its official name.
+
+FFA identifies the league that Arbit serves.
+
+2.2 Product Feature Family
+
+Arbit will be organized around a cohesive family of major capabilities.
+
+Feature	Primary Responsibility
+Arbit Front Office	Personalized manager headquarters and central management workspace
+Arbit Draft	Draft preparation, simulations, and live draft assistance
+Arbit Scout	Player research, statistics, profiles, comparisons, and archetypes
+Arbit Market	Waiver wire analysis, free agents, and trade intelligence
+Arbit Lineup	Sit/start recommendations, roster optimization, and matchup analysis
+Arbit Live	NFL game tracking, live scores, play-by-play, and interactive game visualizations
+Arbit Model	Shared analytical models, projections, evaluations, and player intelligence
+Arbit Archive	FFA league history, records, previous seasons, and championship history
+
+These names establish the initial organizational structure for the product.
+
+Arbit Model should primarily function as the shared intelligence foundation supporting the other modules. Its capabilities may also be exposed through dedicated user-facing analytical experiences where appropriate.
+
+Feature navigation can use concise labels such as Draft, Scout, Market, and Live while retaining the complete names as their formal product identities.
+
+⸻
+
+3. LEAGUE CONTEXT & APPLICATION SCOPE
+
+3.1 FFA League
+
+Arbit is being developed for one existing ESPN Fantasy Football league.
+
+League Name: Family Football Association
+League Abbreviation: FFA
+League Platform: ESPN Fantasy Football
+League Format: Redraft
+League Status: Currently in its inaugural season
+
+The application should retrieve and maintain a complete understanding of the FFA league.
+
+This includes the league’s configuration, teams, managers, rosters, matchups, and all other relevant information available through ESPN.
+
+3.2 Single-League Scope
+
+The initial application will support one fantasy football league: FFA.
+
+The possibility of attaching additional leagues may be considered after development is completed.
+
+However, future multi-league functionality is not part of the current development scope and should not influence the initial product requirements or architectural priorities.
+
+Arbit should be designed and developed to provide the best possible experience for its intended FFA users.
+
+3.3 User Experience
+
+FFA members should be able to log into Arbit and access a personalized experience relevant to their respective fantasy football teams.
+
+The application should recognize each member’s team, roster, matchup, and league context.
+
+This personalization should extend throughout the application, including draft recommendations, player research, roster assessments, lineup decisions, waiver wire analysis, and trade suggestions.
+
+3.4 Championship Tradition
+
+FFA’s championship trophy is a replica of the Geller Cup from the television series Friends.
+
+Each season:
+
+* The winning team’s name and championship year are added to the trophy.
+* The winning manager holds the trophy throughout the offseason.
+* The league conducts a new redraft for the following season.
+
+Arbit Archive should provide a natural home for the league’s developing history, including previous champions, season records, and Geller Cup history.
+
+Because this is the league’s first season, historical league information will accumulate over time.
+
+⸻
+
+4. CORE APPLICATION REQUIREMENTS
+
+4.1 Arbit Front Office — Management Headquarters
+
+Front Office is Arbit’s primary management workspace and personalized entry point.
+
+It should provide a consolidated overview of the information and decisions most relevant to the logged-in FFA manager.
+
+Its purpose is to serve as the central headquarters from which users can access Arbit’s broader capabilities.
+
+Intended Capabilities
+
+* Personalized team and manager information.
+* Current roster overview.
+* Upcoming fantasy matchup information.
+* Current league standings and context.
+* Team strengths, weaknesses, and positional needs.
+* Relevant player performance information.
+* Current roster and lineup considerations.
+* Actionable recommendations from Arbit’s analytical systems.
+* Navigation and access to all major Arbit modules.
+
+Front Office should aggregate useful information from the other Arbit features rather than developing unrelated, duplicate analytical logic.
+
+⸻
+
+4.2 Arbit Draft — End-to-End Draft Intelligence
+
+Arbit Draft will provide a comprehensive, contextually aware Live Draft Assistant.
+
+The goal is to support the user throughout the entire draft process, from preparation through the final selection.
+
+Core Requirements
+
+The assistant must understand:
+
+* FFA’s roster configuration and position requirements.
+* All applicable league scoring rules.
+* League size and draft structure.
+* The user’s assigned draft position.
+* The user’s current draft selections.
+* Positions already filled.
+* Remaining roster requirements.
+* Currently available players.
+* Players selected by other teams.
+* Positional scarcity and draft priorities.
+* Relevant player performance statistics.
+* Player outlooks and projected fantasy value.
+* Bye-week distributions and potential roster conflicts.
+* The probability of individual players being drafted in particular rounds or at particular picks.
+
+Draft Recommendations
+
+The assistant should continuously evaluate the current draft state and provide data-backed recommendations.
+
+Its recommendations should account for the user’s existing roster composition, remaining needs, league scoring system, player availability, and expected draft behavior.
+
+Draft suggestions should not simply reproduce a static ranking or best-player-available list.
+
+They should be situationally aware, updating as the draft progresses.
+
+Draft Intelligence Capabilities
+
+Arbit Draft should support:
+
+* Pre-draft preparation and player evaluation.
+* Draft strategy analysis.
+* Draft simulations and scenario evaluation.
+* Live draft tracking.
+* Dynamic player recommendations.
+* Positional priority analysis.
+* Roster construction evaluation.
+* Bye-week considerations.
+* Expected player availability by round and pick.
+* Comparisons between available draft options.
+* Data-supported explanations of recommended selections.
+
+The ultimate goal is an end-to-end experience that allows the user to make informed selections at every stage of an FFA draft.
+
+⸻
+
+4.3 Arbit Lineup — Sit/Start & Matchup Intelligence
+
+Arbit Lineup will serve as the primary advisor for weekly starting lineup decisions.
+
+It should assess the user’s available roster options, upcoming NFL games, relevant matchups, and FFA scoring settings to determine the most advantageous lineup decisions.
+
+Core Requirements
+
+The advisor must examine:
+
+* The user’s complete fantasy roster.
+* The current FFA matchup between the two competing fantasy teams.
+* Relevant NFL matchups for each player.
+* Individual player performance statistics.
+* Recent performance trends.
+* NFL team and opponent statistics.
+* Position-versus-defense performance.
+* Opposing defensive strengths and weaknesses.
+* Relevant player utilization and opportunity metrics.
+* Applicable league scoring settings.
+* Other relevant football statistics and contextual information.
+
+Sit/Start Recommendations
+
+Arbit Lineup should provide direct recommendations on which players to start and which to bench.
+
+The recommendations should be generated from comprehensive statistical analysis rather than simply relying on fantasy platform projections.
+
+Users should be able to understand why one player is favored over another.
+
+Intended Capabilities
+
+* Weekly starting lineup recommendations.
+* Individual start/sit comparisons.
+* Matchup-based player analysis.
+* Statistical support for each recommendation.
+* Comparative player outlooks.
+* Roster and positional evaluation.
+* Model-generated projections and confidence assessments.
+* Contextual consideration of the user’s fantasy opponent.
+
+The primary objective is to provide deeply researched and understandable lineup advice.
+
+⸻
+
+4.4 Arbit Market — Waiver Wire & Trade Intelligence
+
+Arbit Market will serve as the primary workspace for roster improvements through player acquisitions, waiver wire activity, and trades.
+
+It will contain two major advisory capabilities.
+
+A. Waiver Wire Advisor
+
+The Waiver Wire Advisor will continuously evaluate the players available for acquisition in FFA.
+
+Its analysis should consider both current availability and evolving player value.
+
+Core Requirements
+
+* Retrieve currently available free agents and waiver-eligible players.
+* Monitor player availability throughout the season.
+* Evaluate recent and historical player performance.
+* Identify meaningful statistical trends.
+* Assess upcoming NFL matchups.
+* Evaluate player opportunity and projected performance.
+* Compare available players against the user’s existing roster.
+* Identify positional weaknesses and improvement opportunities.
+* Account for FFA’s scoring and roster rules.
+
+Intended Capabilities
+
+* Weekly waiver recommendations.
+* Updated recommendations as relevant data changes.
+* Position-specific waiver evaluations.
+* Player comparisons.
+* Potential roster upgrade identification.
+* Statistical reasoning for recommended pickups.
+
+The Waiver Wire Advisor should focus on identifying acquisitions that provide meaningful value to the user’s fantasy team.
+
+B. Trade Assistant
+
+The Trade Assistant will evaluate player values and team needs throughout the FFA league to identify advantageous and realistic trade opportunities.
+
+Core Requirements
+
+The Trade Assistant must:
+
+* Analyze the complete rosters of every FFA team.
+* Continuously evaluate relevant player statistics.
+* Understand positional strengths and weaknesses across teams.
+* Identify the user’s roster deficiencies.
+* Identify opposing managers’ potential roster needs.
+* Account for bye-week gaps and positional depth.
+* Assess the value of players involved in potential trades.
+* Compare the benefit of a trade for both managers.
+* Identify trade proposals that offer meaningful roster improvements.
+* Estimate trade feasibility and likelihood of acceptance.
+
+Intended Capabilities
+
+* Trade opportunity discovery.
+* Suggested trade packages.
+* Player value comparisons.
+* Team-to-team roster compatibility analysis.
+* Identification of mutually beneficial trades.
+* Statistical evaluation of proposed transactions.
+* Recommendations for the most promising trade opportunities.
+
+The objective is not merely to label trades as fair or unfair.
+
+Arbit should actively identify valuable opportunities based on the specific rosters, needs, and circumstances of FFA managers.
+
+⸻
+
+4.5 Arbit Scout — Comprehensive Player Intelligence
+
+Arbit Scout will serve as the primary player research and evaluation environment.
+
+A central component of Scout will be a comprehensive Player Stat Card system.
+
+These cards should be rich, interactive, and substantially more informative than conventional fantasy football player summaries.
+
+Player Stat Card Requirements
+
+Each player profile should provide extensive information, including:
+
+* Player identity and NFL team.
+* Position and relevant team information.
+* Historical performance statistics.
+* Current-season statistics.
+* Game-by-game performance.
+* Recent performance trends.
+* Relevant advanced football metrics.
+* Fantasy performance under FFA scoring settings.
+* Player projections and outlooks.
+* Upcoming NFL matchups.
+* Relevant player news.
+* NFL team depth chart information.
+* Player role and utilization.
+* Positional comparisons.
+* Model-generated evaluations and rankings.
+* Player archetype classifications.
+
+Player Archetype System
+
+Arbit Scout should include a comprehensive player archetype labeling system.
+
+The purpose is to classify players based on meaningful statistical characteristics, roles, tendencies, and performance profiles.
+
+Archetypes should be derived from relevant football data and analytical methodologies.
+
+They should provide additional context for player research, comparisons, projections, and recommendations throughout Arbit.
+
+Additional Scout Capabilities
+
+* Player search and discovery.
+* Side-by-side player comparisons.
+* Statistical exploration.
+* Player rankings.
+* Performance trend analysis.
+* Advanced player evaluation.
+* Integration with the broader Arbit intelligence system.
+
+Scout should function as a deep football research environment, not simply a database viewer.
+
+⸻
+
+4.6 Arbit Live — Interactive NFL Game Experience
+
+Arbit Live will provide an interactive NFL game tracking experience combining live scores, play-by-play information, fantasy relevance, and graphical representations of on-field action.
+
+This should be one of Arbit’s most visually rich features.
+
+Live Game Data
+
+The application should display:
+
+* Live NFL scores.
+* Current game status.
+* Team information.
+* Live play-by-play events.
+* Relevant game statistics.
+* Player participation and performance.
+* Fantasy-relevant scoring events.
+* Game developments affecting FFA rostered players.
+
+Interactive Field Graphics
+
+Arbit Live should incorporate interactive football field graphics capable of visually representing individual plays.
+
+The system should support animations or graphical representations for play types including, but not limited to:
+
+* Passing plays.
+* Rushing plays.
+* Quarterback sneaks.
+* Sacks.
+* Interceptions.
+* Field goals.
+* Point-after-touchdown attempts.
+* Other applicable football play types.
+
+The experience should combine event data with visual representation to make live play-by-play more engaging and informative.
+
+Field & Uniform Visuals
+
+The intended visual system will utilize football field and uniform assets from Gridiron databases.
+
+These assets should contribute to:
+
+* Football field representations.
+* NFL team uniform displays.
+* Matchup-specific visuals.
+* The uniforms worn by each team during a particular week.
+
+The design should display the corresponding teams’ uniforms alongside the field graphics where appropriate.
+
+Fantasy-Specific Live Features
+
+Users should be able to filter live game information to focus on players relevant to their fantasy team.
+
+Examples include:
+
+* Displaying only plays involving the user’s rostered players.
+* Identifying fantasy-relevant events.
+* Following the performance of individual players.
+* Connecting NFL game activity to the user’s fantasy matchup.
+
+Arbit Live should offer a meaningful combination of NFL game information and fantasy football context.
+
+⸻
+
+4.7 Arbit Model — Shared Football Intelligence
+
+Arbit Model is the shared analytical foundation supporting Arbit’s decision-making features.
+
+Rather than constructing an entirely separate analytical system for each advisor, Arbit should employ reusable data models, statistical methodologies, projections, and player evaluations.
+
+Responsibilities
+
+Arbit Model should support:
+
+* Comprehensive statistical evaluation.
+* Historical player analysis.
+* Player performance projections.
+* Player rankings.
+* Advanced player comparisons.
+* Player archetype classification.
+* Positional and matchup analysis.
+* Statistical trends.
+* Roster value assessments.
+* Draft evaluations.
+* Sit/start recommendations.
+* Waiver evaluations.
+* Trade intelligence.
+* Machine learning where appropriate.
+
+Modeling Philosophy
+
+The primary data foundation for Arbit Model must be the nflverse suite of datasets.
+
+Analytical systems should utilize meaningful NFL data and advanced statistical relationships rather than relying exclusively on conventional fantasy projections or basic box-score statistics.
+
+Supplementary sources may be used to address genuine gaps in available information.
+
+Model development should take into account the purpose of each recommendation and the relevant FFA league context.
+
+Shared Intelligence Architecture
+
+The same underlying football data and player evaluations should be reusable across Arbit’s major modules.
+
+For example, Arbit Draft, Arbit Scout, Arbit Market, and Arbit Lineup should not maintain conflicting or unrelated implementations of core player statistical analysis.
+
+Each feature may apply its own decision-specific logic while drawing upon shared foundational intelligence.
+
+⸻
+
+4.8 Arbit Archive — League History & Championship Records
+
+Arbit Archive will preserve and present the evolving history of the FFA.
+
+Intended Capabilities
+
+* Historical league standings.
+* Previous season outcomes.
+* Past FFA champions.
+* Geller Cup championship history.
+* Historical fantasy team performance.
+* League records.
+* Historical player and team comparisons.
+* Season-by-season information.
+
+Archive should grow alongside the league and become a meaningful historical resource for family members.
+
+⸻
+
+5. DATA SOURCES & INTEGRATION REQUIREMENTS
+
+The success of Arbit depends heavily on the quality, completeness, consistency, and availability of its underlying data.
+
+Development should establish a reliable data ingestion, normalization, storage, and updating architecture.
+
+The following source priorities are fundamental to the project.
+
+5.1 ESPN Fantasy Football — Primary League Authority
+
+ESPN is the authoritative source for all FFA-specific fantasy league information.
+
+Arbit must continuously retrieve, update, and maintain the available league information necessary to power its features.
+
+Required League Data
+
+This includes, but is not limited to:
+
+* League identification and metadata.
+* League configuration.
+* League size.
+* Roster formats.
+* Roster position requirements.
+* Starting lineup rules.
+* All applicable scoring settings.
+* Participating teams.
+* Team managers.
+* Complete team rosters.
+* Player ownership.
+* Available free agents.
+* Waiver information.
+* League matchups.
+* League standings.
+* Draft information.
+* Other available league-specific information.
+
+The integration should use the relevant ESPN Fantasy Football data interfaces, including unofficial ESPN API endpoints where needed.
+
+The objective is to maintain a comprehensive, up-to-date understanding of the FFA league throughout Arbit.
+
+5.2 nflverse — Primary NFL Statistical Foundation
+
+The nflverse suite of databases will be Arbit’s primary source for NFL statistical data.
+
+This is a core development requirement.
+
+The nflverse ecosystem should provide the primary statistical foundation for:
+
+* Player performance analysis.
+* Team performance analysis.
+* Advanced football metrics.
+* Historical research.
+* Player evaluations.
+* Statistical projections.
+* Player archetypes.
+* Positional analysis.
+* Machine learning and model training.
+* Data-driven fantasy recommendations.
+
+Source Priority
+
+Arbit’s analytical systems should be developed around nflverse data first.
+
+Other datasets and information sources may supplement nflverse where relevant information is missing or where the particular application requires additional data.
+
+Third-party fantasy projections should not replace the deeper statistical evaluation and modeling intended for Arbit.
+
+5.3 Sleeper API — Supplementary Scoring & Play Data
+
+Arbit will utilize the Sleeper API as a supplementary football data source.
+
+Sleeper will not be implemented as an additional fantasy league provider during the initial development.
+
+The intended purpose of its API integration is to retrieve applicable scoring, player, and game-related information that can support Arbit’s features.
+
+The project owner has previously worked with the Sleeper API for related data retrieval.
+
+The developer should research the current available endpoints and incorporate useful information into the appropriate data pipelines.
+
+5.4 Unofficial ESPN API — Live Data Research Priority
+
+For gaps in live NFL game information, scores, and play-by-play data, the development process should first research relevant unofficial ESPN API resources.
+
+This research should determine which live event details and associated game information are available.
+
+If additional sources are needed for particular live game capabilities, they may be evaluated afterward.
+
+The objective is to assemble the necessary information for Arbit Live’s scoring, play-by-play, fantasy tracking, and graphical event representations.
+
+5.5 Gridiron Databases — Field & Uniform Assets
+
+Gridiron databases are the intended source for football field and NFL uniform visual assets.
+
+There is currently no official API identified for the intended integration.
+
+The project owner has previously retrieved field and uniform resources using discovered direct-download URL structures.
+
+Development should account for the available asset retrieval methods and their integration into Arbit Live.
+
+The intended result is a visual environment that can display appropriate field representations and NFL team uniforms for the relevant matchups and weeks.
+
+⸻
+
+6. DATA ARCHITECTURE & SYNCHRONIZATION
+
+Arbit should have a coherent underlying data system that serves the entire application.
+
+This should include the storage, processing, normalization, and delivery of data from multiple sources.
+
+6.1 Unified Data Model
+
+The architecture should support a unified representation of:
+
+* NFL players.
+* NFL teams.
+* Fantasy players and roster ownership.
+* Fantasy teams and managers.
+* League configurations.
+* Statistical records.
+* Games and matchups.
+* Draft selections.
+* Fantasy scoring.
+* Player evaluations.
+* Live game events.
+* Analytical outputs and recommendations.
+
+Player information from ESPN, nflverse, Sleeper, and other relevant sources should be connected through appropriate identifier mapping.
+
+6.2 ESPN League Synchronization
+
+The application must maintain current FFA information.
+
+Synchronization should account for changes such as:
+
+* Roster updates.
+* Player acquisitions and releases.
+* Waiver activity.
+* Trades.
+* Lineup changes.
+* League matchup updates.
+* Draft selections and draft state.
+* Changes to relevant league configurations.
+
+The developer should design the necessary synchronization mechanisms and update procedures.
+
+6.3 Statistical Data Processing
+
+The system should support the ingestion and processing of NFL statistical datasets for use throughout the application.
+
+Relevant processes may include:
+
+* Dataset retrieval.
+* Data normalization.
+* Historical data storage.
+* Statistical feature generation.
+* Model processing.
+* Ranking and projection generation.
+* Analysis of new or updated information.
+* Delivery of derived insights to application features.
+
+6.4 Live Event Processing
+
+Arbit Live requires a data flow capable of processing NFL game events and updating the user experience as new information becomes available.
+
+Live game processing should connect event information with:
+
+* NFL player identities.
+* NFL teams.
+* Relevant scoring outcomes.
+* FFA fantasy players.
+* FFA matchups.
+* Play-by-play visual representations.
+
+6.5 Shared Data Access
+
+Modules should access a shared, consistent data foundation.
+
+The architecture should avoid unnecessary duplication of independent player datasets, league interpretations, or core statistical calculations across feature modules.
+
+⸻
+
+7. UX/UI & DESIGN SYSTEM
+
+The application requires a complete UX/UI design system and architectural specification.
+
+This work should be planned before large-scale feature implementation.
+
+7.1 Design Objectives
+
+Arbit should feel like a cohesive, high-quality football intelligence platform.
+
+The interface should emphasize:
+
+* Clear information hierarchy.
+* Effective presentation of dense statistical information.
+* Intuitive navigation.
+* Meaningful data visualization.
+* Consistent component behavior.
+* Personalized user experiences.
+* Readable player research interfaces.
+* Understandable recommendation workflows.
+* Engaging game and matchup visualizations.
+
+7.2 Platform Experience
+
+Arbit will be developed as:
+
+1. A desktop-accessible web application.
+2. An installable Progressive Web App.
+
+The design and implementation should provide an appropriate user experience across the intended desktop and PWA environments.
+
+7.3 Required Design System
+
+The design system should define, at minimum:
+
+* Design principles.
+* Visual identity.
+* Typography.
+* Color system.
+* Spacing and layout conventions.
+* Reusable interface components.
+* Navigation patterns.
+* Cards and information panels.
+* Tables and statistical displays.
+* Charts and data visualization patterns.
+* Forms and interactive controls.
+* Loading, empty, and error states.
+* Responsive behavior.
+* Interaction patterns.
+* Feature-specific component requirements.
+
+These definitions should be documented and reusable throughout development.
+
+7.4 Feature Experience Specifications
+
+Each major feature should receive a corresponding UX/UI specification.
+
+This should include the Front Office, Draft, Scout, Market, Lineup, Live, and Archive experiences.
+
+The specifications should establish navigation structure, primary user workflows, data presentation requirements, interface components, and interactions.
+
+⸻
+
+8. SOFTWARE ARCHITECTURE & ENGINEERING REQUIREMENTS
+
+Before full implementation, Arbit requires a complete software architecture specification.
+
+The objective is to establish a maintainable technical foundation capable of supporting the application’s substantial data and analytical complexity.
+
+8.1 Architecture Planning
+
+The architecture specification should address:
+
+* Application structure.
+* Frontend architecture.
+* Backend architecture.
+* Database and data storage design.
+* API and integration architecture.
+* Data ingestion workflows.
+* Synchronization mechanisms.
+* Statistical and machine-learning components.
+* Authentication and user-specific sessions.
+* Feature module organization.
+* Shared services.
+* Live data delivery.
+* Development and testing environments.
+* Build and deployment processes.
+* PWA infrastructure.
+
+8.2 Technology Selection
+
+The developer should evaluate and recommend an appropriate technology stack based on Arbit’s functional requirements.
+
+Technology choices should be documented and justified in terms of their suitability for the intended application.
+
+The project is not currently committed to a particular frontend framework, backend framework, database technology, or machine-learning implementation.
+
+These decisions belong to the architecture planning stage.
+
+8.3 Modular Development
+
+Arbit’s modules should have clear responsibilities and integrate with shared systems.
+
+The implementation should support independent development and testing of features while maintaining consistency across the application.
+
+8.4 Quality Expectations
+
+The project should employ appropriate engineering practices, including:
+
+* Consistent code organization.
+* Clear interfaces and data contracts.
+* Reusable components.
+* Automated testing.
+* Integration testing.
+* Type and data validation where applicable.
+* Error handling.
+* Performance evaluation.
+* Development documentation.
+* Traceable changes.
+* Maintainable implementation patterns.
+
+⸻
+
+9. AGENTIC AI DEVELOPMENT GOVERNANCE
+
+This section is a major project requirement.
+
+Arbit will be developed with the assistance of Agentic AI coding agents, potentially using different LLM providers throughout the project’s lifetime.
+
+The project must therefore maintain a standardized, persistent engineering workflow.
+
+The objective is to ensure that any coding agent working on Arbit can understand the application, the work already completed, the current architectural decisions, and the implementation standards it must follow.
+
+9.1 Standardized Agent Development Environment
+
+The developer must establish a workspace and repository scaffold containing the project’s authoritative technical documentation and development procedures.
+
+This environment should define how AI coding agents:
+
+* Review the existing project.
+* Understand the requirements.
+* Locate relevant architecture documentation.
+* Plan implementation tasks.
+* Make code changes.
+* Validate their work.
+* Update documentation.
+* Record findings.
+* Document technical decisions.
+* Produce development handoffs.
+
+9.2 Required Engineering Documentation
+
+The development environment should maintain a structured set of documents covering:
+
+Product Documentation
+
+* Product vision.
+* Feature requirements.
+* Feature specifications.
+* User workflows.
+* Product decisions.
+
+Architecture Documentation
+
+* Overall system architecture.
+* Technology decisions.
+* Data architecture.
+* API contracts.
+* Database design.
+* Module responsibilities.
+* Integration specifications.
+* Design system architecture.
+
+Development Documentation
+
+* Repository structure.
+* Coding standards.
+* Developer instructions.
+* Implementation conventions.
+* Testing requirements.
+* Validation procedures.
+* Code modification restrictions.
+* Development gates.
+
+Project Continuity Documentation
+
+* Change history.
+* Development changelog.
+* Architecture decision records.
+* Research findings.
+* Known issues.
+* Implementation status.
+* Outstanding tasks.
+* Agent handoff records.
+
+9.3 Gated Code Development
+
+The project should include formalized code implementation rules and validation requirements.
+
+These rules should establish a repeatable process for changes to the codebase.
+
+A standardized workflow should follow this general sequence:
+
+1. Review: Read the applicable specifications, relevant source code, architectural decisions, and previous implementation records.
+2. Plan: Define the intended implementation, affected systems, dependencies, and validation requirements.
+3. Implement: Make the required changes while following the project’s established conventions and architectural specifications.
+4. Validate: Perform the relevant tests, checks, and verification procedures.
+5. Document: Record implementation changes, findings, and any relevant architectural decisions.
+6. Handoff: Provide a clear summary of completed work, remaining tasks, and information necessary for the next development session or agent.
+
+Where possible, the repository and development tooling should help enforce these standardized procedures.
+
+9.4 Cross-Agent Continuity
+
+Development continuity must not depend on any particular LLM vendor or coding agent retaining prior conversational context.
+
+Authoritative project context should live within the workspace and documentation.
+
+A new agent should be able to inspect the project and determine:
+
+* What Arbit is intended to accomplish.
+* What has already been implemented.
+* How the existing architecture works.
+* Which development standards apply.
+* Why significant technical decisions were made.
+* Which tasks are currently underway.
+* What remains to be completed.
+* How to continue development consistently.
+
+The project scaffold and documentation system should be designed around this expectation from the beginning.
+
+⸻
+
+10. DEVELOPMENT PLANNING & IMPLEMENTATION STRATEGY
+
+Arbit is a substantial application with several interdependent systems.
+
+Development should be organized into logical, documented phases based on architectural dependencies and feature requirements.
+
+The following is the intended high-level progression.
+
+Phase 1 — Product & Architecture Foundation
+
+* Review and formalize the product requirements.
+* Create the overall architecture specification.
+* Evaluate and select the technology stack.
+* Establish the development workspace.
+* Establish the repository structure.
+* Create the agentic development governance system.
+* Create the initial design system specification.
+* Define development documentation and handoff conventions.
+* Establish implementation and validation rules.
+
+Phase 2 — Data Integration Foundation
+
+* Research and establish ESPN Fantasy Football integration.
+* Establish FFA league synchronization.
+* Integrate nflverse datasets.
+* Research and integrate applicable Sleeper data.
+* Research ESPN live game and play-by-play endpoints.
+* Establish player and team identifier mapping.
+* Design and implement the unified data model.
+* Establish statistical data processing pipelines.
+
+Phase 3 — Core Application Foundation
+
+* Implement the application shell and navigation.
+* Implement authentication and personalized user experiences.
+* Develop the reusable component system.
+* Establish shared frontend and backend services.
+* Implement the primary Front Office experience.
+* Connect league data to user-facing interfaces.
+
+Phase 4 — Football Intelligence Foundation
+
+* Develop statistical analysis infrastructure.
+* Establish player evaluation methodologies.
+* Implement relevant statistical models.
+* Develop projection and ranking systems.
+* Establish player archetype methodologies.
+* Develop shared recommendation-supporting systems.
+* Implement model evaluation and validation processes.
+
+Phase 5 — Fantasy Management & Research Features
+
+Develop and integrate:
+
+* Arbit Scout.
+* Arbit Lineup.
+* Arbit Market.
+* Arbit Draft.
+
+These modules should use the previously established data and intelligence systems.
+
+Implementation order may be refined during the planning process to account for dependencies and project priorities.
+
+Phase 6 — Live NFL Experience
+
+* Establish live event processing.
+* Implement game scores and play-by-play displays.
+* Integrate fantasy-specific live tracking.
+* Develop interactive football field graphics.
+* Develop play animation systems.
+* Integrate field and uniform assets.
+* Implement player-focused game filtering.
+
+Phase 7 — League History & Product Refinement
+
+* Develop Arbit Archive.
+* Establish historical league data presentation.
+* Implement Geller Cup championship records.
+* Refine interactions and visualizations.
+* Perform application-wide integration testing.
+* Refine application performance and overall UX.
+
+These phases represent an initial planning framework rather than a predetermined implementation schedule.
+
+The detailed roadmap should be established through the architecture and specification process.
+
+⸻
+
+11. INITIAL INSTRUCTIONS TO THE AGENTIC AI DEVELOPER
+
+You are responsible for planning, architecting, and developing Arbit according to this document.
+
+Treat this document as the foundational source of product intent and requirements.
+
+Your initial responsibility is to establish a development-ready plan and technical foundation for the application.
+
+Initial Assignment
+
+Step 1 — Requirements Analysis
+
+Review this document thoroughly.
+
+Identify the major feature requirements, shared systems, data dependencies, and implementation considerations.
+
+Preserve the scope and intended depth of each feature.
+
+Do not substitute simplified implementations for the comprehensive analytical capabilities described in this document.
+
+Step 2 — Architecture Proposal
+
+Develop a proposed application architecture that addresses:
+
+* Frontend and backend systems.
+* Technology selection.
+* Application structure.
+* Data storage.
+* ESPN integration.
+* nflverse integration.
+* Supplementary data sources.
+* Live data processing.
+* Statistical and machine-learning systems.
+* Shared intelligence architecture.
+* Authentication.
+* Desktop and PWA experiences.
+* Testing and deployment infrastructure.
+
+Document the reasoning behind the proposed architectural decisions.
+
+Step 3 — Product Specification
+
+Transform the requirements into a structured product and engineering specification.
+
+This should include:
+
+* Functional requirements.
+* Feature boundaries.
+* Major user workflows.
+* Data requirements.
+* System interactions.
+* Module dependencies.
+* Proposed implementation milestones.
+* Validation and acceptance criteria.
+
+Ensure the resulting specification retains the requirements described in this document.
+
+Step 4 — UX/UI & Design System Plan
+
+Establish the initial design system proposal and product information architecture.
+
+Define how Front Office and the Arbit feature family will function together as one cohesive application.
+
+Step 5 — Agentic Development Framework
+
+Design and establish the standardized development workflow, documentation structure, coding guidelines, implementation gates, and agent handoff procedures.
+
+This framework must be suitable for use by multiple AI coding agents across different LLM providers.
+
+Step 6 — Project Scaffold & Development Roadmap
+
+Prepare a project scaffold aligned with the approved architecture and governance standards.
+
+Create a detailed implementation roadmap that identifies the foundational work and the dependencies required to begin development.
+
+Expected Initial Deliverables
+
+The initial planning and foundation work should produce:
+
+1. Arbit Product Specification — Formal functional requirements and feature definitions.
+2. Arbit Architecture Specification — Proposed system architecture, technical stack, and core components.
+3. Arbit Data Architecture Specification — Data sources, data models, integrations, synchronization, and processing.
+4. Arbit Design System Specification — Visual foundation, reusable components, navigation, and UX/UI standards.
+5. Arbit Agentic Development Standard — Developer instructions, coding rules, validation gates, documentation conventions, and handoff workflows.
+6. Arbit Implementation Roadmap — Detailed phases, milestones, dependencies, and implementation priorities.
+7. Arbit Repository & Workspace Scaffold — Organized initial project structure, documentation, and development tooling.
+
+These materials should establish a consistent foundation for the application’s implementation.
+
+Any remaining technical decisions should be clearly documented and resolved as part of the development planning process.
+
+⸻
+
+12. DEFINITION OF SUCCESS
+
+Arbit will ultimately be successful when it provides FFA league members with a unified, powerful, and intuitive environment for managing their fantasy football experience.
+
+A family member should be able to log into Arbit and access comprehensive information about their team, players, matchups, and league.
+
+They should be able to research players in substantial detail, receive well-supported strategic recommendations, evaluate roster improvements, prepare for drafts, follow live NFL action, and understand the reasoning behind the application’s advice.
+
+The platform should combine:
+
+* The league-specific context of ESPN Fantasy Football.
+* The statistical depth of nflverse.
+* Additional relevant football information.
+* Purpose-built analytical and machine-learning systems.
+* Rich interactive user experiences.
+* A consistent product design.
+* Maintainable, well-documented engineering.
+
+From a development standpoint, success also means that the codebase, architecture, and documentation remain coherent as the project grows, including when implementation transitions between different Agentic AI developers.
+
+The ultimate objective is to build Arbit into a comprehensive fantasy football intelligence and management platform that the FFA family can rely on throughout every phase of the fantasy football season.
+
+⸻
+
+End of Initial Product & Development Handoff — Arbit v1.0

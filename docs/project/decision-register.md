@@ -1,0 +1,41 @@
+# Decisions, Inputs and Open Questions
+
+Updated 2026-10-30. Proposed technical choices are agent recommendations; they have not been represented as owner-approved.
+
+## Confirmed product decisions
+
+| ID | Decision | Evidence |
+| --- | --- | --- |
+| OWN-001 | Arbit, FFA companion, Front Office headquarters, eight-capability family, one redraft league | Owner brief v1.0 |
+| OWN-002 | ESPN league ID `1729878439`, season `2026` | Owner reply 2026-10-30 |
+| OWN-003 | Portable, local-first proposal | Owner reply 2026-10-30 |
+| OWN-004 | Owner's prior Gridiron direct asset URL patterns are not yet available | Owner reply 2026-10-30 |
+| OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
+
+## Proposed architecture decisions
+
+| Record | Proposal | Status / adoption point |
+| --- | --- | --- |
+| [ADR-001](../architecture/decisions/001-modular-runtime.md) | React client + modular Python API/worker, native workspace tools | Proposed; record adoption before runtime bootstrap |
+| [ADR-002](../architecture/decisions/002-data-and-identity.md) | PostgreSQL + versioned Parquet, explicit aliases and immutable publication | Proposed; M1 data implementation |
+| [ADR-003](../architecture/decisions/003-shared-intelligence.md) | Shared exact scoring and point-in-time evaluated models; no fabricated probabilities | Proposed; M1 scoring and M3 model implementation |
+| [ADR-004](../architecture/decisions/004-access-live-and-pwa.md) | Separate invite/OIDC auth, server-only ESPN read access, SSE, static-only PWA caching | Proposed; M1 integration/M2 authentication |
+
+Local documentation/contract/token scaffold does not adopt a runtime or commit to hosting. Exact dependency versions are resolved and locked when the runtime is bootstrapped.
+
+## Open inputs and decision rules
+
+| ID | Missing input / unresolved capability | Impact | Next action and decision owner |
+| --- | --- | --- | --- |
+| Q-001 | Authorized FFA access; unauthenticated settings probe is 401 | Cannot inspect actual scoring, roster, ownership, waiver or draft settings | M1: administrator supplies credential references through a secure local path if needed; engineer performs bounded redacted probe. Never paste cookies in chat |
+| Q-002 | Actual FFA rules, format, locks, team/manager memberships | Cannot assume PPR/slots/draft system or ship calibrated advice | M1: fetch complete metadata, enumerate unknown stat/slot IDs, confirm observed rules against league interface |
+| Q-003 | OIDC provider and invited account roster | Blocks real member sign-in, not data/schema work | Before M2: owner chooses provider/account invite policy; proposal favors maintained OIDC library with server sessions |
+| Q-004 | Exact Gridiron asset patterns and reuse/variant verification | Blocks final weekly field/uniform integration | M1 research/M6: owner shares links when available; engineer verifies candidate sites and records permissions/attribution; generic fallback stays labeled |
+| Q-005 | nflverse per-dataset coverage and available historical release metadata | Determines usable in-season features and holdout periods | M1: engineer audits manifests/schemas/coverage and publication times; no future features in M3 |
+| Q-006 | Sleeper supported scoring/play/game capability beyond public docs | Cannot depend on a supported live feed | M1: engineer records read-only proof if available; use documented metadata/state/trends meanwhile |
+| Q-007 | ESPN live endpoint coverage across event types/corrections | Determines exact Live event/graphic fidelity | M1: engineer collects sanitized fixtures and coverage matrix; single final-game observation is insufficient |
+| Q-008 | Target host capacity, backup location, budget, domain | Blocks external deployment decisions only | Before external provisioning: owner selects limits; keep local containers and storage portable |
+| Q-009 | Empirical FFA draft/trade history and optional ADP source | Limits learned selection/acceptance likelihood | M5: use labeled scenario priors and qualitative feasibility until enough validated data exists |
+| Q-010 | Exact first FFA season and archive finalization detail | Limits any imported prior results/Cup entry | M1/M7: confirm source history and actual championship outcome; preserve inaugural-season empty state |
+
+These are milestone prerequisites, not a demand for the owner to answer every question now. Engineering can proceed with contracts, sanitized fixtures and local runtime tasks while access-specific work waits. Material alternatives are documented before changing scope or cost.

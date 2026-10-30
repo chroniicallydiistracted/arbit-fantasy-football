@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arbit.local/schemas/league-config.schema.json",
+  "title": "Confirmed single FFA league configuration",
+  "type": "object",
+  "properties": {
+    "leagueId": {
+      "const": "1729878439",
+      "type": "string"
+    },
+    "season": {
+      "type": "integer",
+      "minimum": 2026,
+      "maximum": 2100
+    },
+    "provider": {
+      "const": "espn",
+      "type": "string"
+    },
+    "leagueName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "abbreviation": {
+      "const": "FFA",
+      "type": "string"
+    },
+    "deploymentPreference": {
+      "const": "portable-local-first",
+      "type": "string"
+    }
+  },
+  "required": [
+    "leagueId",
+    "season",
+    "provider",
+    "leagueName",
+    "abbreviation",
+    "deploymentPreference"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,27 @@
+# Secrets and local state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+/secrets/
+/data/
+/artifacts/
+/local-storage/
+*.sqlite
+*.sqlite3
+# Dependencies, caches, build outputs
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+coverage/
+dist/
+build/
+*.log
+.DS_Store

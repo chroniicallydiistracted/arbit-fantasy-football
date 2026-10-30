@@ -1,0 +1,41 @@
+# Source Research Register
+
+Research date **2026-10-30**. Primary documentation, provider responses, and the community wrapper's own source are distinguished below. A documentation page is evidence of a documented capability, not proof that FFA access or every 2026 dataset works. No raw member data or credential was stored.
+
+## Integration findings
+
+| ID | Primary source | Observed evidence | Architectural implication / remaining proof |
+| --- | --- | --- | --- |
+| SRC-01 | [ESPN wrapper repository](https://github.com/cwendt94/espn-api), [request implementation](https://raw.githubusercontent.com/cwendt94/espn-api/master/espn_api/requests/espn_requests.py), [endpoint constants](https://raw.githubusercontent.com/cwendt94/espn-api/master/espn_api/requests/constant.py) | Wrapper source uses `lm-api-reads.fantasy.espn.com` FFL season/league routes and configurable cookies; this is community code, not official ESPN API documentation | Isolate unofficial adapter, test views/pagination and auth locally; no assumed provider service contract |
+| SRC-02 | [Configured FFA settings endpoint](https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings) | One direct Python HTTP GET without credentials returned **401** | Actual private access/settings remain unverified. Authorized local credential setup or endpoint/auth investigation required; no retry storm or guessed rules |
+| SRC-03 | [nflverse availability schedule](https://nflreadr.nflverse.com/articles/nflverse_data_schedule.html) | Cleaned PBP/player/team stats follow post-game publication and corrections; participation from 2023 onward is described as postseason-published, not updated during the season. Depth chart updates from 2025 are timestamped, rather than source-assigned weeks | Separate live feed from analytical publication; enforce actual observation cutoffs and dataset-specific coverage. Verify current files, injuries and all feature sources during M1 |
+| SRC-04 | [nflreadpy official site](https://nflreadpy.nflverse.com/), [nflverse data repository](https://github.com/nflverse/nflverse-data), [organization licensing statement](https://github.com/nflverse) | Official Python data reader and release-based dataset distribution exist. Organization distinguishes general CC-BY data from FTN CC-BY-SA data and dataset-specific notices | Reader is a candidate convenience layer; preserve release URLs/checksums/terms and inspect licenses per actual dataset. No blanket license claim for every file |
+| SRC-05 | [Sleeper public API docs](https://docs.sleeper.com/) | Read-only API; player directory, NFL state and trending documented. Full player directory should be fetched at most daily. Public documentation does not establish a supported live scoring/PBP feed | Cache directory; use identity/state/trends as supplemental. Research scoring/play candidates separately before depending on them; no Sleeper league adapter |
+| SRC-06 | [ESPN NFL scoreboard](https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard) | Public JSON observed with season/week/events and game status/competitors | Supports scoreboard candidate, not a real-time latency guarantee |
+| SRC-07 | [ESPN event summary sample](https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023) | Web-reader open failed; a direct Python HTTP request succeeded with **200**, keys `boxscore`, `drives`, `scoringPlays`, `header`; 25 previous drives and eight scoring plays in this one completed-game response | Promising live-data research path. Need active-game, every play type, revision/participant/field-location and historical coverage tests; no entire raw response saved |
+| SRC-08 | [Gridiron Uniform Database](https://gridiron-uniforms.com/GUD/controller/controller.php?action=main), [Fields Database](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=main) | Likely intended sites with game/uniform and field views; fields site states constructed-image reuse requires permission | Candidate identification only; owner's earlier direct-download patterns unavailable. Do not bulk download or assume image permission or exact weekly variant |
+
+The FFA probe establishes only an unauthenticated 401; it does not prove credential validity, complete endpoint support or exact reason for denial. The public game probe does not establish guaranteed route coordinates, player tracking or every required scoring category. Source-derived design implications above are engineering inferences, not provider commitments.
+
+## Technology evidence
+
+| ID | Source checked | Relevant evidence and proposal |
+| --- | --- | --- |
+| SRC-09 | [React app creation guidance](https://react.dev/learn/creating-a-react-app), [Vite guide](https://vite.dev/guide/) | React recommends frameworks and allows a custom approach where appropriate; Vite supplies dev/build tooling. SPA selection explicitly owns routing/data/error behavior for this private client |
+| SRC-10 | [FastAPI features](https://fastapi.tiangolo.com/features/) | OpenAPI/Pydantic-oriented HTTP framework supports proposed Python API boundary and generated client contracts |
+| SRC-11 | [DuckDB Parquet documentation](https://duckdb.org/docs/2.0/data/parquet/overview) | Columnar Parquet read/query path supports proposed bulk statistical processing; no large dataset benchmark performed |
+| SRC-12 | [PostgreSQL explicit locking](https://www.postgresql.org/docs/current/explicit-locking.html) | Transaction/row/advisory locking building blocks support proposed job/snapshot coordination; complete queue semantics still need implementation tests |
+| SRC-13 | [MDN SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events), [web.dev service workers](https://web.dev/learn/pwa/service-workers) | SSE supports event/reconnection mechanics; worker caching needs an explicit policy. Proposed same-origin sessions and static-only PWA cache are Arbit decisions |
+| SRC-14 | [Node release lifecycle](https://nodejs.org/en/about/previous-releases) | Node 24 and 26 are listed as LTS on research date; choose mature Node 24 target initially and lock patches during bootstrap, rather than treating host runtime as the project version |
+| SRC-15 | [Authlib web clients](https://docs.authlib.org/en/latest/oauth2/client/web/) | Current OAuth/OIDC web-client integration documentation includes Starlette/FastAPI. Old `/client/starlette.html` and `/client/fastapi.html` links returned 404; use current integration docs, verify library/version/provider at M2 |
+| SRC-16 | [Official checkout action](https://github.com/actions/checkout), [v6 reference](https://api.github.com/repos/actions/checkout/git/ref/tags/v6) | GitHub API returned commit `d23441a48e516b6c34aea4fa41551a30e30af803`; foundation CI pins it and disables persisted checkout credentials |
+
+## Next research experiments
+
+1. With local authorized FFA access, enumerate views/fields/pages, actual categories/slots/draft/waiver settings and missing capabilities; produce sanitized contract fixtures and a support matrix.
+2. Download bounded nflverse samples and inventory season/field coverage, data availability and schema/version changes. Capture actual publication metadata or conservatively timestamp observation. Verify dataset terms rather than generalizing a repository license.
+3. Verify Sleeper current documented directory/state/trending behavior; record any extra stats/scoring/play endpoint separately with proof, stability and fallback.
+4. Capture ESPN active/final/postponed/overtime and corrected-game samples; measure participant IDs, field coordinates, sequence stability and rate behavior. Prefer this research before seeking another live source, as requested.
+5. Confirm owner Gridiron patterns when supplied; verify exact variant mapping, size/content restrictions, reuse permission and attribution. Use curated manifests rather than guessed download URLs.
+
+No provider account, ESPN transaction, paid plan, cloud service, message or public repository was created by this research.

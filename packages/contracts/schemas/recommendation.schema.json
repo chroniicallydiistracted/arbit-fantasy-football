@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arbit.local/schemas/recommendation.schema.json",
+  "title": "Versioned explained advisor recommendation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "lineup",
+        "waiver",
+        "trade",
+        "draft"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "current",
+        "historical",
+        "blocked"
+      ]
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "leagueId": {
+          "type": "string",
+          "const": "1729878439"
+        },
+        "season": {
+          "type": "integer",
+          "minimum": 2026
+        },
+        "teamId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "scoringPeriodId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "horizon": {
+          "type": "string",
+          "enum": [
+            "weekly",
+            "rest_of_season",
+            "draft_season"
+          ]
+        }
+      },
+      "required": [
+        "leagueId",
+        "season",
+        "teamId",
+        "scoringPeriodId",
+        "horizon"
+      ],
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primaryEntityId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "alternativeEntityIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "summary",
+        "primaryEntityId",
+        "alternativeEntityIds"
+      ],
+      "additionalProperties": false
+    },
+    "explanation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projection": {
+      "type": "object",
+      "properties": {
+        "expectedGain": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        },
+        "unit": {
+          "type": "string",
+          "const": "fantasy_points"
+        },
+        "lower": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        },
+        "upper": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        }
+      },
+      "required": [
+        "expectedGain",
+        "unit",
+        "lower",
+        "upper"
+      ],
+      "additionalProperties": false
+    },
+    "confidence": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "unavailable",
+            "heuristic",
+            "validated"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "probability": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "kind",
+        "summary",
+        "probability"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "metric": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          },
+          "window": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sampleCount": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "metric",
+          "value",
+          "unit",
+          "window",
+          "sourceRef",
+          "sampleCount"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "properties": {
+        "snapshotId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "rulesHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "modelRunId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "featureSetVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "featureCutoff": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sourceObservedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "dataStatus": {
+          "type": "string",
+          "enum": [
+            "fresh",
+            "partial",
+            "stale",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "snapshotId",
+        "rulesHash",
+        "modelRunId",
+        "featureSetVersion",
+        "featureCutoff",
+        "sourceObservedAt",
+        "generatedAt",
+        "dataStatus"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id",
+    "synthetic",
+    "kind",
+    "state",
+    "context",
+    "action",
+    "explanation",
+    "projection",
+    "confidence",
+    "evidence",
+    "limitations",
+    "lineage"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,55 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "synthetic": true,
+  "kind": "lineup",
+  "state": "current",
+  "context": {
+    "leagueId": "1729878439",
+    "season": 2026,
+    "teamId": "00000000-0000-4000-8000-000000000010",
+    "scoringPeriodId": "fixture-period",
+    "horizon": "weekly"
+  },
+  "action": {
+    "summary": "Compare synthetic Player A with synthetic Player B for an eligible slot.",
+    "primaryEntityId": "00000000-0000-4000-8000-000000000011",
+    "alternativeEntityIds": [
+      "00000000-0000-4000-8000-000000000012"
+    ]
+  },
+  "explanation": "Synthetic contract example only. These values are not a player prediction or verified FFA analysis.",
+  "projection": {
+    "expectedGain": "1.50",
+    "unit": "fantasy_points",
+    "lower": "-2.00",
+    "upper": "5.00"
+  },
+  "confidence": {
+    "kind": "heuristic",
+    "summary": "Synthetic evidence; probability unavailable.",
+    "probability": null
+  },
+  "evidence": [
+    {
+      "metric": "synthetic_opportunity_share",
+      "value": "0.25",
+      "unit": "fraction",
+      "window": "four synthetic games",
+      "sourceRef": "fixture://synthetic-input-v1",
+      "sampleCount": 4
+    }
+  ],
+  "limitations": [
+    "Synthetic fixture; no FFA scoring settings or private player data has been fetched."
+  ],
+  "lineage": {
+    "snapshotId": "00000000-0000-4000-8000-000000000020",
+    "rulesHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "modelRunId": "fixture-run-v1",
+    "featureSetVersion": "fixture-features-v1",
+    "featureCutoff": "2026-10-30T18:00:00Z",
+    "sourceObservedAt": "2026-10-30T18:00:00Z",
+    "generatedAt": "2026-10-30T18:01:00Z",
+    "dataStatus": "partial"
+  }
+}

@@ -1,0 +1,658 @@
+{
+  "version": 1,
+  "requirements": [
+    {
+      "id": "CTX-001",
+      "title": "One FFA redraft league; independent Arbit identity and Front Office headquarters",
+      "sourceSections": [
+        "1",
+        "2",
+        "3.1",
+        "3.2"
+      ],
+      "milestone": "M0",
+      "spec": "docs/product/product-specification.md",
+      "acceptance": "Configuration fixes ESPN league 1729878439 and season 2026; no multi-league product workflow.",
+      "status": "specified"
+    },
+    {
+      "id": "CTX-002",
+      "title": "Personalized manager/team/roster/matchup context in every advisor",
+      "sourceSections": [
+        "3.3"
+      ],
+      "milestone": "M2",
+      "spec": "docs/product/product-specification.md",
+      "acceptance": "Two authenticated member fixtures see their assigned teams; binding cannot be self-forged.",
+      "status": "specified"
+    },
+    {
+      "id": "CTX-003",
+      "title": "Inaugural history, annual redraft, Geller Cup team/year and offseason custody",
+      "sourceSections": [
+        "3.4"
+      ],
+      "milestone": "M7",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "No fabricated prior champion; verified finals preserve team name, year and manager.",
+      "status": "specified"
+    },
+    {
+      "id": "FO-001",
+      "title": "Team identity, roster, matchup, standings and relevant player performance",
+      "sourceSections": [
+        "4.1"
+      ],
+      "milestone": "M2",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "One published snapshot consistently supplies all own-team overview panels.",
+      "status": "specified"
+    },
+    {
+      "id": "FO-002",
+      "title": "Strengths, weaknesses, positional needs, lineup considerations and actionable module links",
+      "sourceSections": [
+        "4.1"
+      ],
+      "milestone": "M3",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Decision cards reuse advisor results, evidence and snapshot; no duplicate scoring/model.",
+      "status": "specified"
+    },
+    {
+      "id": "DR-001",
+      "title": "Preparation, strategy, simulations, scenarios and player comparisons",
+      "sourceSections": [
+        "4.2"
+      ],
+      "milestone": "M5",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Seeded full-draft scenarios compare options and resulting roster construction.",
+      "status": "specified"
+    },
+    {
+      "id": "DR-002",
+      "title": "Actual league size/scoring/slots, draft format/order, own pick, all selections and available pool",
+      "sourceSections": [
+        "4.2"
+      ],
+      "milestone": "M5",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Configured-format draft replay tracks every team; selected players leave availability.",
+      "status": "specified"
+    },
+    {
+      "id": "DR-003",
+      "title": "Dynamic recommendations: filled/remaining needs, scarcity, projected value, byes and priorities",
+      "sourceSections": [
+        "4.2"
+      ],
+      "milestone": "M5",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Replaying different selections changes recommendations and documents roster/bye tradeoffs.",
+      "status": "specified"
+    },
+    {
+      "id": "DR-004",
+      "title": "Round/pick selection likelihood and next-pick availability with explanations",
+      "sourceSections": [
+        "4.2"
+      ],
+      "milestone": "M5",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Simulation assumptions/calibration status are visible; no invented learned FFA probabilities.",
+      "status": "specified"
+    },
+    {
+      "id": "DR-005",
+      "title": "Live tracking, corrections, stale protection and labeled manual fallback",
+      "sourceSections": [
+        "4.2"
+      ],
+      "milestone": "M5",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Disconnect/correction/resync fixtures restore the board and suspend stale current-pick advice.",
+      "status": "specified"
+    },
+    {
+      "id": "LN-001",
+      "title": "Full-roster weekly sit/start and globally legal optimized lineup",
+      "sourceSections": [
+        "4.3"
+      ],
+      "milestone": "M4",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Exhaustive small-case oracle verifies unique-player slot assignment with locks and byes.",
+      "status": "specified"
+    },
+    {
+      "id": "LN-002",
+      "title": "NFL/defensive positional matchups, recent trends, utilization and FFA opponent context",
+      "sourceSections": [
+        "4.3"
+      ],
+      "milestone": "M4",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Evidence and objective use both own roster and actual opponent with sourced inputs.",
+      "status": "specified"
+    },
+    {
+      "id": "LN-003",
+      "title": "Individual comparisons, outlooks, statistical reasons, projections and confidence",
+      "sourceSections": [
+        "4.3"
+      ],
+      "milestone": "M4",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Alternative selection exposes horizon, gain, interval and evidence limitations.",
+      "status": "specified"
+    },
+    {
+      "id": "WA-001",
+      "title": "Continuously updated complete FFA free-agent and waiver availability",
+      "sourceSections": [
+        "4.4A"
+      ],
+      "milestone": "M4",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Pagination covers the full pool; a new ownership revision invalidates pickup advice.",
+      "status": "specified"
+    },
+    {
+      "id": "WA-002",
+      "title": "Recent/history/trends, opportunity, projections, upcoming matchups and position filters",
+      "sourceSections": [
+        "4.4A"
+      ],
+      "milestone": "M4",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Filtered weekly upgrades retain comparable windows, sources and FFA scoring.",
+      "status": "specified"
+    },
+    {
+      "id": "WA-003",
+      "title": "Roster-specific weaknesses, legal add/drop alternatives and meaningful upgrade value",
+      "sourceSections": [
+        "4.4A"
+      ],
+      "milestone": "M4",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Legal package improves actual roster utility after required drops, with uncertainty.",
+      "status": "specified"
+    },
+    {
+      "id": "TR-001",
+      "title": "All-team needs, strengths, depth, byes and roster compatibility",
+      "sourceSections": [
+        "4.4B"
+      ],
+      "milestone": "M5",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "League needs matrix derives from every current roster and shared evaluations.",
+      "status": "specified"
+    },
+    {
+      "id": "TR-002",
+      "title": "Suggested multi-player packages, player values and both managers benefits",
+      "sourceSections": [
+        "4.4B"
+      ],
+      "milestone": "M5",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Both post-trade rosters and drops are legal; before/after utility uses one horizon.",
+      "status": "specified"
+    },
+    {
+      "id": "TR-003",
+      "title": "Feasibility and likelihood assessment with honest evidence limits",
+      "sourceSections": [
+        "4.4B"
+      ],
+      "milestone": "M5",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Qualitative early feasibility is labeled; numerical acceptance requires labeled held-out validation.",
+      "status": "specified"
+    },
+    {
+      "id": "TR-004",
+      "title": "Custom proposal evaluation, comparisons and opportunity prioritization",
+      "sourceSections": [
+        "4.4B"
+      ],
+      "milestone": "M5",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Saved/custom packages retain snapshot/rules and flag changed ownership or deadlines.",
+      "status": "specified"
+    },
+    {
+      "id": "SC-001",
+      "title": "Search/discovery, identity, history/current/game-level statistics and role",
+      "sourceSections": [
+        "4.5"
+      ],
+      "milestone": "M3",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Profile resolves one canonical entity across provider IDs, team changes and seasons.",
+      "status": "specified"
+    },
+    {
+      "id": "SC-002",
+      "title": "Advanced metrics, trends, news, depth chart, utilization and future matchups",
+      "sourceSections": [
+        "4.5"
+      ],
+      "milestone": "M3",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Every metric/news item has source/time/definition; unavailable feeds remain explicit gaps.",
+      "status": "specified"
+    },
+    {
+      "id": "SC-003",
+      "title": "FFA points, outlooks, projections, rankings and positional evaluation",
+      "sourceSections": [
+        "4.5"
+      ],
+      "milestone": "M3",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Profile and advisors show the same scoring/model versions and uncertainty.",
+      "status": "specified"
+    },
+    {
+      "id": "SC-004",
+      "title": "Rich interactive stat cards, statistical exploration and side-by-side comparisons",
+      "sourceSections": [
+        "4.5"
+      ],
+      "milestone": "M3",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Two-to-four-player comparison aligns units/windows; chart information has a table equivalent.",
+      "status": "specified"
+    },
+    {
+      "id": "SC-005",
+      "title": "Data-derived archetypes with explainable roles and performance profiles",
+      "sourceSections": [
+        "4.5"
+      ],
+      "milestone": "M3",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Versioned labels show contributing metrics/sample; insufficient data yields unclassified.",
+      "status": "specified"
+    },
+    {
+      "id": "LV-001",
+      "title": "Live scores/status/teams, game statistics and player participation/performance",
+      "sourceSections": [
+        "4.6"
+      ],
+      "milestone": "M6",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Pregame/live/overtime/final/stale fixtures display correct state and provenance.",
+      "status": "specified"
+    },
+    {
+      "id": "LV-002",
+      "title": "PBP, fantasy scoring, own-roster filters and fantasy matchup connection",
+      "sourceSections": [
+        "4.6"
+      ],
+      "milestone": "M6",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Canonical participants drive filtering; official ESPN fantasy and live estimates remain distinct.",
+      "status": "specified"
+    },
+    {
+      "id": "LV-003",
+      "title": "Interactive passing/rushing/sneak/sack/interception/FG/PAT and other play graphics",
+      "sourceSections": [
+        "4.6"
+      ],
+      "milestone": "M6",
+      "spec": "docs/design/design-system.md",
+      "acceptance": "Named event replay fixtures and unknown fallback work with keyboard and reduced motion.",
+      "status": "specified"
+    },
+    {
+      "id": "LV-004",
+      "title": "Gridiron field assets and verified matchup/week uniforms beside the field",
+      "sourceSections": [
+        "4.6",
+        "5.5"
+      ],
+      "milestone": "M6",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Asset manifest verifies source/variant/permission; missing variant is labeled fallback.",
+      "status": "specified"
+    },
+    {
+      "id": "LV-005",
+      "title": "Late, duplicate, canceled and revised events update score and graphics consistently",
+      "sourceSections": [
+        "4.6",
+        "6.4"
+      ],
+      "milestone": "M6",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Replaying overlapping/corrected events changes effective scores once and preserves revision history.",
+      "status": "specified"
+    },
+    {
+      "id": "MD-001",
+      "title": "nflverse-first shared intelligence and reusable evaluations across modules",
+      "sourceSections": [
+        "4.7",
+        "5.2",
+        "6.5"
+      ],
+      "milestone": "M3",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "All advisors consume common evaluation artifacts; external fantasy projections are benchmark-only.",
+      "status": "specified"
+    },
+    {
+      "id": "MD-002",
+      "title": "Historical/statistical analysis, projections, rankings, matchups and roster values",
+      "sourceSections": [
+        "4.7"
+      ],
+      "milestone": "M3",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "A point-in-time evaluation set supports weekly/draft/rest-of-season horizons explicitly.",
+      "status": "specified"
+    },
+    {
+      "id": "MD-003",
+      "title": "Advanced comparisons, trends, archetypes and decision-specific analysis",
+      "sourceSections": [
+        "4.7"
+      ],
+      "milestone": "M3",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Interpretable or measured ML features explain contribution and evidence coverage.",
+      "status": "specified"
+    },
+    {
+      "id": "MD-004",
+      "title": "Reproducibility, ML where appropriate, backtesting and validation",
+      "sourceSections": [
+        "4.7",
+        "8.4"
+      ],
+      "milestone": "M3",
+      "spec": "docs/architecture/model-specification.md",
+      "acceptance": "Temporal holdout, baseline/subgroup metrics, leakage checks, lineage and rollback artifact recorded.",
+      "status": "specified"
+    },
+    {
+      "id": "AR-001",
+      "title": "Historical standings/results/champions and Geller Cup history",
+      "sourceSections": [
+        "4.8"
+      ],
+      "milestone": "M7",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Only verified season-final outcomes publish champions with audited correction history.",
+      "status": "specified"
+    },
+    {
+      "id": "AR-002",
+      "title": "Season/team/player records, historical performance and comparisons",
+      "sourceSections": [
+        "4.8"
+      ],
+      "milestone": "M7",
+      "spec": "docs/product/feature-experiences.md",
+      "acceptance": "Record definitions and original scoring are visible; renamed teams preserve prior names.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-001",
+      "title": "Complete ESPN league/settings/managers/teams/rosters/ownership/waivers/matchups/standings/draft",
+      "sourceSections": [
+        "5.1",
+        "6.2"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Access proof, pagination, completeness and all actual rule categories are checked with sanitized fixtures.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-002",
+      "title": "nflverse retrieval, historical storage, normalization/features/rankings/model processing",
+      "sourceSections": [
+        "5.2",
+        "6.3"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Versioned manifests pin checksums, coverage, schema, publication/cutoff and attribution.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-003",
+      "title": "Research applicable Sleeper scoring/player/game/play data; supplemental only",
+      "sourceSections": [
+        "5.3"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Documented endpoints separated from unproven candidates; no second league provider.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-004",
+      "title": "Research ESPN NFL live endpoints before other gap sources",
+      "sourceSections": [
+        "5.4"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Scoreboard/summary coverage matrix and representative play-type fixtures establish actual capabilities.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-005",
+      "title": "Unified players/teams/league/stats/games/draft/scoring/events/evaluations/recommendations",
+      "sourceSections": [
+        "6.1"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Aliases separate human/NFL team/DST/fantasy entities and unresolved identities cannot silently merge.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-006",
+      "title": "Reliable snapshots, sync, correction handling and shared access",
+      "sourceSections": [
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Partial sync cannot replace current state; replay is idempotent and freshness failures visible.",
+      "status": "specified"
+    },
+    {
+      "id": "DATA-007",
+      "title": "Single exact-rule scoring service and season-specific eligibility/lock rules",
+      "sourceSections": [
+        "4.2",
+        "4.3",
+        "4.4",
+        "6.1"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Decimal scoring reconciles tested rules with ESPN; unknown rules block affected advice.",
+      "status": "specified"
+    },
+    {
+      "id": "UX-001",
+      "title": "Design principles, visual identity, typography, color, spacing and layout",
+      "sourceSections": [
+        "7.1",
+        "7.3"
+      ],
+      "milestone": "M0",
+      "spec": "docs/design/design-system.md",
+      "acceptance": "Documented semantic tokens include verified text/focus contrast pairs and responsive rules.",
+      "status": "specified"
+    },
+    {
+      "id": "UX-002",
+      "title": "Reusable navigation/cards/tables/charts/forms/controls and feature UX specifications",
+      "sourceSections": [
+        "7.3",
+        "7.4"
+      ],
+      "milestone": "M2",
+      "spec": "docs/design/design-system.md",
+      "acceptance": "All module workflows and component states documented; implemented shared components tested in context.",
+      "status": "specified"
+    },
+    {
+      "id": "UX-003",
+      "title": "Loading/empty/error/stale states, accessible interactions and dense data readability",
+      "sourceSections": [
+        "7.1",
+        "7.3"
+      ],
+      "milestone": "M2",
+      "spec": "docs/design/design-system.md",
+      "acceptance": "Keyboard/screen-reader/zoom/reflow and chart table alternatives checked on implemented flows.",
+      "status": "specified"
+    },
+    {
+      "id": "UX-004",
+      "title": "Desktop web and installable PWA with appropriate responsive/offline experience",
+      "sourceSections": [
+        "7.2"
+      ],
+      "milestone": "M2",
+      "spec": "docs/architecture/system-architecture.md",
+      "acceptance": "Manifest/install/update/offline flow works; private API/auth responses excluded from worker caches.",
+      "status": "specified"
+    },
+    {
+      "id": "ENG-001",
+      "title": "Justified frontend/backend/database/integrations/ML/live/PWA/deployment architecture",
+      "sourceSections": [
+        "8.1",
+        "8.2"
+      ],
+      "milestone": "M0",
+      "spec": "docs/architecture/system-architecture.md",
+      "acceptance": "Architecture compares alternatives, labels proposal status and records unresolved provider/hosting decisions.",
+      "status": "specified"
+    },
+    {
+      "id": "ENG-002",
+      "title": "Clear feature boundaries, shared services, typed contracts and modular development",
+      "sourceSections": [
+        "8.3",
+        "8.4"
+      ],
+      "milestone": "M1",
+      "spec": "docs/architecture/system-architecture.md",
+      "acceptance": "Core has no provider imports; generated clients/contracts prevent duplicate wire/scoring logic.",
+      "status": "specified"
+    },
+    {
+      "id": "ENG-003",
+      "title": "Tests, validation, errors, performance, environments and maintainable traceable changes",
+      "sourceSections": [
+        "8.4"
+      ],
+      "milestone": "M2",
+      "spec": "docs/engineering/agentic-development-standard.md",
+      "acceptance": "Appropriate unit/integration/browser/operational checks and budgets evidenced at each release gate.",
+      "status": "specified"
+    },
+    {
+      "id": "ENG-004",
+      "title": "Authentication, user sessions and safe private provider integration",
+      "sourceSections": [
+        "3.3",
+        "8.1"
+      ],
+      "milestone": "M2",
+      "spec": "docs/architecture/system-architecture.md",
+      "acceptance": "OIDC/session/CSRF/authorization/revocation checks pass; ESPN cookies never reach browser/logs/Git.",
+      "status": "specified"
+    },
+    {
+      "id": "GOV-001",
+      "title": "Authoritative product/architecture/development/continuity documentation",
+      "sourceSections": [
+        "9.1",
+        "9.2",
+        "9.4"
+      ],
+      "milestone": "M0",
+      "spec": "docs/engineering/agentic-development-standard.md",
+      "acceptance": "A fresh agent can locate specifications, status, decisions, known issues and latest handoff.",
+      "status": "specified"
+    },
+    {
+      "id": "GOV-002",
+      "title": "Review/plan/implement/validate/document/handoff gates and code conventions",
+      "sourceSections": [
+        "9.3"
+      ],
+      "milestone": "M0",
+      "spec": "docs/engineering/agentic-development-standard.md",
+      "acceptance": "Task records identify affected requirements, evidence and risks; CI verifies foundation artifacts.",
+      "status": "specified"
+    },
+    {
+      "id": "GOV-003",
+      "title": "Change history, ADRs/research/issues/status/tasks and cross-provider handoffs",
+      "sourceSections": [
+        "9.2",
+        "9.4"
+      ],
+      "milestone": "M0",
+      "spec": "docs/engineering/agentic-development-standard.md",
+      "acceptance": "Every completed session updates status/changelog/handoff without relying on chat memory.",
+      "status": "specified"
+    },
+    {
+      "id": "PLAN-001",
+      "title": "Dependency-aware phased roadmap retaining complete advanced scope",
+      "sourceSections": [
+        "10",
+        "11"
+      ],
+      "milestone": "M0",
+      "spec": "docs/project/roadmap.md",
+      "acceptance": "Every requirement maps to a milestone, dependency, acceptance gate and planned verification.",
+      "status": "specified"
+    },
+    {
+      "id": "PLAN-002",
+      "title": "Seven initial planning/specification/governance/scaffold deliverables",
+      "sourceSections": [
+        "11"
+      ],
+      "milestone": "M0",
+      "spec": "README.md",
+      "acceptance": "README links all seven deliverables; source brief preserved byte-for-byte.",
+      "status": "specified"
+    },
+    {
+      "id": "SUCCESS-001",
+      "title": "Unified understandable data-driven intelligence usable throughout the fantasy season",
+      "sourceSections": [
+        "12"
+      ],
+      "milestone": "M7",
+      "spec": "docs/product/product-specification.md",
+      "acceptance": "End-to-end manager workflows exercise all modules with shared league/model context and honest limitations.",
+      "status": "specified"
+    }
+  ]
+}
