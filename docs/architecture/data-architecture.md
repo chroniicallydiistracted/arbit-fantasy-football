@@ -72,7 +72,7 @@ The target canonical synchronization flow, not yet implemented, is: acquire a se
 
 Detect acquisitions, releases, trades, lineup changes, waivers, matchups, settings and draft changes by diffing published snapshots; transaction logs are supplementary, not the only source. Do not infer a successful waiver transaction from a trending-player feed. Unknown scoring or slot IDs fail the rules-support gate and block affected calculations while other league facts remain visible.
 
-No season inference from the machine date: configured season is 2026 until an explicit rollover workflow snapshots finals, updates configuration and bootstraps the new season. Observed settings are captured without normalization. Actual FFA rule/category/slot support and score reconciliation remain required before scoring-dependent advice.
+No season inference from the machine date: configured season is 2026 until an explicit rollover workflow snapshots finals, updates configuration and bootstraps the new season. Observed settings are captured without normalization. Actual 46-rule FFA scoring normalization and completed-period reconciliation are implemented; canonical identity/storage, full eligibility/lock handling and model evaluation remain prerequisites for advice.
 
 ## Polling and freshness proposal
 
@@ -102,6 +102,8 @@ For each feature: define unit, denominator, window, minimum sample, missingness 
 ## Shared scoring and recommendation lineage
 
 Normalize ESPN stat-category IDs into versioned scoring rules: linear rates, threshold/range bonuses, distance-dependent kicking, turnovers, fractional/negative points, defensive/team scoring, and slot eligibility as actually configured. Preserve unsupported rules verbatim, with a diagnostic code; do not assume PPR, K/DST, bench, IR, FLEX, or superflex settings. Use exact Decimal arithmetic and tested final rounding. Bonus expectations come from simulated stat lines/distributions, not `bonus(mean(stat))`.
+
+M1c implements the actual FFA scorer adapter: fetched rates, 26 effective athlete rules and 46 D/ST rules with override16 independent of lineup placement. Point/yard bands use raw120/127 with source-indicator consistency checks; the under100-yard range has an unbounded lower endpoint. Only exact actual/source0, weekly/split1, configured season/period and GP=1 blocks are recomputed. Known sparse additive counters have an explicit policy; absent maps/range totals remain unknown. Empty no-game official zeros are not verified stat cases. `espn-score-audit` checks per-rule contributions, scoped player references and historical active-lineup totals, brackets settings and keeps advice disabled. [Support/proof](../research/ffa-scoring-verification-2026-10-30.md) records empirical coverage, precise cent policy and replay provenance. Persisted rule versions and cross-source semantic equivalence are still future integration work.
 
 A historical score uses the relevant season/rule version. Reconcile hand-verified game fixtures against ESPN totals including corrections, D/ST points allowed definitions and edge plays. PBP reconstructed totals are provisional because later boxscore corrections and categories can differ. Advice must carry snapshot ID, rule hash, feature-set version, model run, as-of cutoff, generated time, horizon, coverage and limitations. Changes invalidate by dependency: a lineup move affects that team's lineup scenario; a rules change affects all scoring-dependent artifacts.
 

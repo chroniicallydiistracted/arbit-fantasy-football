@@ -2,7 +2,7 @@
 
 ## Current versus planned contents
 
-M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. M1b adds typed public ESPN acquisition and manual inspection, with the ignored reference checkout under `.references`. Web/Model directories remain future work. Initial contract schemas and design tokens are reviewable artifacts; no frontend UI or durable canonical FFA sync is claimed. [Local development](local-development.md) describes runnable commands.
+M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. M1b adds all audited public ESPN routes and manual inspection, with the ignored reference checkout under `.references`. M1c maps and reconciles actual FFA scoring through the shared Decimal engine; canonical identities/publication and Model remain separate work. Web/Model directories remain future work. Initial contract schemas and design tokens are reviewable artifacts; no frontend UI or durable canonical FFA sync is claimed. [Local development](local-development.md) describes runnable commands.
 
 | Path | Responsibility |
 | --- | --- |

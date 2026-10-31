@@ -421,7 +421,9 @@
       "acceptance": "Access proof, pagination, completeness and all actual rule categories are checked with sanitized fixtures.",
       "status": "in_progress",
       "evidence": [
-        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+        "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
+        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
       ]
     },
     {
@@ -458,7 +460,8 @@
       "acceptance": "Scoreboard/summary coverage matrix and representative play-type fixtures establish actual capabilities.",
       "status": "in_progress",
       "evidence": [
-        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+        "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
+        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open"
       ]
     },
     {
@@ -474,7 +477,9 @@
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
         "docs/project/handoffs/2026-10-30-m1a.md",
-        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+        "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
+        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
       ]
     },
     {
@@ -493,7 +498,9 @@
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
         "docs/project/handoffs/2026-10-30-m1a.md",
-        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+        "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
+        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
       ]
     },
     {
@@ -512,7 +519,9 @@
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
         "docs/project/handoffs/2026-10-30-m1a.md",
-        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+        "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
+        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
       ]
     },
     {

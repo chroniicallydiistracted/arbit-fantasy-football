@@ -1,10 +1,10 @@
 # Arbit agent entry point
 
-Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. The owner brief is authoritative; M1a runtime/core/persistence/health behavior is implemented; M1b public acquisition and all audited usable endpoint routes are implemented and verified; canonical FFA publication, frontend, authentication and models remain future work. Deployment preference: portable and local-first.
+Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. The owner brief is authoritative; M1a runtime/core/persistence/health behavior is implemented; M1b public acquisition and all audited usable endpoint routes are implemented and verified; M1c actual FFA scoring is mapped and reconciled; canonical FFA publication, frontend, authentication and models remain future work. Deployment preference: portable and local-first.
 
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-30-endpoint-coverage.md).
+1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-30-ffa-scoring.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.
@@ -14,7 +14,7 @@ Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, seas
 - Single FFA league, annual redraft; do not add tenancy or a second league provider. Never guess PPR, roster slots, draft structure, waiver rules or first-season history.
 - ESPN is league authority; nflverse is the primary statistical foundation. Sleeper is supplemental. Gridiron assets require verified variants and reuse permission.
 - Shared identity, scoring, eligibility and versioned player evaluations serve all modules. No advisor or client duplicates provider parsing or fantasy arithmetic.
-- Unknown data is not zero. Unknown rules/identity or stale ownership must limit or block affected advice explicitly. Official ESPN totals, live estimates and model projections are visibly distinct.
+- Unknown data is not zero. The documented sparse-counter exception applies only to complete actual GP=1 stat maps; provider-zero no-game references remain separate. Unknown rules/identity or stale ownership must limit or block affected advice explicitly. Official ESPN totals, live estimates and model projections are visibly distinct.
 - Preserve point-in-time lineage and corrections. No future information in a model backtest, fabricated route tracking, or unsupported numerical acceptance probability.
 - Current public ESPN reads require no cookies; message boards are outside product scope. All ESPN interactions are read-only in the initial scope. Credentials remain server-side and outside source, fixtures, logs and browser bundles.
 - Architecture/stack were approved on 2026-10-30. Additional development dependencies are authorized, especially UX/UI. Preserve deliberate, high-quality product design and engineering; generic dashboard filler is not acceptable. Do not report fixtures or documentation as a shipped feature.

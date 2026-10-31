@@ -13,7 +13,6 @@ Updated 2026-10-30. Architecture and recommended stack approved by the owner on 
 | OWN-007 | Owner made FFA public, reviewed the successful API audit and authorized development using public access; message boards are not required | Owner request 2026-10-30 |
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
-
 | OWN-008 | Every successful usable endpoint must be wired before mapping actual FFA rules and verifying ESPN totals; recommendations stay disabled until verification | Owner continuation 2026-10-30 |
 
 ## Accepted architecture decisions
@@ -32,7 +31,7 @@ Owner approval adopts these runtime choices. Hosting remains portable/local-firs
 | ID | Missing input / unresolved capability | Impact | Next action and decision owner |
 | --- | --- | --- | --- |
 | Q-001 | Public source mode authorized for the current development phase; future private visibility is an optional change | Core reads work without cookies; message-board availability has no product impact | Public reader implemented and live-verified; configure and test server-side credentials only if visibility later becomes private |
-| Q-002 | Actual settings retrieved; rule/category normalization, membership binding and scoring reconciliation remain | 46 scoring items, OFFLINE draft, actual slots/waivers/locks observed; usable normalized advice still requires validation | M1b contracts preserve observed rules and unknowns; M1c maps/reconciles exact rules |
+| Q-002 | Actual settings retrieved; rule/category normalization, membership binding and scoring reconciliation remain | 46 scoring items, OFFLINE draft, actual slots/waivers/locks observed; usable normalized advice still requires validation | M1c mapped all46 rules and reconciled completed weeks; canonical persistence, membership and full eligibility/lock handling remain |
 | Q-003 | OIDC provider and invited account roster | Blocks real member sign-in, not data/schema work | Before M2: owner chooses provider/account invite policy; proposal favors maintained OIDC library with server sessions |
 | Q-004 | Exact Gridiron asset patterns and reuse/variant verification | Blocks final weekly field/uniform integration | M1 research/M6: owner shares links when available; engineer verifies candidate sites and records permissions/attribution; generic fallback stays labeled |
 | Q-005 | nflverse per-dataset coverage and available historical release metadata | Determines usable in-season features and holdout periods | M1: engineer audits manifests/schemas/coverage and publication times; no future features in M3 |

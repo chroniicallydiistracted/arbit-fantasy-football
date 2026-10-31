@@ -1,6 +1,6 @@
 # Actual FFA Scoring Mapping and Reconciliation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Normalize all 46 actual FFA scoring definitions and verify completed-period player and starting-lineup scores against ESPN before recommendations can be enabled.
 
@@ -35,8 +35,8 @@
 
 **Interfaces:** `normalize_scoring(settings, season) -> NormalizedScoring` exposes athlete/DST RuleSets, all-source support diagnostics and semantic config hash; immutable mapping version/source provenance. Unknown definitions are retained as UnsupportedRule. Roles are athlete/default positions 1–5 and defense_unit/default 16, never lineup-slot-dependent.
 
-- [ ] Write tests using actual 46 settings: QB 334 pass yards/two pass TD +23 rush yards/two rush TD =35.66; kicker one under-40 and one 40–49 FG, one missed FG, two PAT =8; 60+ FG counted once at6; D/ST 2 INT/4 sacks/return TD/13 PA/238 YA =19. Test range boundaries 0/1/6/7/13/14/17/18/27/28/34/35/45/46 and yard bands, unknown/reverse/extra overrides, changed rates/hash, duplicate rules and unsupported team/enhancement settings.
-- [ ] Run focused tests and observe RED; implement mapping/normalization through existing core rules; repeat tests + Ruff/mypy, expect PASS; commit.
+- [x] Write tests using actual 46 settings: QB 334 pass yards/two pass TD +23 rush yards/two rush TD =35.66; kicker one under-40 and one 40–49 FG, one missed FG, two PAT =8; 60+ FG counted once at6; D/ST 2 INT/4 sacks/return TD/13 PA/238 YA =19. Test range boundaries 0/1/6/7/13/14/17/18/27/28/34/35/45/46 and yard bands, unknown/reverse/extra overrides, changed rates/hash, duplicate rules and unsupported team/enhancement settings.
+- [x] Run focused tests and observe RED; implement mapping/normalization through existing core rules; repeat tests + Ruff/mypy, expect PASS; commit.
 
 ### Task 2: Scoped actual-stat and contribution reconciliation
 
@@ -44,8 +44,8 @@
 
 **Interfaces:** `reconcile_player(player, period, normalized, official_pool_total) -> PlayerReconciliation` computes from raw scoped stats; includes role, exact total, source total, per-rule discrepancies, zero-suppressed IDs and verification/known-zero status. A completed actual block must be unique, present and GP=1. Absent/GP=0 blocks with an explicit official zero are labeled provider-zero and never counted as verified played-stat cases.
 
-- [ ] Add actual anonymized QB/K/DST examples and failures for source/split/season/period/GP, missing maps/totals, duplicate blocks, range-flag contradiction, missing scored raw value and genuine provider total/contribution mismatch. Verify floating serialization artifacts reconcile at cents.
-- [ ] Run and observe RED; implement without reading appliedStats as input values or filling missing maps with zero. Repeat rule/stat tests and quality checks; expect PASS; commit.
+- [x] Add actual anonymized QB/K/DST examples and failures for source/split/season/period/GP, missing maps/totals, duplicate blocks, range-flag contradiction, missing scored raw value and genuine provider total/contribution mismatch. Verify floating serialization artifacts reconcile at cents.
+- [x] Run and observe RED; implement without reading appliedStats as input values or filling missing maps with zero. Repeat rule/stat tests and quality checks; expect PASS; commit.
 
 ### Task 3: Completed-week player/lineup audit and safe operator command
 
@@ -53,7 +53,11 @@
 
 **Interfaces:** `audit_scoring(client, season, periods=None)` reads settings/status, maps all configured rules, fetches each completed period's mRoster/mBoxscore/mMatchupScore with scoring+matchup scope, recomputes every archived roster entry and active-lineup total, then rereads settings. Default periods are observed first through latest-1, bounded by17; reject current/future/unsupported multiweek mappings. Command prints counts/diagnostics/hashes only and returns nonzero on unsupported/missing/mismatched cases. Raw data stays ignored.
 
-- [ ] Add deterministic tests for exact player/lineup sums, bench/IR exclusion, duplicate starters, unsupported slots/period mapping, settings changes, unknown/nonzero missing actuals and safe CLI failure/success. Run and observe RED.
-- [ ] Implement audit/command using existing provider routes; preserve all failed/skipped coverage and keep recommendationsEnabled false.
-- [ ] Run a bounded live audit across completed weeks, record actual support/nonzero coverage and player/team/contribution differences; investigate discrepancies rather than widening tolerance. Add meaningful regressions if provider behavior differs.
-- [ ] Run full runtime checks, obtain one independent whole-slice review, fix Important findings with RED→GREEN tests, rerun necessary checks and update final documentation/local commits. No merge/push/deploy.
+- [x] Add deterministic tests for exact player/lineup sums, bench/IR exclusion, duplicate starters, unsupported slots/period mapping, settings changes, unknown/nonzero missing actuals and safe CLI failure/success. Run and observe RED.
+- [x] Implement audit/command using existing provider routes; preserve all failed/skipped coverage and keep recommendationsEnabled false.
+- [x] Run a bounded live audit across completed weeks, record actual support/nonzero coverage and player/team/contribution differences; investigate discrepancies rather than widening tolerance. Add meaningful regressions if provider behavior differs.
+- [x] Run full runtime checks, obtain one independent whole-slice review, fix Important findings with RED→GREEN tests, rerun necessary checks and update final documentation/local commits. No merge/push/deploy.
+
+## Execution rulings and evidence
+
+The under100-yard band has no lower bound; core RangeRule explicitly accepts lower=None, tested with negative net yardage. Source completeness and no-game references are separate. Hand-calculated QB/K/DST cases live in the scoped-stat tests, avoiding duplicate input setup in compiler tests. Added scoring_lineups.py to keep period math separate from source orchestration. Full live completed periods 1–7 and archived-input replay pass; final report records 797 played cases, 121 explicit zeros and 56 lineups. Two Important review findings were reproduced and fixed, plus the intended range adaptation was included in final commit 0797ceb. Full275 checks pass.
