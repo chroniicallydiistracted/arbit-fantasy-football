@@ -1,6 +1,7 @@
 """Manual public-source inspection and explicitly synthetic pipeline smoke commands."""
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -9,8 +10,10 @@ from typing import Literal
 from arbit_core.config import load_league_config
 from arbit_data.contracts import LeagueSnapshotCandidate
 from arbit_data.db import UnitOfWork
+from arbit_data.espn.client import EspnClient
 from arbit_data.espn.reader import EspnReader
 from arbit_data.espn.transport import EspnError, EspnTransport
+from arbit_data.espn.verification import verify_audit
 from arbit_data.snapshots import SnapshotRef, publish_snapshot
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import create_engine
@@ -50,6 +53,25 @@ def _inspect_public(period: int | None, parser: argparse.ArgumentParser) -> None
         parser.exit(1, '{"error":"CONFIG_INVALID"}\n')
 
 
+def _inspect_endpoints(path: Path, live: bool, parser: argparse.ArgumentParser) -> None:
+    try:
+        with path.open("rb") as source:
+            raw = source.read(2 * 1024 * 1024 + 1)
+        if len(raw) > 2 * 1024 * 1024:
+            raise ValueError("Audit file exceeds size limit")
+        audit = json.loads(raw)
+        if not isinstance(audit, dict) or not isinstance(audit.get("requests"), list):
+            raise ValueError("Invalid audit document")
+        client = EspnClient(EspnTransport()) if live else None
+        report = verify_audit(audit["requests"], client, live=live)
+        report["auditSha256"] = hashlib.sha256(raw).hexdigest()
+    except (OSError, ValueError, KeyError, TypeError):
+        parser.exit(2, '{"error":"AUDIT_INVALID"}\n')
+    print(json.dumps(report, sort_keys=True))
+    if not report["success"]:
+        parser.exit(1)
+
+
 class SyntheticFixture(BaseModel):
     model_config = ConfigDict(extra="forbid", hide_input_in_errors=True)
     synthetic: Literal[True]
@@ -78,7 +100,17 @@ def main() -> None:
         help="Read current public FFA source data and print a safe acquisition summary",
     )
     inspect_command.add_argument("--scoring-period", type=_scoring_period)
+    endpoint_command = subcommands.add_parser(
+        "espn-endpoints", help="Report audited endpoint wiring; optionally verify every route live"
+    )
+    endpoint_command.add_argument("--live", action="store_true")
+    endpoint_command.add_argument(
+        "--audit", type=Path, default=Path("docs/research/espn-public-2026-10-30.json")
+    )
     arguments = parser.parse_args()
+    if arguments.command == "espn-endpoints":
+        _inspect_endpoints(arguments.audit, arguments.live, parser)
+        return
     if arguments.command == "espn-inspect":
         _inspect_public(arguments.scoring_period, parser)
         return

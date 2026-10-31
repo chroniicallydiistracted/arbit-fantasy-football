@@ -128,11 +128,24 @@ def match_request(url: str, fantasy_filter: str | None) -> EndpointRequest:
 
 
 def audit_requests(records: list[dict[str, Any]]) -> tuple[AuditedRequest, ...]:
+    if not records:
+        raise ValueError("Audit must contain request evidence")
     rows = []
     cases: set[str] = set()
     for record in records:
         case = record["case"]
         expected = record["outcome"]
+        if expected not in {
+            "data_returned",
+            "asset_returned",
+            "missing_expected_data",
+            "json_metadata_only",
+            "non_json",
+            "http_error",
+        }:
+            raise ValueError("Unknown audit outcome")
+        if type(record["status"]) is not int:
+            raise ValueError("Invalid HTTP status evidence")
         if not isinstance(case, str) or not case or case in cases:
             raise ValueError("Invalid/duplicate audit case")
         cases.add(case)

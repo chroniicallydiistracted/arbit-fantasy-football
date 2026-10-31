@@ -144,3 +144,26 @@ def test_new_unknown_success_fails_coverage_instead_of_being_silently_skipped():
     ]
     with pytest.raises(ValueError):
         audit_requests(records)
+
+
+@pytest.mark.parametrize(
+    "fantasy_filter",
+    [
+        {"unknown": {}},
+        {"players": {"unknown": {"value": 1}}},
+        {"players": {"filterIds": "invalid"}},
+        {"players": {"filterIds": {"value": [True]}}},
+        {"players": {"filterIds": {"value": [1, 1]}}},
+        {"players": {"limit": True}},
+        {"players": {"offset": -1}},
+        {"players": {"sortPercOwned": {"sortPriority": 1, "sortAsc": "false"}}},
+    ],
+)
+def test_unobserved_or_malformed_filter_options_are_rejected(fantasy_filter):
+    with pytest.raises(ValueError):
+        build_request(
+            Endpoint.LEAGUE,
+            EndpointOptions(
+                season=2026, views=("kona_player_info",), fantasy_filter=fantasy_filter
+            ),
+        )

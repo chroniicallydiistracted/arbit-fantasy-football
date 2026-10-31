@@ -8,6 +8,8 @@ from urllib.parse import urlencode
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from arbit_data.espn.filters import validate_filter
+
 LM = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl"
 CORE = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
 SITE = "https://site.api.espn.com"
@@ -199,15 +201,7 @@ def build_request(endpoint: Endpoint, options: EndpointOptions) -> EndpointReque
         )
         if len(filter_json) > 8192:
             raise ValueError("Fantasy filter exceeds size limit")
-        players = fantasy_filter.get("players")
-        if isinstance(players, dict) and "filterStatus" in players:
-            statuses = players["filterStatus"]
-            if (
-                not isinstance(statuses, dict)
-                or not isinstance(statuses.get("value"), list)
-                or any(s not in ("FREEAGENT", "WAIVERS", "ONTEAM") for s in statuses["value"])
-            ):
-                raise ValueError("Unsupported availability status")
+        validate_filter(fantasy_filter, directory=endpoint == Endpoint.PLAYER_DIRECTORY)
     url = route.path.format(**options.model_dump())
     if params:
         url += "?" + urlencode(params)
