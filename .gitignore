@@ -8,6 +8,7 @@
 /data/
 /artifacts/
 /local-storage/
+/.references/
 *.sqlite
 *.sqlite3
 # Dependencies, caches, build outputs

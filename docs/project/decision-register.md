@@ -10,7 +10,7 @@ Updated 2026-10-30. Architecture and recommended stack approved by the owner on 
 | OWN-002 | ESPN league ID `1729878439`, season `2026` | Owner reply 2026-10-30 |
 | OWN-003 | Portable, local-first proposal | Owner reply 2026-10-30 |
 | OWN-004 | Owner's prior Gridiron direct asset URL patterns are not yet available | Owner reply 2026-10-30 |
-| OWN-007 | Owner made FFA public temporarily and requested a complete reference-repository/API audit before selecting final access policy | Owner request 2026-10-30 |
+| OWN-007 | Owner made FFA public, reviewed the successful API audit and authorized development using public access; message boards are not required | Owner request 2026-10-30 |
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
 
@@ -29,7 +29,7 @@ Owner approval adopts these runtime choices. Hosting remains portable/local-firs
 
 | ID | Missing input / unresolved capability | Impact | Next action and decision owner |
 | --- | --- | --- | --- |
-| Q-001 | Final public/private access policy; public settings/core reads now verified 200, communication still 401 | Core data is available without cookies while public; final production access choice remains owner decision | Owner reviews the public audit; configure private server credential references only if final policy requires it |
+| Q-001 | Public source mode authorized for the current development phase; future private visibility is an optional change | Core reads work without cookies; message-board availability has no product impact | Proceed with public reader; configure and test server-side credentials only if visibility later becomes private |
 | Q-002 | Actual settings retrieved; rule/category normalization, membership binding and scoring reconciliation remain | 46 scoring items, OFFLINE draft, actual slots/waivers/locks observed; usable normalized advice still requires validation | M1c: build contracts from FFA payloads, preserve unknowns, map/reconcile exact rules |
 | Q-003 | OIDC provider and invited account roster | Blocks real member sign-in, not data/schema work | Before M2: owner chooses provider/account invite policy; proposal favors maintained OIDC library with server sessions |
 | Q-004 | Exact Gridiron asset patterns and reuse/variant verification | Blocks final weekly field/uniform integration | M1 research/M6: owner shares links when available; engineer verifies candidate sites and records permissions/attribution; generic fallback stays labeled |

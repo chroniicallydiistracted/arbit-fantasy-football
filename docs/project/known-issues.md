@@ -4,7 +4,7 @@ Updated 2026-10-30. M1a is implemented; provider access and full feature validat
 
 | ID | Evidence / risk | Effect and mitigation | Owner / milestone |
 | --- | --- | --- | --- |
-| R-001 | Historical private-setting 401; public audit now returns 200 core reads and 401 communication | Public source access verified. Private credentials remain untested if owner restores private visibility; production adapter still required | Integration / M1 |
+| R-001 | Historical private-setting 401; current public core reads verified 200 | Public reader development authorized. Message boards excluded by owner; private credentials only become relevant if visibility changes | Integration / M1 |
 | R-002 | Unofficial ESPN endpoints have no service contract | Adapter contracts, bounded polling, drift quarantine, last-complete snapshot, explicit degraded state | Integration / M1/M6 |
 | R-003 | nflverse publication/feature coverage differs by dataset and season | Coverage inventory and observation-time cutoffs; no assumed in-season participation/routes or latest injuries | Data/Model / M1/M3 |
 | R-004 | Sleeper public docs do not prove a supported live scoring/PBP endpoint | Supplemental documented inputs; unproven endpoints cannot be a core dependency | Integration / M1 |

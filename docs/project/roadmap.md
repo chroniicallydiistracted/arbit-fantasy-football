@@ -38,14 +38,14 @@ Provider/asset research can proceed before feature implementation. Archive UI co
 **Slices:**
 
 1. M1a: establish pinned Python/pnpm workspace versions and real check commands; ephemeral/local PostgreSQL; core configuration, canonical contracts, exact scoring and eligibility; first health path and job/store contracts. Detailed tasks: [data-foundation implementation plan](../superpowers/plans/2026-10-30-data-foundation.md).
-2. M1b: FFA access proof and sanitized contract fixtures; complete settings/team/manager/roster/matchup/standings/draft/availability inventory; pagination and capabilities; private credentials supplied only through a local secure setup if required. Current unauthenticated settings probe returned 401.
+2. M1b: FFA access proof and sanitized contract fixtures; complete settings/team/manager/roster/matchup/standings/draft/availability inventory; pagination and capabilities; private credentials supplied only through a local secure setup if required. The 81-probe public audit verified core reads without cookies; message boards are outside scope. The typed public reader is the next implementation slice.
 3. M1c: ESPN stat-category/slot mapping and score reconciliation; canonical cross-provider IDs with ambiguity queue; transactional snapshot publication, source health, durable jobs, backoff, leases and outbox.
 4. M1d: nflverse historical and 2026 coverage inventory, dataset manifests and reproducible Parquet ingest; point-in-time feature prerequisites. Record source-specific attribution/terms and actual publication/coverage.
 5. M1e: Sleeper documented endpoints and optional scoring/play candidates; ESPN live scoreboard/summary coverage matrix and representative play fixtures; identify exact Gridiron links/variants and reuse prerequisites. Unsupported capabilities stay visible.
 
 **Evidence:** complete FFA snapshot with actual rule support report; core scoring fixtures and matched ESPN totals for supported cases; no ownership/alias collisions; duplicate ingestion is idempotent; 401/429/drift/partial-page fixtures preserve the last valid snapshot; checksum/versioned nflverse sample reload reproduces; secrets absent from Git/logs/artifacts. At least one end-to-end bounded ingest→publish→read path runs locally.
 
-**Blockers:** real FFA access requires resolution of 401; synthetic/fixture work can proceed independently. Unknown Gridiron URL patterns block exact asset integration only. A missing/unsupported scoring category blocks the corresponding advice, not discovery of that limitation.
+**Blockers:** public FFA access is verified; actual scoring normalization, canonical mappings and durable production sync remain required. Unknown Gridiron URL patterns block exact asset integration only. A missing/unsupported scoring category blocks the corresponding advice, not discovery of that limitation.
 
 ## M2 — Authenticated application foundation and Front Office facts
 

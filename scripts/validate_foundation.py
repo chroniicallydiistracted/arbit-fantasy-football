@@ -124,7 +124,7 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
         return errors, counts
 
     json_files = sorted(root.rglob('*.json'))
-    json_files = [path for path in json_files if not any(part in {'.git', 'node_modules', '.venv'} for part in path.relative_to(root).parts)]
+    json_files = [path for path in json_files if not any(part in {'.git', 'node_modules', '.venv', '.references'} for part in path.relative_to(root).parts)]
     for path in json_files:
         load_json(path)
     counts['JSON artifacts'] = len(json_files)
@@ -135,7 +135,7 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
         errors.append('Original owner brief checksum does not match source manifest')
 
     docs = sorted(root.rglob('*.md'))
-    docs = [path for path in docs if not any(part in {'.git', 'node_modules', '.venv'} for part in path.relative_to(root).parts)]
+    docs = [path for path in docs if not any(part in {'.git', 'node_modules', '.venv', '.references'} for part in path.relative_to(root).parts)]
     link_pattern = re.compile(r'(?<!!)\[[^\]]+\]\((<[^>]+>|[^)\s]+)\)')
     for path in docs:
         for match in link_pattern.finditer(path.read_text(encoding='utf-8')):
