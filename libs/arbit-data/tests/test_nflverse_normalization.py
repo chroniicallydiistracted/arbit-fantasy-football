@@ -89,3 +89,14 @@ def test_quality_profile_exposes_missing_and_duplicate_keys_without_dropping_row
     assert result.row_count == 3
     assert result.coverage["rows_missing_keys"] == 1
     assert result.coverage["duplicate_keys"] == 1
+
+
+def test_integral_float_scope_values_are_profiled_without_changing_source_types(tmp_path):
+    store = ObjectStore(tmp_path / "objects")
+    table = pa.table({"season": ["2026", "2026"], "week": [1.0, 2.0], "value": [None, 1.25]})
+    path = tmp_path / "float-weeks.parquet"
+    pq.write_table(table, path)
+    raw = store.write((path.read_bytes(),))
+    result = normalize(asset("ep_weekly_2026.parquet", "misc"), raw, store)
+    assert result.coverage["weeks"] == [1, 2]
+    assert pq.read_table(store.path(result.parquet_hash)).equals(table)

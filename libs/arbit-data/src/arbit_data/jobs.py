@@ -3,6 +3,9 @@
 import hashlib
 import json
 import re
+import threading
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from uuid import UUID, uuid4
@@ -122,7 +125,12 @@ class JobQueue:
             )
 
     def claim_job(
-        self, worker_id: str, now: datetime, *, job_type: str | None = None
+        self,
+        worker_id: str,
+        now: datetime,
+        *,
+        job_type: str | None = None,
+        input_prefix: str | None = None,
     ) -> LeasedJob | None:
         require_aware(now)
         if not worker_id:
@@ -136,6 +144,7 @@ class JobQueue:
                     job.c.lease_until <= now,
                     job.c.attempts >= job.c.max_attempts,
                     job.c.job_type == job_type if job_type else true(),
+                    job.c.input_ref.startswith(input_prefix) if input_prefix else true(),
                 )
                 .order_by(job.c.lease_until, job.c.id)
                 .limit(100)
@@ -157,6 +166,7 @@ class JobQueue:
                     .where(
                         job.c.attempts < job.c.max_attempts,
                         job.c.job_type == job_type if job_type else true(),
+                        job.c.input_ref.startswith(input_prefix) if input_prefix else true(),
                         or_(
                             and_(job.c.status == "queued", job.c.ready_at <= now),
                             and_(job.c.status == "running", job.c.lease_until <= now),
@@ -235,3 +245,30 @@ class JobQueue:
                 )
             )
         return self.get_job(job_id)
+
+
+@contextmanager
+def maintain_lease(
+    queue: JobQueue, lease: LeasedJob, *, clock: Callable[[], datetime], interval: float = 10
+) -> Iterator[None]:
+    stop = threading.Event()
+    errors: list[Exception] = []
+
+    def beat() -> None:
+        while not stop.wait(interval):
+            try:
+                queue.heartbeat(lease.id, lease.lease_token, clock())
+            except Exception as error:
+                errors.append(error)
+                return
+
+    thread = threading.Thread(target=beat, daemon=True)
+    thread.start()
+    try:
+        yield
+    finally:
+        stop.set()
+        thread.join()
+    if errors:
+        raise LeaseLostError("heartbeat failed; publication is fenced")
+    queue.heartbeat(lease.id, lease.lease_token, clock())

@@ -72,6 +72,7 @@ class Catalog(DataModel):
     observed_at: datetime
     assets: tuple[Asset, ...]
     sources: tuple[str, ...]
+    excluded: tuple[dict[str, Any], ...] = ()
 
 
 def _parts(filename: str) -> tuple[str, str]:
@@ -108,12 +109,21 @@ def build_catalog(
 ) -> Catalog:
     require_aware(observed_at)
     assets = []
+    excluded = []
     for repo, items in ((CORE_REPO, releases), (OPPORTUNITY_REPO, opportunity)):
         for release in items:
             if release.get("draft") or release.get("prerelease"):
                 continue
             tag = release["tag_name"]
             if repo == OPPORTUNITY_REPO and not tag.endswith("-data"):
+                excluded.append(
+                    {
+                        "repository": repo,
+                        "release": tag,
+                        "reason": "model_artifact_not_dataset",
+                        "files": [a["name"] for a in release["assets"]],
+                    }
+                )
                 continue
             _parts(tag)
             names = set()
@@ -128,9 +138,14 @@ def build_catalog(
                     raise ValueError("SOURCE_SCOPE_MISMATCH")
                 family = tag if repo == CORE_REPO else "ff_opportunity"
                 usage = _usage(family, stem)
+                ftn = (
+                    family == "ftn_charting"
+                    or family == "pbp_participation"
+                    and any(str(year) in name for year in range(2023, 2101))
+                )
                 license = (
                     "CC-BY-SA-4.0"
-                    if family == "ftn_charting" or family == "pbp_participation"
+                    if ftn
                     else "CC-BY-4.0"
                     if repo == CORE_REPO
                     else "source-specific; see upstream ffopportunity terms"
@@ -157,7 +172,9 @@ def build_catalog(
                         usage=usage,
                         license=license,
                         attribution="FTN Data via nflverse"
-                        if family in ("ftn_charting", "pbp_participation")
+                        if ftn
+                        else "NFL NGS via nflverse"
+                        if family == "pbp_participation"
                         else "nflverse and original source authors"
                         if repo == CORE_REPO
                         else "ffopportunity / ffverse; benchmark only",
@@ -230,4 +247,5 @@ def build_catalog(
         observed_at=observed_at,
         assets=resolved,
         sources=tuple(sorted({a.repository for a in assets})),
+        excluded=tuple(excluded),
     )

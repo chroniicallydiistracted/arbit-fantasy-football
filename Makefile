@@ -40,3 +40,9 @@ local-sync-status: local-env
 	uv run --env-file .env.local arbit-worker sync-status
 local-api: local-env
 	uv run --env-file .env.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers
+
+.PHONY: local-nflverse-catalog local-nflverse-verify
+local-nflverse-catalog: local-env
+	uv run --env-file .env.local arbit-worker nflverse-catalog --live
+local-nflverse-verify: local-env
+	uv run --env-file .env.local arbit-worker nflverse-verify --all

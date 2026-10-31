@@ -85,3 +85,15 @@ def test_untrusted_catalog_fields_fail_closed(change):
     change(item)
     with pytest.raises(ValueError):
         build_catalog([item], [], [], observed_at=datetime.now(UTC))
+
+
+def test_model_artifacts_are_recorded_separately_and_ngs_attribution_is_historical():
+    result = build_catalog(
+        [release("pbp_participation", ["pbp_participation_2016.parquet"])],
+        [release("latest-model", ["model.zip"], repo="ffverse/ffopportunity")],
+        [],
+        observed_at=datetime.now(UTC),
+    )
+    assert result.assets[0].license == "CC-BY-4.0"
+    assert "NGS" in result.assets[0].attribution
+    assert result.excluded[0]["reason"] == "model_artifact_not_dataset"

@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 from collections.abc import Iterator
+from decimal import Decimal, DecimalException
 from pathlib import Path
 from typing import Any, Literal
 
@@ -253,7 +254,7 @@ def normalize(asset: Asset, raw: ObjectRef, store: ObjectStore) -> NormalizedDat
                 }[name]
                 try:
                     coverage[label] = (
-                        sorted(int(v) for v in values)
+                        sorted(_scope_integer(v) for v in values)
                         if name in ("season", "week")
                         else sorted(values)
                     )
@@ -286,3 +287,17 @@ def iter_file(path: Path) -> Iterator[bytes]:
     with path.open("rb") as source:
         while chunk := source.read(1024 * 1024):
             yield chunk
+
+
+def _scope_integer(value: str) -> int:
+    try:
+        number = Decimal(value)
+        if (
+            not number.is_finite()
+            or not 0 <= number <= 2100
+            or number != number.to_integral_value()
+        ):
+            raise ValueError("INVALID_COVERAGE_SCOPE")
+        return int(number)
+    except DecimalException:
+        raise ValueError("INVALID_COVERAGE_SCOPE") from None

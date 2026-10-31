@@ -2,7 +2,6 @@
 
 import re
 import secrets
-import threading
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime
@@ -22,7 +21,7 @@ from arbit_data.espn.normalize import scoring_context
 from arbit_data.espn.reader import EspnReader
 from arbit_data.espn.scoring_audit import audit_scoring
 from arbit_data.espn.transport import EspnError
-from arbit_data.jobs import JobQueue, LeasedJob, LeaseLostError, require_lease
+from arbit_data.jobs import JobQueue, LeasedJob, LeaseLostError, maintain_lease, require_lease
 from arbit_data.league_store import (
     Publication,
     publish_capture,
@@ -103,27 +102,8 @@ class SyncService:
 
     @contextmanager
     def _heartbeat(self, lease: LeasedJob) -> Iterator[None]:
-        stop = threading.Event()
-        errors: list[Exception] = []
-
-        def beat() -> None:
-            while not stop.wait(self.heartbeat_seconds):
-                try:
-                    self.queue.heartbeat(lease.id, lease.lease_token, self.clock())
-                except Exception as error:
-                    errors.append(error)
-                    return
-
-        thread = threading.Thread(target=beat, daemon=True)
-        thread.start()
-        try:
+        with maintain_lease(self.queue, lease, clock=self.clock, interval=self.heartbeat_seconds):
             yield
-        finally:
-            stop.set()
-            thread.join()
-        if errors:
-            raise LeaseLostError("heartbeat failed; publication is fenced")
-        self.queue.heartbeat(lease.id, lease.lease_token, self.clock())
 
     def _archive(self, captured: CapturedInput, lease: LeasedJob) -> str:
         manifest = self.archive.write(captured)
