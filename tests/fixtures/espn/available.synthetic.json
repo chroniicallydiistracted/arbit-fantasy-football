@@ -1,0 +1,50 @@
+{
+  "players": [
+    {
+      "id": 910001,
+      "onTeamId": 0,
+      "status": "FREEAGENT",
+      "lineupLocked": false,
+      "rosterLocked": false,
+      "tradeLocked": false,
+      "player": {
+        "id": 910001,
+        "fullName": "Synthetic available player",
+        "proTeamId": 1,
+        "defaultPositionId": 1,
+        "eligibleSlots": [
+          0,
+          20,
+          23
+        ],
+        "active": true,
+        "injured": false,
+        "ownership": {
+          "percentOwned": 50.0,
+          "activityLevel": null
+        },
+        "stats": [
+          {
+            "seasonId": 2026,
+            "scoringPeriodId": 8,
+            "statSourceId": 0,
+            "statSplitTypeId": 1,
+            "stats": {
+              "53": 0.1
+            },
+            "appliedTotal": 0.1
+          },
+          {
+            "seasonId": 2026,
+            "scoringPeriodId": 8,
+            "statSourceId": 1,
+            "statSplitTypeId": 1
+          }
+        ]
+      },
+      "appliedStatTotal": 0.1,
+      "ratings": {}
+    }
+  ],
+  "positionAgainstOpponent": {}
+}
