@@ -1,5 +1,12 @@
 # Development Changelog
 
+## 2026-10-30 — Public ESPN capability audit
+
+- Owner enabled public league viewing for testing; no final access policy selected.
+- Reviewed every tracked file at pseudo-r reference commit 097c42f; tested all 21 documented views/nine client request families through 81 cookie-free GET probes.
+- Verified core data access, actual FFA settings, 923 available players, exact 132-player roster ownership match, 128 picks, 389 unique transactions and an NFL PBP sample.
+- Recorded field/domain/filter discrepancies, explicit communication denial, legacy HTML responses and full sanitized request/checksum evidence. Raw bodies remain ignored local research data; no runtime code, dependencies, cookies, provider writes or production sync changed.
+
 ## 2026-10-30 — M1a runtime/core/snapshot implementation
 
 - Recorded owner architecture/stack approval, dependency authorization and explicit UX/UI quality requirement.

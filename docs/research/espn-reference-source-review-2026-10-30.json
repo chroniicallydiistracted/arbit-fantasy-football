@@ -1,0 +1,419 @@
+{
+  "repository": "https://github.com/pseudo-r/Public-ESPN-Fantasy-API",
+  "commit": "097c42f0da0b692ceb3168a2c6af1e7479be5906",
+  "reviewedOn": "2026-10-30",
+  "coverage": "All tracked files, including all Python implementations/tests, all documentation, configuration, CI, package/build files and empty package markers. No dependency installation or reference service execution.",
+  "fileCount": 68,
+  "pythonFileCount": 34,
+  "totalLines": 7104,
+  "files": [
+    {
+      "path": ".github/FUNDING.yml",
+      "bytes": 17,
+      "lines": 1,
+      "sha256": "722f8f7ef80f1c61769018cc92359a68f71bf507f0dd9497ba1f3611447ddb58"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "bytes": 797,
+      "lines": 42,
+      "sha256": "b32cbc8bf682dca0f6d1cacc7ff7d65a83cca055e65c3d4f30c6718717d7bc20"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/docs_improvement.md",
+      "bytes": 529,
+      "lines": 23,
+      "sha256": "3ab47e16635494c0ead3d1d6082818b7c3401bb9e4e34d443f846ea2db270140"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/missing_endpoint.md",
+      "bytes": 846,
+      "lines": 44,
+      "sha256": "a1224bb2d7cad255cca1a8a78cd91741d9be35943c3d3edd0ca90079bc302b9f"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "bytes": 539,
+      "lines": 21,
+      "sha256": "6b504daf36643e7d01751cea053453230a302576e194e5fd25ccd146a48ead53"
+    },
+    {
+      "path": ".github/workflows/service-ci.yml",
+      "bytes": 1554,
+      "lines": 47,
+      "sha256": "0d21f3b5d3c8cd63c9e74af6b89c8113edb93cd87bc382da32d00dbbd03ee8eb"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 4555,
+      "lines": 83,
+      "sha256": "f1a219d54777c313f2ffde48ee2352cf402075c1d11aefca92814b1139ef0077"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "bytes": 1500,
+      "lines": 33,
+      "sha256": "88c2f19ec52ab8d8f92455068d42157912e4c32c3ae96eb67a30556c1f95e2d7"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 3907,
+      "lines": 137,
+      "sha256": "d12665e0c23e26e1b162517262923a1c25877d7eacff36825a2a4f013752f0fd"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1364,
+      "lines": 28,
+      "sha256": "922d064523cbd6004575763feba665cd19bb63a40572d9fbb3679a702a17844f"
+    },
+    {
+      "path": "PROJECT_SCOPE.md",
+      "bytes": 2072,
+      "lines": 19,
+      "sha256": "ee26f95a1a0640b4ed0c1aa3f9c47d0094766c2dce014360fbd07ad43e6dd247"
+    },
+    {
+      "path": "README.md",
+      "bytes": 22330,
+      "lines": 515,
+      "sha256": "f0bfde2d2899c6673a9bc846c0c83a3400c012a87b8fdd5a6a627964f85deb83"
+    },
+    {
+      "path": "SPONSORS.md",
+      "bytes": 1147,
+      "lines": 37,
+      "sha256": "cda5e592e7e9541001f41e79b513d30ef0e5087096953d29245c3e39b0f9f36c"
+    },
+    {
+      "path": "docs/audit-2026-09-30.md",
+      "bytes": 2267,
+      "lines": 23,
+      "sha256": "61dbdebf919ee642ccedb3eab271fb54e098654b8ebd13dd06359f5d906dceeb"
+    },
+    {
+      "path": "docs/authentication.md",
+      "bytes": 4434,
+      "lines": 133,
+      "sha256": "8f8f72552519851378624a474fb3c3330bac44c01b6b6f357f2d7bf67375accc"
+    },
+    {
+      "path": "docs/data/endpoint-probes-2026-09-30.json",
+      "bytes": 738,
+      "lines": 30,
+      "sha256": "9216798cf1c81ab9f03ef61c1aac51c77691e0107f1a41198aa3110da098416d"
+    },
+    {
+      "path": "docs/draft.md",
+      "bytes": 4567,
+      "lines": 144,
+      "sha256": "ea9b8f30a5d6dd93adc58496191ef9cc32fef36b404965352c01e2f8dfaecb4e"
+    },
+    {
+      "path": "docs/historical_seasons.md",
+      "bytes": 5220,
+      "lines": 146,
+      "sha256": "644715c6d89f6038a770d0b880afcacb0c77af6cf131f6962c5f74b7f49d57ec"
+    },
+    {
+      "path": "docs/known_issues.md",
+      "bytes": 10410,
+      "lines": 221,
+      "sha256": "2887186ed7e6fbd7205bfe0db1bcd8f45249e6f6b799d4c14f2514cdc4519f6b"
+    },
+    {
+      "path": "docs/leagues.md",
+      "bytes": 24800,
+      "lines": 766,
+      "sha256": "336fd5fdfad9142aed454397ef120fb90899b7b730b3fec4a7dfdbb54ac390a0"
+    },
+    {
+      "path": "docs/matchups.md",
+      "bytes": 6534,
+      "lines": 166,
+      "sha256": "499476614658c692b76e132e1b862402b69dbf5d2318b6e4f7fed4e7f049a764"
+    },
+    {
+      "path": "docs/players.md",
+      "bytes": 7407,
+      "lines": 227,
+      "sha256": "8effb141fa038eedff380d461acabe6de40d4fd6f8cd1c69fb258ee96d7f98ae"
+    },
+    {
+      "path": "docs/response_schemas.md",
+      "bytes": 8778,
+      "lines": 423,
+      "sha256": "cdea2e2e8d072b9576b437cef7c0c2f09738153e78707c43e9d214b8d213a06d"
+    },
+    {
+      "path": "docs/settings.md",
+      "bytes": 7417,
+      "lines": 203,
+      "sha256": "e4ca1eaa1d8d3f54f5f78448b5bf187df2e9f57f439451e849fe49504a599e84"
+    },
+    {
+      "path": "docs/stat_ids.md",
+      "bytes": 5279,
+      "lines": 198,
+      "sha256": "66ba5e71905ea27349a32f92d4c291e3857bc0488e377254894063608c7c1166"
+    },
+    {
+      "path": "docs/transactions.md",
+      "bytes": 5534,
+      "lines": 175,
+      "sha256": "299b479b6e6c3f0d9be284cb0b9f478df1cba89b0949b8c5196fa41e1fa21c2a"
+    },
+    {
+      "path": "fantasy_service/.dockerignore",
+      "bytes": 104,
+      "lines": 11,
+      "sha256": "d22a910be45c2abf6a92e43c73077011176ff94db32c8c609f6b832ee50d8471"
+    },
+    {
+      "path": "fantasy_service/.env.example",
+      "bytes": 566,
+      "lines": 21,
+      "sha256": "3cd5bb039b5de5166a8c723e29e45f319acf40af3c47dd72d6e032e00b4d7c37"
+    },
+    {
+      "path": "fantasy_service/.gitignore",
+      "bytes": 432,
+      "lines": 46,
+      "sha256": "ebc40aa0bec9b86de9c30b884d9b6e54ad7a088849707abec9b41314c996fca1"
+    },
+    {
+      "path": "fantasy_service/Dockerfile",
+      "bytes": 673,
+      "lines": 25,
+      "sha256": "cbabc5723d6fe6b567f5b465926db34b540c9f6e9a5c4b7f661945957864fd2e"
+    },
+    {
+      "path": "fantasy_service/Makefile",
+      "bytes": 1132,
+      "lines": 47,
+      "sha256": "97165363c871717eef10fd0f0a4611c442fdfe24c26b60e0edc38e5ee425a90b"
+    },
+    {
+      "path": "fantasy_service/README.md",
+      "bytes": 6131,
+      "lines": 202,
+      "sha256": "d36c722ad554193dad11392e4360e10bef0c5e6ee5d2b269753bc60024fa4e40"
+    },
+    {
+      "path": "fantasy_service/apps/__init__.py",
+      "bytes": 20,
+      "lines": 1,
+      "sha256": "4621634fd26883cff27ee968c3c1d43264a17ccd3a28e485e180c47bab547696"
+    },
+    {
+      "path": "fantasy_service/apps/core/__init__.py",
+      "bytes": 0,
+      "lines": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "fantasy_service/apps/core/upstream.py",
+      "bytes": 1026,
+      "lines": 24,
+      "sha256": "8545c7661e9e1dbb3478c32fd2fb1a6955159dce5d241a1ee1ef5c9ac2c45739"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/__init__.py",
+      "bytes": 27,
+      "lines": 1,
+      "sha256": "c092fb061e148b13038635d36e3c70dce4a4925d58d470babcc7c763b85b26a6"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/admin.py",
+      "bytes": 2940,
+      "lines": 88,
+      "sha256": "978a22a4b1afc7ba77d4537d5f94cde0c6bd0bdfc30ac02b838ad5205777e836"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/apps.py",
+      "bytes": 219,
+      "lines": 9,
+      "sha256": "80e8b2240a18d50ae5061055b401b8ec43794631501c1f077250540a70ee3555"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/models.py",
+      "bytes": 12205,
+      "lines": 313,
+      "sha256": "e2180c3a6f363cb20dda281095005700b8d35937776d5a09bfb2643d982cf62c"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/serializers.py",
+      "bytes": 5955,
+      "lines": 172,
+      "sha256": "c1ed90567a1e2ded2655ae09767dc448aed191cd672e8942a23b67aa8fb7920f"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/urls.py",
+      "bytes": 960,
+      "lines": 26,
+      "sha256": "8523eb1cc566eec3ff1ac2bc025b7f170cb0559b5735fe135ad3485bfe1c61ce"
+    },
+    {
+      "path": "fantasy_service/apps/fantasy/views.py",
+      "bytes": 14290,
+      "lines": 363,
+      "sha256": "852dbd7cb80bbcd61e326ca2471e5217d81cdb18d97938f2927df0f8064a378c"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/__init__.py",
+      "bytes": 26,
+      "lines": 1,
+      "sha256": "ce0a42be927d535d7095bfcaafe3b7932cb7b1d4ad246965d985ea351d8020ef"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/apps.py",
+      "bytes": 218,
+      "lines": 9,
+      "sha256": "a1fe80185bf33bb3c6e4c3454d228ff9efede118485ffaaf02e8a652454eb5e9"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/management/__init__.py",
+      "bytes": 26,
+      "lines": 1,
+      "sha256": "505360db9c168fa5fd18a054bc6d9b49e639048ad656e6f186db95b42e2fc750"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/management/commands/__init__.py",
+      "bytes": 24,
+      "lines": 1,
+      "sha256": "ce5b453da09982479374e1f5616ad412aa8117d0e0eada2480015c9aa3f8fe7e"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/management/commands/sync_fantasy.py",
+      "bytes": 3657,
+      "lines": 88,
+      "sha256": "582434567469f328b6818aae4e4589074cdda04eca5dd3a020cf651a970e6d20"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/services.py",
+      "bytes": 22363,
+      "lines": 576,
+      "sha256": "75f4460ebb6e7d813d5e250dcbd2cb88ce36a8e4e02d9cbe350e73524d3745e4"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/tasks.py",
+      "bytes": 4790,
+      "lines": 139,
+      "sha256": "dd46d0389be51371c51c9dc57892380b30b2541022a82d089b3759361238856a"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/urls.py",
+      "bytes": 522,
+      "lines": 17,
+      "sha256": "0b7c93b7d3800db262c74a2ddc519a04016b3f8f99cfe610402d84d42bc23d10"
+    },
+    {
+      "path": "fantasy_service/apps/ingest/views.py",
+      "bytes": 5381,
+      "lines": 130,
+      "sha256": "76aff0e7a67e1b691ee887ae6f6e457648e5a85aff17a853973fd9e7d46578e4"
+    },
+    {
+      "path": "fantasy_service/clients/__init__.py",
+      "bytes": 172,
+      "lines": 4,
+      "sha256": "4237c389161cbba204e0a443d84b8a5db33e4fed6b89388d745ff58e58067e93"
+    },
+    {
+      "path": "fantasy_service/clients/fantasy_client.py",
+      "bytes": 13349,
+      "lines": 359,
+      "sha256": "bc29d05cc516800cca1d18a2dd6c2e8c3bcc439e211bd57b5aaf8a78d9ea51b5"
+    },
+    {
+      "path": "fantasy_service/config/__init__.py",
+      "bytes": 129,
+      "lines": 4,
+      "sha256": "7ae8e468ce5baf71bf82ac73d808efad7a0618ce2e1ca357c7fd2b7cacd7f4d6"
+    },
+    {
+      "path": "fantasy_service/config/celery.py",
+      "bytes": 277,
+      "lines": 11,
+      "sha256": "fe15d26c07aa399691bf4b57890d47962a6597f1e3e7d2451b07a1add9b588d5"
+    },
+    {
+      "path": "fantasy_service/config/settings/__init__.py",
+      "bytes": 31,
+      "lines": 1,
+      "sha256": "7d1aeae8d77b244efc78e73b86349a2d4947d66062ef7f457a1114cd0392874d"
+    },
+    {
+      "path": "fantasy_service/config/settings/base.py",
+      "bytes": 5787,
+      "lines": 192,
+      "sha256": "263b43eaa6791e71e9bd3a175486d843d1d40e60b46eb0e2628846b45dba2d6f"
+    },
+    {
+      "path": "fantasy_service/config/settings/local.py",
+      "bytes": 319,
+      "lines": 13,
+      "sha256": "e94f3de6e03190bf3787775edd3c0e6036efbbeb0ffc60bde10439fdda43e085"
+    },
+    {
+      "path": "fantasy_service/config/settings/production.py",
+      "bytes": 264,
+      "lines": 8,
+      "sha256": "3caa605c8b96017075d8a72d5b40073d6910c6f1b226f6fbb227c3f9b4c67515"
+    },
+    {
+      "path": "fantasy_service/config/settings/test.py",
+      "bytes": 1080,
+      "lines": 36,
+      "sha256": "0bcfc6a233ebe307a9de4d210dff630060079d202d62b96347e82971481dac7f"
+    },
+    {
+      "path": "fantasy_service/config/urls.py",
+      "bytes": 843,
+      "lines": 18,
+      "sha256": "a638637649db133c662e1d934cbe39f1c33d4d450c11a3732735b5eca3a71ec9"
+    },
+    {
+      "path": "fantasy_service/config/wsgi.py",
+      "bytes": 199,
+      "lines": 8,
+      "sha256": "735fca89f89c9c07b403561c1943ff6842d536c4943198b4ecde8cd596a6d481"
+    },
+    {
+      "path": "fantasy_service/docker-compose.yml",
+      "bytes": 1573,
+      "lines": 68,
+      "sha256": "5e5ee0767d36754a446162614e0a11bc311ca036c53e3f3c0452d53ac9e7681c"
+    },
+    {
+      "path": "fantasy_service/manage.py",
+      "bytes": 652,
+      "lines": 23,
+      "sha256": "5da325945d1b3455d887d12704171d34d3c649cbcc26148a2892f56a61c5df18"
+    },
+    {
+      "path": "fantasy_service/pyproject.toml",
+      "bytes": 3040,
+      "lines": 122,
+      "sha256": "79e4a49c25ece498d9ae030f365f1be4d2fed5c393a7e01c7c4eba2d26c10578"
+    },
+    {
+      "path": "fantasy_service/tests/test_audit_20260930.py",
+      "bytes": 824,
+      "lines": 17,
+      "sha256": "05760ba6ec952b331f0fd2f95f011f25b48ecdd8ff900ea60767f0afcf405ad5"
+    },
+    {
+      "path": "fantasy_service/tests/test_ingestion_permissions.py",
+      "bytes": 301,
+      "lines": 9,
+      "sha256": "e38498078ecaf079183d320028aeecf86c31489363b35c288074173533a0a3c0"
+    },
+    {
+      "path": "fantasy_service/tests/test_live_routes.py",
+      "bytes": 646,
+      "lines": 15,
+      "sha256": "59fd140e005a6a6ef9fe841ac114f9e8b889159784ec6c6b6183e8198e3ceec6"
+    }
+  ]
+}

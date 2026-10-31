@@ -419,7 +419,10 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Access proof, pagination, completeness and all actual rule categories are checked with sanitized fixtures.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+      ]
     },
     {
       "id": "DATA-002",
@@ -453,7 +456,10 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Scoreboard/summary coverage matrix and representative play-type fixtures establish actual capabilities.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
+      ]
     },
     {
       "id": "DATA-005",
@@ -467,7 +473,8 @@
       "status": "in_progress",
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
-        "docs/project/handoffs/2026-10-30-m1a.md"
+        "docs/project/handoffs/2026-10-30-m1a.md",
+        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
       ]
     },
     {
@@ -485,7 +492,8 @@
       "status": "in_progress",
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
-        "docs/project/handoffs/2026-10-30-m1a.md"
+        "docs/project/handoffs/2026-10-30-m1a.md",
+        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
       ]
     },
     {
@@ -503,7 +511,8 @@
       "status": "in_progress",
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
-        "docs/project/handoffs/2026-10-30-m1a.md"
+        "docs/project/handoffs/2026-10-30-m1a.md",
+        "docs/research/espn-public-api-audit-2026-10-30.md \u2014 manual public access/capability proof, not production integration"
       ]
     },
     {

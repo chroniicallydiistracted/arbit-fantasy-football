@@ -1,0 +1,3875 @@
+{
+  "schemaVersion": 1,
+  "testedOn": "2026-10-30",
+  "displayTimezone": "America/Phoenix",
+  "context": {
+    "leagueId": 1729878439,
+    "seasonId": 2026,
+    "isPublic": true,
+    "statusIsViewable": false,
+    "teamCount": 8,
+    "scoringPeriodId": 8,
+    "previousSeasons": [],
+    "scoringType": "H2H_POINTS",
+    "playerRankType": "PPR",
+    "scoringRuleCount": 46,
+    "lineupSlotCounts": {
+      "0": 1,
+      "2": 2,
+      "4": 2,
+      "6": 1,
+      "16": 1,
+      "17": 1,
+      "20": 7,
+      "21": 1,
+      "23": 1
+    },
+    "lineupLocktimeType": "INDIVIDUAL_GAME",
+    "draftType": "OFFLINE",
+    "keeperCount": 0,
+    "waiverType": "WAIVERS_TRADITIONAL",
+    "regularSeasonMatchupPeriods": 14,
+    "playoffTeams": 6
+  },
+  "sourceRepository": "https://github.com/pseudo-r/Public-ESPN-Fantasy-API",
+  "sourceCommit": "097c42f0da0b692ceb3168a2c6af1e7479be5906",
+  "scope": "Every documented football-compatible read URL family and all 21 view names, with representative dependent player/event IDs, filters, weekly scoping and complete available-player pagination. Not an exhaustive discovery of undocumented ESPN routes.",
+  "probeCount": 81,
+  "httpStatuses": {
+    "200": 72,
+    "401": 1,
+    "404": 7,
+    "400": 1
+  },
+  "outcomes": {
+    "data_returned": 61,
+    "missing_expected_data": 3,
+    "json_metadata_only": 3,
+    "http_error": 9,
+    "non_json": 3,
+    "asset_returned": 2
+  },
+  "sourceReview": {
+    "fileCount": 68,
+    "pythonFileCount": 34,
+    "totalLines": 7104
+  },
+  "viewCoverage": [
+    {
+      "view": "mSettings",
+      "probeCases": [
+        "public-settings-preflight",
+        "view-mSettings",
+        "league-combined",
+        "history-route-current-season",
+        "modular-nav-combined",
+        "legacy-domain-v1",
+        "legacy-domain-v2",
+        "legacy-domain-v3",
+        "segment-1",
+        "segment-2",
+        "segment-3"
+      ]
+    },
+    {
+      "view": "mTeam",
+      "probeCases": [
+        "view-mTeam",
+        "league-combined",
+        "modular-nav-combined"
+      ]
+    },
+    {
+      "view": "mRoster",
+      "probeCases": [
+        "view-mRoster",
+        "league-combined",
+        "roster-week-1",
+        "live-rosters-combined"
+      ]
+    },
+    {
+      "view": "mMatchupScore",
+      "probeCases": [
+        "view-mMatchupScore",
+        "league-combined",
+        "matchup-period-1",
+        "matchup-period-8"
+      ]
+    },
+    {
+      "view": "mMatchup",
+      "probeCases": [
+        "view-mMatchup",
+        "live-rosters-combined"
+      ]
+    },
+    {
+      "view": "mBoxscore",
+      "probeCases": [
+        "view-mBoxscore",
+        "live-combined",
+        "boxscore-period-1",
+        "boxscore-period-8",
+        "live-rosters-combined"
+      ]
+    },
+    {
+      "view": "mLiveScoring",
+      "probeCases": [
+        "view-mLiveScoring",
+        "live-combined",
+        "live-rosters-combined"
+      ]
+    },
+    {
+      "view": "mScoreboard",
+      "probeCases": [
+        "view-mScoreboard",
+        "live-combined"
+      ]
+    },
+    {
+      "view": "mSchedule",
+      "probeCases": [
+        "view-mSchedule"
+      ]
+    },
+    {
+      "view": "mStandings",
+      "probeCases": [
+        "view-mStandings",
+        "league-combined"
+      ]
+    },
+    {
+      "view": "mStatus",
+      "probeCases": [
+        "public-settings-preflight",
+        "view-mStatus"
+      ]
+    },
+    {
+      "view": "mDraftDetail",
+      "probeCases": [
+        "view-mDraftDetail",
+        "league-combined"
+      ]
+    },
+    {
+      "view": "mTransactions2",
+      "probeCases": [
+        "view-mTransactions2",
+        "transactions-period-1",
+        "transactions-period-2",
+        "transactions-period-3",
+        "transactions-period-4",
+        "transactions-period-5",
+        "transactions-period-6",
+        "transactions-period-7"
+      ]
+    },
+    {
+      "view": "mPositionalRatings",
+      "probeCases": [
+        "view-mPositionalRatings"
+      ]
+    },
+    {
+      "view": "kona_player_info",
+      "probeCases": [
+        "player-pool-default",
+        "pool-status-FREEAGENT",
+        "pool-status-WAIVERS",
+        "pool-status-ONTEAM",
+        "pool-status-INJURED_RESERVE",
+        "pool-free-waivers",
+        "pool-qb-rankings",
+        "pool-without-filter",
+        "all-rostered-pool",
+        "available-page-00",
+        "available-page-01",
+        "available-page-02",
+        "available-page-03"
+      ]
+    },
+    {
+      "view": "kona_playercard",
+      "probeCases": [
+        "player-card"
+      ]
+    },
+    {
+      "view": "kona_league_messageboard",
+      "probeCases": [
+        "message-board"
+      ]
+    },
+    {
+      "view": "players_wl",
+      "probeCases": [
+        "pro-player-directory"
+      ]
+    },
+    {
+      "view": "proTeamSchedules_wl",
+      "probeCases": [
+        "season-pro-schedules",
+        "league-pro-schedules"
+      ]
+    },
+    {
+      "view": "modular",
+      "probeCases": [
+        "view-modular",
+        "modular-nav-combined"
+      ]
+    },
+    {
+      "view": "mNav",
+      "probeCases": [
+        "view-mNav",
+        "modular-nav-combined"
+      ]
+    }
+  ],
+  "referenceClientCoverage": {
+    "get_league": [
+      "league-combined"
+    ],
+    "get_pro_players": [
+      "pro-player-directory"
+    ],
+    "get_player_pool": [
+      "player-pool-default",
+      "pool-free-waivers",
+      "available-page-00"
+    ],
+    "get_player_card": [
+      "player-card"
+    ],
+    "get_player_news": [
+      "player-news-documented"
+    ],
+    "get_message_board": [
+      "message-board"
+    ],
+    "get_game_metadata": [
+      "game-metadata"
+    ],
+    "get_season": [
+      "season-metadata"
+    ],
+    "get_pro_schedule": [
+      "season-pro-schedules"
+    ]
+  },
+  "pagination": {
+    "pageSize": 300,
+    "maxPages": 30,
+    "pages": [
+      {
+        "offset": 0,
+        "returned": 300,
+        "uniqueIds": 300,
+        "overlapWithEarlierPages": 0
+      },
+      {
+        "offset": 300,
+        "returned": 300,
+        "uniqueIds": 300,
+        "overlapWithEarlierPages": 0
+      },
+      {
+        "offset": 600,
+        "returned": 300,
+        "uniqueIds": 300,
+        "overlapWithEarlierPages": 0
+      },
+      {
+        "offset": 900,
+        "returned": 23,
+        "uniqueIds": 23,
+        "overlapWithEarlierPages": 0
+      }
+    ],
+    "terminatedByShortPage": true,
+    "uniqueAvailablePlayers": 923,
+    "availabilityStatuses": {
+      "FREEAGENT": 884,
+      "WAIVERS": 39
+    },
+    "overlapWithOwnedRoster": 0,
+    "ownedPoolCount": 132,
+    "rosterEntryCount": 132,
+    "uniqueRosterPlayers": 132,
+    "ownedPoolMatchesRoster": true,
+    "irSlotEntries": 5,
+    "eventId": "401873023",
+    "note": "Coverage observed during a bounded multi-request interval, not an atomic provider snapshot or historical/live latency guarantee."
+  },
+  "transactions": {
+    "periodsTested": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "entries": 389,
+    "uniqueIds": 389,
+    "typeCounts": {
+      "ROSTER": 261,
+      "DRAFT": 9,
+      "FREEAGENT": 63,
+      "WAIVER": 49,
+      "TRADE_DECLINE": 5,
+      "TRADE_PROPOSAL": 2
+    }
+  },
+  "completedGameSample": {
+    "eventId": "401873023",
+    "previousDrives": 25,
+    "playEvents": 196,
+    "scoringPlays": 8,
+    "observedPlayTypes": [
+      "End Period",
+      "End of Game",
+      "End of Half",
+      "Field Goal Good",
+      "Fumble Recovery (Opponent)",
+      "Fumble Recovery (Own)",
+      "Kickoff",
+      "Official Timeout",
+      "Pass Incompletion",
+      "Pass Interception Return",
+      "Pass Reception",
+      "Passing Touchdown",
+      "Penalty",
+      "Punt",
+      "Rush",
+      "Rushing Touchdown",
+      "Sack",
+      "Timeout",
+      "Two-minute warning"
+    ],
+    "limitation": "One completed game; not proof of active-game update cadence, every play type or tracking coordinates."
+  },
+  "excludedOrInapplicable": [
+    {
+      "scope": "ESPN mutation examples",
+      "method": "POST",
+      "paths": [
+        "lm-api-writes /transactions/",
+        "lm-api-writes /roster/"
+      ],
+      "reason": "Request concerns data retrieval; no transactions, lineup changes or other ESPN writes authorized or performed."
+    },
+    {
+      "scope": "Reference Django database REST API",
+      "paths": [
+        "/api/v1/fantasy/games/",
+        "/api/v1/fantasy/leagues/",
+        "/api/v1/fantasy/teams/",
+        "/api/v1/fantasy/players/",
+        "/api/v1/fantasy/roster/",
+        "/api/v1/fantasy/matchups/",
+        "/api/v1/fantasy/draft/",
+        "/api/v1/fantasy/transactions/"
+      ],
+      "reason": "Local database-backed wrapper routes, not hosted ESPN endpoints. Reviewed in full; service not installed/deployed. Their upstream request families were tested directly."
+    },
+    {
+      "scope": "Local ingestion/admin/schema routes",
+      "paths": [
+        "/api/v1/ingest/league/",
+        "/api/v1/ingest/roster/",
+        "/api/v1/ingest/players/",
+        "/api/v1/ingest/transactions/",
+        "/api/v1/live/ffl/2026/",
+        "/api/v1/live/ffl/2026/pro-schedule/",
+        "/admin/",
+        "/api/schema/",
+        "/api/docs/"
+      ],
+      "reason": "Local reference-service behavior rather than additional ESPN data. Upstream season/schedule proxies covered; no local service writes were needed."
+    },
+    {
+      "scope": "Other sports and earlier seasons",
+      "reason": "Supplied context is FFL/2026 and previousSeasons is empty. Generic examples adapted to NFL; no unrelated league IDs or invented prior FFA seasons queried."
+    },
+    {
+      "scope": "Authenticated communication/filter variants",
+      "reason": "Public communication GET returned explicit 401 AUTH_COMMUNICATION_NOT_VISIBLE; denial recorded, no credential or alternate-auth attempt."
+    }
+  ],
+  "rawStorage": "Ignored local directory data/research/espn-public/2026-10-30; complete bodies are not committed. Request records below contain only safe metadata/counts/errors.",
+  "requests": [
+    {
+      "case": "public-settings-preflight",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&view=mStatus",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research"
+      },
+      "source": "Owner public-visibility change; compare earlier 401",
+      "capturedAt": "2026-10-31T00:57:44.424256+00:00",
+      "authentication": "none",
+      "status": 200,
+      "bytes": 8978,
+      "sha256": "b0dd1217011bd837c20538e54e6afc7348e12aabebb9a91649f0af91b4882ad0",
+      "rawFile": "initial-settings.json",
+      "outcome": "data_returned",
+      "summary": {
+        "id": 1729878439,
+        "seasonId": 2026,
+        "scoringPeriodId": 8,
+        "isPublic": true,
+        "teamCount": 8,
+        "scoringRules": 46
+      }
+    },
+    {
+      "case": "league-base",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README endpoint catalog",
+      "startedAt": "2026-10-31T00:59:13.101030+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 1644,
+      "sha256": "cfd153e3a18b3fa73fad3319b148cd90926f0acd3cef6e090b312dbc7ed6fdc9",
+      "rawFile": "raw/league-base.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "gameId",
+          "id",
+          "members",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "isPublic": null,
+        "scoringRules": 0
+      },
+      "expectedFieldsPresent": {
+        "status": true
+      },
+      "expectedFieldsNonempty": {
+        "status": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.258
+    },
+    {
+      "case": "view-mSettings",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:03.133313+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 8746,
+      "sha256": "15fefd3bca7ad269157511cfe1e88dffd1454ec89cb44590ab978d31cd5510db",
+      "rawFile": "raw/view-mSettings.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "settings.scoringSettings.scoringItems": true
+      },
+      "expectedFieldsNonempty": {
+        "settings.scoringSettings.scoringItems": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.174
+    },
+    {
+      "case": "view-mTeam",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTeam&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:05.183381+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTeam&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 30348,
+      "sha256": "ef58e1a8acf6d7d15cc9f8109d1410d461b344e2c167a7714fd607727f396133",
+      "rawFile": "raw/view-mTeam.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "members",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "teams[].recordCount": 32
+      },
+      "expectedFieldsPresent": {
+        "teams": true,
+        "members": true
+      },
+      "expectedFieldsNonempty": {
+        "teams": true,
+        "members": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.187
+    },
+    {
+      "case": "view-mRoster",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mRoster&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:07.233477+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mRoster&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 2699125,
+      "sha256": "248c019a6d3df6f7f6b4b4f305342a16e4fbd8b3d96cad4bc822fd0e4b3862dc",
+      "rawFile": "raw/view-mRoster.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "teams[].roster.entriesCount": 132,
+        "teams[].roster.entries[].playerPoolEntry.player.statsCount": 1045
+      },
+      "expectedFieldsPresent": {
+        "teams[].roster.entries": true
+      },
+      "expectedFieldsNonempty": {
+        "teams[].roster.entries": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 1.06
+    },
+    {
+      "case": "view-mMatchupScore",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchupScore&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:09.283703+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchupScore&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 170562,
+      "sha256": "00437e49ccf4d8271c78b38a7d02a6e40792eb2172c4784fac3ed1793d222232",
+      "rawFile": "raw/view-mMatchupScore.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "scheduleCount": 56
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.318
+    },
+    {
+      "case": "view-mMatchup",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchup&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:11.333786+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchup&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 2336910,
+      "sha256": "ebca9f490911544d5cf581888e13119fa7b3dee454e9cc76552cc582d7c66b0f",
+      "rawFile": "raw/view-mMatchup.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].roster.entriesCount": 132
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.542
+    },
+    {
+      "case": "view-mScoreboard",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mScoreboard&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:13.383888+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mScoreboard&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 413345,
+      "sha256": "927c90c0afd2a08c4c23692278740659e72cadd26638d443a79117ed43317e7e",
+      "rawFile": "raw/view-mScoreboard.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "id",
+          "schedule",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].recordCount": 8,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.33
+    },
+    {
+      "case": "view-mStandings",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mStandings&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:15.433974+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mStandings&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 11451,
+      "sha256": "06c8f60105622e0d73cd69c6d87a99dfdded535e9dfcc4e24e210cd081b9514b",
+      "rawFile": "raw/view-mStandings.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "scheduleCount": 56
+      },
+      "expectedFieldsPresent": {
+        "teams[].record": false
+      },
+      "expectedFieldsNonempty": {
+        "teams[].record": false
+      },
+      "outcome": "missing_expected_data",
+      "elapsedSeconds": 0.162
+    },
+    {
+      "case": "view-mSchedule",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSchedule&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:17.483260+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSchedule&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 931,
+      "sha256": "58a6b1dd774921a16b8f773d8cc28ef13176974fa9c211edd28cccf7ccfbb050",
+      "rawFile": "raw/view-mSchedule.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8
+      },
+      "expectedFieldsPresent": {
+        "schedule": false
+      },
+      "expectedFieldsNonempty": {
+        "schedule": false
+      },
+      "outcome": "missing_expected_data",
+      "elapsedSeconds": 0.169
+    },
+    {
+      "case": "view-mBoxscore",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:19.533349+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 354724,
+      "sha256": "95b138e9b6b91d6965ee6c99b88ef49b9ff2eec92fa3e3a7adf6cd6475a0cb67",
+      "rawFile": "raw/view-mBoxscore.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].recordCount": 8,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.355
+    },
+    {
+      "case": "view-mLiveScoring",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mLiveScoring&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:21.583435+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mLiveScoring&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 2196,
+      "sha256": "5e2a4539db9b363dad9ccb6d8a896e4e9f20698611cc51b853ad5affbf5f7a8e",
+      "rawFile": "raw/view-mLiveScoring.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "scheduleCount": 56
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 1.165
+    },
+    {
+      "case": "view-mDraftDetail",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mDraftDetail&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:23.633549+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mDraftDetail&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 30626,
+      "sha256": "b43e7f293e22eecd0bb9d7ed2e0e8c53d1daa1f526599f1008ad65665a9f59c3",
+      "rawFile": "raw/view-mDraftDetail.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "draftDetail.picksCount": 128,
+        "isPublic": null,
+        "scoringRules": 0
+      },
+      "expectedFieldsPresent": {
+        "draftDetail.picks": true
+      },
+      "expectedFieldsNonempty": {
+        "draftDetail.picks": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.176
+    },
+    {
+      "case": "view-mTransactions2",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:25.683641+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 37045,
+      "sha256": "db173176c3451da60c4803e3513be0b07ac136f6862da253eb87f19ad65d31ba",
+      "rawFile": "raw/view-mTransactions2.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "transactionsCount": 60
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.185
+    },
+    {
+      "case": "view-mStatus",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mStatus&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:27.733745+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mStatus&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 1163,
+      "sha256": "b238254ace8e214cb433ec46f750666f0772eb2377cb431842b19f8d30967de8",
+      "rawFile": "raw/view-mStatus.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8
+      },
+      "expectedFieldsPresent": {
+        "status": true
+      },
+      "expectedFieldsNonempty": {
+        "status": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.135
+    },
+    {
+      "case": "view-mPositionalRatings",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mPositionalRatings&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:29.783957+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mPositionalRatings&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 9630,
+      "sha256": "e62804136eac47558409d22d43817596afea15dae08cf0b9e09eca3ff8f2ac16",
+      "rawFile": "raw/view-mPositionalRatings.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "positionAgainstOpponent",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8
+      },
+      "expectedFieldsPresent": {
+        "positionAgainstOpponent": true
+      },
+      "expectedFieldsNonempty": {
+        "positionAgainstOpponent": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.175
+    },
+    {
+      "case": "view-modular",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=modular&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table; docs/leagues.md",
+      "startedAt": "2026-10-31T01:00:31.834038+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=modular&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 931,
+      "sha256": "58a6b1dd774921a16b8f773d8cc28ef13176974fa9c211edd28cccf7ccfbb050",
+      "rawFile": "raw/view-modular.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8
+      },
+      "expectedFieldsPresent": {},
+      "expectedFieldsNonempty": {},
+      "outcome": "json_metadata_only",
+      "elapsedSeconds": 0.188,
+      "interpretation": "JSON shell or navigation metadata; does not establish another analytical data capability."
+    },
+    {
+      "case": "game-metadata",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README; client.get_game_metadata",
+      "startedAt": "2026-10-31T01:00:33.884187+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 385,
+      "sha256": "5a55e496b27011170cd8312e2587ef900c5b95e02dca933501ac4bff3b8101bc",
+      "rawFile": "raw/game-metadata.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "abbrev",
+          "active",
+          "currentSeason",
+          "currentSeasonId",
+          "display",
+          "displayOrder",
+          "id",
+          "name",
+          "proSportAbbrev",
+          "proSportName"
+        ],
+        "id": 1
+      },
+      "expectedFieldsPresent": {
+        "currentSeasonId": true
+      },
+      "expectedFieldsNonempty": {
+        "currentSeasonId": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.163
+    },
+    {
+      "case": "season-metadata",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README; client.get_season",
+      "startedAt": "2026-10-31T01:00:35.934237+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 201,
+      "sha256": "813ce8cb0bc55cdfdd744d883e64756b4574799dc3d53b646ee69e2eb5f862db",
+      "rawFile": "raw/season-metadata.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "abbrev",
+          "active",
+          "currentScoringPeriod",
+          "display",
+          "displayOrder",
+          "endDate",
+          "gameId",
+          "id",
+          "name",
+          "startDate"
+        ],
+        "id": 2026
+      },
+      "expectedFieldsPresent": {
+        "currentScoringPeriod": true
+      },
+      "expectedFieldsNonempty": {
+        "currentScoringPeriod": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.153
+    },
+    {
+      "case": "season-pro-schedules",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026?view=proTeamSchedules_wl",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "client.get_pro_schedule",
+      "startedAt": "2026-10-31T01:00:37.984376+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026?view=proTeamSchedules_wl",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 108947,
+      "sha256": "798d3c478dcc891e896db9a51d88b1ebeee2d9ad90d575a1196568bab603fc36",
+      "rawFile": "raw/season-pro-schedules.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "display",
+          "settings"
+        ],
+        "isPublic": null,
+        "scoringRules": 0
+      },
+      "expectedFieldsPresent": {
+        "settings.proTeams": true
+      },
+      "expectedFieldsNonempty": {
+        "settings.proTeams": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.203
+    },
+    {
+      "case": "league-pro-schedules",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=proTeamSchedules_wl",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README view table",
+      "startedAt": "2026-10-31T01:00:40.034518+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=proTeamSchedules_wl",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 1853,
+      "sha256": "a7637e4c693796c9055aefa3ceb4df4f74b756bf18a085d021aec4bb2cb7a055",
+      "rawFile": "raw/league-pro-schedules.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "gameId",
+          "id",
+          "members",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "isPublic": null,
+        "scoringRules": 0
+      },
+      "expectedFieldsPresent": {
+        "proTeamSchedules": false
+      },
+      "expectedFieldsNonempty": {
+        "proTeamSchedules": false
+      },
+      "outcome": "missing_expected_data",
+      "elapsedSeconds": 0.171
+    },
+    {
+      "case": "league-combined",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&view=mTeam&view=mRoster&view=mStandings&view=mMatchupScore&view=mDraftDetail&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README combined views; ingestion service",
+      "startedAt": "2026-10-31T01:00:42.084608+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&view=mTeam&view=mRoster&view=mStandings&view=mMatchupScore&view=mDraftDetail&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 3149163,
+      "sha256": "4f481b7dd2261f94cab615c9b72120ba1061b5c68621048d338990b046053e3c",
+      "rawFile": "raw/league-combined.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "members",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "scheduleCount": 56,
+        "draftDetail.picksCount": 128,
+        "teams[].roster.entriesCount": 132,
+        "teams[].recordCount": 32,
+        "teams[].roster.entries[].playerPoolEntry.player.statsCount": 1045,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "settings": true,
+        "teams[].roster.entries": true,
+        "schedule": true,
+        "draftDetail.picks": true
+      },
+      "expectedFieldsNonempty": {
+        "settings": true,
+        "teams[].roster.entries": true,
+        "schedule": true,
+        "draftDetail.picks": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.595
+    },
+    {
+      "case": "live-combined",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&view=mLiveScoring&view=mScoreboard&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README combined live views",
+      "startedAt": "2026-10-31T01:00:44.134716+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&view=mLiveScoring&view=mScoreboard&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 446000,
+      "sha256": "3328bf87c1e90867b00a1a63f47eb1864c56da2db232426b465ab63ef4bee790",
+      "rawFile": "raw/live-combined.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].recordCount": 8,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.352
+    },
+    {
+      "case": "player-pool-default",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\": {\"limit\": 50, \"offset\": 0, \"sortPercOwned\": {\"sortPriority\": 1, \"sortAsc\": false}}}"
+      },
+      "source": "docs/players.md; client.get_player_pool",
+      "startedAt": "2026-10-31T01:00:46.183532+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 965907,
+      "sha256": "662ec137f1e8b6d84bfb6a728e9574b2d54bd1ce313aa42ac18f3841acb14506",
+      "rawFile": "raw/player-pool-default.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 50
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.39
+    },
+    {
+      "case": "pro-player-directory",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/players?view=players_wl",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"filterActive\": {\"value\": true}}"
+      },
+      "source": "README; client.get_pro_players",
+      "startedAt": "2026-10-31T01:00:48.233618+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/players?view=players_wl",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 672860,
+      "sha256": "842258a66ac9b24362f851946e9a6d23ae00b6b4ec5bffee26c2cdec7d87542b",
+      "rawFile": "raw/pro-player-directory.json",
+      "summary": {
+        "rootType": "list",
+        "count": 2687
+      },
+      "expectedFieldsPresent": {
+        "$list": true
+      },
+      "expectedFieldsNonempty": {
+        "$list": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.401
+    },
+    {
+      "case": "message-board",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439/communication?view=kona_league_messageboard",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README; client.get_message_board",
+      "startedAt": "2026-10-31T01:00:50.283691+00:00",
+      "authentication": "none",
+      "status": 401,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439/communication?view=kona_league_messageboard",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 304,
+      "sha256": "184e0711a8eca14e2024d2e0534ef4a6aec3fe4c24dba4c357703015ed1438f0",
+      "rawFile": "raw/message-board.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "details",
+          "messages"
+        ],
+        "messages": [
+          "You are not authorized to view this communication group."
+        ],
+        "errorTypes": [
+          "AUTH_COMMUNICATION_NOT_VISIBLE"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "topics": false
+      },
+      "expectedFieldsNonempty": {
+        "topics": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.215
+    },
+    {
+      "case": "history-route-current-season",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/leagueHistory/1729878439?seasonId=2026&view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "docs/historical_seasons.md alternate route with supplied season",
+      "startedAt": "2026-10-31T01:00:52.333873+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/leagueHistory/1729878439?seasonId=2026&view=mSettings",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 150,
+      "sha256": "11379c10a8bc9e7fef6df34b7e1c3b0dd25c394b920b3001a54543703c4da0a5",
+      "rawFile": "raw/history-route-current-season.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "details",
+          "messages"
+        ],
+        "messages": [
+          "Not Found"
+        ],
+        "errorTypes": [
+          "GENERAL_NOT_FOUND"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "$list": false
+      },
+      "expectedFieldsNonempty": {
+        "$list": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.218
+    },
+    {
+      "case": "view-mNav",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mNav",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:40.528754+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mNav",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 4404,
+      "sha256": "c276d104f1f9e1446a7f67a83465b738a7b305fc1572541c5e1b2416d0caba8b",
+      "rawFile": "raw/view-mNav.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "members",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "isPublic": true,
+        "scoringRules": 0
+      },
+      "expectedFieldsPresent": {},
+      "expectedFieldsNonempty": {},
+      "outcome": "json_metadata_only",
+      "elapsedSeconds": 0.177,
+      "interpretation": "JSON shell or navigation metadata; does not establish another analytical data capability."
+    },
+    {
+      "case": "modular-nav-combined",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&view=mTeam&view=modular&view=mNav",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:42.578676+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings&view=mTeam&view=modular&view=mNav",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 38575,
+      "sha256": "54fca837109106cf176ff29dcee66deb338699e778f00d7fdc55d6b4b4a1c2b1",
+      "rawFile": "raw/modular-nav-combined.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "members",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "teams[].recordCount": 32,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "settings": true,
+        "teams": true
+      },
+      "expectedFieldsNonempty": {
+        "settings": true,
+        "teams": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.202
+    },
+    {
+      "case": "player-card",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_playercard",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterIds\":{\"value\":[4426515,4379399,4685382]},\"filterStatsForTopScoringPeriodIds\":{\"value\":5,\"additionalValue\":[\"002026\",\"102026\"]}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:44.628784+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_playercard",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 61419,
+      "sha256": "e75e159d19c5a6375b0f2a1f5d18949bed5805f9419f70a44728e0742cf36266",
+      "rawFile": "raw/player-card.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players"
+        ],
+        "playersCount": 3
+      },
+      "expectedFieldsPresent": {
+        "players[].player.stats": true
+      },
+      "expectedFieldsNonempty": {
+        "players[].player.stats": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.234
+    },
+    {
+      "case": "pool-status-FREEAGENT",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterStatus\":{\"value\":[\"FREEAGENT\"]},\"limit\":25,\"offset\":0,\"sortPercOwned\":{\"sortPriority\":1,\"sortAsc\":false}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:46.677449+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 453973,
+      "sha256": "845bfe01ea0ec3397e19c96d420276f8623e215e520e0b741884480969bd1c70",
+      "rawFile": "raw/pool-status-FREEAGENT.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 25
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.328
+    },
+    {
+      "case": "pool-status-WAIVERS",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterStatus\":{\"value\":[\"WAIVERS\"]},\"limit\":25,\"offset\":0,\"sortPercOwned\":{\"sortPriority\":1,\"sortAsc\":false}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:48.727497+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 310383,
+      "sha256": "3bd4c6201e7b2cafec6f17001e16eeb35e2056b55503c8bded15f19ecda02842",
+      "rawFile": "raw/pool-status-WAIVERS.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 25
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.329
+    },
+    {
+      "case": "pool-status-ONTEAM",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterStatus\":{\"value\":[\"ONTEAM\"]},\"limit\":25,\"offset\":0,\"sortPercOwned\":{\"sortPriority\":1,\"sortAsc\":false}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:50.777569+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 500699,
+      "sha256": "3384fce894c8dead4394c4380f9191d749018d3ce3a82be09075b3bac9610de9",
+      "rawFile": "raw/pool-status-ONTEAM.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 25
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.397
+    },
+    {
+      "case": "pool-status-INJURED_RESERVE",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterStatus\":{\"value\":[\"INJURED_RESERVE\"]},\"limit\":25,\"offset\":0,\"sortPercOwned\":{\"sortPriority\":1,\"sortAsc\":false}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:52.827701+00:00",
+      "authentication": "none",
+      "status": 400,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 686,
+      "sha256": "ece88dde857f196654d2f4c8bf9025baae439981c3ae831112c1ef49871a88d6",
+      "rawFile": "raw/pool-status-INJURED_RESERVE.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "cause",
+          "messages"
+        ],
+        "messages": [
+          "Invalid parameter for 'LeagueFilterParams'."
+        ]
+      },
+      "expectedFieldsPresent": {
+        "players": false
+      },
+      "expectedFieldsNonempty": {
+        "players": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.163
+    },
+    {
+      "case": "pool-free-waivers",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterStatus\":{\"value\":[\"FREEAGENT\",\"WAIVERS\"]},\"limit\":50,\"offset\":0,\"sortPercOwned\":{\"sortPriority\":1,\"sortAsc\":false}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:54.877823+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 893687,
+      "sha256": "07c7215c594e6a09ac6a9c17c73a2cdb73bec3e425af3814857a9647957a3f8c",
+      "rawFile": "raw/pool-free-waivers.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 50
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.409
+    },
+    {
+      "case": "pool-qb-rankings",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\":{\"filterSlotIds\":{\"value\":[0]},\"filterRanksForScoringPeriodIds\":{\"value\":[8]},\"limit\":25,\"offset\":0,\"sortPercOwned\":{\"sortPriority\":1,\"sortAsc\":false}}}"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:56.927866+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 300093,
+      "sha256": "fe862d123cd95fd96b80bce0ee14a14206ccffb62b0d7d88d287cf92bdc5f4b1",
+      "rawFile": "raw/pool-qb-rankings.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 25
+      },
+      "expectedFieldsPresent": {
+        "players[].ratings": true
+      },
+      "expectedFieldsNonempty": {
+        "players[].ratings": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.303
+    },
+    {
+      "case": "pool-without-filter",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:03:58.978119+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 451839,
+      "sha256": "50c8bbac4bc2047a498e431277b675a82c3307ef36980e6d41986cd6fbe6b529",
+      "rawFile": "raw/pool-without-filter.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 50
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.388
+    },
+    {
+      "case": "roster-week-1",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mRoster&scoringPeriodId=1",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:01.028074+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mRoster&scoringPeriodId=1",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 2521820,
+      "sha256": "3c05a253bfa708e6b8b34f523da1ffb493b0c3740b990818e485d4b53ec4ac86",
+      "rawFile": "raw/roster-week-1.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 1,
+        "teamsCount": 8,
+        "teams[].roster.entriesCount": 129,
+        "teams[].roster.entries[].playerPoolEntry.player.statsCount": 912
+      },
+      "expectedFieldsPresent": {
+        "teams[].roster.entries": true
+      },
+      "expectedFieldsNonempty": {
+        "teams[].roster.entries": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.611
+    },
+    {
+      "case": "matchup-period-1",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchupScore&matchupPeriodId=1&scoringPeriodId=1",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:03.078133+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchupScore&matchupPeriodId=1&scoringPeriodId=1",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 233229,
+      "sha256": "78a9ed50bf08bd1a0a47aaebbd231aeda7d40909b35ca4343f43f14968e94533",
+      "rawFile": "raw/matchup-period-1.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 1,
+        "scheduleCount": 56
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.382
+    },
+    {
+      "case": "boxscore-period-1",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&matchupPeriodId=1&scoringPeriodId=1",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:05.128215+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&matchupPeriodId=1&scoringPeriodId=1",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 467397,
+      "sha256": "5e7bd4dc7e61fa53f3a065fa3ab63cb5129fe59ef23402ab93e63310e4b89577",
+      "rawFile": "raw/boxscore-period-1.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 1,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].recordCount": 8,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "schedule[].home.rosterForCurrentScoringPeriod.entries": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule[].home.rosterForCurrentScoringPeriod.entries": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.35
+    },
+    {
+      "case": "matchup-period-8",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchupScore&matchupPeriodId=8&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:07.178285+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchupScore&matchupPeriodId=8&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 170562,
+      "sha256": "00437e49ccf4d8271c78b38a7d02a6e40792eb2172c4784fac3ed1793d222232",
+      "rawFile": "raw/matchup-period-8.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "scheduleCount": 56
+      },
+      "expectedFieldsPresent": {
+        "schedule": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.654
+    },
+    {
+      "case": "boxscore-period-8",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&matchupPeriodId=8&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:09.228357+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mBoxscore&matchupPeriodId=8&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 354724,
+      "sha256": "95b138e9b6b91d6965ee6c99b88ef49b9ff2eec92fa3e3a7adf6cd6475a0cb67",
+      "rawFile": "raw/boxscore-period-8.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].recordCount": 8,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "schedule[].home.rosterForCurrentScoringPeriod.entries": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule[].home.rosterForCurrentScoringPeriod.entries": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.352
+    },
+    {
+      "case": "live-rosters-combined",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchup&view=mBoxscore&view=mLiveScoring&view=mRoster&scoringPeriodId=8&matchupPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:11.278451+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mMatchup&view=mBoxscore&view=mLiveScoring&view=mRoster&scoringPeriodId=8&matchupPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 4418545,
+      "sha256": "190399aa19a8cc78581e17007581f4c398f908003fca306de6ecf860c88c4bea",
+      "rawFile": "raw/live-rosters-combined.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "schedule",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "scheduleCount": 56,
+        "teams[].roster.entriesCount": 132,
+        "teams[].recordCount": 8,
+        "teams[].roster.entries[].playerPoolEntry.player.statsCount": 1045,
+        "isPublic": true,
+        "scoringRules": 46
+      },
+      "expectedFieldsPresent": {
+        "schedule": true,
+        "teams[].roster.entries": true
+      },
+      "expectedFieldsNonempty": {
+        "schedule": true,
+        "teams[].roster.entries": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.921
+    },
+    {
+      "case": "transactions-period-1",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=1",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:13.328580+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=1",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 42746,
+      "sha256": "08b3723168d1b1e66a442bc12f94de29a85e0b6954faa4b59a6f5c9e61bcd19c",
+      "rawFile": "raw/transactions-period-1.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 1,
+        "transactionsCount": 44
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.193
+    },
+    {
+      "case": "transactions-period-2",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=2",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:15.378596+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=2",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 18407,
+      "sha256": "fabfd2d1247d54373574ec9ceda0e5b6a5858b5c559827a91d183e7c33acdd18",
+      "rawFile": "raw/transactions-period-2.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 2,
+        "transactionsCount": 28
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.174
+    },
+    {
+      "case": "transactions-period-3",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=3",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:17.427926+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=3",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 32615,
+      "sha256": "9a3af401f0714c6e77e8fb535676fb3ada0a993da2cc95649b5d0952d23ae7d4",
+      "rawFile": "raw/transactions-period-3.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 3,
+        "transactionsCount": 53
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.149
+    },
+    {
+      "case": "transactions-period-4",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=4",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:19.478013+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=4",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 21906,
+      "sha256": "c2c0b797f9ce1653cde8688788ef2f3e04703448d20043dc085e10c77b512205",
+      "rawFile": "raw/transactions-period-4.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 4,
+        "transactionsCount": 35
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.189
+    },
+    {
+      "case": "transactions-period-5",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=5",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:21.528121+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=5",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 31700,
+      "sha256": "2ba31b36e489693ec507e4c819b2210bca5f669a864f102afe54101b15c20055",
+      "rawFile": "raw/transactions-period-5.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 5,
+        "transactionsCount": 51
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.187
+    },
+    {
+      "case": "transactions-period-6",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=6",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:23.578190+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=6",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 40411,
+      "sha256": "eaf6c947e3fb0cecaf9b17c7a29efce0ee5b0bf6f8ed0c875105c77aa6702947",
+      "rawFile": "raw/transactions-period-6.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 6,
+        "transactionsCount": 64
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.229
+    },
+    {
+      "case": "transactions-period-7",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=7",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:25.628274+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mTransactions2&scoringPeriodId=7",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 33491,
+      "sha256": "9cfeb2022c295f2eedd6d70cf9a038bb8e4684facea5fcffd4167d8100800bbd",
+      "rawFile": "raw/transactions-period-7.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "draftDetail",
+          "gameId",
+          "id",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "status",
+          "transactions"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 7,
+        "transactionsCount": 54
+      },
+      "expectedFieldsPresent": {
+        "transactions": true
+      },
+      "expectedFieldsNonempty": {
+        "transactions": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.168
+    },
+    {
+      "case": "player-news-documented",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/news/players?playerId=4426515&seasonId=2026",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:27.678375+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/news/players?playerId=4426515&seasonId=2026",
+      "contentType": null,
+      "retryAfter": null,
+      "bytes": 36,
+      "sha256": "1b73d7c0054de22b686c87e6ceb9b66efd884dd889da4a27363a61c17049bf1e",
+      "rawFile": "raw/player-news-documented.body",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "messages"
+        ],
+        "messages": [
+          "Resource not found."
+        ]
+      },
+      "expectedFieldsPresent": {
+        "$list": false
+      },
+      "expectedFieldsNonempty": {
+        "$list": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.166
+    },
+    {
+      "case": "legacy-domain-v1",
+      "method": "GET",
+      "url": "https://fantasy.espn.com/apis/v1/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:29.728471+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://www.espn.com/fantasy/",
+      "contentType": "text/html;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 137181,
+      "sha256": "c8d1c67dc6c3d7c757faa541c8682a29cff8734e6deb69ef7b20eb8c14d3a96d",
+      "rawFile": "raw/legacy-domain-v1.body",
+      "outcome": "non_json",
+      "bodyKind": "html",
+      "elapsedSeconds": 0.529
+    },
+    {
+      "case": "legacy-domain-v2",
+      "method": "GET",
+      "url": "https://fantasy.espn.com/apis/v2/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:31.778569+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://www.espn.com/fantasy/",
+      "contentType": "text/html;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 137181,
+      "sha256": "c8d1c67dc6c3d7c757faa541c8682a29cff8734e6deb69ef7b20eb8c14d3a96d",
+      "rawFile": "raw/legacy-domain-v2.body",
+      "outcome": "non_json",
+      "bodyKind": "html",
+      "elapsedSeconds": 0.447
+    },
+    {
+      "case": "legacy-domain-v3",
+      "method": "GET",
+      "url": "https://fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:33.828695+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://www.espn.com/fantasy/",
+      "contentType": "text/html;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 137181,
+      "sha256": "c8d1c67dc6c3d7c757faa541c8682a29cff8734e6deb69ef7b20eb8c14d3a96d",
+      "rawFile": "raw/legacy-domain-v3.body",
+      "outcome": "non_json",
+      "bodyKind": "html",
+      "elapsedSeconds": 0.422
+    },
+    {
+      "case": "segment-1",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/1/leagues/1729878439?view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:35.878778+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/1/leagues/1729878439?view=mSettings",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 150,
+      "sha256": "11379c10a8bc9e7fef6df34b7e1c3b0dd25c394b920b3001a54543703c4da0a5",
+      "rawFile": "raw/segment-1.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "details",
+          "messages"
+        ],
+        "messages": [
+          "Not Found"
+        ],
+        "errorTypes": [
+          "GENERAL_NOT_FOUND"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "settings": false
+      },
+      "expectedFieldsNonempty": {
+        "settings": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.146
+    },
+    {
+      "case": "segment-2",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/2/leagues/1729878439?view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:37.928870+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/2/leagues/1729878439?view=mSettings",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 150,
+      "sha256": "11379c10a8bc9e7fef6df34b7e1c3b0dd25c394b920b3001a54543703c4da0a5",
+      "rawFile": "raw/segment-2.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "details",
+          "messages"
+        ],
+        "messages": [
+          "Not Found"
+        ],
+        "errorTypes": [
+          "GENERAL_NOT_FOUND"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "settings": false
+      },
+      "expectedFieldsNonempty": {
+        "settings": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.153
+    },
+    {
+      "case": "segment-3",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/3/leagues/1729878439?view=mSettings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:39.978988+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/3/leagues/1729878439?view=mSettings",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 150,
+      "sha256": "11379c10a8bc9e7fef6df34b7e1c3b0dd25c394b920b3001a54543703c4da0a5",
+      "rawFile": "raw/segment-3.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "details",
+          "messages"
+        ],
+        "messages": [
+          "Not Found"
+        ],
+        "errorTypes": [
+          "GENERAL_NOT_FOUND"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "settings": false
+      },
+      "expectedFieldsNonempty": {
+        "settings": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.132
+    },
+    {
+      "case": "nfl-core-league",
+      "method": "GET",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:42.029045+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 13600,
+      "sha256": "3e50973e0f58a4a9a4c607069e78948c940b11b28d662ab45639bf68e941aab5",
+      "rawFile": "raw/nfl-core-league.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "$ref",
+          "abbreviation",
+          "athletes",
+          "awards",
+          "calendar",
+          "color",
+          "displayName",
+          "draft",
+          "events",
+          "franchises",
+          "freeAgents",
+          "gender",
+          "group",
+          "groups",
+          "guid",
+          "id",
+          "isTournament",
+          "leaders",
+          "links",
+          "logos",
+          "name",
+          "notes",
+          "rankings",
+          "season",
+          "seasons",
+          "shortName",
+          "slug",
+          "talentPicks",
+          "teams",
+          "transactions",
+          "uid"
+        ],
+        "id": "28",
+        "teamsCount": 1,
+        "transactionsCount": 1,
+        "eventsCount": 1
+      },
+      "expectedFieldsPresent": {
+        "id": true,
+        "name": true
+      },
+      "expectedFieldsNonempty": {
+        "id": true,
+        "name": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.487
+    },
+    {
+      "case": "nfl-core-athletes",
+      "method": "GET",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes?limit=1",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:44.079191+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes?limit=1",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 179,
+      "sha256": "0566f2690d62303635293005c77f8e8ab9fd16867b5722d33e8ebf573cf6528f",
+      "rawFile": "raw/nfl-core-athletes.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "count",
+          "items",
+          "pageCount",
+          "pageIndex",
+          "pageSize"
+        ],
+        "count": 20325,
+        "pageIndex": 1,
+        "pageCount": 20325,
+        "pageSize": 1,
+        "itemsCount": 1
+      },
+      "expectedFieldsPresent": {
+        "items": true
+      },
+      "expectedFieldsNonempty": {
+        "items": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.356
+    },
+    {
+      "case": "nfl-core-season-athlete",
+      "method": "GET",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4426515",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:46.127771+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4426515",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 5604,
+      "sha256": "295c3ec73d788a88284f185c1ce508c855996ae912b01fe2e218b7753bb00a8a",
+      "rawFile": "raw/nfl-core-season-athlete.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "$ref",
+          "active",
+          "age",
+          "alternateIds",
+          "birthPlace",
+          "college",
+          "collegeAthlete",
+          "contract",
+          "contracts",
+          "dateOfBirth",
+          "displayHeight",
+          "displayName",
+          "displayWeight",
+          "draft",
+          "eventLog",
+          "experience",
+          "firstName",
+          "fullName",
+          "guid",
+          "headshot",
+          "height",
+          "id",
+          "injuries",
+          "jersey",
+          "lastName",
+          "linked",
+          "links",
+          "notes",
+          "position",
+          "projections",
+          "shortName",
+          "slug",
+          "statistics",
+          "status",
+          "team",
+          "teams",
+          "type",
+          "uid",
+          "weight"
+        ],
+        "id": "4426515",
+        "teamsCount": 1
+      },
+      "expectedFieldsPresent": {
+        "id": true
+      },
+      "expectedFieldsNonempty": {
+        "id": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.271
+    },
+    {
+      "case": "nfl-core-season-teams",
+      "method": "GET",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams?limit=100",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:48.177983+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams?limit=100",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 3704,
+      "sha256": "85134c011956b299dfbd8c5456d9e23aedaafb5564ef499dd9d7754cba5875f4",
+      "rawFile": "raw/nfl-core-season-teams.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "count",
+          "items",
+          "pageCount",
+          "pageIndex",
+          "pageSize"
+        ],
+        "count": 32,
+        "pageIndex": 1,
+        "pageCount": 1,
+        "pageSize": 100,
+        "itemsCount": 32
+      },
+      "expectedFieldsPresent": {
+        "items": true
+      },
+      "expectedFieldsNonempty": {
+        "items": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.353
+    },
+    {
+      "case": "nfl-site-scoreboard",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:50.228021+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 253459,
+      "sha256": "47155354b333c6ebe665aa9f1eed0437f70c38913ef5b89212c69c3edfd9fef2",
+      "rawFile": "raw/nfl-site-scoreboard.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "events",
+          "leagues",
+          "provider",
+          "season",
+          "week"
+        ],
+        "eventsCount": 14
+      },
+      "expectedFieldsPresent": {
+        "events": true
+      },
+      "expectedFieldsNonempty": {
+        "events": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.644
+    },
+    {
+      "case": "nfl-site-web-scoreboard",
+      "method": "GET",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:52.278231+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 253459,
+      "sha256": "3f81e034f84e2748774bf2c2c00958cf5ab7cc64521b7d9e5fb03fd51e85ba37",
+      "rawFile": "raw/nfl-site-web-scoreboard.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "events",
+          "leagues",
+          "provider",
+          "season",
+          "week"
+        ],
+        "eventsCount": 14
+      },
+      "expectedFieldsPresent": {
+        "events": true
+      },
+      "expectedFieldsNonempty": {
+        "events": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.584
+    },
+    {
+      "case": "nfl-site-news",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:54.328328+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 17132,
+      "sha256": "3d1a5d8981bcb1b928e43fdd809f4892a1300747151797e95afb57796c9bc632",
+      "rawFile": "raw/nfl-site-news.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "articles",
+          "header",
+          "link"
+        ],
+        "articlesCount": 6
+      },
+      "expectedFieldsPresent": {
+        "articles": true
+      },
+      "expectedFieldsNonempty": {
+        "articles": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.403
+    },
+    {
+      "case": "nfl-site-standings",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/standings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:56.378482+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/standings",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 82,
+      "sha256": "e87d8773251c63102d7b982baf674a324c807556b11ca14da295b5bf8064eb60",
+      "rawFile": "raw/nfl-site-standings.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "code",
+          "message"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "children": false
+      },
+      "expectedFieldsNonempty": {
+        "children": false
+      },
+      "outcome": "http_error",
+      "elapsedSeconds": 0.23
+    },
+    {
+      "case": "nfl-site-v2-standings",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/v2/sports/football/nfl/standings",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:04:58.428553+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.api.espn.com/apis/v2/sports/football/nfl/standings",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 157608,
+      "sha256": "d45d73b425737f783cb0ec8d22ae0ba43cbbf9e9f3da3174ad8e807f280065c8",
+      "rawFile": "raw/nfl-site-v2-standings.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "abbreviation",
+          "children",
+          "id",
+          "isConference",
+          "links",
+          "name",
+          "season",
+          "seasons",
+          "shortName",
+          "uid"
+        ],
+        "id": "9"
+      },
+      "expectedFieldsPresent": {
+        "children": true
+      },
+      "expectedFieldsNonempty": {
+        "children": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.688
+    },
+    {
+      "case": "now-news",
+      "method": "GET",
+      "url": "https://now.core.api.espn.com/v1/sports/news",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:05:00.478634+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://now.core.api.espn.com/v1/sports/news",
+      "contentType": "application/json",
+      "retryAfter": null,
+      "bytes": 158469,
+      "sha256": "71185d98118f7533f4a63e988309e1f2b91f37f3f1f27daab4c3eace4d9233c8",
+      "rawFile": "raw/now-news.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "breakingNews",
+          "headlines",
+          "resultsCount",
+          "resultsLimit",
+          "resultsOffset",
+          "status",
+          "timestamp"
+        ],
+        "headlinesCount": 10
+      },
+      "expectedFieldsPresent": {
+        "headlines": true
+      },
+      "expectedFieldsNonempty": {
+        "headlines": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.524
+    },
+    {
+      "case": "now-football-news",
+      "method": "GET",
+      "url": "https://now.core.api.espn.com/v1/sports/news?sport=football",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:05:02.528735+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://now.core.api.espn.com/v1/sports/news?sport=football",
+      "contentType": "application/json",
+      "retryAfter": null,
+      "bytes": 133861,
+      "sha256": "3b1ac6771768f199016ff8461622b09e5815fdb5c95848dbfc14662117da6a39",
+      "rawFile": "raw/now-football-news.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "breakingNews",
+          "headlines",
+          "resultsCount",
+          "resultsLimit",
+          "resultsOffset",
+          "status",
+          "timestamp"
+        ],
+        "headlinesCount": 10
+      },
+      "expectedFieldsPresent": {
+        "headlines": true
+      },
+      "expectedFieldsNonempty": {
+        "headlines": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.491
+    },
+    {
+      "case": "now-nfl-live",
+      "method": "GET",
+      "url": "https://now.core.api.espn.com/v1/sports/football/nfl/live",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:05:04.578797+00:00",
+      "authentication": "none",
+      "status": 404,
+      "finalUrl": "https://now.core.api.espn.com/v1/sports/football/nfl/live",
+      "contentType": "application/json",
+      "retryAfter": null,
+      "bytes": 111,
+      "sha256": "1e0fc4062feb48ac27dc340ed0647b940e6bbb2e3679999be97795ccce3150c6",
+      "rawFile": "raw/now-nfl-live.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "error",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "expectedFieldsPresent": {},
+      "expectedFieldsNonempty": {},
+      "outcome": "http_error",
+      "elapsedSeconds": 0.299
+    },
+    {
+      "case": "cdn-headshot",
+      "method": "GET",
+      "url": "https://a.espncdn.com/i/headshots/nfl/players/full/4426515.png",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:05:06.628883+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://a.espncdn.com/i/headshots/nfl/players/full/4426515.png",
+      "contentType": "image/png",
+      "retryAfter": null,
+      "bytes": 236527,
+      "sha256": "ab48c1fc2fd49b0484a02621a3ee20fbb11fda3239017059354e9027dd4dfdf7",
+      "rawFile": "raw/cdn-headshot.body",
+      "outcome": "asset_returned",
+      "bodyKind": "other",
+      "elapsedSeconds": 1.061
+    },
+    {
+      "case": "cdn-logo-combiner",
+      "method": "GET",
+      "url": "https://a.espncdn.com/combiner/i?img=%2Fi%2Fteamlogos%2Fnfl%2F500%2Flar.png",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "reference repository detailed documentation",
+      "startedAt": "2026-10-31T01:05:08.679214+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://a.espncdn.com/combiner/i?img=%2Fi%2Fteamlogos%2Fnfl%2F500%2Flar.png",
+      "contentType": "image/png",
+      "retryAfter": null,
+      "bytes": 36837,
+      "sha256": "199199f2b4d2124609e02c9cf63ab40ccab8e5615f378d1f724edce0128bb5df",
+      "rawFile": "raw/cdn-logo-combiner.body",
+      "outcome": "asset_returned",
+      "bodyKind": "other",
+      "elapsedSeconds": 0.285
+    },
+    {
+      "case": "unknown-view-control",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=arbit_unknown_view_control",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "Negative control for ignored view behavior",
+      "startedAt": "2026-10-31T01:06:20.482816+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=arbit_unknown_view_control",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 1644,
+      "sha256": "cfd153e3a18b3fa73fad3319b148cd90926f0acd3cef6e090b312dbc7ed6fdc9",
+      "rawFile": "raw/unknown-view-control.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "gameId",
+          "id",
+          "members",
+          "scoringPeriodId",
+          "seasonId",
+          "segmentId",
+          "settings",
+          "status",
+          "teams"
+        ],
+        "id": 1729878439,
+        "seasonId": 2026,
+        "segmentId": 0,
+        "scoringPeriodId": 8,
+        "teamsCount": 8,
+        "membersCount": 8,
+        "isPublic": null,
+        "scoringRules": 0
+      },
+      "expectedFieldsPresent": {},
+      "expectedFieldsNonempty": {},
+      "outcome": "json_metadata_only",
+      "elapsedSeconds": 0.244,
+      "interpretation": "JSON shell or navigation metadata; does not establish another analytical data capability."
+    },
+    {
+      "case": "player-news-site-fantasy",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/fantasy/v3/games/ffl/news/players?playerId=4426515&seasonId=2026",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "Existing Arbit SRC-01 ESPN request constants; corrective domain comparison",
+      "startedAt": "2026-10-31T01:06:22.532874+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.api.espn.com/apis/fantasy/v3/games/ffl/news/players?playerId=4426515&seasonId=2026",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 138128,
+      "sha256": "305a716b4c5044bfc926f65d820825b108db2c24b974e0769cc8538c39673fa8",
+      "rawFile": "raw/player-news-site-fantasy.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "bets",
+          "news"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "news": true
+      },
+      "expectedFieldsNonempty": {
+        "news": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.319
+    },
+    {
+      "case": "nfl-site-summary",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README site data family, event ID from tested scoreboard",
+      "startedAt": "2026-10-31T01:06:24.582936+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 647389,
+      "sha256": "e9d07afdff9876977f0902b4d507f56b5c1b61d3204bb48d3bec322bc2b0d023",
+      "rawFile": "raw/nfl-site-summary.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "againstTheSpread",
+          "article",
+          "boxscore",
+          "broadcasts",
+          "drives",
+          "format",
+          "gameInfo",
+          "header",
+          "injuries",
+          "leaders",
+          "meta",
+          "news",
+          "odds",
+          "pickcenter",
+          "scoringPlays",
+          "standings",
+          "videos",
+          "wallclockAvailable",
+          "winprobability"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "drives.previous": true,
+        "boxscore": true
+      },
+      "expectedFieldsNonempty": {
+        "drives.previous": true,
+        "boxscore": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.422
+    },
+    {
+      "case": "nfl-web-summary",
+      "method": "GET",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023&region=us&lang=en",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "README web summary example adapted to football/event ID",
+      "startedAt": "2026-10-31T01:06:26.633021+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023&region=us&lang=en",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 647392,
+      "sha256": "46da7666994395b865d5d0ca69db1cbe22b84fdfb218e7510977315236d8d267",
+      "rawFile": "raw/nfl-web-summary.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "againstTheSpread",
+          "article",
+          "boxscore",
+          "broadcasts",
+          "drives",
+          "format",
+          "gameInfo",
+          "header",
+          "injuries",
+          "leaders",
+          "meta",
+          "news",
+          "odds",
+          "pickcenter",
+          "scoringPlays",
+          "standings",
+          "videos",
+          "wallclockAvailable",
+          "winprobability"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "drives.previous": true,
+        "boxscore": true
+      },
+      "expectedFieldsNonempty": {
+        "drives.previous": true,
+        "boxscore": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.926
+    },
+    {
+      "case": "all-rostered-pool",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\": {\"filterStatus\": {\"value\": [\"ONTEAM\"]}, \"limit\": 300, \"offset\": 0, \"sortPercOwned\": {\"sortPriority\": 1, \"sortAsc\": false}}}"
+      },
+      "source": "docs/players.md status filter and explicit limit",
+      "startedAt": "2026-10-31T01:06:28.683109+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 2441205,
+      "sha256": "fc7446b5fcc8ac0e39ebb14fb68c663d0a780daf2d92ad5d181f3460a6e59f8a",
+      "rawFile": "raw/all-rostered-pool.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 132
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.567
+    },
+    {
+      "case": "available-page-00",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\": {\"filterStatus\": {\"value\": [\"FREEAGENT\", \"WAIVERS\"]}, \"limit\": 300, \"offset\": 0, \"sortPercOwned\": {\"sortPriority\": 1, \"sortAsc\": false}}}"
+      },
+      "source": "docs/players.md and FantasyClient.get_player_pool limit/offset",
+      "startedAt": "2026-10-31T01:06:30.733203+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 4039890,
+      "sha256": "690dee3ca24ad241b67b34ccd43f81bb6836d59ae254c2536059fd1fba96d878",
+      "rawFile": "raw/available-page-00.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 300
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 2.458
+    },
+    {
+      "case": "available-page-01",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\": {\"filterStatus\": {\"value\": [\"FREEAGENT\", \"WAIVERS\"]}, \"limit\": 300, \"offset\": 300, \"sortPercOwned\": {\"sortPriority\": 1, \"sortAsc\": false}}}"
+      },
+      "source": "docs/players.md and FantasyClient.get_player_pool limit/offset",
+      "startedAt": "2026-10-31T01:06:33.224584+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 1455113,
+      "sha256": "1e756708de6ca0b463f74fbd9dcc0de3410573cf47b64d100c103da3ef4c5eac",
+      "rawFile": "raw/available-page-01.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 300
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.427
+    },
+    {
+      "case": "available-page-02",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\": {\"filterStatus\": {\"value\": [\"FREEAGENT\", \"WAIVERS\"]}, \"limit\": 300, \"offset\": 600, \"sortPercOwned\": {\"sortPriority\": 1, \"sortAsc\": false}}}"
+      },
+      "source": "docs/players.md and FantasyClient.get_player_pool limit/offset",
+      "startedAt": "2026-10-31T01:06:35.274743+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 689714,
+      "sha256": "70ea5487581b0857175949799b3c3f81e1615f199f8f523cfd104db958ec5505",
+      "rawFile": "raw/available-page-02.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 300
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.581
+    },
+    {
+      "case": "available-page-03",
+      "method": "GET",
+      "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/",
+        "X-Fantasy-Filter": "{\"players\": {\"filterStatus\": {\"value\": [\"FREEAGENT\", \"WAIVERS\"]}, \"limit\": 300, \"offset\": 900, \"sortPercOwned\": {\"sortPriority\": 1, \"sortAsc\": false}}}"
+      },
+      "source": "docs/players.md and FantasyClient.get_player_pool limit/offset",
+      "startedAt": "2026-10-31T01:06:37.324855+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leagues/1729878439?view=kona_player_info&scoringPeriodId=8",
+      "contentType": "application/json;charset=utf-8",
+      "retryAfter": null,
+      "bytes": 53423,
+      "sha256": "ea26d345a4b9977717cf4a4250d3d455516f5aaeb348b0302f3ffa3d8488bee9",
+      "rawFile": "raw/available-page-03.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "players",
+          "positionAgainstOpponent"
+        ],
+        "playersCount": 23
+      },
+      "expectedFieldsPresent": {
+        "players": true
+      },
+      "expectedFieldsNonempty": {
+        "players": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.21
+    },
+    {
+      "case": "player-news-site-player-only",
+      "method": "GET",
+      "url": "https://site.api.espn.com/apis/fantasy/v3/games/ffl/news/players?playerId=4426515",
+      "requestHeaders": {
+        "Accept": "application/json",
+        "User-Agent": "Arbit/0.1 read-only endpoint research",
+        "Referer": "https://fantasy.espn.com/"
+      },
+      "source": "cwendt94 espn-api get_player_news exact playerId-only params; compare documented wrong-domain route",
+      "startedAt": "2026-10-31T01:09:15.022021+00:00",
+      "authentication": "none",
+      "status": 200,
+      "finalUrl": "https://site.api.espn.com/apis/fantasy/v3/games/ffl/news/players?playerId=4426515",
+      "contentType": "application/json;charset=UTF-8",
+      "retryAfter": null,
+      "bytes": 138128,
+      "sha256": "4d85be6713773a020941f601c1cd20bc399f2795e4879705f22cdc1cd4da4151",
+      "rawFile": "raw/player-news-site-player-only.json",
+      "summary": {
+        "rootType": "dict",
+        "keys": [
+          "bets",
+          "news"
+        ]
+      },
+      "expectedFieldsPresent": {
+        "news.feed": true
+      },
+      "expectedFieldsNonempty": {
+        "news.feed": true
+      },
+      "outcome": "data_returned",
+      "elapsedSeconds": 0.473
+    }
+  ],
+  "referenceClientExecuted": false,
+  "referenceClientCoverageNote": "All nine upstream client method request families were reproduced with direct GET requests. Source was reviewed in full; Django service/client code was not executed or installed."
+}
