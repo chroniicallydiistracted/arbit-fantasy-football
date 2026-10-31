@@ -28,4 +28,4 @@ def test_upgrade_preserves_existing_snapshots_jobs_and_outbox(engine, candidate)
     with engine.connect() as c:
         assert c.scalar(text("SELECT count(*) FROM outbox_event")) == 1
         assert c.scalar(text("SELECT count(*) FROM league_document")) == 0
-        assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0002_ffa_sync"
+        assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0003_nflverse"

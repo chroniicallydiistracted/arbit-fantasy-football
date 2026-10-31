@@ -159,3 +159,55 @@ provider_budget = Table(
     Column("blocked_until", DateTime(timezone=True), nullable=False),
     Column("failures", Integer, nullable=False),
 )
+
+nflverse_catalog = Table(
+    "nflverse_catalog",
+    metadata,
+    Column("hash", String(64), primary_key=True),
+    Column("observed_at", DateTime(timezone=True), nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+dataset_manifest = Table(
+    "dataset_manifest",
+    metadata,
+    Column("hash", String(64), primary_key=True),
+    Column("logical_key", String, nullable=False),
+    Column("family", String, nullable=False),
+    Column("observed_at", DateTime(timezone=True), nullable=False),
+    Column("raw_hash", String(64), nullable=False),
+    Column("parquet_hash", String(64)),
+    Column("state_hash", String(64), nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+dataset_current = Table(
+    "dataset_current",
+    metadata,
+    Column("logical_key", String, primary_key=True),
+    Column("manifest_hash", String(64), nullable=False),
+)
+dataset_import = Table(
+    "dataset_import",
+    metadata,
+    Column("catalog_hash", String(64), primary_key=True),
+    Column("logical_key", String, primary_key=True),
+    Column("asset_id", String, nullable=False),
+    Column("status", String, nullable=False),
+    Column("manifest_hash", String(64)),
+    Column("error_code", String),
+    Column("checked_at", DateTime(timezone=True), nullable=False),
+)
+mapping_review = Table(
+    "mapping_review",
+    metadata,
+    Column("id", Uuid, primary_key=True),
+    Column("manifest_hash", String(64), nullable=False),
+    Column("source_key", String, nullable=False),
+    Column("reason", String, nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+identity_import = Table(
+    "identity_import",
+    metadata,
+    Column("manifest_hash", String(64), primary_key=True),
+    Column("payload", JSON, nullable=False),
+)
