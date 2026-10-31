@@ -1,0 +1,1343 @@
+{
+  "synthetic": false,
+  "projection": "Minimal factual play fields selected once per provider type; no league-member data. Embedded references are retained as data and never fetched.",
+  "event_id": "401873023",
+  "season": 2026,
+  "source_url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873023/competitions/401873023/plays?limit=300&page=1",
+  "source_sha256": "089b25384212ba424ed62d88c82ce8710ba52c57fc0c6cf3b4ee0947cfbd67c3",
+  "observed_at": "2026-10-31T18:51:08.348041+00:00",
+  "plays": [
+    {
+      "id": "4018730231",
+      "sequenceNumber": "100",
+      "type": {
+        "id": "70",
+        "text": "Coin Toss"
+      },
+      "text": "GAME",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 900.0,
+        "displayValue": "15:00"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 0,
+        "distance": 0,
+        "yardLine": 0,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 0,
+        "distance": 0,
+        "yardLine": 0,
+        "yardsToEndzone": 65,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    },
+    {
+      "id": "40187302340",
+      "sequenceNumber": "4000",
+      "type": {
+        "id": "53",
+        "text": "Kickoff",
+        "abbreviation": "K"
+      },
+      "text": "R.Fitzgerald kicks 57 yards from CAR 35 to GB 8. C.Owen to GB 27 for 19 yards (J.Kuwatch). FUMBLES (J.Kuwatch), touched at GB 28, RECOVERED by CAR-N.Hampton at GB 29.",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 900.0,
+        "displayValue": "15:00"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:15:32Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 0,
+        "distance": 0,
+        "yardLine": 65,
+        "yardsToEndzone": 65,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 29,
+        "yardsToEndzone": 29,
+        "downDistanceText": "1st & 10 at GB 29",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "GB 29",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 19,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4568263?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "kicker"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4578436?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "fumbler"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4578436?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "returner"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4360773?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "recoverer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4875592?lang=en&region=us"
+          },
+          "order": 5,
+          "type": "forcedBy"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4875592?lang=en&region=us"
+          },
+          "order": 6,
+          "type": "tackler"
+        }
+      ]
+    },
+    {
+      "id": "40187302379",
+      "sequenceNumber": "7900",
+      "type": {
+        "id": "5",
+        "text": "Rush",
+        "abbreviation": "RUSH"
+      },
+      "text": "C.Hubbard left tackle to GB 26 for 3 yards (L.Van Ness).",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 895.0,
+        "displayValue": "14:55"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:17:07Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 29,
+        "yardsToEndzone": 29,
+        "downDistanceText": "1st & 10 at GB 29",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "GB 29",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 2,
+        "distance": 7,
+        "yardLine": 26,
+        "yardsToEndzone": 26,
+        "downDistanceText": "2nd & 7 at GB 26",
+        "shortDownDistanceText": "2nd & 7",
+        "possessionText": "GB 26",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 3,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4241416?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "rusher"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4686906?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "tackler"
+        }
+      ]
+    },
+    {
+      "id": "401873023145",
+      "sequenceNumber": "14500",
+      "type": {
+        "id": "24",
+        "text": "Pass Reception",
+        "abbreviation": "REC"
+      },
+      "text": "(Shotgun) B.Young pass short middle to C.Hubbard to GB 15 for no gain (T.Hopper).",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 787.0,
+        "displayValue": "13:07"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:18:56Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 2,
+        "distance": 8,
+        "yardLine": 15,
+        "yardsToEndzone": 15,
+        "downDistanceText": "2nd & 8 at GB 15",
+        "shortDownDistanceText": "2nd & 8",
+        "possessionText": "GB 15",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 3,
+        "distance": 8,
+        "yardLine": 15,
+        "yardsToEndzone": 15,
+        "downDistanceText": "3rd & 8 at GB 15",
+        "shortDownDistanceText": "3rd & 8",
+        "possessionText": "GB 15",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 0,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4685720?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4241416?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "receiver"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4567406?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "tackler"
+        }
+      ]
+    },
+    {
+      "id": "401873023170",
+      "sequenceNumber": "17000",
+      "type": {
+        "id": "7",
+        "text": "Sack"
+      },
+      "text": "(Shotgun) B.Young sacked at GB 21 for -6 yards (D.Wyatt).",
+      "homeScore": 0,
+      "awayScore": 0,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 745.0,
+        "displayValue": "12:25"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:19:37Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 3,
+        "distance": 8,
+        "yardLine": 15,
+        "yardsToEndzone": 15,
+        "downDistanceText": "3rd & 8 at GB 15",
+        "shortDownDistanceText": "3rd & 8",
+        "possessionText": "GB 15",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 4,
+        "distance": 14,
+        "yardLine": 21,
+        "yardsToEndzone": 21,
+        "downDistanceText": "4th & 14 at GB 21",
+        "shortDownDistanceText": "4th & 14",
+        "possessionText": "GB 21",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": -6,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4685720?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4361791?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "sackedBy"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4361791?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "tackler"
+        }
+      ]
+    },
+    {
+      "id": "401873023200",
+      "sequenceNumber": "20000",
+      "type": {
+        "id": "74",
+        "text": "Official Timeout",
+        "abbreviation": "Off TO"
+      },
+      "text": "Official Timeout at 11:43.",
+      "homeScore": 0,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 703.0,
+        "displayValue": "11:43"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:20:49Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": -1,
+        "distance": 0,
+        "yardLine": 65,
+        "yardsToEndzone": 0,
+        "downDistanceText": " & Goal at CAR 35",
+        "shortDownDistanceText": " & Goal",
+        "possessionText": "CAR 35",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": -1,
+        "distance": 0,
+        "yardLine": 65,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    },
+    {
+      "id": "401873023190",
+      "sequenceNumber": "19000",
+      "type": {
+        "id": "59",
+        "text": "Field Goal Good",
+        "abbreviation": "FG"
+      },
+      "text": " R.Fitzgerald 39 yard field goal is GOOD, Center-J.Jansen, Holder-S.Martin.",
+      "homeScore": 0,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 703.0,
+        "displayValue": "11:43"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:20:15Z",
+      "scoringPlay": true,
+      "scoreValue": 3,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 4,
+        "distance": 14,
+        "yardLine": 21,
+        "yardsToEndzone": 21,
+        "downDistanceText": "4th & 14 at GB 21",
+        "shortDownDistanceText": "4th & 14",
+        "possessionText": "GB 21",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": -1,
+        "distance": 10,
+        "yardLine": 0,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 39,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4568263?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "kicker"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4568263?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "scorer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/11759?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "snapper"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/15928?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "holder"
+        }
+      ]
+    },
+    {
+      "id": "401873023265",
+      "sequenceNumber": "26500",
+      "type": {
+        "id": "3",
+        "text": "Pass Incompletion"
+      },
+      "text": "(Shotgun) J.Love pass incomplete short left to M.Golden.",
+      "homeScore": 0,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 658.0,
+        "displayValue": "10:58"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:24:52Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 2,
+        "distance": 6,
+        "yardLine": 37,
+        "yardsToEndzone": 63,
+        "downDistanceText": "2nd & 6 at GB 37",
+        "shortDownDistanceText": "2nd & 6",
+        "possessionText": "GB 37",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 3,
+        "distance": 6,
+        "yardLine": 37,
+        "yardsToEndzone": 63,
+        "downDistanceText": "3rd & 6 at GB 37",
+        "shortDownDistanceText": "3rd & 6",
+        "possessionText": "GB 37",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": 0,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4036378?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4701936?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "receiver"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4701936?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "receiver"
+        }
+      ]
+    },
+    {
+      "id": "401873023313",
+      "sequenceNumber": "31300",
+      "type": {
+        "id": "52",
+        "text": "Punt",
+        "abbreviation": "PUNT"
+      },
+      "text": "D.Whelan punts 49 yards to CAR 11, Center-M.Orzech. T.Etienne to CAR 12 for 1 yard (B.Melton).",
+      "homeScore": 0,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 622.0,
+        "displayValue": "10:22"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:26:04Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 4,
+        "distance": 3,
+        "yardLine": 40,
+        "yardsToEndzone": 40,
+        "downDistanceText": "4th & 3 at GB 40",
+        "shortDownDistanceText": "4th & 3",
+        "possessionText": "GB 40",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 88,
+        "yardsToEndzone": 88,
+        "downDistanceText": "1st & 10 at CAR 12",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "CAR 12",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 1,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4248789?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "punter"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4685350?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "returner"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4259305?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "tackler"
+        }
+      ]
+    },
+    {
+      "id": "401873023440",
+      "sequenceNumber": "44000",
+      "type": {
+        "id": "8",
+        "text": "Penalty",
+        "abbreviation": "PEN"
+      },
+      "text": "PENALTY on GB-J.Jacobs, False Start, 5 yards, enforced at GB 44 - No Play.",
+      "homeScore": 0,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 521.0,
+        "displayValue": "8:41"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:32:20Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": true,
+      "isTurnover": false,
+      "start": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 44,
+        "yardsToEndzone": 56,
+        "downDistanceText": "1st & 10 at GB 44",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "GB 44",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 15,
+        "yardLine": 39,
+        "yardsToEndzone": 61,
+        "downDistanceText": "1st & 15 at GB 39",
+        "shortDownDistanceText": "1st & 15",
+        "possessionText": "GB 39",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": -5,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4047365?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "penalized"
+        }
+      ]
+    },
+    {
+      "id": "401873023666",
+      "sequenceNumber": "66600",
+      "type": {
+        "id": "67",
+        "text": "Passing Touchdown",
+        "abbreviation": "TD"
+      },
+      "text": "(Shotgun) J.Love pass short middle to T.Kraft for 12 yards, TOUCHDOWN. T.Smack extra point is No Good, Hit Left Upright, Center-M.Orzech, Holder-D.Whelan.",
+      "homeScore": 6,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 308.0,
+        "displayValue": "5:08"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:37:40Z",
+      "scoringPlay": true,
+      "scoreValue": 6,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 3,
+        "distance": 8,
+        "yardLine": 88,
+        "yardsToEndzone": 12,
+        "downDistanceText": "3rd & 8 at CAR 12",
+        "shortDownDistanceText": "3rd & 8",
+        "possessionText": "CAR 12",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": -1,
+        "distance": 10,
+        "yardLine": 100,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "pointAfterAttempt": {
+        "id": 62,
+        "text": "Extra Point Missed",
+        "abbreviation": "Extra Point Missed",
+        "value": 0
+      },
+      "statYardage": 12,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4036378?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4572680?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "receiver"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4572680?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "scorer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4869461?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "kicker"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4869461?lang=en&region=us"
+          },
+          "order": 5,
+          "type": "patScorer"
+        }
+      ]
+    },
+    {
+      "id": "4018730231028",
+      "sequenceNumber": "102800",
+      "type": {
+        "id": "2",
+        "text": "End Period",
+        "abbreviation": "EP"
+      },
+      "text": "END QUARTER 1",
+      "homeScore": 6,
+      "awayScore": 3,
+      "period": {
+        "number": 1
+      },
+      "clock": {
+        "value": 0.0,
+        "displayValue": "0:00"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:49:38Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 2,
+        "distance": 1,
+        "yardLine": 1,
+        "yardsToEndzone": 1,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 2,
+        "distance": 1,
+        "yardLine": 1,
+        "yardsToEndzone": 1,
+        "downDistanceText": "2nd & Goal at GB 1",
+        "shortDownDistanceText": "2nd & Goal",
+        "possessionText": "GB 1",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    },
+    {
+      "id": "4018730231048",
+      "sequenceNumber": "104800",
+      "type": {
+        "id": "68",
+        "text": "Rushing Touchdown",
+        "abbreviation": "TD"
+      },
+      "text": "S.Forsythe reported in as eligible.  C.Hubbard right tackle for 1 yard, TOUCHDOWN. R.Fitzgerald extra point is GOOD, Center-J.Jansen, Holder-S.Martin.",
+      "homeScore": 6,
+      "awayScore": 10,
+      "period": {
+        "number": 2
+      },
+      "clock": {
+        "value": 897.0,
+        "displayValue": "14:57"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:53:21Z",
+      "scoringPlay": true,
+      "scoreValue": 6,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 2,
+        "distance": 1,
+        "yardLine": 1,
+        "yardsToEndzone": 1,
+        "downDistanceText": "2nd & Goal at GB 1",
+        "shortDownDistanceText": "2nd & Goal",
+        "possessionText": "GB 1",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": -1,
+        "distance": 10,
+        "yardLine": 0,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "pointAfterAttempt": {
+        "id": 61,
+        "text": "Extra Point Good",
+        "abbreviation": "Extra Point Good",
+        "value": 1
+      },
+      "statYardage": 1,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4241416?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "rusher"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4241416?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "scorer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4568263?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "kicker"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4568263?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "patScorer"
+        }
+      ]
+    },
+    {
+      "id": "4018730231210",
+      "sequenceNumber": "121000",
+      "type": {
+        "id": "29",
+        "text": "Fumble Recovery (Opponent)"
+      },
+      "text": "(Shotgun) J.Love pass short left to C.Watson to CAR 42 for 8 yards (N.Scott). FUMBLES (N.Scott), touched at CAR 40, RECOVERED by CAR-B.Okereke at CAR 37.",
+      "homeScore": 6,
+      "awayScore": 10,
+      "period": {
+        "number": 2
+      },
+      "clock": {
+        "value": 752.0,
+        "displayValue": "12:32"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T00:58:32Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": true,
+      "start": {
+        "down": 3,
+        "distance": 4,
+        "yardLine": 50,
+        "yardsToEndzone": 50,
+        "downDistanceText": "3rd & 4 at 50",
+        "shortDownDistanceText": "3rd & 4",
+        "possessionText": "50",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 63,
+        "yardsToEndzone": 63,
+        "downDistanceText": "1st & 10 at CAR 37",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "CAR 37",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 0,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4036378?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4248528?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "receiver"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4248528?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "fumbler"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3116179?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "forcedBy"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3116179?lang=en&region=us"
+          },
+          "order": 5,
+          "type": "tackler"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3117253?lang=en&region=us"
+          },
+          "order": 6,
+          "type": "recoverer"
+        }
+      ]
+    },
+    {
+      "id": "4018730231262",
+      "sequenceNumber": "126200",
+      "type": {
+        "id": "21",
+        "text": "Timeout",
+        "abbreviation": "TO"
+      },
+      "text": "Timeout #1 by CAR at 11:40.",
+      "homeScore": 6,
+      "awayScore": 10,
+      "period": {
+        "number": 2
+      },
+      "clock": {
+        "value": 700.0,
+        "displayValue": "11:40"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T01:00:52Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 2,
+        "distance": 9,
+        "yardLine": 62,
+        "yardsToEndzone": 0,
+        "downDistanceText": "2nd & 9 at CAR 38",
+        "shortDownDistanceText": "2nd & 9",
+        "possessionText": "CAR 38",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 2,
+        "distance": 9,
+        "yardLine": 62,
+        "yardsToEndzone": 62,
+        "downDistanceText": "2nd & 9 at CAR 38",
+        "shortDownDistanceText": "2nd & 9",
+        "possessionText": "CAR 38",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    },
+    {
+      "id": "4018730231756",
+      "sequenceNumber": "175600",
+      "type": {
+        "id": "26",
+        "text": "Pass Interception Return",
+        "abbreviation": "INTR"
+      },
+      "text": "(Shotgun) B.Young pass short left intended for J.Coker INTERCEPTED by T.Hopper at CAR 44. T.Hopper to CAR 43 for 1 yard (J.Coker).",
+      "homeScore": 13,
+      "awayScore": 10,
+      "period": {
+        "number": 2
+      },
+      "clock": {
+        "value": 323.0,
+        "displayValue": "5:23"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T01:22:03Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": true,
+      "start": {
+        "down": 3,
+        "distance": 3,
+        "yardLine": 52,
+        "yardsToEndzone": 52,
+        "downDistanceText": "3rd & 3 at CAR 48",
+        "shortDownDistanceText": "3rd & 3",
+        "possessionText": "CAR 48",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 57,
+        "yardsToEndzone": 43,
+        "downDistanceText": "1st & 10 at CAR 43",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "CAR 43",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": 1,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4685720?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4567406?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "passDefender"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4567406?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "returner"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4695883?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "tackler"
+        }
+      ]
+    },
+    {
+      "id": "4018730231927",
+      "sequenceNumber": "192700",
+      "type": {
+        "id": "75",
+        "text": "Two-minute warning",
+        "abbreviation": "2Min Warn"
+      },
+      "text": "Two-Minute Warning",
+      "homeScore": 13,
+      "awayScore": 10,
+      "period": {
+        "number": 2
+      },
+      "clock": {
+        "value": 120.0,
+        "displayValue": "2:00"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T01:27:08Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 79,
+        "yardsToEndzone": 0,
+        "downDistanceText": "1st & 10 at CAR 21",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "CAR 21",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 10,
+        "yardLine": 79,
+        "yardsToEndzone": 21,
+        "downDistanceText": "1st & 10 at CAR 21",
+        "shortDownDistanceText": "1st & 10",
+        "possessionText": "CAR 21",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    },
+    {
+      "id": "4018730232391",
+      "sequenceNumber": "239100",
+      "type": {
+        "id": "65",
+        "text": "End of Half",
+        "abbreviation": "EH"
+      },
+      "text": "END QUARTER 2",
+      "homeScore": 20,
+      "awayScore": 10,
+      "period": {
+        "number": 2
+      },
+      "clock": {
+        "value": 0.0,
+        "displayValue": "0:00"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T01:45:53Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 0,
+        "distance": 0,
+        "yardLine": 82,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 1,
+        "distance": 3,
+        "yardLine": 82,
+        "yardsToEndzone": 82,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/29?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    },
+    {
+      "id": "4018730234072",
+      "sequenceNumber": "407200",
+      "type": {
+        "id": "9",
+        "text": "Fumble Recovery (Own)"
+      },
+      "text": "(Shotgun) J.Williams to GB 22 for -5 yards. FUMBLES, recovered by GB-J.Love at GB 21. J.Love pass incomplete short right.PENALTY on GB-J.Love, Intentional Grounding, 15 yards, enforced at GB 27.",
+      "homeScore": 27,
+      "awayScore": 19,
+      "period": {
+        "number": 4
+      },
+      "clock": {
+        "value": 290.0,
+        "displayValue": "4:50"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T03:06:13Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": true,
+      "isTurnover": false,
+      "start": {
+        "down": 3,
+        "distance": 10,
+        "yardLine": 27,
+        "yardsToEndzone": 73,
+        "downDistanceText": "3rd & 10 at GB 27",
+        "shortDownDistanceText": "3rd & 10",
+        "possessionText": "GB 27",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 4,
+        "distance": 25,
+        "yardLine": 12,
+        "yardsToEndzone": 88,
+        "downDistanceText": "4th & 25 at GB 12",
+        "shortDownDistanceText": "4th & 25",
+        "possessionText": "GB 12",
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": -30,
+      "participants": [
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4036378?lang=en&region=us"
+          },
+          "order": 1,
+          "type": "passer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4036378?lang=en&region=us"
+          },
+          "order": 2,
+          "type": "recoverer"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4036378?lang=en&region=us"
+          },
+          "order": 3,
+          "type": "penalized"
+        },
+        {
+          "athlete": {
+            "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/2312707?lang=en&region=us"
+          },
+          "order": 4,
+          "type": "fumbler"
+        }
+      ]
+    },
+    {
+      "id": "4018730234577",
+      "sequenceNumber": "457700",
+      "type": {
+        "id": "66",
+        "text": "End of Game",
+        "abbreviation": "EG"
+      },
+      "text": "END GAME",
+      "homeScore": 27,
+      "awayScore": 19,
+      "period": {
+        "number": 4
+      },
+      "clock": {
+        "value": 0.0,
+        "displayValue": "0:00"
+      },
+      "modified": "2026-10-30T03:37Z",
+      "wallclock": "2026-10-30T03:23:56Z",
+      "scoringPlay": false,
+      "scoreValue": 0,
+      "isPenalty": false,
+      "isTurnover": false,
+      "start": {
+        "down": 0,
+        "distance": 0,
+        "yardLine": 78,
+        "yardsToEndzone": 0,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "end": {
+        "down": 0,
+        "distance": 10,
+        "yardLine": 78,
+        "yardsToEndzone": 22,
+        "team": {
+          "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/9?lang=en&region=us"
+        }
+      },
+      "statYardage": 0
+    }
+  ]
+}
