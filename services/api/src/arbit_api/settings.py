@@ -1,5 +1,6 @@
 """Server-only process settings. League facts live in the checked-in league config."""
 
+import re
 from pathlib import Path
 from typing import Literal, Self
 
@@ -21,6 +22,7 @@ class RuntimeSettings(BaseSettings):
     espn_s2: SecretStr | None = Field(default=None, repr=False)
     espn_swid: SecretStr | None = Field(default=None, repr=False)
     auth_bypass: bool = False
+    operator_token: SecretStr | None = Field(default=None, repr=False)
 
     @model_validator(mode="after")
     def validate_environment(self) -> Self:
@@ -32,4 +34,9 @@ class RuntimeSettings(BaseSettings):
             "postgresql+psycopg://"
         ):
             raise ValueError("database URL must use the PostgreSQL psycopg driver")
+        if self.operator_token is not None:
+            if not re.fullmatch(r"[A-Za-z0-9_-]{32,128}", self.operator_token.get_secret_value()):
+                raise ValueError("operator token requires 32..128 URL-safe characters")
+            if self.bind_host not in ("127.0.0.1", "::1", "localhost"):
+                raise ValueError("local operator reads require a loopback bind")
         return self

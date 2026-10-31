@@ -1,4 +1,4 @@
-"""Health-only service composition. Private league routes await member authentication."""
+"""Health and optional local operator reads. Member application awaits authentication."""
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -10,12 +10,13 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import Engine, String, Uuid, column, create_engine, select, table, text
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
+from arbit_api.local_league import install_operator_routes
 from arbit_api.settings import RuntimeSettings
 
 
 def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None = None) -> FastAPI:
     settings = settings or RuntimeSettings()
-    load_league_config(settings.league_config_path)
+    config = load_league_config(settings.league_config_path)
     owns_engine = engine is None
     database = engine
     if database is None and settings.database_url is not None:
@@ -74,4 +75,5 @@ def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None
             {"status": "unavailable", "code": code}, status_code=503, headers=headers
         )
 
+    install_operator_routes(app, settings, database, config.season)
     return app

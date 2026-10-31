@@ -26,3 +26,17 @@ api:
 
 fixture:
 	uv run arbit-worker fixture tests/fixtures/league-snapshot.example.json
+
+.PHONY: local-env local-db-migrate local-sync local-sync-watch local-api local-sync-status
+local-env:
+	python3 scripts/local_environment.py
+local-db-migrate: local-env
+	uv run --env-file .env.local alembic upgrade head
+local-sync: local-env
+	uv run --env-file .env.local arbit-worker sync --once
+local-sync-watch: local-env
+	uv run --env-file .env.local arbit-worker sync --watch
+local-sync-status: local-env
+	uv run --env-file .env.local arbit-worker sync-status
+local-api: local-env
+	uv run --env-file .env.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers
