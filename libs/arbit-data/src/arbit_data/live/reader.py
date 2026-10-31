@@ -1,6 +1,7 @@
 """Scoped game acquisition and bounded complete core-play collection reads."""
 
 from dataclasses import dataclass
+from datetime import datetime
 from functools import partial
 from typing import Any
 from urllib.parse import urlsplit
@@ -17,27 +18,41 @@ from arbit_data.public_sources.service import SourceService
 from arbit_data.schema import entity_alias
 
 
-def normalize_scoreboard(payload: Any, season: int, week: int) -> dict[str, Any]:
+def normalize_scoreboard(
+    payload: Any, season: int, week: int, season_type: int = 2
+) -> dict[str, Any]:
     raw = _dict(payload)
     if (
         _dict(raw.get("season")).get("year") != season
         or _dict(raw.get("week")).get("number") != week
     ):
         raise ValueError("SCOREBOARD_SCOPE_MISMATCH")
+    if _integer(_dict(raw.get("season")).get("type"), 3) != season_type:
+        raise ValueError("SCOREBOARD_SEASON_TYPE_MISMATCH")
     events = [
         normalize_game(_dict(e), season).model_dump(mode="json")
         for e in _list(raw.get("events"), 32)
     ]
     if len({e["event_id"] for e in events}) != len(events):
         raise ValueError("DUPLICATE_EVENT")
-    return {"season": season, "week": week, "games": events, "recommendations_enabled": False}
+    return {
+        "season": season,
+        "season_type": season_type,
+        "week": week,
+        "games": events,
+        "recommendations_enabled": False,
+    }
 
 
-def normalize_summary(payload: Any, event_id: str, season: int) -> dict[str, Any]:
+def normalize_summary(
+    payload: Any, event_id: str, season: int, season_type: int = 2
+) -> dict[str, Any]:
     raw = _dict(payload)
     header = _dict(raw.get("header"))
     if str(header.get("id")) != event_id:
         raise ValueError("SUMMARY_SCOPE_MISMATCH")
+    if _integer(_dict(header.get("season")).get("type"), 3) != season_type:
+        raise ValueError("SUMMARY_SEASON_TYPE_MISMATCH")
     game = normalize_game(header, season)
     drives = _dict(raw.get("drives"))
     previous = _list(drives.get("previous"), 100)
@@ -56,6 +71,8 @@ def normalize_summary(payload: Any, event_id: str, season: int) -> dict[str, Any
 def normalize_collection(payload: Any, event_id: str, season: int, page: int) -> dict[str, Any]:
     raw = _dict(payload)
     if "$ref" in raw:
+        if not isinstance(raw["$ref"], str):
+            raise ValueError("INVALID_COLLECTION_REFERENCE")
         u = urlsplit(raw["$ref"])
         if (
             u.scheme not in ("http", "https")
@@ -145,7 +162,8 @@ class LiveReader:
             )
         pages = []
         refs = [summary.hash]
-        observed = summary.observed_at
+        page_observations: list[datetime] = []
+        play_observed_at: dict[str, datetime] = {}
         stale = summary.stale
         index = 1
         total = 1
@@ -157,13 +175,20 @@ class LiveReader:
             pages.append(result.payload)
             refs.append(result.hash)
             total = result.payload["page_count"]
-            observed = max(observed, result.observed_at)
+            page_observations.append(result.observed_at)
+            for play in result.payload["plays"]:
+                key = play["provider_id"]
+                play_observed_at[key] = max(
+                    play_observed_at.get(key, result.observed_at), result.observed_at
+                )
             stale |= result.stale
             index += 1
         plays = collect_play_pages(pages, event_id, season)
         return GameRead(
             game,
-            PlaySnapshot(event_id, observed, plays),
+            PlaySnapshot(
+                event_id, max(page_observations), plays, tuple(sorted(play_observed_at.items()))
+            ),
             tuple(refs),
             "complete_observed_collection",
             stale,

@@ -15,15 +15,34 @@ class PlaySnapshot:
     event_id: str
     observed_at: datetime
     plays: tuple[LivePlay, ...]
+    play_observed_at: tuple[tuple[str, datetime], ...] = ()
 
     def __post_init__(self) -> None:
         require_aware(self.observed_at)
+        ids = {p.provider_id for p in self.plays}
         if (
             len(self.plays) > 6000
             or any(p.event_id != self.event_id for p in self.plays)
-            or len({p.provider_id for p in self.plays}) != len(self.plays)
+            or len(ids) != len(self.plays)
         ):
             raise ValueError("INVALID_PLAY_SNAPSHOT")
+        if self.play_observed_at:
+            if (
+                len(self.play_observed_at) != len(ids)
+                or {key for key, _ in self.play_observed_at} != ids
+            ):
+                raise ValueError("INVALID_PLAY_OBSERVATION_TIMES")
+            for _, at in self.play_observed_at:
+                require_aware(at)
+                if at > self.observed_at:
+                    raise ValueError("PLAY_OBSERVATION_AFTER_SNAPSHOT")
+
+    def evidence_times(self) -> dict[str, datetime]:
+        return (
+            dict(self.play_observed_at)
+            if self.play_observed_at
+            else {p.provider_id: self.observed_at for p in self.plays}
+        )
 
 
 @dataclass(frozen=True)
@@ -51,22 +70,30 @@ def merge_observations(previous: PlaySnapshot | None, current: PlaySnapshot) -> 
     if previous is not None and current.observed_at < previous.observed_at:
         return ReplayResult(previous, (), True)
     effective = {p.provider_id: p for p in previous.plays} if previous else {}
+    effective_times = previous.evidence_times() if previous else {}
+    current_times = current.evidence_times()
     changes = []
     for play in current.plays:
         old = effective.get(play.provider_id)
-        if old is not None and old == play:
-            continue
-        if previous and previous.observed_at == current.observed_at and old is not None:
-            raise ValueError("AMBIGUOUS_OBSERVATION")
-        if (
-            old
-            and old.modified_at
-            and play.modified_at
-            and datetime.fromisoformat(play.modified_at.replace("Z", "+00:00"))
-            < datetime.fromisoformat(old.modified_at.replace("Z", "+00:00"))
-        ):
-            continue
+        at = current_times[play.provider_id]
+        if old is not None:
+            old_at = effective_times[play.provider_id]
+            if at < old_at:
+                continue
+            if old == play:
+                effective_times[play.provider_id] = max(old_at, at)
+                continue
+            if at == old_at:
+                raise ValueError("AMBIGUOUS_OBSERVATION")
+            if (
+                old.modified_at
+                and play.modified_at
+                and datetime.fromisoformat(play.modified_at.replace("Z", "+00:00"))
+                < datetime.fromisoformat(old.modified_at.replace("Z", "+00:00"))
+            ):
+                continue
         effective[play.provider_id] = play
+        effective_times[play.provider_id] = at
         changes.append(
             {
                 "play_id": play.provider_id,
@@ -77,6 +104,10 @@ def merge_observations(previous: PlaySnapshot | None, current: PlaySnapshot) -> 
                 else "revised",
             }
         )
-    return ReplayResult(
-        PlaySnapshot(current.event_id, current.observed_at, _ordered(effective)), tuple(changes)
+    snapshot = PlaySnapshot(
+        current.event_id,
+        current.observed_at,
+        _ordered(effective),
+        tuple(sorted(effective_times.items())),
     )
+    return ReplayResult(snapshot, tuple(changes))

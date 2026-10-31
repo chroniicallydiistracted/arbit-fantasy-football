@@ -167,8 +167,17 @@ def replay_observations(uow: UnitOfWork, store: ObjectStore, refs: list[str]) ->
     pages = sorted((p for _, p in loaded), key=lambda p: p["page_index"])
     event_id = pages[0]["event_id"]
     plays = collect_play_pages(pages, event_id, 2026)
+    play_times: dict[str, datetime] = {}
+    for manifest, page in loaded:
+        at = datetime.fromisoformat(manifest["observed_at"])
+        for play in page["plays"]:
+            key = play["provider_id"]
+            play_times[key] = max(play_times.get(key, at), at)
     return PlaySnapshot(
-        event_id, max(datetime.fromisoformat(m["observed_at"]) for m, _ in loaded), plays
+        event_id,
+        max(datetime.fromisoformat(m["observed_at"]) for m, _ in loaded),
+        plays,
+        tuple(sorted(play_times.items())),
     )
 
 

@@ -162,6 +162,22 @@ def _kind(label: str, text: str) -> PlayKind:
 def normalize_play(raw: dict[str, Any], event_id: str, season: int) -> LivePlay:
     event_id = identifier(event_id)
     pid = identifier(raw.get("id"))
+    if "$ref" in raw:
+        reference = raw["$ref"]
+        if not isinstance(reference, str):
+            raise ValueError("INVALID_PLAY_REFERENCE")
+        parsed = urlsplit(reference)
+        expected_path = (
+            f"/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{event_id}/plays/{pid}"
+        )
+        if (
+            parsed.scheme not in ("http", "https")
+            or parsed.netloc != "sports.core.api.espn.com"
+            or parsed.path != expected_path
+            or parsed.fragment
+        ):
+            raise ValueError("PLAY_REFERENCE_SCOPE_MISMATCH")
+
     sequence = raw.get("sequenceNumber")
     if sequence is not None:
         if len(str(sequence)) > 64:

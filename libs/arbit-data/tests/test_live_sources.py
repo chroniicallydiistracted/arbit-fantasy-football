@@ -186,3 +186,122 @@ def test_observed_negative_down_sentinel_stays_unknown_with_raw_evidence():
     assert p.start.down is None and p.start.source_down == "-1"
     with pytest.raises(ValueError):
         normalize_play(raw_play(start={"down": -2}), "123", 2026)
+
+
+@pytest.mark.parametrize("season_type", [1, 3, None])
+def test_scoreboard_rejects_missing_or_wrong_season_type(season_type):
+    from arbit_data.live.reader import normalize_scoreboard
+
+    raw = {"season": {"year": 2026}, "week": {"number": 1}, "events": []}
+    if season_type is not None:
+        raw["season"]["type"] = season_type
+    with pytest.raises(ValueError):
+        normalize_scoreboard(raw, 2026, 1)
+
+
+def test_scoreboard_preserves_verified_season_type():
+    from arbit_data.live.reader import normalize_scoreboard
+
+    result = normalize_scoreboard(
+        {"season": {"year": 2026, "type": 2}, "week": {"number": 1}, "events": []}, 2026, 1
+    )
+    assert result["season_type"] == 2
+
+
+@pytest.mark.parametrize(
+    "reference",
+    [
+        "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/999/competitions/999/plays/9991",
+        "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/123/competitions/123/plays/12399",
+        "http://sports.core.api.espn.pvt/v2/sports/football/leagues/nfl/events/123/competitions/123/plays/12301",
+        "https://evil.example/v2/sports/football/leagues/nfl/events/123/competitions/123/plays/12301",
+        42,
+    ],
+)
+def test_play_own_reference_cannot_relabel_foreign_or_malformed_data(reference):
+    from arbit_data.live.normalize import normalize_play
+
+    with pytest.raises(ValueError):
+        normalize_play(raw_play(**{"$ref": reference}), "123", 2026)
+
+
+def test_malformed_collection_reference_uses_validation_boundary():
+    from arbit_data.live.reader import normalize_collection
+
+    with pytest.raises(ValueError):
+        normalize_collection({"$ref": 42}, "123", 2026, 1)
+
+
+def test_recent_summary_does_not_renew_cached_play_provenance():
+    from arbit_data.live.normalize import normalize_game, normalize_play
+    from arbit_data.live.reader import LiveReader
+    from arbit_data.live.replay import PlaySnapshot, merge_observations
+    from arbit_data.public_sources.repository import ObservationResult
+
+    original = normalize_play(raw_play(), "123", 2026)
+    correction = normalize_play(raw_play(kind="Penalty", text="No Play."), "123", 2026)
+    game = normalize_game(
+        {
+            "id": "123",
+            "season": {"year": 2026, "type": 2},
+            "competitions": [
+                {
+                    "id": "123",
+                    "competitors": [
+                        {"homeAway": "home", "id": "1"},
+                        {"homeAway": "away", "id": "2"},
+                    ],
+                    "status": {
+                        "type": {"name": "STATUS_FINAL", "state": "post", "completed": True}
+                    },
+                }
+            ],
+        },
+        2026,
+    )
+
+    class Captures:
+        def acquire(self, request, normalize):
+            if request.kind == "espn.summary":
+                return ObservationResult(
+                    "a" * 64, T + timedelta(seconds=60), {"game": game.model_dump(mode="json")}
+                )
+            return ObservationResult(
+                "b" * 64,
+                T,
+                {
+                    "event_id": "123",
+                    "count": 1,
+                    "page_index": 1,
+                    "page_count": 1,
+                    "plays": [original.model_dump(mode="json")],
+                },
+                cached=True,
+            )
+
+    result = LiveReader(Captures()).game("123", 2026)
+    assert result.snapshot.observed_at == T
+    previous = PlaySnapshot("123", T + timedelta(seconds=30), (correction,))
+    assert merge_observations(previous, result.snapshot).snapshot.plays[0].cancelled
+
+
+def test_summary_cannot_contradict_requested_regular_season():
+    from arbit_data.live.reader import normalize_summary
+
+    raw = {
+        "header": {
+            "id": "123",
+            "season": {"year": 2026, "type": 1},
+            "competitions": [
+                {
+                    "id": "123",
+                    "competitors": [
+                        {"homeAway": "home", "id": "1"},
+                        {"homeAway": "away", "id": "2"},
+                    ],
+                }
+            ],
+        }
+    }
+    with pytest.raises(ValueError):
+        normalize_summary(raw, "123", 2026)
