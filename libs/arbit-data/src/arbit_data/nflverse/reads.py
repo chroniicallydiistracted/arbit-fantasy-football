@@ -10,6 +10,7 @@ import pyarrow.parquet as pq  # type: ignore[import-untyped]
 from sqlalchemy import or_, select
 
 from arbit_data.db import UnitOfWork
+from arbit_data.nflverse.normalize import _scope_integer
 from arbit_data.nflverse.objects import ObjectStore
 from arbit_data.nflverse.repository import get_dataset
 from arbit_data.schema import (
@@ -131,7 +132,9 @@ def player_stats(
             pc.equal(batch.column(batch.schema.get_field_index("player_id")), ids[0])
         )
         for row in matched.to_pylist():
-            if week is None or str(row.get("week")) == str(week):
+            if _scope_integer(str(row.get("season"))) == season and (
+                week is None or _scope_integer(str(row.get("week"))) == week
+            ):
                 result.append(_json_value(row))
     return {
         **base,

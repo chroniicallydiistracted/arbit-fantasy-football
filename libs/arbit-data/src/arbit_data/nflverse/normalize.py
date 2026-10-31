@@ -3,10 +3,12 @@
 import csv
 import gzip
 import io
+import json
 import os
 import subprocess
 import sys
 import tempfile
+import zlib
 from collections.abc import Iterator
 from decimal import Decimal, DecimalException
 from pathlib import Path
@@ -157,6 +159,7 @@ def normalize(asset: Asset, raw: ObjectRef, store: ObjectStore) -> NormalizedDat
                 _convert(asset, raw, path)
             except (
                 pa.ArrowException,
+                zlib.error,
                 ValueError,
                 OSError,
                 StopIteration,
@@ -245,6 +248,13 @@ def normalize(asset: Asset, raw: ObjectRef, store: ObjectStore) -> NormalizedDat
                 "rows_missing_keys": absent,
                 "duplicate_keys": duplicates,
             }
+            if schema.metadata and b"arbit:nested_json_columns" in schema.metadata:
+                coverage["nested_json_columns"] = json.loads(
+                    schema.metadata[b"arbit:nested_json_columns"]
+                )
+                limits.append(
+                    "Nested R history columns are explicit JSON strings preserving inner columns, types, indices and rows; original R bytes remain authoritative."
+                )
             for name, values in sets.items():
                 label = {
                     "season": "seasons",

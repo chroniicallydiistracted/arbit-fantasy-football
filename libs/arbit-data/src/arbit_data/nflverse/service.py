@@ -20,6 +20,7 @@ from arbit_data.nflverse.catalog import Asset, Catalog
 from arbit_data.nflverse.crosswalk import apply_crosswalk
 from arbit_data.nflverse.normalize import normalize
 from arbit_data.nflverse.objects import ObjectRef, ObjectStore
+from arbit_data.nflverse.provenance import requires_proof
 from arbit_data.nflverse.repository import (
     DatasetManifest,
     get_dataset,
@@ -27,7 +28,7 @@ from arbit_data.nflverse.repository import (
     publish_dataset,
     register_catalog,
 )
-from arbit_data.schema import dataset_import, job, provider_budget
+from arbit_data.schema import dataset_import, dataset_stage, job, provider_budget
 
 
 class Source(Protocol):
@@ -75,12 +76,14 @@ def enqueue_catalog(
             )
             active = c.scalar(
                 select(job.c.id).where(
-                    job.c.job_type == "nflverse.ingest",
+                    job.c.job_type.in_(("nflverse.ingest", "nflverse.publish")),
                     job.c.input_ref == input_ref,
                     job.c.status.in_(("queued", "running")),
                 )
             )
-            if old and (old["status"] in ("published", "unchanged") or active or not retry_failed):
+            if old and (
+                old["status"] in ("published", "unchanged", "staged") or active or not retry_failed
+            ):
                 continue
             key = f"nflverse:{input_ref}" + (":retry:" + uuid4().hex if old else "")
             queued_at = now or datetime.now(UTC)
@@ -112,7 +115,7 @@ def import_status(uow: UnitOfWork, catalog_hash: str) -> dict[str, Any]:
         active = c.scalar(
             select(job.c.id)
             .where(
-                job.c.job_type == "nflverse.ingest",
+                job.c.job_type.in_(("nflverse.ingest", "nflverse.publish")),
                 job.c.input_ref.startswith(catalog_hash + "|"),
                 job.c.status.in_(("queued", "running")),
             )
@@ -171,7 +174,7 @@ class DatasetService:
                 c.execute(
                     select(job)
                     .where(
-                        job.c.job_type == "nflverse.ingest",
+                        job.c.job_type.in_(("nflverse.ingest", "nflverse.publish")),
                         job.c.input_ref.startswith(self.catalog_hash + "|"),
                         job.c.status == "running",
                         job.c.lease_until <= self.clock(),
@@ -240,30 +243,93 @@ class DatasetService:
             input_prefix=self.catalog_hash + "|",
         )
         if lease is None:
+            lease = self.queue.claim_job(
+                self.worker,
+                self.clock(),
+                job_type="nflverse.publish",
+                input_prefix=self.catalog_hash + "|",
+            )
+        if lease is None:
             return None
         asset = self._asset(lease.input_ref)
         try:
             with maintain_lease(self.queue, lease, clock=self.clock):
-                raw = self._raw(asset)
-                normalized = normalize(asset, raw, self.store)
-                manifest = DatasetManifest(
-                    **normalized.model_dump(),
-                    logical_key=asset.logical_key,
-                    family=asset.family,
-                    observed_at=self.clock(),
-                    source=asset.model_dump(mode="json"),
-                )
-                self.store.put_json(manifest.model_dump(mode="json"))
+                if lease.job_type == "nflverse.publish":
+                    with self.uow.engine.connect() as c:
+                        staged = c.scalar(
+                            select(dataset_stage.c.manifest_hash).where(
+                                dataset_stage.c.catalog_hash == self.catalog_hash,
+                                dataset_stage.c.logical_key == asset.logical_key,
+                            )
+                        )
+                    if staged is None:
+                        raise ValueError("STAGED_INPUT_MISSING")
+                    manifest = DatasetManifest.model_validate_json(self.store.read(staged))
+                else:
+                    raw = self._raw(asset)
+                    normalized = normalize(asset, raw, self.store)
+                    manifest = DatasetManifest(
+                        **normalized.model_dump(),
+                        logical_key=asset.logical_key,
+                        family=asset.family,
+                        observed_at=self.clock(),
+                        source=asset.model_dump(mode="json"),
+                    )
+                    self.store.put_json(manifest.model_dump(mode="json"))
                 directory = None
                 if (
                     asset.family == "players"
                     and asset.release == "players"
                     or asset.family == "ff_playerids"
                 ):
-                    if normalized.parquet_hash is not None:
-                        table = pq.read_table(self.store.verify(normalized.parquet_hash).path)
+                    if manifest.parquet_hash is not None:
+                        table = pq.read_table(self.store.verify(manifest.parquet_hash).path)
                         if {"gsis_id", "espn_id"} <= set(table.column_names):
                             directory = table.select(["gsis_id", "espn_id"]).to_pylist()
+
+            if lease.job_type == "nflverse.ingest" and requires_proof(manifest.source):
+                with self.uow.engine.begin() as c:
+                    require_lease(c, lease.id, lease.lease_token, self.clock())
+                    c.execute(
+                        insert(dataset_stage)
+                        .values(
+                            catalog_hash=self.catalog_hash,
+                            logical_key=asset.logical_key,
+                            manifest_hash=manifest.hash,
+                            staged_at=manifest.observed_at,
+                        )
+                        .on_conflict_do_nothing(
+                            index_elements=[
+                                dataset_stage.c.catalog_hash,
+                                dataset_stage.c.logical_key,
+                            ]
+                        )
+                    )
+                    c.execute(
+                        update(dataset_import)
+                        .where(
+                            dataset_import.c.catalog_hash == self.catalog_hash,
+                            dataset_import.c.logical_key == asset.logical_key,
+                        )
+                        .values(status="staged", error_code=None, checked_at=self.clock())
+                    )
+                    require_lease(c, lease.id, lease.lease_token, self.clock())
+                    c.execute(
+                        update(job)
+                        .where(job.c.id == lease.id)
+                        .values(
+                            status="succeeded",
+                            result_ref=manifest.hash,
+                            lease_token=None,
+                            lease_until=None,
+                            error_code=None,
+                        )
+                    )
+                return {
+                    "status": "staged",
+                    "logical_key": asset.logical_key,
+                    "manifest_hash": manifest.hash,
+                }
 
             def attach(c: Any, key: str) -> None:
                 if directory is not None:
@@ -366,3 +432,56 @@ class DatasetService:
             "logical_key": asset.logical_key,
             "error_code": code,
         }
+
+
+def enqueue_staged_publications(
+    uow: UnitOfWork, catalog_hash: str, *, now: datetime | None = None
+) -> int:
+    catalog = load_catalog(catalog_hash, uow)
+    queue = JobQueue(uow, lease_seconds=180, max_attempts=5)
+    count = 0
+    with uow.engine.begin() as c:
+        c.execute(
+            select(
+                func.pg_advisory_xact_lock(
+                    func.hashtextextended("publish-enqueue:" + catalog_hash, 0)
+                )
+            )
+        )
+        stages = (
+            c.execute(
+                select(dataset_stage)
+                .join(
+                    dataset_import,
+                    (dataset_import.c.catalog_hash == dataset_stage.c.catalog_hash)
+                    & (dataset_import.c.logical_key == dataset_stage.c.logical_key),
+                )
+                .where(
+                    dataset_stage.c.catalog_hash == catalog_hash,
+                    dataset_import.c.status == "staged",
+                )
+            )
+            .mappings()
+            .all()
+        )
+        indices = {a.logical_key: i for i, a in enumerate(catalog.assets) if a.selected}
+        for row in stages:
+            input_ref = f"{catalog_hash}|{indices[row['logical_key']]}"
+            active = c.scalar(
+                select(job.c.id).where(
+                    job.c.job_type == "nflverse.publish",
+                    job.c.input_ref == input_ref,
+                    job.c.status.in_(("queued", "running")),
+                )
+            )
+            if active:
+                continue
+            queue.enqueue_in_transaction(
+                c,
+                "nflverse.publish",
+                input_ref,
+                "nflverse.publish:" + str(uuid4()),
+                now or datetime.now(UTC),
+            )
+            count += 1
+    return count

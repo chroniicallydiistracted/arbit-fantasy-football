@@ -100,3 +100,24 @@ def test_integral_float_scope_values_are_profiled_without_changing_source_types(
     result = normalize(asset("ep_weekly_2026.parquet", "misc"), raw, store)
     assert result.coverage["weeks"] == [1, 2]
     assert pq.read_table(store.path(result.parquet_hash)).equals(table)
+
+
+def test_corrupt_csv_deflate_uses_safe_validation_boundary(tmp_path):
+    import gzip
+
+    store = ObjectStore(tmp_path / "objects")
+    compressed = bytearray(gzip.compress(b"column\nvalue\n"))
+    compressed[10] = 0x07
+    raw = store.write((bytes(compressed),))
+    with pytest.raises(ValueError, match="TABULAR_DECODE_FAILED"):
+        normalize(asset("patch.csv.gz", "misc"), raw, store)
+
+
+def test_nested_reference_serialization_preserves_table_fields():
+    import pandas as pd
+    from arbit_data.nflverse.rds_decode import nested_value
+
+    inner = pd.DataFrame({"season": [2026], "amount": [12.5]})
+    nested = nested_value(inner)
+    assert nested["columns"] == ["season", "amount"]
+    assert nested["rows"][0] == [2026, "12.5"]

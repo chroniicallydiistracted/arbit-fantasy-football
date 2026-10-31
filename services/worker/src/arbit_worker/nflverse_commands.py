@@ -13,12 +13,19 @@ import pyarrow.parquet as pq  # type: ignore[import-untyped]
 from arbit_data.db import UnitOfWork
 from arbit_data.errors import SourceError
 from arbit_data.espn.gate import DatabaseGate
+from arbit_data.league import content_hash
 from arbit_data.nflverse.catalog import Catalog
 from arbit_data.nflverse.objects import ObjectStore
+from arbit_data.nflverse.provenance import confirm_catalog, requires_proof
 from arbit_data.nflverse.repository import DatasetManifest, register_catalog
-from arbit_data.nflverse.service import DatasetService, enqueue_catalog, import_status
+from arbit_data.nflverse.service import (
+    DatasetService,
+    enqueue_catalog,
+    enqueue_staged_publications,
+    import_status,
+)
 from arbit_data.nflverse.transport import NflverseTransport, discover
-from arbit_data.schema import dataset_manifest, nflverse_catalog
+from arbit_data.schema import dataset_manifest, nflverse_catalog, source_revision_proof
 from sqlalchemy import create_engine, select
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -88,6 +95,17 @@ def verify_datasets(
                 raise ValueError("PARQUET_PROFILE_MISMATCH")
             tables += 1
             table_rows += manifest.row_count
+    with uow.engine.connect() as c:
+        proofs = c.execute(select(source_revision_proof)).mappings().all()
+    for proof in proofs:
+        if content_hash(proof["payload"]) != proof["hash"]:
+            raise ValueError("SOURCE_PROOF_CHECKSUM_MISMATCH")
+        store.verify(proof["hash"])
+        for key in (
+            proof["payload"]["before_catalog_hash"],
+            proof["payload"]["after_catalog_hash"],
+        ):
+            store.verify(key)
     if digest and not rows:
         raise ValueError("UNKNOWN_MANIFEST")
     return {
@@ -115,7 +133,7 @@ def _run_import(
     lock = threading.Lock()
 
     def run() -> None:
-        source = NflverseTransport(DatabaseGate(uow, provider="nflverse"))
+        source = NflverseTransport(DatabaseGate(uow, provider="nflverse"), staged_downloads=True)
         service = DatasetService(uow, store, source, digest)
         while not stop.is_set():
             outcome = service.run_one()
@@ -142,6 +160,40 @@ def _run_import(
             futures = [pool.submit(run) for _ in range(workers)]
             for future in futures:
                 future.result()
+        status = import_status(uow, digest)
+        with uow.engine.connect() as c:
+            proof = c.scalar(
+                select(source_revision_proof.c.hash)
+                .where(source_revision_proof.c.catalog_hash == digest)
+                .limit(1)
+            )
+        if (
+            not stop.is_set()
+            and any(
+                a.selected and requires_proof(a.model_dump(mode="json")) for a in catalog.assets
+            )
+            and (status["statuses"].get("staged", 0) or proof is None)
+        ):
+            fresh = discover(NflverseTransport(DatabaseGate(uow, provider="nflverse")))
+            confirmation = confirm_catalog(uow, store, digest, fresh)
+            print(
+                json.dumps(
+                    {
+                        "source_revision_check": {
+                            "confirmed": confirmation["confirmed"],
+                            "changed": confirmation["changed"],
+                            "after_catalog_hash": confirmation["after_catalog_hash"],
+                        }
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+            enqueue_staged_publications(uow, digest)
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                futures = [pool.submit(run) for _ in range(workers)]
+                for future in futures:
+                    future.result()
     finally:
         stop.set()
         for sig, handler in previous.items():

@@ -211,3 +211,27 @@ identity_import = Table(
     Column("manifest_hash", String(64), primary_key=True),
     Column("payload", JSON, nullable=False),
 )
+
+source_revision_proof = Table(
+    "source_revision_proof",
+    metadata,
+    Column("hash", String(64), primary_key=True),
+    Column("catalog_hash", String(64), nullable=False),
+    Column("verified_at", DateTime(timezone=True), nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+dataset_provenance = Table(
+    "dataset_provenance",
+    metadata,
+    Column("manifest_hash", String(64), primary_key=True),
+    Column("proof_hash", String(64), nullable=False),
+    Column("verified_at", DateTime(timezone=True), nullable=False),
+)
+dataset_stage = Table(
+    "dataset_stage",
+    metadata,
+    Column("catalog_hash", String(64), primary_key=True),
+    Column("logical_key", String, primary_key=True),
+    Column("manifest_hash", String(64), nullable=False),
+    Column("staged_at", DateTime(timezone=True), nullable=False),
+)

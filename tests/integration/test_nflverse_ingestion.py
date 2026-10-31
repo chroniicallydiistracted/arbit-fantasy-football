@@ -15,10 +15,12 @@ from sqlalchemy import text
 pytestmark = pytest.mark.integration
 
 
-def setup(uow, tmp_path):
+def setup(uow, tmp_path, *, hashless=False):
     path = tmp_path / "players.parquet"
     pq.write_table(pa.table({"gsis_id": ["00-0012345"], "espn_id": ["12345"]}), path)
     data = path.read_bytes()
+    import hashlib
+
     catalog = build_catalog(
         [
             {
@@ -28,6 +30,9 @@ def setup(uow, tmp_path):
                         "id": 1,
                         "name": "players.parquet",
                         "size": len(data),
+                        "digest": None
+                        if hashless
+                        else "sha256:" + hashlib.sha256(data).hexdigest(),
                         "browser_download_url": "https://github.com/nflverse/nflverse-data/releases/download/players/players.parquet",
                     }
                 ],

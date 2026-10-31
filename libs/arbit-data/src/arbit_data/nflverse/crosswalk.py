@@ -4,7 +4,7 @@ import re
 from collections import defaultdict
 from datetime import datetime
 from typing import Any
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from arbit_core.identity import require_aware
 from sqlalchemy import Connection, func, select
@@ -59,6 +59,9 @@ def apply_crosswalk(
         (r["provider"], r["external_id"]): dict(r) for r in observed if r["valid_to"] is None
     }
     historic = {(r["provider"], r["external_id"]) for r in observed if r["valid_to"] is not None}
+    entity_ids: dict[tuple[UUID, str], set[str]] = defaultdict(set)
+    for (provider, external_id), record in current.items():
+        entity_ids[(record["entity_id"], provider)].add(external_id)
     entities = []
     aliases = []
     report = {
@@ -74,11 +77,17 @@ def apply_crosswalk(
         keys = [("gsis", gsis)] + ([("espn", espn)] if espn is not None else [])
         records = [current[k] for k in keys if k in current]
         distinct = {r["entity_id"] for r in records}
+        provider_conflict = len(distinct) == 1 and any(
+            entity_ids.get((next(iter(distinct)), provider), set()) - {external_id}
+            for provider, external_id in keys
+        )
         reason = (
             "AMBIGUOUS_CROSSWALK"
             if len(espns) > 1 or espn is not None and len(reverse[espn]) > 1
             else "EXISTING_ALIAS_CONFLICT"
             if len(distinct) > 1
+            else "EXISTING_PROVIDER_ID_CONFLICT"
+            if provider_conflict
             else "MAPPING_PREDATES_EVIDENCE"
             if any(r["valid_from"] > observed_at for r in records)
             else "CLOSED_ALIAS_REQUIRES_REVIEW"
@@ -116,6 +125,7 @@ def apply_crosswalk(
             }
             aliases.append(value)
             current[(provider, external_id)] = value
+            entity_ids[(entity_id, provider)].add(external_id)
         report["linked"] += 1
     for table, values in ((canonical_entity, entities), (entity_alias, aliases)):
         for start in range(0, len(values), 500):

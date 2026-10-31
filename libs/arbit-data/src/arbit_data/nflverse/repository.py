@@ -6,7 +6,7 @@ from typing import Any, Literal, Self
 
 from arbit_core.identity import require_aware
 from pydantic import Field, model_validator
-from sqlalchemy import Connection, func, select, update
+from sqlalchemy import Connection, and_, exists, func, or_, select, update
 from sqlalchemy.dialects.postgresql import insert
 
 from arbit_data.db import UnitOfWork
@@ -14,12 +14,15 @@ from arbit_data.jobs import LeasedJob, require_lease
 from arbit_data.league import content_hash
 from arbit_data.nflverse.catalog import Catalog
 from arbit_data.nflverse.normalize import NormalizedDataset
+from arbit_data.nflverse.provenance import requires_proof, source_signature
 from arbit_data.schema import (
     dataset_current,
     dataset_import,
     dataset_manifest,
+    dataset_provenance,
     job,
     nflverse_catalog,
+    source_revision_proof,
 )
 
 
@@ -116,6 +119,69 @@ def publish_dataset(
         else:
             digest = manifest.hash
         if known is None and not unchanged:
+            proof = None
+            if requires_proof(manifest.source):
+                proofs = (
+                    c.execute(
+                        select(source_revision_proof)
+                        .where(
+                            source_revision_proof.c.catalog_hash == catalog_hash,
+                            source_revision_proof.c.verified_at >= manifest.observed_at,
+                        )
+                        .order_by(source_revision_proof.c.verified_at)
+                    )
+                    .mappings()
+                    .all()
+                )
+                proof = next(
+                    (
+                        p
+                        for p in proofs
+                        if p["payload"]["assets"].get(manifest.logical_key)
+                        == source_signature(manifest.source)
+                    ),
+                    None,
+                )
+                if proof is None or proof["payload"]["assets"].get(
+                    manifest.logical_key
+                ) != source_signature(manifest.source):
+                    raise ValueError("SOURCE_REVISION_UNVERIFIED")
+            if current is not None:
+                old_source = current["payload"]["source"]
+                old_updated = old_source.get("source_updated_at")
+                new_updated = manifest.source.get("source_updated_at")
+                if old_updated is not None and new_updated is not None:
+                    old_stamp = datetime.fromisoformat(old_updated.replace("Z", "+00:00"))
+                    new_stamp = datetime.fromisoformat(new_updated.replace("Z", "+00:00"))
+                    if new_stamp < old_stamp:
+                        raise ValueError("STALE_SOURCE_REVISION")
+                    if new_stamp == old_stamp and current["raw_hash"] != manifest.raw_hash:
+                        raise ValueError("SOURCE_REVISION_CONFLICT")
+                if (
+                    old_source.get("source_id") is not None
+                    and old_source.get("source_id") == manifest.source.get("source_id")
+                    and current["raw_hash"] != manifest.raw_hash
+                ):
+                    raise ValueError("SOURCE_REVISION_CONFLICT")
+                if catalog_hash is not None:
+                    incoming_at = c.scalar(
+                        select(nflverse_catalog.c.observed_at).where(
+                            nflverse_catalog.c.hash == catalog_hash
+                        )
+                    )
+                    latest_at = c.scalar(
+                        select(func.max(nflverse_catalog.c.observed_at))
+                        .join(
+                            dataset_import, dataset_import.c.catalog_hash == nflverse_catalog.c.hash
+                        )
+                        .where(dataset_import.c.manifest_hash == current["hash"])
+                    )
+                    if (
+                        latest_at is not None
+                        and incoming_at is not None
+                        and incoming_at < latest_at
+                    ):
+                        raise ValueError("STALE_SOURCE_REVISION")
             if current is not None and manifest.observed_at <= current["observed_at"]:
                 raise ValueError("STALE_DATASET_OBSERVATION")
             if (
@@ -137,6 +203,16 @@ def publish_dataset(
                     payload=manifest.model_dump(mode="json"),
                 )
             )
+            if proof is not None:
+                c.execute(
+                    insert(dataset_provenance)
+                    .values(
+                        manifest_hash=digest,
+                        proof_hash=proof["hash"],
+                        verified_at=proof["verified_at"],
+                    )
+                    .on_conflict_do_nothing(index_elements=[dataset_provenance.c.manifest_hash])
+                )
             if on_publish:
                 on_publish(c, digest)
             c.execute(
@@ -195,5 +271,17 @@ def get_dataset(
                 .order_by(dataset_manifest.c.observed_at.desc(), dataset_manifest.c.hash)
                 .limit(1)
             )
+        source = dataset_manifest.c.payload["source"]
+        hashless = and_(
+            source["source_id"].as_string().is_not(None),
+            source["provider_sha256"].as_string().is_(None),
+            source["git_blob_sha1"].as_string().is_(None),
+        )
+        proof_query = select(dataset_provenance.c.manifest_hash).where(
+            dataset_provenance.c.manifest_hash == dataset_manifest.c.hash
+        )
+        if cutoff is not None:
+            proof_query = proof_query.where(dataset_provenance.c.verified_at <= cutoff)
+        query = query.where(or_(~hashless, exists(proof_query)))
         row = c.execute(query).mappings().first()
         return {"manifest_hash": row["hash"], **row["payload"]} if row else None

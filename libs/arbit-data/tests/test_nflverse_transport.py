@@ -38,3 +38,23 @@ def test_discovery_stops_only_on_empty_pages_and_pins_directory_commit():
     fake = Fake()
     result = discover(fake)
     assert len(fake.calls) == 4 and result.assets == ()
+
+
+def test_unbracketed_hashless_download_is_not_implicitly_trusted(tmp_path, monkeypatch):
+    from datetime import UTC, datetime
+
+    from arbit_data.nflverse.catalog import build_catalog
+    from arbit_data.nflverse.objects import ObjectStore
+    from arbit_data.nflverse.transport import NflverseTransport
+    from test_nflverse_catalog import release
+
+    asset = build_catalog(
+        [release("players", ["players.parquet"])], [], [], observed_at=datetime.now(UTC)
+    ).assets[0]
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("unit test reached source HTTP")
+
+    monkeypatch.setattr(NflverseTransport, "_response", forbidden)
+    with pytest.raises(SourceError, match="SOURCE_REVISION_PROOF_REQUIRED"):
+        NflverseTransport().download(asset, ObjectStore(tmp_path))

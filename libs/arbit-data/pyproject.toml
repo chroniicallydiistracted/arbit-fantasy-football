@@ -10,6 +10,7 @@ dependencies = [
     "pyarrow>=21,<30",
     "pyreadr>=0.5,<1",
     "polars>=1.30,<2",
+    "rdata>=1,<2",
 ]
 
 [build-system]

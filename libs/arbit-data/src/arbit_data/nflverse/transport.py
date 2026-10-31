@@ -17,6 +17,7 @@ from arbit_data.espn.http_deadline import DeadlineHTTPSHandler
 from arbit_data.espn.transport import _retry_after
 from arbit_data.nflverse.catalog import Asset, Catalog, build_catalog
 from arbit_data.nflverse.objects import ObjectRef, ObjectStore
+from arbit_data.nflverse.provenance import requires_proof
 
 REPOSITORIES = ("nflverse/nflverse-data", "ffverse/ffopportunity", "dynastyprocess/data")
 
@@ -55,8 +56,9 @@ class _Redirects(HTTPRedirectHandler):
 
 
 class NflverseTransport:
-    def __init__(self, gate: DatabaseGate | None = None):
+    def __init__(self, gate: DatabaseGate | None = None, *, staged_downloads: bool = False):
         self.gate = gate
+        self.staged_downloads = staged_downloads
         self.opener = build_opener(ProxyHandler({}), _Redirects(), DeadlineHTTPSHandler())
 
     @contextmanager
@@ -114,6 +116,8 @@ class NflverseTransport:
             raise SourceError("INVALID_JSON") from None
 
     def download(self, asset: Asset, store: ObjectStore) -> ObjectRef:
+        if requires_proof(asset.model_dump(mode="json")) and not self.staged_downloads:
+            raise SourceError("SOURCE_REVISION_PROOF_REQUIRED")
         try:
             with self._response(asset.source_url) as response:
                 length = response.headers.get("Content-Length")
