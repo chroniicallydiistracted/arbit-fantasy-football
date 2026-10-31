@@ -10,27 +10,15 @@ from decimal import Decimal, DecimalException
 from email.utils import parsedate_to_datetime
 from http.client import HTTPException
 from time import monotonic, sleep
-from typing import Any
+from typing import Any, Literal
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
+from arbit_data.espn.endpoints import Endpoint, EndpointOptions, build_request
 from arbit_data.espn.http_deadline import DeadlineHTTPSHandler
 
 MAX_BYTES = 8 * 1024 * 1024
 TIMEOUT_SECONDS = 15.0
-ORIGIN = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl"
-VIEWS = frozenset(
-    {
-        "mSettings",
-        "mTeam",
-        "mRoster",
-        "mMatchupScore",
-        "mDraftDetail",
-        "mStatus",
-        "kona_player_info",
-    }
-)
 
 
 def utc_now() -> datetime:
@@ -61,6 +49,12 @@ class SourceReceipt:
 @dataclass(frozen=True)
 class FetchResult:
     payload: dict[str, Any]
+    receipt: SourceReceipt
+
+
+@dataclass(frozen=True)
+class EndpointFetchResult:
+    payload: dict[str, Any] | list[Any] | bytes
     receipt: SourceReceipt
 
 
@@ -114,25 +108,24 @@ class EspnTransport:
         scoring_period: int | None = None,
         fantasy_filter: dict[str, object] | None = None,
     ) -> FetchResult:
-        if type(season) is not int or not 2026 <= season <= 2100:
-            raise ValueError("Explicit supported season required")
-        if not views or any(view not in VIEWS for view in views) or len(set(views)) != len(views):
-            raise ValueError("Unsupported or duplicate ESPN view")
-        if scoring_period is not None and (
-            type(scoring_period) is not int or not 1 <= scoring_period <= 99
-        ):
-            raise ValueError("Scoring period must be an integer from 1 to 99")
-        parameters = [("view", view) for view in views]
-        if scoring_period is not None:
-            parameters.append(("scoringPeriodId", str(scoring_period)))
-        url = f"{ORIGIN}/seasons/{season}/segments/0/leagues/1729878439?{urlencode(parameters)}"
-        filter_json = (
-            None
-            if fantasy_filter is None
-            else json.dumps(fantasy_filter, separators=(",", ":"), sort_keys=True, allow_nan=False)
+        if not views:
+            raise ValueError("At least one league view required")
+        result = self.fetch(
+            Endpoint.LEAGUE,
+            EndpointOptions(
+                season=season,
+                views=views,
+                scoring_period=scoring_period,
+                fantasy_filter=fantasy_filter,
+            ),
         )
-        if filter_json is not None and len(filter_json) > 8192:
-            raise ValueError("Fantasy filter exceeds size limit")
+        if not isinstance(result.payload, dict):
+            raise EspnError("INVALID_RESPONSE")
+        return FetchResult(result.payload, result.receipt)
+
+    def fetch(self, endpoint: Endpoint, options: EndpointOptions) -> EndpointFetchResult:
+        spec = build_request(endpoint, options)
+        filter_json = spec.fantasy_filter
         headers = {
             "Accept": "application/json",
             "Accept-Encoding": "identity",
@@ -140,7 +133,7 @@ class EspnTransport:
         }
         if filter_json is not None:
             headers["X-Fantasy-Filter"] = filter_json
-        request = Request(url, headers=headers, method="GET")
+        request = Request(spec.url, headers=headers, method="GET")
         with self._lock:
             if monotonic() < self._blocked_until:
                 raise EspnError(
@@ -150,22 +143,28 @@ class EspnTransport:
                 )
             sleep(max(0.0, self._next_request_at - monotonic()))
             self._next_request_at = monotonic() + 2.0
-            return self._fetch(request, filter_json)
+            return self._fetch(request, filter_json, spec.response_format)
 
-    def _fetch(self, request: Request, filter_json: str | None) -> FetchResult:
+    def _fetch(
+        self,
+        request: Request,
+        filter_json: str | None,
+        response_format: Literal["object", "array", "png"],
+    ) -> EndpointFetchResult:
         started = monotonic()
         try:
             with self._opener.open(request, timeout=TIMEOUT_SECONDS) as response:
                 if response.status != 200:
                     raise EspnError("INVALID_RESPONSE", status=response.status)
                 if (
-                    response.headers.get_content_type() != "application/json"
+                    response.headers.get_content_type()
+                    != ("image/png" if response_format == "png" else "application/json")
                     or response.headers.get("Content-Encoding", "identity").lower() != "identity"
                 ):
                     raise EspnError("INVALID_RESPONSE")
                 length = response.headers.get("Content-Length")
                 if length is not None:
-                    if not length.isascii() or not length.isdigit():
+                    if len(length) > 20 or not length.isascii() or not length.isdigit():
                         raise EspnError("INVALID_RESPONSE")
                     if int(length) > MAX_BYTES:
                         raise EspnError("RESPONSE_TOO_LARGE")
@@ -203,6 +202,19 @@ class EspnTransport:
             raise EspnError(code, status=status, retry_after_seconds=retry) from None
         except (URLError, OSError, HTTPException):
             raise EspnError("NETWORK_ERROR") from None
+        if response_format == "png":
+            if not body.startswith(b"\x89PNG\r\n\x1a\n"):
+                raise EspnError("INVALID_RESPONSE")
+            return EndpointFetchResult(
+                bytes(body),
+                SourceReceipt(
+                    request.full_url,
+                    utc_now(),
+                    hashlib.sha256(body).hexdigest(),
+                    len(body),
+                    filter_json,
+                ),
+            )
         try:
             payload = json.loads(
                 body.decode("utf-8"),
@@ -212,9 +224,9 @@ class EspnTransport:
             )
         except (ValueError, UnicodeError, RecursionError, DecimalException):
             raise EspnError("INVALID_JSON") from None
-        if not isinstance(payload, dict):
+        if not isinstance(payload, dict if response_format == "object" else list):
             raise EspnError("INVALID_RESPONSE")
-        return FetchResult(
+        return EndpointFetchResult(
             payload,
             SourceReceipt(
                 request.full_url,
