@@ -72,6 +72,7 @@ class StatBlock(ProviderModel):
     stat_split_type_id: StrictInt
     stats: dict[str, Decimal] | None = None
     applied_total: Decimal | None = None
+    applied_stats: dict[str, Decimal] | None = None
 
 
 class Player(ProviderModel):
