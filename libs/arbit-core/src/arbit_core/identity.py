@@ -10,7 +10,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-EntityKind = Literal["athlete", "nfl_team", "defense_unit", "fantasy_team"]
+EntityKind = Literal[
+    "athlete", "nfl_team", "defense_unit", "fantasy_team", "manager", "fantasy_matchup"
+]
 
 
 def require_aware(value: datetime) -> None:
@@ -31,6 +33,7 @@ class ProviderRef(BaseModel):
     provider: str = Field(min_length=1)
     entity_kind: EntityKind
     external_id: str = Field(min_length=1)
+    scope: str = Field(default="global", min_length=1)
 
 
 @dataclass(frozen=True)

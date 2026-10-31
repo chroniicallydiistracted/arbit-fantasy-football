@@ -56,3 +56,14 @@ def test_dated_team_affiliation_and_unknown_timestamp():
             ProviderRef(provider="espn", entity_kind="athlete", external_id="1"),
             datetime(2026, 1, 1),
         )
+
+
+def test_native_ids_are_scoped_by_season_and_kind():
+    from arbit_core.identity import ProviderRef
+
+    one = ProviderRef(
+        provider="espn", entity_kind="fantasy_team", external_id="1", scope="ffa:2026"
+    )
+    two = one.model_copy(update={"scope": "ffa:2027"})
+    nfl = ProviderRef(provider="espn", entity_kind="nfl_team", external_id="1")
+    assert len({one, two, nfl}) == 3

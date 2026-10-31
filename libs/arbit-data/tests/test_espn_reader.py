@@ -88,7 +88,8 @@ def test_reads_all_available_pages_and_preserves_exact_observed_facts():
     assert [call[1] for call in transport.calls] == [None, 8, 8, 8, 8]
     assert transport.calls[2][2]["players"]["offset"] == 300
     assert result.capture_started_at <= result.capture_finished_at
-    assert "SYNTHETIC-MANAGER" not in result.league.model_dump_json()
+    assert result.league.teams[0].owners == ("SYNTHETIC-MANAGER",)
+    assert "notificationSettings" not in result.league.model_dump_json()
 
 
 @pytest.mark.parametrize(
@@ -223,3 +224,12 @@ def test_observed_null_ownership_and_absent_stat_values_remain_unknown():
     assert result.available[0].player.ownership["activityLevel"] is None
     assert result.available[0].player.stats[1].stats is None
     assert result.available[0].player.stats[1].applied_total is None
+
+
+def test_manager_changes_during_capture_are_rejected():
+    first = fixture("league.synthetic.json")
+    first["members"] = [{"id": "owner-1", "displayName": "Owner"}]
+    last = deepcopy(first)
+    last["teams"][0]["owners"] = ["other-owner"]
+    with pytest.raises(EspnError, match="SOURCE_CHANGED"):
+        EspnReader(ScriptedEspn(initial=first, final=last)).fetch_league_snapshot(2026)

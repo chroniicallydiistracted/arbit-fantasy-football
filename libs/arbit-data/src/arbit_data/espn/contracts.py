@@ -127,6 +127,15 @@ class Team(ProviderModel):
     abbrev: StrictStr
     record: TeamRecord
     roster: Roster
+    owners: tuple[StrictStr, ...] = ()
+    primary_owner: StrictStr | None = None
+    waiver_rank: PositiveInt | None = None
+    playoff_seed: NonNegativeInt | None = None
+
+
+class Member(ProviderModel):
+    id: StrictStr
+    display_name: StrictStr
 
 
 class MatchupSide(ProviderModel):
@@ -168,6 +177,7 @@ class League(ProviderModel):
     teams: Annotated[tuple[Team, ...], Field(min_length=1)]
     schedule: tuple[Matchup, ...]
     draft_detail: DraftDetail
+    members: tuple[Member, ...] = ()
 
 
 class AvailablePage(ProviderModel):
