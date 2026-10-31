@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 
 from arbit_core.identity import require_aware
-from sqlalchemy import Connection, and_, or_, select, update
+from sqlalchemy import Connection, and_, or_, select, true, update
 from sqlalchemy.dialects.postgresql import insert
 
 from arbit_data.db import UnitOfWork
@@ -38,6 +38,8 @@ class LeasedJob:
     lease_token: UUID
     expires_at: datetime
     attempts: int
+    job_type: str = ""
+    input_ref: str = ""
 
 
 def require_lease(connection: Connection, job_id: UUID, token: UUID, now: datetime) -> None:
@@ -67,38 +69,50 @@ class JobQueue:
     def enqueue(
         self, job_type: str, input_ref: str, idempotency_key: str, not_before: datetime
     ) -> JobRecord:
+        with self.uow.engine.begin() as connection:
+            return self.enqueue_in_transaction(
+                connection, job_type, input_ref, idempotency_key, not_before
+            )
+
+    def enqueue_in_transaction(
+        self,
+        connection: Connection,
+        job_type: str,
+        input_ref: str,
+        idempotency_key: str,
+        not_before: datetime,
+    ) -> JobRecord:
         require_aware(not_before)
         if not job_type or not input_ref or not idempotency_key:
             raise ValueError("job type, input reference and idempotency key are required")
         request_hash = hashlib.sha256(
             json.dumps([job_type, input_ref], separators=(",", ":")).encode()
         ).hexdigest()
-        with self.uow.engine.begin() as connection:
-            connection.execute(
-                insert(job)
-                .values(
-                    id=uuid4(),
-                    job_type=job_type,
-                    input_ref=input_ref,
-                    idempotency_key=idempotency_key,
-                    request_hash=request_hash,
-                    status="queued",
-                    attempts=0,
-                    max_attempts=self.max_attempts,
-                    ready_at=not_before,
-                )
-                .on_conflict_do_nothing(index_elements=[job.c.idempotency_key])
+        connection.execute(
+            insert(job)
+            .values(
+                id=uuid4(),
+                job_type=job_type,
+                input_ref=input_ref,
+                idempotency_key=idempotency_key,
+                request_hash=request_hash,
+                status="queued",
+                attempts=0,
+                max_attempts=self.max_attempts,
+                ready_at=not_before,
             )
-            row = (
-                connection.execute(select(job).where(job.c.idempotency_key == idempotency_key))
-                .mappings()
-                .one()
-            )
-            if row["request_hash"] != request_hash:
-                raise IdempotencyConflictError("idempotency key reused with different job input")
-            return JobRecord(
-                row["id"], row["status"], row["attempts"], row["result_ref"], row["error_code"]
-            )
+            .on_conflict_do_nothing(index_elements=[job.c.idempotency_key])
+        )
+        row = (
+            connection.execute(select(job).where(job.c.idempotency_key == idempotency_key))
+            .mappings()
+            .one()
+        )
+        if row["request_hash"] != request_hash:
+            raise IdempotencyConflictError("idempotency key reused with different job input")
+        return JobRecord(
+            row["id"], row["status"], row["attempts"], row["result_ref"], row["error_code"]
+        )
 
     def get_job(self, job_id: UUID) -> JobRecord:
         with self.uow.engine.connect() as connection:
@@ -107,7 +121,9 @@ class JobQueue:
                 row["id"], row["status"], row["attempts"], row["result_ref"], row["error_code"]
             )
 
-    def claim_job(self, worker_id: str, now: datetime) -> LeasedJob | None:
+    def claim_job(
+        self, worker_id: str, now: datetime, *, job_type: str | None = None
+    ) -> LeasedJob | None:
         require_aware(now)
         if not worker_id:
             raise ValueError("worker identity is required")
@@ -119,6 +135,7 @@ class JobQueue:
                     job.c.status == "running",
                     job.c.lease_until <= now,
                     job.c.attempts >= job.c.max_attempts,
+                    job.c.job_type == job_type if job_type else true(),
                 )
                 .order_by(job.c.lease_until, job.c.id)
                 .limit(100)
@@ -139,6 +156,7 @@ class JobQueue:
                     select(job)
                     .where(
                         job.c.attempts < job.c.max_attempts,
+                        job.c.job_type == job_type if job_type else true(),
                         or_(
                             and_(job.c.status == "queued", job.c.ready_at <= now),
                             and_(job.c.status == "running", job.c.lease_until <= now),
@@ -166,7 +184,7 @@ class JobQueue:
                     worker_id=worker_id,
                 )
             )
-            return LeasedJob(row["id"], token, expires, attempts)
+            return LeasedJob(row["id"], token, expires, attempts, row["job_type"], row["input_ref"])
 
     def heartbeat(self, job_id: UUID, lease_token: UUID, now: datetime) -> datetime:
         with self.uow.engine.begin() as connection:

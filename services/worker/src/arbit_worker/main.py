@@ -20,6 +20,7 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
+from arbit_worker import sync_commands
 from arbit_worker.espn_inspect import acquisition_summary
 
 
@@ -125,7 +126,11 @@ def main() -> None:
         "espn-score-audit", help="Recompute completed FFA player and lineup scores against ESPN"
     )
     scoring_command.add_argument("--periods", nargs="+", type=_scoring_period)
+    sync_commands.add_commands(subcommands)
     arguments = parser.parse_args()
+    if arguments.command in ("sync", "sync-status", "sync-replay"):
+        sync_commands.execute(arguments, parser)
+        return
     if arguments.command == "espn-score-audit":
         _score_audit(arguments.periods, parser)
         return

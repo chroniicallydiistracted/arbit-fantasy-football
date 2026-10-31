@@ -1,6 +1,7 @@
 """Atomic canonical league publication, immutable history and read-only serving queries."""
 
 import hashlib
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Any
@@ -144,11 +145,12 @@ def publish_capture(
     lease: LeasedJob | None = None,
     now: datetime | None = None,
     interval_seconds: int = 300,
+    clock: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> Publication:
     captured = CapturedInput.model_validate(captured.model_dump())
     if hashlib.sha256(captured.model_dump_json().encode()).hexdigest() != manifest_hash:
         raise ValueError("CAPTURE_HASH_MISMATCH")
-    timestamp = now or datetime.now(UTC)
+    timestamp = now or clock()
     require_aware(timestamp)
     acquisition = captured.acquisition
     season = acquisition.league.season_id
@@ -279,7 +281,7 @@ def publish_capture(
         )
         if lease:
             # Evaluate again at the end for real-time calls; injected time remains deterministic in tests.
-            _complete(c, lease, snapshot_id, now or datetime.now(UTC))
+            _complete(c, lease, snapshot_id, now or clock())
         return Publication(snapshot_id, not unchanged)
 
 

@@ -280,3 +280,17 @@ def test_last_confirmation_fences_older_response_and_replay_does_not_refresh(
     )
     assert view["sync"]["last_success_at"] == latest.acquisition.capture_started_at.isoformat()
     assert view["sync"]["stale"] is True
+
+
+def test_expiring_during_transaction_rolls_back_publication(uow, tmp_path, captured_input):
+    from arbit_data.jobs import JobQueue, LeaseLostError
+
+    now = captured_input.acquisition.capture_finished_at
+    queue = JobQueue(uow, lease_seconds=10)
+    queue.enqueue("espn.sync", "2026", "expires", now)
+    lease = queue.claim_job("slow", now)
+    times = iter((now, now + timedelta(seconds=11)))
+    digest = CaptureArchive(tmp_path).write(captured_input)
+    with pytest.raises(LeaseLostError):
+        publish_capture(captured_input, digest, uow, lease=lease, clock=lambda: next(times))
+    assert count(uow, "league_snapshot") == count(uow, "entity_alias") == 0
