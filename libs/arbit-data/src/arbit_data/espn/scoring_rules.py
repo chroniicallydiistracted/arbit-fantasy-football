@@ -42,6 +42,13 @@ def role_for_position(position: int) -> Role:
     raise ValueError("Unsupported scoring position")
 
 
+def _decimal_text(value: Decimal) -> str:
+    try:
+        return str(value.normalize())
+    except DecimalException:
+        return str(value)
+
+
 def _zero_control(value: Any) -> bool:
     try:
         number = Decimal(str(value))
@@ -103,9 +110,9 @@ def normalize_scoring(settings: dict[str, Any], season: int) -> NormalizedScorin
     for item in items:
         source = {
             "statId": item.stat_id,
-            "points": str(item.points.normalize()),
+            "points": _decimal_text(item.points),
             "pointsOverrides": {
-                key: str(value.normalize()) for key, value in sorted(item.points_overrides.items())
+                key: _decimal_text(value) for key, value in sorted(item.points_overrides.items())
             },
             "isReverseItem": item.is_reverse_item,
         }

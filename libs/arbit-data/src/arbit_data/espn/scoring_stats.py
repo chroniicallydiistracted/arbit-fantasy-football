@@ -147,7 +147,12 @@ def reconcile_player(
             if raw is None:
                 raise ScoringDataError("MISSING_RANGE_TOTAL")
             values[category.stat] = raw
-            expected = Decimal(int(raw >= rule.lower and (rule.upper is None or raw < rule.upper)))
+            expected = Decimal(
+                int(
+                    (rule.lower is None or raw >= rule.lower)
+                    and (rule.upper is None or raw < rule.upper)
+                )
+            )
             indicator = stats.get(rule.id)
             if indicator is None and expected != 0:
                 raise ScoringDataError("MISSING_RANGE_INDICATOR")
@@ -159,7 +164,7 @@ def reconcile_player(
         raise ScoringDataError("STAT_ARITHMETIC_FAILED") from None
     differences = []
     observed = []
-    configured = {item.stat_id for item in normalized.source_items}
+    computed_ids = {item.rule_id for item in computed.contributions}
     for contribution in computed.contributions:
         reference = cents(applied.get(contribution.rule_id, Decimal(0)))
         calculated = cents(contribution.points)
@@ -170,9 +175,12 @@ def reconcile_player(
     for key, value in applied.items():
         if not key.isascii() or not key.isdigit():
             raise ScoringDataError("INVALID_APPLIED_CATEGORY")
-        if int(key) not in configured and value != 0:
+        if key not in computed_ids and value != 0:
             differences.append(ContributionDifference(key, Decimal(0), cents(value)))
-    sum_delta = cents(sum(applied.values(), Decimal(0))) - official
+    try:
+        sum_delta = cents(sum(applied.values(), Decimal(0))) - official
+    except DecimalException:
+        raise ScoringDataError("INVALID_NUMERIC") from None
     total_delta = computed.total - official
     pool_delta = computed.total - pool_total
     status: Literal["verified", "mismatch"] = (

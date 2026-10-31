@@ -3,6 +3,7 @@
 import json
 from copy import deepcopy
 from datetime import UTC, datetime
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -178,4 +179,33 @@ def test_limited_required_source_cannot_pass_even_with_other_fields_present():
     assert report["success"] is False
     assert any(
         issue["code"] == "REQUIRED_SOURCE_CAPABILITY_UNAVAILABLE" for issue in report["issues"]
+    )
+
+
+def test_zero_rate_contributions_cannot_cancel_and_falsely_verify():
+    settings, period = inputs()
+    block = period["schedule"][0]["home"]["rosterForCurrentScoringPeriod"]["entries"][0][
+        "playerPoolEntry"
+    ]["player"]["stats"][0]
+    block["appliedStats"].update({"95": 1, "96": -1})
+    report = audit_scoring(Source(settings, period), 2026)
+    assert report["success"] is False
+    issue = next(issue for issue in report["issues"] if issue["code"] == "PLAYER_SCORE_MISMATCH")
+    assert {item["statId"] for item in issue["contributions"]} == {"95", "96"}
+
+
+@pytest.mark.parametrize("where", ["rate", "contributions"])
+def test_extreme_finite_numbers_return_safe_unsupported_or_data_diagnostics(where):
+    settings, period = inputs()
+    if where == "rate":
+        settings["settings"]["scoringSettings"]["scoringItems"][0]["points"] = Decimal("1e1000000")
+    else:
+        block = period["schedule"][0]["home"]["rosterForCurrentScoringPeriod"]["entries"][0][
+            "playerPoolEntry"
+        ]["player"]["stats"][0]
+        block["appliedStats"].update({"95": Decimal("1e1000000"), "96": Decimal("-1e1000000")})
+    report = audit_scoring(Source(settings, period), 2026)
+    assert report["success"] is False and report["recommendationsEnabled"] is False
+    assert any(
+        issue["code"] in {"UNSUPPORTED_RULES", "INVALID_NUMERIC"} for issue in report["issues"]
     )
