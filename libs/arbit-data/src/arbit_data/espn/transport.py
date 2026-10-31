@@ -14,6 +14,7 @@ from typing import Any, Literal
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
+from arbit_data.errors import SourceError
 from arbit_data.espn.endpoints import Endpoint, EndpointOptions, build_request
 from arbit_data.espn.http_deadline import DeadlineHTTPSHandler
 
@@ -25,16 +26,8 @@ def utc_now() -> datetime:
     return datetime.now(UTC)
 
 
-class EspnError(Exception):
-    """Safe failure metadata; never stores request headers or response content."""
-
-    def __init__(
-        self, code: str, *, status: int | None = None, retry_after_seconds: int | None = None
-    ):
-        self.code = code
-        self.status = status
-        self.retry_after_seconds = retry_after_seconds
-        super().__init__(code)
+class EspnError(SourceError):
+    """Safe ESPN source failure."""
 
 
 @dataclass(frozen=True)

@@ -54,3 +54,18 @@ def test_transient_circuit_survives_new_instance_and_locks_release(uow):
     clock.sleep(60)
     with DatabaseGate(uow, clock=clock, sleep=clock.sleep).request():
         pass
+
+
+def test_nflverse_and_espn_budgets_are_independent(uow):
+    from arbit_data.errors import SourceError
+
+    clock = Clock()
+    nfl = DatabaseGate(uow, clock=clock, sleep=clock.sleep, provider="nflverse")
+    with pytest.raises(SourceError):
+        with nfl.request():
+            raise SourceError("RATE_LIMITED", retry_after_seconds=120)
+    with DatabaseGate(uow, clock=clock, sleep=clock.sleep).request():
+        pass
+    with pytest.raises(SourceError, match="SOURCE_COOLDOWN"):
+        with DatabaseGate(uow, clock=clock, sleep=clock.sleep, provider="nflverse").request():
+            pass

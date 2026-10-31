@@ -2,7 +2,14 @@
 name = "arbit-data"
 version = "0.1.0"
 requires-python = ">=3.12,<3.13"
-dependencies = ["arbit-core", "sqlalchemy>=2.0,<3", "psycopg[binary]>=3.2,<4", "alembic>=1.17,<2"]
+dependencies = [
+    "arbit-core",
+    "sqlalchemy>=2.0,<3",
+    "psycopg[binary]>=3.2,<4",
+    "alembic>=1.17,<2",
+    "pyarrow>=21,<30",
+    "pyreadr>=0.5,<1",
+]
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]

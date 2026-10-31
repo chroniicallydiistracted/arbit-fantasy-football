@@ -6,11 +6,13 @@ from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
 from time import monotonic
 from time import sleep as real_sleep
+from typing import Literal
 
 from sqlalchemy import func, select, update
 from sqlalchemy.dialects.postgresql import insert
 
 from arbit_data.db import UnitOfWork
+from arbit_data.errors import SourceError
 from arbit_data.espn.endpoints import Endpoint, EndpointOptions
 from arbit_data.espn.transport import EndpointFetchResult, EspnError, EspnTransport
 from arbit_data.schema import provider_budget
@@ -45,8 +47,12 @@ class DatabaseGate:
         *,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         sleep: Callable[[float], None] = real_sleep,
+        provider: Literal["espn", "nflverse"] = "espn",
     ):
         self.uow, self.clock, self.sleep = uow, clock, sleep
+        self.provider = provider
+        self.lock_key = {"espn": -2, "nflverse": -3}[provider]
+        self.spacing = {"espn": 2.0, "nflverse": 0.1}[provider]
 
     @contextmanager
     def request(self) -> Iterator[None]:
@@ -57,7 +63,9 @@ class DatabaseGate:
             try:
                 deadline = monotonic() + 30
                 while not acquired:
-                    acquired = bool(c.scalar(select(func.pg_try_advisory_lock(1729878439, -2))))
+                    acquired = bool(
+                        c.scalar(select(func.pg_try_advisory_lock(1729878439, self.lock_key)))
+                    )
                     if not acquired:
                         if monotonic() >= deadline:
                             raise EspnError("PROVIDER_BUSY", retry_after_seconds=5)
@@ -65,11 +73,15 @@ class DatabaseGate:
                 now = self.clock()
                 c.execute(
                     insert(provider_budget)
-                    .values(provider="espn", next_allowed_at=now, blocked_until=now, failures=0)
+                    .values(
+                        provider=self.provider, next_allowed_at=now, blocked_until=now, failures=0
+                    )
                     .on_conflict_do_nothing(index_elements=[provider_budget.c.provider])
                 )
                 row = (
-                    c.execute(select(provider_budget).where(provider_budget.c.provider == "espn"))
+                    c.execute(
+                        select(provider_budget).where(provider_budget.c.provider == self.provider)
+                    )
                     .mappings()
                     .one()
                 )
@@ -81,12 +93,12 @@ class DatabaseGate:
                 self.sleep(max(0, (row["next_allowed_at"] - now).total_seconds()))
                 c.execute(
                     update(provider_budget)
-                    .where(provider_budget.c.provider == "espn")
-                    .values(next_allowed_at=after(self.clock(), 2))
+                    .where(provider_budget.c.provider == self.provider)
+                    .values(next_allowed_at=after(self.clock(), self.spacing))
                 )
                 try:
                     yield
-                except EspnError as error:
+                except SourceError as error:
                     failures = row["failures"] + 1 if error.code in TRANSIENT else 0
                     delay = max(
                         error.retry_after_seconds or 0,
@@ -94,20 +106,20 @@ class DatabaseGate:
                     )
                     c.execute(
                         update(provider_budget)
-                        .where(provider_budget.c.provider == "espn")
+                        .where(provider_budget.c.provider == self.provider)
                         .values(failures=failures, blocked_until=after(self.clock(), delay))
                     )
                     raise
                 else:
                     c.execute(
                         update(provider_budget)
-                        .where(provider_budget.c.provider == "espn")
+                        .where(provider_budget.c.provider == self.provider)
                         .values(failures=0)
                     )
             finally:
                 if acquired:
                     try:
-                        if not c.scalar(select(func.pg_advisory_unlock(1729878439, -2))):
+                        if not c.scalar(select(func.pg_advisory_unlock(1729878439, self.lock_key))):
                             c.invalidate()
                     except Exception:
                         c.invalidate()
