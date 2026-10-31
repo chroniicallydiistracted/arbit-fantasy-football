@@ -1,6 +1,6 @@
 # Source Research Register
 
-Research date **2026-10-30**. Primary documentation, provider responses, and the community wrapper's own source are distinguished below. A documentation page is evidence of a documented capability, not proof that FFA access or every 2026 dataset works. No raw member data or credential was stored.
+Research date **2026-10-30**. Primary documentation, provider responses, and the community wrapper's own source are distinguished below. A documentation page is evidence of a documented capability, not proof that FFA access or every 2026 dataset works. No credential or raw member data is committed; public response captures remain in ignored local research storage.
 
 ## Integration findings
 
@@ -33,7 +33,7 @@ The earlier FFA probe established an unauthenticated 401 under the previous visi
 
 ## Next research experiments
 
-1. With local authorized FFA access, enumerate views/fields/pages, actual categories/slots/draft/waiver settings and missing capabilities; produce sanitized contract fixtures and a support matrix.
+1. Public capability inventory, synthetic observed-shape fixtures and bounded typed acquisition are implemented; [fresh reader evidence](espn-reader-live-2026-10-30.json) confirms core counts with seven cookie-free GETs. Next map actual rules/slots, reconcile supported scores and persist canonical identities/source publication. Message boards are outside scope.
 2. Download bounded nflverse samples and inventory season/field coverage, data availability and schema/version changes. Capture actual publication metadata or conservatively timestamp observation. Verify dataset terms rather than generalizing a repository license.
 3. Verify Sleeper current documented directory/state/trending behavior; record any extra stats/scoring/play endpoint separately with proof, stability and fallback.
 4. Capture ESPN active/final/postponed/overtime and corrected-game samples; measure participant IDs, field coordinates, sequence stability and rate behavior. Prefer this research before seeking another live source, as requested.

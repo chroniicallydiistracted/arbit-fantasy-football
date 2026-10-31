@@ -41,10 +41,26 @@ The fixture command prints only the synthetic label and snapshot/hash references
 
 Stop the API with Ctrl+C; stop local PostgreSQL with `docker compose -f infra/compose.yaml stop`. Do not run volume-deletion commands unless intentionally discarding local data. No cloud service, external transaction or production database is involved.
 
+## Public FFA inspection
+
+From the repository root, after `uv sync --frozen`, run:
+
+```sh
+uv run arbit-worker espn-inspect
+# Optional explicit current period; historical ownership acquisition is rejected.
+uv run arbit-worker espn-inspect --scoring-period 8
+```
+
+This opt-in command reads the configured 2026 public league without cookies, credentials or a database. It prints counts, UTC capture times, request URLs/filters and body checksums only; it does not save source bodies, publish a canonical snapshot or calculate advice. A successful fresh read observed eight teams, 132 owned players, 923 available players, 46 scoring items and 128 draft picks; these are observations, not hardcoded expectations. [Live receipt](../research/espn-reader-live-2026-10-30.json).
+
+Run one inspection process at a time. One transport serializes requests to at most 30/minute, caps each body at 8 MiB and availability at 20 requests, and stops on typed provider or consistency errors. A 15-second elapsed I/O budget covers address attempts after DNS, TLS, writes, headers, bodies and chunk framing. Every socket read receives only the remaining budget, so periodic bytes cannot extend it. Synchronous system DNS resolution cannot be interrupted; this is not a guaranteed DNS or absolute process deadline. An error goes to stderr as a safe code/status/retry hint with exit 1. Invalid CLI arguments exit 2. Respect `retryAfterSeconds`; the command never retries automatically. A 429 also prevents early reuse of the same transport. Current published database state is unaffected by every inspection outcome.
+
+Before scheduled or concurrent sync, add a shared provider budget, durable retry orchestration, canonical identity/rule normalization and transactional publication. No member login, historical availability or atomic multi-request snapshot is implied. Message boards are excluded from scope. The [pinned reference](../research/espn-reference.md) lives under ignored `.references`; local captures and third-party files are excluded from the planning-artifact checker, while project links/contracts remain validated.
+
 ## Implemented boundaries and remaining work
 
 Core validates fixed FFA configuration and temporal aliases/affiliations, with no name-only merges or scoring assumptions. Scoring is pure Decimal arithmetic with explicit rules, scopes and rounding, including unsupported/missing diagnostics. Persistence publishes validated complete candidates atomically, preserves the last valid current pointer, deduplicates revisions and writes a transactional outbox. Jobs support idempotency conflicts, row-locked claims, expiring tokens, heartbeat, fencing, delayed retries and failed state. Leased worker publication must pass its lease into `publish_snapshot`; the synthetic smoke command is not the production scheduler.
 
-Current snapshot fields cover the first core/persistence slice only. Actual league metadata/settings, persisted cross-provider mappings, full team/manager/roster contracts, availability pagination and source completeness proof remain M1b/M1c. Source adapter retries add provider-aware jitter, Retry-After and global polling budgets; the durable queue currently provides deterministic bounded retry delay. Missing or unsupported actual FFA rules must still block affected advice.
+Canonical snapshot fields still cover the first core/persistence slice only. M1b now acquires typed public league facts and the entire observed available-player inventory. Persisted canonical cross-provider mappings, manager/account binding, actual rules support/reconciliation and durable source-health/publication remain M1c/M2. Future source adapter orchestration adds provider-aware jitter, Retry-After scheduling and global polling budgets; the durable queue currently provides deterministic bounded retry delay. Missing or unsupported actual FFA rules must still block affected advice.
 
-Next: authorized local FFA access and capability inventory, then full provider normalization and nflverse manifests/coverage. Deliberate UX/UI work follows the [design system](../design/design-system.md) and [feature workflows](../product/feature-experiences.md); generic dashboard filler and ungrounded analytics do not satisfy those specifications.
+Next: normalize the 46 actual FFA scoring items and roster eligibility with support diagnostics, reconcile authoritative totals, persist explicit identities, and wire lease-fenced canonical publication; then nflverse manifests/coverage. Deliberate UX/UI work follows the [design system](../design/design-system.md) and [feature workflows](../product/feature-experiences.md); generic dashboard filler and ungrounded analytics do not satisfy those specifications.

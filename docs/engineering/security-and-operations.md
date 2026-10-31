@@ -12,13 +12,13 @@ Only invited accounts access FFA data. Administrator bindings are audited. Authe
 
 ## Local bootstrap prerequisites
 
-Before live access: adopt runtime ADRs, pin versions/lockfiles, validate `config/league.json`, configure storage/database, register a chosen OIDC client if testing auth, and supply ESPN secret references only if required. Start with synthetic fixtures, test migrations and readiness, then run one bounded live read. A 401 without credentials was observed for the configured FFA settings endpoint; do not claim private access until a valid authorized fetch succeeds. Do not print the successful response's member data into development logs.
+Architecture/stack and pinned runtime were adopted; bounded public FFA reads are now verified without cookies. The earlier private-setting 401 is historical. Current manual access uses `uv run arbit-worker espn-inspect` from the repository root; it does not require a database or ESPN secrets and reports only safe counts/provenance. Message boards are outside scope. If the league becomes private, supply local server-side secret references and verify access before enabling that mode. Canonical publication requires validated storage/migrations, identity/rules support and the sync lease/budget gates; member authentication separately requires a chosen OIDC client. Never print response member data into logs.
 
 ## Incident and recovery procedures
 
 | Trigger | Immediate response | Recovery evidence |
 | --- | --- | --- |
-| ESPN 401/403 | Mark source auth-needed, stop tight retry, preserve last snapshot; administrator rotates locally | Bounded read succeeds, complete snapshot validates, no secret in logs |
+| ESPN 401/403 | Mark source access-denied, stop tight retry and preserve last snapshot; check public visibility, or local server secrets only in an explicitly configured private mode | Bounded read succeeds, complete snapshot validates, no secret in logs |
 | 429/provider outage | Honor Retry-After/backoff, global limiter/circuit breaker; show stale state | Source healthy and schedule resumes without request storm |
 | Schema drift/partial data | Quarantine revision, preserve last complete current pointer; block affected advice | Adapter/fixture updated, replay validates completeness and scoring |
 | Identity mismatch | Freeze affected advice, review alias evidence; version correction | Recomputed joins/derived output and audit trail verified |

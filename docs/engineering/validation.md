@@ -2,13 +2,13 @@
 
 ## Available now
 
-`python3 scripts/validate_foundation.py` (or `make check`) remains the dependency-free artifact check. Python 3.12+ standard library only. CI runs the same command on documentation, schemas, tokens, configuration and the scaffold. It checks local Markdown targets, required artifacts, source-brief checksum, requirement-to-milestone/spec mapping, the declared contract-example subset, league configuration and declared token contrast pairs. External URL reachability is not a deterministic CI check.
+`python3 scripts/validate_foundation.py` (or `make check`) remains the dependency-free artifact check. Python 3.12+ standard library only. CI runs the same command on documentation, schemas, tokens, configuration and the scaffold. It checks local Markdown targets, required artifacts, source-brief checksum, requirement-to-milestone/spec mapping, the declared contract-example subset, league configuration and declared token contrast pairs. External URL reachability is not a deterministic CI check. Ignored local captures, secrets, scratch state and third-party `.references` checkouts are excluded from artifact discovery; a regression proves project links remain checked.
 
 The contract-example checker supports the schema keywords actually used by these local schemas; it is not a complete JSON Schema implementation. M1a adds full Draft 2020-12 AJV validation through `pnpm check:contracts`. OpenAPI business contracts/code generation follow with authenticated API features. Foundation success is not an application build, provider integration proof, full accessibility audit, or model-quality result.
 
 ## Runtime checks available now
 
-After frozen installs and `make db-up`, `make runtime-check` runs foundation checks, Ruff lint/format, strict mypy, AJV contract examples and all pytest tests, including real PostgreSQL migration/snapshot/job/health integration. See [local development](local-development.md). The current verified baseline is 45 tests after final branch review and its two regression fixes. CI is configured to run the same checks with an isolated database, but has not been remotely executed in this session.
+After frozen installs and `make db-up`, `make runtime-check` runs foundation checks, Ruff lint/format, strict mypy, AJV contract examples and all pytest tests, including real PostgreSQL migration/snapshot/job/health integration. See [local development](local-development.md). The current verified baseline is 110 tests, including the public ESPN transport/reader/manual-command failure cases and real PostgreSQL integration. Provider tests use synthetic identities and a loopback-only network guard; live public inspection is a separate opt-in smoke check. CI is configured to run the same checks with an isolated database, but has not been remotely executed in this session.
 
 ## Feature validation gates across M1/M2 and later milestones
 
