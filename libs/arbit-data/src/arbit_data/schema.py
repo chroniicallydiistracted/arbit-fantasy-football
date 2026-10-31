@@ -67,3 +67,95 @@ job = Table(
     Column("result_ref", String),
     Column("error_code", String),
 )
+
+canonical_entity = Table(
+    "canonical_entity",
+    metadata,
+    Column("id", Uuid, primary_key=True),
+    Column("kind", String, nullable=False),
+    Column("created_at", DateTime(timezone=True), nullable=False),
+)
+entity_alias = Table(
+    "entity_alias",
+    metadata,
+    Column("provider", String, primary_key=True),
+    Column("kind", String, primary_key=True),
+    Column("scope", String, primary_key=True),
+    Column("external_id", String, primary_key=True),
+    Column("valid_from", DateTime(timezone=True), primary_key=True),
+    Column("valid_to", DateTime(timezone=True)),
+    Column("entity_id", Uuid, nullable=False),
+    Column("method", String, nullable=False),
+    Column("evidence_manifest", String(64), nullable=False),
+)
+team_affiliation = Table(
+    "team_affiliation",
+    metadata,
+    Column("entity_id", Uuid, primary_key=True),
+    Column("valid_from", DateTime(timezone=True), primary_key=True),
+    Column("team_id", Uuid, nullable=False),
+    Column("valid_to", DateTime(timezone=True)),
+)
+scoring_verification = Table(
+    "scoring_verification",
+    metadata,
+    Column("key", String(64), primary_key=True),
+    Column("season", Integer, nullable=False),
+    Column("verified_at", DateTime(timezone=True), nullable=False),
+    Column("manifest_hash", String(64), nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+rule_version = Table(
+    "rule_version",
+    metadata,
+    Column("hash", String(64), primary_key=True),
+    Column("season", Integer, nullable=False),
+    Column("scoring_key", String(64), nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+league_document = Table(
+    "league_document",
+    metadata,
+    Column("snapshot_id", Uuid, primary_key=True),
+    Column("previous_snapshot_id", Uuid),
+    Column("state_hash", String(64), nullable=False),
+    Column("rules_hash", String(64), nullable=False),
+    Column("kind", String, nullable=False),
+    Column("changes", JSON, nullable=False),
+    Column("payload", JSON, nullable=False),
+    Column("published_at", DateTime(timezone=True), nullable=False),
+)
+source_capture = Table(
+    "source_capture",
+    metadata,
+    Column("manifest_hash", String(64), primary_key=True),
+    Column("season", Integer, nullable=False),
+    Column("adapter_version", String, nullable=False),
+    Column("observed_at", DateTime(timezone=True), nullable=False),
+    Column("finished_at", DateTime(timezone=True), nullable=False),
+    Column("receipts", JSON, nullable=False),
+    Column("status", String, nullable=False),
+    Column("snapshot_id", Uuid),
+    Column("error_code", String),
+)
+sync_state = Table(
+    "sync_state",
+    metadata,
+    Column("season", Integer, primary_key=True),
+    Column("next_due_at", DateTime(timezone=True), nullable=False),
+    Column("paused", Boolean, nullable=False),
+    Column("consecutive_failures", Integer, nullable=False),
+    Column("last_attempt_at", DateTime(timezone=True)),
+    Column("last_success_at", DateTime(timezone=True)),
+    Column("last_snapshot_id", Uuid),
+    Column("last_manifest_hash", String(64)),
+    Column("error_code", String),
+)
+provider_budget = Table(
+    "provider_budget",
+    metadata,
+    Column("provider", String, primary_key=True),
+    Column("next_allowed_at", DateTime(timezone=True), nullable=False),
+    Column("blocked_until", DateTime(timezone=True), nullable=False),
+    Column("failures", Integer, nullable=False),
+)

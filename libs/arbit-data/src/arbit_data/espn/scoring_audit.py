@@ -10,6 +10,7 @@ from arbit_data.espn.scoring_rules import NormalizedScoring, normalize_scoring
 from arbit_data.espn.scoring_stats import ZERO_POLICY, ScoringDataError
 from arbit_data.espn.transport import EspnError, SourceReceipt, utc_now
 from arbit_data.espn.verification import SourceClient
+from arbit_data.league import content_hash
 
 
 @dataclass(frozen=True)
@@ -180,6 +181,17 @@ def audit_scoring(
             raise ScoringDataError("SCORING_SCHEMA_DRIFT")
         context = _context(first.payload, season)
         report["support"] = _support(context.normalized)
+        report["lineupContextHash"] = content_hash(
+            {
+                "season": season,
+                "configHash": context.normalized.config_hash,
+                "athleteRulesHash": context.normalized.athlete_rules.content_hash,
+                "defenseRulesHash": context.normalized.defense_rules.content_hash,
+                "slots": {str(k): v for k, v in context.slots.items()},
+                "periods": {str(k): list(v) for k, v in context.mapping.items()},
+                "size": context.size,
+            }
+        )
         if not context.normalized.supported:
             raise ScoringDataError("UNSUPPORTED_RULES")
         requested = _periods(context, periods)

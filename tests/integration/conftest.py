@@ -63,3 +63,60 @@ def candidate():
         roster=(RosterEntry(entity_id=UUID(int=3), team_id=UUID(int=1), slot="fixture-slot"),),
         available=(UUID(int=4),),
     )
+
+
+@pytest.fixture
+def captured_input():
+    """Observed shape, synthetic people, explicit verification test double (never live proof)."""
+    import json
+    from datetime import UTC, datetime
+    from decimal import Decimal
+    from pathlib import Path
+
+    from arbit_data.archives import CapturedInput
+    from arbit_data.espn.contracts import EspnAcquisition, League, PoolEntry
+    from arbit_data.espn.normalize import scoring_context
+    from arbit_data.espn.scoring_rules import normalize_scoring
+    from arbit_data.espn.transport import SourceReceipt
+
+    raw = json.loads(
+        Path("tests/fixtures/espn/league.synthetic.json").read_text(), parse_float=Decimal
+    )
+    raw["settings"]["scoringSettings"]["scoringItems"] = [
+        i for i in raw["settings"]["scoringSettings"]["scoringItems"] if i["statId"] != 9999
+    ]
+    raw["members"] = [{"id": "SYNTHETIC-MANAGER", "displayName": "Synthetic manager"}]
+    raw["teams"][1]["roster"]["entries"][0]["playerPoolEntry"]["player"]["stats"] = []
+    league = League.model_validate(raw)
+    available = PoolEntry.model_validate(
+        json.loads(
+            Path("tests/fixtures/espn/available.synthetic.json").read_text(), parse_float=Decimal
+        )["players"][0]
+    )
+    t = datetime(2026, 10, 30, 12, tzinfo=UTC)
+    normalized = normalize_scoring(raw["settings"]["scoringSettings"], 2026)
+    report = {
+        "season": 2026,
+        "success": True,
+        "verificationPassed": True,
+        "issues": [],
+        "support": {
+            "configHash": normalized.config_hash,
+            "athleteRulesHash": normalized.athlete_rules.content_hash,
+            "defenseRulesHash": normalized.defense_rules.content_hash,
+            "supported": True,
+        },
+        "totals": {"verifiedPlayerGames": 2, "lineupsMatched": 2, "lineupsChecked": 2},
+        "synthetic": True,
+        "lineupContextHash": scoring_context(league)[0],
+    }
+    return CapturedInput(
+        acquisition=EspnAcquisition(
+            league,
+            (available,),
+            (SourceReceipt("https://lm-api-reads.fantasy.espn.com/synthetic", t, "a" * 64, 100),),
+            t,
+            t,
+        ),
+        verification=report,
+    )

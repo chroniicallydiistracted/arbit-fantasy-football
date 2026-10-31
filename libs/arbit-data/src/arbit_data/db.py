@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import Engine
 
-SCHEMA_REVISION = "0001_foundation"
+SCHEMA_REVISION = "0002_ffa_sync"
 
 
 @dataclass(frozen=True)
