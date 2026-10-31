@@ -45,6 +45,19 @@ def decode_json(body: bytes) -> dict[str, Any] | list[Any]:
         raise SourceError("INVALID_JSON") from None
     if not isinstance(value, (dict, list)):
         raise SourceError("INVALID_RESPONSE")
+    stack = [(value, 0)]
+    nodes = 0
+    while stack:
+        item, depth = stack.pop()
+        nodes += 1
+        if depth > 64:
+            raise SourceError("JSON_DEPTH_LIMIT")
+        if nodes > 2_000_000:
+            raise SourceError("JSON_NODE_LIMIT")
+        if isinstance(item, dict):
+            stack.extend((child, depth + 1) for child in item.values())
+        elif isinstance(item, list):
+            stack.extend((child, depth + 1) for child in item)
     return value
 
 

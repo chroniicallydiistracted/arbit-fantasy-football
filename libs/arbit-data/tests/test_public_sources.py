@@ -77,3 +77,11 @@ def test_public_transport_length_limit_and_retry_hint(monkeypatch):
         with pytest.raises(SourceError) as e:
             t.fetch(req)
         assert e.value.retry_after_seconds == 120
+
+
+def test_deep_json_is_rejected_before_recursive_normalization():
+    from arbit_data.public_sources.transport import decode_json
+
+    body = b'{"nested":' * 100 + b"0" + b"}" * 100
+    with pytest.raises(SourceError, match="JSON_DEPTH_LIMIT"):
+        decode_json(body)

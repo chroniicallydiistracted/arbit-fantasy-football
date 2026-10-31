@@ -5,7 +5,7 @@
   "season": 2026,
   "source_url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873023/competitions/401873023/plays?limit=300&page=1",
   "source_sha256": "089b25384212ba424ed62d88c82ce8710ba52c57fc0c6cf3b4ee0947cfbd67c3",
-  "observed_at": "2026-10-31T18:51:08.348041+00:00",
+  "observed_at": "2026-10-31T19:09:51.813357+00:00",
   "plays": [
     {
       "id": "4018730231",
@@ -1339,5 +1339,6 @@
       },
       "statYardage": 0
     }
-  ]
+  ],
+  "observation_hash": "2ce55d4f02ea0aa8c73bd69aefc8401a79dd4287e3abdd45cbbfb8c97059c082"
 }
