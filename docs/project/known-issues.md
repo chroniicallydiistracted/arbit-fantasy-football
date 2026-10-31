@@ -1,14 +1,14 @@
 # Known Issues and Risks
 
-Updated 2026-10-31. M1a–d data/runtime slices are implemented and locally verified; supplemental/live source, member and full feature/model validation remain open.
+Updated 2026-10-31. M1a–e data/runtime slices are implemented and locally verified; member/full feature/model validation and expanded empirical Live/asset proof remain open.
 
 | ID | Evidence / risk | Effect and mitigation | Owner / milestone |
 | --- | --- | --- | --- |
 | R-001 | Historical private-setting 401; current public core reads verified 200 | Public reader implemented and live-verified. Message boards excluded by owner; private credentials only become relevant if visibility changes | Integration / M1 |
 | R-002 | Unofficial ESPN endpoints have no service contract | Adapter contracts, bounded polling, drift quarantine, last-complete snapshot, explicit degraded state | Integration / M1/M6 |
 | R-003 | nflverse publication/feature coverage differs by dataset and season | Full 1,140-file audit is recorded; no 2026 participation file, FTN charting through week 7, depth timestamps not weeks. Local observation/confirmation is not historical vintage proof; M3 needs an explicit validation policy | Data/Model / M1/M3 |
-| R-004 | Sleeper public docs do not prove a supported live scoring/PBP endpoint | Supplemental documented inputs; unproven endpoints cannot be a core dependency | Integration / M1 |
-| R-005 | Gridiron exact owner links/asset permission unconfirmed | Candidate sites only; asset manifests and permission record; labeled schematic/generic fallback until confirmed | Design/Integration / M1/M6 |
+| R-004 | Documented Sleeper directory/state/trends verified; two undocumented stats formats return 200, no supported play feed established | Research-only candidates; no FFA scoring/ownership authority or unsupported Live dependency | Integration / M3/M6 |
+| R-005 | Fresh Gridiron sites/2026 navigation verified; owner previous patterns and grants absent for both uniform/field graphics | Tested empty-manifest exact-context/permission gate; eligible metadata is not ready media. No downloads/contact. Confirm exact variants, grants and byte/media validation before M6 | Design/Integration / M6 |
 | R-006 | FFA inaugural history is sparse | No learned trade acceptance or FFA draft behavior claimed; clearly labeled priors and qualitative feasibility | Model / M5 |
 | R-007 | Alias ambiguity, unknown stat/slot IDs and score corrections | Dated aliases, unresolved queue, unknown-rule blocks, exact Decimal rules, replay/reconciliation tests | Core/Data / M1 |
 | R-008 | Auth choice and deployment capacity are open | Keep provider-independent server sessions and portable local storage; select before the relevant milestone | Owner/Engineering / M2/release |
@@ -28,3 +28,7 @@ Updated 2026-10-31. M1a–d data/runtime slices are implemented and locally veri
 | R-019 | Legacy participation `old_2023` has a distinct retained source shape | Confirm exact source-specific provenance/terms before promoting this variant into model features; original bytes are retained | Data/Model / M3 |
 
 Add discovered bugs with a reproduction, affected requirement, expected behavior, observed result, evidence and next step. Do not put secrets or raw member payloads in this file.
+
+| R-020 | Sleeper direct directory hints match only 40/121 owned athletes; 27 wider-directory conflicts remain | Read-only exact existing aliases only; preserve gaps. Verify any additional trusted bridge before supplemental model features; NFLverse remains 121/121 | Data/Model / M3 |
+| R-021 | M1e observed final/pregame/overtime/tie and factual play classes; no active latency, real correction pair or explicit sneak label | Synthetic regression behavior is distinguished; collect source captures/timing before full Live release | Integration / M6 |
+| R-022 | Proposed serving freshness windows are longer than strict M1e batch-cache intervals | Actual one-interval/failed-refresh policy is documented; defer measured serving-threshold tuning. No automatic supplemental/live scheduler exists | Engineering / M6 |

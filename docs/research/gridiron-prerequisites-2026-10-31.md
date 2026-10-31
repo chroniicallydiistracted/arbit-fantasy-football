@@ -1,0 +1,18 @@
+# Gridiron asset prerequisites — 2026-10-31
+
+The Uniform Database and Fields Database are verified candidate sources. Fresh bounded HTML reads returned 200 for the [uniform main page](https://gridiron-uniforms.com/GUD/controller/controller.php?action=main), [uniform explanation/terms](https://gridiron-uniforms.com/GUD/about.shtml), [field main page](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=main) and [2026 field index](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=view-year-all&year=2026). [Safe receipts](m1e-live-2026-10-31.json) record URL, UTC time, byte count/hash, navigation counts and policy observations. Raw HTML remains private; no image bytes were requested.
+
+The fresh uniform page exposes 2026 week navigation through `action=weekly&year=2026&week=...&league=NFL` and a season view using `action=wwww&year=2026`. The field index exposes multiple variants, including field page titles with suffixes such as `^1`/`^2` and image filenames spanning several years. These are observed candidate routes, not an API or confirmed per-game mapping. A field's title, filename year or home-team abbreviation alone cannot verify the venue surface used in a particular game. Neutral/international/shared venues and alternate treatments require their own evidence. Some page links contain HTTP image references; no insecure fetch or rewritten/hotlinked image was attempted.
+
+The uniform site's explanation says constructed uniform reuse needs permission from its contributors, separately from field-graphics permission. The field disclaimer also requires permission and restricts selling its information to third parties. Ownership of team/league/manufacturer marks is distinct from the site's constructed templates. This record reports the sites' statements and grants no reuse rights.
+
+| Prerequisite | Current evidence | Remaining action / milestone |
+| --- | --- | --- |
+| Candidate source identity | Both sites and 2026 navigation verified | Retain source URL/time/hash; do not guess stable bulk-download rules |
+| Owner's previous direct patterns | Still unavailable | Owner supplies when available; exact link/variant proof before M6 image integration |
+| Game-specific field and home/away uniforms | No curated confirmed entries | Verify actual event/date/season-type/week/team/venue/neutral context and each exact variant |
+| Reuse grant and permitted uses | No grants recorded | Obtain owner-authorized permission evidence for required display/cache/adaptation/redistribution scope; no outreach performed here |
+| Image bytes/media/dimensions/integrity | No media acquired | After permission, verify bounded bytes/type/dimensions/checksum and safe local serving inM 6 |
+| User-visible fallback | Metadata gate returns explicit fallback; no UI yet | M6 renders a clearly labeled generic surface/uniform until the exact variant is verified |
+
+The implemented [empty manifest](../../config/gridiron-assets.json) and [prerequisite gate](../../libs/arbit-data/src/arbit_data/assets.py) distinguish `eligible_metadata` from local media readiness. Tests exercise exact scope, venue/neutral ambiguity, missing variant evidence, missing/expired grants, unsafe URLs and multiple eligible entries. A curator's statement still needs genuine supporting evidence; the program cannot authenticate a permission letter. No bulk scraping, image download, hotlink activation, message or account was created. These gaps block exact M6 assets, not M2 or independent text-based Live work.

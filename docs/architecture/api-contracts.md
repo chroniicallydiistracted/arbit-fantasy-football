@@ -57,3 +57,7 @@ A bounded scenario accepts `Idempotency-Key` scoped to account and request hash,
 Core: `score(stat_line, rule_set) -> ScoreBreakdown`, `validate_roster(roster, slot_rules, lock_state) -> ConstraintReport`, and `resolve_identity(provider_ref, as_of) -> ResolvedIdentity | UnresolvedIdentity`. ScoreBreakdown includes per-rule Decimal contributions and unsupported-rule diagnostics; no adapter performs fantasy arithmetic.
 
 Data: adapters return validated source records plus `SourceFetch` provenance, not shared mutable singletons. Worker: `enqueue(job_type, input_ref, idempotency_key, not_before) -> JobRef`; claim lease, heartbeat, fenced complete and retry/dead-letter are persistent. Model: `evaluate_players(context, feature_set, model_ref) -> EvaluationSet`; advisors receive that set and league constraints. The concrete typed signatures and table migrations are pinned in the first implementation plan and later vertical-slice plans; the API OpenAPI becomes the executable authority once generated.
+
+## M1e operator-only source tools
+
+M1e adds guarded local worker commands for supplemental capture, NFL source inspection, offline verification/replay and Gridiron prerequisite checks; it adds no member/business HTTP routes. [Command and source contracts](../engineering/supplemental-live-sources.md). Candidate/Sleeper points are never authoritative FFA totals; a canonical play's page observation time is separate from game-summary freshness. M2 still owns authentication and generated member contracts, M6 owns persistent Live events/SSE and rendering.

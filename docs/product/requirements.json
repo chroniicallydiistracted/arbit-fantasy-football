@@ -292,7 +292,10 @@
       "milestone": "M6",
       "spec": "docs/product/feature-experiences.md",
       "acceptance": "Pregame/live/overtime/final/stale fixtures display correct state and provenance.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+      ]
     },
     {
       "id": "LV-002",
@@ -303,7 +306,10 @@
       "milestone": "M6",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Canonical participants drive filtering; official ESPN fantasy and live estimates remain distinct.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+      ]
     },
     {
       "id": "LV-003",
@@ -314,7 +320,10 @@
       "milestone": "M6",
       "spec": "docs/design/design-system.md",
       "acceptance": "Named event replay fixtures and unknown fallback work with keyboard and reduced motion.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+      ]
     },
     {
       "id": "LV-004",
@@ -326,7 +335,10 @@
       "milestone": "M6",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Asset manifest verifies source/variant/permission; missing variant is labeled fallback.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+      ]
     },
     {
       "id": "LV-005",
@@ -338,7 +350,10 @@
       "milestone": "M6",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Replaying overlapping/corrected events changes effective scores once and preserves revision history.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+      ]
     },
     {
       "id": "MD-001",
@@ -454,7 +469,10 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Documented endpoints separated from unproven candidates; no second league provider.",
-      "status": "specified"
+      "status": "verified",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — measured documented/candidate source matrix, scoped ESPN game/core-play factual fixtures and explicit empirical gaps; no second league or supported-unproven feed"
+      ]
     },
     {
       "id": "DATA-004",
@@ -465,10 +483,11 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Scoreboard/summary coverage matrix and representative play-type fixtures establish actual capabilities.",
-      "status": "in_progress",
+      "status": "verified",
       "evidence": [
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
-        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open"
+        "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — measured documented/candidate source matrix, scoped ESPN game/core-play factual fixtures and explicit empirical gaps; no second league or supported-unproven feed"
       ]
     },
     {
@@ -488,7 +507,8 @@
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
         "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
         "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain",
-        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open"
+        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open",
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
       ]
     },
     {
@@ -510,7 +530,8 @@
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
         "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
-        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain",
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
       ]
     },
     {

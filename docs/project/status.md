@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M1 data/runtime foundation**.
+Updated **2026-10-31**. Phase: **M1 source/runtime foundation delivered for observed scope; M2 next**.
 
 ## Confirmed context
 
@@ -8,7 +8,7 @@ FFA ESPN league **1729878439**, season **2026**. Owner approved the architecture
 
 ## Current implementation
 
-M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification currently has **357 passing tests**, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. All completed slices have independent review and regression-backed fixes; no Important findings remain deferred.
+M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification currently has **409 passing tests**, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. All completed slices have independent review and regression-backed fixes; no Important findings remain deferred.
 
 M1b implements the public transport, observed league/player contracts, bounded complete pagination, ownership/context checks and `arbit-worker espn-inspect`. The complete audited retrieval surface is wired through 19 registered endpoint families; `arbit-worker espn-endpoints --live` passed all 68 recognized successful variants after review (63 available, three limited, two metadata-only). [Coverage](../research/espn-endpoint-coverage-2026-10-30.md). A fresh live read returned eight teams, 132 owned, 923 available, 46 scoring items, 128 picks and 56 matchups through seven cookie-free GETs. [Reader receipt](../research/espn-reader-live-2026-10-30.json). The pinned reference checkout is available under ignored `.references`.
 
@@ -18,7 +18,9 @@ M1c durable sync now publishes complete FFA facts with persistent native identit
 
 M1d is implemented and fully imported: 1,140 selected logical files across 28 families, 1,087 tables/11,973,952 stored rows and 53 archive-only originals/metadata/reference files. Versioned original/normalized objects and additive 0003/0004 migrations pin checksums, source/observation/proof times, schemas, coverage and attribution. Durable staged acquisition/publication, exact GSIS/ESPN crosswalks and protected canonical-player reads are verified. All 786 checksum-free assets passed a second catalog check; offline verification covered all 1,140 manifests/1,157 unique data objects. All 121 rostered athletes map to GSIS, with two lacking weekly rows. Five later conflicting supplemental aliases were closed with backed-up immutable history; zero active provider/entity multiplicities remain. [Full audit](../research/nflverse-data-audit-2026-10-31.md), [guide](../engineering/nflverse-ingestion.md), [safe receipt](../research/nflverse-live-2026-10-31.json).
 
-No frontend UI, member authentication/binding, statistical model or deployment exists yet. M1e supplemental/live-source coverage and asset prerequisites are next. Recommendations remain disabled. The earlier private-setting 401 is historical; current settings requests return 200 without cookies, and message-board availability is outside product scope. See the [full audit](../research/espn-public-api-audit-2026-10-30.md).
+M1e is implemented and locally verified: durable public observations/daily cache, documented Sleeper directory/state/trends and two explicit candidate stat representations; read-only exact joins with conflicts excluded; scoped ESPN scoreboard/summary/core plays and per-play-time correction-safe replay; empty Gridiron manifest and exact-context/permission gate. Actual proof: 12,229 directory records, 40/121 owned-athlete direct hints (NFLverse remains 121/121); four completed games/842 plays including overtime/tie, all 293 game-scoped supplied athlete IDs resolved; final/pregame CLI and offline 25-observation/66-object verification. No images or messages. [Audit](../research/m1e-source-audit-2026-10-31.md), [guide](../engineering/supplemental-live-sources.md).
+
+No frontend UI, member authentication/binding, statistical model or deployment exists yet. M2 authenticated shell/team binding and Front Office facts are next. OIDC provider/invite policy must be selected before auth implementation; active/corrected Live evidence and exact asset grants remain M6 gates. Recommendations remain disabled. The earlier private-setting 401 is historical; current settings requests return 200 without cookies, and message-board availability is outside product scope. See the [full audit](../research/espn-public-api-audit-2026-10-30.md).
 
 ## Milestones
 
@@ -29,7 +31,7 @@ No frontend UI, member authentication/binding, statistical model or deployment e
 | M1b FFA access/capability inventory | All audited usable routes wired and live-verified; canonical local sync implemented in M1c; member production access awaits M2 |
 | M1c scoring/normalization | Scoring and canonical FFA aliases/publication/durable local sync implemented and live-verified |
 | M1d statistical foundation | Complete published catalog imported, reviewed, replay/identity/local-read verified |
-| M1e supplemental/live sources and assets | Next |
+| M1e supplemental/live sources and assets | Implemented/reviewed; observed source matrix, offline replay and asset prerequisites verified; empirical Live/asset gaps explicit |
 | M2 application/auth/Front Office/PWA | Not started |
 | M3 Model/Scout | Not started |
 | M4 Lineup/waivers | Not started |
@@ -39,6 +41,6 @@ No frontend UI, member authentication/binding, statistical model or deployment e
 
 ## Repository and verification
 
-Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m1d-nflverse`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
+Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m1e-supplemental-live`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
 
-Latest [NFLverse handoff](handoffs/2026-10-31-nflverse.md) records full M1d source/identity/HTTP proof and review rulings; [durable sync handoff](handoffs/2026-10-30-durable-ffa-sync.md) records canonical publication and live API proof; [scoring handoff](handoffs/2026-10-30-ffa-scoring.md) records exact scoring verification; [endpoint handoff](handoffs/2026-10-30-endpoint-coverage.md) records full routing; [reader handoff](handoffs/2026-10-30-public-reader.md) records core acquisition; [public API handoff](handoffs/2026-10-30-espn-public.md) records the earlier 81-probe audit. [M1a handoff](handoffs/2026-10-30-m1a.md) records runtime tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.
+Latest [M1e handoff](handoffs/2026-10-31-supplemental-live.md) records supplemental/live proof, review fixes and remaining gates; [NFLverse handoff](handoffs/2026-10-31-nflverse.md) records full M1d source/identity/HTTP proof and review rulings; [durable sync handoff](handoffs/2026-10-30-durable-ffa-sync.md) records canonical publication and live API proof; [scoring handoff](handoffs/2026-10-30-ffa-scoring.md) records exact scoring verification; [endpoint handoff](handoffs/2026-10-30-endpoint-coverage.md) records full routing; [reader handoff](handoffs/2026-10-30-public-reader.md) records core acquisition; [public API handoff](handoffs/2026-10-30-espn-public.md) records the earlier 81-probe audit. [M1a handoff](handoffs/2026-10-30-m1a.md) records runtime tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.

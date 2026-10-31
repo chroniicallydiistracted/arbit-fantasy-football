@@ -33,14 +33,14 @@ The earlier FFA probe established an unauthenticated 401 under the previous visi
 | SRC-13 | [MDN SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events), [web.dev service workers](https://web.dev/learn/pwa/service-workers) | SSE supports event/reconnection mechanics; worker caching needs an explicit policy. Proposed same-origin sessions and static-only PWA cache are Arbit decisions |
 | SRC-14 | [Node release lifecycle](https://nodejs.org/en/about/previous-releases) | Node 24 and 26 are listed as LTS on research date; choose mature Node 24 target initially and lock patches during bootstrap, rather than treating host runtime as the project version |
 | SRC-15 | [Authlib web clients](https://docs.authlib.org/en/latest/oauth2/client/web/) | Current OAuth/OIDC web-client integration documentation includes Starlette/FastAPI. Old `/client/starlette.html` and `/client/fastapi.html` links returned 404; use current integration docs, verify library/version/provider at M2 |
-| SRC-16 | [Official checkout action](https://github.com/actions/checkout), [v6 reference](https://api.github.com/repos/actions/checkout/git/ref/tags/v6) | GitHub API returned commit `d23441a48e516b6c34aea4fa41551a30e30af803`; foundation CI pins it and disables persisted checkout credentials |
+| SRC-16 | [Official checkout action](https://github.com/actions/checkout), [v 6 reference](https://api.github.com/repos/actions/checkout/git/ref/tags/v6) | GitHub API returned commit `d23441a48e516b6c34aea4fa41551a30e30af803`; foundation CI pins it and disables persisted checkout credentials |
 
 ## Next research experiments
 
 1. Public capability inventory, synthetic observed-shape fixtures and bounded typed acquisition are implemented; [fresh reader evidence](espn-reader-live-2026-10-30.json) confirms core counts with seven cookie-free GETs. Actual rules/reconciliation and canonical identities/rules/source publication/eligibility/locks are now verified through M1c. Message boards are outside scope.
 2. M1d complete catalog/import/coverage/crosswalk proof is recorded in SRC-21. M3 still defines semantic feature windows, source-specific use eligibility and historical-vintage/retrospective validation policy; first local observation is not an old publication date.
-3. Verify Sleeper current documented directory/state/trending behavior; record any extra stats/scoring/play endpoint separately with proof, stability and fallback.
-4. Capture ESPN active/final/postponed/overtime and corrected-game samples; measure participant IDs, field coordinates, sequence stability and rate behavior. Prefer this research before seeking another live source, as requested.
+3. M1e documented Sleeper/candidate proof is complete below; verify any additional exact-ID bridge and stat semantics before M3 feature use.
+4. M1e final/pregame/overtime/tie/core-participant proof is complete below; M6 still captures active/postponed/corrected states and measures field/sequence/timing/load behavior before rich Live release.
 5. Confirm owner Gridiron patterns when supplied; verify exact variant mapping, size/content restrictions, reuse permission and attribution. Use curated manifests rather than guessed download URLs.
 
 No provider account, ESPN transaction, paid plan, cloud service, message or public repository was created by this research.
@@ -48,3 +48,11 @@ No provider account, ESPN transaction, paid plan, cloud service, message or publ
 ## Durable canonical sync proof — 2026-10-30
 
 [Safe live receipt](ffa-sync-live-2026-10-30.json) records a bounded fresh public FFA acquisition, first/new-context completed-week verification, private capture/alias/rule/document publication and protected loopback HTTP read. Two source refreshes retained one full snapshot/outbox; offline replay returned its original revision without refreshing source age. [Operator semantics](../engineering/ffa-synchronization.md). This does not prove provider atomicity, future availability, member authentication or recommendation readiness.
+
+## M1e source proof — 2026-10-31
+
+[Sleeper official docs](https://docs.sleeper.com/) now document noncommercial public read access, daily directory caching and trending attribution. Four implemented resources returned 200, including 12,229 directory rows and 25 add/drop entries each. Two explicit undocumented weekly stats candidates returned 2,095 rows each with matching ID sets; they remain research. Direct directory hints join 40/121 owned athletes without mutations; wider conflicts/missingness stay visible. No supported live-play feed was established. Commercial release needs separate provider authorization.
+
+[Full matrix](m1e-source-audit-2026-10-31.md), [safe receipt](m1e-live-2026-10-31.json) and [observation inventory](m1e-source-inventory-2026-10-31.json) record scoped ESPN scoreboard/summary/core collection proof: four completed games/842 plays including overtime/tie, final/pregame states, explicit participant references, factual fixtures and offline replay. Active/corrected empirical cases and timing remain M6. No narrative name matching, fantasy deltas or tracking route inference.
+
+[Gridiron primary uniform terms](https://gridiron-uniforms.com/GUD/about.shtml) and [field terms/index](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=main) were freshly read with 2026 navigation. Both require permission for constructed graphics; no grants or owner previous patterns are confirmed. [Prerequisites](gridiron-prerequisites-2026-10-31.md) and empty manifest keep exact assets blocked without blocking independent M2/text-Live work. No image, account, message or provider mutation.

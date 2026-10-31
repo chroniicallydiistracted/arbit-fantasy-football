@@ -1,0 +1,280 @@
+{
+  "observed_at": "2026-10-31T19:32:43.955166+00:00",
+  "observations": [
+    {
+      "observation_hash": "9ccbc6de0b0af4079d3e429365a98786025930372b31e359c0f0a97522fdb38b",
+      "kind": "sleeper.players",
+      "url": "https://api.sleeper.app/v1/players/nfl",
+      "usage": "supplemental",
+      "body_hash": "cddc62215c7b600ef57b249c865e61a5a33d79e024a1e1df323f12a8ebc124d1",
+      "normalized_hash": "189ae44dc7affc547a4a39d6ee6b163d2bde2a719b65b7ab329d33f46768da60",
+      "byte_count": 14662722,
+      "source_observed_at": "2026-10-31T19:00:39.449477+00:00",
+      "observed_at": "2026-10-31T19:00:39.645191+00:00"
+    },
+    {
+      "observation_hash": "356d523e53cba51f3211b98ea1591f5b3348c207a881d16a19720b7696153fcd",
+      "kind": "sleeper.state",
+      "url": "https://api.sleeper.app/v1/state/nfl",
+      "usage": "supplemental",
+      "body_hash": "c185bd3a9b0f23658825d6846d6e402d549f5e38a7311bc387e88b14557b9ffb",
+      "normalized_hash": "cc5ace057968f2885102ef2d07d6fae70fe8f62cea578f86bcdb08faa1ea2376",
+      "byte_count": 211,
+      "source_observed_at": "2026-10-31T19:00:40.573238+00:00",
+      "observed_at": "2026-10-31T19:00:40.576094+00:00"
+    },
+    {
+      "observation_hash": "a8a9329cbb400eab0d28f27f7fdcf918c658bd679916cf85924ac5f56aa3171c",
+      "kind": "sleeper.trending.add",
+      "url": "https://api.sleeper.app/v1/players/nfl/trending/add?lookback_hours=24&limit=25",
+      "usage": "supplemental",
+      "body_hash": "2f769edb63633076d07c8e82da61814b3ee08136c0d3a0ab2bb3755b8550064d",
+      "normalized_hash": "e9d89809b75ebe327bc1fd6cc2df197d6b094c6654d3423ac69a13bec7fb94df",
+      "byte_count": 893,
+      "source_observed_at": "2026-10-31T19:00:41.568244+00:00",
+      "observed_at": "2026-10-31T19:00:41.571238+00:00"
+    },
+    {
+      "observation_hash": "c582822a1ff6dfbf35af43ee7dbbadf18e6efcf5e2446014c3d9bec9f785c80a",
+      "kind": "sleeper.trending.drop",
+      "url": "https://api.sleeper.app/v1/players/nfl/trending/drop?lookback_hours=24&limit=25",
+      "usage": "supplemental",
+      "body_hash": "703f272b92afaee158c73a6a5b53d5d6f1d62b084c21cbfcc6c0e827b3af0df7",
+      "normalized_hash": "612378a6e04a1550bb5a9655485384558dd496e6fa5dcc4f0912a22d5188e907",
+      "byte_count": 886,
+      "source_observed_at": "2026-10-31T19:00:42.589481+00:00",
+      "observed_at": "2026-10-31T19:00:42.592745+00:00"
+    },
+    {
+      "observation_hash": "f045f587554eba744ce90b941c6e61702eb186cc609490113288435587d0b760",
+      "kind": "espn.scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&week=8&seasontype=2",
+      "usage": "live",
+      "body_hash": "3cb4b55428518296818e862704494896ac52c0f852211d032f4db4e67ee68ad3",
+      "normalized_hash": "36fc90040a951db1141331427ebd6ba90f24c87bf901b473500cdc9a0947e53b",
+      "byte_count": 253449,
+      "source_observed_at": "2026-10-31T19:09:47.379482+00:00",
+      "observed_at": "2026-10-31T19:09:47.383352+00:00"
+    },
+    {
+      "observation_hash": "1bc33f84a639bfdd0079119bba5466da1997230c9333aab934ca03c3d0a56573",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023",
+      "usage": "live",
+      "body_hash": "ed4ee664b927061f6c0099ea47d7ca76f1212e87e17234e7d7f107053d73d26d",
+      "normalized_hash": "c7cd518315b90858403a8c89e5e2a5e20926582d7a5ae2e5132f9ba79a44dc80",
+      "byte_count": 656116,
+      "source_observed_at": "2026-10-31T19:09:49.501612+00:00",
+      "observed_at": "2026-10-31T19:09:49.505557+00:00"
+    },
+    {
+      "observation_hash": "2ce55d4f02ea0aa8c73bd69aefc8401a79dd4287e3abdd45cbbfb8c97059c082",
+      "kind": "espn.plays",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873023/competitions/401873023/plays?limit=300&page=1",
+      "usage": "live",
+      "body_hash": "089b25384212ba424ed62d88c82ce8710ba52c57fc0c6cf3b4ee0947cfbd67c3",
+      "normalized_hash": "9061c48cd16aba0d6fbcfdc0f4cf90a11b472e8b40217775cd2d87e68013bff1",
+      "byte_count": 884646,
+      "source_observed_at": "2026-10-31T19:09:51.813357+00:00",
+      "observed_at": "2026-10-31T19:09:51.823550+00:00"
+    },
+    {
+      "observation_hash": "548cf5ed8b65fb3523d4fd4b3ec3674127f55f69a244a53fc0b41c1437ae684c",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872923",
+      "usage": "live",
+      "body_hash": "4fb6c186338df1bcab6ab82f84b822ed2af4c2c11c82e85bead37f4adbf8dafd",
+      "normalized_hash": "3443359bc6e9690aa1e0d0316f9295f4185dc40ba2ead49bfc8bd675fbf5a588",
+      "byte_count": 688494,
+      "source_observed_at": "2026-10-31T19:09:53.509517+00:00",
+      "observed_at": "2026-10-31T19:09:53.514187+00:00"
+    },
+    {
+      "observation_hash": "700b184b7e37a4499b48cc65210c89de3903d70075624ddc999427b5620eda06",
+      "kind": "espn.plays",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872923/competitions/401872923/plays?limit=300&page=1",
+      "usage": "live",
+      "body_hash": "4a503664ca69080e1bd7e93bc213630b7cf729e2098568a40b1cb6074e6f976b",
+      "normalized_hash": "458b69ae55d7d86f6acd378325a7edd6148247a04733ee171c880a041fa2d5b2",
+      "byte_count": 1040355,
+      "source_observed_at": "2026-10-31T19:09:56.463492+00:00",
+      "observed_at": "2026-10-31T19:09:56.476200+00:00"
+    },
+    {
+      "observation_hash": "2850869728a1545284ff0bd1d8f89a11dc4bcd87def4d8c8bd0dee8826be727b",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872936",
+      "usage": "live",
+      "body_hash": "bd15e0fed0fc8ada4ea40c5739d55c54cc46ea1eab71b1a53bbfea95c089134c",
+      "normalized_hash": "32b01a1946aa766933d4d70cffc219de6ced6cd0aa322a11e98666a34a41a2b4",
+      "byte_count": 605205,
+      "source_observed_at": "2026-10-31T19:09:57.485603+00:00",
+      "observed_at": "2026-10-31T19:09:57.489343+00:00"
+    },
+    {
+      "observation_hash": "b501162832612fa6f4b4a9c90c9a2efb22cab3ad8717c6aa4ac9e2a4d3f9e3c3",
+      "kind": "espn.plays",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872936/competitions/401872936/plays?limit=300&page=1",
+      "usage": "live",
+      "body_hash": "dfb11137c1cfe00c0c8f3973b722989a85f6c89ae4fb77ab471044a02a620cf9",
+      "normalized_hash": "cb7f00009713ee4150c04d68dfecea3a9a0fe87bf3b1dd2133146d2b61c8d9ad",
+      "byte_count": 885513,
+      "source_observed_at": "2026-10-31T19:09:59.820483+00:00",
+      "observed_at": "2026-10-31T19:09:59.833860+00:00"
+    },
+    {
+      "observation_hash": "5cdb8a5476d83c1b27bd554651594c42560ffa1c394dbb9fe007da9c46bf4d49",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872988",
+      "usage": "live",
+      "body_hash": "a2c01e48e339c7d0b02b331df9e8accdd4b375acf4685fccea1cc403a13b58de",
+      "normalized_hash": "9cf684db85402e7ed36f2bb3e559c0e52378017d12f222f9977ea52688a1d27a",
+      "byte_count": 661838,
+      "source_observed_at": "2026-10-31T19:10:01.748649+00:00",
+      "observed_at": "2026-10-31T19:10:01.753496+00:00"
+    },
+    {
+      "observation_hash": "9b1149dcad57fb3f4d76e254ed2708be731a0405f637592ae6d6ad16640c65c3",
+      "kind": "espn.plays",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872988/competitions/401872988/plays?limit=300&page=1",
+      "usage": "live",
+      "body_hash": "5f5aa012936a304d9a8557fe54443985fd1129ae7b83c6107584d431db63713c",
+      "normalized_hash": "ec00912a6a214a5020b755cfd1df99f2297a6cf2c0dd812049d5695b1fd514cc",
+      "byte_count": 996421,
+      "source_observed_at": "2026-10-31T19:10:03.824776+00:00",
+      "observed_at": "2026-10-31T19:10:03.836525+00:00"
+    },
+    {
+      "observation_hash": "6cb39866d939d951cf4d87297dd779dac82444f1939bd3b78efe5423c88420a9",
+      "kind": "sleeper.trending.add",
+      "url": "https://api.sleeper.app/v1/players/nfl/trending/add?lookback_hours=24&limit=25",
+      "usage": "supplemental",
+      "body_hash": "a9977a13fcda5735013579546d63927653cb67bdd3cb1c4eb5e76cb20b0d5802",
+      "normalized_hash": "826884c5041f55201d3095c291466dd5fb8a0e846f07c3d46e62bb3d74697070",
+      "byte_count": 893,
+      "source_observed_at": "2026-10-31T19:16:38.599812+00:00",
+      "observed_at": "2026-10-31T19:16:38.603314+00:00"
+    },
+    {
+      "observation_hash": "44dbd9764e82df76c4aef7d565f15f60a0a2c6253036fd9993153a8921732814",
+      "kind": "sleeper.trending.drop",
+      "url": "https://api.sleeper.app/v1/players/nfl/trending/drop?lookback_hours=24&limit=25",
+      "usage": "supplemental",
+      "body_hash": "b2d213e8356f858dddd3bc0d0a1a7bf9c244f5e690789192c69f6618b0284824",
+      "normalized_hash": "e55f9bbc0ec249f9c2baa2cc0cabd1f6fab81cdd366fb06bea729552ea41599f",
+      "byte_count": 886,
+      "source_observed_at": "2026-10-31T19:16:39.599781+00:00",
+      "observed_at": "2026-10-31T19:16:39.602449+00:00"
+    },
+    {
+      "observation_hash": "dd8ed6ea9d6774ea9661d611ee0476967d21d766ec2422068fb4c8ecac94a812",
+      "kind": "sleeper.stats.v1",
+      "url": "https://api.sleeper.app/v1/stats/nfl/regular/2026/7",
+      "usage": "candidate",
+      "body_hash": "f234896b04f5e61ee3d453f88d0617de8e1530e2a09c8f79b043d85ac5b91ad6",
+      "normalized_hash": "e83737dee8c672f1be72ddc1b0d852046dc312dfa9e9ae3a2de5d12931563522",
+      "byte_count": 510291,
+      "source_observed_at": "2026-10-31T19:16:40.761707+00:00",
+      "observed_at": "2026-10-31T19:16:40.769166+00:00"
+    },
+    {
+      "observation_hash": "9a31780bda55f0ca6f9cfe5f6e60e8e39d11938aa12c5ac6714fab8f35468450",
+      "kind": "sleeper.stats.current",
+      "url": "https://api.sleeper.com/stats/nfl/2026/7?season_type=regular",
+      "usage": "candidate",
+      "body_hash": "b97dd7f26e8c81998b622d5bbb49f83e9eec7ba7287676454162c0b35821bcad",
+      "normalized_hash": "4235d4217fc6e9cd42e42e9839710d147e3d97193ed1cd5f14711397d50c3062",
+      "byte_count": 1907953,
+      "source_observed_at": "2026-10-31T19:16:42.030426+00:00",
+      "observed_at": "2026-10-31T19:16:42.050159+00:00"
+    },
+    {
+      "observation_hash": "18f0b322bc6c705e441d1e8d4c5b8b58f6c592f0661945b175d222635ba2571e",
+      "kind": "espn.scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&week=8&seasontype=2",
+      "usage": "live",
+      "body_hash": "5cbcd22f47ba8f7ba2272aa2e3a255927c21a876f87a17e8cd0b27c08fd36987",
+      "normalized_hash": "36fc90040a951db1141331427ebd6ba90f24c87bf901b473500cdc9a0947e53b",
+      "byte_count": 253449,
+      "source_observed_at": "2026-10-31T19:16:43.130629+00:00",
+      "observed_at": "2026-10-31T19:16:43.134442+00:00"
+    },
+    {
+      "observation_hash": "9602ca3733fc1713ac53571d5afd4211b4b40083c075de20ee70bd72b4d7e03f",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023",
+      "usage": "live",
+      "body_hash": "4dc7f07809c9c72db51aa03ec5f444e6e9192346fd1f12b922c7eb5b2146c0f4",
+      "normalized_hash": "c7cd518315b90858403a8c89e5e2a5e20926582d7a5ae2e5132f9ba79a44dc80",
+      "byte_count": 656116,
+      "source_observed_at": "2026-10-31T19:16:45.247353+00:00",
+      "observed_at": "2026-10-31T19:16:45.251757+00:00"
+    },
+    {
+      "observation_hash": "83d65fb278c96dd8f29cadeafc88dd7236ea864f9d68a00318fa227b14e488b4",
+      "kind": "espn.plays",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873023/competitions/401873023/plays?limit=300&page=1",
+      "usage": "live",
+      "body_hash": "089b25384212ba424ed62d88c82ce8710ba52c57fc0c6cf3b4ee0947cfbd67c3",
+      "normalized_hash": "9061c48cd16aba0d6fbcfdc0f4cf90a11b472e8b40217775cd2d87e68013bff1",
+      "byte_count": 884646,
+      "source_observed_at": "2026-10-31T19:16:47.418335+00:00",
+      "observed_at": "2026-10-31T19:16:47.428665+00:00"
+    },
+    {
+      "observation_hash": "9cb6510d1e590f264de676bfe1d24382ec283230a968bc912fdd1771f5d8435d",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873026",
+      "usage": "live",
+      "body_hash": "89a01938cb0045c53a4b11181a43fd97ff43b5e6539f7cc44f2343ff1dac6914",
+      "normalized_hash": "6bd57a5f5872daa728b408b84be2b7995bed8d628fc0427367bf429133c28587",
+      "byte_count": 128727,
+      "source_observed_at": "2026-10-31T19:16:49.027211+00:00",
+      "observed_at": "2026-10-31T19:16:49.030185+00:00"
+    },
+    {
+      "observation_hash": "9953bc31ff80b3e33cf379c0de7561cbb28e31a596702b0be3244290126940f7",
+      "kind": "espn.scoreboard",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&week=8&seasontype=2",
+      "usage": "live",
+      "body_hash": "8b8e3cc26f782710c0c6dc3a3cc235167b461f40bb4048c7d5519f6e7252e2d3",
+      "normalized_hash": "93411ffc80f41214632914774218519290160a5805313bf14537e2b782fbca3d",
+      "byte_count": 253449,
+      "source_observed_at": "2026-10-31T19:30:49.623285+00:00",
+      "observed_at": "2026-10-31T19:30:49.627143+00:00"
+    },
+    {
+      "observation_hash": "d9182fcc6dc28fb6fae279d23fb11aff5965029d907ef29792a429ad574622ea",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873023",
+      "usage": "live",
+      "body_hash": "4dc7f07809c9c72db51aa03ec5f444e6e9192346fd1f12b922c7eb5b2146c0f4",
+      "normalized_hash": "c7cd518315b90858403a8c89e5e2a5e20926582d7a5ae2e5132f9ba79a44dc80",
+      "byte_count": 656116,
+      "source_observed_at": "2026-10-31T19:30:51.745503+00:00",
+      "observed_at": "2026-10-31T19:30:51.749613+00:00"
+    },
+    {
+      "observation_hash": "946cf877668d32661b7a6af2e9967cdb0170677961b3481d01e1703406323f96",
+      "kind": "espn.plays",
+      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873023/competitions/401873023/plays?limit=300&page=1",
+      "usage": "live",
+      "body_hash": "089b25384212ba424ed62d88c82ce8710ba52c57fc0c6cf3b4ee0947cfbd67c3",
+      "normalized_hash": "9061c48cd16aba0d6fbcfdc0f4cf90a11b472e8b40217775cd2d87e68013bff1",
+      "byte_count": 884646,
+      "source_observed_at": "2026-10-31T19:30:54.831232+00:00",
+      "observed_at": "2026-10-31T19:30:54.844907+00:00"
+    },
+    {
+      "observation_hash": "befcdd8cd4b7f2d5edff81df0d9ddfa7c15d75403545fc89574f0f3a325e4a3e",
+      "kind": "espn.summary",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873026",
+      "usage": "live",
+      "body_hash": "d0cc2565e79bfcf0eab0d48ecb56e69c351bebe05a647a2854665330cb5314ae",
+      "normalized_hash": "6bd57a5f5872daa728b408b84be2b7995bed8d628fc0427367bf429133c28587",
+      "byte_count": 128727,
+      "source_observed_at": "2026-10-31T19:30:55.826145+00:00",
+      "observed_at": "2026-10-31T19:30:55.829350+00:00"
+    }
+  ]
+}

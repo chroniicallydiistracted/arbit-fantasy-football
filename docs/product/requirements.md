@@ -65,3 +65,5 @@ All original sections 1–12 map below. Shared requirements apply to every affec
 | SUCCESS-001 | Unified understandable data-driven intelligence usable throughout the fantasy season | 12 | M7 | End-to-end manager workflows exercise all modules with shared league/model context and honest limitations. |
 
 M1d implementation evidence for DATA-002/005 and MD-004 prerequisites: [full NFLverse handoff](../project/handoffs/2026-10-31-nflverse.md). Acquisition, manifests and exact owned-athlete crosswalks are verified; semantic features, historical-vintage/model validation and broader product obligations remain open.
+
+M1e evidence for DATA-003/004 and partial DATA-005/006, LV-001–005: [supplemental/live handoff](../project/handoffs/2026-10-31-supplemental-live.md). Documented/candidate capability research is verified; full Live member experience, empirical active/correction proof, scoring attribution, SSE and permitted imagery remain open.

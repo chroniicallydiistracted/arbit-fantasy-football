@@ -2,7 +2,7 @@
 
 ## Current versus planned contents
 
-M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. M1b adds all audited public ESPN routes and manual inspection, with the ignored reference checkout under `.references`. M1c maps/reconciles actual FFA scoring and durably publishes canonical identities/rules/full facts with protected local reads. M1d adds full NFLverse acquisition/storage/manifests, source proofs, exact GSIS/ESPN joins and source-stat reads. Web/Model directories remain future work. Initial contract schemas and design tokens are reviewable artifacts; no frontend UI or trained model is claimed. [Local development](local-development.md) describes runnable commands.
+M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. M1b adds all audited public ESPN routes and manual inspection, with the ignored reference checkout under `.references`. M1c maps/reconciles actual FFA scoring and durably publishes canonical identities/rules/full facts with protected local reads. M1d adds full NFLverse acquisition/storage/manifests, source proofs, exact GSIS/ESPN joins and source-stat reads. M1e adds cached supplemental observations, scoped NFL play contracts/offline replay and asset prerequisite metadata without media acquisition. Web/Model directories remain future work. Initial contract schemas and design tokens are reviewable artifacts; no frontend UI or trained model is claimed. [Local development](local-development.md) describes runnable commands.
 
 | Path | Responsibility |
 | --- | --- |
@@ -40,4 +40,4 @@ Use one pnpm JS workspace and one uv Python workspace as adopted by the owner. I
 
 ## Source control and publication
 
-The owner published the initialized repository and pushed baseline commit `cab6bd8` to main. Development is on `codex/m1d-nflverse`; no new branch push, merge or deployment is implied by local development. No commit is required merely to review the proposals. When implementation starts, use small traceable commits and task/handoff records. Root `.gitignore` excludes credentials, caches, build outputs, local data and model artifacts. Add any future licensing/distribution choice explicitly; the owner has not selected an open-source license.
+The owner published the initialized repository and pushed baseline commit `cab6bd8` to main. Development is on `codex/m1e-supplemental-live`; no new branch push, merge or deployment is implied by local development. No commit is required merely to review the proposals. When implementation starts, use small traceable commits and task/handoff records. Root `.gitignore` excludes credentials, caches, build outputs, local data and model artifacts. Add any future licensing/distribution choice explicitly; the owner has not selected an open-source license.
