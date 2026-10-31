@@ -22,7 +22,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["libs/arbit-core/tests", "libs/arbit-data/tests", "services/api/tests", "tests/integration", "tests/contracts"]
+testpaths = ["libs/arbit-core/tests", "libs/arbit-data/tests", "services/api/tests", "services/worker/tests", "tests/integration", "tests/contracts"]
 addopts = "-ra --strict-markers"
 markers = ["integration: requires dedicated PostgreSQL test database"]
 

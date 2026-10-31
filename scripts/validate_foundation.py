@@ -113,6 +113,16 @@ def contrast(first: str, second: str) -> float:
     return (high + 0.05) / (low + 0.05)
 
 
+def project_artifacts(root: Path, pattern: str) -> list[Path]:
+    """Project artifacts exclude local captures, private state and vendor checkouts."""
+    local_roots = {'.references', '.superpowers', 'data', 'artifacts', 'local-storage', 'secrets'}
+    return sorted(
+        path for path in root.rglob(pattern)
+        if path.relative_to(root).parts[0] not in local_roots
+        and not any(part in {'.git', 'node_modules', '.venv'} for part in path.relative_to(root).parts)
+    )
+
+
 def validate(root: Path) -> tuple[list[str], dict[str, int]]:
     errors = []
     counts = {}
@@ -123,8 +133,7 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
     if errors:
         return errors, counts
 
-    json_files = sorted(root.rglob('*.json'))
-    json_files = [path for path in json_files if not any(part in {'.git', 'node_modules', '.venv', '.references'} for part in path.relative_to(root).parts)]
+    json_files = project_artifacts(root, '*.json')
     for path in json_files:
         load_json(path)
     counts['JSON artifacts'] = len(json_files)
@@ -134,8 +143,7 @@ def validate(root: Path) -> tuple[list[str], dict[str, int]]:
     if actual_hash != source['sha256']:
         errors.append('Original owner brief checksum does not match source manifest')
 
-    docs = sorted(root.rglob('*.md'))
-    docs = [path for path in docs if not any(part in {'.git', 'node_modules', '.venv', '.references'} for part in path.relative_to(root).parts)]
+    docs = project_artifacts(root, '*.md')
     link_pattern = re.compile(r'(?<!!)\[[^\]]+\]\((<[^>]+>|[^)\s]+)\)')
     for path in docs:
         for match in link_pattern.finditer(path.read_text(encoding='utf-8')):
