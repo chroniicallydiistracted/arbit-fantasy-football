@@ -6,7 +6,7 @@ import math
 import threading
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from decimal import Decimal
+from decimal import Decimal, DecimalException
 from email.utils import parsedate_to_datetime
 from http.client import HTTPException
 from time import monotonic, sleep
@@ -14,6 +14,8 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
+
+from arbit_data.espn.http_deadline import DeadlineHTTPSHandler
 
 MAX_BYTES = 8 * 1024 * 1024
 TIMEOUT_SECONDS = 15.0
@@ -99,7 +101,7 @@ class EspnTransport:
     """Serial 30/minute budget per instance; scheduled multi-process sync is not yet supported."""
 
     def __init__(self) -> None:
-        self._opener = build_opener(ProxyHandler({}), _NoRedirect())
+        self._opener = build_opener(ProxyHandler({}), _NoRedirect(), DeadlineHTTPSHandler())
         self._lock = threading.Lock()
         self._next_request_at = 0.0
         self._blocked_until = 0.0
@@ -208,7 +210,7 @@ class EspnTransport:
                 parse_constant=_invalid_constant,
                 object_pairs_hook=_object,
             )
-        except (ValueError, UnicodeError, RecursionError):
+        except (ValueError, UnicodeError, RecursionError, DecimalException):
             raise EspnError("INVALID_JSON") from None
         if not isinstance(payload, dict):
             raise EspnError("INVALID_RESPONSE")

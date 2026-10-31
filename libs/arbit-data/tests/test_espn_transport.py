@@ -11,7 +11,7 @@ from decimal import Decimal
 from http.client import HTTPConnection
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
-from urllib.request import HTTPSHandler, ProxyHandler, Request, build_opener
+from urllib.request import ProxyHandler, Request, build_opener
 
 import pytest
 from arbit_data.espn import transport as module
@@ -19,12 +19,30 @@ from arbit_data.espn.transport import EspnError, EspnTransport
 
 
 @contextmanager
-def server(monkeypatch, *, body=b'{"points":0.1}', status=200, headers=None, delay=0):
+def server(
+    monkeypatch,
+    *,
+    body=b'{"points":0.1}',
+    status=200,
+    headers=None,
+    delay=0,
+    raw_chunks=None,
+    real_clock=False,
+):
     received = []
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             received.append((self.path, self.headers))
+            if raw_chunks is not None:
+                try:
+                    for chunk in raw_chunks:
+                        self.wfile.write(chunk)
+                        self.wfile.flush()
+                        time.sleep(delay)
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
+                return
             time.sleep(delay)
             self.send_response(status)
             if "Content-Type" not in (headers or {}):
@@ -44,7 +62,7 @@ def server(monkeypatch, *, body=b'{"points":0.1}', status=200, headers=None, del
     thread = threading.Thread(target=lambda: httpd.serve_forever(poll_interval=0.01), daemon=True)
     thread.start()
 
-    class Loopback(HTTPSHandler):
+    class Loopback(module.DeadlineHTTPSHandler):
         def https_open(self, req):
             original = urlsplit(req.full_url)
             local = Request(
@@ -52,7 +70,7 @@ def server(monkeypatch, *, body=b'{"points":0.1}', status=200, headers=None, del
                 headers=dict(req.header_items()),
             )
             local.timeout = req.timeout
-            return self.do_open(HTTPConnection, local)
+            return self._open_deadline(local, HTTPConnection)
 
     client = EspnTransport()
     # Replace only the network destination; keep request validation, pacing,
@@ -65,8 +83,16 @@ def server(monkeypatch, *, body=b'{"points":0.1}', status=200, headers=None, del
         return real_connect(address, *args, **kwargs)
 
     monkeypatch.setattr(socket, "create_connection", local_only)
+    real_resolve = socket.getaddrinfo
+
+    def local_dns(host, *args, **kwargs):
+        assert host == "127.0.0.1", "Tests must never resolve an external host"
+        return real_resolve(host, *args, **kwargs)
+
+    monkeypatch.setattr(socket, "getaddrinfo", local_dns)
     ticks = [0.0]
-    monkeypatch.setattr(module, "monotonic", lambda: ticks[0])
+    if not real_clock:
+        monkeypatch.setattr(module, "monotonic", lambda: ticks[0])
     monkeypatch.setattr(module, "sleep", lambda seconds: ticks.__setitem__(0, ticks[0] + seconds))
     try:
         yield client, received, ticks
@@ -193,3 +219,34 @@ def test_invalid_scope_fails_before_network(monkeypatch, season, views, period):
         with pytest.raises(ValueError):
             client.get(season, views=views, scoring_period=period)
         assert received == []
+
+
+@pytest.mark.parametrize(
+    "chunks",
+    [
+        [b"HTTP/1.1 200 OK\r\nX-Slow: "]
+        + [b"x"] * 20
+        + [b"\r\nContent-Type: application/json\r\n\r\n{}"],
+        [
+            b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nTransfer-Encoding: chunked\r\n\r\n1;"
+        ]
+        + [b"x"] * 20
+        + [b"\r\nx\r\n0\r\n\r\n"],
+    ],
+)
+def test_elapsed_deadline_bounds_dribbled_headers_and_chunk_framing(monkeypatch, chunks):
+    monkeypatch.setattr(module, "TIMEOUT_SECONDS", 0.1)
+    with server(monkeypatch, raw_chunks=chunks, delay=0.04, real_clock=True) as (client, _, _):
+        started = time.monotonic()
+        with pytest.raises(EspnError) as caught:
+            client.get(2026, views=("mSettings",))
+        elapsed = time.monotonic() - started
+        assert caught.value.code == "NETWORK_ERROR"
+        assert elapsed < 0.45
+
+
+def test_decimal_parse_failure_is_a_safe_provider_error(monkeypatch):
+    with server(monkeypatch, body=b'{"x":1e9999999999999999999999}') as (client, _, _):
+        with pytest.raises(EspnError) as caught:
+            client.get(2026, views=("mSettings",))
+        assert caught.value.code == "INVALID_JSON"
