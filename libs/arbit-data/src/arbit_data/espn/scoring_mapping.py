@@ -17,6 +17,7 @@ class Category:
     raw: str
     lower: int | None = None
     upper: int | None = None
+    is_range: bool = False
 
 
 LINEAR = {
@@ -62,9 +63,9 @@ for key, lower, upper in [
     (124, 35, 46),
     (125, 46, None),
 ]:
-    CATEGORIES[key] = Category("defense.points_allowed", "120", lower, upper)
-for key, lower, upper in [
-    (128, 0, 100),
+    CATEGORIES[key] = Category("defense.points_allowed", "120", lower, upper, True)
+for key, yard_lower, yard_upper in [
+    (128, None, 100),
     (129, 100, 200),
     (130, 200, 300),
     (132, 350, 400),
@@ -73,4 +74,4 @@ for key, lower, upper in [
     (135, 500, 550),
     (136, 550, None),
 ]:
-    CATEGORIES[key] = Category("defense.yards_allowed", "127", lower, upper)
+    CATEGORIES[key] = Category("defense.yards_allowed", "127", yard_lower, yard_upper, True)

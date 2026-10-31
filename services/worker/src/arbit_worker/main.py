@@ -12,6 +12,7 @@ from arbit_data.contracts import LeagueSnapshotCandidate
 from arbit_data.db import UnitOfWork
 from arbit_data.espn.client import EspnClient
 from arbit_data.espn.reader import EspnReader
+from arbit_data.espn.scoring_audit import audit_scoring
 from arbit_data.espn.transport import EspnError, EspnTransport
 from arbit_data.espn.verification import verify_audit
 from arbit_data.snapshots import SnapshotRef, publish_snapshot
@@ -72,6 +73,19 @@ def _inspect_endpoints(path: Path, live: bool, parser: argparse.ArgumentParser) 
         parser.exit(1)
 
 
+def _score_audit(periods: list[int] | None, parser: argparse.ArgumentParser) -> None:
+    try:
+        config = load_league_config(Path("config/league.json"))
+        report = audit_scoring(
+            EspnClient(EspnTransport()), config.season, None if periods is None else tuple(periods)
+        )
+    except (OSError, ValueError):
+        parser.exit(2, '{"error":"CONFIG_INVALID"}\n')
+    print(json.dumps(report, sort_keys=True))
+    if not report["success"]:
+        parser.exit(1)
+
+
 class SyntheticFixture(BaseModel):
     model_config = ConfigDict(extra="forbid", hide_input_in_errors=True)
     synthetic: Literal[True]
@@ -107,7 +121,14 @@ def main() -> None:
     endpoint_command.add_argument(
         "--audit", type=Path, default=Path("docs/research/espn-public-2026-10-30.json")
     )
+    scoring_command = subcommands.add_parser(
+        "espn-score-audit", help="Recompute completed FFA player and lineup scores against ESPN"
+    )
+    scoring_command.add_argument("--periods", nargs="+", type=_scoring_period)
     arguments = parser.parse_args()
+    if arguments.command == "espn-score-audit":
+        _score_audit(arguments.periods, parser)
+        return
     if arguments.command == "espn-endpoints":
         _inspect_endpoints(arguments.audit, arguments.live, parser)
         return

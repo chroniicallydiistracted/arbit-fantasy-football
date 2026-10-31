@@ -105,3 +105,16 @@ def test_missing_scoring_controls_are_unknown_not_zero_defaults(option):
     data = settings()
     data.pop(option)
     assert not normalize_scoring(data, 2026).supported
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        lambda s: s.update(homeTeamBonus="invalid"),
+        lambda s: s["scoringItems"][0].update(points="1e100"),
+    ],
+)
+def test_unusable_numeric_configuration_is_unsupported_not_an_unhandled_exception(change):
+    data = settings()
+    change(data)
+    assert not normalize_scoring(data, 2026).supported

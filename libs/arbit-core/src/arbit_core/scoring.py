@@ -63,7 +63,9 @@ def score(stat_line: StatLine, rules: RuleSet) -> ScoreBreakdown:
             elif isinstance(rule, ThresholdRule):
                 points = rule.points if value >= rule.threshold else Decimal(0)
             elif isinstance(rule, RangeRule):
-                if value >= rule.lower and (rule.upper is None or value < rule.upper):
+                if (rule.lower is None or value >= rule.lower) and (
+                    rule.upper is None or value < rule.upper
+                ):
                     points = rule.points
             contributions.append(ScoreContribution(rule.id, rule.stat, points))
         total = sum((item.points for item in contributions), Decimal(0))

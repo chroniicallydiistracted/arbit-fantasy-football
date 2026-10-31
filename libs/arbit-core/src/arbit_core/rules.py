@@ -33,13 +33,13 @@ class RangeRule(ScoringModel):
     kind: Literal["range"] = "range"
     id: str = Field(min_length=1)
     stat: str = Field(min_length=1)
-    lower: Decimal
+    lower: Decimal | None
     upper: Decimal | None = None
     points: Decimal
 
     @model_validator(mode="after")
     def ordered_bounds(self) -> Self:
-        if self.upper is not None and self.upper <= self.lower:
+        if self.lower is not None and self.upper is not None and self.upper <= self.lower:
             raise ValueError("range upper must exceed lower")
         return self
 

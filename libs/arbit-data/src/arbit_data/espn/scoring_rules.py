@@ -3,7 +3,7 @@
 import hashlib
 import json
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, DecimalException
 from typing import Any, Literal
 
 from arbit_core.rules import LinearRule, RangeRule, Rule, RuleSet, UnsupportedRule
@@ -42,6 +42,21 @@ def role_for_position(position: int) -> Role:
     raise ValueError("Unsupported scoring position")
 
 
+def _zero_control(value: Any) -> bool:
+    try:
+        number = Decimal(str(value))
+        return number.is_finite() and number == 0
+    except (DecimalException, ValueError):
+        return False
+
+
+def _cent_rates(values: list[Decimal]) -> bool:
+    try:
+        return all(value == value.quantize(CENT) for value in values)
+    except DecimalException:
+        return False
+
+
 def normalize_scoring(settings: dict[str, Any], season: int) -> NormalizedScoring:
     if type(season) is not int or not 2026 <= season <= 2100:
         raise ValueError("Explicit supported season required")
@@ -76,7 +91,7 @@ def normalize_scoring(settings: dict[str, Any], season: int) -> NormalizedScorin
     if parsed.scoring_type != "H2H_POINTS":
         unsupported.append("settings.scoringType:unsupported")
     for option in ["homeTeamBonus", "playoffHomeTeamBonus"]:
-        if Decimal(str(settings.get(option, 0))) != 0:
+        if not _zero_control(settings.get(option, 0)):
             unsupported.append(f"settings.{option}:unsupported_bonus")
     if settings.get("scoringEnhancementType", "NONE") != "NONE":
         unsupported.append("settings.scoringEnhancementType:unsupported")
@@ -105,10 +120,7 @@ def normalize_scoring(settings: dict[str, Any], season: int) -> NormalizedScorin
             issue = "unsupported_override"
         elif extras:
             issue = "unknown_rule_options"
-        elif any(
-            value != value.quantize(CENT)
-            for value in [item.points, *item.points_overrides.values()]
-        ):
+        elif not _cent_rates([item.points, *item.points_overrides.values()]):
             issue = "unsupported_subcent_rate"
         if issue:
             unsupported.append(f"stat.{item.stat_id}:{issue}")
@@ -130,7 +142,7 @@ def normalize_scoring(settings: dict[str, Any], season: int) -> NormalizedScorin
                 )
             elif rate != 0:
                 assert category is not None
-                if category.lower is not None:
+                if category.is_range:
                     if role != "defense_unit":
                         unsupported.append(f"stat.{item.stat_id}:range_for_non_defense")
                         rules[role_key].append(
@@ -144,7 +156,7 @@ def normalize_scoring(settings: dict[str, Any], season: int) -> NormalizedScorin
                             RangeRule(
                                 id=str(item.stat_id),
                                 stat=category.stat,
-                                lower=Decimal(category.lower),
+                                lower=None if category.lower is None else Decimal(category.lower),
                                 upper=None if category.upper is None else Decimal(category.upper),
                                 points=rate.normalize(),
                             )

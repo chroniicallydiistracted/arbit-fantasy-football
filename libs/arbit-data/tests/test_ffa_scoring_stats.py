@@ -120,3 +120,39 @@ def test_wrong_applied_contributions_fail_even_if_total_is_unchanged():
     result = reconcile_player(case["player"], 1, rules, Decimal("8"))
     assert result.status == "mismatch"
     assert {difference.rule_id for difference in result.contribution_differences} == {"77", "80"}
+
+
+def test_negative_net_yards_still_belong_to_under_100_defense_band():
+    rules, case = one_case("defense")
+    block = case["player"]["stats"][0]
+    block.update(
+        stats={"120": 0, "127": -7, "89": 1, "128": 1, "210": 1},
+        appliedStats={"89": 5, "128": 5},
+        appliedTotal=10,
+    )
+    result = reconcile_player(case["player"], 1, rules, Decimal("10"))
+    assert result.status == "verified" and result.computed_total == Decimal("10")
+
+
+def test_rare_return_safety_and_fumble_categories_have_hand_calculated_weights():
+    rules, case = one_case("defense")
+    block = case["player"]["stats"][0]
+    block.update(
+        stats={
+            "63": 1,
+            "93": 1,
+            "98": 1,
+            "101": 1,
+            "206": 1,
+            "209": 1,
+            "120": 0,
+            "127": 99,
+            "89": 1,
+            "128": 1,
+            "210": 1,
+        },
+        appliedStats={"63": 6, "93": 6, "98": 2, "101": 6, "206": 2, "209": 1, "89": 5, "128": 5},
+        appliedTotal=33,
+    )
+    result = reconcile_player(case["player"], 1, rules, Decimal("33"))
+    assert result.status == "verified" and result.computed_total == Decimal("33")
