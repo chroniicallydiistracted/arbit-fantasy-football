@@ -53,6 +53,7 @@ class Endpoint(StrEnum):
     NFL_CORE_TEAMS = "nfl_core_teams"
     NFL_SCOREBOARD = "nfl_scoreboard"
     NFL_WEB_SCOREBOARD = "nfl_web_scoreboard"
+    NFL_PLAYS = "nfl_plays"
     NFL_SUMMARY = "nfl_summary"
     NFL_WEB_SUMMARY = "nfl_web_summary"
     NFL_NEWS = "nfl_news"
@@ -70,6 +71,8 @@ class EndpointOptions(BaseModel):
     matchup_period: Annotated[int, Field(ge=1, le=99)] | None = None
     player_id: Annotated[int, Field(gt=0)] | None = None
     event_id: Annotated[str, Field(pattern=r"^[1-9][0-9]{0,19}$")] | None = None
+    nfl_week: Annotated[int, Field(ge=1, le=25)] | None = None
+    season_type: Annotated[int, Field(ge=1, le=3)] | None = None
     team_abbrev: Annotated[str, Field(pattern=r"^[a-z]{2,4}$")] | None = None
     limit: Annotated[int, Field(ge=1, le=300)] | None = None
     page: Annotated[int, Field(ge=1, le=100000)] | None = None
@@ -115,8 +118,16 @@ ROUTES = {
     Endpoint.NFL_CORE_TEAMS: Route(
         CORE + "/seasons/{season}/teams", frozenset({"season"}), frozenset({"limit", "page"})
     ),
-    Endpoint.NFL_SCOREBOARD: Route(SITE + "/apis/site/v2/sports/football/nfl/scoreboard"),
+    Endpoint.NFL_SCOREBOARD: Route(
+        SITE + "/apis/site/v2/sports/football/nfl/scoreboard",
+        optional=frozenset({"season", "nfl_week", "season_type"}),
+    ),
     Endpoint.NFL_WEB_SCOREBOARD: Route(WEB + "/apis/site/v2/sports/football/nfl/scoreboard"),
+    Endpoint.NFL_PLAYS: Route(
+        CORE + "/events/{event_id}/competitions/{event_id}/plays",
+        frozenset({"event_id"}),
+        frozenset({"limit", "page"}),
+    ),
     Endpoint.NFL_SUMMARY: Route(
         SITE + "/apis/site/v2/sports/football/nfl/summary", frozenset({"event_id"})
     ),
@@ -179,7 +190,19 @@ def build_request(endpoint: Endpoint, options: EndpointOptions) -> EndpointReque
         params.append(("playerId", str(options.player_id)))
         if options.season is not None:
             params.append(("seasonId", str(options.season)))
-    elif endpoint in (Endpoint.NFL_CORE_ATHLETES, Endpoint.NFL_CORE_TEAMS):
+    elif endpoint == Endpoint.NFL_SCOREBOARD:
+        if (
+            options.nfl_week is not None or options.season_type is not None
+        ) and options.season is None:
+            raise ValueError("Explicit season required for scoped NFL scoreboard")
+        for key, value in [
+            ("dates", options.season),
+            ("week", options.nfl_week),
+            ("seasontype", options.season_type),
+        ]:
+            if value is not None:
+                params.append((key, str(value)))
+    elif endpoint in (Endpoint.NFL_CORE_ATHLETES, Endpoint.NFL_CORE_TEAMS, Endpoint.NFL_PLAYS):
         for key, value in [("limit", options.limit), ("page", options.page)]:
             if value is not None:
                 params.append((key, str(value)))

@@ -235,3 +235,24 @@ dataset_stage = Table(
     Column("manifest_hash", String(64), nullable=False),
     Column("staged_at", DateTime(timezone=True), nullable=False),
 )
+
+public_source_observation = Table(
+    "public_source_observation",
+    metadata,
+    Column("hash", String(64), primary_key=True),
+    Column("request_key", String, nullable=False),
+    Column("kind", String, nullable=False),
+    Column("observed_at", DateTime(timezone=True), nullable=False),
+    Column("payload", JSON, nullable=False),
+)
+public_source_refresh = Table(
+    "public_source_refresh",
+    metadata,
+    Column("request_key", String, primary_key=True),
+    Column("kind", String, nullable=False),
+    Column("current_hash", String(64), ForeignKey("public_source_observation.hash")),
+    Column("next_allowed_at", DateTime(timezone=True), nullable=False),
+    Column("token", Uuid),
+    Column("expires_at", DateTime(timezone=True)),
+    Column("last_error", String),
+)

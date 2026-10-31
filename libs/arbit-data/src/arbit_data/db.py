@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import Engine
 
-SCHEMA_REVISION = "0004_source_provenance"
+SCHEMA_REVISION = "0005_public_sources"
 
 
 @dataclass(frozen=True)
