@@ -72,3 +72,13 @@ def test_archive_rejects_tamper_paths_and_oversized_content(tmp_path, monkeypatc
     store.path(token).write_bytes(bomb)
     with pytest.raises(ValueError):
         store.read(token)
+
+
+def test_malformed_deflate_is_a_controlled_capture_error(tmp_path):
+    store = CaptureArchive(tmp_path)
+    digest = store.write(capture())
+    compressed = bytearray(store.path(digest).read_bytes())
+    compressed[10] = 0x07  # Reserved DEFLATE block type, not a checksum-only mismatch.
+    store.path(digest).write_bytes(compressed)
+    with pytest.raises(ValueError, match="invalid capture"):
+        store.read(digest)

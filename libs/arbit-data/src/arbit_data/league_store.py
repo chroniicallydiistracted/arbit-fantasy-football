@@ -165,7 +165,7 @@ def publish_capture(
         ).scalar_one_or_none()
         if replay is not None:
             if lease:
-                _complete(c, lease, replay, timestamp)
+                _complete(c, lease, replay, now or clock())
             return Publication(replay, False, True)
         # A later successful no-change confirmation also fences older observations.
         last_success = c.scalar(

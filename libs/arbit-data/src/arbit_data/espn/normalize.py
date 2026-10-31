@@ -1,6 +1,6 @@
 """The sole ESPN-to-canonical boundary: native facts, explicit scopes and immutable policy."""
 
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import ROUND_HALF_UP, Decimal, DecimalException
 from typing import Any, Literal
 from uuid import UUID
 
@@ -148,7 +148,12 @@ def _actual_points(pool: PoolEntry, season: int, period: int) -> Decimal | None:
     if len(blocks) > 1:
         raise ValueError("AMBIGUOUS_ACTUAL_POINTS")
     value = blocks[0].applied_total if blocks else None
-    return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) if value is not None else None
+    try:
+        return (
+            value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) if value is not None else None
+        )
+    except DecimalException:
+        raise ValueError("INVALID_ACTUAL_POINTS") from None
 
 
 def normalize_acquisition(

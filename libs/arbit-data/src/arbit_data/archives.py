@@ -4,6 +4,7 @@ import gzip
 import hashlib
 import io
 import os
+import zlib
 from pathlib import Path
 from typing import Any, Literal, Self
 
@@ -91,5 +92,5 @@ class CaptureArchive:
             if len(data) > MAX_CAPTURE_BYTES or hashlib.sha256(data).hexdigest() != digest:
                 raise ValueError("invalid capture integrity")
             return CapturedInput.model_validate_json(data)
-        except (OSError, EOFError, io.UnsupportedOperation) as error:
+        except (OSError, EOFError, io.UnsupportedOperation, zlib.error) as error:
             raise ValueError("invalid capture") from error

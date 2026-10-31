@@ -294,3 +294,19 @@ def test_expiring_during_transaction_rolls_back_publication(uow, tmp_path, captu
     with pytest.raises(LeaseLostError):
         publish_capture(captured_input, digest, uow, lease=lease, clock=lambda: next(times))
     assert count(uow, "league_snapshot") == count(uow, "entity_alias") == 0
+
+
+def test_leased_replay_rechecks_time_before_completing(uow, tmp_path, captured_input):
+    from arbit_data.jobs import JobQueue, LeaseLostError
+
+    publish(uow, tmp_path, captured_input)
+    now = captured_input.acquisition.capture_finished_at
+    queue = JobQueue(uow, lease_seconds=10)
+    queued = queue.enqueue("espn.sync", "2026", "replay-expiry", now)
+    lease = queue.claim_job("replay", now)
+    times = iter((now, now + timedelta(seconds=11)))
+    digest = CaptureArchive(tmp_path).write(captured_input)
+    with pytest.raises(LeaseLostError):
+        publish_capture(captured_input, digest, uow, lease=lease, clock=lambda: next(times))
+    assert queue.get_job(queued.id).status == "running"
+    assert count(uow, "league_snapshot") == 1

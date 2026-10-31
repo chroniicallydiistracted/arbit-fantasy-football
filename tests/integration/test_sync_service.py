@@ -247,3 +247,39 @@ def test_crashed_last_attempt_enters_recovery_delay(uow, tmp_path, captured_inpu
     assert read_sync(uow, 2026, now=service.clock())["error_code"] == "LEASE_EXHAUSTED"
     assert schedule_sync(uow, 2026, now=service.clock()) is None
     assert schedule_sync(uow, 2026, now=service.clock() + timedelta(seconds=900)) is not None
+
+
+def test_extreme_actual_points_quarantine_safely_and_worker_can_continue(
+    uow, tmp_path, captured_input
+):
+    from test_canonical_publication import later
+
+    now = captured_input.acquisition.capture_finished_at
+    source = Source(captured_input)
+    service = SyncService(uow, CaptureArchive(tmp_path), source, clock=lambda: now)
+    schedule_sync(uow, 2026, now=now)
+    first = service.run_one()
+
+    def extreme(d):
+        d["teams"][0]["roster"]["entries"][0]["playerPoolEntry"]["player"]["stats"] = [
+            {
+                "seasonId": 2026,
+                "scoringPeriodId": 8,
+                "statSourceId": 0,
+                "statSplitTypeId": 1,
+                "appliedTotal": "1e1000",
+            }
+        ]
+
+    source.captured = later(captured_input, seconds=300, change=extreme)
+    service.clock = lambda: now + timedelta(seconds=300)
+    schedule_sync(uow, 2026, now=service.clock())
+    failure = service.run_one()
+    assert failure["status"] == "paused" and failure["error_code"] == "INVALID_ACTUAL_POINTS"
+    assert read_current(uow, 2026, now=service.clock())["snapshot_id"] == first["snapshot_id"]
+    with uow.engine.connect() as c:
+        assert c.scalar(text("SELECT count(*) FROM source_capture WHERE status='quarantined'")) == 1
+    source.captured = later(captured_input, seconds=600)
+    service.clock = lambda: now + timedelta(seconds=600)
+    schedule_sync(uow, 2026, now=service.clock(), force=True)
+    assert service.run_one()["status"] == "succeeded"
