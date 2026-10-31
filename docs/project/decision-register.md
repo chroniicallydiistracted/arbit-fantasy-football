@@ -14,6 +14,8 @@ Updated 2026-10-30. Architecture and recommended stack approved by the owner on 
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
 
+| OWN-008 | Every successful usable endpoint must be wired before mapping actual FFA rules and verifying ESPN totals; recommendations stay disabled until verification | Owner continuation 2026-10-30 |
+
 ## Accepted architecture decisions
 
 | Record | Proposal | Status / adoption point |

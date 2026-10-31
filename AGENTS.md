@@ -1,10 +1,10 @@
 # Arbit agent entry point
 
-Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. The owner brief is authoritative; M1a runtime/core/persistence/health behavior is implemented; M1b public source acquisition/manual inspection is implemented; canonical FFA publication, frontend, authentication and models remain future work. Deployment preference: portable and local-first.
+Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. The owner brief is authoritative; M1a runtime/core/persistence/health behavior is implemented; M1b public acquisition and all audited usable endpoint routes are implemented and verified; canonical FFA publication, frontend, authentication and models remain future work. Deployment preference: portable and local-first.
 
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-30-public-reader.md).
+1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-30-endpoint-coverage.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.

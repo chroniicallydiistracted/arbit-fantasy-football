@@ -1,6 +1,6 @@
 # ESPN Endpoint Coverage Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Make every verified useful JSON/PNG request in the public audit callable through Arbit before proceeding to scoring normalization.
 
@@ -33,10 +33,10 @@
 
 **Interfaces:** `Endpoint` enum; frozen `EndpointOptions` for season/views/scoring+matchup period/player/event/team/limit/page/sport/filter; `build_request(endpoint, options) -> EndpointRequest` (fixed URL, response format, filter JSON). `audit_requests(records) -> tuple[AuditedRequest,...]` accounts for all 81 original records as callable or explicitly excluded; unexpected success cases fail closed.
 
-- [ ] Write table-driven route examples with literal expected URLs and known input/query rejection cases. Reconstruct all 68 callable successful cases, including 63 JSON/PNG data cases and five limited/metadata cases; exclude nine HTTP failures, three legacy HTML and one unknown control.
-- [ ] Run focused tests; expect missing-module RED.
-- [ ] Implement the catalog and inverse audit matcher, rejecting unconsumed or duplicated non-view query parameters. Rebuild every matched URL/filter through the production builder and compare semantic query pairs before accepting it.
-- [ ] Repeat tests and Ruff/mypy; expect PASS; commit.
+- [x] Write table-driven route examples with literal expected URLs and known input/query rejection cases. Reconstruct all 68 callable successful cases, including 63 JSON/PNG data cases and five limited/metadata cases; exclude nine HTTP failures, three legacy HTML and one unknown control.
+- [x] Run focused tests; expect missing-module RED.
+- [x] Implement the catalog and inverse audit matcher, rejecting unconsumed or duplicated non-view query parameters. Rebuild every matched URL/filter through the production builder and compare semantic query pairs before accepting it.
+- [x] Repeat tests and Ruff/mypy; expect PASS; commit.
 
 ### Task 2: Shared transport and observed capability client
 
@@ -44,10 +44,10 @@
 
 **Interfaces:** `EspnTransport.fetch(endpoint, options) -> EndpointFetchResult` supports object/array/PNG formats from catalog only. Existing `get(...) -> FetchResult` stays object-only and preserves the core reader protocol. `EspnClient.fetch(endpoint, options) -> EndpointResponse` validates observed required sections, IDs and period metadata and labels available/limited/metadata-only.
 
-- [ ] Add real-loopback tests for array directories, both CDN image routes, corrected hosts/queries, malformed binary/type, scope mismatch and empty/absent sections. Verify the existing guarded transport rejects unregistered URLs and that all families execute through it.
-- [ ] Run tests; expect absent general fetch/client RED.
-- [ ] Generalize response format handling without weakening legacy `get`; share the same serial limiter, deadlines, safe errors and receipts across all endpoints. Implement per-view/per-family section checks and opaque-ID validation. Do not manufacture empty payloads for absent data.
-- [ ] Repeat all adapter/reader tests and quality checks; expect PASS; commit.
+- [x] Add real-loopback tests for array directories, both CDN image routes, corrected hosts/queries, malformed binary/type, scope mismatch and empty/absent sections. Verify the existing guarded transport rejects unregistered URLs and that all families execute through it.
+- [x] Run tests; expect absent general fetch/client RED.
+- [x] Generalize response format handling without weakening legacy `get`; share the same serial limiter, deadlines, safe errors and receipts across all endpoints. Implement per-view/per-family section checks and opaque-ID validation. Do not manufacture empty payloads for absent data.
+- [x] Repeat all adapter/reader tests and quality checks; expect PASS; commit.
 
 ### Task 3: Executable coverage evidence, final review and handoff
 
@@ -55,7 +55,7 @@
 
 **Interfaces:** `verify_audit(records, client, live=False)` accounts for every record; live mode invokes all 68 recognized successful cases through the production client. `arbit-worker espn-endpoints [--live]` reads the checked-in audit from the repository root and prints safe JSON with per-case classification/receipt/capability; nonzero on unexpected failed checks. This is opt-in manual inspection, never scheduled or mandatory CI.
 
-- [ ] Add tests for all-route successful verification, fail-closed unexpected success, safe partial failure evidence, 401/429 stop/no retry and CLI nonzero/privacy behavior. Run and observe RED.
-- [ ] Implement safe reporting/CLI, preserving prior fixture/inspection commands.
-- [ ] Run full `make runtime-check` and one paced live verification through the production adapter. Validate earlier captured bodies separately to distinguish access drift from implementation issues. Record actual outcomes, never replace a failed result with the old audit.
-- [ ] Obtain the required single independent whole-slice review, fix Important findings with RED→GREEN tests, rerun checks and finish documentation/local commits. Record deferred downstream scoring/sync/model scope explicitly.
+- [x] Add tests for all-route successful verification, fail-closed unexpected success, safe partial failure evidence, 401/429 stop/no retry and CLI nonzero/privacy behavior. Run and observe RED.
+- [x] Implement safe reporting/CLI, preserving prior fixture/inspection commands.
+- [x] Run full `make runtime-check` and one paced live verification through the production adapter. Validate earlier captured bodies separately to distinguish access drift from implementation issues. Record actual outcomes, never replace a failed result with the old audit.
+- [x] Obtain the required single independent whole-slice review, fix Important findings with RED→GREEN tests, rerun checks and finish documentation/local commits. Record deferred downstream scoring/sync/model scope explicitly.
