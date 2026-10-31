@@ -27,7 +27,7 @@ VIEW_SECTIONS: dict[str, tuple[Section, ...]] = {
     "mTransactions2": (("transactions", list),),
     "mPositionalRatings": (("positionAgainstOpponent.positionalRatings", dict),),
     "kona_player_info": (("players", list),),
-    "kona_playercard": (("players", list),),
+    "kona_playercard": (("players", list), ("players.*.player.stats", list)),
     "proTeamSchedules_wl": (("proTeamSchedules", list),),
     "modular": (),
     "mNav": (),
@@ -56,13 +56,13 @@ SECTIONS: dict[Endpoint, tuple[Section, ...]] = {
     Endpoint.NFL_SUMMARY: (
         ("header", dict),
         ("boxscore", dict),
-        ("drives", dict),
+        ("drives.previous", list),
         ("scoringPlays", list),
     ),
     Endpoint.NFL_WEB_SUMMARY: (
         ("header", dict),
         ("boxscore", dict),
-        ("drives", dict),
+        ("drives.previous", list),
         ("scoringPlays", list),
     ),
     Endpoint.NFL_NEWS: (("articles", list),),
@@ -107,7 +107,9 @@ def _scope(endpoint: Endpoint, options: EndpointOptions, payload: dict[str, Any]
             "kona_player_info",
             "kona_playercard",
         }
-        if not pool_only and (type(payload.get("id")) is not int or payload["id"] != 1729878439):
+        if (not pool_only or "id" in payload) and (
+            type(payload.get("id")) is not int or payload["id"] != 1729878439
+        ):
             raise EspnError("SCOPE_MISMATCH")
         for key, expected in [
             ("seasonId", options.season),
@@ -152,6 +154,16 @@ def _scope(endpoint: Endpoint, options: EndpointOptions, payload: dict[str, Any]
         expected = 1 if endpoint == Endpoint.GAME else options.season
         if type(payload.get("id")) is not int or payload["id"] != expected:
             raise EspnError("SCOPE_MISMATCH")
+    elif endpoint == Endpoint.NFL_CORE_LEAGUE:
+        if payload.get("id") != "28":
+            raise EspnError("SCOPE_MISMATCH")
+    elif endpoint in (Endpoint.NFL_CORE_ATHLETES, Endpoint.NFL_CORE_TEAMS):
+        if (
+            options.page is not None
+            and "pageIndex" in payload
+            and payload["pageIndex"] != options.page
+        ):
+            raise EspnError("SCOPE_MISMATCH")
     elif endpoint == Endpoint.NFL_CORE_ATHLETE:
         if payload.get("id") != str(options.player_id):
             raise EspnError("SCOPE_MISMATCH")
@@ -159,6 +171,35 @@ def _scope(endpoint: Endpoint, options: EndpointOptions, payload: dict[str, Any]
         header = payload.get("header")
         if isinstance(header, dict) and header.get("id") != options.event_id:
             raise EspnError("SCOPE_MISMATCH")
+
+
+def _matchup_rosters(payload: dict[str, Any], options: EndpointOptions) -> bool:
+    status = payload.get("status", {})
+    period = options.matchup_period
+    if period is None and isinstance(status, dict):
+        period = status.get("requestedMatchupPeriodId", status.get("currentMatchupPeriod"))
+    if type(period) is not int:
+        return False
+    schedule = payload.get("schedule")
+    if not isinstance(schedule, list):
+        return False
+    selected = [
+        matchup
+        for matchup in schedule
+        if isinstance(matchup, dict) and matchup.get("matchupPeriodId") == period
+    ]
+    if not selected:
+        return False
+    for matchup in selected:
+        sides = [side for side in (matchup.get("home"), matchup.get("away")) if side is not None]
+        if not sides:
+            return False
+        for side in sides:
+            if not isinstance(side, dict):
+                raise EspnError("SCHEMA_DRIFT")
+            if not _section(side, "rosterForCurrentScoringPeriod.entries", list):
+                return False
+    return True
 
 
 class EspnClient:
@@ -182,9 +223,22 @@ class EspnClient:
                     capability = "metadata_only"
             else:
                 sections = SECTIONS.get(endpoint, ())
+            if endpoint == Endpoint.LEAGUE and options.fantasy_filter is not None:
+                player_filter = options.fantasy_filter.get("players", {})
+                if (
+                    isinstance(player_filter, dict)
+                    and "filterRanksForScoringPeriodIds" in player_filter
+                ):
+                    sections += (("players.*.ratings", dict),)
             missing = tuple(
                 dict.fromkeys(path for path, kind in sections if not _section(payload, path, kind))
             )
+            if (
+                endpoint == Endpoint.LEAGUE
+                and "mBoxscore" in options.views
+                and not _matchup_rosters(payload, options)
+            ):
+                missing += ("matchup_rosters",)
             if missing:
                 capability = "limited"
         elif isinstance(payload, list):

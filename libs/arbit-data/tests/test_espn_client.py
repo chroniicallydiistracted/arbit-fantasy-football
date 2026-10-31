@@ -48,12 +48,22 @@ from espn_http import server
         (
             Endpoint.NFL_SUMMARY,
             {"event_id": "401873023"},
-            {"header": {"id": "401873023"}, "boxscore": {}, "drives": {}, "scoringPlays": []},
+            {
+                "header": {"id": "401873023"},
+                "boxscore": {},
+                "drives": {"previous": []},
+                "scoringPlays": [],
+            },
         ),
         (
             Endpoint.NFL_WEB_SUMMARY,
             {"event_id": "401873023"},
-            {"header": {"id": "401873023"}, "boxscore": {}, "drives": {}, "scoringPlays": []},
+            {
+                "header": {"id": "401873023"},
+                "boxscore": {},
+                "drives": {"previous": []},
+                "scoringPlays": [],
+            },
         ),
         (Endpoint.NFL_NEWS, {}, {"articles": []}),
         (Endpoint.NFL_STANDINGS, {}, {"children": []}),
@@ -187,3 +197,95 @@ def test_exact_decimals_survive_array_transport(monkeypatch):
             Endpoint.PLAYER_DIRECTORY, EndpointOptions(season=2026)
         )
         assert result.payload[0]["ownership"] == Decimal("0.1")
+
+
+@pytest.mark.parametrize(
+    "endpoint,options,payload,missing",
+    [
+        (
+            Endpoint.LEAGUE,
+            dict(season=2026, views=("mBoxscore",), scoring_period=1, matchup_period=1),
+            {
+                "id": 1729878439,
+                "schedule": [{"matchupPeriodId": 1, "home": {"teamId": 1}, "away": {"teamId": 2}}],
+            },
+            "matchup_rosters",
+        ),
+        (
+            Endpoint.LEAGUE,
+            dict(
+                season=2026,
+                views=("kona_playercard",),
+                fantasy_filter={"players": {"filterIds": {"value": [900001]}}},
+            ),
+            {"players": [{"id": 900001}]},
+            "players.*.player.stats",
+        ),
+        (
+            Endpoint.LEAGUE,
+            dict(
+                season=2026,
+                views=("kona_player_info",),
+                fantasy_filter={"players": {"filterRanksForScoringPeriodIds": {"value": [8]}}},
+            ),
+            {"players": [{"id": 900001}]},
+            "players.*.ratings",
+        ),
+        (
+            Endpoint.NFL_SUMMARY,
+            dict(event_id="401873023"),
+            {"header": {"id": "401873023"}, "boxscore": {}, "drives": {}, "scoringPlays": []},
+            "drives.previous",
+        ),
+    ],
+)
+def test_nested_audited_capabilities_cannot_disappear_silently(
+    monkeypatch, endpoint, options, payload, missing
+):
+    with server(monkeypatch, body=json.dumps(payload).encode()) as (transport, _, _):
+        result = EspnClient(transport).fetch(endpoint, EndpointOptions(**options))
+        assert result.capability == "limited" and missing in result.missing_sections
+
+
+@pytest.mark.parametrize(
+    "endpoint,options,payload",
+    [
+        (
+            Endpoint.LEAGUE,
+            dict(season=2026, views=("kona_player_info",)),
+            {"id": 42, "players": []},
+        ),
+        (Endpoint.NFL_CORE_LEAGUE, {}, {"id": "46", "athletes": {}, "teams": {}}),
+        (
+            Endpoint.NFL_CORE_ATHLETES,
+            {"page": 2},
+            {"count": 1, "items": [], "pageIndex": 1, "pageCount": 2},
+        ),
+    ],
+)
+def test_optional_metadata_still_rejects_contradictory_scope(
+    monkeypatch, endpoint, options, payload
+):
+    with server(monkeypatch, body=json.dumps(payload).encode()) as (transport, _, _):
+        with pytest.raises(EspnError) as caught:
+            EspnClient(transport).fetch(endpoint, EndpointOptions(**options))
+        assert caught.value.code == "SCOPE_MISMATCH"
+
+
+def test_boxscore_validates_only_requested_matchup_rosters(monkeypatch):
+    payload = {
+        "id": 1729878439,
+        "schedule": [
+            {
+                "matchupPeriodId": 1,
+                "home": {"teamId": 1, "rosterForCurrentScoringPeriod": {"entries": []}},
+            },
+            {"matchupPeriodId": 8, "home": {"teamId": 2}},
+        ],
+    }
+    with server(monkeypatch, body=json.dumps(payload).encode()) as (transport, _, _):
+        result = EspnClient(transport).fetch(
+            Endpoint.LEAGUE,
+            EndpointOptions(season=2026, views=("mBoxscore",), scoring_period=1, matchup_period=1),
+        )
+        assert result.capability == "available"

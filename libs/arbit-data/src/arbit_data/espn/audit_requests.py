@@ -165,5 +165,15 @@ def audit_requests(records: list[dict[str, Any]]) -> tuple[AuditedRequest, ...]:
         request = (
             None if excluded else match_request(record["url"], headers.get("x-fantasy-filter"))
         )
+        if request is not None:
+            compatible = (
+                {"asset_returned"}
+                if request.response_format == "png"
+                else {"data_returned", "missing_expected_data", "json_metadata_only"}
+            )
+            if expected not in compatible:
+                raise ValueError("Audit outcome contradicts registered response format")
+        elif excluded == "http_failure" and expected != "http_error":
+            raise ValueError("Audit outcome contradicts HTTP status")
         rows.append(AuditedRequest(case, expected, request, excluded))
     return tuple(rows)

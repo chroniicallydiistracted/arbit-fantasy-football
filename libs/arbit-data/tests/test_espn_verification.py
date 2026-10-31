@@ -150,3 +150,15 @@ def test_invalid_audit_outcome_is_rejected_before_network():
 def test_empty_audit_cannot_claim_complete_wiring():
     with pytest.raises(ValueError):
         verify_audit([])
+
+
+@pytest.mark.parametrize("outcome", ["non_json", "http_error"])
+def test_inconsistent_success_outcome_is_rejected_before_any_call(outcome):
+    class Forbidden:
+        def fetch(self, *args):
+            raise AssertionError("Invalid audit reached source")
+
+    data = records()[:2]
+    data[1]["outcome"] = outcome
+    with pytest.raises(ValueError):
+        verify_audit(data, Forbidden(), live=True)
