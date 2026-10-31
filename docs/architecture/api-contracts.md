@@ -1,6 +1,6 @@
 # API and Integration Contracts
 
-Version 0.1 · 2026-10-30 · Business-route design contracts. M1a implements `/health/live` and `/health/ready`; member business routes remain unimplemented until their authenticated slices. M1c adds optional loopback-and-secret operator-only `/internal/league/current`, `/history`, `/snapshots/{uuid}` and `/sync` GETs; [implemented contract and errors](../engineering/ffa-synchronization.md). No token means no data routes; production remains blocked.
+Version 0.1 · 2026-10-30 · Business-route design contracts. M1a implements `/health/live` and `/health/ready`; member business routes remain unimplemented until their authenticated slices. M1c adds optional loopback-and-secret operator-only `/internal/league/current`, `/history`, `/snapshots/{uuid}` and `/sync` GETs; [implemented contract and errors](../engineering/ffa-synchronization.md). M1d adds stored `/internal/league/nflverse/coverage` and `/internal/league/nflverse/players/{uuid}/stats?season=2026&week=1` GETs under the same boundary; [implemented source-read contract](../engineering/nflverse-ingestion.md). No token means no data routes; production remains blocked.
 
 ## Common rules
 

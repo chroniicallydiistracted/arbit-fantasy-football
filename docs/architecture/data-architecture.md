@@ -1,6 +1,6 @@
 # Arbit Data Architecture Specification
 
-Version 0.1 · 2026-10-30 · Proposed. Source capability evidence: [research register](../research/source-register.md).
+Updated 2026-10-31 · Accepted architecture; implementation status is explicit below. Source capability evidence: [research register](../research/source-register.md).
 
 ## Source authority and boundaries
 
@@ -95,6 +95,12 @@ These are Arbit schedules and user-facing staleness thresholds, subject to measu
 
 Offseason disables game/draft polling; scheduler uses configured season state and observed games rather than a hardcoded calendar. Poll due times have jitter. Backoff starts at five seconds, exponential up to 15 minutes with jitter; honor longer `Retry-After`. Cap normal attempts at five, then failed/dead-letter state for inspection. Repeated auth denial immediately marks credential action needed and stops tight retries. A circuit breaker limits outage storms. Current published state remains available with its age.
 
+## Implemented NFLverse statistical foundation — M1d
+
+The [full audit](../research/nflverse-data-audit-2026-10-31.md) records complete published catalog acquisition: 1,140 logical files/28 families, immutable originals and normalized Parquet, additive 0003/0004 schema, profiles/terms/source timestamps and exact canonical GSIS/ESPN joins. All 121 owned athletes resolve to GSIS; two have no observed weekly rows. NFL-team metadata is retained without guessed franchise/DST joins. Wider source ambiguities remain in review.
+
+Per-file acquisition/publication uses durable leased jobs and last-good pointers. Hashless sources stage until a second source catalog confirms identity/size/revision; immutable proofs separately date confirmation. As-of reads require acquisition and confirmation by cutoff, while source/catalog ordering prevents delayed older work from replacing current data. A corrected historical download is not a historical publication vintage. No automatic source scheduler or model-feature promotion is installed. See [operator contract](../engineering/nflverse-ingestion.md).
+
 ## NFL statistical processing
 
 Start with a measured dataset coverage inventory for past seasons and 2026; record missingness, revisions, types and licensing per dataset. Candidate features: efficiency (EPA, success, yards per opportunity), volume (snaps, attempts, targets, air yards, red-zone share), role stability, team pace/pass rate, defensive matchup, schedule and recent trends with sample weighting. Route/participation features enter in-season models only if their actual publication timestamp proves availability at that cutoff. Injury, news, weather and depth information need source-specific evidence, not an assumption that all exist in one dataset.
@@ -105,7 +111,7 @@ For each feature: define unit, denominator, window, minimum sample, missingness 
 
 Normalize ESPN stat-category IDs into versioned scoring rules: linear rates, threshold/range bonuses, distance-dependent kicking, turnovers, fractional/negative points, defensive/team scoring, and slot eligibility as actually configured. Preserve unsupported rules verbatim, with a diagnostic code; do not assume PPR, K/DST, bench, IR, FLEX, or superflex settings. Use exact Decimal arithmetic and tested final rounding. Bonus expectations come from simulated stat lines/distributions, not `bonus(mean(stat))`.
 
-M1c implements the actual FFA scorer adapter: fetched rates, 26 effective athlete rules and 46 D/ST rules with override16 independent of lineup placement. Point/yard bands use raw120/127 with source-indicator consistency checks; the under100-yard range has an unbounded lower endpoint. Only exact actual/source0, weekly/split1, configured season/period and GP=1 blocks are recomputed. Known sparse additive counters have an explicit policy; absent maps/range totals remain unknown. Empty no-game official zeros are not verified stat cases. `espn-score-audit` checks per-rule contributions, scoped player references and historical active-lineup totals, brackets settings and keeps advice disabled. [Support/proof](../research/ffa-scoring-verification-2026-10-30.md) records empirical coverage, precise cent policy and replay provenance. Persisted rule versions and cross-source semantic equivalence are still future integration work.
+M1c implements the actual FFA scorer adapter: fetched rates, 26 effective athlete rules and 46 D/ST rules with override16 independent of lineup placement. Point/yard bands use raw120/127 with source-indicator consistency checks; the under100-yard range has an unbounded lower endpoint. Only exact actual/source0, weekly/split1, configured season/period and GP=1 blocks are recomputed. Known sparse additive counters have an explicit policy; absent maps/range totals remain unknown. Empty no-game official zeros are not verified stat cases. `espn-score-audit` checks per-rule contributions, scoped player references and historical active-lineup totals, brackets settings and keeps advice disabled. [Support/proof](../research/ffa-scoring-verification-2026-10-30.md) records empirical coverage, precise cent policy and replay provenance. Exact FFA rule versions are persisted by M1c. Cross-source semantic equivalence and feature/model validation remain future M3 work; upstream fantasy-point columns are not FFA totals.
 
 A historical score uses the relevant season/rule version. Reconcile hand-verified game fixtures against ESPN totals including corrections, D/ST points allowed definitions and edge plays. PBP reconstructed totals are provisional because later boxscore corrections and categories can differ. Advice must carry snapshot ID, rule hash, feature-set version, model run, as-of cutoff, generated time, horizon, coverage and limitations. Changes invalidate by dependency: a lineup move affects that team's lineup scenario; a rules change affects all scoring-dependent artifacts.
 

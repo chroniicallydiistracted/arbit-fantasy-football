@@ -385,7 +385,10 @@
       "milestone": "M3",
       "spec": "docs/architecture/model-specification.md",
       "acceptance": "Temporal holdout, baseline/subgroup metrics, leakage checks, lineage and rollback artifact recorded.",
-      "status": "specified"
+      "status": "specified",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open"
+      ]
     },
     {
       "id": "AR-001",
@@ -437,7 +440,10 @@
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Versioned manifests pin checksums, coverage, schema, publication/cutoff and attribution.",
-      "status": "specified"
+      "status": "in_progress",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open"
+      ]
     },
     {
       "id": "DATA-003",
@@ -481,7 +487,8 @@
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
         "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
-        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain",
+        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open"
       ]
     },
     {

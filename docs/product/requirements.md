@@ -63,3 +63,5 @@ All original sections 1–12 map below. Shared requirements apply to every affec
 | PLAN-001 | Dependency-aware phased roadmap retaining complete advanced scope | 10, 11 | M0 | Every requirement maps to a milestone, dependency, acceptance gate and planned verification. |
 | PLAN-002 | Seven initial planning/specification/governance/scaffold deliverables | 11 | M0 | README links all seven deliverables; source brief preserved byte-for-byte. |
 | SUCCESS-001 | Unified understandable data-driven intelligence usable throughout the fantasy season | 12 | M7 | End-to-end manager workflows exercise all modules with shared league/model context and honest limitations. |
+
+M1d implementation evidence for DATA-002/005 and MD-004 prerequisites: [full NFLverse handoff](../project/handoffs/2026-10-31-nflverse.md). Acquisition, manifests and exact owned-athlete crosswalks are verified; semantic features, historical-vintage/model validation and broader product obligations remain open.

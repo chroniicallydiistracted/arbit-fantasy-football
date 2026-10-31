@@ -1,6 +1,6 @@
 # Decisions, Inputs and Open Questions
 
-Updated 2026-10-30. Architecture and recommended stack approved by the owner on 2026-10-30; additional development dependencies are authorized, especially for UX/UI work.
+Updated 2026-10-31. Architecture and recommended stack approved by the owner on 2026-10-30; additional development dependencies are authorized, especially for UX/UI work.
 
 ## Confirmed product decisions
 
@@ -13,6 +13,7 @@ Updated 2026-10-30. Architecture and recommended stack approved by the owner on 
 | OWN-007 | Owner made FFA public, reviewed the successful API audit and authorized development using public access; message boards are not required | Owner request 2026-10-30 |
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
+| OWN-009 | Proceed to M1d with all-encompassing NFLverse inclusion | Owner request 2026-10-31; [full audit](../research/nflverse-data-audit-2026-10-31.md) |
 | OWN-008 | Every successful usable endpoint must be wired before mapping actual FFA rules and verifying ESPN totals; recommendations stay disabled until verification | Owner continuation 2026-10-30 |
 
 ## Accepted architecture decisions
@@ -34,7 +35,7 @@ Owner approval adopts these runtime choices. Hosting remains portable/local-firs
 | Q-002 | Actual settings retrieved; rule/category normalization, membership binding and scoring reconciliation remain | 46 scoring items, OFFLINE draft, actual slots/waivers/locks observed; usable normalized advice still requires validation | M1c mapped all46 rules, reconciled completed weeks and persisted canonical FFA facts/rules/locks/eligibility and observed memberships; member account binding and lineup optimization remain |
 | Q-003 | OIDC provider and invited account roster | Blocks real member sign-in, not data/schema work | Before M2: owner chooses provider/account invite policy; proposal favors maintained OIDC library with server sessions |
 | Q-004 | Exact Gridiron asset patterns and reuse/variant verification | Blocks final weekly field/uniform integration | M1 research/M6: owner shares links when available; engineer verifies candidate sites and records permissions/attribution; generic fallback stays labeled |
-| Q-005 | nflverse per-dataset coverage and available historical release metadata | Determines usable in-season features and holdout periods | M1: engineer audits manifests/schemas/coverage and publication times; no future features in M3 |
+| Q-005 | nflverse per-dataset coverage and available historical release metadata | Determines usable in-season features and holdout periods | M1d full catalog/import/coverage and source-revision proofs complete; first local observation is not historical vintage evidence. M3 defines retrospective/vintage policy before backtests |
 | Q-006 | Sleeper supported scoring/play/game capability beyond public docs | Cannot depend on a supported live feed | M1: engineer records read-only proof if available; use documented metadata/state/trends meanwhile |
 | Q-007 | ESPN live endpoint coverage across event types/corrections | Determines exact Live event/graphic fidelity | M1: engineer collects sanitized fixtures and coverage matrix; single final-game observation is insufficient |
 | Q-008 | Target host capacity, backup location, budget, domain | Blocks external deployment decisions only | Before external provisioning: owner selects limits; keep local containers and storage portable |
@@ -46,5 +47,12 @@ These are milestone prerequisites, not a demand for the owner to answer every qu
 ## M1c implementation decisions
 
 - Local operator inspection uses an optional random secret plus actual loopback peer, with no-store and no provider calls. This is a development-only read surface; accepted invite/OIDC member architecture and production startup block remain. [Guide](../engineering/ffa-synchronization.md).
-- Native fantasy-team/matchup aliases include league/season scope; manager source membership never proves Arbit account ownership. Dated affiliations describe observations. Cross-provider matching/curated alias corrections remain M1d.
+- Native fantasy-team/matchup aliases include league/season scope; manager source membership never proves Arbit account ownership. Dated affiliations describe observations. M1d now implements exact GSIS/ESPN matching and backed-up alias corrections; ambiguous records remain in review.
 - Parsed/redacted capture hashes differ from original HTTP body hashes. Unchanged observations confirm the existing revision; replay cannot move current or renew freshness. First/new scoring-lineup contexts require completed-period reconciliation; preseason/rollover needs a separate validation design.
+
+## M1d implementation decisions
+
+- All published core/ffverse logical partitions are included, with one preferred serialization per stem and explicit mirror/model/legacy/diagnostic/benchmark decisions. Data ZIPs remain intact archive originals; every table column and null is retained. [Audit](../research/nflverse-data-audit-2026-10-31.md).
+- Hashless assets stage until a second complete source catalog confirms identity/size/revision. Immutable proofs and separate confirmation times constrain as-of reads; local hashes alone cannot authenticate mutable upstream revisions. Source/catalog order separately fences current pointers.
+- Exact GSIS/ESPN pairs reuse existing UUIDs; entity-wide contradictory active provider IDs enter review. Five newly imported later supplemental aliases were corrected after backup by closing their validity and appending reviews, preserving original rows/reports. No name merge or historical backdating.
+- Parquet/CSV use bounded Arrow processing; nested RDS uses a resource-limited data-only fallback and explicit JSON columns with original RDS retained. Dependencies are approved and frozen. No upstream model execution, source ranking promotion or recommendation enablement.
