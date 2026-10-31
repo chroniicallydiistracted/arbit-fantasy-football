@@ -1,5 +1,7 @@
 # M1e — Supplemental sources, ESPN live coverage and asset prerequisites
 
+**Historical source scope:** At the start of M2, the owner excluded all Sleeper fantasy inputs and limited Sleeper to relevant live NFL games/PBP only. The former directory/state/trend/stat/hint integrations described below are retired; receipts retain their historical meaning and are not application inputs. See OWN-011.
+
 Completed **2026-10-31**, local branch **`codex/m1e-supplemental-live`**, base `2a8f35a`. M1e implements the accepted roadmap's source prerequisites; it does not ship the M6 Live interface or enable recommendations. Requirements DATA-003/004 are verified for their source-research acceptance; DATA-005/006 and LV-001–005 have partial foundation evidence and remain broader obligations.
 
 ## Delivered and observed

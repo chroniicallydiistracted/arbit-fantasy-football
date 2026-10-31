@@ -1,5 +1,7 @@
 # Supplemental and live source operations — M1e
 
+**Current owner policy:** Sleeper is eligible only for verified relevant NFL live-game/PBP data. No eligible route is currently enabled. Former fantasy directories, hints, state/trends and fantasy-stat acquisition/mapping are retired; `sleeper-sync` and `sleeper-probe` return `SLEEPER_LIVE_ONLY` before reading cache or contacting a provider. Remaining Sleeper descriptions below are historical M1e implementation notes, not active product capability. Default source status/verification excludes retired Sleeper observations.
+
 M1e adds durable public observations and safe local inspection. ESPN remains FFA authority, NFLverse remains the statistical foundation, and Sleeper is supplemental. No source command calculates fantasy recommendations, changes a league, creates aliases or serves public/member data. The [source audit](../research/m1e-source-audit-2026-10-31.md) distinguishes actual capabilities from empirical gaps.
 
 ## Local commands
@@ -7,8 +9,6 @@ M1e adds durable public observations and safe local inspection. ESPN remains FFA
 After frozen installs, `make db-up` and `make local-db-migrate`, use the existing private local profile:
 
 ```sh
-uv run --env-file .env.local arbit-worker sleeper-sync
-uv run --env-file .env.local arbit-worker sleeper-probe --season 2026 --week 7
 uv run --env-file .env.local arbit-worker live-inspect --season 2026 --week 8 --events 401873023 401873026
 uv run --env-file .env.local arbit-worker sources-status
 uv run --env-file .env.local arbit-worker sources-verify

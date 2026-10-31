@@ -53,36 +53,12 @@ def build_source_request(
         or len(event_id) > 20
     ):
         raise ValueError("INVALID_SOURCE_SCOPE")
-    provider: Literal["espn", "sleeper"] = "sleeper"
+    if kind.startswith("sleeper."):
+        raise ValueError("SLEEPER_LIVE_ONLY")
+    provider: Literal["espn", "sleeper"] = "espn"
     response: Literal["object", "array"] = "object"
-    usage: Literal["supplemental", "candidate", "live"] = "supplemental"
-    base = "https://api.sleeper.app"
-    if kind == "sleeper.players":
-        url = base + "/v1/players/nfl"
-        ttl = 86400
-    elif kind == "sleeper.state":
-        url = base + "/v1/state/nfl"
-        ttl = 3600
-    elif kind in ("sleeper.trending.add", "sleeper.trending.drop"):
-        url = (
-            base
-            + "/v1/players/nfl/trending/"
-            + kind.rsplit(".", 1)[1]
-            + "?lookback_hours=24&limit=25"
-        )
-        ttl = 900
-        response = "array"
-    elif kind in ("sleeper.stats.v1", "sleeper.stats.current"):
-        if week is None or season_type != 2:
-            raise ValueError("REGULAR_WEEK_REQUIRED")
-        usage = "candidate"
-        ttl = 86400
-        if kind.endswith(".v1"):
-            url = f"{base}/v1/stats/nfl/regular/{season}/{week}"
-        else:
-            url = f"https://api.sleeper.com/stats/nfl/{season}/{week}?season_type=regular"
-            response = "array"
-    elif kind.startswith("espn."):
+    usage: Literal["supplemental", "candidate", "live"] = "live"
+    if kind.startswith("espn."):
         provider = "espn"
         usage = "live"
         ttl = 30

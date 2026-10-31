@@ -28,3 +28,15 @@ def test_invalid_scopes_are_rejected_before_source_calls(monkeypatch, args):
     with pytest.raises(SystemExit) as e:
         main()
     assert e.value.code == 2
+
+
+@pytest.mark.parametrize("command", ["sleeper-sync", "sleeper-probe"])
+def test_retired_sleeper_commands_fail_before_database_or_network(monkeypatch, capsys, command):
+    from arbit_worker.main import main
+
+    monkeypatch.delenv("ARBIT_DATABASE_URL", raising=False)
+    monkeypatch.setattr("sys.argv", ["arbit-worker", command])
+    with pytest.raises(SystemExit) as e:
+        main()
+    assert e.value.code == 2
+    assert json.loads(capsys.readouterr().err)["error"] == "SLEEPER_LIVE_ONLY"

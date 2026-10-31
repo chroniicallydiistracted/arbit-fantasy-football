@@ -462,16 +462,17 @@
     },
     {
       "id": "DATA-003",
-      "title": "Research applicable Sleeper scoring/player/game/play data; supplemental only",
+      "title": "Research relevant Sleeper NFL live-game/PBP data only; exclude fantasy inputs",
       "sourceSections": [
         "5.3"
       ],
       "milestone": "M1",
       "spec": "docs/architecture/data-architecture.md",
-      "acceptance": "Documented endpoints separated from unproven candidates; no second league provider.",
+      "acceptance": "Verified relevant live-game/PBP routes are distinguished from unproven candidates; no Sleeper fantasy data, identity hints or second league provider is integrated.",
       "status": "verified",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — measured documented/candidate source matrix, scoped ESPN game/core-play factual fixtures and explicit empirical gaps; no second league or supported-unproven feed"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — measured documented/candidate source matrix, scoped ESPN game/core-play factual fixtures and explicit empirical gaps; no second league or supported-unproven feed",
+        "OWN-011 / M2 owner correction — former fantasy acquisition and identity-hint paths retired; no eligible live-game/PBP route enabled yet"
       ]
     },
     {

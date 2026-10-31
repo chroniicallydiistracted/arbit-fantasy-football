@@ -31,16 +31,16 @@ class Transport:
         )
 
 
-def test_directory_refresh_is_cached_across_services_without_renewing_observation(uow, tmp_path):
+def test_eligible_source_is_cached_across_services_without_renewing_observation(uow, tmp_path):
     from arbit_data.public_sources.requests import build_source_request
     from arbit_data.public_sources.service import SourceService
 
     transport = Transport()
     store = ObjectStore(tmp_path)
     service = SourceService(uow, store, transport, clock=lambda: T)
-    req = build_source_request("sleeper.players")
+    req = build_source_request("espn.summary", event_id="123")
     first = service.acquire(req, lambda p: p)
-    second = SourceService(uow, store, transport, clock=lambda: T + timedelta(hours=23)).acquire(
+    second = SourceService(uow, store, transport, clock=lambda: T + timedelta(seconds=23)).acquire(
         req, lambda p: p
     )
     assert transport.calls == 1 and second.cached
@@ -48,11 +48,11 @@ def test_directory_refresh_is_cached_across_services_without_renewing_observatio
     assert first.hash == second.hash
 
 
-def test_only_one_process_reserves_daily_request(uow):
+def test_only_one_process_reserves_refresh(uow):
     from arbit_data.public_sources.repository import reserve
     from arbit_data.public_sources.requests import build_source_request
 
-    req = build_source_request("sleeper.players")
+    req = build_source_request("espn.summary", event_id="123")
 
     def claim():
         try:
@@ -65,16 +65,16 @@ def test_only_one_process_reserves_daily_request(uow):
     assert sum(x is not None for x in results) == 1
 
 
-def test_failed_refresh_preserves_last_good_and_daily_attempt_reservation(uow, tmp_path):
+def test_failed_refresh_preserves_last_good_and_attempt_reservation(uow, tmp_path):
     from arbit_data.public_sources.requests import build_source_request
     from arbit_data.public_sources.service import SourceService
 
     transport = Transport()
     store = ObjectStore(tmp_path)
-    req = build_source_request("sleeper.players")
+    req = build_source_request("espn.summary", event_id="123")
     first = SourceService(uow, store, transport, clock=lambda: T).acquire(req, lambda p: p)
     transport.fail = True
-    later = T + timedelta(days=1, seconds=1)
+    later = T + timedelta(seconds=31)
     result = SourceService(uow, store, transport, clock=lambda: later).acquire(req, lambda p: p)
     assert result.stale and result.error == "SCHEMA_DRIFT" and result.hash == first.hash
     again = SourceService(
@@ -87,7 +87,7 @@ def test_expired_reservation_cannot_publish(uow, tmp_path):
     from arbit_data.public_sources.repository import publish, reserve
     from arbit_data.public_sources.requests import build_source_request
 
-    req = build_source_request("sleeper.state")
+    req = build_source_request("espn.summary", event_id="123")
     token = reserve(uow, req, T)
     with pytest.raises(SourceError, match="RESERVATION_LOST"):
         publish(
@@ -108,7 +108,7 @@ def test_corrupt_saved_body_is_not_served_from_cache(uow, tmp_path):
 
     store = ObjectStore(tmp_path)
     service = SourceService(uow, store, Transport(), clock=lambda: T)
-    first = service.acquire(build_source_request("sleeper.state"), lambda p: p)
+    first = service.acquire(build_source_request("espn.summary", event_id="123"), lambda p: p)
     with uow.engine.connect() as c:
         payload = c.scalar(
             select(public_source_observation.c.payload).where(
@@ -117,4 +117,4 @@ def test_corrupt_saved_body_is_not_served_from_cache(uow, tmp_path):
         )
     store.path(payload["body_hash"]).write_bytes(b"{}")
     with pytest.raises(ValueError, match="CHECKSUM"):
-        service.acquire(build_source_request("sleeper.state"), lambda p: p)
+        service.acquire(build_source_request("espn.summary", event_id="123"), lambda p: p)

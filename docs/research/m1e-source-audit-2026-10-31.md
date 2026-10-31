@@ -1,5 +1,7 @@
 # M1e supplemental and live source audit
 
+**Historical source scope:** At the start of M2, the owner excluded all Sleeper fantasy inputs and limited Sleeper to relevant live NFL games/PBP only. The former directory/state/trend/stat/hint integrations described below are retired; receipts retain their historical meaning and are not application inputs. See OWN-011.
+
 Observed **2026-10-31**. M1e is implemented and locally verified: cached supplemental Sleeper acquisition, scoped ESPN game/play normalization and offline replay, plus Gridiron metadata prerequisites. This is source-foundation evidence; member access, the Live interface, scoring estimates, models and recommendations remain later work. [Safe receipt](m1e-live-2026-10-31.json), [per-observation inventory](m1e-source-inventory-2026-10-31.json), [operator guide](../engineering/supplemental-live-sources.md).
 
 ## Sleeper documented and candidate capability matrix

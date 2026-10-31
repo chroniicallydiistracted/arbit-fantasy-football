@@ -13,6 +13,7 @@ Updated 2026-10-31. Architecture and recommended stack approved by the owner on 
 | OWN-007 | Owner made FFA public, reviewed the successful API audit and authorized development using public access; message boards are not required | Owner request 2026-10-30 |
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
+| OWN-011 | Sleeper only for relevant NFL live games/PBP; no fantasy data integration. Use only GPT-6.1 Sol for every subagent | Owner correction at start of M2, 2026-10-31; overrides broader earlier source interpretations and skill model defaults |
 | OWN-010 | Proceed with M1e supplemental Sleeper, ESPN Live coverage and Gridiron prerequisites | Owner request 2026-10-31; [audit](../research/m1e-source-audit-2026-10-31.md) |
 | OWN-009 | Proceed to M1d with all-encompassing NFLverse inclusion | Owner request 2026-10-31; [full audit](../research/nflverse-data-audit-2026-10-31.md) |
 | OWN-008 | Every successful usable endpoint must be wired before mapping actual FFA rules and verifying ESPN totals; recommendations stay disabled until verification | Owner continuation 2026-10-30 |
@@ -37,7 +38,7 @@ Owner approval adopts these runtime choices. Hosting remains portable/local-firs
 | Q-003 | OIDC provider and invited account roster | Blocks real member sign-in, not data/schema work | Before M2: owner chooses provider/account invite policy; proposal favors maintained OIDC library with server sessions |
 | Q-004 | Exact Gridiron asset patterns and reuse/variant verification | Blocks final weekly field/uniform integration | M1 research/M6: owner shares links when available; engineer verifies candidate sites and records permissions/attribution; generic fallback stays labeled |
 | Q-005 | nflverse per-dataset coverage and available historical release metadata | Determines usable in-season features and holdout periods | M1d full catalog/import/coverage and source-revision proofs complete; first local observation is not historical vintage evidence. M3 defines retrospective/vintage policy before backtests |
-| Q-006 | Sleeper supported scoring/play/game capability beyond public docs | Cannot depend on a supported live feed | M1e verifies documented metadata/state/trends and two undocumented weekly stats formats; no supported play feed established. Keep candidates research-only before M3/M6 |
+| Q-006 | Eligible Sleeper NFL live-game/PBP routes remain unverified | Sleeper cannot be a Live dependency yet | Fantasy routes/hints are retired, not future features. Verify only relevant game/PBP candidates in later source work; ESPN remains active |
 | Q-007 | ESPN live endpoint coverage across event types/corrections | Determines exact Live event/graphic fidelity | M1e records four final games including overtime/tie, pregame, core participants and factual fixtures; active/delayed/corrected empirical coverage and latency remain M6 |
 | Q-008 | Target host capacity, backup location, budget, domain | Blocks external deployment decisions only | Before external provisioning: owner selects limits; keep local containers and storage portable |
 | Q-009 | Empirical FFA draft/trade history and optional ADP source | Limits learned selection/acceptance likelihood | M5: use labeled scenario priors and qualitative feasibility until enough validated data exists |
@@ -64,3 +65,7 @@ These are milestone prerequisites, not a demand for the owner to answer every qu
 - Candidate stats 200 responses do not imply documented support, verified FFA scoring or a supported play feed. Supplemental hints remain read-only; 40/121 owned direct matches are a visible coverage limit, not a reason to name-match.
 - Explicit public core play references supply athletes absent from the summary. Scoped origin/event/play checks never fetch embedded URLs. Per-play page observation time governs revision ordering; a newer summary/page cannot restamp older cached facts.
 - Gridiron `eligible_metadata` is always distinct from local image readiness. Empty manifest and missing grants remain fallback; no image bytes or external messages are authorized by M1e. Both site's uniform and field permissions require genuine evidence.
+
+## M2 owner overrides
+
+OWN-011 supersedes the broader Sleeper interpretation used in M1e. Preserve past receipts as history without consuming those datasets. All subagents must explicitly use `gpt-6.1-sol`; no Astra or other model is authorized. M2 is authorized under the accepted invite-only OIDC/member-binding and React/PWA architecture. Sign-in provider choice was requested early; provider-neutral work proceeds without credentials in chat.

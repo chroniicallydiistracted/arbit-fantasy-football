@@ -8,7 +8,7 @@ Updated 2026-10-31 · Accepted architecture; implementation status is explicit b
 | --- | --- | --- | --- |
 | ESPN Fantasy | FFA league truth | Settings/scoring, slots/eligibility, teams/managers, rosters/ownership, matchups/standings, draft, free agents/waivers, transactions where available | Unofficial, mutable interface; private access may need server-side cookies. Completeness/pagination and permission must be demonstrated with FFA, never inferred from one successful request |
 | nflverse | Primary NFL statistical foundation | PBP, player/team weekly stats, schedules/results, rosters/IDs, snap counts, depth, NGS, advanced charting where covered | Dataset-specific schema, publication times, coverage and terms; not a guaranteed real-time feed. In-season features must not use data published after the prediction cutoff |
-| Sleeper | Supplemental metadata, NFL state, trends and ID hints | Documented player directory/state/trending; scoring/play/game endpoints only after explicit proof | No Sleeper fantasy league integration. Official public docs do not establish a supported live PBP/scoring feed; endpoint gaps remain research work |
+| Sleeper | Relevant NFL live games and play-by-play only | Only individually verified eligible game/PBP routes | Owner excludes all fantasy data, directories/crosswalk hints, trends, projections, rankings and fantasy stats/scoring. No eligible route is currently enabled |
 | ESPN NFL | Live NFL context | Scoreboard, event summary, drives/plays, boxscore, participants and scoring events where supplied | Unofficial; fields/types/coverage vary by event. One completed-game summary was observed, not a live reliability guarantee |
 | Gridiron | Intended fields/uniforms | Team/season/game-specific images and variant metadata | Likely sites identified; owner URL patterns not supplied. No API assumed; assets and use permissions unconfirmed |
 
@@ -89,8 +89,7 @@ These are Arbit schedules and user-facing staleness thresholds, subject to measu
 | ESPN NFL scoreboard / active game summaries | Scoreboard every 30 seconds; selected active-game summaries every 15–30 seconds within host budget | 60 seconds since last successful fetch; show delay without claiming field-to-screen latency |
 | Final NFL game reconciliation | At final, +1 hour, next morning and next correction cycle | Provisional until reconciliation; ESPN fantasy confirmation separate |
 | nflverse datasets | Check manifest/checksum on relevant provider publication schedule; daily general reconciliation | Dataset-specific expected release plus one missed release window; show observation time as well as fetch time |
-| Sleeper full player directory | At most once per day; use saved mapping | 48 hours; no directory call per player lookup |
-| Sleeper state/trends | Hourly/15 minutes respectively within documented limits | Two missed intervals; supplemental signals only |
+| Sleeper live NFL games/PBP | Disabled pending route verification | No fantasy directory, trend, state or scoring use |
 | Gridiron approved asset manifests | Weekly and on explicit curation | Unknown variant remains unknown; never substitute a generic uniform as verified |
 
 Offseason disables game/draft polling; scheduler uses configured season state and observed games rather than a hardcoded calendar. Poll due times have jitter. Backoff starts at five seconds, exponential up to 15 minutes with jitter; honor longer `Retry-After`. Cap normal attempts at five, then failed/dead-letter state for inspection. Repeated auth denial immediately marks credential action needed and stops tight retries. A circuit breaker limits outage storms. Current published state remains available with its age.
@@ -142,3 +141,7 @@ M1e uses stricter stale-at-one-refresh-interval or failed-refresh behavior than 
 ESPN year/type/week and source event/competition/play scope are validated; embedded reference URLs are never fetched. Core-play athlete references enable exact native canonical lookup where provided. Every play retains its source page's observation time through live and offline replay; summary or other-page freshness cannot promote cached old revisions. Missing plays are not tombstones. Pure replay preserves explicit cancellations without calculating fantasy effects, publishing M6 effective-play state or emitting SSE. Actual active/corrected sources, semantic attribution and rich Live remain M6.
 
 The Gridiron prerequisite gate selects only exact context with variant/pattern evidence and dated permission; `eligible_metadata` is not image readiness. Empty manifest/no grants/no media acquisition remain explicit. See [full source audit](../research/m1e-source-audit-2026-10-31.md).
+
+## Owner source correction — start of M2
+
+The owner restricts Sleeper to relevant NFL live-game/PBP data only. All former Sleeper fantasy acquisition, directory/hint mapping, state/trend and fantasy-stat candidate paths are retired and blocked before cache/network reads. Historical M1e receipts describe past research only; they are not model, identity or application inputs. No eligible Sleeper live route is currently enabled. ESPN remains the verified live source, and NFLverse remains the statistical foundation.

@@ -11,9 +11,8 @@ from espn_http import server
 def test_source_routes_are_scoped_and_cannot_accept_injected_paths():
     from arbit_data.public_sources.requests import build_source_request, validate_request
 
-    assert build_source_request("sleeper.players").ttl_seconds == 86400
-    assert build_source_request("sleeper.trending.add").usage == "supplemental"
-    assert build_source_request("sleeper.stats.v1", week=7).usage == "candidate"
+    assert build_source_request("espn.summary", event_id="123").ttl_seconds == 30
+    assert build_source_request("espn.summary", event_id="123").usage == "live"
     req = build_source_request("espn.plays", event_id="401873023", page=2)
     assert "page=2" in req.url
     for kw in ({"event_id": "1/../../secret"}, {"event_id": "123", "page": 0}):
@@ -29,7 +28,7 @@ def test_public_transport_preserves_original_bytes_and_rejects_redirects(monkeyp
     from arbit_data.public_sources.requests import build_source_request
     from arbit_data.public_sources.transport import PublicTransport
 
-    req = build_source_request("sleeper.state")
+    req = build_source_request("espn.summary", event_id="123")
     with server(
         monkeypatch, body=b'{"season":"2026","zero":0.1}', headers={"Content-Length": "28"}
     ) as (client, _, _):
@@ -58,14 +57,14 @@ def test_public_transport_rejects_invalid_json(monkeypatch, body):
         t = PublicTransport()
         t._opener = client._opener
         with pytest.raises(SourceError):
-            t.fetch(build_source_request("sleeper.state"))
+            t.fetch(build_source_request("espn.summary", event_id="123"))
 
 
 def test_public_transport_length_limit_and_retry_hint(monkeypatch):
     from arbit_data.public_sources.requests import build_source_request
     from arbit_data.public_sources.transport import PublicTransport
 
-    req = build_source_request("sleeper.state")
+    req = build_source_request("espn.summary", event_id="123")
     with server(monkeypatch, headers={"Content-Length": "999999999"}) as (client, _, _):
         t = PublicTransport()
         t._opener = client._opener

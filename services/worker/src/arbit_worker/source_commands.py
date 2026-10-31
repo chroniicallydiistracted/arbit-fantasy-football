@@ -5,7 +5,6 @@ import json
 import os
 from collections import Counter
 from datetime import UTC, datetime
-from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -18,12 +17,9 @@ from arbit_data.live.reader import LiveReader, collect_play_pages, resolve_parti
 from arbit_data.live.replay import PlaySnapshot, merge_observations
 from arbit_data.nflverse.objects import ObjectStore
 from arbit_data.public_sources.repository import ObservationResult, load_observation
-from arbit_data.public_sources.requests import build_source_request
 from arbit_data.public_sources.service import SourceService
 from arbit_data.public_sources.transport import PublicTransport, decode_json
 from arbit_data.schema import public_source_observation, public_source_refresh
-from arbit_data.sleeper.mapping import identity_coverage
-from arbit_data.sleeper.reader import normalize_sleeper
 from sqlalchemy import create_engine, select
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -57,16 +53,19 @@ def _event(value: str) -> str:
 
 
 def add_commands(subparsers: Any) -> None:
-    subparsers.add_parser("sleeper-sync", help="Capture cached supplemental directory/state/trends")
+    subparsers.add_parser(
+        "sleeper-sync", help="Retired: Sleeper is restricted to verified NFL live games/PBP"
+    )
     probe = subparsers.add_parser(
-        "sleeper-probe", help="Probe two undocumented weekly statistics candidates"
+        "sleeper-probe", help="Retired: Sleeper fantasy-stat resources are not eligible"
     )
     live = subparsers.add_parser(
         "live-inspect", help="Inspect scoped NFL scoreboard and selected game/play sources"
     )
-    for parser in (probe, live):
-        parser.add_argument("--season", type=int, required=True)
-        parser.add_argument("--week", type=_week, required=True)
+    probe.add_argument("--season", type=int)
+    probe.add_argument("--week", type=_week)
+    live.add_argument("--season", type=int, required=True)
+    live.add_argument("--week", type=_week, required=True)
     live.add_argument("--events", nargs="+", type=_event)
     subparsers.add_parser(
         "sources-status", help="Read stored source age and safe errors without network"
@@ -98,44 +97,15 @@ def _summary(kind: str, result: ObservationResult) -> dict[str, Any]:
     }
 
 
-def sync_sleeper(service: SourceService, uow: UnitOfWork, season: int) -> dict[str, Any]:
-    resources = []
-    identity = None
-    for kind in (
-        "sleeper.players",
-        "sleeper.state",
-        "sleeper.trending.add",
-        "sleeper.trending.drop",
-    ):
-        try:
-            result = service.acquire(
-                build_source_request(kind, season=season),
-                partial(normalize_sleeper, kind, season=season),
-            )
-            resources.append(_summary(kind, result))
-            if kind == "sleeper.players":
-                mapping = identity_coverage(uow, result.payload, result.observed_at)
-                identity = {
-                    k: mapping[k] for k in ("read_only", "name_matching_used", "counts", "cutoff")
-                }
-            elif kind == "sleeper.state":
-                resources[-1]["season_matches_config"] = result.payload["season_matches_config"]
-        except SourceError as error:
-            resources.append({"kind": kind, "error": error.code, "status": error.status})
-    return {
-        "resources": resources,
-        "identity": identity,
-        "success": all(
-            not r.get("error") and not r.get("stale") and r.get("season_matches_config", True)
-            for r in resources
-        ),
-        "recommendations_enabled": False,
-    }
-
-
 def verify_sources(uow: UnitOfWork, store: ObjectStore) -> dict[str, Any]:
     with uow.engine.connect() as c:
-        refs: list[str] = list(c.execute(select(public_source_observation.c.hash)).scalars())
+        refs: list[str] = list(
+            c.execute(
+                select(public_source_observation.c.hash).where(
+                    public_source_observation.c.kind.like("espn.%")
+                )
+            ).scalars()
+        )
     objects = set()
     plays = 0
     for ref in refs:
@@ -243,6 +213,11 @@ def inspect_live(
 
 
 def execute(arguments: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
+    if arguments.command in ("sleeper-sync", "sleeper-probe"):
+        parser.exit(
+            2,
+            '{"error":"SLEEPER_LIVE_ONLY","detail":"Sleeper fantasy inputs are retired; no verified eligible live-game/PBP route is enabled."}\n',
+        )
     engine = None
     try:
         if arguments.command == "assets-check":
@@ -328,33 +303,9 @@ def execute(arguments: argparse.Namespace, parser: argparse.ArgumentParser) -> N
             }
         else:
             service = SourceService(uow, store, PublicTransport())
-            if arguments.command == "sleeper-sync":
-                report = sync_sleeper(service, uow, config.season)
-            elif arguments.command == "sleeper-probe":
-                resources = []
-                for kind in ("sleeper.stats.v1", "sleeper.stats.current"):
-                    try:
-                        result = service.acquire(
-                            build_source_request(kind, season=config.season, week=arguments.week),
-                            partial(normalize_sleeper, kind, season=config.season),
-                        )
-                        resources.append(_summary(kind, result))
-                    except SourceError as error:
-                        resources.append(
-                            {"kind": kind, "error": error.code, "status": error.status}
-                        )
-                report = {
-                    "resources": resources,
-                    "documented": False,
-                    "supported_live_play_feed": False,
-                    "ffa_scoring_verified": False,
-                    "success": all(not r.get("error") and not r.get("stale") for r in resources),
-                    "recommendations_enabled": False,
-                }
-            else:
-                report = inspect_live(
-                    LiveReader(service), uow, config.season, arguments.week, arguments.events
-                )
+            report = inspect_live(
+                LiveReader(service), uow, config.season, arguments.week, arguments.events
+            )
         print(json.dumps(report, sort_keys=True))
         if report.get("success") is False:
             parser.exit(1)

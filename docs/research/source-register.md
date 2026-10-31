@@ -56,3 +56,7 @@ No provider account, ESPN transaction, paid plan, cloud service, message or publ
 [Full matrix](m1e-source-audit-2026-10-31.md), [safe receipt](m1e-live-2026-10-31.json) and [observation inventory](m1e-source-inventory-2026-10-31.json) record scoped ESPN scoreboard/summary/core collection proof: four completed games/842 plays including overtime/tie, final/pregame states, explicit participant references, factual fixtures and offline replay. Active/corrected empirical cases and timing remain M6. No narrative name matching, fantasy deltas or tracking route inference.
 
 [Gridiron primary uniform terms](https://gridiron-uniforms.com/GUD/about.shtml) and [field terms/index](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=main) were freshly read with 2026 navigation. Both require permission for constructed graphics; no grants or owner previous patterns are confirmed. [Prerequisites](gridiron-prerequisites-2026-10-31.md) and empty manifest keep exact assets blocked without blocking independent M2/text-Live work. No image, account, message or provider mutation.
+
+## Superseding owner scope — M2
+
+Sleeper is now restricted to relevant NFL live games/PBP only. Directory/crosswalk, state/trends, fantasy-stat/scoring and other fantasy inputs are not eligible for the application or models; all earlier such paths are retired. Historical source observations above are retained as evidence, not active dependencies. No eligible live route is currently verified/enabled; future research must stay within the corrected scope.

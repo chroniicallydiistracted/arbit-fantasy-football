@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M1 source/runtime foundation delivered for observed scope; M2 next**.
+Updated **2026-10-31**. Phase: **M2 member application in progress**.
 
 ## Confirmed context
 
@@ -32,7 +32,7 @@ No frontend UI, member authentication/binding, statistical model or deployment e
 | M1c scoring/normalization | Scoring and canonical FFA aliases/publication/durable local sync implemented and live-verified |
 | M1d statistical foundation | Complete published catalog imported, reviewed, replay/identity/local-read verified |
 | M1e supplemental/live sources and assets | Implemented/reviewed; observed source matrix, offline replay and asset prerequisites verified; empirical Live/asset gaps explicit |
-| M2 application/auth/Front Office/PWA | Not started |
+| M2 application/auth/Front Office/PWA | In progress; owner source/model policies recorded; provider choice pending |
 | M3 Model/Scout | Not started |
 | M4 Lineup/waivers | Not started |
 | M5 trade/Draft | Not started |
@@ -41,6 +41,10 @@ No frontend UI, member authentication/binding, statistical model or deployment e
 
 ## Repository and verification
 
-Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m1e-supplemental-live`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
+Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m2-member-application`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
 
 Latest [M1e handoff](handoffs/2026-10-31-supplemental-live.md) records supplemental/live proof, review fixes and remaining gates; [NFLverse handoff](handoffs/2026-10-31-nflverse.md) records full M1d source/identity/HTTP proof and review rulings; [durable sync handoff](handoffs/2026-10-30-durable-ffa-sync.md) records canonical publication and live API proof; [scoring handoff](handoffs/2026-10-30-ffa-scoring.md) records exact scoring verification; [endpoint handoff](handoffs/2026-10-30-endpoint-coverage.md) records full routing; [reader handoff](handoffs/2026-10-30-public-reader.md) records core acquisition; [public API handoff](handoffs/2026-10-30-espn-public.md) records the earlier 81-probe audit. [M1a handoff](handoffs/2026-10-30-m1a.md) records runtime tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.
+
+## M2 active work and source correction
+
+The owner restricts Sleeper to relevant NFL live games/PBP only. Earlier directory/state/trend/fantasy-stat and hint-mapping paths are retired and no longer application inputs; old audit receipts remain historical. No eligible Sleeper live route is enabled. ESPN game/PBP remains active. Any subagent uses only GPT-6.1 Sol. [M2 plan](../superpowers/plans/2026-10-31-member-application.md) covers invited member access, stored Front Office facts and the deliberate application/PWA shell. No real OAuth client or external service has been provisioned.

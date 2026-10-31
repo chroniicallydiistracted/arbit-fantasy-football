@@ -98,3 +98,5 @@ Provider/asset research can proceed before feature implementation. Archive UI co
 ## Definition of milestone completion and sequencing
 
 Each slice records requirement IDs, plan/files/interfaces, automated/manual evidence, data provenance, limitations, adoption decisions and handoff. No dates or budget estimates are fabricated. Reorder later slices for a real league need, but preserve dependencies and update the registry. New execution plans are written per vertical slice before its code changes; this roadmap is not a substitute for tested interfaces. Owner authorization governs publication/spending; local preparation remains independent.
+
+Owner correction at M2 start: Sleeper is limited to relevant NFL live-game/PBP only. Earlier M1e fantasy directory/state/trend/stat/hint integrations are retired; do not carry them into model or member work. M1e remains a completed historical source milestone with this superseding scope applied.
