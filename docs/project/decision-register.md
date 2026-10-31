@@ -31,7 +31,7 @@ Owner approval adopts these runtime choices. Hosting remains portable/local-firs
 | ID | Missing input / unresolved capability | Impact | Next action and decision owner |
 | --- | --- | --- | --- |
 | Q-001 | Public source mode authorized for the current development phase; future private visibility is an optional change | Core reads work without cookies; message-board availability has no product impact | Public reader implemented and live-verified; configure and test server-side credentials only if visibility later becomes private |
-| Q-002 | Actual settings retrieved; rule/category normalization, membership binding and scoring reconciliation remain | 46 scoring items, OFFLINE draft, actual slots/waivers/locks observed; usable normalized advice still requires validation | M1c mapped all46 rules and reconciled completed weeks; canonical persistence, membership and full eligibility/lock handling remain |
+| Q-002 | Actual settings retrieved; rule/category normalization, membership binding and scoring reconciliation remain | 46 scoring items, OFFLINE draft, actual slots/waivers/locks observed; usable normalized advice still requires validation | M1c mapped all46 rules, reconciled completed weeks and persisted canonical FFA facts/rules/locks/eligibility and observed memberships; member account binding and lineup optimization remain |
 | Q-003 | OIDC provider and invited account roster | Blocks real member sign-in, not data/schema work | Before M2: owner chooses provider/account invite policy; proposal favors maintained OIDC library with server sessions |
 | Q-004 | Exact Gridiron asset patterns and reuse/variant verification | Blocks final weekly field/uniform integration | M1 research/M6: owner shares links when available; engineer verifies candidate sites and records permissions/attribution; generic fallback stays labeled |
 | Q-005 | nflverse per-dataset coverage and available historical release metadata | Determines usable in-season features and holdout periods | M1: engineer audits manifests/schemas/coverage and publication times; no future features in M3 |
@@ -42,3 +42,9 @@ Owner approval adopts these runtime choices. Hosting remains portable/local-firs
 | Q-010 | Exact first FFA season and archive finalization detail | Limits any imported prior results/Cup entry | M1/M7: confirm source history and actual championship outcome; preserve inaugural-season empty state |
 
 These are milestone prerequisites, not a demand for the owner to answer every question now. Engineering can proceed with contracts, sanitized fixtures and local runtime tasks while the remaining source/model/auth prerequisites are resolved. Material alternatives are documented before changing scope or cost.
+
+## M1c implementation decisions
+
+- Local operator inspection uses an optional random secret plus actual loopback peer, with no-store and no provider calls. This is a development-only read surface; accepted invite/OIDC member architecture and production startup block remain. [Guide](../engineering/ffa-synchronization.md).
+- Native fantasy-team/matchup aliases include league/season scope; manager source membership never proves Arbit account ownership. Dated affiliations describe observations. Cross-provider matching/curated alias corrections remain M1d.
+- Parsed/redacted capture hashes differ from original HTTP body hashes. Unchanged observations confirm the existing revision; replay cannot move current or renew freshness. First/new scoring-lineup contexts require completed-period reconciliation; preseason/rollover needs a separate validation design.

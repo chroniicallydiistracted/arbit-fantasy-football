@@ -1,6 +1,6 @@
 # API and Integration Contracts
 
-Version 0.1 · 2026-10-30 · Business-route design contracts. M1a implements `/health/live` and `/health/ready`; business routes remain unimplemented until their authenticated slices.
+Version 0.1 · 2026-10-30 · Business-route design contracts. M1a implements `/health/live` and `/health/ready`; member business routes remain unimplemented until their authenticated slices. M1c adds optional loopback-and-secret operator-only `/internal/league/current`, `/history`, `/snapshots/{uuid}` and `/sync` GETs; [implemented contract and errors](../engineering/ffa-synchronization.md). No token means no data routes; production remains blocked.
 
 ## Common rules
 

@@ -43,3 +43,7 @@ The earlier FFA probe established an unauthenticated 401 under the previous visi
 5. Confirm owner Gridiron patterns when supplied; verify exact variant mapping, size/content restrictions, reuse permission and attribution. Use curated manifests rather than guessed download URLs.
 
 No provider account, ESPN transaction, paid plan, cloud service, message or public repository was created by this research.
+
+## Durable canonical sync proof — 2026-10-30
+
+[Safe live receipt](ffa-sync-live-2026-10-30.json) records a bounded fresh public FFA acquisition, first/new-context completed-week verification, private capture/alias/rule/document publication and protected loopback HTTP read. Two source refreshes retained one full snapshot/outbox; offline replay returned its original revision without refreshing source age. [Operator semantics](../engineering/ffa-synchronization.md). This does not prove provider atomicity, future availability, member authentication or recommendation readiness.

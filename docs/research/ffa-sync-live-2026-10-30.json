@@ -1,0 +1,130 @@
+{
+  "observed_at": "2026-10-31T05:58:25.320959+00:00",
+  "league_id": "1729878439",
+  "season": 2026,
+  "local_only": true,
+  "requests": {
+    "/health/ready": {
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    "/internal/league/current": {
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    "/internal/league/history": {
+      "status": 200,
+      "cache_control": "no-store"
+    },
+    "/internal/league/sync": {
+      "status": 200,
+      "cache_control": "no-store"
+    }
+  },
+  "snapshot_id": "a6a79f29-01cc-4259-9890-5d86ba7e208a",
+  "manifest_hash": "36d73d52cc68b2e68b7cdb57979d2f7f7dfa708ff336b4e427e8c733546e8537",
+  "state_hash": "b3e13bf84a14fb5a9ed8be060a8fa9c5852406eeeed0a691fbb792ef57516694",
+  "rules_hash": "723dac8f74da3fa1248b3a284cd97d8c7324fa300f8d9a6ba15ab10de0ceb808",
+  "scoring_period": 8,
+  "teams": 8,
+  "managers": 8,
+  "owned": 132,
+  "available": 923,
+  "matchups": 56,
+  "draft_picks": 128,
+  "recommendations_enabled": false,
+  "unauthorized": {
+    "status": 401,
+    "cache_control": "no-store"
+  },
+  "league_snapshot_count": 1,
+  "league_document_count": 1,
+  "outbox_event_count": 1,
+  "entity_alias_count": 1159,
+  "canonical_entity_count": 1159,
+  "rule_version_count": 1,
+  "scoring_verification_count": 1,
+  "source_capture_count": 4,
+  "scoring_verified_totals": {
+    "errors": 0,
+    "mismatches": 0,
+    "rosterEntries": 918,
+    "lineupsChecked": 56,
+    "lineupsMatched": 56,
+    "providerZeroEntries": 121,
+    "verifiedPlayerGames": 797
+  },
+  "configured_rules": 46,
+  "unobserved_nonzero_rule_ids": [
+    63,
+    89,
+    93,
+    98,
+    101,
+    125,
+    128,
+    135,
+    136,
+    206,
+    209
+  ],
+  "code_commit": "53477de",
+  "api_stopped_after_smoke": true,
+  "polling_left_running": false,
+  "captures": [
+    {
+      "manifest_hash": "36d73d52cc68b2e68b7cdb57979d2f7f7dfa708ff336b4e427e8c733546e8537",
+      "status": "published",
+      "snapshot_id": "a6a79f29-01cc-4259-9890-5d86ba7e208a",
+      "observed_at": "2026-10-31T05:57:26.058802+00:00"
+    },
+    {
+      "manifest_hash": "3f9628a8880703591e624cf7c5122de89f98e0ec02c7d00e282d602a02613bc0",
+      "status": "unchanged",
+      "snapshot_id": "a6a79f29-01cc-4259-9890-5d86ba7e208a",
+      "observed_at": "2026-10-31T05:58:07.757130+00:00"
+    },
+    {
+      "manifest_hash": "2a627af452517035754eec09c29e8badd030fb02540a4bac8883c4a7464e7ccb",
+      "status": "unchanged",
+      "snapshot_id": "a6a79f29-01cc-4259-9890-5d86ba7e208a",
+      "observed_at": "2026-10-31T06:03:32.728669+00:00"
+    },
+    {
+      "manifest_hash": "52d065fbaa492889c338b1e9df83d2bc53fb2fa860d573fc27c9b7845cb08878",
+      "status": "unchanged",
+      "snapshot_id": "a6a79f29-01cc-4259-9890-5d86ba7e208a",
+      "observed_at": "2026-10-31T06:06:20.798912+00:00"
+    }
+  ],
+  "repeat_refresh": {
+    "changed": false,
+    "same_snapshot": true,
+    "snapshot_count": 1,
+    "outbox_count": 1,
+    "successful_refreshes": 4
+  },
+  "offline_replay": {
+    "replayed": true,
+    "changed": false,
+    "same_snapshot": true,
+    "confirmation_preserved": true
+  },
+  "final_verified_code_commit": "8db1af8",
+  "final_http_smoke": {
+    "observed_at": "2026-10-31T06:07:36.497378+00:00",
+    "status": 200,
+    "cache_control": "no-store",
+    "same_snapshot": true,
+    "sync_status": "fresh",
+    "stale": false,
+    "unauthorized_status": 401
+  },
+  "watch_smoke": {
+    "status": "succeeded",
+    "changed": false,
+    "exit_on_sigterm": 0,
+    "left_running": false
+  },
+  "no_active_sync_jobs_at_finish": true
+}

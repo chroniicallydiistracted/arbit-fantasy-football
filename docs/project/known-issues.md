@@ -1,6 +1,6 @@
 # Known Issues and Risks
 
-Updated 2026-10-30. M1a and the M1b manual public reader are implemented; canonical sync and full feature validation remain open.
+Updated 2026-10-30. M1a, M1b and M1c durable canonical FFA sync are implemented; cross-provider/statistical, member and full feature validation remain open.
 
 | ID | Evidence / risk | Effect and mitigation | Owner / milestone |
 | --- | --- | --- | --- |
@@ -17,8 +17,11 @@ Updated 2026-10-30. M1a and the M1b manual public reader are implemented; canoni
 | R-011 | Native worktree helper cannot recognize Linux checkout; global Corepack cache points into Windows | Dedicated feature branch and pinned npm-exec tooling; no global installation changes | Environment / current session |
 | R-010 | Proposed SLO/model gates are unmeasured | Treat as budgets/policies; release evidence must contain actual results, not inferred success from architecture | Engineering / relevant milestone |
 
-| R-013 | Manual transport budget is per instance and source reads span a capture window | One operator process only; source changes that occur and revert or silent provider omissions cannot be ruled out. Shared polling budget, durable retries and canonical publication are M1c prerequisites | Integration / M1c |
+| R-013 | Standalone manual research budget is per instance; automatic workers now share PostgreSQL pacing/cooldown. Source reads still span a capture window | Do not mix standalone manual research with automatic polling. Stable bracketing cannot rule out change-and-revert or silent omissions; no atomic provider snapshot claim | Integration / M1c |
 
 | R-014 | Eleven configured categories have no nonzero observed contribution in rostered weeks 1–7 | Mappings/formulas have hand/boundary tests; keep empirical coverage explicit and add anonymized fixtures as real examples occur. Advice remains disabled pending downstream prerequisites | Data/Model / M1c/M3 |
+
+| R-015 | New-season/preseason sync currently requires nonempty completed-period scoring proof; missing draft profiles fail closed | Explicit rollover validation and bounded profile enrichment before adopting a changed source state; no guessing/projection fallback | Integration / season rollover |
+| R-016 | Native ESPN identities/rules are stored, but statistical crosswalks and NFL-team display directory are not yet verified | M1d establishes dataset manifests/cutoffs/crosswalks before model joins; no name matching | Data / M1d |
 
 Add discovered bugs with a reproduction, affected requirement, expected behavior, observed result, evidence and next step. Do not put secrets or raw member payloads in this file.

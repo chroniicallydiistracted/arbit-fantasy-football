@@ -423,7 +423,8 @@
       "evidence": [
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
-        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
       ]
     },
     {
@@ -479,7 +480,8 @@
         "docs/project/handoffs/2026-10-30-m1a.md",
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
-        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
       ]
     },
     {
@@ -500,7 +502,8 @@
         "docs/project/handoffs/2026-10-30-m1a.md",
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
-        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
       ]
     },
     {
@@ -521,7 +524,8 @@
         "docs/project/handoffs/2026-10-30-m1a.md",
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
-        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release"
+        "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
       ]
     },
     {
@@ -628,7 +632,10 @@
       "milestone": "M2",
       "spec": "docs/architecture/system-architecture.md",
       "acceptance": "OIDC/session/CSRF/authorization/revocation checks pass; ESPN cookies never reach browser/logs/Git.",
-      "status": "specified"
+      "status": "specified",
+      "evidence": [
+        "docs/engineering/ffa-synchronization.md — optional loopback+secret operator inspection only; production/member OIDC remains unimplemented"
+      ]
     },
     {
       "id": "GOV-001",

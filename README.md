@@ -4,9 +4,9 @@
 
 ## Current state
 
-Architecture and the recommended stack were approved by the owner on 2026-10-30. **M1a runtime/core/snapshot foundation is implemented:** pinned workspaces, exact scoring, temporal identity resolution, PostgreSQL migrations/snapshots/outbox, durable job leases, a guarded synthetic worker path and health-only API. FFA is ESPN league **1729878439**, season **2026**. Deployment preference: portable and local-first.
+Architecture and the recommended stack were approved by the owner on 2026-10-30. **M1a runtime/core/snapshot foundation is implemented:** pinned workspaces, exact scoring, temporal identity resolution, PostgreSQL migrations/snapshots/outbox, durable job leases, a guarded synthetic worker path and a default health-only API. FFA is ESPN league **1729878439**, season **2026**. Deployment preference: portable and local-first.
 
-Public ESPN access is now verified by an [81-probe capability audit](docs/research/espn-public-api-audit-2026-10-30.md); a typed public reader and safe `uv run arbit-worker espn-inspect` command are now implemented and live-verified. All 68 recognized successful audit variants across 19 route families are wired and live-verified; see [coverage](docs/research/espn-endpoint-coverage-2026-10-30.md). All 46 actual scoring definitions are mapped; 797 played player-games and 56 lineup totals reconcile for weeks 1–7. [Scoring verification](docs/research/ffa-scoring-verification-2026-10-30.md) records exact evidence and unobserved rare-category limits. Recommendations remain disabled; canonical production synchronization remains future work. Message boards are outside scope. The audited reference is cloned under ignored `.references`; see [provenance](docs/research/espn-reference.md). No frontend UI, member authentication or trained model exists yet. The owner authorizes additional dependencies, especially UX/UI, and requires deliberate, high-quality design and engineering. Begin with the [local development guide](docs/engineering/local-development.md) for installation, tests and the synthetic smoke path.
+Public ESPN access is now verified by an [81-probe capability audit](docs/research/espn-public-api-audit-2026-10-30.md); a typed public reader and safe `uv run arbit-worker espn-inspect` command are now implemented and live-verified. All 68 recognized successful audit variants across 19 route families are wired and live-verified; see [coverage](docs/research/espn-endpoint-coverage-2026-10-30.md). All 46 actual scoring definitions are mapped; 797 played player-games and 56 lineup totals reconcile for weeks 1–7. [Scoring verification](docs/research/ffa-scoring-verification-2026-10-30.md) records exact evidence and unobserved rare-category limits. Canonical FFA synchronization now persists stable identities, full facts, verified rule versions and correction history, with durable retries/shared pacing and protected local reads. The [live roundtrip](docs/research/ffa-sync-live-2026-10-30.json) verified ESPN → PostgreSQL → Arbit API; [operator guide](docs/engineering/ffa-synchronization.md). Recommendations remain disabled; production/member access awaits M2. Message boards are outside scope. The audited reference is cloned under ignored `.references`; see [provenance](docs/research/espn-reference.md). No frontend UI, member authentication or trained model exists yet. The owner authorizes additional dependencies, especially UX/UI, and requires deliberate, high-quality design and engineering. Begin with the [local development guide](docs/engineering/local-development.md) for installation and tests; the [sync guide](docs/engineering/ffa-synchronization.md) runs real local FFA ingestion.
 
 ## Start here
 
@@ -20,7 +20,7 @@ Public ESPN access is now verified by an [81-probe capability audit](docs/resear
 | Implementation roadmap | [Roadmap](docs/project/roadmap.md) and [first implementation plan](docs/superpowers/plans/2026-10-30-data-foundation.md) |
 | Repository and workspace scaffold | [Repository guide](docs/engineering/repository-guide.md) |
 
-The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-30-ffa-scoring.md).
+The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-30-durable-ffa-sync.md).
 
 ## Verify the foundation and runtime
 
@@ -45,6 +45,6 @@ packages/          API schemas and design tokens
 infra/             Local and deployment configuration, added with runtime
 ```
 
-The Python services/core/data libraries and native workspaces now contain the first runtime slice; the web and analytical Model directories remain future work. No Nx dependency is selected for this small mixed-language workspace.
+The Python services/core/data libraries and native workspaces now contain the verified runtime and canonical FFA synchronization slices; the web and analytical Model directories remain future work. No Nx dependency is selected for this small mixed-language workspace.
 
 Provider capabilities and limitations are recorded with sources in the [research register](docs/research/source-register.md). Do not put ESPN cookies, passwords, raw league-member data, or downloaded datasets in Git.

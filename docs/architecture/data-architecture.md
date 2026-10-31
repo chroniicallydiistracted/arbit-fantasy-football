@@ -16,7 +16,7 @@ A source conflict never silently overwrites authoritative FFA facts. Retain both
 
 ## Canonical identity
 
-Use internal UUIDs, with `(provider, entity_kind, external_id)` aliases and effective dates. Preserve provider IDs as strings. `entity_kind` distinguishes athlete, NFL team, fantasy team, and defense/special-teams unit; a D/ST is not a human player. GSIS/ESPN/Sleeper IDs are aliases, not a universal primary key. An NFL player can change team within a season; team affiliation is dated.
+Use internal UUIDs, with `(provider, entity_kind, scope, external_id)` aliases and effective dates. Preserve provider IDs as strings. `entity_kind` distinguishes athlete, NFL team, fantasy team, and defense/special-teams unit; a D/ST is not a human player. GSIS/ESPN/Sleeper IDs are aliases, not a universal primary key. An NFL player can change team within a season; team affiliation is dated.
 
 Reconciliation order: verified provider crosswalk → exact trusted alias → curated deterministic evidence (name, position, birth date, team history) → unresolved queue. Fuzzy/name-only matches may propose candidates but never auto-merge, especially suffixes, duplicated names, rookies, traded players and D/ST units. Store mapping method, evidence, reviewer, confidence, and validity. Unresolved identities can appear as raw provider records but are excluded from affected advice with a visible limitation. Alias corrections invalidate derived projections/joins and preserve the original mapping version for reproduction.
 
@@ -33,7 +33,7 @@ Object manifest: dataset ID, provider URL, fetch time, provider publication time
 
 ## Relational model
 
-All timestamps are UTC `timestamptz`; the client formats the member's timezone. Use UUID primary keys except source-native identifiers stored as aliases. The following are planned tables, not applied migrations.
+All timestamps are UTC `timestamptz`; the client formats the member's timezone. Use UUID primary keys except source-native identifiers stored as aliases. This is the target relational model; applied `0001_foundation` and `0002_ffa_sync` currently implement its snapshot/outbox/jobs, native identity/affiliation, immutable rules/captures/document and sync-health subset. [Implemented schema and behavior](../engineering/ffa-synchronization.md). Other rows remain planned.
 
 | Table or group | Key constraints and relationships | Purpose |
 | --- | --- | --- |
@@ -68,13 +68,15 @@ The implemented transport uses fixed-origin HTTPS GETs, no redirects/environment
 
 Availability advances offsets by the actual number returned until an empty page, with at most 20 page requests. Duplicate IDs, incorrect statuses, owned overlap, scope mismatches and detected changes to settings/period/roster/locks/draft fail the acquisition. Historical rosters are rejected because the current player pool cannot establish past availability. Source observations span a capture window; changes that occur and revert between observations, or provider omissions without metadata, cannot be ruled out. This is not an atomic provider snapshot or an advice-readiness claim.
 
-The target canonical synchronization flow, not yet implemented, is: acquire a season-specific lease → fetch all required views/pages → store redacted immutable response manifests → validate required sections and exact configuration → reconcile identities → stage a candidate snapshot → verify ownership and roster invariants → publish in one transaction → enqueue invalidations and outbox event. Paginate/filter the entire available-player universe; top-50 results cannot stand for all FFA free agents. If data changes across pages, retry a bounded reconciliation pass and mark uncertain results instead of publishing an inconsistent roster.
+The implemented M1c canonical synchronization flow is: acquire a season-specific lease → fetch all required views/pages → store redacted immutable response manifests → validate required sections and exact configuration → reconcile identities → stage a candidate snapshot → verify ownership and roster invariants → publish in one transaction → enqueue invalidations and outbox event. Paginate/filter the entire available-player universe; top-50 results cannot stand for all FFA free agents. If data changes across pages, retry a bounded reconciliation pass and mark uncertain results instead of publishing an inconsistent roster.
 
 Detect acquisitions, releases, trades, lineup changes, waivers, matchups, settings and draft changes by diffing published snapshots; transaction logs are supplementary, not the only source. Do not infer a successful waiver transaction from a trending-player feed. Unknown scoring or slot IDs fail the rules-support gate and block affected calculations while other league facts remain visible.
 
-No season inference from the machine date: configured season is 2026 until an explicit rollover workflow snapshots finals, updates configuration and bootstraps the new season. Observed settings are captured without normalization. Actual 46-rule FFA scoring normalization and completed-period reconciliation are implemented; canonical identity/storage, full eligibility/lock handling and model evaluation remain prerequisites for advice.
+No season inference from the machine date: configured season is 2026 until an explicit rollover workflow snapshots finals, updates configuration and bootstraps the new season. Observed settings, both normalized exact scoring roles, full policy provenance and eligibility/locks now persist in immutable rule/document versions. Actual46-rule scoring reconciliation gates first/new scoring-lineup contexts. Cross-provider identity, optimization/model evaluation and member access remain prerequisites for advice. [Durable-sync contract](../engineering/ffa-synchronization.md).
 
 ## Polling and freshness proposal
+
+Implemented normal-week mode: five-minute durable sync, stale after 15 minutes; one shared request at a time and two seconds between starts (≤30/minute). Retry due times have jitter/Retry-After; three transient request failures open a 60-second circuit, five job attempts enter a 15-minute recovery delay, permanent access/rule failures pause. Other adaptive modes in this table remain proposals. Standalone research commands retain their explicit per-instance budget.
 
 These are Arbit schedules and user-facing staleness thresholds, subject to measured provider behavior and rate limits, **not provider guarantees**. One global provider limiter shares traffic across jobs and users. Initial ESPN host budget ≤60 requests/minute combined, concurrency ≤2; tune downward on 429s and record all request volume.
 

@@ -92,7 +92,7 @@ def _invalid_constant(value: str) -> None:
 
 
 class EspnTransport:
-    """Serial 30/minute budget per instance; scheduled multi-process sync is not yet supported."""
+    """Base per-instance pacing; automatic workers use GatedEspnTransport for shared budgeting."""
 
     def __init__(self) -> None:
         self._opener = build_opener(ProxyHandler({}), _NoRedirect(), DeadlineHTTPSHandler())
