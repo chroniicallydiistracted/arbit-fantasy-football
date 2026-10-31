@@ -22,6 +22,7 @@ class RuntimeSettings(BaseSettings):
     espn_s2: SecretStr | None = Field(default=None, repr=False)
     espn_swid: SecretStr | None = Field(default=None, repr=False)
     auth_bypass: bool = False
+    nflverse_path: Path = Path("data/nflverse")
     operator_token: SecretStr | None = Field(default=None, repr=False)
 
     @model_validator(mode="after")

@@ -93,3 +93,15 @@ def test_operator_errors_are_safe_and_no_store(uow):
         assert unavailable.status_code == 503
         assert unavailable.json() == {"error": "DATABASE_NOT_CONFIGURED"}
         assert unavailable.headers["cache-control"] == "no-store"
+
+
+def test_nflverse_operator_coverage_route_is_protected_and_no_store(uow):
+    with client(uow) as api:
+        assert api.get("/internal/league/nflverse/coverage").status_code == 401
+        response = api.get(
+            "/internal/league/nflverse/coverage", headers={"Authorization": "Bearer " + TOKEN}
+        )
+        assert response.status_code == 200
+        assert response.json()["families"] == {}
+        assert response.json()["recommendations_enabled"] is False
+        assert response.headers["cache-control"] == "no-store"

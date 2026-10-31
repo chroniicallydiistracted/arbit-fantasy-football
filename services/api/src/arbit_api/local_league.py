@@ -8,6 +8,8 @@ from uuid import UUID
 
 from arbit_data.db import UnitOfWork
 from arbit_data.league_store import read_current, read_history, read_snapshot, read_sync
+from arbit_data.nflverse.objects import ObjectStore
+from arbit_data.nflverse.reads import coverage, player_stats
 from fastapi import FastAPI, Query, Request, Response
 from fastapi.responses import JSONResponse
 from sqlalchemy import Engine
@@ -58,7 +60,7 @@ def install_operator_routes(
                     {"error": "SNAPSHOT_NOT_FOUND"}, status_code=404, headers=HEADERS
                 )
             return JSONResponse(result, headers=HEADERS)
-        except SQLAlchemyError:
+        except (SQLAlchemyError, OSError, ValueError):
             return JSONResponse({"error": "DATABASE_UNAVAILABLE"}, status_code=503, headers=HEADERS)
 
     @app.get("/internal/league/current")
@@ -80,3 +82,19 @@ def install_operator_routes(
     @app.get("/internal/league/sync")
     def sync() -> JSONResponse:
         return serve(lambda uow: read_sync(uow, season))
+
+    @app.get("/internal/league/nflverse/coverage")
+    def nflverse_coverage() -> JSONResponse:
+        return serve(coverage)
+
+    @app.get("/internal/league/nflverse/players/{entity_id}/stats")
+    def nflverse_player_stats(
+        entity_id: UUID,
+        season: int = Query(ge=1999, le=2100),
+        week: int | None = Query(default=None, ge=0, le=25),
+    ) -> JSONResponse:
+        return serve(
+            lambda uow: player_stats(
+                uow, ObjectStore(settings.nflverse_path / "objects"), entity_id, season, week=week
+            )
+        )
