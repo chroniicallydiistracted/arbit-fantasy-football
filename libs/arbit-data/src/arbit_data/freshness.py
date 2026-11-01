@@ -4,12 +4,12 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any, Literal
 
-from sqlalchemy import Connection, select
+from sqlalchemy import Connection, func, select
 from sqlalchemy.dialects.postgresql import insert
 
 from arbit_data.db import UnitOfWork
 from arbit_data.events import emit
-from arbit_data.schema import source_health, sync_state
+from arbit_data.schema import dataset_manifest, source_health, sync_state
 
 LEAGUE = "espn.league"
 SCOREBOARD = "espn.nfl.scoreboard"
@@ -26,6 +26,7 @@ SOURCES: tuple[tuple[str, str], ...] = (
     (STATISTICS, "NFL statistics"),
 )
 SourceState = Literal["current", "behind", "down", "idle", "never"]
+STATISTICS_STALE_SECONDS = 36 * 3600
 # Errors stop reading as a blip after this many consecutive failures.
 DOWN_AFTER_FAILURES = 3
 
@@ -163,6 +164,7 @@ def read_sources(uow: UnitOfWork, season: int, now: datetime | None = None) -> l
     with uow.engine.connect() as c:
         rows = {r.source: r for r in c.execute(select(source_health)).all()}
         league = c.execute(select(sync_state).where(sync_state.c.season == season)).first()
+        imported = c.scalar(select(func.max(dataset_manifest.c.observed_at)))
     result = []
     for source, label in SOURCES:
         row = rows.get(source)
@@ -179,6 +181,9 @@ def read_sources(uow: UnitOfWork, season: int, now: datetime | None = None) -> l
             stale_after = stale_after or 900
             if league.paused:
                 failures = max(failures, DOWN_AFTER_FAILURES)
+        if source == STATISTICS and last is None and imported is not None:
+            # A manual import is real evidence too, before the worker's first scheduled one.
+            last, stale_after = imported, STATISTICS_STALE_SECONDS
         state = classify(
             last_success_at=last,
             stale_after_seconds=stale_after,

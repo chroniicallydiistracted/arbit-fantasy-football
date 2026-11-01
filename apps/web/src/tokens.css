@@ -7,6 +7,7 @@
   --ink-muted: #4A5059;
   --rule: #C7CBD0;
   --rule-strong: #0B0C0E;
+  --board-panel: #0B0C0E;
   --control-border: #6A7079;
   --action: #0B0C0E;
   --on-action: #FFFFFF;
@@ -71,6 +72,7 @@
   --ink-muted: #AEB4BD;
   --rule: #30343A;
   --rule-strong: #F5F6F7;
+  --board-panel: #1A1C21;
   --control-border: #7C828B;
   --action: #FFC600;
   --on-action: #0B0C0E;
@@ -92,6 +94,7 @@
     --ink-muted: #AEB4BD;
     --rule: #30343A;
     --rule-strong: #F5F6F7;
+    --board-panel: #1A1C21;
     --control-border: #7C828B;
     --action: #FFC600;
     --on-action: #0B0C0E;

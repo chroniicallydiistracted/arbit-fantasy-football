@@ -4,13 +4,14 @@ import asyncio
 import hmac
 from collections.abc import Awaitable, Callable, Iterable
 from datetime import UTC, datetime
+from decimal import ROUND_HALF_UP, Decimal
 from ipaddress import ip_address
 from typing import Any, Literal, cast
 from uuid import UUID
 
 from arbit_data import freshness
 from arbit_data.db import UnitOfWork
-from arbit_data.league import LeagueDocument, Player
+from arbit_data.league import LeagueDocument, Matchup, MatchupSide, Player
 from arbit_data.league_store import read_current, read_snapshot
 from arbit_data.live import store as live_store
 from arbit_data.members import (
@@ -103,6 +104,30 @@ SLOT_ORDER = {
 }
 
 
+def _cents(value: Decimal | None) -> Decimal | None:
+    """Official totals at the verified 0.01 half-up policy. ESPN serializes binary floats."""
+    return None if value is None else value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def _team(team: Any) -> Team:
+    facts = Team.model_validate(team.model_dump(exclude={"managers", "primary_manager"}))
+    return facts.model_copy(
+        update={
+            "points_for": _cents(facts.points_for),
+            "points_against": _cents(facts.points_against),
+        }
+    )
+
+
+def _matchup(matchup: Matchup) -> Matchup:
+    def side(value: MatchupSide | None) -> MatchupSide | None:
+        if value is None:
+            return None
+        return value.model_copy(update={"official_points": _cents(value.official_points)})
+
+    return matchup.model_copy(update={"home": side(matchup.home), "away": side(matchup.away)})
+
+
 def _roster_key(player: Player) -> tuple[int, str]:
     return (SLOT_ORDER.get(player.lineup_slot or "", len(SLOT_ORDER)), player.display_name)
 
@@ -138,8 +163,8 @@ def _season_strip(document: LeagueDocument, team_id: UUID) -> list[SeasonCell]:
             SeasonCell(
                 matchup_period=matchup.matchup_period,
                 opponent_team_id=other.team_id if other else None,
-                own_points=own.official_points,
-                opponent_points=other.official_points if other else None,
+                own_points=_cents(own.official_points),
+                opponent_points=_cents(other.official_points) if other else None,
                 result=result,
             )
         )
@@ -307,11 +332,7 @@ def install_member_routes(
 
     def member_teams(account_id: UUID, document: LeagueDocument) -> list[Team]:
         approved = manager_ids(uow, account_id, season)
-        return [
-            Team.model_validate(t.model_dump(exclude={"managers", "primary_manager"}))
-            for t in document.teams
-            if approved.intersection(t.managers)
-        ]
+        return [_team(t) for t in document.teams if approved.intersection(t.managers)]
 
     def require_binding(
         member: dict[str, Any], document: LeagueDocument | None = None
@@ -352,13 +373,7 @@ def install_member_routes(
         return result
 
     def team_facts(document: LeagueDocument) -> list[Team]:
-        return sorted(
-            (
-                Team.model_validate(t.model_dump(exclude={"managers", "primary_manager"}))
-                for t in document.teams
-            ),
-            key=_standing_key,
-        )
+        return sorted((_team(t) for t in document.teams), key=_standing_key)
 
     @router.get("/auth/status", response_model=AuthStatus)
     def auth_status(request: Request) -> AuthStatus:
@@ -493,7 +508,7 @@ def install_member_routes(
         return FrontOffice(
             snapshot=snapshot,
             team=chosen,
-            matchup=matchup,
+            matchup=_matchup(matchup) if matchup else None,
             roster=with_nfl(document, roster),
             standings=team_facts(document),
             matchup_periods=periods,
@@ -597,14 +612,16 @@ def install_member_routes(
                 score=score,
             )
 
+        # ESPN reports 0 before kickoff. No game has been played, so the score is unknown.
+        started = game["phase"] not in ("scheduled", "postponed", "cancelled", "unknown")
         return LiveGameRow(
             event_id=game["event_id"],
             phase=game["phase"],
             kickoff=game.get("date"),
-            period=game.get("period"),
-            clock=game.get("clock"),
-            home=side(game["home_team_id"], game.get("home_score")),
-            away=side(game["away_team_id"], game.get("away_score")),
+            period=game.get("period") if started else None,
+            clock=game.get("clock") if started else None,
+            home=side(game["home_team_id"], game.get("home_score") if started else None),
+            away=side(game["away_team_id"], game.get("away_score") if started else None),
             own_players=own_by_team.get(game["home_team_id"], [])
             + own_by_team.get(game["away_team_id"], []),
             observed_at=game["observed_at"],

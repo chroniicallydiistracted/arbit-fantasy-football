@@ -125,7 +125,9 @@ function GameTile({ game, selected }: { game: Game; selected: boolean }) {
         ].map(({ key, team, trailing }) => (
           <span className="game-line" key={key} data-trailing={trailing}>
             <b>{team.abbreviation ?? "—"}</b>
-            <span className="game-score">{team.score ?? "—"}</span>
+            <span className="game-score" data-unknown={team.score == null}>
+              {team.score ?? "—"}
+            </span>
           </span>
         ))}
         {game.own_players.length > 0 && (

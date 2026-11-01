@@ -6,11 +6,11 @@
 
 FFA is ESPN league **1729878439**, season **2026**. The owner approved the architecture/stack; deployment remains portable and local-first.
 
-**M2 is implemented locally:** invited Google-compatible sign-in, opaque sessions, administrator-approved FFA team binding, Front Office saved facts, player drawer/search, watchlist/themes, administrator access controls and a static-only PWA. Start with [member application operations](docs/engineering/member-application.md) and the [M2 handoff](docs/project/handoffs/2026-10-31-member-application.md). Google is selected; private client configuration and a real invited member/team round trip remain the operational release gate. No external service or deployment was created.
+**M2 is implemented locally:** invited Google-compatible sign-in, opaque sessions, administrator-approved FFA team binding, Front Office saved facts, player drawer/search, watchlist/themes, administrator access controls and a static-only PWA. Start with [member application operations](docs/engineering/member-application.md) and the [latest handoff](docs/project/handoffs/2026-10-31-platform-reset.md). The owner verified the first real Google sign-in. A design reset and real-time sync platform are built on `claude/platform-reset`. Hosting is deferred until development finishes; the production origin will be `https://ffa.westfam.media`.
 
 M1 foundations remain verified: [all 68 usable ESPN audit variants](docs/research/espn-endpoint-coverage-2026-10-30.md) across 19 route families; all 46 actual FFA scoring definitions, 797 played player-games and 56 lineup totals reconciled; [durable canonical FFA sync](docs/engineering/ffa-synchronization.md); and [all 1,140 NFLverse files](docs/engineering/nflverse-ingestion.md) across 28 families, including 11,973,952 stored rows. All 121 owned athletes map exactly to GSIS; two lack observed weekly rows. [Research register](docs/research/source-register.md) records provenance and coverage limits.
 
-ESPN remains league authority, NFLverse the statistical foundation. Sleeper is eligible only for verified relevant NFL live-game/PBP; all former fantasy/hint paths are retired and no eligible Sleeper live route is enabled. [M1e research](docs/research/m1e-source-audit-2026-10-31.md) remains historical evidence. Gridiron media still needs exact variants and reuse permission. Message boards are out of scope. No model or recommendation is enabled.
+ESPN remains league authority, NFLverse the statistical foundation. Sleeper is eligible only for verified relevant NFL live-game/PBP; all former fantasy/hint paths are retired and no eligible Sleeper live route is enabled. [M1e research](docs/research/m1e-source-audit-2026-10-31.md) remains historical evidence. Gridiron media has private personal-use permission and still needs exact URL patterns and variants. Message boards are out of scope. No model or recommendation is enabled.
 
 ## Start here
 
@@ -24,7 +24,7 @@ ESPN remains league authority, NFLverse the statistical foundation. Sleeper is e
 | Implementation roadmap | [Roadmap](docs/project/roadmap.md) and [first implementation plan](docs/superpowers/plans/2026-10-30-data-foundation.md) |
 | Repository and workspace scaffold | [Repository guide](docs/engineering/repository-guide.md) |
 
-The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-31-supplemental-live.md).
+The [unaltered owner brief](docs/product/vision-source.txt) remains the source of product intent. [Requirement traceability](docs/product/requirements.md) preserves its scope. Start a new development session with [project status](docs/project/status.md), [decisions and unknowns](docs/project/decision-register.md), and the [latest handoff](docs/project/handoffs/2026-10-31-platform-reset.md).
 
 ## Verify the foundation and runtime
 

@@ -176,6 +176,14 @@ def test_explicit_cancellation_is_reported_but_a_missing_play_is_not_a_deletion(
     assert event_types(uow)[-1] == "game.corrected"
 
 
+def test_play_already_cancelled_when_first_seen_is_not_a_correction(uow):
+    """Observed in real ESPN data: completed games include plays flagged no-play from the start."""
+    store.publish_scoreboard(uow, board(game()), NOW)
+    change = store.publish_plays(uow, "401", (play(cancelled=True),), NOW, body_hash="a" * 64)
+    assert change.introduced == ("1",) and change.cancelled == ()
+    assert event_types(uow)[-1] == "game.plays"
+
+
 def test_older_provider_revision_arriving_late_cannot_undo_a_newer_one(uow):
     store.publish_scoreboard(uow, board(game()), NOW)
     store.publish_plays(
@@ -445,6 +453,29 @@ def test_source_states_follow_age_and_failures(uow):
         )
     assert read(NOW)[freshness.SCOREBOARD] == "down"
     assert read(NOW)[freshness.PLAYS] == "never"
+
+
+def test_statistics_age_comes_from_stored_imports_before_the_first_scheduled_run(uow):
+    from arbit_data.schema import dataset_manifest
+    from sqlalchemy import insert
+
+    with uow.engine.begin() as c:
+        c.execute(
+            insert(dataset_manifest).values(
+                hash="a" * 64,
+                logical_key="k",
+                family="f",
+                observed_at=NOW,
+                raw_hash="b" * 64,
+                state_hash="c" * 64,
+                payload={},
+            )
+        )
+    read = lambda at: next(  # noqa: E731
+        s for s in freshness.read_sources(uow, SEASON, at) if s.source == freshness.STATISTICS
+    )
+    assert read(NOW + timedelta(hours=1)).state == "current"
+    assert read(NOW + timedelta(hours=37)).state == "behind"
 
 
 def test_source_with_no_expected_reads_is_idle_not_stale(uow):

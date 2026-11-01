@@ -494,7 +494,7 @@ label {
 
 /* Scoreboard */
 .score-board {
-  background: var(--board);
+  background: var(--board-panel);
 }
 .score-head {
   display: flex;
@@ -1059,19 +1059,20 @@ label {
   min-height: 7rem;
   padding: var(--space-2) var(--space-3);
   color: var(--board-ink);
-  background: var(--board);
+  background: var(--board-panel);
   border-left: 0.25rem solid var(--board-rule);
+  align-content: start;
   text-decoration: none;
 }
 .game-tile:hover {
-  background: var(--board-raised);
+  outline: 1px solid var(--board-muted);
+  outline-offset: -1px;
 }
 .game-tile[data-live="true"] {
   border-left-color: var(--board-chain);
 }
 .game-tile[aria-current="true"] {
   border-left-color: var(--board-flag);
-  background: var(--board-raised);
 }
 .game-status {
   color: var(--board-muted);
@@ -1090,6 +1091,10 @@ label {
   font-size: var(--type-h2);
   line-height: 1;
   text-transform: uppercase;
+}
+.game-score[data-unknown="true"] {
+  color: var(--board-muted);
+  font-weight: 300;
 }
 .game-line b {
   font-weight: 700;
@@ -1311,8 +1316,8 @@ label {
   .live-split {
     grid-template-columns: minmax(0, 1fr);
   }
-  .live-split .game-grid {
-    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  .live-split .game-grid li:not(:has(.game-tile[aria-current="true"])) {
+    display: none;
   }
 }
 

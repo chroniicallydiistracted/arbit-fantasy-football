@@ -1,3 +1,3 @@
 # Worker service
 
-M1a provides `arbit-worker fixture PATH`, an explicitly synthetic end-to-end smoke path into a database ending in `_fixture` or `_test`. It prints only labeled snapshot references and does not poll ESPN or execute arbitrary jobs. Durable scheduling/provider ingestion/model dispatch will compose the shared queue/data/core libraries later, preserving leases/fencing/idempotency and per-host budgets. See [local development](../../docs/engineering/local-development.md).
+`arbit-worker run` is the supervised sync process: league, live and statistics lanes on a cadence driven by the observed NFL slate. Other commands cover one-off sync, NFLverse import and verification, source inspection and offline replay. See the [real-time plan](../../docs/superpowers/plans/2026-10-31-realtime-sync.md) and [local development](../../docs/engineering/local-development.md).

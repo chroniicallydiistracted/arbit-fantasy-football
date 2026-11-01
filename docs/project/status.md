@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M2 implemented; owner verified first Google/admin/team flow; remaining member/UX acceptance open**.
+Updated **2026-10-31**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset`, awaiting owner review and upgrade of the running app**. Primary developer: Claude. M3 is next.
 
 ## Confirmed context
 
@@ -8,7 +8,7 @@ FFA ESPN league **1729878439**, season **2026**. Owner approved the architecture
 
 ## Current implementation
 
-M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification currently has **409 passing tests**, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. All completed slices have independent review and regression-backed fixes; no Important findings remain deferred.
+M1a is implemented: pinned native Python/JS workspaces, exact scoring and temporal identity, PostgreSQL migration/snapshot/outbox persistence, fenced durable jobs, guarded synthetic worker path and health-only API. See [local development](../engineering/local-development.md) for reproducible commands. Runtime verification had **409 passing tests** at that point, including real PostgreSQL integration, plus Ruff/strict mypy/AJV/artifact checks. All completed slices have independent review and regression-backed fixes; no Important findings remain deferred.
 
 M1b implements the public transport, observed league/player contracts, bounded complete pagination, ownership/context checks and `arbit-worker espn-inspect`. The complete audited retrieval surface is wired through 19 registered endpoint families; `arbit-worker espn-endpoints --live` passed all 68 recognized successful variants after review (63 available, three limited, two metadata-only). [Coverage](../research/espn-endpoint-coverage-2026-10-30.md). A fresh live read returned eight teams, 132 owned, 923 available, 46 scoring items, 128 picks and 56 matchups through seven cookie-free GETs. [Reader receipt](../research/espn-reader-live-2026-10-30.json). The pinned reference checkout is available under ignored `.references`.
 
@@ -41,13 +41,13 @@ M2 member auth/binding, Front Office facts and PWA now exist locally. Google is 
 
 ## Repository and verification
 
-Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m2-member-application`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
+Owner published baseline commit `cab6bd8` on main. Owner published `codex/m2-member-application` at `61368fd`. Current work: local branch `claude/platform-reset`, not pushed; no merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
 
 Latest [M2 handoff](handoffs/2026-10-31-member-application.md) records member implementation, local proof and Google release gate. Earlier [M1e handoff](handoffs/2026-10-31-supplemental-live.md) records supplemental/live proof, review fixes and remaining gates; [NFLverse handoff](handoffs/2026-10-31-nflverse.md) records full M1d source/identity/HTTP proof and review rulings; [durable sync handoff](handoffs/2026-10-30-durable-ffa-sync.md) records canonical publication and live API proof; [scoring handoff](handoffs/2026-10-30-ffa-scoring.md) records exact scoring verification; [endpoint handoff](handoffs/2026-10-30-endpoint-coverage.md) records full routing; [reader handoff](handoffs/2026-10-30-public-reader.md) records core acquisition; [public API handoff](handoffs/2026-10-30-espn-public.md) records the earlier 81-probe audit. [M1a handoff](handoffs/2026-10-30-m1a.md) records runtime tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.
 
 ## M2 active work and source correction
 
-The owner restricts Sleeper to relevant NFL live games/PBP only. Earlier directory/state/trend/fantasy-stat and hint-mapping paths are retired and no longer application inputs; old audit receipts remain historical. No eligible Sleeper live route is enabled. ESPN game/PBP remains active. Any subagent uses only GPT-6.1 Sol. [M2 plan](../superpowers/plans/2026-10-31-member-application.md) covers invited member access, stored Front Office facts and the deliberate application/PWA shell. Google is now the selected provider. No real OAuth client or external service has been provisioned.
+The owner restricts Sleeper to relevant NFL live games/PBP only. Earlier directory/state/trend/fantasy-stat and hint-mapping paths are retired and no longer application inputs; old audit receipts remain historical. No eligible Sleeper live route is enabled. ESPN game/PBP remains active. [M2 plan](../superpowers/plans/2026-10-31-member-application.md) covers invited member access, stored Front Office facts and the deliberate application/PWA shell. Google is now the selected provider. No real OAuth client or external service has been provisioned.
 
 ## M2 implemented scope
 
@@ -62,3 +62,14 @@ The owner created the Google OAuth client and supplied credentials in a locally 
 ## Owner sign-in acceptance and manager labels — 2026-10-31
 
 The owner confirmed successful real Google sign-in, first administrator invitation, team approval/session rotation and return to Front Office. This is owner-reported real acceptance, separate from prior fictional tests; second-member and native/assistive-technology checks remain open. ESPN's team/settings view supplies first names for all eight FFA managers; six display names are generic. Canonical optional first names and team context now label the administrator manager dropdown, retaining original handles for fallback/disambiguation and stable IDs for binding. A normal live sync stored all eight names with manager IDs and approved bindings unchanged.
+
+## Design reset and real-time platform — 2026-10-31
+
+The owner reported AI-identifiable design drift and stale data, and redirected the work (OWN-013–017). **Built and verified on `claude/platform-reset`; not applied to the running app.** [Handoff](handoffs/2026-10-31-platform-reset.md).
+
+- **Design:** new officiating-and-broadcast character ([ADR-005](../architecture/decisions/005-officiating-character.md), [design system](../design/design-system.md)), all slogans removed, and `pnpm check:design` enforcing the rules; it flagged 436 violations on the old interface. Owner review remains the acceptance gate.
+- **Sync:** `arbit-worker run` keeps the FFA league, NFL scoreboard, active-game plays and summaries, NFL teams and schedule, and NFLverse statistics current on a cadence that follows the real NFL slate.
+- **Clients:** session-bound SSE updates open pages without a reload. Per-device sessions mean signing in on a phone no longer ends the laptop session.
+- **Members now see:** a text-first Live scoreboard and plays with a my-players filter, NFL team/bye/opponent on roster rows, per-source data status, season results strip and playoff line.
+- **Evidence:** 545 backend tests, 14 client tests, 10 browser scenarios and all static checks pass. The worker ran against real ESPN into a restored database copy. No live game was on, so active-game behavior awaits the first real slate.
+- **Pending owner action:** run the upgrade, which the auto-mode classifier correctly would not let the agent do unasked: it stops the running API and installs persistent services.

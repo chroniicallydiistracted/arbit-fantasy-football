@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
@@ -748,3 +749,99 @@ def test_front_office_season_strip_and_roster_order_come_from_stored_facts(uow, 
         assert strip[7]["result"] == "win", "a completed period reports its result"
         assert strip[8]["result"] is None, "the current period has no result, even with totals"
         assert office["playoff_team_count"] is None, "an absent rule stays unknown, not a default"
+
+
+def test_official_totals_never_show_provider_float_noise(uow, engine):
+    """Observed in real ESPN data: season points_for of 899.3000000000001."""
+    from arbit_api.fixture import seed
+    from arbit_api.main import create_app
+    from arbit_data.schema import league_document
+    from sqlalchemy import select, update
+
+    configured = settings(engine)
+    seed(configured, engine)
+    with engine.begin() as c:
+        document = c.scalar(select(league_document.c.payload))
+        for team in document["teams"]:
+            team["points_for"] = "899.3000000000001"
+        c.execute(update(league_document).values(payload=document))
+    with TestClient(create_app(configured, engine=engine), client=("127.0.0.1", 50000)) as client:
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        office = client.get("/api/v1/front-office").json()
+    assert {t["points_for"] for t in office["standings"]} == {"899.30"}
+    assert office["team"]["points_for"] == "899.30"
+
+
+def test_unplayed_games_report_no_score_and_a_member_needs_a_team_for_live_data(uow, engine):
+    """ESPN sends 0 before kickoff. Unknown is not zero."""
+    from arbit_api.fixture import fixture_game, seed
+    from arbit_api.main import create_app
+    from arbit_data.live import store
+
+    configured = settings(engine)
+    seed(configured, engine)
+    store.publish_scoreboard(
+        uow,
+        {"season": 2026, "season_type": 2, "week": 8, "games": [fixture_game("0", "scheduled")]},
+        datetime.now(UTC),
+    )
+    with TestClient(create_app(configured, engine=engine), client=("127.0.0.1", 50000)) as client:
+        assert client.get("/api/v1/live/games").status_code == 401
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        game = client.get("/api/v1/live/games").json()["games"][0]
+        assert game["home"]["score"] is None and game["away"]["score"] is None
+        assert game["home"]["abbreviation"] == "FIC"
+        assert client.get("/api/v1/live/games/1/plays").status_code == 404
+        assert client.get("/api/v1/live/games/not-a-game/plays").status_code == 422
+
+
+def test_sources_hide_provider_codes_from_members(uow, engine):
+    from arbit_api.fixture import seed
+    from arbit_api.main import create_app
+    from arbit_data import freshness
+
+    configured = settings(engine)
+    seed(configured, engine)
+    freshness.record_failure(
+        uow,
+        freshness.SCOREBOARD,
+        "RATE_LIMITED",
+        now=datetime.now(UTC),
+        cadence_seconds=15,
+        stale_after_seconds=60,
+    )
+    with TestClient(create_app(configured, engine=engine), client=("127.0.0.1", 50000)) as client:
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        rows = client.get("/api/v1/sources").json()["sources"]
+    assert [r["source"] for r in rows][:2] == ["espn.league", "espn.nfl.scoreboard"]
+    assert all(r["error_code"] is None for r in rows)
+
+
+def test_device_sessions_require_csrf_and_stay_with_their_owner(uow, engine):
+    from arbit_api.fixture import seed
+    from arbit_api.main import create_app
+
+    configured = settings(engine)
+    seed(configured, engine)
+    app = create_app(configured, engine=engine)
+    origin = {"Origin": "http://testserver"}
+    with (
+        TestClient(app, client=("127.0.0.1", 50000)) as one,
+        TestClient(app, client=("127.0.0.1", 50000)) as two,
+    ):
+        one.post("/auth/fixture", json={"member": "one"}, headers=origin)
+        two.post("/auth/fixture", json={"member": "two"}, headers=origin)
+        session_id = one.get("/api/v1/me/sessions").json()["sessions"][0]["id"]
+        assert one.get("/api/v1/me/sessions").json()["sessions"][0]["current"] is True
+        body = {"session_id": session_id}
+        assert one.post("/api/v1/me/sessions/revoke", json=body, headers=origin).status_code == 403
+        csrf = {**origin, "X-CSRF-Token": two.get("/auth/status").json()["csrf_token"]}
+        denied = two.post("/api/v1/me/sessions/revoke", json=body, headers=csrf)
+        assert denied.status_code == 403 and denied.json()["code"] == "SESSION_NOT_FOUND"
+        assert one.get("/api/v1/me").status_code == 200, "another member can't end this session"

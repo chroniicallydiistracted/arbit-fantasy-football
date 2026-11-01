@@ -1,6 +1,6 @@
 # Arbit Implementation Roadmap
 
-Version 0.1 · 2026-10-30. Dependency plan, not a promised calendar. All 57 obligations are mapped in the [requirement registry](../product/requirements.md). A phase is complete only with its evidence gate; the full scope remains required even when an earlier slice is useful.
+Version 0.1 · 2026-10-30. Dependency plan, not a promised calendar. All 60 obligations are mapped in the [requirement registry](../product/requirements.md). A phase is complete only with its evidence gate; the full scope remains required even when an earlier slice is useful.
 
 ## Dependency graph
 
@@ -102,3 +102,5 @@ Each slice records requirement IDs, plan/files/interfaces, automated/manual evid
 Owner correction at M2 start: Sleeper is limited to relevant NFL live-game/PBP only. Earlier M1e fantasy directory/state/trend/stat/hint integrations are retired; do not carry them into model or member work. M1e remains a completed historical source milestone with this superseding scope applied.
 
 M2 is implemented locally; Google is selected. Real OAuth client/member/team verification is its remaining operational gate. M3 then builds semantic features and temporal model validation. See [M2 handoff](handoffs/2026-10-31-member-application.md).
+
+Owner direction 2026-10-31 (OWN-016, OWN-017): before M3, the design was reset and a real-time sync platform added as M2 hardening, under UX-005, DATA-008 and ENG-005. See the [handoff](handoffs/2026-10-31-platform-reset.md). A text-first Live scoreboard and play feed exist now; M6 still owns fantasy attribution, field graphics, Gridiron art and full-slate proof. Hosting is deferred until development finishes (OWN-014), and second-member acceptance moves with it. Timing to weigh when sequencing M3 and M4: the league is in week 8 of 14 and the trade deadline is 2026-12-02.

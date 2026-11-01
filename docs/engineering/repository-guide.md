@@ -15,9 +15,9 @@ M1a implements the Python runtime/core/persistence/health slice with native work
 | `docs/project/` | Status, roadmap, decisions, issues, changelog and dated handoffs |
 | `docs/research/` | Dated source evidence, probes and future validation work |
 | `docs/superpowers/` | Composite foundation design and first concrete implementation plan |
-| `apps/web/` | Implemented member shell, Front Office/player/watchlist/preferences/admin controls and static-only PWA; other module routes clearly future |
-| `services/api/` | Health/operator reads plus invite/OIDC/session/binding/member/admin facts; SSE remains M6 |
-| `services/worker/` | Durable FFA sync, complete NFLverse batch ingestion, safe inspection/replay commands; model jobs remain planned |
+| `apps/web/` | Implemented member shell, Front Office, text-first Live scoreboard and plays, player drawer, watchlist, preferences, device sessions, admin controls and static-only PWA; other workspaces state they aren't built |
+| `services/api/` | Health/operator reads, invite/OIDC/session/binding/member/admin facts, live reads and the SSE event stream |
+| `services/worker/` | Supervised sync daemon (`arbit-worker run`), durable FFA sync, NFLverse ingestion, safe inspection/replay commands; model jobs remain planned |
 | `libs/arbit-core/` | Shared exact scoring, domain identities and league contracts; optimization remains planned |
 | `libs/arbit-data/` | Provider acquisition/normalization, immutable objects/manifests, source proofs, crosswalks and canonical persistence |
 | `libs/arbit-model/` | Planned features/projections/evaluation/archetypes/advisor policies |
@@ -25,7 +25,7 @@ M1a implements the Python runtime/core/persistence/health slice with native work
 | `packages/design-tokens/` | Implemented semantic visual/typography tokens, generated CSS and contrast checks |
 | `tests/fixtures/` | Clearly synthetic contract examples; sanitized provider fixtures added later |
 | `scripts/` | Foundation validation; add actual local tools rather than undocumented one-off commands |
-| `infra/` | Pinned local PostgreSQL Compose configuration; external deployment remains planned |
+| `infra/` | Pinned local PostgreSQL Compose configuration and systemd user units; external deployment remains planned |
 | `.github/workflows/` | Foundation and isolated PostgreSQL runtime checks; no deployment or private provider credentials |
 
 ## Dependency direction and boundaries
@@ -40,4 +40,4 @@ Use one pnpm JS workspace and one uv Python workspace as adopted by the owner. I
 
 ## Source control and publication
 
-The owner published the initialized repository and pushed baseline commit `cab6bd8` to main. Development is on `codex/m1e-supplemental-live`; no new branch push, merge or deployment is implied by local development. No commit is required merely to review the proposals. When implementation starts, use small traceable commits and task/handoff records. Root `.gitignore` excludes credentials, caches, build outputs, local data and model artifacts. Add any future licensing/distribution choice explicitly; the owner has not selected an open-source license.
+The owner published the initialized repository and pushed baseline commit `cab6bd8` to main. Current development is on `claude/platform-reset`; no branch push, merge or deployment is implied by local development. No commit is required merely to review the proposals. When implementation starts, use small traceable commits and task/handoff records. Root `.gitignore` excludes credentials, caches, build outputs, local data and model artifacts. Add any future licensing/distribution choice explicitly; the owner has not selected an open-source license.

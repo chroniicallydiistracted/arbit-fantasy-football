@@ -300,7 +300,8 @@
       "acceptance": "Pregame/live/overtime/final/stale fixtures display correct state and provenance.",
       "status": "in_progress",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
+        "docs/project/handoffs/2026-10-31-platform-reset.md — text-first scoreboard and game state served to members; active-game proof pending"
       ]
     },
     {
@@ -314,7 +315,8 @@
       "acceptance": "Canonical participants drive filtering; official ESPN fantasy and live estimates remain distinct.",
       "status": "in_progress",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
+        "docs/project/handoffs/2026-10-31-platform-reset.md — text play feed and exact-alias my-players filter; fantasy attribution remains M6"
       ]
     },
     {
@@ -358,7 +360,8 @@
       "acceptance": "Replaying overlapping/corrected events changes effective scores once and preserves revision history.",
       "status": "in_progress",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
+        "docs/project/handoffs/2026-10-31-platform-reset.md — append-only play revisions, late and cancelled handling, correction events; real correction pair pending"
       ]
     },
     {
@@ -538,7 +541,8 @@
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
         "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
         "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain",
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
+        "docs/project/handoffs/2026-10-31-platform-reset.md — continuous supervised sync added; season rollover remains open"
       ]
     },
     {
@@ -573,7 +577,10 @@
       "milestone": "M0",
       "spec": "docs/design/design-system.md",
       "acceptance": "Documented semantic tokens include verified text/focus contrast pairs and responsive rules.",
-      "status": "specified"
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-platform-reset.md — design system v0.3 and token set replaced under ADR-005"
+      ]
     },
     {
       "id": "UX-002",
@@ -587,7 +594,8 @@
       "acceptance": "All module workflows and component states documented; implemented shared components tested in context.",
       "status": "implemented",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit",
+        "docs/project/handoffs/2026-10-31-platform-reset.md — shell, scoreboard, agate tables, drawer and states rebuilt"
       ]
     },
     {
@@ -763,8 +771,10 @@
       "milestone": "M2",
       "spec": "docs/design/design-system.md",
       "acceptance": "Design lint rejects raw style values, banned generic fonts and slogan copy; owner accepts the rendered character.",
-      "status": "in_progress",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-platform-reset.md — design lint and rendered reset; owner review of the character is the remaining gate"
+      ]
     },
     {
       "id": "DATA-008",
@@ -777,8 +787,10 @@
       "milestone": "M2",
       "spec": "docs/architecture/data-architecture.md",
       "acceptance": "Every changing source has a declared cadence and stale limit; a supervised worker keeps them current through restarts; members can see per-source age.",
-      "status": "in_progress",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-platform-reset.md — supervised worker, cadence policy and per-source health; real ESPN proof on a restored copy, no live game observed"
+      ]
     },
     {
       "id": "ENG-005",
@@ -791,8 +803,10 @@
       "milestone": "M2",
       "spec": "docs/architecture/system-architecture.md",
       "acceptance": "Open clients update from session-bound events without reload and fall back to polling; signing in on one device does not end another; revoked sessions lose the stream.",
-      "status": "in_progress",
-      "evidence": []
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-platform-reset.md — SSE to open clients, browser proof without reload, per-device sessions and revocation tests; not yet applied to the running app"
+      ]
     }
   ]
 }

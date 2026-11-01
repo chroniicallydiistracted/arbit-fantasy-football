@@ -4,7 +4,7 @@ Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, seas
 
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-31-member-application.md).
+1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-31-platform-reset.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.
@@ -35,6 +35,6 @@ Current executable check:
 python3 scripts/validate_foundation.py
 ```
 
-Runtime check: `make runtime-check` after frozen installs and `make db-up`; see [local development](docs/engineering/local-development.md). Run `make web-check` for the implemented client/contracts/PWA and the isolated browser flow in the member guide. Never fabricate a successful build or use private provider calls as mandatory CI tests.
+Runtime check: `make runtime-check` after frozen installs and `make db-up`; see [local development](docs/engineering/local-development.md). Run `make web-check` for the implemented client, contracts, design rules and PWA, and the isolated browser flow in the member guide. Don't run a build or browser suite against the owner's running app; see the member guide for an isolated port. Never fabricate a successful build or use private provider calls as mandatory CI tests.
 
 Before handoff update status, changelog, decision/issue records as relevant, and a dated handoff with actual commands/results and remaining work. Make uncertainties actionable by naming the milestone they block. Keep the source brief unchanged; record interpretations in specifications/ADRs. Never overwrite another agent's work or claim it as verified without reading the diff and evidence.

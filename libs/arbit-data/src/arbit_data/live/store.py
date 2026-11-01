@@ -212,10 +212,11 @@ def publish_plays(
                     set_={"is_current": True, "last_observed_at": observed_at},
                 )
             )
-            if play.cancelled:
-                cancelled.append(play.provider_id)
-            elif previous is None:
+            # A play already cancelled when first seen is history, not a correction to anything.
+            if previous is None:
                 introduced.append(play.provider_id)
+            elif play.cancelled:
+                cancelled.append(play.provider_id)
             else:
                 revised.append(play.provider_id)
         c.execute(

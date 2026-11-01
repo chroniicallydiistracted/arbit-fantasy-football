@@ -69,3 +69,13 @@ M1e adds guarded local worker commands for supplemental capture, NFL source insp
 - Administrator directory/invitation/binding/revocation/suspension/reactivation routes require the administrator role plus CSRF/Origin on mutations. Directory is bounded100accounts and exposes active configured-season manager IDs only.
 
 For this concrete small facts slice, typed responses use named fields and a shared `snapshot` object (id, observed_at, source_status, stale, season/scoring/matchup periods) rather than the earlier generic `data/meta` proposal. Auth/preferences have their own typed models. This supersedes that proposal for implemented routes; future large/statistical/scenario interfaces remain specified separately. Decimal scores remain strings/null. Historical matchups do not imply available historical roster snapshots. Private errors use `application/problem+json`, safe stable code/requestId and no raw provider/SQL/input payloads; `error` remains a compatibility alias for code. All private responses, including failures, are no-store.
+
+## Implemented real-time surface — 2026-10-31
+
+Added to the generated OpenAPI; see the [plan](../superpowers/plans/2026-10-31-realtime-sync.md).
+
+- GET`/api/v1/events`: session-bound SSE. Sends `id`, `event` and a safe summary only; clients re-read through authorized routes. Honors `Last-Event-ID` with bounded replay; `snapshot.required` when a cursor has expired or a client falls behind; `session.ended` then close when the session or binding stops being valid, checked every 20 s heartbeat. Event types: `league.updated`, `source.status`, `games.updated`, `game.plays`, `game.corrected`, `schedule.updated`. This replaces the earlier proposed names `game.play` and `analysis.ready` until a consumer needs them.
+- GET`/api/v1/sources`: per-source state (`current`, `behind`, `down`, `idle`, `never`) and last success. Provider error codes are returned to administrators only.
+- GET`/api/v1/live/games` and `/api/v1/live/games/{event_id}/plays?own=&limit=`: the most recently observed week, roster relevance and revision-aware plays. Scores are null before kickoff even though ESPN sends 0. The roster filter uses exact ESPN athlete aliases, never names. Fantasy attribution stays M6.
+- GET`/api/v1/me/sessions`, POST`/api/v1/me/sessions/revoke`: the member's own devices by public ID. Another member's ID returns `SESSION_NOT_FOUND`.
+- FrontOffice gained `season_strip`, `playoff_team_count` and roster `nfl` context; `Snapshot` gained `confirmed_at`, which is what data age must be computed from. Official totals are served at the verified 0.01 half-up policy.

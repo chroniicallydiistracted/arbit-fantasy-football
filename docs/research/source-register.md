@@ -64,3 +64,7 @@ Sleeper is now restricted to relevant NFL live games/PBP only. Directory/crosswa
 ## M2 Google and interface dependencies — 2026-10-31
 
 Google selected by owner. [Published OIDC metadata](https://accounts.google.com/.well-known/openid-configuration) and [official server-flow setup](https://developers.google.com/identity/openid-connect/openid-connect) verified issuer/fixed endpoints, RS256, S256, client_secret_post and exact redirect registration. Authlib/joserfc official APIs back offline signed-token/PKCE tests; no actual Google client or member sign-in proof. Current React/Vite/Router/Query versions and self-hosted OFL Newsreader/Instrument Sans are frozen; original SVG mark and resvg build conversion reuse no NFL/ESPN/Gridiron media.
+
+## Real-time source proof — 2026-11-01
+
+ESPN's `proTeams` directory, read through the production worker into a restored copy of the local database, returned 32 teams and 272 scheduled games. Directory IDs joined 132/132 owned players and all 14 games of week 8 by both team and event ID. A completed game returned 197 plays through the same path. No game was in progress during this run, so active-game latency, cadence under load and real correction pairs remain R-021. Gridiron permission: see OWN-015 and the [prerequisites](gridiron-prerequisites-2026-10-31.md).

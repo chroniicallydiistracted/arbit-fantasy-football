@@ -149,3 +149,13 @@ The owner restricts Sleeper to relevant NFL live-game/PBP data only. All former 
 ## M2 access storage
 
 Additive migration0006 provides issuer+subject accounts, hashed invitations/opaque sessions, bounded expiring browser-bound OIDC flows, approved season/manager bindings, revisioned preferences and safe access audit events. Consumed flow secrets are wiped. Suspended accounts and revoked sessions/bindings cannot authorize facts; reactivation requires fresh sign-in and preserves revoked state. Member responses compose one canonical FFA document with explicit observation/source status and no provider calls. The populated local migration preserved source/manifests/identity/canonical content; [M2 evidence](../project/handoffs/2026-10-31-member-application.md).
+
+## Implemented real-time sync — 2026-10-31
+
+`arbit-worker run` keeps every changing source current in separate league, live and statistics lanes. Cadence follows the observed NFL slate; the [plan](../superpowers/plans/2026-10-31-realtime-sync.md) holds the table and supersedes the "other adaptive modes" proposal above for those sources. Budgets are per host: Fantasy one request per 2 s, NFL one per second. Additive `0007_realtime` adds `source_health`, `nfl_team`, `nfl_schedule_game`, `nfl_game` and `nfl_play_revision`, plus `outbox_event.occurred_at` and per-device session columns.
+
+ESPN's `proTeams` directory is the verified NFL-team source that M1c was waiting for: its IDs match the fantasy `proTeamId` alias and the site scoreboard. It joined 132/132 owned players and all 14 games of a real week (2026-11-01). Team rows live outside the immutable league document, so a directory update never creates a league revision.
+
+An unchanged read writes only freshness. A changed play writes a new revision with its event in one transaction. A missing play is never a deletion; only an explicit source cancellation is. A play already cancelled when first seen is history rather than a correction. Final games are read again at 0, 1 and 12 hours for late corrections. Outbox events are trimmed after 24 hours, always keeping the newest so sequences are never reused.
+
+Not yet synced because nothing consumes them: FFA transactions and waiver results (M4), player news (M3), ESPN positional ratings (M4). Each must join the registry in `arbit_data/freshness.py` when its consumer ships.
