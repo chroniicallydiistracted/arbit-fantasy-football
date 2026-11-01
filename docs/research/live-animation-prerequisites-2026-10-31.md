@@ -65,6 +65,25 @@ These are acceptance criteria for LV-003, not aims:
 
 **Gate:** one real play goes first: a pass from CAR at GB, the one game with listed field and uniforms and stored plays. The owner reviews rendered video of it. No other play type is built until that look is approved, because the player model and motion could still miss the bar and be expensive to change later.
 
+## Sprite option — owner proposal, 2026-11-01
+
+The owner proposed cutting a sprite sheet (`docs/potential-assets/player-clip-group.png`) into motions. Its origin and license are unknown. **The GitHub repository is public, so the file stays uncommitted until that is settled.**
+
+**What the sheet is:** 384 cells, but only 6 drawings: 32 color sets × 2 skin tones × 6 poses. Silhouettes are pixel-identical across all sets. The poses are stand, three running frames, one arm-up pose facing the camera, and one kneel. They face one way, every player has the same body and the number 11, and each pose uses 16–18 color classes, so remapping to real weekly colors looks feasible (not tested). Stripes and logos would not carry over.
+
+**Scratch test, not application code:** a real play (401873023594, 24-yard pass) on the listed Green Bay field. Stills look good and suit the small cast. Reviewed frame by frame, the motion is stepped: poses hold 2–3 frames, and the tackle jumps from a sprint straight to a kneel, because the sheet has no contact or fall.
+
+| Motion | On the sheet | Roughly needed (estimate) |
+| --- | --- | --- |
+| Stand | 1 | 2 |
+| Run | 3 | 8 |
+| Throw | 1 | 5 |
+| Catch | 0 | 4 |
+| Tackle, hit, fall, get up | 0 | 12 |
+| Kick, punt, snap, hold | 1 (the kneel, for the hold) | 14 |
+
+**If chosen:** one set of about 45 frames serves all teams through recoloring. It would replace items 9 and 10, shrink 8, 11, 14, 15 and 16, and suit the soft field art in item 12. Sprites always step between drawn frames, so frame count and contact poses decide whether it clears the quality bar. The camera must stay side-on. Still open: where the missing frames come from, the sheet's license, and the owner's choice between this look and 3D.
+
 ## Proposed order
 
 1. **Done 2026-11-01:** raw copies of the responses the worker already fetches, adding no ESPN requests (OWN-020).

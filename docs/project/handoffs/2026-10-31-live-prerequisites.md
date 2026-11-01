@@ -23,8 +23,10 @@ The owner accepted the design (OWN-018) and moved Live ahead of M3 (OWN-019), as
 
 ## Owner inputs needed
 
-1. Player model and motion clips: budget and an Adobe account, or another route.
-2. Which phones and computers must run this smoothly.
+1. 3D or [sprites](../../research/live-animation-prerequisites-2026-10-31.md#sprite-option--owner-proposal-2026-11-01). Sprites need the sheet's origin and license, and about 45 frames from somewhere. 3D needs a player model and motion clips: budget and an Adobe account, or another route.
+2. Which phones and computers must run this smoothly. Sprites make this much less of a constraint.
+
+The GitHub repository is public. `docs/potential-assets/` is uncommitted on purpose: stage explicit paths and never `git add -A docs`.
 
 ## Resume here
 

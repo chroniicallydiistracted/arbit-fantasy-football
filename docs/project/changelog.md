@@ -3,6 +3,7 @@
 ## 2026-10-31 — Live capture and animation scope
 
 - Added private raw copies of every response the live lane reads, adding no requests, with a 5 GiB limit and failures that never reach the feed (OWN-020, R-030). The worker was restarted with it at 2026-11-01 06:23 UTC; 553 backend tests and all static checks pass.
+- Measured the owner's proposed sprite sheet and tested it on one real play in scratch: 6 poses recolored, attractive stills, stepped motion. Findings are in the prerequisites; no application code changed.
 - Owner scoped animation to what is relevant to each play (OWN-021). Spec documents now describe labeled 3D re-creations of the players ESPN names and the ball, replacing the dashed schematic and the 600–1800 ms sequence limit (ENG-023).
 
 ## 2026-10-31 — M2 source and agent policy correction
