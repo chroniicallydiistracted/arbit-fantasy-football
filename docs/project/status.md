@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M2 implemented locally; real Google/member operational gate open**.
+Updated **2026-10-31**. Phase: **M2 implemented; owner verified first Google/admin/team flow; remaining member/UX acceptance open**.
 
 ## Confirmed context
 
@@ -58,3 +58,7 @@ Final M2 verification: 453 backend tests, 14 client tests and 7 Chromium scenari
 ## Google configuration follow-up — 2026-10-31
 
 The owner created the Google OAuth client and supplied credentials in a locally ignored file. That file was safely moved from `config/google-auth.env` to root `.env.auth.local`, restricted to mode 600, and confirmed untracked/ignored. Configuration validation and real-OIDC-mode local readiness passed without printing credentials or contacting Google. The remaining M2 gate is the first administrator invitation, actual Google sign-in, approved manager binding and second-member verification.
+
+## Owner sign-in acceptance and manager labels — 2026-10-31
+
+The owner confirmed successful real Google sign-in, first administrator invitation, team approval/session rotation and return to Front Office. This is owner-reported real acceptance, separate from prior fictional tests; second-member and native/assistive-technology checks remain open. ESPN's team/settings view supplies first names for all eight FFA managers; six display names are generic. Canonical optional first names and team context now label the administrator manager dropdown, retaining original handles for fallback/disambiguation and stable IDs for binding. A normal live sync stored all eight names with manager IDs and approved bindings unchanged.

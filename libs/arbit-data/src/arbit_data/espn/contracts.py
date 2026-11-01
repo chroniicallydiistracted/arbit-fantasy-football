@@ -136,6 +136,7 @@ class Team(ProviderModel):
 class Member(ProviderModel):
     id: StrictStr
     display_name: StrictStr
+    first_name: StrictStr | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class MatchupSide(ProviderModel):

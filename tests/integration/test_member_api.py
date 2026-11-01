@@ -675,3 +675,47 @@ def test_repeated_fictional_login_and_reseed_preserve_invites_without_accumulati
             )
             seed(configured, engine)
     assert inventory() == before
+
+
+def test_admin_manager_options_include_verified_first_name_and_team_context(
+    uow, engine, tmp_path, captured_input
+):
+    from dataclasses import replace
+
+    from arbit_api.main import create_app
+    from arbit_data.archives import CaptureArchive
+    from arbit_data.league_store import publish_capture
+    from arbit_data.members import create_invitation, sign_in
+
+    from services.api.tests.test_oidc import provider_settings
+
+    acquisition = captured_input.acquisition
+    original = acquisition.league.members[0]
+    member = original.model_copy(update={"display_name": "ESPNFAN001", "first_name": "Avery"})
+    capture = captured_input.model_copy(
+        update={
+            "acquisition": replace(
+                acquisition, league=acquisition.league.model_copy(update={"members": (member,)})
+            )
+        }
+    )
+    digest = CaptureArchive(tmp_path).write(capture)
+    publish_capture(capture, digest, uow, now=acquisition.capture_finished_at)
+    configured = provider_settings().model_copy(
+        update={"database_url": settings(engine).database_url, "public_origin": "http://testserver"}
+    )
+    invitation = create_invitation(
+        uow, "https://identity.example", "admin@example.test", role="admin", bootstrap=True
+    )
+    token, _ = sign_in(
+        uow, "https://identity.example", "admin", "admin@example.test", True, invitation=invitation
+    )
+    with TestClient(create_app(configured, engine=engine)) as client:
+        client.cookies.set("arbit_session", token)
+        result = client.get("/api/v1/admin/directory")
+        assert result.status_code == 200
+        manager = result.json()["managers"][0]
+        assert manager["first_name"] == "Avery"
+        assert manager["display_name"] == "ESPNFAN001"
+        assert manager["team_names"]
+        assert len(manager["team_names"]) == len(manager["team_ids"])

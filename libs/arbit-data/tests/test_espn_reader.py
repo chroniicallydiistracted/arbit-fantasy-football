@@ -233,3 +233,12 @@ def test_manager_changes_during_capture_are_rejected():
     last["teams"][0]["owners"] = ["other-owner"]
     with pytest.raises(EspnError, match="SOURCE_CHANGED"):
         EspnReader(ScriptedEspn(initial=first, final=last)).fetch_league_snapshot(2026)
+
+
+def test_first_name_changes_during_capture_are_rejected():
+    first = fixture("league.synthetic.json")
+    first["members"] = [{"id": "owner-1", "displayName": "ESPNFAN001", "firstName": "Avery"}]
+    last = deepcopy(first)
+    last["members"][0]["firstName"] = "Morgan"
+    with pytest.raises(EspnError, match="SOURCE_CHANGED"):
+        EspnReader(ScriptedEspn(initial=first, final=last)).fetch_league_snapshot(2026)

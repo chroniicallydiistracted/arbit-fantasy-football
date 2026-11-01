@@ -376,6 +376,8 @@ export interface components {
         AdminManager: {
             /** Display Name */
             display_name: string;
+            /** First Name */
+            first_name?: string | null;
             /**
              * Id
              * Format: uuid
@@ -383,6 +385,8 @@ export interface components {
             id: string;
             /** Team Ids */
             team_ids: string[];
+            /** Team Names */
+            team_names?: string[];
         };
         /** Analysis */
         Analysis: {

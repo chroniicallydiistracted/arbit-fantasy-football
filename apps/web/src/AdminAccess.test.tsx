@@ -35,7 +35,15 @@ it("creates a private invitation only on explicit submission and keeps assignmen
                     manager_ids: [],
                   },
                 ],
-                managers: [{ id: "manager", display_name: "Fictional FFA manager", team_ids: [] }],
+                managers: [
+                  {
+                    id: "manager",
+                    display_name: "ESPNFAN001",
+                    first_name: "Avery",
+                    team_ids: [],
+                    team_names: ["Juniper Club"],
+                  },
+                ],
               }
             : { invitation_url: "https://arbit.invalid/join#private-test-token" },
         ),
@@ -51,6 +59,7 @@ it("creates a private invitation only on explicit submission and keeps assignmen
   );
   await screen.findByRole("option", { name: "Fictional member" });
   expect(calls.every((call) => call.url.endsWith("directory"))).toBe(true);
+  expect(screen.getByRole("option", { name: "Avery — Juniper Club" })).toBeVisible();
   fireEvent.change(screen.getByLabelText("Invited account email"), {
     target: { value: "member@fiction.invalid" },
   });

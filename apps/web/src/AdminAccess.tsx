@@ -6,6 +6,16 @@ import { useSession } from "./session";
 import { http } from "./transport";
 
 type Directory = components["schemas"]["AdminDirectory"];
+type Manager = Directory["managers"][number];
+function managerLabel(manager: Manager, all: Manager[]): string {
+  const base = (value: Manager) =>
+    [value.first_name?.trim() || value.display_name, ...(value.team_names ?? [])].join(" — ");
+  const label = base(manager);
+  return all.some((other) => other.id !== manager.id && base(other) === label)
+    ? `${label} (${manager.display_name})`
+    : label;
+}
+
 export function AdminAccess() {
   const { auth, me, refresh } = useSession();
   const query = useQuery({
@@ -165,7 +175,7 @@ export function AdminAccess() {
               <option value="">Choose the confirmed manager</option>
               {query.data?.managers.map((value) => (
                 <option key={value.id} value={value.id}>
-                  {value.display_name}
+                  {managerLabel(value, query.data.managers)}
                 </option>
               ))}
             </select>

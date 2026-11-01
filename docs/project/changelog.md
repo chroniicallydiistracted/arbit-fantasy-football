@@ -88,3 +88,7 @@ M2 final validation: 453 backend / 14 client tests and 7 Chromium scenarios pass
 ## 2026-10-31 — Private Google configuration prepared
 
 Moved the owner-provided ignored configuration into root `.env.auth.local` and set mode 600. Verified Git exclusion, complete real-OIDC configuration, unauthenticated member boundary and local database readiness without exposing credentials or making provider calls. Actual Google/member sign-in remains unverified.
+
+## 2026-10-31 — First-name manager assignment labels
+
+Owner confirmed the real first-administrator Google/binding/Front Office flow. Manager choices now prefer verified ESPN first names plus team context, with handle fallback/disambiguation. Live sync populated eight first names and preserved all manager IDs/approved bindings. Original captures remain compatible; unused surnames/email/notification fields remain excluded.

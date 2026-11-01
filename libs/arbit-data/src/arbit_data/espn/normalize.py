@@ -308,7 +308,11 @@ def normalize_acquisition(
         matchup_period=league.status.current_matchup_period,
         rules_hash=rules_hash,
         managers=tuple(
-            Manager(id=identity("manager", m.id), display_name=m.display_name)
+            Manager(
+                id=identity("manager", m.id),
+                display_name=m.display_name,
+                first_name=(m.first_name.strip() or None) if m.first_name else None,
+            )
             for m in sorted(league.members, key=lambda m: m.id)
         ),
         teams=tuple(teams),

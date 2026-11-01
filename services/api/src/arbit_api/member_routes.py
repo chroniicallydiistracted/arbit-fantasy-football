@@ -441,6 +441,8 @@ def install_member_routes(
                     {
                         "id": m.id,
                         "display_name": m.display_name,
+                        "first_name": m.first_name,
+                        "team_names": [t.name for t in document.teams if m.id in t.managers],
                         "team_ids": [t.id for t in document.teams if m.id in t.managers],
                     }
                     for m in document.managers

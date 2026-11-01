@@ -20,7 +20,8 @@ def capture():
         {
             "id": "manager-a",
             "displayName": "Commissioner",
-            "firstName": "PRIVATE-FIRST",
+            "firstName": "Avery",
+            "lastName": "PRIVATE-LAST",
             "notificationSettings": {"email": "private@example.invalid"},
         }
     ]
@@ -47,7 +48,12 @@ def test_archive_roundtrip_is_private_and_idempotent(tmp_path):
     assert path.stat().st_mode & 0o777 == 0o600
     data = gzip.decompress(path.read_bytes())
     assert hashlib.sha256(data).hexdigest() == digest
-    assert b"PRIVATE-FIRST" not in data and b"private@example" not in data
+    # First names are now explicitly used for manager labels; unrelated identity
+    # and notification fields must still be excluded from private captures.
+    assert b"Avery" in data
+    assert b"PRIVATE-LAST" not in data and b"private@example" not in data
+    assert b"notificationSettings" not in data
+    assert item.acquisition.league.members[0].first_name == "Avery"
     assert b"Commissioner" in data
     assert item.acquisition.league.members[0].id == "manager-a"
     assert store.read(digest).acquisition.receipts[0].sha256 == "a" * 64

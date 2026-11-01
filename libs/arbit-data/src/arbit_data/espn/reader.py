@@ -103,7 +103,9 @@ def _context(league: League) -> tuple[Any, ...]:
         tuple(sorted(team.id for team in league.teams)),
         rosters,
         league.draft_detail,
-        tuple(sorted((member.id, member.display_name) for member in league.members)),
+        tuple(
+            sorted((member.id, member.display_name, member.first_name) for member in league.members)
+        ),
         tuple(
             sorted(
                 (team.id, team.name, team.abbrev, tuple(sorted(team.owners)), team.primary_owner)

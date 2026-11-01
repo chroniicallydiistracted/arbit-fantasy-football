@@ -145,7 +145,9 @@ class AdminAccount(Account):
 class AdminManager(WireModel):
     id: UUID
     display_name: str
+    first_name: str | None = None
     team_ids: list[UUID]
+    team_names: list[str] = Field(default_factory=list)
 
 
 class AdminDirectory(WireModel):

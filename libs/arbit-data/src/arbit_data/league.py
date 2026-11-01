@@ -6,6 +6,8 @@ from decimal import Decimal
 from typing import Any, Literal
 from uuid import UUID
 
+from pydantic import Field
+
 from arbit_data.contracts import DataModel
 
 
@@ -18,6 +20,7 @@ def content_hash(payload: Any) -> str:
 class Manager(DataModel):
     id: UUID
     display_name: str
+    first_name: str | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class FantasyTeam(DataModel):

@@ -310,3 +310,35 @@ def test_leased_replay_rechecks_time_before_completing(uow, tmp_path, captured_i
         publish_capture(captured_input, digest, uow, lease=lease, clock=lambda: next(times))
     assert queue.get_job(queued.id).status == "running"
     assert count(uow, "league_snapshot") == 1
+
+
+def test_verified_first_names_publish_without_changing_manager_identity(
+    uow, tmp_path, captured_input
+):
+    from uuid import UUID
+
+    from arbit_data.espn.contracts import Member
+    from arbit_data.league import Manager
+
+    # Absent optional names must not alter old capture hashes or canonical documents.
+    assert Member(id="old", display_name="ESPNFAN001").model_dump() == {
+        "id": "old",
+        "display_name": "ESPNFAN001",
+    }
+    assert Manager(id=UUID(int=1), display_name="Old").model_dump(mode="json") == {
+        "id": str(UUID(int=1)),
+        "display_name": "Old",
+    }
+    publish(uow, tmp_path, captured_input)
+    old = read_current(uow, 2026)
+
+    def rename(data):
+        data["members"][0]["firstName"] = "  Avery  "
+
+    updated = later(captured_input, change=rename)
+    publish(uow, tmp_path, updated)
+    new = read_current(uow, 2026)
+    assert new["league"]["managers"][0]["first_name"] == "Avery"
+    assert new["league"]["managers"][0]["id"] == old["league"]["managers"][0]["id"]
+    assert new["league"]["teams"] == old["league"]["teams"]
+    assert new["league"]["players"] == old["league"]["players"]
