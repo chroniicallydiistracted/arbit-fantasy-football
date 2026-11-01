@@ -56,7 +56,7 @@ export function PlayerDrawer() {
           : [...me.preferences.watchlist, player as string],
       });
     } catch (value) {
-      setError(value instanceof Error ? value.message : "Watchlist could not be updated.");
+      setError(value instanceof Error ? value.message : "Watchlist update failed.");
     } finally {
       setSaving(false);
     }
@@ -71,59 +71,53 @@ export function PlayerDrawer() {
         close();
       }}
     >
-      <div className="drawer-top">
-        <span className="eyebrow">Player file</span>
-        <button type="button" className="quiet" onClick={close} aria-label="Close player details">
-          Close <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      {query.isPending && (
-        <>
-          <h2 id="player-title">Player details</h2>
-          <Busy label="Opening player file…" />
-        </>
-      )}
-      {query.isError && (
-        <>
-          <h2 id="player-title">Player details unavailable</h2>
-          <p role="alert">This player could not be loaded. Close this file and try again.</p>
-        </>
-      )}
-      {data && query.data && (
-        <>
-          <p className="player-position">
-            {data.position}{" "}
-            <span> / {data.kind === "defense_unit" ? "Defense & special teams" : "Player"}</span>
-          </p>
-          <h2 id="player-title">{data.display_name}</h2>
-          <button
-            type="button"
-            className="watch-button"
-            aria-pressed={watched}
-            disabled={saving}
-            onClick={() => void toggle()}
-          >
-            {saving ? "Saving…" : watched ? "✓ On your watchlist" : "+ Add to watchlist"}
+      <div className="drawer-head">
+        <div className="drawer-top">
+          <span>Player</span>
+          <button type="button" className="quiet" onClick={close} aria-label="Close player details">
+            Close
           </button>
-          {error && (
-            <p role="alert" className="error-text">
-              {error}
+        </div>
+        {data && query.data ? (
+          <>
+            <p>
+              {data.position} ·{" "}
+              {data.kind === "defense_unit" ? "Defense & special teams" : "Athlete"}
             </p>
-          )}
-          <section className="drawer-section">
-            <h3>Official points</h3>
-            <p className="drawer-points">
-              {points(data.official_current_points)} <span>pts</span>
-            </p>
-            <p className="muted">
-              ESPN · scoring period {query.data.snapshot.scoring_period}
-              {data.official_current_points === null
-                ? " · Total not available"
-                : " · Official total"}
-            </p>
-          </section>
-          <section className="drawer-section">
-            <h3>Roster facts</h3>
+            <h2 id="player-title">{data.display_name}</h2>
+          </>
+        ) : (
+          <h2 id="player-title">{query.isError ? "Player unavailable" : "Player"}</h2>
+        )}
+      </div>
+      <div className="drawer-body">
+        {query.isPending && <Busy label="Loading player…" />}
+        {query.isError && (
+          <p role="alert">This player couldn’t be loaded. Close this and try again.</p>
+        )}
+        {data && query.data && (
+          <>
+            <button
+              type="button"
+              className="toggle"
+              aria-pressed={watched}
+              disabled={saving}
+              onClick={() => void toggle()}
+            >
+              {saving ? "Saving…" : watched ? "On watchlist" : "Add to watchlist"}
+            </button>
+            {error && (
+              <p role="alert" className="error-text">
+                {error}
+              </p>
+            )}
+            <section>
+              <p className="drawer-points">{points(data.official_current_points)}</p>
+              <p className="fine">
+                Official ESPN points, scoring period {query.data.snapshot.scoring_period}
+                {data.official_current_points === null ? ". No score yet." : ""}
+              </p>
+            </section>
             <dl className="fact-list">
               <div>
                 <dt>Availability</dt>
@@ -137,22 +131,21 @@ export function PlayerDrawer() {
               </div>
               <div>
                 <dt>Lineup slot</dt>
-                <dd>{data.lineup_slot ?? "Not assigned"}</dd>
+                <dd>{data.lineup_slot ?? "None"}</dd>
               </div>
               <div>
                 <dt>Eligible slots</dt>
                 <dd>{data.eligible_slots.join(", ") || "Unknown"}</dd>
               </div>
               <div>
-                <dt>Health</dt>
+                <dt>Injury</dt>
                 <dd>
-                  {data.injury_status ||
-                    (data.injured ? "Injury reported" : "No injury flag reported")}
+                  {data.injury_status || (data.injured ? "Injury reported" : "None reported")}
                 </dd>
               </div>
               <div>
-                <dt>Active</dt>
-                <dd>{data.active ? "Listed active" : "Not listed active"}</dd>
+                <dt>Roster status</dt>
+                <dd>{data.active ? "Active" : "Inactive"}</dd>
               </div>
               <div>
                 <dt>Locks</dt>
@@ -163,22 +156,20 @@ export function PlayerDrawer() {
                     data.trade_locked && "Trade",
                   ]
                     .filter(Boolean)
-                    .join(", ") || "None reported"}
+                    .join(", ") || "None"}
                 </dd>
               </div>
             </dl>
-          </section>
-          <section className="analysis-note">
-            <p className="eyebrow">Player analysis</p>
-            <h3>A fuller picture is coming.</h3>
-            <p>
-              Evaluations and recommendations will appear once the shared player model has been
-              verified.
+            <p className="fine">
+              <span className="state-off">Projections off</span>
+              Evaluations appear here once player projections are built.
             </p>
-          </section>
-          <SourceNote snapshot={query.data.snapshot} />
-        </>
-      )}
+            <p className="fine">
+              <SourceNote snapshot={query.data.snapshot} />
+            </p>
+          </>
+        )}
+      </div>
     </dialog>
   );
 }

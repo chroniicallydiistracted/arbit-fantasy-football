@@ -14,7 +14,7 @@ describe("official fact presentation", () => {
   it("never claims future or invalid source times are fresh", () => {
     const now = Date.parse("2026-10-31T12:00:00Z");
     expect(ageLabel("2026-10-31T11:58:00Z", now)).toBe("2 min ago");
-    expect(ageLabel("2026-11-01T00:00:00Z", now)).toBe("Time needs verification");
-    expect(ageLabel("invalid", now)).toBe("Time unavailable");
+    expect(ageLabel("2026-11-01T00:00:00Z", now)).toBe("time unknown");
+    expect(ageLabel("invalid", now)).toBe("time unknown");
   });
 });

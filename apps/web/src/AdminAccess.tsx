@@ -41,7 +41,7 @@ export function AdminAccess() {
     } catch (failure) {
       setError(true);
       setMessage(
-        failure instanceof Error ? failure.message : "The access change could not be saved.",
+        failure instanceof Error ? failure.message : "The change wasn’t saved. Try again.",
       );
     } finally {
       setBusy(false);
@@ -72,30 +72,23 @@ export function AdminAccess() {
   }
   return (
     <section className="settings-section admin-access">
-      <p className="eyebrow">Administrator</p>
       <h2>League access</h2>
       <p>
-        Invitations allow sign-in. Team assignments require your separate approval. Changing an
-        assignment signs that member out so their next session uses the approved access.
+        An invitation lets someone sign in. A team assignment is a separate approval. Changing an
+        assignment signs that member out.
       </p>
       {me?.fixture && (
-        <Notice>
-          This fictional preview shows the access controls. Real invitations require the configured
-          sign-in provider.
-        </Notice>
+        <Notice>Test data. Invitations need Google sign-in and are disabled here.</Notice>
       )}
       {message && <Notice danger={error}>{message}</Notice>}
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          void run(
-            createInvite,
-            "Private invitation created. Share the link directly with the invited member.",
-          );
+          void run(createInvite, "Invitation created. Send the link to that member directly.");
         }}
       >
         <h3>Invite a member</h3>
-        <label htmlFor="invitation-email">Invited account email</label>
+        <label htmlFor="invitation-email">Google account email</label>
         <input
           id="invitation-email"
           type="email"
@@ -106,12 +99,12 @@ export function AdminAccess() {
           onChange={(event) => setEmail(event.target.value)}
         />
         <button type="submit" disabled={busy || me?.fixture}>
-          Create private invitation
+          Create invitation
         </button>
       </form>
       {invite && (
         <div className="private-invitation">
-          <label htmlFor="private-invitation">Private invitation · Expires in seven days</label>
+          <label htmlFor="private-invitation">Invitation link, expires in seven days</label>
           <input
             id="private-invitation"
             readOnly
@@ -134,7 +127,7 @@ export function AdminAccess() {
         </div>
       )}
       <div className="assignment-form">
-        <h3>Approve an FFA team assignment</h3>
+        <h3>Assign a team</h3>
         {query.isError ? (
           <Notice
             danger
@@ -144,7 +137,7 @@ export function AdminAccess() {
               </button>
             }
           >
-            Member assignments could not be loaded.
+            Members couldn’t be loaded.
           </Notice>
         ) : (
           <>
@@ -172,7 +165,7 @@ export function AdminAccess() {
               value={manager}
               onChange={(event) => setManager(event.target.value)}
             >
-              <option value="">Choose the confirmed manager</option>
+              <option value="">Choose a manager</option>
               {query.data?.managers.map((value) => (
                 <option key={value.id} value={value.id}>
                   {managerLabel(value, query.data.managers)}
@@ -180,30 +173,26 @@ export function AdminAccess() {
               ))}
             </select>
             <p className="muted">
-              Choose the member’s actual ESPN manager identity. Co-managers retain their separate
-              identities.
+              Pick the ESPN manager this person actually is. Co-managers each have their own entry.
             </p>
             <div className="admin-actions">
               <button
                 type="button"
                 disabled={busy || !account || !manager || !!selected?.suspended}
                 onClick={() =>
-                  void run(() => bind(), "Team assignment approved. The member must sign in again.")
+                  void run(() => bind(), "Team assigned. The member must sign in again.")
                 }
               >
-                Approve assignment
+                Assign team
               </button>
               <button
                 type="button"
                 disabled={busy || !account || !manager || !selected?.manager_ids.includes(manager)}
                 onClick={() =>
-                  void run(
-                    () => bind(true),
-                    "Team assignment removed. Prior sessions were revoked.",
-                  )
+                  void run(() => bind(true), "Team removed. The member’s sessions were ended.")
                 }
               >
-                Remove assignment
+                Remove team
               </button>
             </div>
             {selected && (
@@ -220,20 +209,20 @@ export function AdminAccess() {
                           body: { account_id: account },
                           csrf: auth?.csrf_token,
                         });
-                      }, "Member reactivated. They must sign in again; removed assignments stay removed.")
+                      }, "Member reactivated. They must sign in again. Removed teams stay removed.")
                     }
                   >
                     Reactivate member
                   </button>
                 )}
                 <p className="muted">
-                  Revoke sessions to require a fresh sign-in. Suspension also prevents future
-                  sign-in and should be used only when access must be withdrawn.
+                  Revoking ends every session for this member. Suspending also blocks future
+                  sign-in.
                 </p>
                 <button
                   type="button"
                   disabled={busy || account === me?.account.id}
-                  onClick={() => void run(() => revoke(false), "Member sessions revoked.")}
+                  onClick={() => void run(() => revoke(false), "Sessions ended.")}
                 >
                   Revoke sessions
                 </button>
@@ -245,7 +234,7 @@ export function AdminAccess() {
                       if (
                         window.confirm(`Suspend ${selected.display_name} and revoke their access?`)
                       )
-                        void run(() => revoke(true), "Member suspended and sessions revoked.");
+                        void run(() => revoke(true), "Member suspended and sessions ended.");
                     }}
                   >
                     Suspend member

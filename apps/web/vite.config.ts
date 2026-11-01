@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 // Build tooling only. This never enters the client bundle.
@@ -7,12 +8,18 @@ import { writeStaticWorker } from "../../scripts/web/static-worker.mjs";
 export default defineConfig({
   plugins: [
     react(),
-    {
-      name: "arbit-static-worker",
-      async closeBundle() {
-        await writeStaticWorker(new URL("./dist", import.meta.url).pathname);
-      },
-    },
+    (() => {
+      let outDir = "";
+      return {
+        name: "arbit-static-worker",
+        configResolved(config: { root: string; build: { outDir: string } }) {
+          outDir = resolve(config.root, config.build.outDir);
+        },
+        async closeBundle() {
+          await writeStaticWorker(outDir);
+        },
+      };
+    })(),
   ],
   server: {
     strictPort: true,

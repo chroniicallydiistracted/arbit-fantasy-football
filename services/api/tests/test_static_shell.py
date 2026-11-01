@@ -32,10 +32,10 @@ def test_font_license_notices_are_allowlisted(tmp_path):
 
     (tmp_path / "index.html").write_text("<!doctype html>")
     (tmp_path / "licenses").mkdir()
-    for name in ["newsreader.txt", "instrument-sans.txt"]:
+    for name in ["big-shoulders.txt", "libre-franklin.txt"]:
         (tmp_path / "licenses" / name).write_text("SIL OPEN FONT LICENSE")
     with TestClient(create_app(RuntimeSettings(web_dist_path=tmp_path))) as client:
-        for name in ["newsreader.txt", "instrument-sans.txt"]:
+        for name in ["big-shoulders.txt", "libre-franklin.txt"]:
             assert client.get(f"/licenses/{name}").text == "SIL OPEN FONT LICENSE"
         assert client.get("/licenses/other.txt").status_code == 404
 

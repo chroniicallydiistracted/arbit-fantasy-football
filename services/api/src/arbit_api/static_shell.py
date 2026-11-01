@@ -31,8 +31,8 @@ PUBLIC_FILES = {
     "manifest.webmanifest",
     "mark.svg",
     "offline.html",
-    "licenses/newsreader.txt",
-    "licenses/instrument-sans.txt",
+    "licenses/big-shoulders.txt",
+    "licenses/libre-franklin.txt",
 }
 
 

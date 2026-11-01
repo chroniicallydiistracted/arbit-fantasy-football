@@ -55,10 +55,10 @@ export function PwaControls() {
   }, []);
   if (!waiting && !install) return null;
   return (
-    <aside className="pwa-offer" aria-label="Application options">
+    <aside className="pwa-offer" aria-label="App update and install">
       {waiting && (
         <>
-          <span>A new Arbit version is ready.</span>
+          <span>Update available.</span>
           <button
             type="button"
             onClick={() => {

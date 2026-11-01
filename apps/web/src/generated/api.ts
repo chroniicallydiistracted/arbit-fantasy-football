@@ -444,8 +444,12 @@ export interface components {
             matchup: components["schemas"]["Matchup"] | null;
             /** Matchup Periods */
             matchup_periods: number[];
+            /** Playoff Team Count */
+            playoff_team_count: number | null;
             /** Roster */
             roster: components["schemas"]["Player"][];
+            /** Season Strip */
+            season_strip: components["schemas"]["SeasonCell"][];
             /** Selected Matchup Period */
             selected_matchup_period: number;
             snapshot: components["schemas"]["Snapshot"];
@@ -626,6 +630,22 @@ export interface components {
              * @default false
              */
             suspend: boolean;
+        };
+        /**
+         * SeasonCell
+         * @description One matchup period for the member's team. Result only once the period has completed.
+         */
+        SeasonCell: {
+            /** Matchup Period */
+            matchup_period: number;
+            /** Opponent Points */
+            opponent_points: string | null;
+            /** Opponent Team Id */
+            opponent_team_id: string | null;
+            /** Own Points */
+            own_points: string | null;
+            /** Result */
+            result: ("win" | "loss" | "tie") | null;
         };
         /** Snapshot */
         Snapshot: {

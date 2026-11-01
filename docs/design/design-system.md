@@ -1,80 +1,109 @@
 # Arbit Design System Specification
 
-Version0.2 · 2026-10-31 · M2 visual system implemented for the member shell and facts. Future feature/Live components remain specifications. See [feature experiences](../product/feature-experiences.md) for screen workflows and [tokens](../../packages/design-tokens/tokens.json) for machine-readable values.
+Version 0.3 · 2026-10-31 · Implemented for the member shell and facts. Replaces the v0.2 system, which the owner rejected as AI-identifiable ([ADR-005](../architecture/decisions/005-officiating-character.md)). Future Live and advisor components remain specifications. Machine values: [tokens](../../packages/design-tokens/tokens.json). Screen workflows: [feature experiences](../product/feature-experiences.md).
 
-## Product character and information hierarchy
+## Character
 
-A calm football front office: ink and warm paper, deep green for primary actions, restrained brass for the Geller Cup tradition. Dense analysis should feel readable and deliberate. Football team colors belong in team identifiers and Live context, not in place of semantic status colors. No decorative dashboard metrics without a decision or a clear meaning.
+Arbit is named for the arbiter. The interface takes its character from the people who rule on a football game and the graphics that show it: **officials and the broadcast booth.** It should read as a piece of football equipment, not a software template.
 
-Each workspace answers: what matters, what evidence supports it, what alternatives exist, and what action the manager can take. The default hierarchy is page/team context → primary decision → evidence and comparison → supplementary statistics. Front Office is the entry point; the feature family shares profile, recommendation and matchup components. Model remains shared intelligence, with a plain-language methodology view.
+Every workspace answers: what matters, what evidence supports it, what the alternatives are, what the member can do. Hierarchy runs context → decision → evidence → supporting statistics. Density is a feature; members come to compare numbers.
 
-## Visual tokens
+## Language
 
-| Role | Light | Dark |
-| --- | --- | --- |
-| Canvas | `#F5F3ED` | `#101A18` |
-| Surface | `#FFFFFF` | `#192622` |
-| Primary text | `#182722` | `#F3F4EF` |
-| Secondary text | `#506159` | `#B8C8BF` |
-| Primary action | `#176044` | `#9AD8B3` |
-| Action text | `#FFFFFF` | `#10251A` |
-| Warning text | `#825200` | `#EFC36A` |
-| Error text | `#AE2E35` | `#FFACAE` |
-| Focus ring | `#176044` | `#9AD8B3` |
+This is a rule, not a preference: **no slogans, taglines or marketing lines anywhere in the product**, including the sign-in page. A referee states the call.
 
-Use semantic variables, never arbitrary team-color text on unknown backgrounds. Brass `#A77828` is ornamental; use the tested warning token for small warning text. Borders use role-specific muted tones for decoration; form boundaries/focus must meet nontext contrast. Status always includes icon/text as well as color. Dark mode follows system preference with persistent account override; charts, field controls and asset framing have explicit dark treatments.
+- Labels say what a thing is: "Roster", not "The team sheet".
+- Empty and error states say what is missing, why and what would change it: "No roster saved for this matchup."
+- Say what isn't built: "Not built yet. Sit and start calls need player projections." Don't promise ("coming soon", "insight follows").
+- State uses exact words: **Official** for ESPN-published figures, **Final**, **In progress**, **Live** and **Provisional** for unconfirmed values, **Projected** for model output, **Current** and **Behind** for data age, and **Off** for a disabled capability. A recommendation is a **call**.
+- Short sentences. No exclamation marks, no addressing the member's feelings, no "seamless", "effortless", "unlock", "elevate".
+- Never expose IDs, training jargon or provider errors in member flows.
 
-Typography: self-hosted OFL Instrument Sans for interface text and Newsreader for editorial headings, with system fallbacks. Scores use tabular numerals; IDs stay out of normal manager flows. Source mark is original SVG; PNG install variants are generated during build. Font notices ship with the static app. Type scale 12/14/16/20/24/32/40 px; body 16 px at 1.5 line-height; dense tables 14 px at 1.4; metadata 12 px only for secondary information. Strong numeric hierarchy must not hide units, horizon or source context.
+Recommendation copy follows **action → evidence → uncertainty → ESPN link**. Confidence labels describe evidence quality; a numeric probability appears only when validated and correctly named.
 
-Spacing base 4 px: 4/8/12/16/24/32/48/64. Corners 4/8/12 px; elevation restricted to dialogs/popovers. Content max 1600 px with 24–32 px desktop gutters; 12-column grid and 24 px gaps. Navigation width 232 px, header at least 64 px. Roster/research tables may use horizontal overflow rather than compressing values into unreadable columns.
+## Color: signals from the game
 
-## Navigation and responsive behavior
+Everything is black and white until something needs attention. Each signal has one meaning, taken from what it means on a football broadcast, and never decorates.
 
-At ≥1280 px: persistent navigation, wide content, optional 320 px contextual rail. At 768–1279 px: collapsible navigation and stacked rail. Below 768 px: single column, compact top navigation/menu and a maximum of five direct bottom actions (Front Office, Lineup, Scout, Live, More); Draft/Market/Archive remain accessible through More. Active draft can offer a contextual shortcut without changing route semantics. These are layout breakpoints, not device detection.
+| Role | Light | Dark | Football source | Meaning |
+| --- | --- | --- | --- | --- |
+| `canvas` / `surface` | `#E7E9EB` / `#FFFFFF` | `#0A0B0D` / `#15171B` | | Cool neutral only. Never cream |
+| `ink` / `inkMuted` | `#0B0C0E` / `#4A5059` | `#F5F6F7` / `#AEB4BD` | | Text |
+| `flag` | `#FFC600` | `#FFC600` | Penalty flag and first-down line | A decision or threshold: active tab, playoff line, own team. Fill only, with `onFlag` text |
+| `los` | `#1257C9` | `#86B7FF` | Blue line of scrimmage | Modeled or projected values, and model state |
+| `chain` | `#A93C05` | `#FF9A5C` | Orange sideline chains | Live, provisional, questionable, data behind |
+| `challenge` | `#BA0E18` | `#FF8A91` | Red challenge flag | Faults, corrections, out, losses |
+| `gain` | `#0A6B32` | `#5FD892` | Field | Wins and positive change. The field surface in Live |
+| `board*` | constant | constant | Broadcast scoreboard | Always-dark band, scoreboards and drawer headers, in both themes |
 
-Global player search is keyboard accessible; Esc closes overlays and returns focus. Team/season/week context is visible when it changes interpretation. Back navigation restores scroll/filter/comparison state. Touch controls target ≥44 px; no hover-only action. PWA safe areas, browser back behavior and install/update prompts use platform conventions. Accessibility and layout must be tested at 320, 768, 1280 and 1600 px, with 200% text zoom and reflow.
+`action` is black in light mode and yellow in dark. Team colors belong in team identity and Live, and never replace a signal. Status always has text as well as color. All token pairs are contrast-checked by the foundation validator.
 
-## Component inventory and behavior
+**Excluded:** cream or warm paper backgrounds, forest green, gold or brass accents, gradients as decoration, drop shadows, glass, offset neo-brutalist shadows, pulsing dots.
 
-| Component | Required behavior/states |
+## Type
+
+- **Big Shoulders** for display: page and section titles, tabs, table headers, slot tags and all large numerals. Tall American gothic drawn from stadium signage. It is the only uppercase in the system and carries almost no tracking.
+- **Libre Franklin** for text and tables: the sports-page grotesque tradition. Tabular lining figures everywhere.
+- Roles: `agate` 12 px (secondary only), `data` 13, `ui` 14 (tables), `body` 16, `label` 17, `h3` 20, `h2` 26, `h1` 44, `score` up to 96, `gate` up to 176.
+
+**Excluded:** serif display faces, italic emphasis, tracked uppercase eyebrows above headings, a period after a heading or logo, numbered navigation, Inter and the other generated-interface defaults listed in the lint.
+
+## Space and shape
+
+Spacing is the 4 px scale in tokens, used through `--space-*` and `--gutter`. Corners are square, or 2 px on controls. There are no elevation shadows; separation comes from rules, boards and surface change. Maximum content width is 1520 px.
+
+## Motifs
+
+Used rarely, always structurally.
+
+- **Referee stripes:** the 4 px strip at the top of the window and the sign-in panel. Nothing else.
+- **Hash marks:** the tick rule under a page title, drawn like yard-line hashes.
+- **First-down line:** a solid yellow rule marks a threshold, such as the active tab, the current matchup or the playoff line.
+- **Mark:** an original white A with a yellow first-down line running through it, on black. No NFL, ESPN or Gridiron media.
+
+## Layout and navigation
+
+- **Band:** always-dark top band with wordmark, workspace tabs, search and account. Not a left sidebar: tables get the width.
+- **Context strip:** FFA, season, matchup period, compact scorebug on other workspaces, and data status.
+- **Front Office:** scoreboard and season strip across the top; roster and league table beneath.
+- **Breakpoints:** ≥1100 px one-row band with rail; 768–1099 px tabs on a second row, single column; below 768 px a bottom tab bar with at most five direct actions (Front Office, Lineup, Scout, Live, More), with Draft, Market, Archive and account under More.
+
+These are layout breakpoints, not device detection. Layout must work at 320, 768, 1280 and 1600 px, and at 200% text zoom. Touch targets are at least 44 px on controls, and no action is hover-only. Wide tables scroll in their own container rather than compressing values.
+
+## Components
+
+| Component | Required behavior and states |
 | --- | --- |
-| AppShell / Navigation | Active route, keyboard order, mobile menu, team/period context, session expiration |
-| Button / IconButton / Link | Primary/secondary/quiet/danger, loading, disabled reason, focus; links navigate, buttons act |
-| FormField / Select / Search / SegmentedControl | Persistent label, help/error association, keyboard selection, debounced async loading, clear action |
-| Card / Panel / Disclosure | Heading hierarchy, bounded density, expanded keyboard access; whole-card navigation must not swallow child buttons |
-| PlayerIdentity / PlayerStatCard / ProfileDrawer | Team/position/ownership, current role, rich research sections, missing data, consistent player link |
-| StatValue / StatTable / DataTable | Units/window, alignment, tabular digits, sort/filter/page or virtualization, sticky header with semantic table support |
-| RecommendationCard / EvidenceDrawer | Action, benefit/horizon, alternatives, evidence/sample, freshness, uncertainty, methodology link, blocked reason |
-| ProjectionInterval / TrendChart / ComparisonChart | Observed vs projected style, zero/baseline choice, consistent axes, table alternative, keyboard point inspection |
-| TeamHeader / MatchupSummary / RosterSlot | Official vs projected score, eligibility/lock, own/opponent context, bye/inactive/empty states |
-| DraftBoard / PickClock / AvailabilityEstimate | Current pick, selected/available, board corrections, offline/manual status, scenario assumptions |
-| TradeBuilder / AddDropComparison | Package legality, both teams' effects, stale ownership, unknown waiver/deadline rules |
-| GameScore / PlayTimeline / FieldReplay | Status/clock/possession, filters, corrections, pause/step/replay, schematic label and fallback |
-| SourceStatus / EmptyState / ErrorState / Toast | Fresh/partial/stale/unavailable, recoverable action, timestamps; no generic success message for failed action |
-| Dialog / Popover / Tabs / Tooltip | Appropriate semantics, focus trap only in modal, restore focus, close keyboard handling; essential information outside tooltip |
+| Band / Tabs / BottomTabs | Active route with first-down marker, keyboard order, More sheet closes on Esc and returns focus |
+| Button / Link | Primary, default, quiet; loading and disabled with reason; links navigate, buttons act |
+| Field / Select / Search | Persistent label, help and error association, debounced async search, Esc clears |
+| ScoreBoard / SeasonStrip | Official or Live authority label, Final or In progress, own team marked, unknown scores as a muted dash, results by period |
+| AgateTable | Grouped rows, units in headers, tabular digits, numeric right, identity left. Empty, filtered-zero and unavailable are different states |
+| PlayerDrawer | Pins its snapshot, modal focus handling, restores focus on close, states missing data |
+| SourceStatus | Current, Behind or Refresh failed, with age from the source's observation time |
+| RecommendationCard / EvidenceDrawer | Action, benefit and horizon, alternatives, evidence and sample, freshness, uncertainty, methodology link, blocked reason. Modeled values in `los` |
+| ProjectionInterval / TrendChart / ComparisonChart | Observed solid, projected dashed or banded with text label, consistent axes, table alternative, keyboard point inspection |
+| DraftBoard / TradeBuilder / AddDropComparison | Selected and available, package legality, both teams' effects, stale ownership, unknown rules |
+| GameScore / PlayTimeline / FieldReplay | Status, clock, possession, filters, corrections, pause and replay, schematic label, fallback |
 
-Component implementation should reuse proven accessible primitives when appropriate, with semantic HTML first. Document examples for default/loading/empty/error/stale/disabled/focus states. Use story-based visual checks when runtime exists. Do not create a component library disconnected from real feature workflows.
+Reuse accessible primitives where they help; prefer semantic HTML. Build components against real workflows, not a disconnected library.
 
-## Tables and visualization standards
+## Tables and charts
 
-Numeric columns right-align, textual identities left-align. Keep fixed precision appropriate to meaning; decimal fantasy totals follow the rule set and do not invent extra confidence through formatting. Column headings expose units and definitions. Pin player identity on wide comparison tables; preferences restore without changing data meaning. Virtualized tables must retain accessible row/column semantics or provide paginated accessible mode. Empty, filtered-zero, and unavailable are different states.
+Numeric columns right-align; identities left-align. Precision follows the rule set and never invents confidence. Line charts for time trends, interval or dot charts for uncertain projections, bars for comparable quantities, heatmaps only with a recoverable table. No radar charts by default and no 3D. Observed values are solid, modeled values dashed or banded in `los` with a text label. Missing intervals stay gaps. Palettes combine hue, lightness and shape, and are tested in color-vision simulation.
 
-Use line charts for time trends, interval/dot charts for uncertain projections, bars for comparable quantities, and heatmaps only where a table legend makes values recoverable. Avoid radar charts as the default player comparison. Use direct labels and source/sample/cutoff. Observed values solid; modeled projections dashed/banded with text label. Missing intervals remain gaps. Color palettes use distinct hue/lightness plus shape/dash encoding, tested in color-vision simulations. Never use a three-dimensional effect to imply more evidence.
+## Live graphics
 
-## Live graphical system
+The field plane is normalized 0–100 between goal lines with separate end zones and width proportional to 53⅓ yards. A play can mirror to the viewer's orientation without changing data. Mark the line of scrimmage in `los`, the first-down line in `flag`, ball direction and start and end positions. Paths are schematic, never claimed as tracking. Pass, rush, turnover, sack and kicking events have distinct path, icon and text treatments, and unknown events keep their narrative. Verified Gridiron fields and uniforms use the asset manifest and are served only inside the private application (OWN-015); a generic fallback is labeled. The timeline and fantasy facts stay useful if images fail.
 
-Field coordinate plane is normalized length 0–100 between goal lines, separate end zones, width proportional to 53 1/3 yards. The canonical play can be mirrored to the user's viewing orientation without changing data. Mark line of scrimmage, first-down distance where observed, ball direction and start/end positions. Paths are schematic, never claimed tracking data. Passing/rushing/turnover/sack/kicking events have distinct path/icon/text treatments; unknown events retain narrative. Verified team fields and weekly uniforms use an asset manifest; generic fallback is labeled. Text timeline and participant/fantasy facts remain useful if images fail.
+UI transitions run 120–200 ms; play sequences 600–1800 ms with visible controls. Playback is user-triggered by default; reduced motion uses static start and end frames with narrative. Corrections are labeled and old effects updated, never played as another score. Screen readers receive throttled summaries and can pause announcements.
 
-Motion uses short 120–200 ms UI transitions; play sequences typically 600–1800 ms with visible replay controls. User-triggered playback only by default; reduced motion uses static start/end and narrative. Corrections are labeled and old effects updated, not played as another score. Screen readers receive throttled score/play summaries and can pause announcements.
+## Loading, failure and freshness
 
-## Loading, failure, and confidence language
+First load shows the running-stripe indicator with an accessible label. Refresh keeps prior values and their timestamp; a source failure doesn't erase unrelated panels. "No recommendations" distinguishes no material upgrade from incomplete analysis. Stale ownership says when it was observed and cannot imply a pickup is possible. Offline shows connection status only; private data is never persisted in service-worker caches.
 
-Use stable-layout skeletons for first load with an accessible busy label. On refresh, preserve prior values and show their timestamp; a source failure must not erase unrelated successful panels. “No recommendations” distinguishes no material upgrade from incomplete analysis. A stale ownership snapshot says when it was observed and offers refresh; it cannot imply a pickup is currently possible. Offline shows connection status and safe shell; private data is not persisted in service-worker caches.
+## Enforcement and acceptance
 
-Recommendation copy: **Action → evidence → uncertainty → action link.** Example structure: “Consider [player] for [slot]. [Measured opportunity/matchup evidence]. [Risk or missing input]. Review in ESPN.” Examples use synthetic labels until supported by real results. Confidence labels describe evidence quality; numerical probabilities appear only when validated and correctly named. Do not expose backend IDs, training jargon or provider errors in normal manager flows; keep diagnostic details in authorized administration.
+`pnpm check:design` (part of `make web-check`) fails on raw colors, raw font sizes, off-scale spacing, shadows, italics, banned fonts, and slogan phrases in the interface. Add a phrase when one slips through. The foundation validator checks token contrast. These catch regressions; they cannot judge originality, which needs review of the rendered product.
 
-## Accessibility and design acceptance
-
-Target WCAG 2.2 AA: text contrast ≥4.5:1 for normal text and ≥3:1 for large text; meaningful nontext boundaries/focus ≥3:1; visible focus not obscured by sticky UI; semantic landmarks/headings; keyboard-complete paths; error summaries; accessible names; reduced motion; 200% zoom and 320 px reflow. Announce async errors and important changes without focus theft. Automated checks complement manual keyboard/screen-reader testing of sign-in, research comparison, lineup, draft and Live.
-
-The foundation validator checks declared token pairs, including text over canvas/surface and primary action text; this is token evidence, not a full interface accessibility audit. Feature release requires actual viewport/keyboard/contrast checks, labeled data provenance, error-state review and fidelity to the documented hierarchy. M2 now has actual four-viewport rendering, keyboard/focus/reflow and automated accessibility checks; native OS install/human screen-reader validation remains release work. See the [handoff](../project/handoffs/2026-10-31-member-application.md).
+Target is WCAG 2.2 AA: text contrast ≥4.5:1 (≥3:1 large), nontext and focus ≥3:1, focus never obscured by sticky UI, semantic landmarks and headings, keyboard-complete paths, accessible names, error summaries, reduced motion, 200% zoom and 320 px reflow. Async errors and important changes are announced without focus theft. Browser checks cover four viewports, axe and keyboard flows. A human screen-reader pass and native install remain release work.

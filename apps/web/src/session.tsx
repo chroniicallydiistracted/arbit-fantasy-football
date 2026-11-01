@@ -149,7 +149,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       target.protocol !== "https:" &&
       !(auth?.fixture && target.origin === window.location.origin)
     )
-      throw new Error("Sign-in is unavailable. Please contact your league administrator.");
+      throw new Error("Sign-in is unavailable. Contact the league administrator.");
     window.location.assign(target.href);
   }
   async function fixtureLogin(member: "one" | "two") {

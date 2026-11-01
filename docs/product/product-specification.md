@@ -6,7 +6,7 @@ Version 0.1 · 2026-10-30 · Status: proposed foundation derived from owner brie
 
 Arbit turns football data into explained fantasy decisions for FFA members. It serves one existing ESPN redraft league: **1729878439**, season **2026**. The owner confirms a portable, local-first deployment proposal. The brief describes this as FFA's inaugural season; confirm available history from ESPN rather than inventing previous seasons. A new redraft starts each year; season-scoped identities preserve team-name and manager changes.
 
-Arbit is the product name; FFA is league context; **Front Office** is the personalized headquarters. ESPN controls league facts. nflverse is the primary statistical foundation. Sleeper supplements specific gaps and does not become a second league provider. Gridiron field and uniform assets remain an intended Live dependency. The full product comprises Front Office, Draft, Scout, Market, Lineup, Live, Model, and Archive.
+Arbit is the product name; FFA is league context; **Front Office** is the personalized headquarters. ESPN controls league facts. nflverse is the primary statistical foundation. Sleeper is limited to verified NFL live-game and play-by-play data (OWN-011) and is never a league provider. Gridiron field and uniform assets remain an intended Live dependency. The full product comprises Front Office, Draft, Scout, Market, Lineup, Live, Model, and Archive.
 
 The initial assignment delivers specifications, research, governance, roadmap, and scaffold. Later milestones deliver the product. Milestone slices are sequencing decisions, not replacements for the comprehensive final scope.
 

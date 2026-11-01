@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { AdminAccess } from "./AdminAccess";
 import type { PlayerFacts, Preferences } from "./api";
-import { Empty, Notice } from "./primitives";
+import { Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
 
@@ -19,68 +19,55 @@ export function Settings() {
     try {
       await save({ ...me.preferences, theme: value });
       setFailed(false);
-      setMessage("Your appearance preference is saved.");
+      setMessage("Saved.");
     } catch (error) {
       setFailed(true);
-      setMessage(error instanceof Error ? error.message : "Preference could not be saved.");
+      setMessage(error instanceof Error ? error.message : "Saving failed. Try again.");
     } finally {
       setSaving(false);
     }
   }
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Your account</p>
-          <h1>
-            Preferences<span className="heading-period">.</span>
-          </h1>
-        </div>
+      <PageTitle title="Preferences" />
+      <div className="settings">
+        <section className="settings-section">
+          <h2>Appearance</h2>
+          <fieldset className="theme-options">
+            <legend className="sr-only">Color theme</legend>
+            {(["system", "light", "dark"] as const).map((value) => (
+              <button
+                type="button"
+                key={value}
+                aria-pressed={me?.preferences.theme === value}
+                disabled={saving}
+                onClick={() => void theme(value)}
+              >
+                {value === "system" ? "System" : value === "light" ? "Light" : "Dark"}
+              </button>
+            ))}
+          </fieldset>
+          {message && <Notice danger={failed}>{message}</Notice>}
+        </section>
+        <section className="settings-section">
+          <h2>Data on this device</h2>
+          <p>
+            League data is held in memory and cleared when you sign out or go offline. Your
+            watchlist and preferences are saved to your account.
+          </p>
+          <p className="muted">
+            Your team is assigned by the league administrator. Ask them if it needs to change.
+          </p>
+        </section>
+        {me?.account.role === "admin" && <AdminAccess />}
+        <section className="settings-section">
+          <h2>Install</h2>
+          <p>
+            Use your browser’s Install or Add to Home Screen option. Offline, Arbit shows a
+            connection notice and no team data.
+          </p>
+        </section>
       </div>
-      <section className="settings-section">
-        <h2>Appearance</h2>
-        <p className="muted">
-          Choose the setting that feels right. Your preference follows your account.
-        </p>
-        <fieldset className="theme-options">
-          <legend className="sr-only">Color theme</legend>
-          {(["system", "light", "dark"] as const).map((value) => (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={me?.preferences.theme === value}
-              disabled={saving}
-              onClick={() => void theme(value)}
-            >
-              {value === "system"
-                ? "Follow device"
-                : value === "light"
-                  ? "Warm paper"
-                  : "Evening green"}
-            </button>
-          ))}
-        </fieldset>
-        {message && <Notice danger={failed}>{message}</Notice>}
-      </section>
-      <section className="settings-section">
-        <h2>Private by design</h2>
-        <p>
-          Your watchlist and preferences are saved to your account. Private league information is
-          held in memory while you use Arbit and cleared when you sign out or go offline.
-        </p>
-        <p className="muted">
-          Arbit uses your approved FFA team assignment. If your assignment needs to change, ask your
-          league administrator.
-        </p>
-      </section>
-      {me?.account.role === "admin" && <AdminAccess />}
-      <section className="settings-section">
-        <h2>Arbit on your home screen</h2>
-        <p>
-          If your browser supports installation, use its install or Add to Home Screen option.
-          Offline access shows a safe connection screen; it does not save your team information.
-        </p>
-      </section>
     </>
   );
 }
@@ -106,31 +93,22 @@ export function Watchlist() {
     try {
       await save({ ...me.preferences, watchlist: ids.filter((value) => value !== id) });
     } catch (value) {
-      setError(value instanceof Error ? value.message : "Watchlist could not be saved.");
+      setError(value instanceof Error ? value.message : "Watchlist update failed.");
     } finally {
       setSaving(false);
     }
   }
   if (!ids.length)
     return (
-      <Empty eyebrow="Your shortlist" title="Keep an eye on a player.">
-        <p>
-          Find a player using the search above, open their file, and add them to your watchlist.
-          Your shortlist is private to you.
-        </p>
-      </Empty>
+      <StatePanel title="Watchlist is empty">
+        <p>Search for a player, open them, and choose Add to watchlist.</p>
+      </StatePanel>
     );
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Your shortlist</p>
-          <h1>
-            Watchlist<span className="heading-period">.</span>
-          </h1>
-        </div>
-        <span className="muted">{ids.length} saved players</span>
-      </div>
+      <PageTitle title="Watchlist">
+        <span className="muted">{ids.length} players</span>
+      </PageTitle>
       {error && <Notice danger>{error}</Notice>}
       <ul className="watchlist">
         {visible.map((id, index) => {
@@ -150,13 +128,13 @@ export function Watchlist() {
                   }}
                 >
                   {query.isPending
-                    ? "Loading player…"
-                    : (query.data?.player.display_name ?? "Player currently unavailable")}
+                    ? "Loading…"
+                    : (query.data?.player.display_name ?? "Player unavailable")}
                 </button>
                 <p className="muted">
                   {query.data
                     ? `${query.data.player.position} · ${query.data.player.availability === "owned" ? "On an FFA roster" : query.data.player.availability === "waivers" ? "On waivers" : "Free agent"}`
-                    : "Saved to your watchlist"}
+                    : "On watchlist"}
                 </p>
               </div>
               <button

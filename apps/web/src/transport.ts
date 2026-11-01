@@ -8,7 +8,7 @@ export class ApiError extends Error {
 }
 export class SessionLostError extends ApiError {
   constructor() {
-    super(401, "Your session has ended. Sign in again to continue.");
+    super(401, "Your session ended. Sign in to continue.");
   }
 }
 export async function http<T>(
@@ -51,10 +51,10 @@ export async function http<T>(
     throw new ApiError(
       response.status,
       response.status === 409
-        ? "Your preferences changed in another window. Review the latest version and try again."
+        ? "Your preferences changed in another window. Check them and try again."
         : response.status === 403
-          ? "Your account does not have access to this view."
-          : "This information is unavailable right now. Try again shortly.",
+          ? "Your account can’t open this."
+          : "Couldn’t load this. Try again.",
     );
   return response.status === 204 ? (undefined as T) : (response.json() as Promise<T>);
 }

@@ -7,7 +7,7 @@ from typing import Any, Literal, cast
 from uuid import UUID
 
 from arbit_data.db import UnitOfWork
-from arbit_data.league import LeagueDocument
+from arbit_data.league import LeagueDocument, Player
 from arbit_data.league_store import read_current, read_snapshot
 from arbit_data.members import (
     MemberError,
@@ -52,6 +52,7 @@ from arbit_api.member_contracts import (
     Preferences,
     ReactivateRequest,
     RevokeRequest,
+    SeasonCell,
     Snapshot,
     StartRequest,
     StartResponse,
@@ -72,6 +73,62 @@ from arbit_api.settings import RuntimeSettings
 
 COOKIE = "arbit_session"
 FLOW_COOKIE = "arbit_flow"
+# Display order only. Slot legality and counts always come from stored rules.
+SLOT_ORDER = {
+    slot: index
+    for index, slot in enumerate(
+        ("QB", "RB", "RB_WR", "WR", "WR_TE", "TE", "FLEX", "OP", "DST", "K", "BENCH", "IR")
+    )
+}
+
+
+def _roster_key(player: Player) -> tuple[int, str]:
+    return (SLOT_ORDER.get(player.lineup_slot or "", len(SLOT_ORDER)), player.display_name)
+
+
+def _standing_key(team: Team) -> tuple[bool, int, str]:
+    return (team.playoff_seed is None, team.playoff_seed or 0, team.name)
+
+
+def _season_strip(document: LeagueDocument, team_id: UUID) -> list[SeasonCell]:
+    """Own results by period. Totals only count as a result once the period has completed."""
+    cells = []
+    for matchup in sorted(document.matchups, key=lambda m: m.matchup_period):
+        sides = [side for side in (matchup.home, matchup.away) if side is not None]
+        own = next((side for side in sides if side.team_id == team_id), None)
+        if own is None:
+            continue
+        other = next((side for side in sides if side.team_id != team_id), None)
+        result: Literal["win", "loss", "tie"] | None = None
+        if (
+            matchup.matchup_period < document.matchup_period
+            and other is not None
+            and own.official_points is not None
+            and other.official_points is not None
+        ):
+            result = (
+                "win"
+                if own.official_points > other.official_points
+                else "loss"
+                if own.official_points < other.official_points
+                else "tie"
+            )
+        cells.append(
+            SeasonCell(
+                matchup_period=matchup.matchup_period,
+                opponent_team_id=other.team_id if other else None,
+                own_points=own.official_points,
+                opponent_points=other.official_points if other else None,
+                result=result,
+            )
+        )
+    return cells
+
+
+def _playoff_team_count(rules: dict[str, Any] | None) -> int | None:
+    schedule = ((rules or {}).get("provider_policy") or {}).get("scheduleSettings") or {}
+    count = schedule.get("playoffTeamCount")
+    return count if type(count) is int and count > 0 else None
 
 
 def install_member_routes(
@@ -244,10 +301,13 @@ def install_member_routes(
         return document
 
     def team_facts(document: LeagueDocument) -> list[Team]:
-        return [
-            Team.model_validate(t.model_dump(exclude={"managers", "primary_manager"}))
-            for t in document.teams
-        ]
+        return sorted(
+            (
+                Team.model_validate(t.model_dump(exclude={"managers", "primary_manager"}))
+                for t in document.teams
+            ),
+            key=_standing_key,
+        )
 
     @router.get("/auth/status", response_model=AuthStatus)
     def auth_status(request: Request) -> AuthStatus:
@@ -349,7 +409,7 @@ def install_member_routes(
         matchup_period: int | None = Query(default=None, ge=1, le=30),
     ) -> FrontOffice:
         member = principal(request)
-        _, document, snapshot = stored()
+        stored_result, document, snapshot = stored()
         allowed = member_teams(member["id"], document)
         if not allowed:
             raise HTTPException(403, "BINDING_REQUIRED")
@@ -370,7 +430,11 @@ def install_member_routes(
             None,
         )
         historical = period != document.matchup_period
-        roster = [] if historical else [p for p in document.players if p.team_id == chosen.id]
+        roster = (
+            []
+            if historical
+            else sorted((p for p in document.players if p.team_id == chosen.id), key=_roster_key)
+        )
         return FrontOffice(
             snapshot=snapshot,
             team=chosen,
@@ -379,6 +443,8 @@ def install_member_routes(
             standings=team_facts(document),
             matchup_periods=periods,
             selected_matchup_period=period,
+            season_strip=_season_strip(document, chosen.id),
+            playoff_team_count=_playoff_team_count(stored_result.get("rules")),
             historical_roster_unavailable=historical,
             fixture=settings.auth_mode == "fixture",
         )

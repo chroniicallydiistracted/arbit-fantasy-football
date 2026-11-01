@@ -19,31 +19,27 @@ export function PlayerSearchBox() {
   });
   return (
     <div className="player-search">
-      <label htmlFor="player-search">Find a player</label>
-      <div className="search-input">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
-          <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.5" />
-          <path d="m16 16 5 5" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-        <input
-          id="player-search"
-          type="search"
-          value={input}
-          maxLength={80}
-          placeholder="Search the league’s players"
-          autoComplete="off"
-          onChange={(event) => setInput(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Escape") {
-              setInput("");
-              setTerm("");
-            }
-          }}
-          aria-describedby="search-help"
-        />
-      </div>
+      <label htmlFor="player-search" className="sr-only">
+        Search players
+      </label>
+      <input
+        id="player-search"
+        type="search"
+        value={input}
+        maxLength={80}
+        placeholder="Search players"
+        autoComplete="off"
+        onChange={(event) => setInput(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setInput("");
+            setTerm("");
+          }
+        }}
+        aria-describedby="search-help"
+      />
       <span id="search-help" className="sr-only">
-        Enter at least two characters. Tab to a result to open player details.
+        Enter at least two letters. Tab to a result to open it.
       </span>
       {term.length >= 2 && (
         <section className="search-results" aria-label="Player search results">
@@ -53,7 +49,7 @@ export function PlayerSearchBox() {
                 ? "Searching…"
                 : query.isError
                   ? "Search unavailable"
-                  : `${query.data?.players.length ?? 0} results`}
+                  : `${query.data?.players.length ?? 0} found`}
             </span>
             <button
               type="button"
@@ -66,10 +62,8 @@ export function PlayerSearchBox() {
               Close
             </button>
           </div>
-          {query.isError && <p role="alert">Please try your search again shortly.</p>}
-          {query.data?.players.length === 0 && (
-            <p>No players match that name. Try a different spelling.</p>
-          )}
+          {query.isError && <p role="alert">Search failed. Try again.</p>}
+          {query.data?.players.length === 0 && <p>No players match that name.</p>}
           <ul>
             {query.data?.players.map((player) => (
               <li key={player.id}>
@@ -91,7 +85,7 @@ export function PlayerSearchBox() {
             ))}
           </ul>
           {query.data?.players.length === 20 && (
-            <p>Showing the first 20. Refine your search for more specific results.</p>
+            <p>First 20 shown. Type more of the name to narrow it.</p>
           )}
         </section>
       )}

@@ -269,11 +269,29 @@
             "title": "Matchup Periods",
             "type": "array"
           },
+          "playoff_team_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Playoff Team Count"
+          },
           "roster": {
             "items": {
               "$ref": "#/components/schemas/Player"
             },
             "title": "Roster",
+            "type": "array"
+          },
+          "season_strip": {
+            "items": {
+              "$ref": "#/components/schemas/SeasonCell"
+            },
+            "title": "Season Strip",
             "type": "array"
           },
           "selected_matchup_period": {
@@ -302,6 +320,8 @@
           "standings",
           "matchup_periods",
           "selected_matchup_period",
+          "season_strip",
+          "playoff_team_count",
           "historical_roster_unavailable",
           "fixture"
         ],
@@ -804,6 +824,75 @@
           "account_id"
         ],
         "title": "RevokeRequest",
+        "type": "object"
+      },
+      "SeasonCell": {
+        "additionalProperties": false,
+        "description": "One matchup period for the member's team. Result only once the period has completed.",
+        "properties": {
+          "matchup_period": {
+            "title": "Matchup Period",
+            "type": "integer"
+          },
+          "opponent_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opponent Points"
+          },
+          "opponent_team_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opponent Team Id"
+          },
+          "own_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Own Points"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "enum": [
+                  "win",
+                  "loss",
+                  "tie"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          }
+        },
+        "required": [
+          "matchup_period",
+          "opponent_team_id",
+          "own_points",
+          "opponent_points",
+          "result"
+        ],
+        "title": "SeasonCell",
         "type": "object"
       },
       "Snapshot": {

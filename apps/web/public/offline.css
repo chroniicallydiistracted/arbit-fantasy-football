@@ -1,1 +1,7 @@
-body{background:#F5F3ED;color:#182722;font:1rem/1.6 system-ui;margin:0;padding:clamp(24px,8vw,96px)}main{max-width:36rem}h1{font:3rem/1.1 Georgia,serif}a{display:inline-block;color:#176044;padding:12px 0}p{max-width:32rem}
+/* Generated from packages/design-tokens/tokens.json. */
+body{margin:0;background:#0B0C0E;color:#F5F6F7;font:1rem/1.45 "Liberation Sans",Arial,sans-serif}
+.edge{height:.25rem;background:repeating-linear-gradient(90deg, #0B0C0E 0 0.75rem, #F5F6F7 0.75rem 1.5rem)}
+main{padding:clamp(1.5rem,8vw,4rem);max-width:36rem}
+h1{font:800 3.5rem/1 "Arial Narrow","Liberation Sans Narrow",sans-serif;text-transform:uppercase;margin:0 0 1rem}
+p{color:#AEB4BD;margin:0 0 1.5rem}
+a{display:inline-block;background:#FFC600;color:#0B0C0E;font-weight:600;padding:.75rem 1.25rem;text-decoration:none}

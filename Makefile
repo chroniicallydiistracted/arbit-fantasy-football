@@ -50,6 +50,7 @@ local-nflverse-verify: local-env
 .PHONY: web-check web-build member-api
 web-check:
 	pnpm check:client
+	pnpm check:design
 	pnpm check:web
 	pnpm test:pwa
 web-build:

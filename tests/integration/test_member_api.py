@@ -384,7 +384,7 @@ def test_unbound_accounts_cannot_read_league_or_change_watchlist(uow, engine):
         )
 
 
-def test_front_office_preserves_source_team_order_and_freshness(uow, engine):
+def test_front_office_orders_standings_by_reported_seed_and_reports_freshness(uow, engine):
     from datetime import UTC, datetime
 
     from arbit_api.fixture import seed
@@ -405,7 +405,9 @@ def test_front_office_preserves_source_team_order_and_freshness(uow, engine):
             "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
         )
         response = client.get("/api/v1/front-office").json()
-        assert [t["id"] for t in response["standings"]] == [t["id"] for t in document["teams"]]
+        seeds = [t["playoff_seed"] for t in response["standings"]]
+        assert seeds == sorted(seeds), "provider order must not leak into the league table"
+        assert [t["id"] for t in response["standings"]] != [t["id"] for t in document["teams"]]
         assert response["snapshot"]["source_status"] == "fresh"
         assert response["snapshot"]["stale"] is False
         with engine.begin() as c:
@@ -719,3 +721,30 @@ def test_admin_manager_options_include_verified_first_name_and_team_context(
         assert manager["display_name"] == "ESPNFAN001"
         assert manager["team_names"]
         assert len(manager["team_names"]) == len(manager["team_ids"])
+
+
+def test_front_office_season_strip_and_roster_order_come_from_stored_facts(uow, engine):
+    from arbit_api.fixture import seed
+    from arbit_api.main import create_app
+    from arbit_data.schema import league_document
+    from sqlalchemy import select, update
+
+    configured = settings(engine)
+    seed(configured, engine)
+    with engine.begin() as c:
+        document = c.scalar(select(league_document.c.payload))
+        document["players"].reverse()
+        c.execute(update(league_document).values(payload=document))
+    app = create_app(configured, engine=engine)
+    with TestClient(app, client=("127.0.0.1", 50000)) as client:
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        office = client.get("/api/v1/front-office").json()
+        slots = [p["lineup_slot"] for p in office["roster"]]
+        assert slots[0] == "QB" and slots[-1] == "IR"
+        assert slots.index("BENCH") > slots.index("K"), "bench follows every starter"
+        strip = {cell["matchup_period"]: cell for cell in office["season_strip"]}
+        assert strip[7]["result"] == "win", "a completed period reports its result"
+        assert strip[8]["result"] is None, "the current period has no result, even with totals"
+        assert office["playoff_team_count"] is None, "an absent rule stays unknown, not a default"

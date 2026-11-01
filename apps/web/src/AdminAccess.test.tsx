@@ -60,10 +60,10 @@ it("creates a private invitation only on explicit submission and keeps assignmen
   await screen.findByRole("option", { name: "Fictional member" });
   expect(calls.every((call) => call.url.endsWith("directory"))).toBe(true);
   expect(screen.getByRole("option", { name: "Avery — Juniper Club" })).toBeVisible();
-  fireEvent.change(screen.getByLabelText("Invited account email"), {
+  fireEvent.change(screen.getByLabelText("Google account email"), {
     target: { value: "member@fiction.invalid" },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Create private invitation" }));
+  fireEvent.click(screen.getByRole("button", { name: "Create invitation" }));
   await screen.findByDisplayValue("https://arbit.invalid/join#private-test-token");
   expect(calls.find((call) => call.url.endsWith("invitations"))).toMatchObject({
     body: '{"email":"member@fiction.invalid","role":"member"}',
@@ -72,7 +72,7 @@ it("creates a private invitation only on explicit submission and keeps assignmen
   expect(calls.some((call) => call.url.endsWith("bindings"))).toBe(false);
   fireEvent.change(screen.getByLabelText("Member account"), { target: { value: "member" } });
   fireEvent.change(screen.getByLabelText("FFA manager"), { target: { value: "manager" } });
-  fireEvent.click(screen.getByRole("button", { name: "Approve assignment" }));
+  fireEvent.click(screen.getByRole("button", { name: "Assign team" }));
   await waitFor(() => expect(calls.some((call) => call.url.endsWith("bindings"))).toBe(true));
   expect(calls.find((call) => call.url.endsWith("bindings"))).toMatchObject({
     body: '{"account_id":"member","manager_id":"manager"}',

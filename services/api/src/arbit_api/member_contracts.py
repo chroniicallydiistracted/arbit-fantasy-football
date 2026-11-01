@@ -94,6 +94,16 @@ class Analysis(WireModel):
     reason: str = "Model analysis is not available yet."
 
 
+class SeasonCell(WireModel):
+    """One matchup period for the member's team. Result only once the period has completed."""
+
+    matchup_period: int
+    opponent_team_id: UUID | None
+    own_points: Decimal | None
+    opponent_points: Decimal | None
+    result: Literal["win", "loss", "tie"] | None
+
+
 class FrontOffice(WireModel):
     snapshot: Snapshot
     team: Team
@@ -103,6 +113,8 @@ class FrontOffice(WireModel):
     analysis: Analysis = Field(default_factory=Analysis)
     matchup_periods: list[int]
     selected_matchup_period: int
+    season_strip: list[SeasonCell]
+    playoff_team_count: int | None
     historical_roster_unavailable: bool
     fixture: bool
 

@@ -1,18 +1,19 @@
 import type { ReactNode } from "react";
 import type { Snapshot } from "./api";
 import { ageLabel, dateLabel } from "./format";
+
 export function Arrow({ direction = "right" }: { direction?: "right" | "up" }) {
   return (
-    <svg className="arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+    <svg width="14" height="14" aria-hidden="true" viewBox="0 0 24 24" fill="none">
       <path
         d={direction === "up" ? "M5 19 19 5M5 5h14v14" : "M4 12h15m-6-6 6 6-6 6"}
         stroke="currentColor"
-        strokeWidth="1.6"
+        strokeWidth="2.4"
       />
     </svg>
   );
 }
-export function Busy({ label = "Opening your front office…" }: { label?: string }) {
+export function Busy({ label = "Loading league data…" }: { label?: string }) {
   return (
     <div className="busy" role="status">
       <span className="loading-line" />
@@ -36,39 +37,41 @@ export function Notice({
     </div>
   );
 }
+export type SourceState = "current" | "behind" | "down";
+export function sourceState(snapshot: Snapshot, failed = false): SourceState {
+  if (failed) return "down";
+  return snapshot.stale || snapshot.source_status !== "fresh" ? "behind" : "current";
+}
 export function SourceNote({ snapshot, failed = false }: { snapshot: Snapshot; failed?: boolean }) {
-  const status = failed
-    ? "Refresh unavailable"
-    : snapshot.stale || snapshot.source_status !== "fresh"
-      ? "Needs a refresh"
-      : "Latest saved view";
+  const state = sourceState(snapshot, failed);
   return (
-    <div className={`source-note ${failed || snapshot.stale ? "source-stale" : ""}`}>
-      <span className="status-dot" aria-hidden="true" />
-      <span>{status}</span>
-      <span className="source-time">
-        ESPN ·{" "}
+    <span className="status" data-state={state}>
+      <span>
+        {state === "down" ? "Refresh failed" : state === "behind" ? "Behind" : "Current"} · ESPN{" "}
         <time dateTime={snapshot.observed_at} title={dateLabel(snapshot.observed_at)}>
           {ageLabel(snapshot.observed_at)}
         </time>
       </span>
-    </div>
+    </span>
   );
 }
-export function Empty({
-  eyebrow,
-  title,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
-}) {
+/** Page title with the hash-mark rule beneath it. */
+export function PageTitle({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <section className="empty-state">
-      <p className="eyebrow">{eyebrow}</p>
-      <h1>{title}</h1>
-      <div className="empty-copy">{children}</div>
-    </section>
+    <>
+      <div className="page-head">
+        <h1>{title}</h1>
+        {children}
+      </div>
+      <div className="hash-rule" aria-hidden="true" />
+    </>
+  );
+}
+export function StatePanel({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <>
+      <PageTitle title={title} />
+      <section className="state-panel">{children}</section>
+    </>
   );
 }

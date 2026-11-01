@@ -1,8 +1,8 @@
 {
-  "id": "/", "name": "Arbit · FFA Front Office", "short_name": "Arbit",
-  "description": "Your private FFA fantasy football front office.",
+  "id": "/", "name": "Arbit", "short_name": "Arbit",
+  "description": "FFA Fantasy Football Companion",
   "start_url": "/front-office", "scope": "/", "display": "standalone",
-  "background_color": "#F5F3ED", "theme_color": "#176044",
+  "background_color": "#0B0C0E", "theme_color": "#0B0C0E",
   "icons": [
     {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
     {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},

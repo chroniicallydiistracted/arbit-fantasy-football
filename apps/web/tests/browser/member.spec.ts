@@ -4,19 +4,19 @@ import { expect, type Page, test } from "@playwright/test";
 
 async function login(page: Page, member: "one" | "two" = "one") {
   await page.goto("/front-office");
-  await page.getByRole("button", { name: `Open preview · Member ${member}` }).click();
-  await expect(page.getByRole("heading", { name: "Front Office.", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: `Sign in as test member ${member}` }).click();
+  await expect(page.getByRole("heading", { name: "Front Office", exact: true })).toBeVisible();
   const status = await page.request.get("/auth/status").then((response) => response.json());
   const me = await page.request.get("/api/v1/me").then((response) => response.json());
   await page.request.put("/api/v1/me/preferences", {
-    headers: { Origin: "http://127.0.0.1:8000", "X-CSRF-Token": status.csrf_token },
+    headers: { Origin: new URL(page.url()).origin, "X-CSRF-Token": status.csrf_token },
     data: { version: me.preferences.version, theme: "system", watchlist: [] },
   });
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Front Office.", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Front Office", exact: true })).toBeVisible();
 }
 async function openMenu(page: Page) {
-  const menu = page.getByRole("button", { name: "Toggle navigation" });
+  const menu = page.getByRole("button", { name: "More", exact: true });
   if (await menu.isVisible()) await menu.click();
 }
 
@@ -27,12 +27,12 @@ test("two members, official nulls, historical context, player focus, private wat
   await login(page);
   await expect(page.getByRole("heading", { name: "Fictional Juniper Club" })).toBeVisible();
   await expect(page.locator(".matchup-score").first()).toContainText("—");
-  await page.getByLabel("Fantasy matchup").selectOption("7");
+  await page.getByRole("link", { name: /^Matchup 7/ }).click();
   await expect(
-    page.getByRole("heading", { name: "That roster hasn’t been captured." }),
+    page.getByRole("heading", { name: "No roster saved for this matchup" }),
   ).toBeVisible();
   await expect(page.locator(".matchup-score").first()).toContainText("128.25");
-  await page.getByLabel("Fantasy matchup").selectOption("8");
+  await page.getByRole("link", { name: /^Matchup 8/ }).click();
   await page.getByLabel("Position", { exact: true }).selectOption("QB");
   const player = page.getByRole("button", { name: /^Avery Juniper/ });
   await player.click();
@@ -61,16 +61,16 @@ test("two members, official nulls, historical context, player focus, private wat
   await other.close();
   await openMenu(page);
   await page.getByRole("link", { name: "Preferences", exact: true }).click();
-  await page.getByRole("button", { name: "Evening green" }).click();
+  await page.getByRole("button", { name: "Dark", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await openMenu(page);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Welcome back." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign in as test member one" })).toBeVisible();
   expect(
     await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length })),
   ).toEqual({ local: 0, session: 0 });
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Welcome back." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign in as test member one" })).toBeVisible();
 });
 
 for (const width of [320, 768, 1280, 1600]) {
@@ -103,7 +103,7 @@ for (const width of [320, 768, 1280, 1600]) {
     if (width === 320) {
       await openMenu(page);
       await page.keyboard.press("Escape");
-      await expect(page.getByRole("button", { name: "Toggle navigation" })).toHaveAttribute(
+      await expect(page.getByRole("button", { name: "More", exact: true })).toHaveAttribute(
         "aria-expanded",
         "false",
       );
@@ -128,7 +128,7 @@ test("static-only install cache, offline private clearing and explicit update", 
     await navigator.serviceWorker.ready;
   });
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Front Office.", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Front Office", exact: true })).toBeVisible();
   await page.evaluate(async () => {
     await fetch("/api/v1/me", { cache: "no-store" });
   });
@@ -152,18 +152,16 @@ test("static-only install cache, offline private clearing and explicit update", 
     ),
   ).toBe(true);
   await context.setOffline(true);
-  await expect(
-    page.getByRole("heading", { name: "Reconnect to open your front office." }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Offline", exact: true })).toBeVisible();
   await expect(page.getByText("Fictional Juniper Club", { exact: true })).toHaveCount(0);
   await page.reload();
-  await expect(
-    page.getByRole("heading", { name: "Your front office will be here when you reconnect." }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Offline", exact: true })).toBeVisible();
   await context.setOffline(false);
   await page.goto("/front-office");
-  await expect(page.getByRole("heading", { name: "Front Office.", exact: true })).toBeVisible();
-  const path = new URL("../../dist/sw.js", import.meta.url);
+  await expect(page.getByRole("heading", { name: "Front Office", exact: true })).toBeVisible();
+  const path = process.env.ARBIT_WEB_DIST_PATH
+    ? `${process.env.ARBIT_WEB_DIST_PATH}/sw.js`
+    : new URL("../../dist/sw.js", import.meta.url);
   const original = await readFile(path, "utf8");
   try {
     await writeFile(path, original.replace(/arbit-static-[a-f0-9]+/, "arbit-static-browser-test"));
@@ -172,7 +170,7 @@ test("static-only install cache, offline private clearing and explicit update", 
     });
     await expect(page.getByRole("button", { name: "Update & reload" })).toBeVisible();
     await page.getByRole("button", { name: "Update & reload" }).click();
-    await expect(page.getByRole("heading", { name: "Front Office.", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Front Office", exact: true })).toBeVisible();
   } finally {
     await writeFile(path, original);
   }
@@ -198,14 +196,12 @@ test("a shared-cookie account switch clears a fresh private deep link before sho
   });
   await expect(page.locator(".member-label strong")).toHaveText("Fictional member two");
   await expect(
-    page.getByRole("heading", { name: "The league view is unavailable.", exact: true }),
+    page.getByRole("heading", { name: "League data unavailable", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".own-team h3")).toHaveCount(0);
-  await page.getByRole("link", { name: "Return to your team" }).click();
+  await page.getByRole("link", { name: "Your team" }).click();
   await expect(page.locator(".own-team h3")).toHaveText("Fictional Copper Owls");
-  await page.getByLabel("Find a player").fill("Ja'Marr");
-  await expect(
-    page.getByText("No players match that name. Try a different spelling."),
-  ).toBeVisible();
+  await page.getByLabel("Search players").fill("Ja'Marr");
+  await expect(page.getByText("No players match that name.")).toBeVisible();
   await expect(page.getByText("Search unavailable", { exact: true })).toHaveCount(0);
 });

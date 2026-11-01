@@ -10,9 +10,9 @@ export function record(team: { wins: number; losses: number; ties: number }): st
 }
 export function ageLabel(observed: string, now = Date.now()): string {
   const age = now - Date.parse(observed);
-  if (!Number.isFinite(age)) return "Time unavailable";
-  if (age < 0) return "Time needs verification";
-  if (age < 60_000) return "Just now";
+  if (!Number.isFinite(age)) return "time unknown";
+  if (age < 0) return "time unknown";
+  if (age < 60_000) return "now";
   if (age < 3_600_000) return `${Math.floor(age / 60_000)} min ago`;
   if (age < 86_400_000) return `${Math.floor(age / 3_600_000)} hr ago`;
   return `${Math.floor(age / 86_400_000)} days ago`;

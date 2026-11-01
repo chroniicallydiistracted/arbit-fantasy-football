@@ -1,10 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
+import { Fragment } from "react";
 import { Link, useSearchParams } from "react-router";
-import type { FrontOffice as Office, Team } from "./api";
+import type { FrontOffice as Office, Player, Team } from "./api";
 import { points, record } from "./format";
-import { Arrow, Busy, Empty, Notice, SourceNote } from "./primitives";
+import { Arrow, Busy, Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
+
+const GROUPS = [
+  { key: "starters", title: "Starters" },
+  { key: "bench", title: "Bench" },
+  { key: "reserve", title: "Injured reserve" },
+] as const;
+function groupOf(player: Player) {
+  if (player.lineup_slot === "BENCH") return "bench";
+  if (player.lineup_slot === "IR") return "reserve";
+  return "starters";
+}
 
 export function FrontOffice() {
   const [params, setParams] = useSearchParams();
@@ -29,17 +41,17 @@ export function FrontOffice() {
   if (query.isPending) return <Busy />;
   if (!query.data)
     return (
-      <Empty eyebrow="Front Office" title="The league view is unavailable.">
-        <p>
-          Your team details could not be loaded. Your account and saved preferences are still here.
-        </p>
-        <button className="primary" type="button" onClick={() => void query.refetch()}>
-          Try again <Arrow />
-        </button>
-        <Link className="text-link" to="/front-office">
-          Return to your team
-        </Link>
-      </Empty>
+      <StatePanel title="League data unavailable">
+        <p>Your team’s data couldn’t be loaded. Your account and preferences are unaffected.</p>
+        <div className="actions">
+          <button className="primary" type="button" onClick={() => void query.refetch()}>
+            Retry
+          </button>
+          <Link className="link-button" to="/front-office">
+            Your team
+          </Link>
+        </div>
+      </StatePanel>
     );
   const data = query.data;
   const position = params.get("position") ?? "";
@@ -62,6 +74,9 @@ export function FrontOffice() {
         ? data.matchup.home
         : null;
   const opponent = data.standings.find((team) => team.id === other?.team_id);
+  const scored = own?.official_points != null && other?.official_points != null;
+  const ownTrails = scored && Number(own.official_points) < Number(other.official_points);
+  const otherTrails = scored && Number(other.official_points) < Number(own.official_points);
   function openPlayer(id: string) {
     const next = new URLSearchParams(params);
     next.set("player", id);
@@ -70,15 +85,9 @@ export function FrontOffice() {
   }
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">FFA / {data.snapshot.season} season</p>
-          <h1>
-            Front Office<span className="heading-period">.</span>
-          </h1>
-        </div>
-        <div className="context-controls">
-          {me && me.teams.length > 1 && (
+      <PageTitle title="Front Office">
+        {me && me.teams.length > 1 && (
+          <div className="context-controls">
             <label>
               Team
               <select value={data.team.id} onChange={(event) => set("team", event.target.value)}>
@@ -89,23 +98,9 @@ export function FrontOffice() {
                 ))}
               </select>
             </label>
-          )}
-          <label>
-            Fantasy matchup
-            <select
-              value={data.selected_matchup_period}
-              onChange={(event) => set("period", event.target.value)}
-            >
-              {data.matchup_periods.map((value) => (
-                <option key={value} value={value}>
-                  Matchup {value}
-                  {value === data.snapshot.matchup_period ? " · Current" : ""}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      </div>
+          </div>
+        )}
+      </PageTitle>
       {query.isError && (
         <Notice
           danger
@@ -115,232 +110,183 @@ export function FrontOffice() {
             </button>
           }
         >
-          Refresh failed. These are the previously saved facts, observed at the time below.
+          Refresh failed. Showing the last saved data.
         </Notice>
       )}
-      <SourceNote snapshot={data.snapshot} failed={query.isError} />
-      {(data.snapshot.stale || data.snapshot.source_status !== "fresh") && (
-        <p className="stale-explanation">
-          This saved league view may be out of date. Scores, ownership and locks may have changed in
-          ESPN.
-        </p>
+      {!query.isError && (data.snapshot.stale || data.snapshot.source_status !== "fresh") && (
+        <Notice>This data is behind ESPN. Scores, ownership and locks may have changed.</Notice>
       )}
+      <section className="score-board" aria-labelledby="matchup-heading">
+        <div className="score-head">
+          <div className="score-title">
+            <h2 id="matchup-heading">Matchup {data.selected_matchup_period}</h2>
+            <span className="authority">Official</span>
+            <span>
+              {data.selected_matchup_period < data.snapshot.matchup_period
+                ? "Final"
+                : data.selected_matchup_period === data.snapshot.matchup_period
+                  ? "In progress"
+                  : "Not started"}
+            </span>
+          </div>
+          <a
+            href="https://fantasy.espn.com/football/league?leagueId=1729878439"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open in ESPN <Arrow direction="up" />
+          </a>
+        </div>
+        <div className="score-sides">
+          <ScoreTeam team={data.team} score={own?.official_points} own trailing={ownTrails} />
+          <ScoreTeam team={opponent} score={other?.official_points} trailing={otherTrails} />
+        </div>
+        <nav aria-label="Matchups this season">
+          <ol className="season-strip">
+            {data.season_strip.map((cell) => {
+              const next = new URLSearchParams(params);
+              if (cell.matchup_period === data.snapshot.matchup_period) next.delete("period");
+              else next.set("period", String(cell.matchup_period));
+              const label = cell.result ? { win: "W", loss: "L", tie: "T" }[cell.result] : "–";
+              return (
+                <li key={cell.matchup_period}>
+                  <Link
+                    to={`?${next}`}
+                    data-result={cell.result ?? undefined}
+                    data-current={cell.matchup_period === data.snapshot.matchup_period}
+                    aria-current={
+                      cell.matchup_period === data.selected_matchup_period ? "true" : undefined
+                    }
+                    aria-label={`Matchup ${cell.matchup_period}${cell.result ? `, ${cell.result}` : ""}${
+                      cell.matchup_period === data.snapshot.matchup_period ? ", current" : ""
+                    }`}
+                  >
+                    <b>{cell.matchup_period}</b>
+                    <small>{label}</small>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      </section>
       <div className="office-grid">
-        <div className="office-main">
-          <section className="matchup-panel" aria-labelledby="matchup-heading">
-            <div className="section-kicker">
-              <h2 id="matchup-heading">Matchup {data.selected_matchup_period}</h2>
-              <span>Official ESPN totals</span>
-            </div>
-            <div className="matchup-teams">
-              <ScoreTeam team={data.team} score={own?.official_points} own />
-              <span className="versus">vs</span>
-              <ScoreTeam team={opponent} score={other?.official_points} />
-            </div>
-            <div className="matchup-foot">
-              <span>
-                {own?.official_points == null || other?.official_points == null
-                  ? "A score is not yet available. Unknown totals are shown as —."
-                  : "Official fantasy points · No projected points added"}
-              </span>
-              <a
-                href="https://fantasy.espn.com/football/league?leagueId=1729878439"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View league in ESPN <Arrow direction="up" />
-              </a>
-            </div>
-          </section>
-          <section className="roster-section" aria-labelledby="roster-heading">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">The team sheet</p>
-                <h2 id="roster-heading">
-                  {data.historical_roster_unavailable ? "Historical roster" : "Your roster"}
-                </h2>
-              </div>
-              {!data.historical_roster_unavailable && (
-                <span className="muted">{data.roster.length} players</span>
-              )}
-            </div>
-            {data.historical_roster_unavailable ? (
-              <div className="inline-empty">
-                <h3>That roster hasn’t been captured.</h3>
-                <p>
-                  The matchup above shows its saved official total. The current roster is not
-                  substituted for a historical lineup.
-                </p>
-                <button type="button" className="text-link" onClick={() => set("period", "")}>
-                  See the current roster <Arrow />
+        <section aria-labelledby="roster-heading">
+          <div className="section-head">
+            <h2 id="roster-heading">
+              {data.historical_roster_unavailable
+                ? `Roster, matchup ${data.selected_matchup_period}`
+                : "Roster"}
+            </h2>
+            {!data.historical_roster_unavailable && (
+              <div className="section-tools">
+                <label htmlFor="roster-position">Position</label>
+                <select
+                  id="roster-position"
+                  value={position}
+                  onChange={(event) => set("position", event.target.value)}
+                >
+                  <option value="">All</option>
+                  {["QB", "RB", "WR", "TE", "K", "DST"].map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="toggle"
+                  aria-pressed={watchOnly}
+                  onClick={() => set("watched", watchOnly ? "" : "true")}
+                >
+                  Watchlist
                 </button>
               </div>
-            ) : (
-              <>
-                <div className="roster-controls">
-                  <div className="position-filter">
-                    <label htmlFor="roster-position">Position</label>
-                    <select
-                      id="roster-position"
-                      value={position}
-                      onChange={(event) => set("position", event.target.value)}
-                    >
-                      <option value="">All positions</option>
-                      {["QB", "RB", "WR", "TE", "K", "DST"].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <button
-                    type="button"
-                    className={`filter-button ${watchOnly ? "selected" : ""}`}
-                    aria-pressed={watchOnly}
-                    onClick={() => set("watched", watchOnly ? "" : "true")}
-                  >
-                    Watchlist{watchOnly ? " ✓" : ""}
-                  </button>
-                </div>
-                {roster.length ? (
-                  <div className="table-wrap">
-                    <table className="roster-table">
-                      <caption className="sr-only">
-                        Your roster. Official points are for scoring period{" "}
-                        {data.snapshot.scoring_period}.
-                      </caption>
-                      <thead>
-                        <tr>
-                          <th scope="col">Slot</th>
-                          <th scope="col">Player</th>
-                          <th scope="col" className="player-status-heading">
-                            Status
-                          </th>
-                          <th scope="col" className="numeric">
-                            Official pts
+            )}
+          </div>
+          {data.historical_roster_unavailable ? (
+            <div className="inline-state">
+              <h3>No roster saved for this matchup</h3>
+              <p>The score above is the official total. Today’s roster isn’t shown in its place.</p>
+              <button type="button" onClick={() => set("period", "")}>
+                Current roster
+              </button>
+            </div>
+          ) : roster.length ? (
+            <div className="table-wrap">
+              <table className="agate roster-table">
+                <caption className="sr-only">
+                  Roster for scoring period {data.snapshot.scoring_period}, official ESPN points.
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Slot</th>
+                    <th scope="col">Player</th>
+                    <th scope="col" className="player-status-heading">
+                      Status
+                    </th>
+                    <th scope="col" className="numeric">
+                      Pts
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {GROUPS.map((group) => {
+                    const rows = roster.filter((player) => groupOf(player) === group.key);
+                    if (!rows.length) return null;
+                    return (
+                      <Fragment key={group.key}>
+                        <tr className="group-row">
+                          <th colSpan={4} scope="colgroup">
+                            {group.title}
                           </th>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {roster.map((player) => (
-                          <tr key={player.id}>
-                            <td>
-                              <span className="slot-tag">{player.lineup_slot ?? "—"}</span>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className="player-link"
-                                onClick={() => openPlayer(player.id)}
-                              >
-                                {player.display_name}
-                                {me?.preferences.watchlist.includes(player.id) && (
-                                  <span
-                                    role="img"
-                                    aria-label="On watchlist"
-                                    className="watched-star"
-                                  >
-                                    ✦
-                                  </span>
-                                )}
-                              </button>
-                              <div className="player-subline">
-                                <span>{player.position}</span>
-                                <span className="mobile-status">
-                                  {player.injury_status ||
-                                    (player.lineup_locked
-                                      ? "Lineup locked"
-                                      : !player.active
-                                        ? "Not active"
-                                        : "")}
-                                </span>
-                              </div>
-                            </td>
-                            <td className="player-status">
-                              <span className={player.injured ? "injury-label" : "muted"}>
-                                {player.injury_status ||
-                                  (player.injured
-                                    ? "Injury reported"
-                                    : !player.active
-                                      ? "Not active"
-                                      : "—")}
-                              </span>
-                              {player.lineup_locked && (
-                                <span className="lock-label">Lineup locked</span>
-                              )}
-                            </td>
-                            <td className="numeric score-cell">
-                              <span>
-                                {points(player.official_current_points)}
-                                {player.official_current_points === null && (
-                                  <span className="sr-only"> Score unavailable</span>
-                                )}
-                              </span>
-                            </td>
-                          </tr>
+                        {rows.map((player) => (
+                          <RosterRow
+                            key={player.id}
+                            player={player}
+                            watched={!!me?.preferences.watchlist.includes(player.id)}
+                            open={() => openPlayer(player.id)}
+                          />
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <div className="inline-empty">
-                    <p>
-                      {data.roster.length === 0
-                        ? "No roster facts are available in this saved league view."
-                        : "No players match these filters."}
-                    </p>
-                    {data.roster.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const next = new URLSearchParams(params);
-                          next.delete("position");
-                          next.delete("watched");
-                          setParams(next);
-                        }}
-                      >
-                        Clear filters
-                      </button>
-                    )}
-                  </div>
-                )}
-                <p className="table-footnote">
-                  Scoring period {data.snapshot.scoring_period} · Locks and health are as reported
-                  by ESPN. A dash means unavailable.
-                </p>
-              </>
-            )}
-          </section>
-        </div>
-        <aside className="office-rail">
-          <section className="analysis-panel" aria-labelledby="analysis-heading">
-            <p className="eyebrow">Your next decision</p>
-            <h2 id="analysis-heading">
-              Facts first.
-              <br />
-              <em>Insight follows.</em>
-            </h2>
-            <p>
-              Player evaluations and recommendations will follow once the shared model has been
-              built and verified.
-            </p>
-            <Link to="/model" className="text-link">
-              About player analysis <Arrow />
-            </Link>
-          </section>
-          <section className="standings-section" aria-labelledby="standings-heading">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">Around the FFA</p>
-                <h2 id="standings-heading">League table</h2>
-              </div>
+                      </Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-            <p className="table-context">Current saved season totals</p>
+          ) : (
+            <div className="inline-state">
+              <p>
+                {data.roster.length === 0
+                  ? "No roster data in this saved league view."
+                  : "No players match these filters."}
+              </p>
+              {data.roster.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = new URLSearchParams(params);
+                    next.delete("position");
+                    next.delete("watched");
+                    setParams(next);
+                  }}
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          )}
+        </section>
+        <aside className="office-rail" aria-label="League">
+          <section aria-labelledby="standings-heading">
+            <div className="section-head">
+              <h2 id="standings-heading">League table</h2>
+            </div>
             <div className="table-wrap">
-              <table className="standings-table">
+              <table className="agate standings-table">
                 <caption className="sr-only">
-                  Current league standings in ESPN source order. Seed is the reported playoff seed,
-                  not a forecast.
+                  Current standings in reported playoff seed order.
                 </caption>
                 <thead>
                   <tr>
@@ -352,63 +298,133 @@ export function FrontOffice() {
                       <abbr title="Points for">PF</abbr>
                     </th>
                     <th scope="col" className="numeric">
-                      Seed
+                      <abbr title="Reported playoff seed">Seed</abbr>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.standings.map((team) => (
-                    <tr key={team.id} className={team.id === data.team.id ? "own-standing" : ""}>
-                      <th scope="row">
-                        {team.name}
-                        {team.id === data.team.id && <span className="you-label">You</span>}
-                      </th>
-                      <td className="numeric">{record(team)}</td>
-                      <td className="numeric">{points(team.points_for)}</td>
-                      <td className="numeric">{team.playoff_seed ?? "—"}</td>
-                    </tr>
+                  {data.standings.map((team, index) => (
+                    <Fragment key={team.id}>
+                      <tr className={team.id === data.team.id ? "own-standing" : ""}>
+                        <th scope="row">
+                          {team.name}
+                          {team.id === data.team.id && (
+                            <span className="sr-only"> (your team)</span>
+                          )}
+                        </th>
+                        <td className="numeric">{record(team)}</td>
+                        <td className="numeric">{points(team.points_for)}</td>
+                        <td className="numeric">{team.playoff_seed ?? "—"}</td>
+                      </tr>
+                      {data.playoff_team_count != null &&
+                        index + 1 === data.playoff_team_count &&
+                        index + 1 < data.standings.length && (
+                          <tr className="playoff-line">
+                            <td colSpan={4}>
+                              <span>Playoff line</span>
+                            </td>
+                          </tr>
+                        )}
+                    </Fragment>
                   ))}
                 </tbody>
               </table>
             </div>
-            <p className="table-footnote">
-              Seed is the reported playoff seed. League order is supplied by ESPN.
+          </section>
+          <section className="fact-panel" aria-labelledby="recommendations-heading">
+            <h2 id="recommendations-heading">Recommendations</h2>
+            <span className="state-off">Off</span>
+            <p className="fine">
+              Lineup, waiver and trade calls need player projections, which aren’t built yet.
             </p>
           </section>
-          <div className="league-note">
-            <span className="league-note-rule" />
-            <p>Built for the FFA.</p>
-            <span>
-              One annual redraft league.
-              <br />A clearer view of your team.
-            </span>
-          </div>
         </aside>
       </div>
     </>
   );
 }
+
+function RosterRow({
+  player,
+  watched,
+  open,
+}: {
+  player: Player;
+  watched: boolean;
+  open: () => void;
+}) {
+  const injury =
+    player.injury_status && player.injury_status !== "ACTIVE" ? player.injury_status : null;
+  const status = injury ?? (player.injured ? "Injured" : !player.active ? "Inactive" : null);
+  return (
+    <tr>
+      <td className="slot-cell">
+        <span className="slot-tag">{player.lineup_slot ?? "—"}</span>
+      </td>
+      <td className="player-cell">
+        <button type="button" className="player-link" onClick={open}>
+          {player.display_name}
+          {watched && (
+            <span role="img" aria-label="On watchlist" className="watched">
+              W
+            </span>
+          )}
+        </button>
+        <span className="player-line">
+          {player.position}
+          <span className="mobile-status">{status ? ` · ${status}` : ""}</span>
+          {player.lineup_locked ? <span className="mobile-status"> · Locked</span> : null}
+        </span>
+      </td>
+      <td className="player-status">
+        {status ? (
+          <span
+            className={`tag ${status === "OUT" || status === "Inactive" ? "tag-fault" : "tag-caution"}`}
+          >
+            {status}
+          </span>
+        ) : (
+          <span className="muted">—</span>
+        )}
+        {player.lineup_locked && <span className="tag tag-lock">Locked</span>}
+      </td>
+      <td className="numeric score-cell">
+        {points(player.official_current_points)}
+        {player.official_current_points === null && (
+          <span className="sr-only"> Score unavailable</span>
+        )}
+      </td>
+    </tr>
+  );
+}
+
 function ScoreTeam({
   team,
   score,
   own = false,
+  trailing = false,
 }: {
   team?: Team;
   score?: string | null;
   own?: boolean;
+  trailing?: boolean;
 }) {
   return (
     <div className={`score-team ${own ? "own-team" : ""}`}>
-      <div className="team-monogram" aria-hidden="true">
+      <div className="team-tile" aria-hidden="true">
         {team?.abbreviation || "?"}
       </div>
-      <p className="team-context">{own ? "Your team" : "Opponent"}</p>
-      <h3>{team?.name ?? "Opponent unavailable"}</h3>
-      <p className="team-record">{team ? record(team) : "Record unavailable"}</p>
-      <p className="matchup-score">
+      <div className="team-id">
+        <h3>{team?.name ?? "Opponent unavailable"}</h3>
+        <p>
+          {own ? "Your team · " : ""}
+          {team ? record(team) : "Record unavailable"}
+          {team?.playoff_seed != null ? ` · Seed ${team.playoff_seed}` : ""}
+        </p>
+      </div>
+      <p className="matchup-score" data-trailing={trailing} data-unknown={score == null}>
         {points(score)}
         {score == null && <span className="sr-only"> Score unavailable</span>}
-        <span>pts</span>
       </p>
     </div>
   );
