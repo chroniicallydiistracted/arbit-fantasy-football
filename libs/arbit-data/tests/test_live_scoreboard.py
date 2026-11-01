@@ -179,6 +179,12 @@ def test_a_finished_drive_is_not_also_listed_as_current():
     assert [d["current"] for d in detail["drives"]] == [False]
 
 
+def test_a_running_drive_listed_twice_shows_once_as_current():
+    running = {"id": "9", "team": {"id": "12"}, "offensivePlays": 6}
+    detail = normalize_summary_detail({"drives": {"previous": [running], "current": running}})
+    assert [(d["current"], d["plays"]) for d in detail["drives"]] == [(True, 6)]
+
+
 def test_an_empty_placeholder_is_not_a_drive():
     placeholder = {"id": "8", "team": {"id": "12"}, "offensivePlays": 0, "yards": 0}
     assert normalize_summary_detail({"drives": {"previous": [placeholder]}})["drives"] == []

@@ -485,19 +485,24 @@ def _drive(raw: dict[str, Any], current: bool) -> dict[str, Any]:
 
 def _drives(value: Any) -> list[dict[str, Any]]:
     raw = _dict(value)
-    finished = _list(raw.get("previous"), 100)
+    finished = [_dict(d) for d in _list(raw.get("previous"), 100)]
     current = _dict(raw.get("current"))
-    # When a drive ends ESPN keeps listing it as current, alongside the same drive as finished.
-    ended = current.get("id") is not None and any(
-        _dict(d).get("id") == current.get("id") for d in finished
-    )
+    # ESPN lists the latest drive in both places. It is still running only if it has no result.
+    running = bool(current) and not current.get("displayResult")
+    drive_id = current.get("id")
+    if running and drive_id is not None:
+        finished = [d for d in finished if d.get("id") != drive_id]
     # ESPN also lists empty placeholders with no plays and no result, which are not drives.
     drives = [
-        drive
-        for drive in (_drive(_dict(d), False) for d in finished)
-        if drive["plays"] or drive["result"]
+        drive for drive in (_drive(d, False) for d in finished) if drive["plays"] or drive["result"]
     ]
-    return drives + ([_drive(current, True)] if current and not ended else [])
+    if (
+        current
+        and not running
+        and (drive_id is None or all(d.get("id") != drive_id for d in finished))
+    ):
+        drives.append(_drive(current, False))
+    return drives + ([_drive(current, True)] if running else [])
 
 
 def _win_points(value: Any) -> list[dict[str, Any]]:
