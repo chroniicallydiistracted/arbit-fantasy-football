@@ -41,3 +41,6 @@ test-results/
 
 # Per-plan local execution evidence
 .superpowers/
+
+# Owner sprite art of unknown license. The repository is public.
+/docs/potential-assets/

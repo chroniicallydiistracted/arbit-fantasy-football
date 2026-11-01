@@ -23,12 +23,11 @@ The owner accepted the design (OWN-018) and moved Live ahead of M3 (OWN-019), as
 
 ## Owner inputs needed
 
-1. 3D or [sprites](../../research/live-animation-prerequisites-2026-10-31.md#sprite-option--owner-proposal-2026-11-01). Sprites need the sheet's origin and license, and about 45 frames from somewhere. 3D needs a player model and motion clips: budget and an Adobe account, or another route.
-2. Which phones and computers must run this smoothly. Sprites make this much less of a constraint.
+1. Where the sprite sheet came from and its license. The owner chose [sprites](../../research/live-animation-prerequisites-2026-10-31.md#sprite-direction--owner-decision-2026-11-01) (OWN-022), and a fuller source would be the only route to exact frames.
 
-The GitHub repository is public. `docs/potential-assets/` is uncommitted on purpose: stage explicit paths and never `git add -A docs`.
+The GitHub repository is public. `docs/potential-assets/` and `data/sprites/` are ignored on purpose.
 
 ## Resume here
 
 1. After the slate, read the logs and `data/live-captures`: record latency and correction evidence, the `situation` shape and capture size, and close R-025, R-030 and the statistics question in R-026.
-2. Build scoreboards, then the Gridiron sync lane and private delivery, then the single-play slice for owner review. Refetch KC and CHI uniforms and newly listed fields before using them.
+2. Build scoreboards, then the Gridiron sync lane and private delivery, then the pass-play sprite frames and single-play slice for owner review. Refetch KC and CHI uniforms and newly listed fields before using them.

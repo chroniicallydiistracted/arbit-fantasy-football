@@ -28,6 +28,8 @@ That is a much smaller scene than 22 players, so each player can carry more deta
 
 ## Prerequisites
 
+**The owner chose pixel sprites (OWN-022).** Items 8–11 and 14–16 below describe the 3D route that was not chosen; the [sprite direction](#sprite-direction--owner-decision-2026-11-01) replaces them.
+
 Status: ✓ ready, ◐ partly ready, ✗ missing.
 
 | # | Prerequisite | Status | What it takes |
@@ -56,18 +58,18 @@ Status: ✓ ready, ◐ partly ready, ✗ missing.
 
 These are acceptance criteria for LV-003, not aims:
 
-- Continuous skeletal motion with blending and planted feet. No stepped frames, no sliding figures, no shapes along a path.
+- Enough drawn frames that no action jumps: catches, contact and falls have their own frames. Stride frames advance with ground speed, so figures don't slide.
 - The ball flies on a physical arc and arrives when and where the receiver does.
 - Every play ends on ESPN's exact spot, with the correct players involved and no others.
 - Camera framing makes the small cast look deliberate, not like an empty field.
-- Broadcast camera work rather than a fixed top-down view, with real weekly field and uniforms.
+- A moving side-on broadcast camera rather than a fixed top-down view, with the real field and weekly uniform colors.
 - The label stays visible and the observed facts stay one action away.
 
-**Gate:** one real play goes first: a pass from CAR at GB, the one game with listed field and uniforms and stored plays. The owner reviews rendered video of it. No other play type is built until that look is approved, because the player model and motion could still miss the bar and be expensive to change later.
+**Gate:** one real play goes first: a pass from CAR at GB, the one game with listed field and uniforms and stored plays. The owner reviews rendered video of it. No other play type is built until that look is approved, because frame quality could still miss the bar and be expensive to change later.
 
-## Sprite option — owner proposal, 2026-11-01
+## Sprite direction — owner decision, 2026-11-01
 
-The owner proposed cutting a sprite sheet (`docs/potential-assets/player-clip-group.png`) into motions. Its origin and license are unknown. **The GitHub repository is public, so the file stays uncommitted until that is settled.**
+The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-group.png`) over 3D (OWN-022). Its origin and license are unknown. **The GitHub repository is public, so the sheet and everything derived from it stay in ignored paths**, like Gridiron art.
 
 **What the sheet is:** 384 cells, but only 6 drawings: 32 color sets × 2 skin tones × 6 poses. Silhouettes are pixel-identical across all sets. The poses are stand, three running frames, one arm-up pose facing the camera, and one kneel. They face one way, every player has the same body and the number 11, and each pose uses 16–18 color classes, so remapping to real weekly colors looks feasible (not tested). Stripes and logos would not carry over.
 
@@ -82,7 +84,22 @@ The owner proposed cutting a sprite sheet (`docs/potential-assets/player-clip-gr
 | Tackle, hit, fall, get up | 0 | 12 |
 | Kick, punt, snap, hold | 1 (the kneel, for the hold) | 14 |
 
-**If chosen:** one set of about 45 frames serves all teams through recoloring. It would replace items 9 and 10, shrink 8, 11, 14, 15 and 16, and suit the soft field art in item 12. Sprites always step between drawn frames, so frame count and contact poses decide whether it clears the quality bar. The camera must stay side-on. Still open: where the missing frames come from, the sheet's license, and the owner's choice between this look and 3D.
+**Consequences:** one set of about 45 frames serves all teams through recoloring. That replaces items 9 and 10, shrinks 8, 11, 14, 15 and 16, and suits the soft field art in item 12. Sprites always step between drawn frames, so frame count and contact poses decide whether it clears the quality bar. The camera stays side-on.
+
+**The art underneath:** about 32 pixels tall on a 3-pixel pitch, using 21 color classes. The sheet is not on a clean grid: reducing it moves about 1 in 5 sheet pixels, with little visible change. All frames, old and new, should share the reduced grid so they match. Two class quirks need splitting before real uniforms work: helmet and pants share one set of colors, and the ball shares the skin colors, so it turns peach on the light-skin set.
+
+**Can new frames match? Tested on 2026-11-01** in private `data/sprites/test-2026-11-01/`, with the same play rendered again:
+
+| Frame | Method | Result, by eye |
+| --- | --- | --- |
+| Knee drive | Hand-drawn on an original's upper body | Fits at game size; legs slightly thinner |
+| Catch | Hand-drawn on an original's body | Fits. Hands must be timed to the ball |
+| Falling, 30° | Pixel-art rotation of an original | Fits; the best of the set |
+| Falling, 60° | Same | Usable, slightly messy |
+| Tackle lunge | Rotation plus hand-drawn arms | Usable; the collision now reads as a tackle |
+| Flat on the ground | Three attempts: hand-drawn, rotated, combined | Not good enough yet |
+
+Colors and pixel size can match exactly, but drawing habits can't. Close-up comparison will always show some difference; the realistic target is that it can't be spotted at game size. These are judgments from stills and consecutive frames, because real-time motion can't be watched here. The owner reviews frames by group. The sheet's source, if it has more frames, is the only route to truly exact art.
 
 ## Proposed order
 
