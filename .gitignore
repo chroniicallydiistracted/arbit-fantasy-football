@@ -11,6 +11,7 @@
 /.references/
 *.sqlite
 *.sqlite3
+/config/google-auth.env
 # Dependencies, caches, build outputs
 node_modules/
 .venv/
