@@ -61,7 +61,8 @@ Field points retain source yards-to-endzone and separate team frames. Turnover/m
 - **Where:** `ARBIT_LIVE_CAPTURE_PATH`, default ignored `data/live-captures`, readable only by the file owner.
 - **Layout:** `objects/<sha256>.json.gz` holds each distinct body once. `<UTC date>.jsonl` has one line per read: time, kind, URL, event, page, then hash and size or an error code.
 - **Limit:** capture stops at 5 GiB and logs `capture_problem` with `CAPTURE_FULL`. Nothing is deleted automatically. Any capture failure is logged as a code and never reaches the feed.
-- **First live `situation`:** seen 2026-11-01 22:00 UTC on all 3 games in progress. Fields: `down`, `distance`, `yardLine`, `possession` (team ID), `possessionText`, `downDistanceText`, `shortDownDistanceText`, `isRedZone`, `homeTimeouts`, `awayTimeouts`, `lastPlay`.
+- **First live `situation`:** seen 2026-11-01 22:00 UTC on all 3 games in progress. Fields: `down`, `distance`, `yardLine` (from the home goal line, 845 of 845 samples), `possession` (team ID), `possessionText`, `downDistanceText`, `shortDownDistanceText`, `isRedZone`, `homeTimeouts`, `awayTimeouts`, `lastPlay`.
+- **Delay:** plays reached the database a median of about 2 minutes after ESPN's own timestamp (138 plays, first 20 minutes), and the scoreboard's `lastPlay` was usually no faster.
 - **Use:** nothing reads these files at runtime, and database backups don't include them. They are source material for building and replaying scoreboards and play graphics.
 
 ## Gridiron prerequisites

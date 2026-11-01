@@ -13,6 +13,7 @@ Updated 2026-10-31. Architecture and recommended stack approved by the owner on 
 | OWN-007 | Owner made FFA public, reviewed the successful API audit and authorized development using public access; message boards are not required | Owner request 2026-10-30 |
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
+| OWN-024 | The sprite art belongs to the owner, and the animations should be pushed to the repository. The sheet and frames are public on branch `claude/sprite-art`. Gridiron art stays out (OWN-015) | Owner statement 2026-11-01 |
 | OWN-023 | Owner approved the look of the test frames and asked for more poses and better versions of the test frames: "Yes these animations are good... overall I like it a lot." The single-play look gate is passed; new play types still get owner review on rendered video | Owner statement 2026-11-01 |
 | OWN-022 | Use the pixel sprite look instead of 3D. New poses must be "as close to exact that we can get" to the owner's sheet | Owner statement 2026-11-01 |
 | OWN-021 | Animate only what is relevant to the play: "We can animate everything that is relevant to the play. Other players and their positions do not need to be animated. We will animate the plays specifically." Replaces the spec's dashed schematic | Owner statement 2026-10-31 |
@@ -83,5 +84,6 @@ OWN-011 supersedes the broader Sleeper interpretation used in M1e. Preserve past
 
 | OWN-012 | 2026-10-31 | Google selected for M2 sign-in | Fixed official issuer/endpoints/hosts, private local client configuration; no client provisioned |
 | ENG-021 | 2026-10-31 | Biome handles frontend lint/format with strict TypeScript, Vitest and Playwright | One frozen toolchain replaces proposed ESLint; generated types/tokens checked for drift |
+| ENG-024 | 2026-11-01 | Scoreboard detail adds no migration on game night; the summary is stored in the existing `boxscore` column | The worker reads every column, so a pending migration could stop live scoring if it restarted first. [Plan](../superpowers/plans/2026-11-01-live-scoreboards.md) |
 | ENG-023 | 2026-10-31 | Play animation keeps a permanent "Re-creation from play-by-play" label with ESPN's facts one action away | Movement between ESPN's spots is generated, and the no-fabricated-tracking invariant still applies under OWN-021 |
 | ENG-022 | 2026-10-31 | M2 facts use named typed fields and a shared snapshot object | Supersedes generic data/meta proposal for implemented routes; generated contracts, Decimal/null and safe problem errors retained |

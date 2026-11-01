@@ -36,8 +36,8 @@ Status: ✓ ready, ◐ partly ready, ✗ missing.
 | --- | --- | --- | --- |
 | 1 | Real play data | ✓ | Stored as append-only revisions with corrections |
 | 2 | Field and uniform art | ◐ | Week 8 fetched. Needs a sync lane and game status |
-| 3 | Live game situation | ◐ | Possession, down and distance, timeouts and red zone are expected in ESPN's `situation` block only during games. Its shape is unobserved and the code doesn't store it. Raw copies of every live read have been kept since 2026-11-01 06:23 UTC (R-030), so tomorrow's first real look is retained |
-| 4 | Other scoreboard data | ✗ | ESPN offers venue, weather, broadcast, leaders, team colors, drives (25 in the sample game) and win probability per play (197 points). All are discarded. No schema change needed: `nfl_game.payload` is JSON |
+| 3 | Live game situation | ✓ | Observed live on 2026-11-01 and stored with the scoreboard. [Scoreboard plan](../superpowers/plans/2026-11-01-live-scoreboards.md) |
+| 4 | Other scoreboard data | ✓ | Venue, weather, broadcast, leaders, team colors, drives, win probability and team stats are stored and shown |
 | 5 | Play latency measurement | ◐ | `wallclock` and `first_observed_at` are stored, so tomorrow measures it (R-025) |
 | 6 | Play interpreter | ✗ | Turn text and participants into a structured script. Testable now against stored plays |
 | 7 | Choreography engine | ✗ | Motion for each named role and a timing solver that lands on ESPN's spot. No formations, assignments or pursuit (OWN-021). `ftn_charting` (through week 7) and `nextgen_stats` may calibrate timing; columns still to profile, and FTN carries CC-BY-SA attribution |
@@ -69,7 +69,7 @@ These are acceptance criteria for LV-003, not aims:
 
 ## Sprite direction — owner decision, 2026-11-01
 
-The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-group.png`) over 3D (OWN-022). Its origin and license are unknown. **The GitHub repository is public, so the sheet and everything derived from it stay in ignored paths**, like Gridiron art.
+The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-group.png`) over 3D (OWN-022). The art belongs to the owner (OWN-024) and lives in [`assets/sprites`](../../assets/sprites/README.md). Published previews use a plain drawn field, because Gridiron art can't enter the repository.
 
 **What the sheet is:** 384 cells, but only 6 drawings: 32 color sets × 2 skin tones × 6 poses. Silhouettes are pixel-identical across all sets. The poses are stand, three running frames, one arm-up pose facing the camera, and one kneel. They face one way, every player has the same body and the number 11, and each pose uses 16–18 color classes, so remapping to real weekly colors looks feasible (not tested). Stripes and logos would not carry over.
 
@@ -88,7 +88,7 @@ The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-g
 
 **The art underneath:** about 32 pixels tall on a 3-pixel pitch, using 21 color classes. The sheet is not on a clean grid: reducing it moves about 1 in 5 sheet pixels, with little visible change. All frames, old and new, should share the reduced grid so they match. Two class quirks need splitting before real uniforms work: helmet and pants share one set of colors, and the ball shares the skin colors, so it turns peach on the light-skin set.
 
-**Can new frames match? Tested on 2026-11-01** in private `data/sprites/test-2026-11-01/`, with the same play rendered again:
+**Can new frames match? Tested on 2026-11-01**, with the same play rendered again:
 
 | Frame | Method | Result, by eye |
 | --- | --- | --- |
@@ -103,9 +103,7 @@ The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-g
 
 Weakest frames: `ground`, `snap_ready` and `snap_release` (flat torso), `catch_high`. Not drawn yet: low catch, falling backward and a fumble recovery pose, which reuse other frames for now. Goalposts are a placeholder and there is no stadium surround. Numbers are still 11, and helmet and pants still share colors, so real uniforms are not done. Interception, kickoff and PAT reuse these frames but were not rendered.
 
-**Private and unbacked:** frame sources are `data/sprites/work/frames/` with `compose.py` and the review tools, and renders are in `data/sprites/review/`. Because the repository is public, they exist only on this PC. They are not in Git or database backups.
-
-Colors and pixel size can match exactly, but drawing habits can't. Close-up comparison will always show some difference; the realistic target is that it can't be spotted at game size. These are judgments from stills and consecutive frames, because real-time motion can't be watched here. The owner reviews frames by group. The sheet's source, if it has more frames, is the only route to truly exact art.
+Colors and pixel size can match exactly, but drawing habits can't. Close-up comparison will always show some difference; the realistic target is that it can't be spotted at game size. These are judgments from stills and consecutive frames, because real-time motion can't be watched here. The owner reviews frames by group.
 
 ## Proposed order
 

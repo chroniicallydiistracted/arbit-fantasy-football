@@ -301,7 +301,8 @@
       "status": "in_progress",
       "evidence": [
         "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
-        "docs/project/handoffs/2026-10-31-platform-reset.md — text-first scoreboard and game state served to members; active-game proof pending"
+        "docs/project/handoffs/2026-10-31-platform-reset.md — text-first scoreboard and game state served to members; active-game proof pending",
+        "docs/superpowers/plans/2026-11-01-live-scoreboards.md — scoreboards verified with real captured games on an isolated port; player box scores and running-app upgrade remain"
       ]
     },
     {
@@ -331,7 +332,8 @@
       "status": "in_progress",
       "evidence": [
         "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
-        "docs/research/live-animation-prerequisites-2026-10-31.md — prerequisites and single-play quality gate; no graphics built"
+        "docs/research/live-animation-prerequisites-2026-10-31.md — prerequisites and single-play quality gate; no graphics built",
+        "assets/sprites/README.md — 40 owner-approved sprite frames with rendered previews; not yet in the app"
       ]
     },
     {
