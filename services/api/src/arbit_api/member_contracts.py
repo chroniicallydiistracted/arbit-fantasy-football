@@ -171,6 +171,43 @@ class LiveTeam(WireModel):
     abbreviation: str | None
     name: str | None
     score: str | None
+    color: str | None
+    record: str | None
+    periods: list[str | None]
+    timeouts: int | None
+    has_ball: bool
+
+
+class LiveLastPlay(WireModel):
+    kind: str | None
+    text: str | None
+    yards: int | None
+
+
+class LiveSituation(WireModel):
+    """`yard_line` and `first_down_line` run from the home goal line (0) to the away goal line (100)."""
+
+    down: int | None
+    distance: int | None
+    short_text: str | None
+    field_text: str | None
+    yard_line: int | None
+    first_down_line: int | None
+    possession: Literal["home", "away"] | None
+    red_zone: bool | None
+    last_play: LiveLastPlay | None
+
+
+class LiveVenue(WireModel):
+    name: str | None
+    city: str | None
+    state: str | None
+    indoor: bool | None
+
+
+class LiveWeather(WireModel):
+    temperature: int | None
+    condition: str | None
 
 
 class LiveGameRow(WireModel):
@@ -181,9 +218,52 @@ class LiveGameRow(WireModel):
     clock: str | None
     home: LiveTeam
     away: LiveTeam
+    situation: LiveSituation | None
+    venue: LiveVenue | None
+    weather: LiveWeather | None
+    broadcast: list[str]
     own_players: list[str]
     observed_at: datetime
     changed_at: datetime
+
+
+class LiveLeader(WireModel):
+    category: str
+    name: str | None
+    team: str | None
+    line: str | None
+
+
+class LiveDrive(WireModel):
+    team: str | None
+    result: str | None
+    plays: int | None
+    yards: int | None
+    elapsed: str | None
+    start: str | None
+    end: str | None
+    scored: bool | None
+    current: bool
+
+
+class LiveWinPoint(WireModel):
+    home: float
+
+
+class LiveTeamStat(WireModel):
+    key: str
+    label: str | None
+    home: str | None
+    away: str | None
+
+
+class LiveGameDetail(WireModel):
+    game: LiveGameRow
+    leaders: list[LiveLeader]
+    drives: list[LiveDrive]
+    win_probability: list[LiveWinPoint]
+    team_stats: list[LiveTeamStat]
+    summary_observed_at: datetime | None
 
 
 class LiveGames(WireModel):

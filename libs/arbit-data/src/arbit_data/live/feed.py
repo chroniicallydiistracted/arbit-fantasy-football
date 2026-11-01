@@ -101,7 +101,9 @@ class LiveFeed:
             build_source_request("espn.summary", event_id=event_id, season=self.season)
         )
         summary = normalize_summary(response.payload, event_id, self.season, season_type)
-        store.publish_summary(self.uow, event_id, summary["boxscore"], self.clock())
+        store.publish_summary(
+            self.uow, event_id, summary["boxscore"], self.clock(), summary["detail"]
+        )
 
     def _board_step(self, now: datetime) -> None:
         if self.board_due is not None and now < self.board_due:

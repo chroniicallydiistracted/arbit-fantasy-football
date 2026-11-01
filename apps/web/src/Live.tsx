@@ -1,16 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router";
 import { useFallbackInterval } from "./events";
-import { ageLabel, dateLabel } from "./format";
+import { ageLabel } from "./format";
+import {
+  BallMark,
+  Drives,
+  FieldStrip,
+  type Game,
+  GameBoard,
+  type GameDetail,
+  IN_PLAY,
+  Leaders,
+  periodLabel,
+  ReadAt,
+  statusLine,
+  TeamStats,
+  teamColor,
+  trailing,
+  WinChart,
+} from "./GameBoard";
 import type { components } from "./generated/api";
 import { Busy, Notice, PageTitle, StatePanel } from "./primitives";
 import { http } from "./transport";
 
 type Games = components["schemas"]["LiveGames"];
-type Game = components["schemas"]["LiveGameRow"];
 type Plays = components["schemas"]["LivePlays"];
 
-const IN_PLAY = new Set(["in_progress", "halftime", "overtime", "delayed"]);
 const PHASE_ORDER: Record<string, number> = {
   in_progress: 0,
   overtime: 0,
@@ -19,39 +34,6 @@ const PHASE_ORDER: Record<string, number> = {
   scheduled: 1,
   final: 2,
 };
-function periodLabel(period: number | null) {
-  if (period == null) return "";
-  return period > 4 ? (period === 5 ? "OT" : `${period - 4}OT`) : `Q${period}`;
-}
-function statusLine(game: Game): string {
-  switch (game.phase) {
-    case "in_progress":
-    case "overtime":
-      return [periodLabel(game.period), game.clock].filter(Boolean).join(" ");
-    case "halftime":
-      return "Halftime";
-    case "delayed":
-      return "Delayed";
-    case "final":
-      return game.period != null && game.period > 4 ? "Final/OT" : "Final";
-    case "postponed":
-      return "Postponed";
-    case "cancelled":
-      return "Cancelled";
-    case "scheduled":
-      return game.kickoff ? kickoffLabel(game.kickoff) : "Kickoff to be announced";
-    default:
-      return "Status unknown";
-  }
-}
-function kickoffLabel(value: string): string {
-  return new Intl.DateTimeFormat(undefined, {
-    weekday: "short",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
-
 export function LiveBoard() {
   const interval = useFallbackInterval();
   const { eventId } = useParams();
@@ -98,7 +80,7 @@ export function LiveBoard() {
               <GameTile key={game.event_id} game={game} selected={game.event_id === eventId} />
             ))}
           </ul>
-          {eventId && <PlayFeed eventId={eventId} />}
+          {eventId && <GameDetailPanel eventId={eventId} />}
         </div>
       )}
     </>
@@ -106,30 +88,45 @@ export function LiveBoard() {
 }
 
 function GameTile({ game, selected }: { game: Game; selected: boolean }) {
-  const live = IN_PLAY.has(game.phase);
-  const home = Number(game.home.score);
-  const away = Number(game.away.score);
-  const started = game.home.score != null && game.away.score != null && game.phase !== "scheduled";
+  const situation = game.situation;
+  const sides = [
+    { key: "away", team: game.away, other: game.home },
+    { key: "home", team: game.home, other: game.away },
+  ];
   return (
     <li>
       <Link
         className="game-tile"
         to={`/live/games/${game.event_id}`}
-        data-live={live}
+        data-live={IN_PLAY.has(game.phase)}
         aria-current={selected ? "true" : undefined}
       >
-        <span className="game-status">{statusLine(game)}</span>
-        {[
-          { key: "away", team: game.away, trailing: started && away < home },
-          { key: "home", team: game.home, trailing: started && home < away },
-        ].map(({ key, team, trailing }) => (
-          <span className="game-line" key={key} data-trailing={trailing}>
+        <span className="game-status">
+          <span>{statusLine(game)}</span>
+          {game.broadcast.length > 0 && <span className="game-channel">{game.broadcast[0]}</span>}
+        </span>
+        {sides.map(({ key, team, other }) => (
+          <span
+            className="game-line"
+            key={key}
+            data-trailing={trailing(game, team, other)}
+            style={teamColor(team)}
+          >
+            <i className="team-tick" />
             <b>{team.abbreviation ?? "—"}</b>
+            {team.has_ball ? <BallMark /> : <span />}
+            <span className="game-record">{team.record}</span>
             <span className="game-score" data-unknown={team.score == null}>
               {team.score ?? "—"}
             </span>
           </span>
         ))}
+        {situation && (situation.short_text || situation.field_text) && (
+          <span className="game-down" data-redzone={situation.red_zone === true}>
+            {[situation.short_text, situation.field_text].filter(Boolean).join(" · ")}
+          </span>
+        )}
+        <FieldStrip game={game} compact />
         {game.own_players.length > 0 && (
           <span className="game-own">
             <b>{game.own_players.length} yours</b> {game.own_players.join(", ")}
@@ -137,6 +134,39 @@ function GameTile({ game, selected }: { game: Game; selected: boolean }) {
         )}
       </Link>
     </li>
+  );
+}
+
+function GameDetailPanel({ eventId }: { eventId: string }) {
+  const interval = useFallbackInterval();
+  const query = useQuery({
+    queryKey: ["live-game", eventId],
+    queryFn: ({ signal }) =>
+      http<GameDetail>(`/api/v1/live/games/${encodeURIComponent(eventId)}`, { signal }),
+    refetchInterval: interval,
+  });
+  if (query.isPending) return <Busy label="Loading game…" />;
+  if (!query.data) return <Notice danger>This game couldn’t be loaded.</Notice>;
+  const detail = query.data;
+  return (
+    <div className="game-page">
+      <GameBoard game={detail.game} />
+      <p className="table-foot game-read">
+        <ReadAt when={detail.game.observed_at} /> from ESPN.{" "}
+        <Link className="link-button quiet" to="/live">
+          All games
+        </Link>
+      </p>
+      <div className="game-columns">
+        <PlayFeed eventId={eventId} />
+        <div className="game-rail">
+          <WinChart detail={detail} />
+          <TeamStats detail={detail} />
+          <Leaders detail={detail} />
+          <Drives detail={detail} />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -153,11 +183,7 @@ function PlayFeed({ eventId }: { eventId: string }) {
   return (
     <section className="play-feed" aria-labelledby="plays-heading">
       <div className="section-head">
-        <h2 id="plays-heading">
-          {query.data
-            ? `${query.data.game.away.abbreviation ?? "—"} at ${query.data.game.home.abbreviation ?? "—"}`
-            : "Plays"}
-        </h2>
+        <h3 id="plays-heading">Plays</h3>
         <div className="section-tools">
           <button
             type="button"
@@ -172,9 +198,6 @@ function PlayFeed({ eventId }: { eventId: string }) {
           >
             My players
           </button>
-          <Link className="link-button quiet" to="/live">
-            Close
-          </Link>
         </div>
       </div>
       {query.isPending && <Busy label="Loading plays…" />}
@@ -216,14 +239,8 @@ function PlayFeed({ eventId }: { eventId: string }) {
       )}
       {query.data?.plays_observed_at && (
         <p className="table-foot">
-          Provider play data, unofficial until ESPN Fantasy settles it. Read{" "}
-          <time
-            dateTime={query.data.plays_observed_at}
-            title={dateLabel(query.data.plays_observed_at)}
-          >
-            {ageLabel(query.data.plays_observed_at)}
-          </time>
-          .
+          Provider play data, unofficial until ESPN Fantasy settles it.{" "}
+          <ReadAt when={query.data.plays_observed_at} />.
         </p>
       )}
     </section>

@@ -68,6 +68,57 @@ class LivePlay(LiveModel):
     )
 
 
+class TeamLine(LiveModel):
+    color: str | None = None
+    alternate_color: str | None = None
+    record: str | None = None
+    periods: tuple[str | None, ...] = ()
+
+
+class LastPlay(LiveModel):
+    provider_id: str | None = None
+    kind_text: str | None = None
+    text: str | None = None
+    yards: int | None = None
+    team_id: str | None = None
+    home_win: float | None = None
+
+
+class Situation(LiveModel):
+    """ESPN's live game state. `yard_line` is measured from the home team's goal line."""
+
+    down: int | None = None
+    distance: int | None = None
+    yard_line: int | None = None
+    possession_team_id: str | None = None
+    field_text: str | None = None
+    short_text: str | None = None
+    red_zone: bool | None = None
+    home_timeouts: int | None = None
+    away_timeouts: int | None = None
+    last_play: LastPlay | None = None
+
+
+class Venue(LiveModel):
+    name: str | None = None
+    city: str | None = None
+    state: str | None = None
+    indoor: bool | None = None
+
+
+class Weather(LiveModel):
+    temperature: int | None = None
+    condition: str | None = None
+
+
+class Leader(LiveModel):
+    category: str
+    athlete_id: str | None = None
+    name: str | None = None
+    team_id: str | None = None
+    line: str | None = None
+
+
 class LiveGame(LiveModel):
     event_id: str
     season: int
@@ -82,6 +133,14 @@ class LiveGame(LiveModel):
     period: int | None
     clock: str | None
     neutral_site: bool | None
+    status_detail: str | None = None
+    home_line: TeamLine | None = None
+    away_line: TeamLine | None = None
+    situation: Situation | None = None
+    venue: Venue | None = None
+    weather: Weather | None = None
+    broadcast: tuple[str, ...] = ()
+    leaders: tuple[Leader, ...] = ()
     recommendations_enabled: Literal[False] = False
     fantasy_scoring: Literal["not_calculated; ESPN Fantasy remains authoritative"] = (
         "not_calculated; ESPN Fantasy remains authoritative"

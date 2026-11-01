@@ -428,11 +428,186 @@
         "title": "InviteResponse",
         "type": "object"
       },
+      "LiveDrive": {
+        "additionalProperties": false,
+        "properties": {
+          "current": {
+            "title": "Current",
+            "type": "boolean"
+          },
+          "elapsed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elapsed"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "plays": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plays"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "scored": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scored"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          },
+          "yards": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Yards"
+          }
+        },
+        "required": [
+          "team",
+          "result",
+          "plays",
+          "yards",
+          "elapsed",
+          "start",
+          "end",
+          "scored",
+          "current"
+        ],
+        "title": "LiveDrive",
+        "type": "object"
+      },
+      "LiveGameDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "drives": {
+            "items": {
+              "$ref": "#/components/schemas/LiveDrive"
+            },
+            "title": "Drives",
+            "type": "array"
+          },
+          "game": {
+            "$ref": "#/components/schemas/LiveGameRow"
+          },
+          "leaders": {
+            "items": {
+              "$ref": "#/components/schemas/LiveLeader"
+            },
+            "title": "Leaders",
+            "type": "array"
+          },
+          "summary_observed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary Observed At"
+          },
+          "team_stats": {
+            "items": {
+              "$ref": "#/components/schemas/LiveTeamStat"
+            },
+            "title": "Team Stats",
+            "type": "array"
+          },
+          "win_probability": {
+            "items": {
+              "$ref": "#/components/schemas/LiveWinPoint"
+            },
+            "title": "Win Probability",
+            "type": "array"
+          }
+        },
+        "required": [
+          "game",
+          "leaders",
+          "drives",
+          "win_probability",
+          "team_stats",
+          "summary_observed_at"
+        ],
+        "title": "LiveGameDetail",
+        "type": "object"
+      },
       "LiveGameRow": {
         "additionalProperties": false,
         "properties": {
           "away": {
             "$ref": "#/components/schemas/LiveTeam"
+          },
+          "broadcast": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Broadcast",
+            "type": "array"
           },
           "changed_at": {
             "format": "date-time",
@@ -495,6 +670,36 @@
           "phase": {
             "title": "Phase",
             "type": "string"
+          },
+          "situation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveSituation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "venue": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveVenue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "weather": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveWeather"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -505,6 +710,10 @@
           "clock",
           "home",
           "away",
+          "situation",
+          "venue",
+          "weather",
+          "broadcast",
           "own_players",
           "observed_at",
           "changed_at"
@@ -576,6 +785,101 @@
           "last_success_at"
         ],
         "title": "LiveGames",
+        "type": "object"
+      },
+      "LiveLastPlay": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "yards": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Yards"
+          }
+        },
+        "required": [
+          "kind",
+          "text",
+          "yards"
+        ],
+        "title": "LiveLastPlay",
+        "type": "object"
+      },
+      "LiveLeader": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team"
+          }
+        },
+        "required": [
+          "category",
+          "name",
+          "team",
+          "line"
+        ],
+        "title": "LiveLeader",
         "type": "object"
       },
       "LivePlayRow": {
@@ -709,6 +1013,127 @@
         "title": "LivePlays",
         "type": "object"
       },
+      "LiveSituation": {
+        "additionalProperties": false,
+        "description": "`yard_line` and `first_down_line` run from the home goal line (0) to the away goal line (100).",
+        "properties": {
+          "distance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance"
+          },
+          "down": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Down"
+          },
+          "field_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field Text"
+          },
+          "first_down_line": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Down Line"
+          },
+          "last_play": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveLastPlay"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "possession": {
+            "anyOf": [
+              {
+                "enum": [
+                  "home",
+                  "away"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Possession"
+          },
+          "red_zone": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Red Zone"
+          },
+          "short_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Text"
+          },
+          "yard_line": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Yard Line"
+          }
+        },
+        "required": [
+          "down",
+          "distance",
+          "short_text",
+          "field_text",
+          "yard_line",
+          "first_down_line",
+          "possession",
+          "red_zone",
+          "last_play"
+        ],
+        "title": "LiveSituation",
+        "type": "object"
+      },
       "LiveTeam": {
         "additionalProperties": false,
         "properties": {
@@ -723,6 +1148,21 @@
             ],
             "title": "Abbreviation"
           },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "has_ball": {
+            "title": "Has Ball",
+            "type": "boolean"
+          },
           "name": {
             "anyOf": [
               {
@@ -734,6 +1174,31 @@
             ],
             "title": "Name"
           },
+          "periods": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Periods",
+            "type": "array"
+          },
+          "record": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Record"
+          },
           "score": {
             "anyOf": [
               {
@@ -744,14 +1209,184 @@
               }
             ],
             "title": "Score"
+          },
+          "timeouts": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeouts"
           }
         },
         "required": [
           "abbreviation",
           "name",
-          "score"
+          "score",
+          "color",
+          "record",
+          "periods",
+          "timeouts",
+          "has_ball"
         ],
         "title": "LiveTeam",
+        "type": "object"
+      },
+      "LiveTeamStat": {
+        "additionalProperties": false,
+        "properties": {
+          "away": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Away"
+          },
+          "home": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Home"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "home",
+          "away"
+        ],
+        "title": "LiveTeamStat",
+        "type": "object"
+      },
+      "LiveVenue": {
+        "additionalProperties": false,
+        "properties": {
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "indoor": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indoor"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          }
+        },
+        "required": [
+          "name",
+          "city",
+          "state",
+          "indoor"
+        ],
+        "title": "LiveVenue",
+        "type": "object"
+      },
+      "LiveWeather": {
+        "additionalProperties": false,
+        "properties": {
+          "condition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temperature"
+          }
+        },
+        "required": [
+          "temperature",
+          "condition"
+        ],
+        "title": "LiveWeather",
+        "type": "object"
+      },
+      "LiveWinPoint": {
+        "additionalProperties": false,
+        "properties": {
+          "home": {
+            "title": "Home",
+            "type": "number"
+          }
+        },
+        "required": [
+          "home"
+        ],
+        "title": "LiveWinPoint",
         "type": "object"
       },
       "Matchup": {
@@ -3326,6 +3961,176 @@
           }
         },
         "summary": "Live Games"
+      }
+    },
+    "/api/v1/live/games/{event_id}": {
+      "get": {
+        "operationId": "live_game_api_v1_live_games__event_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[1-9][0-9]{0,19}$",
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveGameDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Entity",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until retry",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Live Game"
       }
     },
     "/api/v1/live/games/{event_id}/plays": {

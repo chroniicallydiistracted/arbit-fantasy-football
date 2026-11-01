@@ -61,9 +61,82 @@ def fixture_game(home_score: str | None, phase: str = "in_progress") -> dict[str
         "period": 2,
         "clock": "4:12",
         "neutral_site": False,
+        "status_detail": "4:12 - 2nd",
+        "home_line": {
+            "color": "1b6e3c",
+            "alternate_color": "f2c230",
+            "record": "5-2",
+            "periods": ["0", home_score or "0"],
+        },
+        "away_line": {
+            "color": "7a1f2b",
+            "alternate_color": "e8e8e8",
+            "record": "3-4",
+            "periods": ["3", "0"],
+        },
+        "situation": {
+            "down": 3,
+            "distance": 7,
+            "yard_line": 38,
+            "possession_team_id": FIXTURE_HOME,
+            "field_text": "FIC 38",
+            "short_text": "3rd & 7",
+            "red_zone": False,
+            "home_timeouts": 3,
+            "away_timeouts": 1,
+            "last_play": {
+                "kind_text": "Rush",
+                "text": "Fictional runner up the middle for 3 yards.",
+                "yards": 3,
+            },
+        },
+        "venue": {"name": "Fixture Field", "city": "Testville", "state": "TS", "indoor": False},
+        "weather": {"temperature": 61, "condition": "Clear"},
+        "broadcast": ["TEST"],
+        "leaders": [
+            {
+                "category": "PASS",
+                "name": "Q. Fiction",
+                "team_id": FIXTURE_HOME,
+                "line": "11/16, 121 YDS",
+            },
+        ],
         "recommendations_enabled": False,
         "fantasy_scoring": "not_calculated; ESPN Fantasy remains authoritative",
     }
+
+
+FIXTURE_DETAIL = {
+    "drives": [
+        {
+            "team_id": FIXTURE_AWAY,
+            "result": "Field goal",
+            "plays": 8,
+            "yards": 41,
+            "elapsed": "4:02",
+            "start": "TST 25",
+            "end": "FIC 34",
+            "scored": True,
+            "current": False,
+        },
+        {
+            "team_id": FIXTURE_HOME,
+            "result": None,
+            "plays": 3,
+            "yards": 13,
+            "elapsed": "1:10",
+            "start": "FIC 25",
+            "end": None,
+            "scored": None,
+            "current": True,
+        },
+    ],
+    "win_probability": [{"play_id": str(n), "home": 0.5 + n / 50} for n in range(12)],
+    "team_stats": [
+        {"key": "totalYards", "label": "Total Yards", "home": "121", "away": "96"},
+        {"key": "turnovers", "label": "Turnovers", "home": "0", "away": "1"},
+    ],
+}
 
 
 def publish_fixture_score(engine: Engine, home_score: str) -> None:
@@ -74,6 +147,9 @@ def publish_fixture_score(engine: Engine, home_score: str) -> None:
         UnitOfWork(engine),
         {"season": 2026, "season_type": 2, "week": 8, "games": [fixture_game(home_score)]},
         datetime.now(UTC),
+    )
+    live_store.publish_summary(
+        UnitOfWork(engine), FIXTURE_EVENT, {}, datetime.now(UTC), FIXTURE_DETAIL
     )
 
 

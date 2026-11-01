@@ -432,6 +432,21 @@ def test_capture_keeps_every_live_response_without_adding_requests(uow, tmp_path
     assert {"espn.scoreboard.current", "espn.plays", "espn.summary"} == set(wrapped.requests)
 
 
+def test_summary_detail_announces_changes_only_and_survives_older_rows(uow):
+    store.publish_scoreboard(uow, board(game()), NOW)
+    assert store.read_game(uow, "401")["detail"] == {}, "no summary read yet"
+    detail = {"drives": [], "win_probability": [{"play_id": "1", "home": 0.5}], "team_stats": []}
+    before = event_types(uow).count("game.summary")
+    store.publish_summary(uow, "401", {"teams": []}, NOW, detail)
+    store.publish_summary(uow, "401", {"teams": []}, NOW + timedelta(seconds=60), detail)
+    assert event_types(uow).count("game.summary") == before + 1, "unchanged detail is silent"
+    assert store.read_game(uow, "401")["detail"] == detail
+    # A row from before detail existed holds a bare boxscore.
+    with uow.engine.begin() as c:
+        c.execute(nfl_game.update().values(boxscore={"teams": []}))
+    assert store.read_game(uow, "401")["detail"] == {}
+
+
 def test_identical_play_bytes_skip_processing(uow):
     transport = FakeTransport(
         {

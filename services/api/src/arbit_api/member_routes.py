@@ -56,11 +56,20 @@ from arbit_api.member_contracts import (
     FrontOffice,
     InviteRequest,
     InviteResponse,
+    LiveDrive,
+    LiveGameDetail,
     LiveGameRow,
     LiveGames,
+    LiveLastPlay,
+    LiveLeader,
     LivePlayRow,
     LivePlays,
+    LiveSituation,
     LiveTeam,
+    LiveTeamStat,
+    LiveVenue,
+    LiveWeather,
+    LiveWinPoint,
     Me,
     PlayerFacts,
     PlayerNfl,
@@ -604,12 +613,23 @@ def install_member_routes(
     def game_row(
         game: dict[str, Any], teams: dict[str, Any], own_by_team: dict[str, list[str]]
     ) -> LiveGameRow:
-        def side(espn_id: str, score: str | None) -> LiveTeam:
+        situation = game.get("situation") or {}
+        # Outside live play there is no ball to place, even if the last reading had one.
+        in_play = game["phase"] in ("in_progress", "overtime", "delayed")
+        ball = situation.get("possession_team_id") if in_play else None
+
+        def side(espn_id: str, score: str | None, where: str) -> LiveTeam:
             team = teams.get(espn_id)
+            line = game.get(f"{where}_line") or {}
             return LiveTeam(
                 abbreviation=team.abbreviation if team else None,
                 name=f"{team.location} {team.name}" if team else None,
                 score=score,
+                color=line.get("color"),
+                record=line.get("record"),
+                periods=line.get("periods", []) if started else [],
+                timeouts=situation.get(f"{where}_timeouts") if in_play else None,
+                has_ball=ball == espn_id,
             )
 
         # ESPN reports 0 before kickoff. No game has been played, so the score is unknown.
@@ -620,12 +640,51 @@ def install_member_routes(
             kickoff=game.get("date"),
             period=game.get("period") if started else None,
             clock=game.get("clock") if started else None,
-            home=side(game["home_team_id"], game.get("home_score") if started else None),
-            away=side(game["away_team_id"], game.get("away_score") if started else None),
+            home=side(game["home_team_id"], game.get("home_score") if started else None, "home"),
+            away=side(game["away_team_id"], game.get("away_score") if started else None, "away"),
+            situation=live_situation(game) if in_play else None,
+            venue=LiveVenue(**game["venue"]) if game.get("venue") else None,
+            weather=LiveWeather(**game["weather"]) if game.get("weather") else None,
+            broadcast=game.get("broadcast", []),
             own_players=own_by_team.get(game["home_team_id"], [])
             + own_by_team.get(game["away_team_id"], []),
             observed_at=game["observed_at"],
             changed_at=game["changed_at"],
+        )
+
+    def live_situation(game: dict[str, Any]) -> LiveSituation | None:
+        raw = game.get("situation")
+        if not raw:
+            return None
+        team = raw.get("possession_team_id")
+        possession: Literal["home", "away"] | None = None
+        if team == game["home_team_id"]:
+            possession = "home"
+        elif team == game["away_team_id"]:
+            possession = "away"
+        line, distance = raw.get("yard_line"), raw.get("distance")
+        first_down = None
+        if line is not None and distance is not None and possession:
+            # The home team drives away from its own goal line, which is 0 on ESPN's scale.
+            first_down = (
+                min(100, line + distance) if possession == "home" else max(0, line - distance)
+            )
+        last = raw.get("last_play")
+        return LiveSituation(
+            down=raw.get("down"),
+            distance=distance,
+            short_text=raw.get("short_text"),
+            field_text=raw.get("field_text"),
+            yard_line=line,
+            first_down_line=first_down,
+            possession=possession,
+            # ESPN's flag can outlast the snap: it was seen set during a timeout with no down.
+            red_zone=raw.get("red_zone") if raw.get("down") is not None else None,
+            last_play=LiveLastPlay(
+                kind=last.get("kind_text"), text=last.get("text"), yards=last.get("yards")
+            )
+            if last
+            else None,
         )
 
     def own_by_nfl_team(member: dict[str, Any], document: LeagueDocument) -> dict[str, list[str]]:
@@ -667,6 +726,57 @@ def install_member_routes(
             ),
             source_state=status.state,
             last_success_at=status.last_success_at,
+        )
+
+    @router.get("/api/v1/live/games/{event_id}", response_model=LiveGameDetail)
+    def live_game(
+        request: Request, event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$")
+    ) -> LiveGameDetail:
+        member = principal(request)
+        _, document, _ = stored()
+        require_binding(member, document)
+        board = live_store.read_games(uow, season)
+        game = next((g for g in (board or {}).get("games", []) if g["event_id"] == event_id), None)
+        stored_game = live_store.read_game(uow, event_id)
+        if board is None or game is None or stored_game is None:
+            raise HTTPException(404, "GAME_NOT_FOUND")
+        teams = board["teams"]
+
+        def team_abbreviation(espn_id: str | None) -> str | None:
+            team = teams.get(espn_id)
+            return team.abbreviation if team else None
+
+        detail = stored_game["detail"]
+        return LiveGameDetail(
+            game=game_row(game, teams, own_by_nfl_team(member, document)),
+            leaders=[
+                LiveLeader(
+                    category=x["category"],
+                    name=x.get("name"),
+                    team=team_abbreviation(x.get("team_id")),
+                    line=x.get("line"),
+                )
+                for x in game.get("leaders", [])
+            ],
+            drives=[
+                LiveDrive(
+                    team=team_abbreviation(d.get("team_id")),
+                    result=d.get("result"),
+                    plays=d.get("plays"),
+                    yards=d.get("yards"),
+                    elapsed=d.get("elapsed"),
+                    start=d.get("start"),
+                    end=d.get("end"),
+                    scored=d.get("scored"),
+                    current=d.get("current") is True,
+                )
+                for d in detail.get("drives", [])
+            ],
+            win_probability=[
+                LiveWinPoint(home=p["home"]) for p in detail.get("win_probability", [])
+            ],
+            team_stats=[LiveTeamStat(**s) for s in detail.get("team_stats", [])],
+            summary_observed_at=stored_game["summary_observed_at"],
         )
 
     @router.get("/api/v1/live/games/{event_id}/plays", response_model=LivePlays)

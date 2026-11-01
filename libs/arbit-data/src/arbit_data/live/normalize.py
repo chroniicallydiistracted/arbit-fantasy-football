@@ -1,6 +1,7 @@
 """Parse explicit source facts; never follow references, name-match, or infer tracking."""
 
 import re
+from collections.abc import Callable
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import Any
@@ -8,7 +9,19 @@ from urllib.parse import urlsplit
 
 from arbit_core.identity import require_aware
 
-from arbit_data.live.contracts import FieldPoint, LiveGame, LivePlay, Participant, PlayKind
+from arbit_data.live.contracts import (
+    FieldPoint,
+    LastPlay,
+    Leader,
+    LiveGame,
+    LivePlay,
+    Participant,
+    PlayKind,
+    Situation,
+    TeamLine,
+    Venue,
+    Weather,
+)
 from arbit_data.public_sources.repository import json_ready
 
 
@@ -262,6 +275,139 @@ def normalize_play(raw: dict[str, Any], event_id: str, season: int) -> LivePlay:
     )
 
 
+def _lenient[T](read: Callable[..., T], *args: Any) -> T | None:
+    """Scoreboard extras must never cost the score: a shape change here only loses the extra."""
+    try:
+        return read(*args)
+    except (ValueError, TypeError, KeyError, AttributeError, ArithmeticError):
+        return None
+
+
+def _bounded(value: Any, low: int, high: int) -> int | None:
+    """ESPN uses out-of-range values such as a down of -1 for unknown. Unknown is not a number."""
+    if value is None or isinstance(value, bool):
+        return None
+    number = Decimal(str(value))
+    if number != number.to_integral_value() or not low <= number <= high:
+        return None
+    return int(number)
+
+
+def _hex_color(value: Any) -> str | None:
+    return (
+        value.lower() if isinstance(value, str) and re.fullmatch(r"[0-9a-fA-F]{6}", value) else None
+    )
+
+
+def _team_line(competitor: dict[str, Any]) -> TeamLine:
+    team = _dict(competitor.get("team"))
+    overall = next(
+        (
+            _dict(r).get("summary")
+            for r in _list(competitor.get("records"), 8)
+            if _dict(r).get("type") == "total"
+        ),
+        None,
+    )
+    scores = (
+        _bounded(_dict(p).get("value"), 0, 200) for p in _list(competitor.get("linescores"), 12)
+    )
+    periods = tuple(None if score is None else str(score) for score in scores)
+    return TeamLine(
+        color=_hex_color(team.get("color")),
+        alternate_color=_hex_color(team.get("alternateColor")),
+        record=_text(overall, 16),
+        periods=periods,
+    )
+
+
+def _last_play(raw: dict[str, Any]) -> LastPlay:
+    probability = _dict(raw.get("probability")).get("homeWinPercentage")
+    return LastPlay(
+        provider_id=_text(raw.get("id"), 40) if isinstance(raw.get("id"), str) else None,
+        kind_text=_text(_dict(raw.get("type")).get("text"), 64),
+        text=_text(raw.get("text"), 500),
+        yards=_bounded(raw.get("statYardage"), -120, 120),
+        team_id=_lenient(identifier, _dict(raw.get("team")).get("id")),
+        home_win=round(float(probability), 4) if probability is not None else None,
+    )
+
+
+def _situation(value: Any) -> Situation | None:
+    raw = _dict(value)
+    if not raw:
+        return None
+    last_play = _dict(raw.get("lastPlay"))
+    return Situation(
+        down=_bounded(raw.get("down"), 1, 4),
+        distance=_bounded(raw.get("distance"), 0, 120),
+        yard_line=_bounded(raw.get("yardLine"), 0, 100),
+        possession_team_id=_lenient(identifier, raw.get("possession")),
+        field_text=_text(raw.get("possessionText"), 32),
+        short_text=_text(raw.get("shortDownDistanceText"), 32),
+        red_zone=_flag(raw.get("isRedZone")),
+        home_timeouts=_bounded(raw.get("homeTimeouts"), 0, 3),
+        away_timeouts=_bounded(raw.get("awayTimeouts"), 0, 3),
+        last_play=_lenient(_last_play, last_play) if last_play else None,
+    )
+
+
+def _venue(value: Any) -> Venue | None:
+    raw = _dict(value)
+    if not raw:
+        return None
+    address = _dict(raw.get("address"))
+    return Venue(
+        name=_text(raw.get("fullName"), 128),
+        city=_text(address.get("city"), 64),
+        state=_text(address.get("state"), 32),
+        indoor=_flag(raw.get("indoor")),
+    )
+
+
+def _weather(value: Any) -> Weather | None:
+    raw = _dict(value)
+    if not raw:
+        return None
+    # ESPN's condition text has been seen in either field, with a bare code in the other.
+    words = [
+        v
+        for v in (raw.get("displayValue"), raw.get("conditionId"))
+        if isinstance(v, str) and v and not v.isdigit()
+    ]
+    return Weather(
+        temperature=_bounded(raw.get("temperature"), -60, 140),
+        condition=_text(words[0], 64) if words else None,
+    )
+
+
+def _broadcast(value: Any) -> tuple[str, ...]:
+    names = [
+        n for b in _list(value, 8) for n in _list(_dict(b).get("names"), 8) if isinstance(n, str)
+    ]
+    return tuple(dict.fromkeys(names))[:4]
+
+
+def _leaders(value: Any) -> tuple[Leader, ...]:
+    found = []
+    for category in _list(value, 12)[:6]:
+        top = _list(_dict(category).get("leaders"), 12)
+        short = _text(_dict(category).get("shortDisplayName"), 16)
+        if not top or short not in ("PASS", "RUSH", "REC"):
+            continue
+        athlete = _dict(_dict(top[0]).get("athlete"))
+        found.append(
+            Leader(
+                category=short,
+                athlete_id=_lenient(identifier, athlete.get("id")),
+                name=_text(athlete.get("shortName"), 64),
+                team_id=_lenient(identifier, _dict(_dict(top[0]).get("team")).get("id")),
+                line=_text(_dict(top[0]).get("displayValue"), 64),
+            )
+        )
+    return tuple(found)
+
+
 def normalize_game(raw: dict[str, Any], season: int) -> LiveGame:
     event_id = identifier(raw.get("id"))
     if _dict(raw.get("season")).get("year") != season:
@@ -312,4 +458,84 @@ def normalize_game(raw: dict[str, Any], season: int) -> LiveGame:
         period=period,
         clock=_text(status.get("displayClock"), 32),
         neutral_site=_flag(c.get("neutralSite")),
+        status_detail=_lenient(_text, status_type.get("shortDetail"), 64),
+        home_line=_lenient(_team_line, home),
+        away_line=_lenient(_team_line, away),
+        situation=_lenient(_situation, c.get("situation")),
+        venue=_lenient(_venue, c.get("venue")),
+        weather=_lenient(_weather, raw.get("weather") or c.get("weather")),
+        broadcast=_lenient(_broadcast, c.get("broadcasts")) or (),
+        leaders=_lenient(_leaders, c.get("leaders")) or (),
     )
+
+
+def _drive(raw: dict[str, Any], current: bool) -> dict[str, Any]:
+    return {
+        "team_id": _lenient(identifier, _dict(raw.get("team")).get("id")),
+        "result": _text(raw.get("displayResult"), 48),
+        "plays": _bounded(raw.get("offensivePlays"), 0, 60),
+        "yards": _bounded(raw.get("yards"), -120, 200),
+        "elapsed": _text(_dict(raw.get("timeElapsed")).get("displayValue"), 16),
+        "start": _text(_dict(raw.get("start")).get("text"), 32),
+        "end": _text(_dict(raw.get("end")).get("text"), 32),
+        "scored": _flag(raw.get("isScore")),
+        "current": current,
+    }
+
+
+def _drives(value: Any) -> list[dict[str, Any]]:
+    raw = _dict(value)
+    finished = _list(raw.get("previous"), 100)
+    current = _dict(raw.get("current"))
+    # When a drive ends ESPN keeps listing it as current, alongside the same drive as finished.
+    ended = current.get("id") is not None and any(
+        _dict(d).get("id") == current.get("id") for d in finished
+    )
+    # ESPN also lists empty placeholders with no plays and no result, which are not drives.
+    drives = [
+        drive
+        for drive in (_drive(_dict(d), False) for d in finished)
+        if drive["plays"] or drive["result"]
+    ]
+    return drives + ([_drive(current, True)] if current and not ended else [])
+
+
+def _win_points(value: Any) -> list[dict[str, Any]]:
+    points = []
+    for item in _list(value, 600):
+        value = _dict(item).get("homeWinPercentage")
+        if value is not None:
+            points.append(
+                {"play_id": str(_dict(item).get("playId")), "home": round(float(value), 4)}
+            )
+    return points
+
+
+def _team_stats(value: Any) -> list[dict[str, Any]]:
+    raw = _dict(value)
+    sides = {_dict(t).get("homeAway"): _dict(t) for t in _list(raw.get("teams"), 2)}
+    home, away = (
+        _list(sides["home"].get("statistics"), 60),
+        _list(sides["away"].get("statistics"), 60),
+    )
+    other = {_dict(s).get("name"): _dict(s).get("displayValue") for s in away}
+    rows: dict[str, dict[str, Any]] = {}
+    for stat in home:
+        name = _text(_dict(stat).get("name"), 48)
+        if name and name not in rows:
+            rows[name] = {
+                "key": name,
+                "label": _text(_dict(stat).get("label"), 64),
+                "home": _text(_dict(stat).get("displayValue"), 16),
+                "away": _text(other.get(name), 16),
+            }
+    return list(rows.values())
+
+
+def normalize_summary_detail(raw: dict[str, Any]) -> dict[str, Any]:
+    """What a game page shows beyond the scoreboard. Each part can fail alone without the others."""
+    return {
+        "drives": _lenient(_drives, raw.get("drives")) or [],
+        "win_probability": _lenient(_win_points, raw.get("winprobability")) or [],
+        "team_stats": _lenient(_team_stats, raw.get("boxscore")) or [],
+    }

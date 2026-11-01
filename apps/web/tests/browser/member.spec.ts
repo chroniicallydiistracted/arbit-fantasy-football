@@ -236,6 +236,23 @@ test("the Live workspace deep-links to a game and survives a hard reload", async
   await expect(page.getByRole("heading", { name: "TST at FIC" })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("heading", { name: "TST at FIC" })).toBeVisible();
+  // The scoreboard states the live situation in words, on the field and by quarter.
+  const board = page.locator(".game-board");
+  await expect(board.locator(".gb-down")).toContainText("3rd & 7");
+  await expect(board.locator(".gb-down")).toContainText("FIC 38");
+  await expect(board.getByRole("img", { name: /Ball at FIC 38/ })).toBeVisible();
+  await expect(board.getByRole("table", { name: "Score by quarter" })).toContainText("Q2");
+  await expect(page.getByRole("img", { name: /win probability/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Drives" })).toBeVisible();
+  for (const width of [320, 768, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/live/games/990000001");
+    await expect(board).toBeVisible();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow, `game page overflows at ${width}px`).toBeLessThanOrEqual(0);
+  }
   const result = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
     .analyze();

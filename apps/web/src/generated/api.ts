@@ -174,6 +174,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/live/games/{event_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Live Game */
+        get: operations["live_game_api_v1_live_games__event_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/live/games/{event_id}/plays": {
         parameters: {
             query?: never;
@@ -602,9 +619,46 @@ export interface components {
             /** Invitation Url */
             invitation_url: string;
         };
+        /** LiveDrive */
+        LiveDrive: {
+            /** Current */
+            current: boolean;
+            /** Elapsed */
+            elapsed: string | null;
+            /** End */
+            end: string | null;
+            /** Plays */
+            plays: number | null;
+            /** Result */
+            result: string | null;
+            /** Scored */
+            scored: boolean | null;
+            /** Start */
+            start: string | null;
+            /** Team */
+            team: string | null;
+            /** Yards */
+            yards: number | null;
+        };
+        /** LiveGameDetail */
+        LiveGameDetail: {
+            /** Drives */
+            drives: components["schemas"]["LiveDrive"][];
+            game: components["schemas"]["LiveGameRow"];
+            /** Leaders */
+            leaders: components["schemas"]["LiveLeader"][];
+            /** Summary Observed At */
+            summary_observed_at: string | null;
+            /** Team Stats */
+            team_stats: components["schemas"]["LiveTeamStat"][];
+            /** Win Probability */
+            win_probability: components["schemas"]["LiveWinPoint"][];
+        };
         /** LiveGameRow */
         LiveGameRow: {
             away: components["schemas"]["LiveTeam"];
+            /** Broadcast */
+            broadcast: string[];
             /**
              * Changed At
              * Format: date-time
@@ -628,6 +682,9 @@ export interface components {
             period: number | null;
             /** Phase */
             phase: string;
+            situation: components["schemas"]["LiveSituation"] | null;
+            venue: components["schemas"]["LiveVenue"] | null;
+            weather: components["schemas"]["LiveWeather"] | null;
         };
         /** LiveGames */
         LiveGames: {
@@ -644,6 +701,26 @@ export interface components {
             source_state: "current" | "behind" | "down" | "idle" | "never";
             /** Week */
             week: number | null;
+        };
+        /** LiveLastPlay */
+        LiveLastPlay: {
+            /** Kind */
+            kind: string | null;
+            /** Text */
+            text: string | null;
+            /** Yards */
+            yards: number | null;
+        };
+        /** LiveLeader */
+        LiveLeader: {
+            /** Category */
+            category: string;
+            /** Line */
+            line: string | null;
+            /** Name */
+            name: string | null;
+            /** Team */
+            team: string | null;
         };
         /** LivePlayRow */
         LivePlayRow: {
@@ -680,14 +757,81 @@ export interface components {
             /** Plays Observed At */
             plays_observed_at: string | null;
         };
+        /**
+         * LiveSituation
+         * @description `yard_line` and `first_down_line` run from the home goal line (0) to the away goal line (100).
+         */
+        LiveSituation: {
+            /** Distance */
+            distance: number | null;
+            /** Down */
+            down: number | null;
+            /** Field Text */
+            field_text: string | null;
+            /** First Down Line */
+            first_down_line: number | null;
+            last_play: components["schemas"]["LiveLastPlay"] | null;
+            /** Possession */
+            possession: ("home" | "away") | null;
+            /** Red Zone */
+            red_zone: boolean | null;
+            /** Short Text */
+            short_text: string | null;
+            /** Yard Line */
+            yard_line: number | null;
+        };
         /** LiveTeam */
         LiveTeam: {
             /** Abbreviation */
             abbreviation: string | null;
+            /** Color */
+            color: string | null;
+            /** Has Ball */
+            has_ball: boolean;
             /** Name */
             name: string | null;
+            /** Periods */
+            periods: (string | null)[];
+            /** Record */
+            record: string | null;
             /** Score */
             score: string | null;
+            /** Timeouts */
+            timeouts: number | null;
+        };
+        /** LiveTeamStat */
+        LiveTeamStat: {
+            /** Away */
+            away: string | null;
+            /** Home */
+            home: string | null;
+            /** Key */
+            key: string;
+            /** Label */
+            label: string | null;
+        };
+        /** LiveVenue */
+        LiveVenue: {
+            /** City */
+            city: string | null;
+            /** Indoor */
+            indoor: boolean | null;
+            /** Name */
+            name: string | null;
+            /** State */
+            state: string | null;
+        };
+        /** LiveWeather */
+        LiveWeather: {
+            /** Condition */
+            condition: string | null;
+            /** Temperature */
+            temperature: number | null;
+        };
+        /** LiveWinPoint */
+        LiveWinPoint: {
+            /** Home */
+            home: number;
         };
         /** Matchup */
         Matchup: {
@@ -1934,6 +2078,107 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LiveGames"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    live_game_api_v1_live_games__event_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveGameDetail"];
                 };
             };
             /** @description Unauthorized */

@@ -15,9 +15,10 @@ export function useFallbackInterval(): number | false {
 const AFFECTS: Record<string, string[]> = {
   "league.updated": ["front-office", "player", "search", "sources"],
   "source.status": ["sources", "front-office"],
-  "games.updated": ["live-games", "live-plays", "sources"],
+  "games.updated": ["live-games", "live-game", "live-plays", "sources"],
   "game.plays": ["live-plays", "sources"],
   "game.corrected": ["live-plays", "sources"],
+  "game.summary": ["live-game"],
   "schedule.updated": ["front-office", "live-games"],
 };
 

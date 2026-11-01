@@ -799,6 +799,84 @@ def test_unplayed_games_report_no_score_and_a_member_needs_a_team_for_live_data(
         assert client.get("/api/v1/live/games/not-a-game/plays").status_code == 422
 
 
+def test_live_scoreboard_states_the_situation_only_while_a_game_is_on(uow, engine):
+    from arbit_api.fixture import fixture_game, seed
+    from arbit_api.main import create_app
+    from arbit_data.live import store
+
+    configured = settings(engine)
+    seed(configured, engine)
+    with TestClient(create_app(configured, engine=engine), client=("127.0.0.1", 50000)) as client:
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        live = client.get("/api/v1/live/games/990000001").json()
+        situation = live["game"]["situation"]
+        assert situation["short_text"] == "3rd & 7"
+        assert situation["possession"] == "home"
+        # Home drives away from its own goal line, which is 0 on ESPN's scale.
+        assert situation["first_down_line"] == 45
+        assert (
+            live["game"]["home"]["has_ball"] is True and live["game"]["away"]["has_ball"] is False
+        )
+        assert live["game"]["home"]["timeouts"] == 3
+        assert [d["current"] for d in live["drives"]] == [False, True]
+        assert live["team_stats"][0] == {
+            "key": "totalYards",
+            "label": "Total Yards",
+            "home": "121",
+            "away": "96",
+        }
+        assert live["leaders"][0]["team"] == "FIC"
+        assert client.get("/api/v1/live/games/1").status_code == 404
+        assert client.get("/api/v1/live/games/not-a-game").status_code == 422
+
+        store.publish_scoreboard(
+            uow,
+            {"season": 2026, "season_type": 2, "week": 8, "games": [fixture_game("9", "final")]},
+            datetime.now(UTC),
+        )
+        ended = client.get("/api/v1/live/games/990000001").json()["game"]
+        assert ended["situation"] is None
+        assert ended["home"]["has_ball"] is False and ended["home"]["timeouts"] is None
+        assert ended["home"]["score"] == "9", "the final score stays"
+
+        halftime = fixture_game("9", "halftime")
+        store.publish_scoreboard(
+            uow,
+            {"season": 2026, "season_type": 2, "week": 8, "games": [halftime]},
+            datetime.now(UTC),
+        )
+        assert client.get("/api/v1/live/games/990000001").json()["game"]["situation"] is None
+
+
+def test_away_team_first_down_line_runs_toward_the_home_goal(uow, engine):
+    from arbit_api.fixture import FIXTURE_AWAY, fixture_game, seed
+    from arbit_api.main import create_app
+    from arbit_data.live import store
+
+    configured = settings(engine)
+    seed(configured, engine)
+    game = fixture_game("7")
+    # Goal to go from the 8: the line to gain is the goal line itself, never past it.
+    game["situation"] = {
+        "distance": 8,
+        "yard_line": 8,
+        "possession_team_id": FIXTURE_AWAY,
+        "red_zone": True,
+    }
+    store.publish_scoreboard(
+        uow, {"season": 2026, "season_type": 2, "week": 8, "games": [game]}, datetime.now(UTC)
+    )
+    with TestClient(create_app(configured, engine=engine), client=("127.0.0.1", 50000)) as client:
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        situation = client.get("/api/v1/live/games").json()["games"][0]["situation"]
+        assert situation["possession"] == "away" and situation["first_down_line"] == 0
+        assert situation["red_zone"] is None, "ESPN's flag alone, with no down, is stale"
+
+
 def test_sources_hide_provider_codes_from_members(uow, engine):
     from arbit_api.fixture import seed
     from arbit_api.main import create_app

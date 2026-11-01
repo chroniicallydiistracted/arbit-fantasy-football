@@ -10,7 +10,14 @@ from sqlalchemy import or_, select
 
 from arbit_data.db import UnitOfWork
 from arbit_data.live.contracts import LiveGame, LivePlay
-from arbit_data.live.normalize import _dict, _integer, _list, normalize_game, normalize_play
+from arbit_data.live.normalize import (
+    _dict,
+    _integer,
+    _list,
+    normalize_game,
+    normalize_play,
+    normalize_summary_detail,
+)
 from arbit_data.live.replay import PlaySnapshot
 from arbit_data.public_sources.repository import json_ready
 from arbit_data.public_sources.requests import build_source_request
@@ -62,6 +69,7 @@ def normalize_summary(
     return {
         "game": game.model_dump(mode="json"),
         "boxscore": json_ready(_dict(raw.get("boxscore"))),
+        "detail": json_ready(normalize_summary_detail(raw)),
         "summary_play_count": len({str(p.get("id")) for p in plays}),
         "summary_plays_with_athlete_ids": sum(bool(p.get("participants")) for p in plays),
         "recommendations_enabled": False,

@@ -251,14 +251,22 @@ def plays_unchanged(uow: UnitOfWork, event_id: str, body_hash: str, observed_at:
 
 
 def publish_summary(
-    uow: UnitOfWork, event_id: str, boxscore: dict[str, Any], observed_at: datetime
+    uow: UnitOfWork,
+    event_id: str,
+    boxscore: dict[str, Any],
+    observed_at: datetime,
+    detail: dict[str, Any] | None = None,
 ) -> None:
+    """Keeps the raw boxscore with the parsed detail. Older rows hold a bare boxscore."""
     with uow.engine.begin() as c:
+        previous = c.scalar(select(nfl_game.c.boxscore).where(nfl_game.c.event_id == event_id))
         c.execute(
             update(nfl_game)
             .where(nfl_game.c.event_id == event_id)
-            .values(boxscore=boxscore, summary_observed_at=observed_at)
+            .values(boxscore={"raw": boxscore, "detail": detail}, summary_observed_at=observed_at)
         )
+        if detail is not None and (previous or {}).get("detail") != detail:
+            emit(c, "game.summary", {"event": event_id})
 
 
 def mark_final_check(uow: UnitOfWork, event_id: str) -> None:
@@ -536,6 +544,8 @@ def read_game(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
                 nfl_game.c.payload,
                 nfl_game.c.observed_at,
                 nfl_game.c.plays_observed_at,
+                nfl_game.c.summary_observed_at,
+                nfl_game.c.boxscore,
             ).where(nfl_game.c.event_id == event_id)
         ).first()
     if row is None:
@@ -544,6 +554,8 @@ def read_game(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
         **row.payload,
         "observed_at": row.observed_at,
         "plays_observed_at": row.plays_observed_at,
+        "summary_observed_at": row.summary_observed_at,
+        "detail": (row.boxscore or {}).get("detail") or {},
     }
 
 
