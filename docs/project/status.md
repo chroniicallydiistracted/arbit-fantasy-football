@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset`, awaiting owner review and upgrade of the running app**. Primary developer: Claude. M3 is next.
+Updated **2026-10-31**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset` and running on the local app, awaiting owner review**. Primary developer: Claude. M3 is next.
 
 ## Confirmed context
 
@@ -65,11 +65,12 @@ The owner confirmed successful real Google sign-in, first administrator invitati
 
 ## Design reset and real-time platform — 2026-10-31
 
-The owner reported AI-identifiable design drift and stale data, and redirected the work (OWN-013–017). **Built and verified on `claude/platform-reset`; not applied to the running app.** [Handoff](handoffs/2026-10-31-platform-reset.md).
+The owner reported AI-identifiable design drift and stale data, and redirected the work (OWN-013–017). **Built and verified on `claude/platform-reset`; applied to the running local app on 2026-11-01 04:26 UTC.** [Handoff](handoffs/2026-10-31-platform-reset.md).
 
 - **Design:** new officiating-and-broadcast character ([ADR-005](../architecture/decisions/005-officiating-character.md), [design system](../design/design-system.md)), all slogans removed, and `pnpm check:design` enforcing the rules; it flagged 436 violations on the old interface. Owner review remains the acceptance gate.
 - **Sync:** `arbit-worker run` keeps the FFA league, NFL scoreboard, active-game plays and summaries, NFL teams and schedule, and NFLverse statistics current on a cadence that follows the real NFL slate.
 - **Clients:** session-bound SSE updates open pages without a reload. Per-device sessions mean signing in on a phone no longer ends the laptop session.
 - **Members now see:** a text-first Live scoreboard and plays with a my-players filter, NFL team/bye/opponent on roster rows, per-source data status, season results strip and playoff line.
 - **Evidence:** 545 backend tests, 14 client tests, 10 browser scenarios and all static checks pass. The worker ran against real ESPN into a restored database copy. No live game was on, so active-game behavior awaits the first real slate.
-- **Pending owner action:** run the upgrade, which the auto-mode classifier correctly would not let the agent do unasked: it stops the running API and installs persistent services.
+- **Running now:** `arbit-api` and `arbit-worker` as systemd user services on schema `0007_realtime`. They do not come back by themselves after a Windows restart (R-029).
+- **Pending owner action:** review the design on the upgraded app (R-028).

@@ -59,10 +59,10 @@ member-api: local-env
 	uv run --env-file .env.local --env-file .env.auth.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log --timeout-graceful-shutdown 5
 
 .PHONY: local-worker local-upgrade services-install services-status services-remove
-# Back up, migrate and rebuild the client. Stop the member API first: the new client needs new routes.
+# Back up, migrate and rebuild the client. Stop the API and worker first: the new client needs new routes.
+# Backups hold member data, so only the owner of the files can read them.
 local-upgrade: local-env
-	mkdir -p data/backups/$$(date +%F)
-	docker exec arbit-dev-postgres-1 pg_dump -U arbit_local -d arbit_local -Fc > data/backups/$$(date +%F)/before-upgrade-$$(date +%H%M%S).dump
+	umask 077; mkdir -p data/backups/$$(date +%F) && docker exec arbit-dev-postgres-1 pg_dump -U arbit_local -d arbit_local -Fc > data/backups/$$(date +%F)/before-upgrade-$$(date +%H%M%S).dump
 	uv run --env-file .env.local alembic upgrade head
 	pnpm --filter @arbit/web build
 local-worker: local-env

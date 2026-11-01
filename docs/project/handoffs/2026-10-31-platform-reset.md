@@ -4,19 +4,25 @@
 
 Branch `claude/platform-reset`, on top of the owner's published `61368fd`. Local commits only: no push, merge or deployment. Primary developer changed to Claude this session. The owner redirected work ahead of M3 (OWN-013–017): the design had drifted to AI-identifiable defaults, data went stale, and clients needed live refresh and a true session.
 
-**Not applied to the running app.** `:8000` still serves the old client on schema `0006_members`, and no worker is running. The auto-mode classifier blocked installing persistent services and stopping the running API, and that decision is the owner's. Their real database and running app were not modified.
+**Applied to the running app on 2026-11-01 04:26 UTC (2026-10-31 21:26 Phoenix), by the owner's decision.** `:8000` serves the new client on schema `0007_realtime`, and `arbit-api` and `arbit-worker` run as systemd user services with linger. The next real slate is Sunday 2026-11-01, first kickoff 18:00 UTC, which gives the first active-game evidence (R-025).
 
-## Owner action to go live
+## How the upgrade went
 
-Stop the old API, back up, migrate, rebuild and install services:
+The command the developer gave the owner was defective. It began with `pkill -f '<uvicorn command line>'`. The prompt's `!` prefix runs through `bash -c`, so that shell's own command line matched the pattern: it stopped the API, then killed itself before `make` started. The empty output gave it away, and the app was down until the developer ran the two remaining steps the owner had just issued. The command had not been tested before it was handed over. Nothing was lost, since the migration had not started.
+
+Results: backup `data/backups/2026-10-31/before-upgrade-212549.dump`; migration to `0007_realtime`; client rebuilt; both units active and enabled, linger on, no restarts. `/health/ready` reports ready. The one usable session survived. The worker read 32 NFL teams, 272 games, 14 games with state and 197 plays into the real database, with no source failures. The real sign-in page loaded in Chromium with both fonts and no console, CSP or request errors.
+
+Backups were being written world-readable (the dated directory happened to protect this one), so `make local-upgrade` now sets `umask 077`.
+
+## Later upgrades
 
 ```sh
-pkill -f 'uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000'
+systemctl --user stop arbit-api arbit-worker
 make local-upgrade
-make services-install
+systemctl --user start arbit-worker arbit-api
 ```
 
-`make services-install` installs `arbit-worker` and `arbit-api` as systemd user units and enables linger; `make services-remove` undoes it. Without services, run `make member-api` and `make local-worker` in two terminals after the first two commands. Existing sign-ins survive the migration. The next real slate is Sunday 2026-11-01, first kickoff 18:00 UTC. Running before then gives the first active-game evidence (R-025).
+`make services-remove` undoes the services. Without them, run `make member-api` and `make local-worker` in two terminals. An open or installed client keeps its old version until the user chooses **Update & reload**.
 
 ## Completed work
 
@@ -46,7 +52,7 @@ Pinned Python 3.12.13, Node 24.22.2, pnpm 12.16.1, uv 0.11.33, local PostgreSQL.
 
 Real-data results on the copy: migration preserved all counts (2 snapshots, 19,008 entities, 35,505 aliases, 1,140 manifests, 1 session). 32 NFL teams, 272 games. Directory joined 132/132 owned players and 14/14 games by team and event ID. 197 plays from the completed game. All five sources reported correctly. The fictional fixture login was bound to a real manager on the copy to view real pages; no real sign-in was bypassed on the real database.
 
-**Not verified:** behavior during a live game, since none was on (R-025). The statistics lane against the real source (R-026). `make services-install` and `make local-upgrade` as commands, since they were blocked (R-024). Native install and a human screen-reader pass (R-023). Remote CI has not run. The new design has not had owner review (R-028). No independent reviewer ran; OWN-013 now allows it within the cost ceiling.
+**Not verified:** behavior during a live game, since none was on (R-025). The statistics lane against the real source; its first real import comes due about 2026-11-01 09:57 UTC (R-026). Signed-in pages on the upgraded app, since only the owner holds that session. Recovery after a crash or Windows restart (R-029). Native install and a human screen-reader pass (R-023). Remote CI has not run. The new design has not had owner review (R-028). No independent reviewer ran; OWN-013 now allows it within the cost ceiling.
 
 ## Decisions, issues and limitations
 
@@ -54,7 +60,7 @@ Hosting: the worker's database guard allows local databases only and needs a pro
 
 ## Resume here
 
-1. Owner reviews the rendered design and runs the upgrade above.
-2. After the first live slate, read `journalctl --user -u arbit-worker`, record latency and any correction pair as a research receipt, and close R-025.
+1. Owner reviews the rendered design on the upgraded app.
+2. Read `journalctl --user -u arbit-worker`: confirm the first statistics import (R-026), then after the first live slate record latency and any correction pair as a research receipt and close R-025.
 3. Run an independent review of this branch at or below the current model's cost (OWN-013).
 4. Start **M3 Model/Scout**: create `libs/arbit-model` as a workspace member, settle the historical-vintage policy (Q-005) before any backtest, and weigh league timing in the [roadmap](../roadmap.md).
