@@ -24,6 +24,7 @@ from arbit_data.errors import SourceError
 from arbit_data.espn.endpoints import Endpoint, EndpointOptions
 from arbit_data.espn.gate import DatabaseGate, GatedEspnTransport
 from arbit_data.live import cadence, store
+from arbit_data.live.capture import CapturingTransport
 from arbit_data.live.feed import LiveFeed
 from arbit_data.public_sources.transport import PublicTransport
 from arbit_data.schema import dataset_manifest, sync_state
@@ -181,7 +182,15 @@ class LiveLane:
     name = "live"
 
     def __init__(self, uow: UnitOfWork, season: int, *, feed: LiveFeed | None = None):
-        self.feed = feed or LiveFeed(uow, PublicTransport(), season)
+        self.feed = feed or LiveFeed(
+            uow,
+            CapturingTransport(
+                PublicTransport(),
+                Path(os.environ.get("ARBIT_LIVE_CAPTURE_PATH", "data/live-captures")),
+                on_problem=lambda code: log(self.name, event="capture_problem", code=code),
+            ),
+            season,
+        )
         self.mode: cadence.Mode | None = None
 
     def step(self) -> float:

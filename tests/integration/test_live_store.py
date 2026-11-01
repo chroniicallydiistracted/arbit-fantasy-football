@@ -1,5 +1,6 @@
 """Live game storage against real PostgreSQL: revisions, corrections, events and failure isolation."""
 
+import json
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
@@ -7,6 +8,7 @@ import pytest
 from arbit_data import events, freshness
 from arbit_data.errors import SourceError
 from arbit_data.live import store
+from arbit_data.live.capture import CapturingTransport
 from arbit_data.live.contracts import FieldPoint, LivePlay, Participant
 from arbit_data.live.feed import LiveFeed, normalize_current_scoreboard
 from arbit_data.public_sources.requests import SourceRequest
@@ -408,6 +410,26 @@ def test_one_failing_game_does_not_hold_up_the_scoreboard(uow):
     statuses = {s.source: s for s in freshness.read_sources(uow, SEASON, NOW)}
     assert statuses[freshness.SCOREBOARD].state == "current"
     assert statuses[freshness.PLAYS].error_code == "UNAVAILABLE"
+
+
+def test_capture_keeps_every_live_response_without_adding_requests(uow, tmp_path):
+    responses = {
+        "espn.scoreboard.current": raw_board("in"),
+        "espn.plays": empty_plays(),
+        "espn.summary": {"header": {}},
+    }
+    plain = FakeTransport(responses)
+    LiveFeed(uow, plain, SEASON, gate=OpenGate(), clock=lambda: NOW).step()
+
+    wrapped = FakeTransport(responses)
+    capturing = CapturingTransport(wrapped, tmp_path, clock=lambda: NOW)
+    LiveFeed(
+        uow, capturing, SEASON, gate=OpenGate(), clock=lambda: NOW + timedelta(minutes=5)
+    ).step()
+    assert wrapped.requests == plain.requests
+    lines = (tmp_path / "2026-11-01.jsonl").read_text().splitlines()
+    assert sorted(json.loads(line)["kind"] for line in lines) == sorted(wrapped.requests)
+    assert {"espn.scoreboard.current", "espn.plays", "espn.summary"} == set(wrapped.requests)
 
 
 def test_identical_play_bytes_skip_processing(uow):

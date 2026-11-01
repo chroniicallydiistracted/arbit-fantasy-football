@@ -1,7 +1,10 @@
 import threading
 from datetime import UTC, datetime, timedelta
 
-from arbit_worker.daemon import StatisticsLane, run_lane
+import pytest
+from arbit_data.errors import SourceError
+from arbit_data.public_sources.requests import build_source_request
+from arbit_worker.daemon import LiveLane, StatisticsLane, run_lane
 from sqlalchemy.exc import OperationalError
 
 
@@ -30,6 +33,24 @@ def test_lane_survives_failures_and_logs_only_safe_codes(capsys, monkeypatch):
     assert lane.calls == 3, "two failures must not stop the lane"
     assert "DATABASE_UNAVAILABLE" in output and "LANE_ERROR" in output
     assert "secret-host" not in output and "token=abc" not in output
+
+
+def test_running_live_lane_captures_to_the_configured_private_path(capsys, monkeypatch, tmp_path):
+    blocked = tmp_path / "captures"
+    blocked.write_text("")
+    monkeypatch.setenv("ARBIT_LIVE_CAPTURE_PATH", str(blocked))
+    transport = LiveLane(None, 2026).feed.transport
+
+    def unavailable(_request):
+        raise SourceError("UNAVAILABLE")
+
+    transport.transport.fetch = unavailable
+    with pytest.raises(SourceError):
+        transport.fetch(build_source_request("espn.scoreboard.current"))
+    output = capsys.readouterr().out
+    assert transport.root == blocked
+    assert '"event": "capture_problem"' in output and '"lane": "live"' in output
+    assert str(tmp_path) not in output, "logs carry codes, never paths"
 
 
 class Health:
