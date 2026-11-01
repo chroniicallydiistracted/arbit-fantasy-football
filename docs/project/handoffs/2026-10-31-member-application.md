@@ -50,3 +50,7 @@ M2 code and local verification are complete. Actual member release requires an o
 After that operational gate, M3 defines point-in-time semantic features, missingness/coverage policy and temporal model validation on the imported NFLverse foundation. Recommendations remain disabled until shared scoring, identity, ownership freshness and model evidence satisfy their gates. M6 still owns active-game timing/corrections/full-slate Live and verified Gridiron reuse.
 
 Only local commits were created. Fixture API/browser processes are stopped; the existing PostgreSQL service remains available. The next contributor can start from the operator guide without relying on chat history.
+
+## Google configuration follow-up — 2026-10-31
+
+The owner has now created the Google client. The owner-provided `config/google-auth.env` was moved safely to root `.env.auth.local` with mode 600; both the final profile and its former path were confirmed excluded from Git, and neither was tracked. The separate downloaded credential backup remains outside the workspace and was not accessed. A `uv run python` check loaded the two private profiles, validated `RuntimeSettings`, then used local `TestClient` reads of `/health/ready` and `/auth/status`: ready, OIDC enabled, fixture mode false and unauthenticated. Credential values were not printed; no provider request, administrator invitation or real member login occurred. First-administrator identity/invitation and actual Google/member acceptance are the next operational steps.
