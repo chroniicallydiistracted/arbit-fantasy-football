@@ -1,5 +1,7 @@
 # Gridiron asset prerequisites — 2026-10-31
 
+**Second superseding note, same day:** URL patterns, publication timing and week 8 bytes are now verified. See [Gridiron URL patterns](gridiron-url-patterns-2026-10-31.md). Rows below saying no media was acquired describe the earlier state.
+
 **Superseding note, same day:** the owner reports having obtained permission privately for all Gridiron images and assets, for personal use only (OWN-015). The grant is held by the owner and is not in this repository. Assets may therefore be served only inside the invite-only application, never publicly or commercially. URL patterns and per-game variant verification below remain open and are now the only blockers for exact M6 art. Rows below that say no grant exists describe the state before this note.
 
 The Uniform Database and Fields Database are verified candidate sources. Fresh bounded HTML reads returned 200 for the [uniform main page](https://gridiron-uniforms.com/GUD/controller/controller.php?action=main), [uniform explanation/terms](https://gridiron-uniforms.com/GUD/about.shtml), [field main page](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=main) and [2026 field index](https://www.gridiron-uniforms.com/fields/controller/controller.php?action=view-year-all&year=2026). [Safe receipts](m1e-live-2026-10-31.json) record URL, UTC time, byte count/hash, navigation counts and policy observations. Raw HTML remains private; no image bytes were requested.

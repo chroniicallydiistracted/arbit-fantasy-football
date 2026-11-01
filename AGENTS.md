@@ -1,10 +1,10 @@
 # Arbit agent entry point
 
-Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. M1a–e runtime/source/scoring/NFLverse/game-play foundations are implemented within recorded coverage. M2 member auth/API/Front Office/PWA and administrator controls are implemented; the owner verified the first real Google sign-in. A design reset and real-time sync platform (owner direction, 2026-10-31) are in progress ahead of M3. Semantic features/models, advisors, full Live and deployment remain future work. Hosting platform is undecided and deferred until application development finishes; the production origin will be `https://ffa.westfam.media`. Until then deployment remains local-first.
+Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. M1a–e runtime/source/scoring/NFLverse/game-play foundations are implemented within recorded coverage. M2 member auth/API/Front Office/PWA and administrator controls are implemented; the owner verified the first real Google sign-in. A design reset and real-time sync platform (owner direction, 2026-10-31) run on the local app, and the owner accepted the design. Live (M6) is next, ahead of M3, by owner direction (OWN-019). Semantic features/models, advisors, full Live and deployment remain future work. Hosting platform is undecided and deferred until application development finishes; the production origin will be `https://ffa.westfam.media`. Until then deployment remains local-first.
 
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-31-platform-reset.md).
+1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-31-live-prerequisites.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.

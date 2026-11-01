@@ -330,7 +330,8 @@
       "acceptance": "Named event replay fixtures and unknown fallback work with keyboard and reduced motion.",
       "status": "in_progress",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
+        "docs/research/live-animation-prerequisites-2026-10-31.md — prerequisites and single-play quality gate; no graphics built"
       ]
     },
     {
@@ -345,7 +346,8 @@
       "acceptance": "Asset manifest verifies source/variant/permission; missing variant is labeled fallback.",
       "status": "in_progress",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain"
+        "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
+        "docs/research/gridiron-url-patterns-2026-10-31.md — URL patterns, publication timing and week 8 bytes verified; manifest, sync lane and serving remain"
       ]
     },
     {
@@ -771,9 +773,10 @@
       "milestone": "M2",
       "spec": "docs/design/design-system.md",
       "acceptance": "Design lint rejects raw style values, banned generic fonts and slogan copy; owner accepts the rendered character.",
-      "status": "implemented",
+      "status": "verified",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-platform-reset.md — design lint and rendered reset; owner review of the character is the remaining gate"
+        "docs/project/handoffs/2026-10-31-platform-reset.md — design lint and rendered reset",
+        "docs/project/decision-register.md — owner accepted the rendered character (OWN-018)"
       ]
     },
     {

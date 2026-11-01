@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset` and running on the local app, awaiting owner review**. Primary developer: Claude. M3 is next.
+Updated **2026-10-31**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset`, running on the local app and accepted by the owner**. Primary developer: Claude. **Live (M6) is next by owner direction, ahead of M3** (OWN-019); see [prerequisites](../research/live-animation-prerequisites-2026-10-31.md).
 
 ## Confirmed context
 
@@ -67,10 +67,10 @@ The owner confirmed successful real Google sign-in, first administrator invitati
 
 The owner reported AI-identifiable design drift and stale data, and redirected the work (OWN-013–017). **Built and verified on `claude/platform-reset`; applied to the running local app on 2026-11-01 04:26 UTC.** [Handoff](handoffs/2026-10-31-platform-reset.md).
 
-- **Design:** new officiating-and-broadcast character ([ADR-005](../architecture/decisions/005-officiating-character.md), [design system](../design/design-system.md)), all slogans removed, and `pnpm check:design` enforcing the rules; it flagged 436 violations on the old interface. Owner review remains the acceptance gate.
+- **Design:** new officiating-and-broadcast character ([ADR-005](../architecture/decisions/005-officiating-character.md), [design system](../design/design-system.md)), all slogans removed, and `pnpm check:design` enforcing the rules; it flagged 436 violations on the old interface. The owner accepted it (OWN-018).
 - **Sync:** `arbit-worker run` keeps the FFA league, NFL scoreboard, active-game plays and summaries, NFL teams and schedule, and NFLverse statistics current on a cadence that follows the real NFL slate.
 - **Clients:** session-bound SSE updates open pages without a reload. Per-device sessions mean signing in on a phone no longer ends the laptop session.
 - **Members now see:** a text-first Live scoreboard and plays with a my-players filter, NFL team/bye/opponent on roster rows, per-source data status, season results strip and playoff line.
 - **Evidence:** 545 backend tests, 14 client tests, 10 browser scenarios and all static checks pass. The worker ran against real ESPN into a restored database copy. No live game was on, so active-game behavior awaits the first real slate.
 - **Running now:** `arbit-api` and `arbit-worker` as systemd user services on schema `0007_realtime`. They do not come back by themselves after a Windows restart (R-029).
-- **Pending owner action:** review the design on the upgraded app (R-028).
+- **Next:** Gridiron URL patterns are verified and week 8 art is stored privately. Scoreboards and animation have [19 listed prerequisites](../research/live-animation-prerequisites-2026-10-31.md); the owner's inputs are a raw-sampler restart before kickoff, the re-creation label, the player model and motion clips, and the device floor.

@@ -24,4 +24,4 @@ Stripes and football references can tip into novelty, so they stay structural, r
 
 ## Evidence
 
-Token contrast through the foundation validator, four-viewport and axe browser checks, `pnpm check:design`, and owner review of the rendered product. Related: UX-001/002/003/005, OWN-016; [design system](../../design/design-system.md).
+Token contrast through the foundation validator, four-viewport and axe browser checks, `pnpm check:design`, and owner review of the rendered product, passed 2026-10-31 (OWN-018). Related: UX-001/002/003/005, OWN-016; [design system](../../design/design-system.md).
