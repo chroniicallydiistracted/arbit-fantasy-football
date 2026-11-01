@@ -67,6 +67,12 @@ def build_source_request(
                 raise ValueError("NFL_WEEK_REQUIRED")
             endpoint = Endpoint.NFL_SCOREBOARD
             options = EndpointOptions(season=season, nfl_week=week, season_type=season_type)
+        elif kind == "espn.scoreboard.current":
+            # The provider's own current week. The response states its scope, which is validated.
+            if week is not None:
+                raise ValueError("INVALID_SOURCE_SCOPE")
+            endpoint = Endpoint.NFL_SCOREBOARD
+            options = EndpointOptions()
         elif kind == "espn.summary":
             endpoint = Endpoint.NFL_SUMMARY
             options = EndpointOptions(event_id=event_id)

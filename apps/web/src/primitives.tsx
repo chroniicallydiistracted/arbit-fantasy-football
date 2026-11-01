@@ -44,12 +44,13 @@ export function sourceState(snapshot: Snapshot, failed = false): SourceState {
 }
 export function SourceNote({ snapshot, failed = false }: { snapshot: Snapshot; failed?: boolean }) {
   const state = sourceState(snapshot, failed);
+  const read = snapshot.confirmed_at ?? snapshot.observed_at;
   return (
     <span className="status" data-state={state}>
       <span>
         {state === "down" ? "Refresh failed" : state === "behind" ? "Behind" : "Current"} · ESPN{" "}
-        <time dateTime={snapshot.observed_at} title={dateLabel(snapshot.observed_at)}>
-          {ageLabel(snapshot.observed_at)}
+        <time dateTime={read} title={dateLabel(read)}>
+          {ageLabel(read)}
         </time>
       </span>
     </span>

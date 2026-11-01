@@ -1,0 +1,17 @@
+[Unit]
+Description=Arbit sync worker: FFA league, NFL games and statistics
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@ROOT@
+Environment=PATH=@PATH@
+ExecStart=@UV@ run --frozen --env-file .env.local arbit-worker run
+Restart=always
+RestartSec=10
+TimeoutStopSec=45
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

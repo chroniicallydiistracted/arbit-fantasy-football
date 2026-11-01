@@ -119,6 +119,18 @@ export function PlayerDrawer() {
               </p>
             </section>
             <dl className="fact-list">
+              {data.nfl && (
+                <div>
+                  <dt>This week</dt>
+                  <dd>
+                    {data.nfl.on_bye
+                      ? "Bye"
+                      : data.nfl.opponent_abbreviation
+                        ? `${data.nfl.home ? "vs" : "at"} ${data.nfl.opponent_abbreviation}`
+                        : "No game listed"}
+                  </dd>
+                </div>
+              )}
               <div>
                 <dt>Availability</dt>
                 <dd>

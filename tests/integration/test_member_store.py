@@ -41,7 +41,7 @@ def test_invitations_are_exact_single_use_and_sessions_expire(uow):
             invitation=invite,
             now=now,
         )
-    assert authenticate(uow, token, now=now + timedelta(days=8)) is None
+    assert authenticate(uow, token, now=now + timedelta(days=31)) is None
     token, _ = sign_in(
         uow, "https://identity.example", "subject-one", "one@example.test", True, now=now
     )
@@ -108,11 +108,24 @@ def test_expired_invitation_absolute_session_limit_rotation_and_suspension(uow):
         invitation=invitation,
         now=now,
     )
-    rotated, _ = sign_in(uow, "https://identity.example", "one", "one@example.test", True, now=now)
-    assert authenticate(uow, original, now=now) is None
-    for day in range(1, 30):
+    other_device, _ = sign_in(
+        uow, "https://identity.example", "one", "one@example.test", True, now=now
+    )
+    assert authenticate(uow, original, now=now) is not None, "other devices stay signed in"
+    rotated, _ = sign_in(
+        uow,
+        "https://identity.example",
+        "one",
+        "one@example.test",
+        True,
+        replaces=original,
+        now=now,
+    )
+    assert authenticate(uow, original, now=now) is None, "the presented session is replaced"
+    assert authenticate(uow, other_device, now=now) is not None
+    for day in range(1, 90, 7):
         assert authenticate(uow, rotated, now=now + timedelta(days=day)) is not None
-    assert authenticate(uow, rotated, now=now + timedelta(days=30)) is None
+    assert authenticate(uow, rotated, now=now + timedelta(days=90)) is None, "absolute limit"
     revoke_sessions(uow, account["id"], suspend=True)
     with pytest.raises(MemberError):
         sign_in(uow, "https://identity.example", "one", "one@example.test", True, now=now)
@@ -312,3 +325,87 @@ def test_concurrent_suspensions_cannot_remove_last_active_administrator(uow):
             )
             == 1
         )
+
+
+def test_member_lists_and_ends_only_their_own_devices(uow):
+    from arbit_data.members import (
+        MemberError,
+        authenticate,
+        create_invitation,
+        list_sessions,
+        revoke_device,
+        sign_in,
+    )
+
+    def enter(name, label=None, replaces=None):
+        invite = create_invitation(uow, "https://identity.example", f"{name}@example.test")
+        return sign_in(
+            uow,
+            "https://identity.example",
+            name,
+            f"{name}@example.test",
+            True,
+            invitation=invite,
+            device_label=label,
+            replaces=replaces,
+        )
+
+    laptop, account = enter("one", "Chrome on Windows")
+    phone, _ = sign_in(
+        uow,
+        "https://identity.example",
+        "one",
+        "one@example.test",
+        True,
+        device_label="Safari on iPhone",
+    )
+    other, other_account = enter("two")
+    sessions = list_sessions(uow, account["id"], phone)
+    assert {s["device"] for s in sessions} == {"Chrome on Windows", "Safari on iPhone"}
+    assert [s["device"] for s in sessions if s["current"]] == ["Safari on iPhone"]
+    assert all("hash" not in s for s in sessions), "a session secret must never leave the store"
+    laptop_id = next(s["id"] for s in sessions if s["device"] == "Chrome on Windows")
+    with pytest.raises(MemberError, match="SESSION_NOT_FOUND"):
+        revoke_device(uow, other_account["id"], laptop_id)
+    assert authenticate(uow, laptop) is not None
+    revoke_device(uow, account["id"], laptop_id)
+    assert authenticate(uow, laptop) is None
+    assert authenticate(uow, phone) is not None
+    assert authenticate(uow, other) is not None
+
+
+def test_device_limit_ends_the_oldest_session_only(uow):
+    from arbit_data.members import (
+        MAX_DEVICES,
+        authenticate,
+        create_invitation,
+        list_sessions,
+        sign_in,
+    )
+
+    start = datetime.now(UTC)
+    invite = create_invitation(uow, "https://identity.example", "one@example.test", now=start)
+    first, account = sign_in(
+        uow,
+        "https://identity.example",
+        "one",
+        "one@example.test",
+        True,
+        invitation=invite,
+        now=start,
+    )
+    tokens = [first]
+    for index in range(1, MAX_DEVICES + 2):
+        token, _ = sign_in(
+            uow,
+            "https://identity.example",
+            "one",
+            "one@example.test",
+            True,
+            now=start + timedelta(minutes=index),
+        )
+        tokens.append(token)
+    later = start + timedelta(hours=1)
+    assert len(list_sessions(uow, account["id"], tokens[-1], now=later)) == MAX_DEVICES
+    assert authenticate(uow, tokens[0], now=later) is None
+    assert authenticate(uow, tokens[-1], now=later) is not None

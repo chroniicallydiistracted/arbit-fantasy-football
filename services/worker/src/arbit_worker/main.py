@@ -20,7 +20,7 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
-from arbit_worker import nflverse_commands, source_commands, sync_commands
+from arbit_worker import daemon, nflverse_commands, source_commands, sync_commands
 from arbit_worker.espn_inspect import acquisition_summary
 
 
@@ -129,7 +129,11 @@ def main() -> None:
     sync_commands.add_commands(subcommands)
     nflverse_commands.add_commands(subcommands)
     source_commands.add_commands(subcommands)
+    daemon.add_command(subcommands)
     arguments = parser.parse_args()
+    if arguments.command == "run":
+        daemon.execute(arguments, parser)
+        return
     if arguments.command in source_commands.COMMANDS:
         source_commands.execute(arguments, parser)
         return

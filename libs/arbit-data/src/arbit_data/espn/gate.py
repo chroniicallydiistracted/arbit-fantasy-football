@@ -47,12 +47,13 @@ class DatabaseGate:
         *,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         sleep: Callable[[float], None] = real_sleep,
-        provider: Literal["espn", "nflverse", "sleeper"] = "espn",
+        provider: Literal["espn", "espn_nfl", "nflverse", "sleeper"] = "espn",
     ):
         self.uow, self.clock, self.sleep = uow, clock, sleep
         self.provider = provider
-        self.lock_key = {"espn": -2, "nflverse": -3, "sleeper": -4}[provider]
-        self.spacing = {"espn": 2.0, "nflverse": 0.1, "sleeper": 1.0}[provider]
+        # Budgets are per host: Fantasy league reads and NFL game reads are separate services.
+        self.lock_key = {"espn": -2, "nflverse": -3, "sleeper": -4, "espn_nfl": -5}[provider]
+        self.spacing = {"espn": 2.0, "nflverse": 0.1, "sleeper": 1.0, "espn_nfl": 1.0}[provider]
 
     @contextmanager
     def request(self) -> Iterator[None]:

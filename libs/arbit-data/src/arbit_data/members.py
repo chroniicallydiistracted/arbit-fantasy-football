@@ -18,6 +18,13 @@ from arbit_data.db import UnitOfWork
 from arbit_data.member_schema import account, audit, binding, flow, preferences, session
 from arbit_data.member_schema import invitation as invitation_table
 
+# A session survives a month without use and three months in total. Privilege changes still
+# end every session at once.
+SESSION_IDLE = timedelta(days=30)
+SESSION_ABSOLUTE = timedelta(days=90)
+# Oldest sessions beyond this are ended when a new device signs in.
+MAX_DEVICES = 10
+
 
 class MemberError(ValueError):
     """Safe stable boundary code, never a raw provider or SQL error."""
@@ -110,6 +117,8 @@ def sign_in(
     invitation: str | None = None,
     invitation_hash: str | None = None,
     display_name: str = "FFA member",
+    replaces: str | None = None,
+    device_label: str | None = None,
     now: datetime | None = None,
 ) -> tuple[str, dict[str, Any]]:
     now = now or datetime.now(UTC)
@@ -176,12 +185,28 @@ def sign_in(
             row = c.execute(select(account).where(account.c.id == account_id)).mappings().one()
         if row["suspended"]:
             raise MemberError("SIGN_IN_DENIED")
-        # Rotate every prior session for this account after each completed login.
-        c.execute(
-            update(session)
-            .where(session.c.account_id == row["id"], session.c.revoked_at.is_(None))
-            .values(revoked_at=now)
+        # Replace the session this browser presented, whoever it belonged to, so a new sign-in
+        # always gets a new secret. Other devices stay signed in.
+        if replaces:
+            c.execute(
+                update(session)
+                .where(session.c.hash == digest(replaces), session.c.revoked_at.is_(None))
+                .values(revoked_at=now)
+            )
+        stale: list[str] = list(
+            c.scalars(
+                select(session.c.hash)
+                .where(
+                    session.c.account_id == row["id"],
+                    session.c.revoked_at.is_(None),
+                    session.c.expires_at > now,
+                )
+                .order_by(session.c.last_seen_at.desc())
+                .offset(MAX_DEVICES - 1)
+            )
         )
+        if stale:
+            c.execute(update(session).where(session.c.hash.in_(stale)).values(revoked_at=now))
         token = secrets.token_urlsafe(32)
         c.execute(
             insert(session).values(
@@ -189,7 +214,8 @@ def sign_in(
                 account_id=row["id"],
                 created_at=now,
                 last_seen_at=now,
-                expires_at=now + timedelta(days=30),
+                expires_at=now + SESSION_ABSOLUTE,
+                device_label=(device_label or "")[:80] or None,
             )
         )
         c.execute(
@@ -213,7 +239,7 @@ def authenticate(
                     session.c.hash == digest(token),
                     session.c.revoked_at.is_(None),
                     session.c.expires_at > now,
-                    session.c.last_seen_at > now - timedelta(days=7),
+                    session.c.last_seen_at > now - SESSION_IDLE,
                     account.c.suspended.is_(False),
                 )
                 .with_for_update()
@@ -294,6 +320,57 @@ def logout(uow: UnitOfWork, token: str) -> None:
             update(session)
             .where(session.c.hash == digest(token))
             .values(revoked_at=datetime.now(UTC))
+        )
+
+
+def list_sessions(
+    uow: UnitOfWork, account_id: UUID, current_token: str, *, now: datetime | None = None
+) -> list[dict[str, Any]]:
+    """The member's signed-in devices. Exposes the public ID only, never a session secret."""
+    now = now or datetime.now(UTC)
+    current = digest(current_token)
+    with uow.engine.connect() as c:
+        rows = c.execute(
+            select(session)
+            .where(
+                session.c.account_id == account_id,
+                session.c.revoked_at.is_(None),
+                session.c.expires_at > now,
+                session.c.last_seen_at > now - SESSION_IDLE,
+            )
+            .order_by(session.c.last_seen_at.desc())
+        ).all()
+    return [
+        {
+            "id": r.public_id,
+            "device": r.device_label,
+            "created_at": r.created_at,
+            "last_seen_at": r.last_seen_at,
+            "current": r.hash == current,
+        }
+        for r in rows
+    ]
+
+
+def revoke_device(uow: UnitOfWork, account_id: UUID, public_id: UUID) -> None:
+    """End one of the member's own sessions. Another member's ID behaves as not found."""
+    now = datetime.now(UTC)
+    with uow.engine.begin() as c:
+        ended = c.execute(
+            update(session)
+            .where(
+                session.c.public_id == public_id,
+                session.c.account_id == account_id,
+                session.c.revoked_at.is_(None),
+            )
+            .values(revoked_at=now)
+        ).rowcount
+        if not ended:
+            raise MemberError("SESSION_NOT_FOUND")
+        c.execute(
+            insert(audit).values(
+                actor_id=account_id, target_id=account_id, action="session.revoked", occurred_at=now
+            )
         )
 
 

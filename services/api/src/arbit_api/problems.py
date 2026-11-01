@@ -53,6 +53,8 @@ SAFE_CODES = frozenset(
         "NOT_FOUND",
         "METHOD_NOT_ALLOWED",
         "REQUEST_FAILED",
+        "SESSION_NOT_FOUND",
+        "GAME_NOT_FOUND",
     }
 )
 DETAILS = {

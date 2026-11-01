@@ -34,6 +34,8 @@ session = Table(
     Column("last_seen_at", DateTime(timezone=True)),
     Column("expires_at", DateTime(timezone=True)),
     Column("revoked_at", DateTime(timezone=True)),
+    Column("public_id", Uuid),
+    Column("device_label", String),
 )
 flow = Table(
     "member_flow",

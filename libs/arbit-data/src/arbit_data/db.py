@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import Engine
 
-SCHEMA_REVISION = "0006_members"
+SCHEMA_REVISION = "0007_realtime"
 
 
 @dataclass(frozen=True)

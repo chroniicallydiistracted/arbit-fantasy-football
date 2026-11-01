@@ -56,4 +56,14 @@ web-check:
 web-build:
 	pnpm --filter @arbit/web build
 member-api: local-env
-	uv run --env-file .env.local --env-file .env.auth.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log
+	uv run --env-file .env.local --env-file .env.auth.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log --timeout-graceful-shutdown 5
+
+.PHONY: local-worker services-install services-status services-remove
+local-worker: local-env
+	uv run --env-file .env.local arbit-worker run
+services-install:
+	sh infra/systemd/install.sh
+services-status:
+	systemctl --user status arbit-worker.service arbit-api.service --no-pager
+services-remove:
+	sh infra/systemd/install.sh --remove

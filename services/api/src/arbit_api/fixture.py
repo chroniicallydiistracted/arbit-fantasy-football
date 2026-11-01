@@ -5,6 +5,7 @@ ARBIT_DATABASE_URL ending _fixture or _test. ARBIT_PUBLIC_ORIGIN is the browser
 origin (including the Vite port). This module never fetches a provider.
 """
 
+import sys
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from typing import Literal, cast
@@ -15,6 +16,7 @@ from alembic.config import Config
 from arbit_data.contracts import LeagueSnapshotCandidate, RosterEntry
 from arbit_data.db import UnitOfWork
 from arbit_data.league import FantasyTeam, LeagueDocument, Manager, Matchup, MatchupSide, Player
+from arbit_data.live import store as live_store
 from arbit_data.members import (
     account_exists,
     bind_manager,
@@ -38,6 +40,41 @@ from arbit_api.settings import RuntimeSettings
 
 class FixtureSafetyError(ValueError):
     pass
+
+
+# Fictional NFL ESPN IDs well outside the real range.
+FIXTURE_HOME, FIXTURE_AWAY, FIXTURE_EVENT = "9901", "9902", "990000001"
+
+
+def fixture_game(home_score: str | None, phase: str = "in_progress") -> dict[str, object]:
+    return {
+        "event_id": FIXTURE_EVENT,
+        "season": 2026,
+        "date": "2026-11-01T17:00:00Z",
+        "home_team_id": FIXTURE_HOME,
+        "away_team_id": FIXTURE_AWAY,
+        "home_score": home_score,
+        "away_score": "3",
+        "source_status": "FICTIONAL",
+        "phase": phase,
+        "completed": phase == "final",
+        "period": 2,
+        "clock": "4:12",
+        "neutral_site": False,
+        "recommendations_enabled": False,
+        "fantasy_scoring": "not_calculated; ESPN Fantasy remains authoritative",
+    }
+
+
+def publish_fixture_score(engine: Engine, home_score: str) -> None:
+    """Publish a fictional scoreboard change, exactly as the worker would."""
+    if not (engine.url.database or "").endswith(("_fixture", "_test")):
+        raise FixtureSafetyError("Fictional live data requires a dedicated fixture database")
+    live_store.publish_scoreboard(
+        UnitOfWork(engine),
+        {"season": 2026, "season_type": 2, "week": 8, "games": [fixture_game(home_score)]},
+        datetime.now(UTC),
+    )
 
 
 def seed(settings: RuntimeSettings, engine: Engine) -> None:
@@ -269,6 +306,19 @@ def seed(settings: RuntimeSettings, engine: Engine) -> None:
         )
         bind_manager(uow, account["id"], manager, 2026, account["id"])
         logout(uow, token)
+    live_store.publish_directory(
+        uow,
+        live_store.Directory(
+            (
+                live_store.TeamEntry(FIXTURE_HOME, "FIC", "Fictional", "Falcons", 5),
+                live_store.TeamEntry(FIXTURE_AWAY, "TST", "Testing", "Tigers", 9),
+            )
+        ),
+        2026,
+        now,
+        digest("arbit-fictional-nfl-directory-v1"),
+    )
+    publish_fixture_score(engine, "7")
 
 
 if __name__ == "__main__":
@@ -277,6 +327,10 @@ if __name__ == "__main__":
         raise SystemExit("Set explicit fixture environment and dedicated database settings first")
     engine = create_engine(settings.database_url.get_secret_value(), hide_parameters=True)
     try:
+        if len(sys.argv) == 3 and sys.argv[1] == "live-score":
+            publish_fixture_score(engine, sys.argv[2])
+            print("Fictional live score published. No provider proof.")
+            raise SystemExit(0)
         seed(settings, engine)
         print(
             "Fictional preview ready: two members, two teams, 34 fictional players. No provider proof."

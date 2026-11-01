@@ -106,6 +106,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Events Stream */
+        get: operations["events_stream_api_v1_events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/front-office": {
         parameters: {
             query?: never;
@@ -132,6 +149,40 @@ export interface paths {
         };
         /** Teams */
         get: operations["teams_api_v1_league_teams_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/live/games": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Live Games */
+        get: operations["live_games_api_v1_live_games_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/live/games/{event_id}/plays": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Live Plays */
+        get: operations["live_plays_api_v1_live_games__event_id__plays_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -174,6 +225,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Sessions */
+        get: operations["my_sessions_api_v1_me_sessions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/sessions/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** End My Session */
+        post: operations["end_my_session_api_v1_me_sessions_revoke_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/players": {
         parameters: {
             query?: never;
@@ -200,6 +285,23 @@ export interface paths {
         };
         /** Player */
         get: operations["player_api_v1_players__entity_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Sources */
+        get: operations["sources_api_v1_sources_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -426,6 +528,33 @@ export interface components {
              */
             manager_id: string;
         };
+        /** DeviceSession */
+        DeviceSession: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Current */
+            current: boolean;
+            /** Device */
+            device: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Last Seen At
+             * Format: date-time
+             */
+            last_seen_at: string;
+        };
+        /** DeviceSessions */
+        DeviceSessions: {
+            /** Sessions */
+            sessions: components["schemas"]["DeviceSession"][];
+        };
         /** FixtureRequest */
         FixtureRequest: {
             /**
@@ -447,7 +576,7 @@ export interface components {
             /** Playoff Team Count */
             playoff_team_count: number | null;
             /** Roster */
-            roster: components["schemas"]["Player"][];
+            roster: components["schemas"]["RosterPlayer"][];
             /** Season Strip */
             season_strip: components["schemas"]["SeasonCell"][];
             /** Selected Matchup Period */
@@ -472,6 +601,93 @@ export interface components {
         InviteResponse: {
             /** Invitation Url */
             invitation_url: string;
+        };
+        /** LiveGameRow */
+        LiveGameRow: {
+            away: components["schemas"]["LiveTeam"];
+            /**
+             * Changed At
+             * Format: date-time
+             */
+            changed_at: string;
+            /** Clock */
+            clock: string | null;
+            /** Event Id */
+            event_id: string;
+            home: components["schemas"]["LiveTeam"];
+            /** Kickoff */
+            kickoff: string | null;
+            /**
+             * Observed At
+             * Format: date-time
+             */
+            observed_at: string;
+            /** Own Players */
+            own_players: string[];
+            /** Period */
+            period: number | null;
+            /** Phase */
+            phase: string;
+        };
+        /** LiveGames */
+        LiveGames: {
+            /** Games */
+            games: components["schemas"]["LiveGameRow"][];
+            /** Last Success At */
+            last_success_at: string | null;
+            /** Season Type */
+            season_type: number | null;
+            /**
+             * Source State
+             * @enum {string}
+             */
+            source_state: "current" | "behind" | "down" | "idle" | "never";
+            /** Week */
+            week: number | null;
+        };
+        /** LivePlayRow */
+        LivePlayRow: {
+            /** Away Score */
+            away_score: string | null;
+            /** Cancelled */
+            cancelled: boolean;
+            /** Clock */
+            clock: string | null;
+            /** Corrected */
+            corrected: boolean;
+            /** Home Score */
+            home_score: string | null;
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Own */
+            own: boolean;
+            /** Period */
+            period: number | null;
+            /** Scoring */
+            scoring: boolean;
+            /** Text */
+            text: string;
+        };
+        /** LivePlays */
+        LivePlays: {
+            game: components["schemas"]["LiveGameRow"];
+            /** Has Participants */
+            has_participants: boolean;
+            /** Plays */
+            plays: components["schemas"]["LivePlayRow"][];
+            /** Plays Observed At */
+            plays_observed_at: string | null;
+        };
+        /** LiveTeam */
+        LiveTeam: {
+            /** Abbreviation */
+            abbreviation: string | null;
+            /** Name */
+            name: string | null;
+            /** Score */
+            score: string | null;
         };
         /** Matchup */
         Matchup: {
@@ -517,63 +733,36 @@ export interface components {
             /** Teams */
             teams: components["schemas"]["Team"][];
         };
-        /** Player */
-        Player: {
-            /** Active */
-            active: boolean;
-            /**
-             * Availability
-             * @enum {string}
-             */
-            availability: "owned" | "free_agent" | "waivers";
-            /** Display Name */
-            display_name: string;
-            /** Eligible Slots */
-            eligible_slots: string[];
-            /**
-             * Id
-             * Format: uuid
-             */
-            id: string;
-            /** Injured */
-            injured: boolean;
-            /** Injury Status */
-            injury_status: string | null;
-            /**
-             * Kind
-             * @enum {string}
-             */
-            kind: "athlete" | "defense_unit";
-            /** Lineup Locked */
-            lineup_locked: boolean;
-            /** Lineup Slot */
-            lineup_slot: string | null;
-            /** Nfl Team Id */
-            nfl_team_id: string | null;
-            /** Official Current Points */
-            official_current_points: string | null;
-            /**
-             * Position
-             * @enum {string}
-             */
-            position: "QB" | "RB" | "WR" | "TE" | "K" | "DST";
-            /** Roster Locked */
-            roster_locked: boolean;
-            /** Team Id */
-            team_id: string | null;
-            /** Trade Locked */
-            trade_locked: boolean;
-        };
         /** PlayerFacts */
         PlayerFacts: {
             analysis?: components["schemas"]["Analysis"];
-            player: components["schemas"]["Player"];
+            player: components["schemas"]["RosterPlayer"];
             snapshot: components["schemas"]["Snapshot"];
+        };
+        /**
+         * PlayerNfl
+         * @description NFL context from ESPN's team directory for the snapshot's scoring period.
+         */
+        PlayerNfl: {
+            /** Bye Week */
+            bye_week: number | null;
+            /** Home */
+            home: boolean | null;
+            /** Kickoff */
+            kickoff: string | null;
+            /** On Bye */
+            on_bye: boolean;
+            /** Opponent Abbreviation */
+            opponent_abbreviation: string | null;
+            /** Team Abbreviation */
+            team_abbreviation: string;
+            /** Team Name */
+            team_name: string;
         };
         /** PlayerSearch */
         PlayerSearch: {
             /** Players */
-            players: components["schemas"]["Player"][];
+            players: components["schemas"]["RosterPlayer"][];
             snapshot: components["schemas"]["Snapshot"];
         };
         /** Preferences */
@@ -618,6 +807,14 @@ export interface components {
              */
             account_id: string;
         };
+        /** RevokeDevice */
+        RevokeDevice: {
+            /**
+             * Session Id
+             * Format: uuid
+             */
+            session_id: string;
+        };
         /** RevokeRequest */
         RevokeRequest: {
             /**
@@ -630,6 +827,54 @@ export interface components {
              * @default false
              */
             suspend: boolean;
+        };
+        /** RosterPlayer */
+        RosterPlayer: {
+            /** Active */
+            active: boolean;
+            /**
+             * Availability
+             * @enum {string}
+             */
+            availability: "owned" | "free_agent" | "waivers";
+            /** Display Name */
+            display_name: string;
+            /** Eligible Slots */
+            eligible_slots: string[];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Injured */
+            injured: boolean;
+            /** Injury Status */
+            injury_status: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "athlete" | "defense_unit";
+            /** Lineup Locked */
+            lineup_locked: boolean;
+            /** Lineup Slot */
+            lineup_slot: string | null;
+            nfl?: components["schemas"]["PlayerNfl"] | null;
+            /** Nfl Team Id */
+            nfl_team_id: string | null;
+            /** Official Current Points */
+            official_current_points: string | null;
+            /**
+             * Position
+             * @enum {string}
+             */
+            position: "QB" | "RB" | "WR" | "TE" | "K" | "DST";
+            /** Roster Locked */
+            roster_locked: boolean;
+            /** Team Id */
+            team_id: string | null;
+            /** Trade Locked */
+            trade_locked: boolean;
         };
         /**
          * SeasonCell
@@ -649,6 +894,11 @@ export interface components {
         };
         /** Snapshot */
         Snapshot: {
+            /**
+             * Confirmed At
+             * @description When this content was last confirmed against ESPN; observed_at is when it first appeared.
+             */
+            confirmed_at?: string | null;
             /**
              * Id
              * Format: uuid
@@ -672,6 +922,30 @@ export interface components {
             source_status: "fresh" | "stale" | "unavailable" | "degraded";
             /** Stale */
             stale: boolean;
+        };
+        /** SourceRow */
+        SourceRow: {
+            /**
+             * Error Code
+             * @description Administrators only
+             */
+            error_code?: string | null;
+            /** Label */
+            label: string;
+            /** Last Success At */
+            last_success_at: string | null;
+            /** Source */
+            source: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "current" | "behind" | "down" | "idle" | "never";
+        };
+        /** Sources */
+        Sources: {
+            /** Sources */
+            sources: components["schemas"]["SourceRow"][];
         };
         /** StartRequest */
         StartRequest: {
@@ -1346,6 +1620,103 @@ export interface operations {
             };
         };
     };
+    events_stream_api_v1_events_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     front_office_api_v1_front_office_get: {
         parameters: {
             query?: {
@@ -1464,6 +1835,209 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Teams"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    live_games_api_v1_live_games_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveGames"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    live_plays_api_v1_live_games__event_id__plays_get: {
+        parameters: {
+            query?: {
+                own?: boolean;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LivePlays"];
                 };
             };
             /** @description Unauthorized */
@@ -1749,6 +2323,208 @@ export interface operations {
             };
         };
     };
+    my_sessions_api_v1_me_sessions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeviceSessions"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    end_my_session_api_v1_me_sessions_revoke_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RevokeDevice"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Success"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     search_players_api_v1_players_get: {
         parameters: {
             query: {
@@ -1871,6 +2647,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerFacts"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    sources_api_v1_sources_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sources"];
                 };
             };
             /** @description Unauthorized */

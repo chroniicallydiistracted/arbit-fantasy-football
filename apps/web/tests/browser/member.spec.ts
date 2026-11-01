@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
@@ -204,4 +205,46 @@ test("a shared-cookie account switch clears a fresh private deep link before sho
   await page.getByLabel("Search players").fill("Ja'Marr");
   await expect(page.getByText("No players match that name.")).toBeVisible();
   await expect(page.getByText("Search unavailable", { exact: true })).toHaveCount(0);
+});
+
+test("an open client updates without a reload when the server publishes a change", async ({
+  page,
+}) => {
+  await login(page);
+  await page.getByRole("link", { name: "Live", exact: true }).first().click();
+  const tile = page.locator(".game-tile").first();
+  await expect(tile).toContainText("FIC");
+  await expect(tile).toContainText("7");
+  let navigations = 0;
+  page.on("framenavigated", () => {
+    navigations += 1;
+  });
+  const score = String(10 + Math.floor(Math.random() * 80));
+  // Same publication path as the worker, in the dedicated fixture database.
+  execFileSync("uv", ["run", "python", "-m", "arbit_api.fixture", "live-score", score], {
+    cwd: new URL("../../../../", import.meta.url).pathname,
+    stdio: "ignore",
+  });
+  await expect(tile.locator(".game-line").last()).toContainText(score, { timeout: 8000 });
+  expect(navigations).toBe(0);
+  await expect(page.getByText("Reconnecting")).toHaveCount(0);
+});
+
+test("the Live workspace deep-links to a game and survives a hard reload", async ({ page }) => {
+  await login(page);
+  await page.goto("/live/games/990000001");
+  await expect(page.getByRole("heading", { name: "TST at FIC" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "TST at FIC" })).toBeVisible();
+  const result = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  expect(result.violations).toEqual([]);
+});
+
+test("a member can see and end their own signed-in devices", async ({ page }) => {
+  await login(page);
+  await page.goto("/settings");
+  await expect(page.getByRole("heading", { name: "Signed-in devices" })).toBeVisible();
+  await expect(page.locator(".device-list li").first()).toContainText("This device");
 });

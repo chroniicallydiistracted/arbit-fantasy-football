@@ -1,8 +1,10 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { AdminAccess } from "./AdminAccess";
 import type { PlayerFacts, Preferences } from "./api";
+import { ageLabel } from "./format";
+import type { components } from "./generated/api";
 import { Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
@@ -49,6 +51,7 @@ export function Settings() {
           </fieldset>
           {message && <Notice danger={failed}>{message}</Notice>}
         </section>
+        <Devices />
         <section className="settings-section">
           <h2>Data on this device</h2>
           <p>
@@ -71,6 +74,56 @@ export function Settings() {
     </>
   );
 }
+function Devices() {
+  const { auth, refresh } = useSession();
+  const query = useQuery({
+    queryKey: ["sessions"],
+    queryFn: ({ signal }) =>
+      http<components["schemas"]["DeviceSessions"]>("/api/v1/me/sessions", { signal }),
+  });
+  const [error, setError] = useState("");
+  async function end(id: string, current: boolean) {
+    setError("");
+    try {
+      await http("/api/v1/me/sessions/revoke", {
+        method: "POST",
+        body: { session_id: id },
+        csrf: auth?.csrf_token,
+      });
+      if (current) await refresh();
+      else await query.refetch();
+    } catch (value) {
+      setError(value instanceof Error ? value.message : "That device couldn’t be signed out.");
+    }
+  }
+  return (
+    <section className="settings-section">
+      <h2>Signed-in devices</h2>
+      {error && <Notice danger>{error}</Notice>}
+      {query.isError && <Notice danger>Devices couldn’t be loaded.</Notice>}
+      <ul className="device-list">
+        {query.data?.sessions.map((session) => (
+          <li key={session.id}>
+            <span>
+              <strong>{session.device ?? "Unknown device"}</strong>
+              {session.current && " · This device"}
+              <span className="player-line">Last used {ageLabel(session.last_seen_at)}</span>
+            </span>
+            <button
+              type="button"
+              aria-label={`End session on ${session.device ?? "unknown device"}`}
+              onClick={() => void end(session.id, session.current)}
+            >
+              End session
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p className="muted">Sessions end after 30 days without use, and always after 90 days.</p>
+    </section>
+  );
+}
+
 export function Watchlist() {
   const { me, save } = useSession();
   const [params, setParams] = useSearchParams();

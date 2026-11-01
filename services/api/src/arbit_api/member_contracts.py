@@ -82,6 +82,10 @@ class FixtureRequest(WireModel):
 class Snapshot(WireModel):
     id: UUID
     observed_at: datetime
+    confirmed_at: datetime | None = Field(
+        default=None,
+        description="When this content was last confirmed against ESPN; observed_at is when it first appeared.",
+    )
     source_status: Literal["fresh", "stale", "unavailable", "degraded"]
     stale: bool
     season: int
@@ -104,11 +108,27 @@ class SeasonCell(WireModel):
     result: Literal["win", "loss", "tie"] | None
 
 
+class PlayerNfl(WireModel):
+    """NFL context from ESPN's team directory for the snapshot's scoring period."""
+
+    team_abbreviation: str
+    team_name: str
+    bye_week: int | None
+    on_bye: bool
+    opponent_abbreviation: str | None
+    home: bool | None
+    kickoff: datetime | None
+
+
+class RosterPlayer(Player):
+    nfl: PlayerNfl | None = None
+
+
 class FrontOffice(WireModel):
     snapshot: Snapshot
     team: Team
     matchup: Matchup | None
-    roster: list[Player]
+    roster: list[RosterPlayer]
     standings: list[Team]
     analysis: Analysis = Field(default_factory=Analysis)
     matchup_periods: list[int]
@@ -126,13 +146,89 @@ class Teams(WireModel):
 
 class PlayerFacts(WireModel):
     snapshot: Snapshot
-    player: Player
+    player: RosterPlayer
     analysis: Analysis = Field(default_factory=Analysis)
 
 
 class PlayerSearch(WireModel):
     snapshot: Snapshot
-    players: list[Player]
+    players: list[RosterPlayer]
+
+
+class SourceRow(WireModel):
+    source: str
+    label: str
+    state: Literal["current", "behind", "down", "idle", "never"]
+    last_success_at: datetime | None
+    error_code: str | None = Field(default=None, description="Administrators only")
+
+
+class Sources(WireModel):
+    sources: list[SourceRow]
+
+
+class LiveTeam(WireModel):
+    abbreviation: str | None
+    name: str | None
+    score: str | None
+
+
+class LiveGameRow(WireModel):
+    event_id: str
+    phase: str
+    kickoff: datetime | None
+    period: int | None
+    clock: str | None
+    home: LiveTeam
+    away: LiveTeam
+    own_players: list[str]
+    observed_at: datetime
+    changed_at: datetime
+
+
+class LiveGames(WireModel):
+    week: int | None
+    season_type: int | None
+    games: list[LiveGameRow]
+    source_state: Literal["current", "behind", "down", "idle", "never"]
+    last_success_at: datetime | None
+
+
+class LivePlayRow(WireModel):
+    id: str
+    period: int | None
+    clock: str | None
+    kind: str
+    text: str
+    home_score: str | None
+    away_score: str | None
+    scoring: bool
+    cancelled: bool
+    corrected: bool
+    own: bool
+
+
+class LivePlays(WireModel):
+    game: LiveGameRow
+    plays: list[LivePlayRow]
+    plays_observed_at: datetime | None
+    has_participants: bool
+
+
+class DeviceSession(WireModel):
+    id: UUID
+    device: str | None
+    created_at: datetime
+    last_seen_at: datetime
+    current: bool
+
+
+class DeviceSessions(WireModel):
+    sessions: list[DeviceSession]
+
+
+class RevokeDevice(WireModel):
+    session_id: UUID
 
 
 class InviteRequest(WireModel):

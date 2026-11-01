@@ -1,5 +1,6 @@
 """Optional built application on the API origin with explicit public route limits."""
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,8 @@ SPA_ROUTES = {
     "watchlist",
     "model",
 }
+# Deep links with an identifier serve the same client; the client checks them against the API.
+SPA_PATTERNS = (re.compile(r"live/games/[1-9][0-9]{0,19}"),)
 PUBLIC_FILES = {
     "sw.js",
     "offline.css",
@@ -59,7 +62,8 @@ def install_static_shell(app: FastAPI, path: Path | None) -> None:
 
     @app.get("/{path:path}", include_in_schema=False)
     def shell(request: Request, path: str) -> Any:
-        filename = "index.html" if path in SPA_ROUTES else path if path in PUBLIC_FILES else None
+        is_client_route = path in SPA_ROUTES or any(p.fullmatch(path) for p in SPA_PATTERNS)
+        filename = "index.html" if is_client_route else path if path in PUBLIC_FILES else None
         if filename is None or not (root / filename).is_file():
             raise HTTPException(404, "NOT_FOUND")
         headers = {

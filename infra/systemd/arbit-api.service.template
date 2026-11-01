@@ -1,0 +1,17 @@
+[Unit]
+Description=Arbit member API and web client on 127.0.0.1:8000
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@ROOT@
+Environment=PATH=@PATH@
+ExecStart=@UV@ run --frozen --env-file .env.local --env-file .env.auth.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log --timeout-graceful-shutdown 5
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

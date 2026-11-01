@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, Navigate, NavLink, Route, Routes, useLocation } from "react-router";
 import type { FrontOffice as Office } from "./api";
+import { LiveEvents, useFallbackInterval, useStreamState } from "./events";
 import { FrontOffice } from "./FrontOffice";
 import { points } from "./format";
+import { LiveBoard } from "./Live";
 import { PlayerDrawer } from "./PlayerDrawer";
 import { Busy, Notice, PageTitle, SourceNote, StatePanel } from "./primitives";
 import { PwaControls } from "./pwa";
@@ -92,7 +94,7 @@ export function App({ invitation }: { invitation?: string }) {
       <NavLink to="/settings">Preferences</NavLink>
     </>
   );
-  return (
+  const shell = (
     <>
       <a className="skip-link" href="#main">
         Skip to content
@@ -153,8 +155,10 @@ export function App({ invitation }: { invitation?: string }) {
                 />
               }
             />
+            <Route path="/live" element={<LiveBoard />} />
+            <Route path="/live/games/:eventId" element={<LiveBoard />} />
             {workspaces
-              .filter((item) => item.path !== "/front-office")
+              .filter((item) => !["/front-office", "/live"].includes(item.path))
               .map((item) => (
                 <Route
                   key={item.path}
@@ -218,16 +222,19 @@ export function App({ invitation }: { invitation?: string }) {
       <PwaControls />
     </>
   );
+  return bound ? <LiveEvents>{shell}</LiveEvents> : shell;
 }
 
 /** League context on every workspace: period, the member's current score, data age. */
 function ContextStrip({ season, teamId }: { season: number; teamId?: string | null }) {
   const location = useLocation();
   const search = teamId ? `?team_id=${encodeURIComponent(teamId)}` : "";
+  const stream = useStreamState();
+  const interval = useFallbackInterval();
   const query = useQuery({
     queryKey: ["front-office", teamId, null],
-    queryFn: ({ signal }) => http<Office>(`/api/v1/front-office${search}`, { signal }),
-    refetchInterval: 60_000,
+    queryFn: ({ signal }) => http<Office>(`/api/v1/front-office?${search.slice(1)}`, { signal }),
+    refetchInterval: interval,
   });
   const data = query.data;
   const own = data?.matchup
@@ -256,6 +263,16 @@ function ContextStrip({ season, teamId }: { season: number; teamId?: string | nu
         </Link>
       )}
       <span className="context-push">
+        {stream === "down" && (
+          <span className="status" data-state="behind">
+            Updates paused{" "}
+          </span>
+        )}
+        {stream === "connecting" && (
+          <span className="status" data-state="behind">
+            Reconnecting{" "}
+          </span>
+        )}
         {data ? <SourceNote snapshot={data.snapshot} failed={query.isError} /> : null}
       </span>
     </div>

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { Link, useSearchParams } from "react-router";
-import type { FrontOffice as Office, Player, Team } from "./api";
-import { points, record } from "./format";
+import type { FrontOffice as Office, Player, Sources, Team } from "./api";
+import { useFallbackInterval } from "./events";
+import { ageLabel, dateLabel, points, record } from "./format";
 import { Arrow, Busy, Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
@@ -30,7 +31,7 @@ export function FrontOffice() {
   const query = useQuery({
     queryKey: ["front-office", teamId, period],
     queryFn: ({ signal }) => http<Office>(`/api/v1/front-office?${search}`, { signal }),
-    refetchInterval: 60_000,
+    refetchInterval: useFallbackInterval(),
   });
   const set = (key: string, value: string) => {
     const next = new URLSearchParams(params);
@@ -331,6 +332,7 @@ export function FrontOffice() {
               </table>
             </div>
           </section>
+          <SourcePanel />
           <section className="fact-panel" aria-labelledby="recommendations-heading">
             <h2 id="recommendations-heading">Recommendations</h2>
             <span className="state-off">Off</span>
@@ -341,6 +343,71 @@ export function FrontOffice() {
         </aside>
       </div>
     </>
+  );
+}
+
+function gameLine(nfl: NonNullable<Player["nfl"]>): string {
+  if (nfl.on_bye) return "Bye";
+  if (!nfl.opponent_abbreviation) return "No game listed";
+  const when = nfl.kickoff
+    ? new Intl.DateTimeFormat(undefined, {
+        weekday: "short",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(new Date(nfl.kickoff))
+    : "";
+  return `${nfl.home ? "vs" : "at"} ${nfl.opponent_abbreviation}${when ? ` ${when}` : ""}`;
+}
+
+const SOURCE_STATE: Record<Sources["sources"][number]["state"], string> = {
+  current: "Current",
+  behind: "Behind",
+  down: "Failing",
+  idle: "No games on",
+  never: "Not read yet",
+};
+
+function SourcePanel() {
+  const query = useQuery({
+    queryKey: ["sources"],
+    queryFn: ({ signal }) => http<Sources>("/api/v1/sources", { signal }),
+    refetchInterval: 60_000,
+  });
+  if (!query.data) return null;
+  return (
+    <section className="fact-panel" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">Data</h2>
+      <ul className="source-list">
+        {query.data.sources.map((row) => (
+          <li key={row.source}>
+            <span>{row.label}</span>
+            <span
+              className="status"
+              data-state={
+                row.state === "down"
+                  ? "down"
+                  : row.state === "behind" || row.state === "never"
+                    ? "behind"
+                    : "current"
+              }
+            >
+              <span>
+                {SOURCE_STATE[row.state]}
+                {row.last_success_at && row.state !== "idle" ? (
+                  <>
+                    {" · "}
+                    <time dateTime={row.last_success_at} title={dateLabel(row.last_success_at)}>
+                      {ageLabel(row.last_success_at)}
+                    </time>
+                  </>
+                ) : null}
+                {row.error_code ? ` · ${row.error_code}` : ""}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -372,6 +439,8 @@ function RosterRow({
         </button>
         <span className="player-line">
           {player.position}
+          {player.nfl ? ` · ${player.nfl.team_abbreviation}` : ""}
+          {player.nfl ? ` · ${gameLine(player.nfl)}` : ""}
           <span className="mobile-status">{status ? ` · ${status}` : ""}</span>
           {player.lineup_locked ? <span className="mobile-status"> · Locked</span> : null}
         </span>
