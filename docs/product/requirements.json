@@ -752,6 +752,47 @@
       "spec": "docs/product/product-specification.md",
       "acceptance": "End-to-end manager workflows exercise all modules with shared league/model context and honest limitations.",
       "status": "specified"
+    },
+    {
+      "id": "UX-005",
+      "title": "Original product character, token-only styling and plain product language",
+      "sourceSections": [
+        "7.1",
+        "7.3"
+      ],
+      "milestone": "M2",
+      "spec": "docs/design/design-system.md",
+      "acceptance": "Design lint rejects raw style values, banned generic fonts and slogan copy; owner accepts the rendered character.",
+      "status": "in_progress",
+      "evidence": []
+    },
+    {
+      "id": "DATA-008",
+      "title": "Supervised worker and measured per-source freshness for every changing source",
+      "sourceSections": [
+        "6.2",
+        "6.3",
+        "6.4"
+      ],
+      "milestone": "M2",
+      "spec": "docs/architecture/data-architecture.md",
+      "acceptance": "Every changing source has a declared cadence and stale limit; a supervised worker keeps them current through restarts; members can see per-source age.",
+      "status": "in_progress",
+      "evidence": []
+    },
+    {
+      "id": "ENG-005",
+      "title": "Live client refresh and durable multi-device member sessions",
+      "sourceSections": [
+        "3.3",
+        "6.4",
+        "8.1"
+      ],
+      "milestone": "M2",
+      "spec": "docs/architecture/system-architecture.md",
+      "acceptance": "Open clients update from session-bound events without reload and fall back to polling; signing in on one device does not end another; revoked sessions lose the stream.",
+      "status": "in_progress",
+      "evidence": []
     }
   ]
 }

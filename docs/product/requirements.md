@@ -1,6 +1,6 @@
 # Requirement Traceability
 
-Version 0.1 · 2026-10-30. The [owner brief](vision-source.txt) is preserved unchanged. IDs below are stable verification obligations; **specified does not mean implemented**. The machine-readable [registry](requirements.json) is the authority for IDs, owner specifications, planned acceptance, and milestones. If requirements change, update both records together.
+Version 0.2 · 2026-10-31. The [owner brief](vision-source.txt) is preserved unchanged. IDs below are stable verification obligations; **specified does not mean implemented**. The machine-readable [registry](requirements.json) is the authority for IDs, owner specifications, planned acceptance, and milestones. If requirements change, update both records together.
 
 All original sections 1–12 map below. Shared requirements apply to every affected module, not only their first milestone. Later milestones retain the full scope; [roadmap](../project/roadmap.md) defines dependencies and release gates.
 
@@ -62,6 +62,9 @@ All original sections 1–12 map below. Shared requirements apply to every affec
 | GOV-003 | Change history, ADRs/research/issues/status/tasks and cross-provider handoffs | 9.2, 9.4 | M0 | Every completed session updates status/changelog/handoff without relying on chat memory. |
 | PLAN-001 | Dependency-aware phased roadmap retaining complete advanced scope | 10, 11 | M0 | Every requirement maps to a milestone, dependency, acceptance gate and planned verification. |
 | PLAN-002 | Seven initial planning/specification/governance/scaffold deliverables | 11 | M0 | README links all seven deliverables; source brief preserved byte-for-byte. |
+| UX-005 | Original product character, token-only styling and plain product language | 7.1, 7.3 | M2 | Design lint rejects raw style values, banned generic fonts and slogan copy; owner accepts the rendered character. |
+| DATA-008 | Supervised worker and measured per-source freshness for every changing source | 6.2, 6.3, 6.4 | M2 | Every changing source has a declared cadence and stale limit; a supervised worker keeps them current through restarts; members can see per-source age. |
+| ENG-005 | Live client refresh and durable multi-device member sessions | 3.3, 6.4, 8.1 | M2 | Open clients update from session-bound events without reload and fall back to polling; signing in on one device does not end another; revoked sessions lose the stream. |
 | SUCCESS-001 | Unified understandable data-driven intelligence usable throughout the fantasy season | 12 | M7 | End-to-end manager workflows exercise all modules with shared league/model context and honest limitations. |
 
 M1d implementation evidence for DATA-002/005 and MD-004 prerequisites: [full NFLverse handoff](../project/handoffs/2026-10-31-nflverse.md). Acquisition, manifests and exact owned-athlete crosswalks are verified; semantic features, historical-vintage/model validation and broader product obligations remain open.
