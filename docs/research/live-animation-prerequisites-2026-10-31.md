@@ -84,7 +84,7 @@ The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-g
 | Tackle, hit, fall, get up | 0 | 12 |
 | Kick, punt, snap, hold | 1 (the kneel, for the hold) | 14 |
 
-**Consequences:** one set of about 45 frames serves all teams through recoloring. That replaces items 9 and 10, shrinks 8, 11, 14, 15 and 16, and suits the soft field art in item 12. Sprites always step between drawn frames, so frame count and contact poses decide whether it clears the quality bar. The camera stays side-on.
+**Consequences:** one set of frames serves all teams through recoloring. That replaces items 9 and 10, shrinks 8, 11, 14, 15 and 16, and suits the soft field art in item 12. Sprites always step between drawn frames, so frame count and contact poses decide whether it clears the quality bar. The camera stays side-on.
 
 **The art underneath:** about 32 pixels tall on a 3-pixel pitch, using 21 color classes. The sheet is not on a clean grid: reducing it moves about 1 in 5 sheet pixels, with little visible change. All frames, old and new, should share the reduced grid so they match. Two class quirks need splitting before real uniforms work: helmet and pants share one set of colors, and the ball shares the skin colors, so it turns peach on the light-skin set.
 
@@ -98,6 +98,12 @@ The owner chose the look of a sprite sheet (`docs/potential-assets/player-clip-g
 | Falling, 60° | Same | Usable, slightly messy |
 | Tackle lunge | Rotation plus hand-drawn arms | Usable; the collision now reads as a tackle |
 | Flat on the ground | Three attempts: hand-drawn, rotated, combined | Not good enough yet |
+
+**Full set drawn after the owner approved the look (OWN-023):** 40 frames, the 6 originals plus 34 new, on the clean grid with a ball color of its own. They cover stance, an 8-frame run, dropback, a throw from cock to follow-through, catches, lunge, wrap, hit, falling, ground, getting up, kick, punt, hold, snap and celebration. Rendered and checked frame by frame on real plays: pass, run, sack, field goal and punt.
+
+Weakest frames: `ground`, `snap_ready` and `snap_release` (flat torso), `catch_high`. Not drawn yet: low catch, falling backward and a fumble recovery pose, which reuse other frames for now. Goalposts are a placeholder and there is no stadium surround. Numbers are still 11, and helmet and pants still share colors, so real uniforms are not done. Interception, kickoff and PAT reuse these frames but were not rendered.
+
+**Private and unbacked:** frame sources are `data/sprites/work/frames/` with `compose.py` and the review tools, and renders are in `data/sprites/review/`. Because the repository is public, they exist only on this PC. They are not in Git or database backups.
 
 Colors and pixel size can match exactly, but drawing habits can't. Close-up comparison will always show some difference; the realistic target is that it can't be spotted at game size. These are judgments from stills and consecutive frames, because real-time motion can't be watched here. The owner reviews frames by group. The sheet's source, if it has more frames, is the only route to truly exact art.
 

@@ -13,6 +13,7 @@ Updated 2026-10-31. Architecture and recommended stack approved by the owner on 
 | OWN-007 | Owner made FFA public, reviewed the successful API audit and authorized development using public access; message boards are not required | Owner request 2026-10-30 |
 | OWN-006 | Architecture/stack approved; additional dependencies approved; deliberate, high-quality UX/UI and engineering required | Owner reply 2026-10-30 |
 | OWN-005 | nflverse primary statistics; ESPN league truth; Sleeper supplemental; ESPN-first live research | Owner brief §§5–6 |
+| OWN-023 | Owner approved the look of the test frames and asked for more poses and better versions of the test frames: "Yes these animations are good... overall I like it a lot." The single-play look gate is passed; new play types still get owner review on rendered video | Owner statement 2026-11-01 |
 | OWN-022 | Use the pixel sprite look instead of 3D. New poses must be "as close to exact that we can get" to the owner's sheet | Owner statement 2026-11-01 |
 | OWN-021 | Animate only what is relevant to the play: "We can animate everything that is relevant to the play. Other players and their positions do not need to be animated. We will animate the plays specifically." Replaces the spec's dashed schematic | Owner statement 2026-10-31 |
 | OWN-020 | Approved raw live capture and one worker restart before the first live slate | Owner statement 2026-10-31 |

@@ -30,4 +30,4 @@ The GitHub repository is public. `docs/potential-assets/` and `data/sprites/` ar
 ## Resume here
 
 1. After the slate, read the logs and `data/live-captures`: record latency and correction evidence, the `situation` shape and capture size, and close R-025, R-030 and the statistics question in R-026.
-2. Build scoreboards, then the Gridiron sync lane and private delivery, then the pass-play sprite frames and single-play slice for owner review. Refetch KC and CHI uniforms and newly listed fields before using them.
+2. Build scoreboards, then the Gridiron sync lane and private delivery, then recoloring to real uniforms and the app's play renderer. The full frame set is drawn ([status](../../research/live-animation-prerequisites-2026-10-31.md#sprite-direction--owner-decision-2026-11-01)), so only the weakest frames and missing poses remain. Refetch KC and CHI uniforms and newly listed fields before using them.
