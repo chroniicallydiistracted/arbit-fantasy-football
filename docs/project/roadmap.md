@@ -85,7 +85,7 @@ Provider/asset research can proceed before feature implementation. Archive UI co
 
 **Slices:** shared poll/event normalization, corrected stat projections, persisted outbox and reconnect cursors; scoreboards/game stats/player/PBP views; own-roster/fantasy filters and matchup attribution; field coordinate/orientation model; pass/run/sneak/sack/interception/FG/PAT and other canonical play graphics; verified weekly field/uniform manifests and labeled fallback; reduced motion and replay controls; full-slate performance.
 
-**Evidence:** recorded/sanitized replay for each named play class, no-play/correction/duplicate/out-of-order/turnover/overtime; official-vs-provisional scoring separation; expired reconnect cursor restores from snapshot; 25-session/16-game target load with poll budget; source staleness visible; schematic routes not represented as tracking. Text-only Live can be a slice but does not close field/uniform/animation obligations.
+**Evidence:** recorded/sanitized replay for each named play class, no-play/correction/duplicate/out-of-order/turnover/overtime; official-vs-provisional scoring separation; expired reconnect cursor restores from snapshot; 25-session/16-game target load with poll budget; source staleness visible; re-created motion not represented as tracking. Text-only Live can be a slice but does not close field/uniform/animation obligations.
 
 ## M7 — Archive, Geller Cup and integrated refinement
 
@@ -105,4 +105,4 @@ M2 is implemented locally; Google is selected. Real OAuth client/member/team ver
 
 Owner direction 2026-10-31 (OWN-016, OWN-017): before M3, the design was reset and a real-time sync platform added as M2 hardening, under UX-005, DATA-008 and ENG-005. See the [handoff](handoffs/2026-10-31-platform-reset.md). A text-first Live scoreboard and play feed exist now; M6 still owns fantasy attribution, field graphics, Gridiron art and full-slate proof. Hosting is deferred until development finishes (OWN-014), and second-member acceptance moves with it. Timing to weigh when sequencing M3 and M4: the league is in week 8 of 14 and the trade deadline is 2026-12-02.
 
-Owner direction 2026-10-31 (OWN-019): Live moves ahead of M3. M6's dependency on M3 applies only to fantasy attribution and shared evaluations, which stay open until M3 lands; the source, asset, scoreboard and animation slices proceed first. Order and gates: [prerequisites](../research/live-animation-prerequisites-2026-10-31.md).
+Owner direction 2026-10-31 (OWN-019): Live moves ahead of M3. M6's dependency on M3 applies only to fantasy attribution and shared evaluations, which stay open until M3 lands; the source, asset, scoreboard and animation slices proceed first. Plays are animated with only the players ESPN names and the ball (OWN-021). Order and gates: [prerequisites](../research/live-animation-prerequisites-2026-10-31.md).

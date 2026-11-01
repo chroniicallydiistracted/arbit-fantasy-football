@@ -84,7 +84,7 @@ These are layout breakpoints, not device detection. Layout must work at 320, 768
 | RecommendationCard / EvidenceDrawer | Action, benefit and horizon, alternatives, evidence and sample, freshness, uncertainty, methodology link, blocked reason. Modeled values in `los` |
 | ProjectionInterval / TrendChart / ComparisonChart | Observed solid, projected dashed or banded with text label, consistent axes, table alternative, keyboard point inspection |
 | DraftBoard / TradeBuilder / AddDropComparison | Selected and available, package legality, both teams' effects, stale ownership, unknown rules |
-| GameScore / PlayTimeline / FieldReplay | Status, clock, possession, filters, corrections, pause and replay, schematic label, fallback |
+| GameScore / PlayTimeline / FieldReplay | Status, clock, possession, filters, corrections, pause and replay, re-creation label, fallback |
 
 Reuse accessible primitives where they help; prefer semantic HTML. Build components against real workflows, not a disconnected library.
 
@@ -94,9 +94,9 @@ Numeric columns right-align; identities left-align. Precision follows the rule s
 
 ## Live graphics
 
-The field plane is normalized 0–100 between goal lines with separate end zones and width proportional to 53⅓ yards. A play can mirror to the viewer's orientation without changing data. Mark the line of scrimmage in `los`, the first-down line in `flag`, ball direction and start and end positions. Paths are schematic, never claimed as tracking. Pass, rush, turnover, sack and kicking events have distinct path, icon and text treatments, and unknown events keep their narrative. Verified Gridiron fields and uniforms use the asset manifest and are served only inside the private application (OWN-015); a generic fallback is labeled. The timeline and fantasy facts stay useful if images fail.
+The field plane is normalized 0–100 between goal lines with separate end zones and width proportional to 53⅓ yards. A play can mirror to the viewer's orientation without changing data. Mark the line of scrimmage in `los`, the first-down line in `flag`, ball direction and start and end positions. Plays are 3D re-creations of the players ESPN names and the ball, labeled "Re-creation from play-by-play" and never claimed as tracking (OWN-021). Pass, rush, turnover, sack and kicking events each have their own motion and text treatment, and unknown events keep their narrative. Verified Gridiron fields and uniforms use the asset manifest and are served only inside the private application (OWN-015); a generic fallback is labeled. The timeline and fantasy facts stay useful if images fail.
 
-UI transitions run 120–200 ms; play sequences 600–1800 ms with visible controls. Playback is user-triggered by default; reduced motion uses static start and end frames with narrative. Corrections are labeled and old effects updated, never played as another score. Screen readers receive throttled summaries and can pause announcements.
+UI transitions run 120–200 ms; play re-creations run at game speed with visible controls. Playback is user-triggered by default; reduced motion uses static start and end frames with narrative. Corrections are labeled and old effects updated, never played as another score. Screen readers receive throttled summaries and can pause announcements.
 
 ## Loading, failure and freshness
 

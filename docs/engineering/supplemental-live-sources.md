@@ -54,6 +54,15 @@ Every play carries its play-page observation time through live reads and offline
 
 Field points retain source yards-to-endzone and separate team frames. Turnover/multiphase/unknown positions cannot become an invented continuous route or stadium direction. Text/unknown fallback is deliberate. Actual active-game latency, live corrections and some game/play classes remain empirical M6 gates.
 
+## Raw live capture
+
+`arbit-worker run` keeps a private copy of every response the live lane reads, because parsing discards any field the code doesn't know (R-030). It adds no requests. The owner approved it (OWN-020).
+
+- **Where:** `ARBIT_LIVE_CAPTURE_PATH`, default ignored `data/live-captures`, readable only by the file owner.
+- **Layout:** `objects/<sha256>.json.gz` holds each distinct body once. `<UTC date>.jsonl` has one line per read: time, kind, URL, event, page, then hash and size or an error code.
+- **Limit:** capture stops at 5 GiB and logs `capture_problem` with `CAPTURE_FULL`. Nothing is deleted automatically. Any capture failure is logged as a code and never reaches the feed.
+- **Use:** nothing reads these files at runtime, and database backups don't include them. They are source material for building and replaying scoreboards and play graphics.
+
 ## Gridiron prerequisites
 
 `config/gridiron-assets.json` is intentionally empty. Curated records require exact event/season/type/week/team/venue/neutral context, verified variant/pattern evidence and observation time, source/image metadata/checksum/dimensions/attribution, and a dated permission grant for the corresponding field/uniform uses. Unknown context, ambiguous matches, missing or expired permission selects labeled fallback.

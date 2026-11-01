@@ -36,7 +36,7 @@ Detailed workflows, screen content, interactions, and failure states are in [Fea
 | Lineup | Full-roster optimization, individual sit/start, own fantasy opponent, NFL matchup/defense and usage analysis, scoring, projections, confidence | Optimal legal assignment against exhaustive small fixtures; locked players fixed; choices explained; incomplete injury/rules inputs prevent overconfident advice |
 | Market: waivers | FFA availability, waiver/free-agent state, trend/opportunity evaluation, schedule, roster fit, position filters, add/drop improvement | Ownership change invalidates pickup; every package legal under roster/waiver rules; gain compared to actual team and replacement; unknown bid/waiver state shown |
 | Market: trades | Whole-league needs/depth/byes, valuations, multi-player packages, both managers' benefit, feasibility, comparisons, evaluation of custom proposals | Both rosters legal after trade and drops; package values tied to shared model and horizon; feasibility assumptions exposed; no fabricated acceptance probability |
-| Live | Scores, game state, stats, play-by-play, player participation, fantasy events and matchup context, roster filters, field/play visualizations, weekly fields/uniforms | Replay pass/run/sneak/sack/interception/FG/PAT plus correction and unknown type; fantasy attribution and score revisions correct; schematic motion identified; reduced motion works |
+| Live | Scores, game state, stats, play-by-play, player participation, fantasy events and matchup context, roster filters, field/play visualizations, weekly fields/uniforms | Replay pass/run/sneak/sack/interception/FG/PAT plus correction and unknown type; fantasy attribution and score revisions correct; re-created motion labeled; reduced motion works |
 | Model | Shared features, historical analysis, projections/distributions, rankings, comparisons, archetypes, matchup/roster value and decision support, evaluated ML | Point-in-time reproducible run; rolling temporal holdout and baseline comparison; all advisors share scoring and evaluation versions; no future-data leakage |
 | Archive | Season standings/results/champions, Geller Cup, records, team/player history and comparisons | Inaugural season has honest empty history; final results frozen with auditable corrections; champion derived from verified playoff outcome |
 
@@ -46,7 +46,7 @@ Detailed workflows, screen content, interactions, and failure states are in [Fea
 2. Before kickoff, manager opens Lineup, checks lock state and injury freshness, compares a flexible slot, changes the optimization objective, and reviews the projected lineup and tradeoffs.
 3. During waiver week, manager filters Market by position and time horizon, evaluates an add/drop pair and waiver constraints, then watches availability refresh without losing the comparison.
 4. Before and during the draft, manager explores strategy scenarios, sets a watchlist, follows authoritative or clearly labeled manual draft state, and gets updated choices before each pick.
-5. During games, manager follows roster-related plays, opens a schematic replay, sees provisional FFA scoring context, and observes corrections without duplicated fantasy points.
+5. During games, manager follows roster-related plays, opens a play re-creation, sees provisional FFA scoring context, and observes corrections without duplicated fantasy points.
 6. After the season, manager browses verified standings, records, and Geller Cup history; historical figures disclose the original season scoring rules.
 
 ## Cross-cutting experience and quality
