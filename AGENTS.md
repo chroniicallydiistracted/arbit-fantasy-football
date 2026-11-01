@@ -1,10 +1,10 @@
 # Arbit agent entry point
 
-Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. The owner brief is authoritative; M1a runtime/core/persistence/health behavior is implemented; M1b public acquisition and all audited usable endpoint routes are implemented and verified; M1c actual FFA scoring, canonical identity/rule publication and durable local synchronization are implemented and live-verified; comprehensive M1d nflverse storage/manifests and exact GSIS/ESPN crosswalks are implemented and fully imported; M1e cached supplemental sources, scoped NFL game/play normalization and offline replay, and Gridiron prerequisite gates are implemented and live-verified within their documented coverage. Member access, full Live presentation, semantic model features and models remain future work. Deployment preference: portable and local-first.
+Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. M1a–e runtime/source/scoring/NFLverse/game-play foundations are implemented within recorded coverage. M2 member auth/API/Front Office/PWA and administrator controls are implemented and locally validated; real Google client configuration and invited member/team verification remain the operational release gate. Semantic features/models, advisors, full Live and deployment remain future work. Deployment preference: portable and local-first.
 
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-31-supplemental-live.md).
+1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-10-31-member-application.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.
@@ -33,6 +33,6 @@ Current executable check:
 python3 scripts/validate_foundation.py
 ```
 
-Runtime check: `make runtime-check` after frozen installs and `make db-up`; see [local development](docs/engineering/local-development.md). The first slice is backend-only; frontend build targets do not exist yet. Never fabricate a successful build or use private provider calls as mandatory CI tests.
+Runtime check: `make runtime-check` after frozen installs and `make db-up`; see [local development](docs/engineering/local-development.md). Run `make web-check` for the implemented client/contracts/PWA and the isolated browser flow in the member guide. Never fabricate a successful build or use private provider calls as mandatory CI tests.
 
 Before handoff update status, changelog, decision/issue records as relevant, and a dated handoff with actual commands/results and remaining work. Make uncertainties actionable by naming the milestone they block. Keep the source brief unchanged; record interpretations in specifications/ADRs. Never overwrite another agent's work or claim it as verified without reading the diff and evidence.

@@ -1,6 +1,6 @@
 # API and Integration Contracts
 
-Version 0.1 · 2026-10-30 · Business-route design contracts. M1a implements `/health/live` and `/health/ready`; member business routes remain unimplemented until their authenticated slices. M1c adds optional loopback-and-secret operator-only `/internal/league/current`, `/history`, `/snapshots/{uuid}` and `/sync` GETs; [implemented contract and errors](../engineering/ffa-synchronization.md). M1d adds stored `/internal/league/nflverse/coverage` and `/internal/league/nflverse/players/{uuid}/stats?season=2026&week=1` GETs under the same boundary; [implemented source-read contract](../engineering/nflverse-ingestion.md). No token means no data routes; production remains blocked.
+Version0.2 ·2026-10-31. [Generated OpenAPI](../../packages/contracts/openapi.json) is authoritative for implemented M2 member/auth/administrator routes. Other feature/SSE/job routes below remain design contracts. M1 operator-only reads remain separate; no token means no operator routes. Production member access requires complete secure OIDC and HTTPS; local fixture auth is strictly isolated. [Member operations](../engineering/member-application.md).
 
 ## Common rules
 
@@ -60,4 +60,12 @@ Data: adapters return validated source records plus `SourceFetch` provenance, no
 
 ## M1e operator-only source tools
 
-M1e adds guarded local worker commands for supplemental capture, NFL source inspection, offline verification/replay and Gridiron prerequisite checks; it adds no member/business HTTP routes. [Command and source contracts](../engineering/supplemental-live-sources.md). Candidate/Sleeper points are never authoritative FFA totals; a canonical play's page observation time is separate from game-summary freshness. M2 still owns authentication and generated member contracts, M6 owns persistent Live events/SSE and rendering.
+M1e adds guarded local worker commands for supplemental capture, NFL source inspection, offline verification/replay and Gridiron prerequisite checks; it adds no member/business HTTP routes. [Command and source contracts](../engineering/supplemental-live-sources.md). Candidate/Sleeper points are never authoritative FFA totals; a canonical play's page observation time is separate from game-summary freshness. M2 implements authentication/generated member contracts; M6 owns persistent Live events/SSE and rendering.
+
+## Implemented M2 surface
+
+- `/auth/status`, POST`/auth/start`, GET`/auth/callback`, POST`/auth/logout`; POST`/auth/fixture` exists only in the isolated test mode. Default disabled authentication exposes no member API.
+- GET`/api/v1/me`, `/front-office?team_id=&matchup_period=`, `/league/teams`, `/players?query=&limit=`, `/players/{entity_id}?snapshot_id=`; PUT`/me/preferences`. Team context is constrained by approved managers; unbound members cannot retrieve league/player facts. Search is bounded20results, watchlists100IDs.
+- Administrator directory/invitation/binding/revocation/suspension/reactivation routes require the administrator role plus CSRF/Origin on mutations. Directory is bounded100accounts and exposes active configured-season manager IDs only.
+
+For this concrete small facts slice, typed responses use named fields and a shared `snapshot` object (id, observed_at, source_status, stale, season/scoring/matchup periods) rather than the earlier generic `data/meta` proposal. Auth/preferences have their own typed models. This supersedes that proposal for implemented routes; future large/statistical/scenario interfaces remain specified separately. Decimal scores remain strings/null. Historical matchups do not imply available historical roster snapshots. Private errors use `application/problem+json`, safe stable code/requestId and no raw provider/SQL/input payloads; `error` remains a compatibility alias for code. All private responses, including failures, are no-store.

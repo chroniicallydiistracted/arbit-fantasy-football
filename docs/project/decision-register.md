@@ -69,3 +69,7 @@ These are milestone prerequisites, not a demand for the owner to answer every qu
 ## M2 owner overrides
 
 OWN-011 supersedes the broader Sleeper interpretation used in M1e. Preserve past receipts as history without consuming those datasets. All subagents must explicitly use `gpt-6.1-sol`; no Astra or other model is authorized. M2 is authorized under the accepted invite-only OIDC/member-binding and React/PWA architecture. Sign-in provider choice was requested early; provider-neutral work proceeds without credentials in chat.
+
+| OWN-012 | 2026-10-31 | Google selected for M2 sign-in | Fixed official issuer/endpoints/hosts, private local client configuration; no client provisioned |
+| ENG-021 | 2026-10-31 | Biome handles frontend lint/format with strict TypeScript, Vitest and Playwright | One frozen toolchain replaces proposed ESLint; generated types/tokens checked for drift |
+| ENG-022 | 2026-10-31 | M2 facts use named typed fields and a shared snapshot object | Supersedes generic data/meta proposal for implemented routes; generated contracts, Decimal/null and safe problem errors retained |

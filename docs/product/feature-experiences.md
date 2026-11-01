@@ -95,3 +95,7 @@ Records use explicit definition, scoring version, regular/postseason scope and t
 **Job:** make every advisor use coherent evidence and measured methods.
 
 The user-facing methodology view explains features, source coverage, uncertainty, baseline comparisons, model release and known gaps in plain language. It may expose rankings and archetype exploration, but does not become a competing copy of Scout. Administrative training/configuration lives separately from a manager's workflow. Exact modeling contracts and release criteria: [Model specification](../architecture/model-specification.md).
+
+## M2 implemented experience
+
+Front Office now implements saved official team/roster/matchup/standings facts, historical period and position filters in URLs, pinned player drawer/search, private watchlist/theme preferences and administrator invitation/team approval/revocation/suspension/reactivation controls. Unknown scores remain dashes; historical selection with no roster capture withholds the roster. Current standings remain labeled current. Analysis and other modules explicitly identify future capability. Google access requires private client setup; [local operator/member guide](../engineering/member-application.md). Native install and human assistive-technology acceptance remain open.

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import Engine
 
-SCHEMA_REVISION = "0005_public_sources"
+SCHEMA_REVISION = "0006_members"
 
 
 @dataclass(frozen=True)

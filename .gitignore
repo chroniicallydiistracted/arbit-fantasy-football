@@ -26,3 +26,17 @@ dist/
 build/
 *.log
 .DS_Store
+
+# Browser proof and generated compiler state
+.playwright-mcp/
+.playwright-cli/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Install icons are generated from the original SVG during build
+/apps/web/public/icon-192.png
+/apps/web/public/icon-512.png
+
+# Per-plan local execution evidence
+.superpowers/

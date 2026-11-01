@@ -1,6 +1,6 @@
 # Security and Operations Runbook
 
-Version 0.1 · Proposed runtime procedures; no production service exists.
+Version0.2 · M2 local access procedures implemented; production service/operational acceptance remains open.
 
 ## Trust and secrets
 
@@ -8,7 +8,7 @@ Assets: ESPN session cookies, member identity/team bindings, private rosters/lea
 
 Store provider/OIDC/database credentials in local ignored environment files or a deployment secret store. `.env.example` has names only. Never ask members to paste ESPN cookies into chat. Commissioner enters them through an approved local/admin setup path at the integration milestone; no automatic extraction from browser profiles. Never request ESPN passwords. Do not log headers/cookies/raw auth responses or persist auth secrets in snapshot metadata. Use least-privilege DB/storage access, encryption at rest where supported, TLS externally, and restricted backups. Redact PII from test fixtures and research records.
 
-Member access will require invited accounts. Before M2, the only implemented league HTTP reads are optional development/test operator routes requiring a private token plus actual loopback peer; they cannot enable production. [Local guide](ffa-synchronization.md). Administrator bindings are audited. Authenticate and authorize each HTTP/job/export/SSE path; a UUID is not authorization. No secret key appears in a `VITE_*` client variable. CSRF protection applies to local preference/scenario/admin mutations even though provider integration is read-only. Logout/revocation closes streams and clears in-memory private data. Avoid private browser persistence/service-worker caches in the first version.
+Member access uses invited OIDC accounts, opaque database sessions and administrator-confirmed bindings; Google is selected. [M2 operation and release gate](member-application.md). Optional development/test operator routes still require a private token plus actual loopback peer; production refuses them. [Local guide](ffa-synchronization.md). Administrator bindings are audited. Authenticate and authorize each HTTP/job/export/SSE path; a UUID is not authorization. No secret key appears in a `VITE_*` client variable. CSRF protection applies to local preference/scenario/admin mutations even though provider integration is read-only. Logout/expiry/offline clear in-memory private data. Revocation is enforced per request; future M6 streams must close on revoked access. Avoid private browser persistence/service-worker caches in the first version.
 
 ## Local bootstrap prerequisites
 

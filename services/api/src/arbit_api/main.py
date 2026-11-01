@@ -11,7 +11,9 @@ from sqlalchemy import Engine, String, Uuid, column, create_engine, select, tabl
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
 from arbit_api.local_league import install_operator_routes
+from arbit_api.member_routes import install_member_routes
 from arbit_api.settings import RuntimeSettings
+from arbit_api.static_shell import install_static_shell
 
 
 def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None = None) -> FastAPI:
@@ -64,6 +66,19 @@ def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None
                         snapshot_table = table("league_snapshot", column("id", Uuid), schema=schema)
                         revision = connection.scalar(select(version_table.c.version_num))
                         connection.execute(select(snapshot_table.c.id).limit(0))
+                        if settings.auth_mode != "disabled":
+                            for name in (
+                                "member_account",
+                                "member_invitation",
+                                "member_session",
+                                "member_flow",
+                                "member_binding",
+                                "member_preferences",
+                                "member_audit",
+                            ):
+                                connection.execute(
+                                    select(1).select_from(table(name, schema=schema)).limit(0)
+                                )
                         if revision == SCHEMA_REVISION:
                             return JSONResponse({"status": "ready"}, headers=headers)
                         code = "SCHEMA_MISMATCH"
@@ -76,4 +91,6 @@ def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None
         )
 
     install_operator_routes(app, settings, database, config.season)
+    install_member_routes(app, settings, database, config.season)
+    install_static_shell(app, settings.web_dist_path)
     return app

@@ -145,3 +145,7 @@ The Gridiron prerequisite gate selects only exact context with variant/pattern e
 ## Owner source correction — start of M2
 
 The owner restricts Sleeper to relevant NFL live-game/PBP data only. All former Sleeper fantasy acquisition, directory/hint mapping, state/trend and fantasy-stat candidate paths are retired and blocked before cache/network reads. Historical M1e receipts describe past research only; they are not model, identity or application inputs. No eligible Sleeper live route is currently enabled. ESPN remains the verified live source, and NFLverse remains the statistical foundation.
+
+## M2 access storage
+
+Additive migration0006 provides issuer+subject accounts, hashed invitations/opaque sessions, bounded expiring browser-bound OIDC flows, approved season/manager bindings, revisioned preferences and safe access audit events. Consumed flow secrets are wiped. Suspended accounts and revoked sessions/bindings cannot authorize facts; reactivation requires fresh sign-in and preserves revoked state. Member responses compose one canonical FFA document with explicit observation/source status and no provider calls. The populated local migration preserved source/manifests/identity/canonical content; [M2 evidence](../project/handoffs/2026-10-31-member-application.md).

@@ -1,0 +1,60 @@
+# Member application — M2
+
+The local application implements invited accounts, Google-compatible OpenID Connect, administrator-approved FFA manager bindings, opaque sessions, saved preferences/watchlists and stored Front Office facts. It serves the built React client on the API origin. No model, provider transaction, full Live workspace or deployment is enabled. The [handoff](../project/handoffs/2026-10-31-member-application.md) separates actual source evidence from fictional browser evidence.
+
+## Build and validate
+
+Use the [pinned tools](local-development.md), frozen installs and `make db-up`. From the repository root:
+
+```sh
+uv sync --frozen
+pnpm install --frozen-lockfile
+make runtime-check
+make web-check
+```
+
+`web-check` verifies generated OpenAPI/TypeScript drift, Biome, strict TypeScript, Vitest/component behavior, the production build and negative service-worker coverage. `pnpm generate:client` regenerates TypeScript after `uv run python scripts/export_openapi.py`. API boundary models remain authoritative. `pnpm --filter @arbit/web dev` runs the optional Vite development server; configure `ARBIT_PUBLIC_ORIGIN` to that exact origin while using its same-origin proxy. Browser tests use the built single-origin application at port 8000.
+
+The build generates192/512PNG icons from the original SVG using resvg-js, plus CSS from shared semantic tokens. Binary outputs remain ignored; frozen packages supply fonts locally. OFL notices ship under `/licenses/`. No CDN fonts, provider client calls or private environment values enter the browser bundle.
+
+## Fictional local preview
+
+This is a separate database, not a way to bypass real FFA authentication. `make db-up` creates `arbit_member_fixture`. Use only this profile for the preview:
+
+```sh
+export ARBIT_ENV=test
+export ARBIT_AUTH_MODE=fixture
+export ARBIT_PUBLIC_ORIGIN=http://127.0.0.1:8000
+export ARBIT_DATABASE_URL='postgresql+psycopg://arbit_local:arbit-local-dev-only@127.0.0.1:55439/arbit_member_fixture'
+uv run python -m arbit_api.fixture
+make web-build
+uv run uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log
+```
+
+Open `http://127.0.0.1:8000`. The banner and sign-in buttons identify the fictional preview. Two members have separate teams; current scores are unknown; one historical matchup has fictional final totals. The seed is idempotent and refuses existing unrelated data. Fixture authentication requires explicit test mode, a dedicated loopback `_test`/`_fixture` database, a matching actual engine and an actual loopback HTTP peer. It refuses the real `_local` database and production. Stop this process and clear these exported variables before running real member access.
+
+For reproducible Chromium checks, install `pnpm --filter @arbit/web exec playwright install chromium`, start the isolated application as above, then run `pnpm --filter @arbit/web test:browser`. On this host the existing Chromium149 binary was selected with `ARBIT_BROWSER_PATH`; other hosts use Playwright’s matching browser by default. Tests use fictional identities only. Browser traces/screenshots stay ignored. CI performs this against an ephemeral test database; the workflow has not been run remotely in this session.
+
+## Google sign-in and real FFA access
+
+The owner selected Google on 2026-10-31. The server profile matches Google’s published issuer, endpoints, RS256 and S256 metadata. Google requires a Web application OAuth client and an exact registered redirect URI. [Official setup](https://developers.google.com/identity/openid-connect/openid-connect), [published metadata](https://accounts.google.com/.well-known/openid-configuration).
+
+1. In the owner-controlled Google project, configure the consent screen/audience and a Web application OAuth client. For local use, register `http://127.0.0.1:8000/auth/callback` exactly. Add invited test accounts if the Google app remains in testing.
+2. Copy [the configuration template](../../config/google-auth.env.example) to ignored `.env.auth.local`, restrict it to mode600, and enter the client ID/secret locally. Do not send credentials in chat. Leave `.env.local` as the private database/operator profile.
+3. Run `make local-db-migrate` and `make web-build`. Prepare the first administrator’s private invitation with `uv run --env-file .env.local --env-file .env.auth.local python -m arbit_api.admin`. The hidden email prompt is not logged; the link is written exclusively to mode600 `secrets/admin-invitation.txt`. Bootstrap closes when an administrator or an unexpired administrator invitation exists.
+4. Run `make member-api`, open the private invitation link locally, and sign in with that exact invited Google account. Invitation fragments are stripped before requests and submitted only to the same-origin auth-start endpoint; they are never sent to Google.
+5. In **Preferences → League access**, approve the correct canonical FFA manager identity for the account. An unassigned administrator can reach Preferences. Binding changes revoke prior sessions; sign in again to confirm the team. Subsequent invitations, bindings, suspension/reactivation and session revocation are administrator-only. Inviting a member does not bind a team automatically.
+
+No Google client/project has been registered by this development work. A real Google round trip, real first-admin bootstrap and real member/team confirmation remain the M2 operational acceptance gate. They cannot be replaced by fixture sign-in or mocked provider tests. No real member accounts were created for validation.
+
+Externally served environments must use `ARBIT_ENV=production`, complete OIDC configuration and HTTPS. Fixture mode, auth bypass and operator-token routes are rejected. Use a trusted TLS proxy and suppress query/access logging there as well. Hosting, TLS, backups/restore and measured load remain separate release work; no service is provisioned here.
+
+## Access and data behavior
+
+Accounts are immutable issuer+subject identities. A verified email only redeems a one-use seven-day invitation; it cannot claim a manager. Session hashes live in PostgreSQL, with seven-day idle and thirty-day absolute expiry; a completed login rotates prior account sessions. HttpOnly, host-scoped, SameSite=Lax cookies are Secure over HTTPS. CSRF token and exact Origin checks protect mutations. Single-use browser-bound state, nonce and PKCE verifier expire in ten minutes; consumed secrets are wiped, expired flows pruned and active flows capped100. The maintained Authlib/joserfc path validates RS256 signature, issuer/audience/nonce/time and applicable access-token hash. Provider HTTP has fixed HTTPS hosts, no redirect/environment proxy and bounded responses; provider access tokens are never stored.
+
+Bound members read one canonical saved snapshot per facts response. Unknown official scores remain unknown; no projection or live estimate is added. The player drawer pins its source snapshot when opened from a roster/search. Historical matchup selection shows official totals and explicitly withholds a roster when no historical lineup capture exists. Current season standings stay labeled current. A paused/degraded/stale/unknown source is visibly limited. No request refreshes a provider.
+
+Member preferences use revision checks; a conflicting tab refreshes the actual state rather than silently overwriting it. Watchlists contain known canonical player IDs only, at most100. Theme-only preference changes remain possible while assignment/source facts are unavailable. Access is rechecked on private requests, window focus and once per minute while a signed-in tab is visible. Session/account/assignment changes are audited; one active administrator must survive concurrent suspension attempts. Reactivation does not restore revoked sessions or bindings.
+
+The service worker has a closed static allow-list and build-content version. `/api`, `/auth`, `/internal`, exports and events remain network-only; arbitrary runtime content and authenticated HTML are not cached. Offline, expiry and logout clear private query memory; offline navigation serves only the neutral connection page. Updates wait for the user’s **Update & reload** action. No private localStorage/sessionStorage, persisted query cache or offline roster is implemented.

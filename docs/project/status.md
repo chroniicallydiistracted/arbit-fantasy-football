@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M2 member application in progress**.
+Updated **2026-10-31**. Phase: **M2 implemented locally; real Google/member operational gate open**.
 
 ## Confirmed context
 
@@ -20,7 +20,7 @@ M1d is implemented and fully imported: 1,140 selected logical files across 28 fa
 
 M1e is implemented and locally verified: durable public observations/daily cache, documented Sleeper directory/state/trends and two explicit candidate stat representations; read-only exact joins with conflicts excluded; scoped ESPN scoreboard/summary/core plays and per-play-time correction-safe replay; empty Gridiron manifest and exact-context/permission gate. Actual proof: 12,229 directory records, 40/121 owned-athlete direct hints (NFLverse remains 121/121); four completed games/842 plays including overtime/tie, all 293 game-scoped supplied athlete IDs resolved; final/pregame CLI and offline 25-observation/66-object verification. No images or messages. [Audit](../research/m1e-source-audit-2026-10-31.md), [guide](../engineering/supplemental-live-sources.md).
 
-No frontend UI, member authentication/binding, statistical model or deployment exists yet. M2 authenticated shell/team binding and Front Office facts are next. OIDC provider/invite policy must be selected before auth implementation; active/corrected Live evidence and exact asset grants remain M6 gates. Recommendations remain disabled. The earlier private-setting 401 is historical; current settings requests return 200 without cookies, and message-board availability is outside product scope. See the [full audit](../research/espn-public-api-audit-2026-10-30.md).
+M2 member auth/binding, Front Office facts and PWA now exist locally. Google is selected, with real client/member/team acceptance still open. Active/corrected Live evidence and exact asset grants remain M6 gates. Recommendations remain disabled. The earlier private-setting 401 is historical; current settings requests return 200 without cookies, and message-board availability is outside product scope. See the [full audit](../research/espn-public-api-audit-2026-10-30.md).
 
 ## Milestones
 
@@ -32,7 +32,7 @@ No frontend UI, member authentication/binding, statistical model or deployment e
 | M1c scoring/normalization | Scoring and canonical FFA aliases/publication/durable local sync implemented and live-verified |
 | M1d statistical foundation | Complete published catalog imported, reviewed, replay/identity/local-read verified |
 | M1e supplemental/live sources and assets | Implemented/reviewed; observed source matrix, offline replay and asset prerequisites verified; empirical Live/asset gaps explicit |
-| M2 application/auth/Front Office/PWA | In progress; owner source/model policies recorded; provider choice pending |
+| M2 application/auth/Front Office/PWA | Implemented/local validation; Google selected; real client/member acceptance pending |
 | M3 Model/Scout | Not started |
 | M4 Lineup/waivers | Not started |
 | M5 trade/Draft | Not started |
@@ -43,8 +43,14 @@ No frontend UI, member authentication/binding, statistical model or deployment e
 
 Owner published baseline commit `cab6bd8` on main. Current work: local branch `codex/m2-member-application`; no new push, merge or deployment. Aggregate validation: `make runtime-check` after frozen installs and `make db-up`. On this host use the pinned npm-exec workaround in the development guide if Corepack is misconfigured. Local PostgreSQL service remains available; HTTP smoke process has been stopped.
 
-Latest [M1e handoff](handoffs/2026-10-31-supplemental-live.md) records supplemental/live proof, review fixes and remaining gates; [NFLverse handoff](handoffs/2026-10-31-nflverse.md) records full M1d source/identity/HTTP proof and review rulings; [durable sync handoff](handoffs/2026-10-30-durable-ffa-sync.md) records canonical publication and live API proof; [scoring handoff](handoffs/2026-10-30-ffa-scoring.md) records exact scoring verification; [endpoint handoff](handoffs/2026-10-30-endpoint-coverage.md) records full routing; [reader handoff](handoffs/2026-10-30-public-reader.md) records core acquisition; [public API handoff](handoffs/2026-10-30-espn-public.md) records the earlier 81-probe audit. [M1a handoff](handoffs/2026-10-30-m1a.md) records runtime tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.
+Latest [M2 handoff](handoffs/2026-10-31-member-application.md) records member implementation, local proof and Google release gate. Earlier [M1e handoff](handoffs/2026-10-31-supplemental-live.md) records supplemental/live proof, review fixes and remaining gates; [NFLverse handoff](handoffs/2026-10-31-nflverse.md) records full M1d source/identity/HTTP proof and review rulings; [durable sync handoff](handoffs/2026-10-30-durable-ffa-sync.md) records canonical publication and live API proof; [scoring handoff](handoffs/2026-10-30-ffa-scoring.md) records exact scoring verification; [endpoint handoff](handoffs/2026-10-30-endpoint-coverage.md) records full routing; [reader handoff](handoffs/2026-10-30-public-reader.md) records core acquisition; [public API handoff](handoffs/2026-10-30-espn-public.md) records the earlier 81-probe audit. [M1a handoff](handoffs/2026-10-30-m1a.md) records runtime tests, code scope, environment adaptations and review results. [Initial foundation handoff](handoffs/2026-10-30-foundation.md) is historical. [Roadmap](roadmap.md), [decisions](decision-register.md), [known issues](known-issues.md), [research](../research/source-register.md) and [changelog](changelog.md) preserve continuity.
 
 ## M2 active work and source correction
 
-The owner restricts Sleeper to relevant NFL live games/PBP only. Earlier directory/state/trend/fantasy-stat and hint-mapping paths are retired and no longer application inputs; old audit receipts remain historical. No eligible Sleeper live route is enabled. ESPN game/PBP remains active. Any subagent uses only GPT-6.1 Sol. [M2 plan](../superpowers/plans/2026-10-31-member-application.md) covers invited member access, stored Front Office facts and the deliberate application/PWA shell. No real OAuth client or external service has been provisioned.
+The owner restricts Sleeper to relevant NFL live games/PBP only. Earlier directory/state/trend/fantasy-stat and hint-mapping paths are retired and no longer application inputs; old audit receipts remain historical. No eligible Sleeper live route is enabled. ESPN game/PBP remains active. Any subagent uses only GPT-6.1 Sol. [M2 plan](../superpowers/plans/2026-10-31-member-application.md) covers invited member access, stored Front Office facts and the deliberate application/PWA shell. Google is now the selected provider. No real OAuth client or external service has been provisioned.
+
+## M2 implemented scope
+
+Invited OIDC accounts, opaque sessions, administrator-approved manager bindings and access controls, typed/generated member API, Front Office saved facts, player drawer/search, watchlist/preferences and static-only PWA are implemented. Two clearly fictional browser members prove scope; the actual stored FFA snapshot validates without a fixture identity. Google is selected; owner-controlled client configuration and real invited sign-in/team proof remain open. [M2 handoff](handoffs/2026-10-31-member-application.md), [operations](../engineering/member-application.md). No recommendations, active Live workspace or deployment.
+
+Final M2 verification: 453 backend tests, 14 client tests and 7 Chromium scenarios pass; generated contracts/type/build/PWA checks pass. One Sol review’s two Important and one Minor findings were fixed with regressions. Actual populated-source migration preserves all counts/digest; no real member account was created. See the final M2 handoff for remaining operational acceptance.

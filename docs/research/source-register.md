@@ -60,3 +60,7 @@ No provider account, ESPN transaction, paid plan, cloud service, message or publ
 ## Superseding owner scope — M2
 
 Sleeper is now restricted to relevant NFL live games/PBP only. Directory/crosswalk, state/trends, fantasy-stat/scoring and other fantasy inputs are not eligible for the application or models; all earlier such paths are retired. Historical source observations above are retained as evidence, not active dependencies. No eligible live route is currently verified/enabled; future research must stay within the corrected scope.
+
+## M2 Google and interface dependencies — 2026-10-31
+
+Google selected by owner. [Published OIDC metadata](https://accounts.google.com/.well-known/openid-configuration) and [official server-flow setup](https://developers.google.com/identity/openid-connect/openid-connect) verified issuer/fixed endpoints, RS256, S256, client_secret_post and exact redirect registration. Authlib/joserfc official APIs back offline signed-token/PKCE tests; no actual Google client or member sign-in proof. Current React/Vite/Router/Query versions and self-hosted OFL Newsreader/Instrument Sans are frozen; original SVG mark and resvg build conversion reuse no NFL/ESPN/Gridiron media.

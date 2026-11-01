@@ -22,7 +22,7 @@ db-migrate:
 	uv run alembic upgrade head
 
 api:
-	uv run uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000
+	uv run uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-access-log
 
 fixture:
 	uv run arbit-worker fixture tests/fixtures/league-snapshot.example.json
@@ -39,10 +39,20 @@ local-sync-watch: local-env
 local-sync-status: local-env
 	uv run --env-file .env.local arbit-worker sync-status
 local-api: local-env
-	uv run --env-file .env.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers
+	uv run --env-file .env.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-access-log --no-proxy-headers
 
 .PHONY: local-nflverse-catalog local-nflverse-verify
 local-nflverse-catalog: local-env
 	uv run --env-file .env.local arbit-worker nflverse-catalog --live
 local-nflverse-verify: local-env
 	uv run --env-file .env.local arbit-worker nflverse-verify --all
+
+.PHONY: web-check web-build member-api
+web-check:
+	pnpm check:client
+	pnpm check:web
+	pnpm test:pwa
+web-build:
+	pnpm --filter @arbit/web build
+member-api: local-env
+	uv run --env-file .env.local --env-file .env.auth.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log

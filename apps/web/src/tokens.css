@@ -1,0 +1,43 @@
+/* Generated from packages/design-tokens/tokens.json. */
+:root {
+  --canvas: #F5F3ED;
+  --surface: #FFFFFF;
+  --text: #182722;
+  --muted-text: #506159;
+  --action: #176044;
+  --on-action: #FFFFFF;
+  --warning: #825200;
+  --danger: #AE2E35;
+  --focus: #176044;
+  --control-border: #6B7C72;
+  --font-body: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Newsreader", Georgia, serif;
+}
+:root[data-theme="dark"] {
+  --canvas: #101A18;
+  --surface: #192622;
+  --text: #F3F4EF;
+  --muted-text: #B8C8BF;
+  --action: #9AD8B3;
+  --on-action: #10251A;
+  --warning: #EFC36A;
+  --danger: #FFACAE;
+  --focus: #9AD8B3;
+  --control-border: #81978A;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --canvas: #101A18;
+  --surface: #192622;
+  --text: #F3F4EF;
+  --muted-text: #B8C8BF;
+  --action: #9AD8B3;
+  --on-action: #10251A;
+  --warning: #EFC36A;
+  --danger: #FFACAE;
+  --focus: #9AD8B3;
+  --control-border: #81978A;
+    color-scheme: dark;
+  }
+}

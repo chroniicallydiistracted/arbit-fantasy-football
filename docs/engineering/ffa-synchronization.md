@@ -1,6 +1,6 @@
 # Local FFA synchronization
 
-Implemented M1c, 2026-10-30. The worker reads the public FFA league **1729878439**, configured season **2026**, and publishes complete canonical revisions to PostgreSQL. The API reads those stored facts. There is no member UI, member login, recommendation service or production deployment.
+Implemented M1c, 2026-10-30. The worker reads the public FFA league **1729878439**, configured season **2026**, and publishes complete canonical revisions to PostgreSQL. The API reads those stored facts. M2 now adds [member UI/login](member-application.md); no recommendation service or production deployment exists.
 
 ## Start locally
 

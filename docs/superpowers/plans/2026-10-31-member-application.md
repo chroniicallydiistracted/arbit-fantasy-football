@@ -10,6 +10,10 @@
 
 **Execution scope:** No source/model recommendations, active Live UI or deployment. No new provider account/project/client registration, paid service or messages. Real OIDC connection requires owner-selected provider and local client configuration; complete all provider-neutral implementation/testable local work first, never present fixture sign-in as real-provider proof.
 
+**Requirements:** DATA-003 source correction; CTX-002 team context; FO-001 pinned facts; UX-002/003/004 implemented components, accessibility and PWA; ENG-003/004 validation, sessions and authorization. Other modules remain future capability.
+
+**Affected files:** additive `services/api/migrations/versions/0006_members.py`; member schema/store in `libs/arbit-data`; auth/settings/contracts/routes/static/fixture/admin in `services/api`; generated `packages/contracts/openapi.json` and `apps/web/src/generated/api.ts`; React client/public assets/tests in `apps/web`; node/build/token/CI scripts and the operator/status/requirements/handoff records. Source correction touches only former Sleeper acquisition/mapping and its generic source tests/docs.
+
 ## Task 0 — Correct source/model policy
 
 - Add regression requiring all existing Sleeper directory/state/trend/fantasy-stat request kinds and forged requests to fail before cache/network access.

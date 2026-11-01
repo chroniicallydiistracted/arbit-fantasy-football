@@ -1,17 +1,17 @@
 # Known Issues and Risks
 
-Updated 2026-10-31. M1a–e data/runtime slices are implemented and locally verified; member/full feature/model validation and expanded empirical Live/asset proof remain open.
+Updated 2026-10-31. M1a–e data/runtime slices are implemented and locally verified; real-member/full feature/model validation and expanded empirical Live/asset proof remain open.
 
 | ID | Evidence / risk | Effect and mitigation | Owner / milestone |
 | --- | --- | --- | --- |
 | R-001 | Historical private-setting 401; current public core reads verified 200 | Public reader implemented and live-verified. Message boards excluded by owner; private credentials only become relevant if visibility changes | Integration / M1 |
 | R-002 | Unofficial ESPN endpoints have no service contract | Adapter contracts, bounded polling, drift quarantine, last-complete snapshot, explicit degraded state | Integration / M1/M6 |
 | R-003 | nflverse publication/feature coverage differs by dataset and season | Full 1,140-file audit is recorded; no 2026 participation file, FTN charting through week 7, depth timestamps not weeks. Local observation/confirmation is not historical vintage proof; M3 needs an explicit validation policy | Data/Model / M1/M3 |
-| R-004 | Documented Sleeper directory/state/trends verified; two undocumented stats formats return 200, no supported play feed established | Research-only candidates; no FFA scoring/ownership authority or unsupported Live dependency | Integration / M3/M6 |
+| R-004 | Owner limits Sleeper to verified NFL live-game/PBP only; no eligible route enabled | All former fantasy acquisition/hint paths retired; retain historical receipts only. Verify an eligible route before adoption | Integration / M6 |
 | R-005 | Fresh Gridiron sites/2026 navigation verified; owner previous patterns and grants absent for both uniform/field graphics | Tested empty-manifest exact-context/permission gate; eligible metadata is not ready media. No downloads/contact. Confirm exact variants, grants and byte/media validation before M6 | Design/Integration / M6 |
 | R-006 | FFA inaugural history is sparse | No learned trade acceptance or FFA draft behavior claimed; clearly labeled priors and qualitative feasibility | Model / M5 |
 | R-007 | Alias ambiguity, unknown stat/slot IDs and score corrections | Dated aliases, unresolved queue, unknown-rule blocks, exact Decimal rules, replay/reconciliation tests | Core/Data / M1 |
-| R-008 | Auth choice and deployment capacity are open | Keep provider-independent server sessions and portable local storage; select before the relevant milestone | Owner/Engineering / M2/release |
+| R-008 | Google selected; actual OAuth client/consent/private configuration and real member proof absent | M2 code/local fixture checks cannot prove Google access. Complete real invite, manager approval and two-member round trip; no secret in chat | Owner/Engineering / M2 operational release |
 | R-009 | Normal command isolation is unavailable in this session | Local command runner reported missing `bwrap`; scoped host execution used for file preparation and validation. This is an execution environment issue, not an Arbit dependency | Environment / current session |
 | R-012 | Reference docs differ from FFA: missing mSchedule/standings fields, wrong pro-schedule/news scope, unsupported IR availability enum, incorrect football stat IDs and appliedStats description | Implemented contracts validate actual FFA league/player shapes and missing-data failures; all audited routes now have verified retrieval contracts; actual mapping now uses observed raw stats and pinned independent provenance, with source rule support and reconciliation checks | Integration / M1b–c |
 | R-011 | Native worktree helper cannot recognize Linux checkout; global Corepack cache points into Windows | Dedicated feature branch and pinned npm-exec tooling; no global installation changes | Environment / current session |
@@ -29,6 +29,8 @@ Updated 2026-10-31. M1a–e data/runtime slices are implemented and locally veri
 
 Add discovered bugs with a reproduction, affected requirement, expected behavior, observed result, evidence and next step. Do not put secrets or raw member payloads in this file.
 
-| R-020 | Sleeper direct directory hints match only 40/121 owned athletes; 27 wider-directory conflicts remain | Read-only exact existing aliases only; preserve gaps. Verify any additional trusted bridge before supplemental model features; NFLverse remains 121/121 | Data/Model / M3 |
+| R-020 | Historical Sleeper hints were incomplete and are now outside owner scope | No Sleeper fantasy hints feed identity/models; NFLverse exact GSIS/ESPN bridge remains authoritative statistical foundation | Data/Model / M3 |
 | R-021 | M1e observed final/pregame/overtime/tie and factual play classes; no active latency, real correction pair or explicit sneak label | Synthetic regression behavior is distinguished; collect source captures/timing before full Live release | Integration / M6 |
 | R-022 | Proposed serving freshness windows are longer than strict M1e batch-cache intervals | Actual one-interval/failed-refresh policy is documented; defer measured serving-threshold tuning. No automatic supplemental/live scheduler exists | Engineering / M6 |
+
+| R-023 | M2 automated accessibility/keyboard/reflow/PWA checks are local fictional evidence | Human assistive-technology and native OS install acceptance remain release checks; no WCAG certification or real-provider proof claimed | Product/Engineering / M2 release |

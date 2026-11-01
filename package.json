@@ -3,7 +3,19 @@
   "private": true,
   "version": "0.1.0",
   "packageManager": "pnpm@12.16.1",
-  "engines": {"node": ">=24 <25"},
-  "scripts": {"check:contracts": "node scripts/validate-contracts.mjs"},
-  "devDependencies": {"ajv": "8.20.0", "ajv-formats": "3.0.1"}
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "check:contracts": "node scripts/validate-contracts.mjs",
+    "check:web": "pnpm --filter @arbit/web lint && pnpm --filter @arbit/web typecheck && pnpm --filter @arbit/web test && pnpm --filter @arbit/web build",
+    "generate:client": "openapi-typescript packages/contracts/openapi.json -o apps/web/src/generated/api.ts",
+    "test:pwa": "node --test scripts/web/static-worker.test.mjs",
+    "check:client": "node scripts/web/check-generated.mjs"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "openapi-typescript": "7.13.0"
+  }
 }

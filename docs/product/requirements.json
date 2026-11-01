@@ -28,7 +28,10 @@
       "milestone": "M2",
       "spec": "docs/product/product-specification.md",
       "acceptance": "Two authenticated member fixtures see their assigned teams; binding cannot be self-forged.",
-      "status": "specified"
+      "status": "verified",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+      ]
     },
     {
       "id": "CTX-003",
@@ -50,7 +53,10 @@
       "milestone": "M2",
       "spec": "docs/product/feature-experiences.md",
       "acceptance": "One published snapshot consistently supplies all own-team overview panels.",
-      "status": "specified"
+      "status": "verified",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+      ]
     },
     {
       "id": "FO-002",
@@ -579,7 +585,10 @@
       "milestone": "M2",
       "spec": "docs/design/design-system.md",
       "acceptance": "All module workflows and component states documented; implemented shared components tested in context.",
-      "status": "specified"
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+      ]
     },
     {
       "id": "UX-003",
@@ -591,7 +600,10 @@
       "milestone": "M2",
       "spec": "docs/design/design-system.md",
       "acceptance": "Keyboard/screen-reader/zoom/reflow and chart table alternatives checked on implemented flows.",
-      "status": "specified"
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+      ]
     },
     {
       "id": "UX-004",
@@ -602,7 +614,10 @@
       "milestone": "M2",
       "spec": "docs/architecture/system-architecture.md",
       "acceptance": "Manifest/install/update/offline flow works; private API/auth responses excluded from worker caches.",
-      "status": "specified"
+      "status": "implemented",
+      "evidence": [
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+      ]
     },
     {
       "id": "ENG-001",
@@ -645,10 +660,11 @@
       "milestone": "M2",
       "spec": "docs/engineering/agentic-development-standard.md",
       "acceptance": "Appropriate unit/integration/browser/operational checks and budgets evidenced at each release gate.",
-      "status": "in_progress",
+      "status": "implemented",
       "evidence": [
         "M1a subset only; remaining provider/full-product gates stay open",
-        "docs/project/handoffs/2026-10-30-m1a.md"
+        "docs/project/handoffs/2026-10-30-m1a.md",
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
       ]
     },
     {
@@ -661,9 +677,10 @@
       "milestone": "M2",
       "spec": "docs/architecture/system-architecture.md",
       "acceptance": "OIDC/session/CSRF/authorization/revocation checks pass; ESPN cookies never reach browser/logs/Git.",
-      "status": "specified",
+      "status": "implemented",
       "evidence": [
-        "docs/engineering/ffa-synchronization.md — optional loopback+secret operator inspection only; production/member OIDC remains unimplemented"
+        "docs/engineering/ffa-synchronization.md — optional loopback+secret operator inspection only; production/member OIDC remains unimplemented",
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
       ]
     },
     {

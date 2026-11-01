@@ -43,3 +43,23 @@ jobs:
           pnpm install --frozen-lockfile
       - name: Validate runtime and foundation
         run: make runtime-check
+      - name: Validate generated member client and PWA
+        run: make web-check
+      - name: Install Chromium for public fictional browser checks
+        run: pnpm --filter @arbit/web exec playwright install --with-deps chromium
+      - name: Run fictional member browser journey
+        env:
+          ARBIT_ENV: test
+          ARBIT_AUTH_MODE: fixture
+          ARBIT_PUBLIC_ORIGIN: http://127.0.0.1:8000
+          ARBIT_DATABASE_URL: postgresql+psycopg://arbit_local:arbit-local-dev-only@127.0.0.1:5432/arbit_test
+        run: |
+          uv run python -m arbit_api.fixture
+          uv run uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log &
+          API_PID=$!
+          trap 'kill "$API_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:8000/health/ready > /dev/null; then break; fi
+            sleep 0.25
+          done
+          pnpm --filter @arbit/web test:browser

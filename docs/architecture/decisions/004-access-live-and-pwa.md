@@ -16,6 +16,6 @@ Unrestricted team selection is not identity verification. Custom passwords add r
 
 ## Evidence
 
-M2 auth/CSRF/binding/revocation and offline-cache negatives; M6 reconnect/expired cursor/correction/full-slate tests. OIDC provider still needs owner selection. Related: ENG-004, UX-004, LV-005; [system architecture](../system-architecture.md), [operations](../../engineering/security-and-operations.md).
+M2 auth/CSRF/binding/revocation and offline-cache negatives; M6 reconnect/expired cursor/correction/full-slate tests. Google selected2026-10-31; real private client configuration and invited account/team acceptance remain open. Related: ENG-004, UX-004, LV-005; [system architecture](../system-architecture.md), [operations](../../engineering/security-and-operations.md).
 
 Adoption record: owner stated “Architecture passed” and “I approve your recommended stack” on 2026-10-30. Original proposal retained above; implementation evidence is recorded in runtime handoffs.

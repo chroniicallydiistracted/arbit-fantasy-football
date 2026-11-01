@@ -22,7 +22,7 @@ uv run arbit-worker assets-check
 
 `sleeper-sync` captures the full directory, current NFL state, and 24-hour add/drop trends (25 each). It prints counts/hashes/age evidence and read-only join totals, never source player names, member records or raw bodies. `sleeper-probe` is an explicit research command for two undocumented stats representations; HTTP 200 does not promote them into a supported live feed or FFA scoring source. Season disagreement in documented state is visible and makes overall sync unsuccessful without changing configuration.
 
-All database commands reject production, non-loopback hosts and names outside `_local`/`_test`. `assets-check` needs no database, provider calls or media. API default health-only behavior, optional loopback operator boundary and production startup block remain unchanged; M1e adds no member endpoints.
+All database commands reject production, non-loopback hosts and names outside `_local`/`_test`. `assets-check` needs no database, provider calls or media. M1e itself added no member endpoints. M2 now provides configured member auth/routes; the optional loopback operator boundary remains, and production requires complete secure OIDC.
 
 ## Acquisition, cache and freshness
 

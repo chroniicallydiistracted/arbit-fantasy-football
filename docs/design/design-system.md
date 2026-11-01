@@ -1,6 +1,6 @@
 # Arbit Design System Specification
 
-Version 0.1 · 2026-10-30 · Proposed visual direction. See [feature experiences](../product/feature-experiences.md) for screen workflows and [tokens](../../packages/design-tokens/tokens.json) for machine-readable values.
+Version0.2 · 2026-10-31 · M2 visual system implemented for the member shell and facts. Future feature/Live components remain specifications. See [feature experiences](../product/feature-experiences.md) for screen workflows and [tokens](../../packages/design-tokens/tokens.json) for machine-readable values.
 
 ## Product character and information hierarchy
 
@@ -24,7 +24,7 @@ Each workspace answers: what matters, what evidence supports it, what alternativ
 
 Use semantic variables, never arbitrary team-color text on unknown backgrounds. Brass `#A77828` is ornamental; use the tested warning token for small warning text. Borders use role-specific muted tones for decoration; form boundaries/focus must meet nontext contrast. Status always includes icon/text as well as color. Dark mode follows system preference with persistent account override; charts, field controls and asset framing have explicit dark treatments.
 
-Typography: system sans stack initially, with tabular numerals for scores/statistics and a system monospace stack for IDs/diagnostic tables only. Optional licensed display type may be evaluated later. Type scale 12/14/16/20/24/32/40 px; body 16 px at 1.5 line-height; dense tables 14 px at 1.4; metadata 12 px only for secondary information. Strong numeric hierarchy must not hide units, horizon or source context.
+Typography: self-hosted OFL Instrument Sans for interface text and Newsreader for editorial headings, with system fallbacks. Scores use tabular numerals; IDs stay out of normal manager flows. Source mark is original SVG; PNG install variants are generated during build. Font notices ship with the static app. Type scale 12/14/16/20/24/32/40 px; body 16 px at 1.5 line-height; dense tables 14 px at 1.4; metadata 12 px only for secondary information. Strong numeric hierarchy must not hide units, horizon or source context.
 
 Spacing base 4 px: 4/8/12/16/24/32/48/64. Corners 4/8/12 px; elevation restricted to dialogs/popovers. Content max 1600 px with 24–32 px desktop gutters; 12-column grid and 24 px gaps. Navigation width 232 px, header at least 64 px. Roster/research tables may use horizontal overflow rather than compressing values into unreadable columns.
 
@@ -77,4 +77,4 @@ Recommendation copy: **Action → evidence → uncertainty → action link.** Ex
 
 Target WCAG 2.2 AA: text contrast ≥4.5:1 for normal text and ≥3:1 for large text; meaningful nontext boundaries/focus ≥3:1; visible focus not obscured by sticky UI; semantic landmarks/headings; keyboard-complete paths; error summaries; accessible names; reduced motion; 200% zoom and 320 px reflow. Announce async errors and important changes without focus theft. Automated checks complement manual keyboard/screen-reader testing of sign-in, research comparison, lineup, draft and Live.
 
-The foundation validator checks declared token pairs, including text over canvas/surface and primary action text; this is token evidence, not a full interface accessibility audit. Feature release requires actual viewport/keyboard/contrast checks, labeled data provenance, error-state review and fidelity to the documented hierarchy. No rendered UI or visual usability validation exists at this foundation stage.
+The foundation validator checks declared token pairs, including text over canvas/surface and primary action text; this is token evidence, not a full interface accessibility audit. Feature release requires actual viewport/keyboard/contrast checks, labeled data provenance, error-state review and fidelity to the documented hierarchy. M2 now has actual four-viewport rendering, keyboard/focus/reflow and automated accessibility checks; native OS install/human screen-reader validation remains release work. See the [handoff](../project/handoffs/2026-10-31-member-application.md).

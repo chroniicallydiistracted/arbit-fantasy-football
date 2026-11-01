@@ -2,7 +2,7 @@
 
 ## Current versus planned contents
 
-M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. M1b adds all audited public ESPN routes and manual inspection, with the ignored reference checkout under `.references`. M1c maps/reconciles actual FFA scoring and durably publishes canonical identities/rules/full facts with protected local reads. M1d adds full NFLverse acquisition/storage/manifests, source proofs, exact GSIS/ESPN joins and source-stat reads. M1e adds cached supplemental observations, scoped NFL play contracts/offline replay and asset prerequisite metadata without media acquisition. Web/Model directories remain future work. Initial contract schemas and design tokens are reviewable artifacts; no frontend UI or trained model is claimed. [Local development](local-development.md) describes runnable commands.
+M1a implements the Python runtime/core/persistence/health slice with native workspaces, frozen lockfiles, migration and real checks. M1b adds all audited public ESPN routes and manual inspection, with the ignored reference checkout under `.references`. M1c maps/reconciles actual FFA scoring and durably publishes canonical identities/rules/full facts with protected local reads. M1d adds full NFLverse acquisition/storage/manifests, source proofs, exact GSIS/ESPN joins and source-stat reads. M1e adds cached supplemental observations, scoped NFL play contracts/offline replay and asset prerequisite metadata without media acquisition. M2 adds implemented member auth/API/administrator controls and the React Front Office/PWA. Model features remain future work. Generated member contracts and semantic tokens are executable client inputs. [Local development](local-development.md) describes runnable commands.
 
 | Path | Responsibility |
 | --- | --- |
@@ -15,14 +15,14 @@ M1a implements the Python runtime/core/persistence/health slice with native work
 | `docs/project/` | Status, roadmap, decisions, issues, changelog and dated handoffs |
 | `docs/research/` | Dated source evidence, probes and future validation work |
 | `docs/superpowers/` | Composite foundation design and first concrete implementation plan |
-| `apps/web/` | Planned React client routes, components and PWA lifecycle |
-| `services/api/` | Health and protected local FFA/NFLverse reads; member auth/generated client/SSE remain planned |
+| `apps/web/` | Implemented member shell, Front Office/player/watchlist/preferences/admin controls and static-only PWA; other module routes clearly future |
+| `services/api/` | Health/operator reads plus invite/OIDC/session/binding/member/admin facts; SSE remains M6 |
 | `services/worker/` | Durable FFA sync, complete NFLverse batch ingestion, safe inspection/replay commands; model jobs remain planned |
 | `libs/arbit-core/` | Shared exact scoring, domain identities and league contracts; optimization remains planned |
 | `libs/arbit-data/` | Provider acquisition/normalization, immutable objects/manifests, source proofs, crosswalks and canonical persistence |
 | `libs/arbit-model/` | Planned features/projections/evaluation/archetypes/advisor policies |
-| `packages/contracts/` | Initial local JSON schemas; generated client/OpenAPI added with API |
-| `packages/design-tokens/` | Initial machine-readable semantic visual tokens and tested contrast pairs |
+| `packages/contracts/` | JSON schemas and generated private member OpenAPI/TypeScript source |
+| `packages/design-tokens/` | Implemented semantic visual/typography tokens, generated CSS and contrast checks |
 | `tests/fixtures/` | Clearly synthetic contract examples; sanitized provider fixtures added later |
 | `scripts/` | Foundation validation; add actual local tools rather than undocumented one-off commands |
 | `infra/` | Pinned local PostgreSQL Compose configuration; external deployment remains planned |

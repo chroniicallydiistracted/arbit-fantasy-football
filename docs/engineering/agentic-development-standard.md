@@ -29,7 +29,7 @@ Parallel contributors, if explicitly requested, receive non-overlapping file own
 
 ## Coding and module conventions
 
-Owner-approved runtime conventions; Python tooling/lockfiles are implemented at M1a, web tooling follows with the UI slice: strict TypeScript in the client, Pydantic boundary validation, Python type annotations, Ruff formatting/linting, a Python type checker, ESLint/TypeScript checks, Vitest/component tests and pytest for core/data/model. Generated OpenAPI types carry a do-not-edit banner. Choose one formatting/lint configuration and record exact commands; don't list aspirational commands as available.
+Owner-approved runtime conventions; Python tooling/lockfiles are implemented at M1a, web tooling follows with the UI slice: strict TypeScript in the client, Pydantic boundary validation, Python type annotations, Ruff formatting/linting, a Python type checker, Biome/TypeScript checks, Vitest/component tests and pytest for core/data/model. Generated OpenAPI types carry a do-not-edit banner. Choose one formatting/lint configuration and record exact commands; don't list aspirational commands as available.
 
 Name domain concepts consistently with the glossary/contracts: NFL `athlete` and `nfl_team`, team `defense_unit`, FFA `fantasy_team`, `league_snapshot`, rule version and scoring/matchup periods. Keep scoring/rules pure and deterministic. Use Decimal for exact contributions. Provider adapters parse once into canonical contracts; feature modules cannot import raw provider payload types. No hardcoded league scoring defaults or stat-ID mappings without tested provenance.
 
