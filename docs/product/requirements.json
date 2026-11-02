@@ -365,7 +365,8 @@
       "status": "in_progress",
       "evidence": [
         "docs/project/handoffs/2026-10-31-supplemental-live.md — partial source/identity/replay/asset prerequisites only; full member Live UI/scoring/SSE and empirical/media gates remain",
-        "docs/project/handoffs/2026-10-31-platform-reset.md — append-only play revisions, late and cancelled handling, correction events; real correction pair pending"
+        "docs/project/handoffs/2026-10-31-platform-reset.md — append-only play revisions, late and cancelled handling, correction events; real correction pair pending",
+        "docs/research/live-slate-receipt-2026-11-01.md — real revisions observed on four live-captured games; corrected label defined by ENG-025; effective fantasy scoring and graphics remain"
       ]
     },
     {

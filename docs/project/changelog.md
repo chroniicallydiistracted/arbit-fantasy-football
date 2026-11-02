@@ -1,5 +1,13 @@
 # Development Changelog
 
+## 2026-11-01 — Scoreboards running and first slate measured
+
+- Upgraded the running app with scoreboards after PHI at WSH ended, by owner approval: about 5 seconds offline, no schema change, backup taken.
+- Checked the new code against a restored copy of the real database during a real game. It read all 14 games, and 58 real changes reached an open page with no reload.
+- Fixed the corrected label: it was on 69% of plays because any new revision counted, and now needs a changed result or credited player (ENG-025).
+- Fixed a repeated last-play label, tags touching the play text, and "unknown" scores read aloud for unplayed games.
+- Recorded the [first slate](../research/live-slate-receipt-2026-11-01.md): 0 read failures and a median play delay of 36 seconds, replacing an early estimate of about 2 minutes. Closed R-025, R-026 and R-030.
+
 ## 2026-10-31 — Live capture and animation scope
 
 - Added private raw copies of every response the live lane reads, adding no requests, with a 5 GiB limit and failures that never reach the feed (OWN-020, R-030). The worker was restarted with it at 2026-11-01 06:23 UTC; 553 backend tests and all static checks pass.

@@ -17,10 +17,10 @@ Owner direction (OWN-019): "Begin on the scoreboards now." Requirements: LV-001,
 
 ## Evidence
 
-- All 431 captured scoreboards and 338 summaries parsed with no failures.
-- 571 backend tests, 19 client tests and 10 browser scenarios, including accessibility on the game page, no overflow at 320 px and a server change reaching an open page without a reload.
-- Viewed with real captured games on an isolated port in dark, light and phone layouts.
+- All captured scoreboards and summaries parsed with no failures (459 and 362 at the last full run).
+- 587 backend tests, 20 client tests and 10 browser scenarios, including accessibility on the game page, no overflow at 320 px and a server change reaching an open page without a reload.
+- Viewed with real captured games on an isolated port in dark, light and phone layouts, then checked during PHI at WSH on a copy of the real database ([receipt](../../research/live-slate-receipt-2026-11-01.md)).
 
 ## Not done
 
-Not on the running app until it is upgraded. Real-time updates are tested with fictional data; real games were replayed from capture. Player box scores, scoring-play and injury panels, and fantasy points are not built.
+Running since 2026-11-01 21:25 (UTC−7). Signed-in pages on the running app are the owner's to confirm. Player box scores, scoring-play and injury panels, and fantasy points are not built.

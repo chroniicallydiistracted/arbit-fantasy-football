@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-10-31**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset`, running on the local app and accepted by the owner**. Primary developer: Claude. **Live (M6) is next by owner direction, ahead of M3** (OWN-019); see [prerequisites](../research/live-animation-prerequisites-2026-10-31.md).
+Updated **2026-11-01**. Phase: **M2 implemented; design reset and real-time platform built on `claude/platform-reset`, running on the local app and accepted by the owner**. Primary developer: Claude. **Live (M6) is next by owner direction, ahead of M3** (OWN-019); see [prerequisites](../research/live-animation-prerequisites-2026-10-31.md).
 
 ## Confirmed context
 
@@ -36,7 +36,7 @@ M2 member auth/binding, Front Office facts and PWA now exist locally. Google is 
 | M3 Model/Scout | Not started |
 | M4 Lineup/waivers | Not started |
 | M5 trade/Draft | Not started |
-| M6 Live | Not started |
+| M6 Live | In progress: scoreboards running on the local app; Gridiron delivery, play animation and fantasy attribution remain |
 | M7 Archive/refinement | Not started |
 
 ## Repository and verification
@@ -70,8 +70,8 @@ The owner reported AI-identifiable design drift and stale data, and redirected t
 - **Design:** new officiating-and-broadcast character ([ADR-005](../architecture/decisions/005-officiating-character.md), [design system](../design/design-system.md)), all slogans removed, and `pnpm check:design` enforcing the rules; it flagged 436 violations on the old interface. The owner accepted it (OWN-018).
 - **Sync:** `arbit-worker run` keeps the FFA league, NFL scoreboard, active-game plays and summaries, NFL teams and schedule, and NFLverse statistics current on a cadence that follows the real NFL slate.
 - **Clients:** session-bound SSE updates open pages without a reload. Per-device sessions mean signing in on a phone no longer ends the laptop session.
-- **Members now see:** a text-first Live scoreboard and plays with a my-players filter, NFL team/bye/opponent on roster rows, per-source data status, season results strip and playoff line.
-- **Evidence:** 545 backend tests, 14 client tests, 10 browser scenarios and all static checks pass. The worker ran against real ESPN into a restored database copy. No live game was on, so active-game behavior awaits the first real slate.
-- **Running now:** `arbit-api` and `arbit-worker` as systemd user services on schema `0007_realtime`. They do not come back by themselves after a Windows restart (R-029).
-- **Next:** Gridiron URL patterns are verified and week 8 art is stored privately. Scoreboards and animation have [19 listed prerequisites](../research/live-animation-prerequisites-2026-10-31.md); the owner chose [pixel sprites](../research/live-animation-prerequisites-2026-10-31.md#sprite-direction--owner-decision-2026-11-01) (OWN-022), approved the test frames (OWN-023) and owns the art (OWN-024). 40 frames are in `assets/sprites`, not yet in the app. [Scoreboards](../superpowers/plans/2026-11-01-live-scoreboards.md) are built and verified on an isolated port with real captured games, and are not on the running app until it is upgraded.
+- **Members now see:** real Live scoreboards with possession, down and distance, field position, score by quarter, win probability, team stats, leaders, drives and plays with a my-players filter; also NFL team/bye/opponent on roster rows, per-source data status, season results strip and playoff line.
+- **Evidence:** 587 backend tests, 20 client tests, 10 browser scenarios and all static checks pass. The [first real slate](../research/live-slate-receipt-2026-11-01.md) was measured: 0 read failures, a median play delay of 36 seconds, and real game changes reaching an open page without a reload.
+- **Running now:** `arbit-api` and `arbit-worker` as systemd user services on schema `0007_realtime`, upgraded with scoreboards 2026-11-01 21:25 (UTC−7). They do not come back by themselves after a Windows restart (R-029).
+- **Next:** Gridiron URL patterns are verified and week 8 art is stored privately. Scoreboards and animation have [19 listed prerequisites](../research/live-animation-prerequisites-2026-10-31.md); the owner chose [pixel sprites](../research/live-animation-prerequisites-2026-10-31.md#sprite-direction--owner-decision-2026-11-01) (OWN-022), approved the test frames (OWN-023) and owns the art (OWN-024). 40 frames are in `assets/sprites`, not yet in the app. [Scoreboards](../superpowers/plans/2026-11-01-live-scoreboards.md) are running. Next are Gridiron sync and private delivery, then recoloring and the in-app play renderer.
 - **Live capture:** the worker has kept private raw copies of every live read since 2026-11-01 06:23 UTC, ahead of the first real slate (OWN-020, R-030). Animation shows only the players ESPN names on a play and the ball (OWN-021). The host PC slept through the 2026-11-01 early games, so only the late games were observed live (R-029).

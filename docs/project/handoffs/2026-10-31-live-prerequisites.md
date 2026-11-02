@@ -23,11 +23,11 @@ The owner accepted the design (OWN-018) and moved Live ahead of M3 (OWN-019), as
 
 ## Owner inputs needed
 
-1. Approval to upgrade the running app with the [scoreboards](../../superpowers/plans/2026-11-01-live-scoreboards.md): stop both services, `make local-upgrade`, start them. No schema change. The best window is between game windows.
+None. The owner approved the scoreboard upgrade, which ran 2026-11-01 21:25 (UTC−7) after PHI at WSH ended, offline about 5 seconds with a backup taken. Signed-in pages on the running app are the owner's to confirm, since only they hold that session.
 
 The GitHub repository is public. Only `claude/sprite-art` is pushed from this work: the sprite art alone (OWN-024). `claude/platform-reset` stays local until the owner asks. Review renders in `data/sprites/` include Gridiron field art, so they stay ignored (OWN-015).
 
 ## Resume here
 
-1. After the slate, read the logs and `data/live-captures`: record latency and correction evidence and capture size, and close R-025, R-030 and the statistics question in R-026.
+1. Done: the [first slate](../../research/live-slate-receipt-2026-11-01.md) is measured, and R-025, R-026 and R-030 are closed. Check that drives and team stats appeared on Sunday's finals after their 12-hour checks (R-032), and watch CHI at SEA on 2026-11-03 01:15 UTC as the first live game on the running app.
 2. Build the Gridiron sync lane and private delivery, then recoloring to real uniforms and the app's play renderer, using `assets/sprites`. Scoreboard follow-ups: player box scores, scoring plays and injuries. The full frame set is drawn ([status](../../research/live-animation-prerequisites-2026-10-31.md#sprite-direction--owner-decision-2026-11-01)), so only the weakest frames and missing poses remain. Refetch KC and CHI uniforms and newly listed fields before using them.
