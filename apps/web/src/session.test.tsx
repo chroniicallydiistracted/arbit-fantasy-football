@@ -29,6 +29,15 @@ function Probe() {
     </>
   );
 }
+function Starter({ onFailure }: { onFailure: (failure: Error) => void }) {
+  const session = useSession();
+  if (session.loading) return null;
+  return (
+    <button type="button" onClick={() => void session.start().catch(onFailure)}>
+      Start sign-in
+    </button>
+  );
+}
 afterEach(() => {
   vi.unstubAllGlobals();
   document.documentElement.dataset.theme = "system";
@@ -72,6 +81,39 @@ it("signs in after an empty session and clears all member queries on logout", as
   await screen.findByText("Signed out");
   expect(client.getQueryCache().getAll()).toHaveLength(0);
   expect(document.documentElement.dataset.theme).toBe("system");
+});
+it("blames the address, not the account, when the server refuses to start a sign-in", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string) =>
+      url === "/auth/start"
+        ? new Response(JSON.stringify({ code: "ORIGIN_REQUIRED" }), { status: 403 })
+        : new Response(
+            JSON.stringify({
+              enabled: true,
+              authenticated: false,
+              csrf_token: null,
+              fixture: false,
+            }),
+          ),
+    ),
+  );
+  let failure: Error | undefined;
+  render(
+    <QueryClientProvider client={new QueryClient()}>
+      <SessionProvider>
+        <Starter
+          onFailure={(value) => {
+            failure = value;
+          }}
+        />
+      </SessionProvider>
+    </QueryClientProvider>,
+  );
+  fireEvent.click(await screen.findByText("Start sign-in"));
+  await waitFor(() => expect(failure).toBeDefined());
+  expect(failure?.message).toContain("address");
+  expect(failure?.message).not.toMatch(/account/i);
 });
 it("clears member facts and their theme as soon as the device goes offline", async () => {
   vi.stubGlobal(

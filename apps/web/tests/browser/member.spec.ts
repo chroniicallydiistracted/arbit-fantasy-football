@@ -259,6 +259,20 @@ test("the Live workspace deep-links to a game and survives a hard reload", async
   expect(result.violations).toEqual([]);
 });
 
+test("another name for this machine opens the app where sign-in works", async ({
+  page,
+  baseURL,
+}) => {
+  const own = new URL(baseURL ?? "");
+  test.skip(own.hostname !== "127.0.0.1", "needs the app's own address to be 127.0.0.1");
+  await page.goto(`http://localhost:${own.port}/live?from=bookmark`);
+  await expect(page).toHaveURL(`${own.origin}/live?from=bookmark`);
+  await page.getByRole("button", { name: "Sign in as test member one" }).click();
+  await expect(page.getByRole("heading", { name: "Live", exact: true })).toBeVisible();
+  const cookies = await page.context().cookies(own.origin);
+  expect(cookies.map((cookie) => cookie.name)).toContain("arbit_session");
+});
+
 test("a member can see and end their own signed-in devices", async ({ page }) => {
   await login(page);
   await page.goto("/settings");

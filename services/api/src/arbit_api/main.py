@@ -92,5 +92,5 @@ def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None
 
     install_operator_routes(app, settings, database, config.season)
     install_member_routes(app, settings, database, config.season)
-    install_static_shell(app, settings.web_dist_path)
+    install_static_shell(app, settings.web_dist_path, settings.public_origin)
     return app

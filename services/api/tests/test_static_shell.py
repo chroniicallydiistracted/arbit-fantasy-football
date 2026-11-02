@@ -1,4 +1,54 @@
+import pytest
 from fastapi.testclient import TestClient
+
+
+def _shell_client(tmp_path, public_origin, base_url):
+    from arbit_api.main import create_app
+    from arbit_api.settings import RuntimeSettings
+
+    (tmp_path / "index.html").write_text("<!doctype html><title>Arbit</title>")
+    app = create_app(RuntimeSettings(web_dist_path=tmp_path, public_origin=public_origin))
+    return TestClient(app, base_url=base_url, follow_redirects=False)
+
+
+@pytest.mark.parametrize(
+    ("public_origin", "visited", "expected"),
+    [
+        ("http://127.0.0.1:8000", "http://localhost:8000", "http://127.0.0.1:8000"),
+        ("http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:8000"),
+    ],
+)
+def test_other_names_for_this_machine_go_to_the_address_sign_in_works_on(
+    tmp_path, public_origin, visited, expected
+):
+    """Browsers treat each name as its own site: no cookie, and sign-in is refused."""
+    with _shell_client(tmp_path, public_origin, visited) as client:
+        response = client.get("/join?invitation=abc&next=live")
+        assert response.status_code == 307
+        assert response.headers["location"] == f"{expected}/join?invitation=abc&next=live"
+        assert response.headers["cache-control"] == "no-store"
+
+
+@pytest.mark.parametrize(
+    ("public_origin", "visited"),
+    [
+        ("http://127.0.0.1:8000", "http://127.0.0.1:8000"),
+        ("http://127.0.0.1:8000", "http://localhost:9000"),
+        # A hosted app sits behind a proxy whose host header this server does not control.
+        ("https://ffa.westfam.media", "http://localhost:8000"),
+        (None, "http://localhost:8000"),
+    ],
+)
+def test_the_app_is_served_where_no_other_address_applies(tmp_path, public_origin, visited):
+    with _shell_client(tmp_path, public_origin, visited) as client:
+        assert client.get("/live").status_code == 200
+
+
+def test_only_real_pages_redirect(tmp_path):
+    with _shell_client(tmp_path, "http://127.0.0.1:8000", "http://localhost:8000") as client:
+        assert client.get("/unknown").status_code == 404
+        assert client.get("/.env").status_code == 404
+        assert client.get("/health/live").status_code == 200
 
 
 def test_built_shell_is_allowlisted_and_private_paths_never_fall_back(tmp_path):

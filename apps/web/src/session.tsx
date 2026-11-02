@@ -11,7 +11,7 @@ import {
 } from "react";
 import type { AuthStatus, Me, Preferences } from "./api";
 import type { components } from "./generated/api";
-import { http } from "./transport";
+import { ApiError, http } from "./transport";
 
 type Session = {
   online: boolean;
@@ -143,6 +143,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const result = await http<components["schemas"]["StartResponse"]>("/auth/start", {
       method: "POST",
       body: { invitation: invitation || null },
+    }).catch((failure: unknown) => {
+      // Nobody is signed in yet, so a refusal here is about where the page was opened.
+      if (failure instanceof ApiError && failure.status === 403)
+        throw new Error("Sign-in doesn’t work from this address. Open Arbit at its usual address.");
+      throw failure;
     });
     const target = new URL(result.authorization_url);
     if (

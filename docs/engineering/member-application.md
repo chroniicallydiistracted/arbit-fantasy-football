@@ -49,6 +49,10 @@ No Google client/project has been registered by this development work. A real Go
 
 Externally served environments must use `ARBIT_ENV=production`, complete OIDC configuration and HTTPS. Fixture mode, auth bypass and operator-token routes are rejected. Use a trusted TLS proxy and suppress query/access logging there as well. Hosting, TLS, backups/restore and measured load remain separate release work; no service is provisioned here.
 
+## Local address
+
+The app's address is exactly `ARBIT_PUBLIC_ORIGIN`, which is `http://127.0.0.1:8000` locally. Browsers treat `localhost` and `127.0.0.1` as separate sites, so the session cookie and the sign-in origin check only work on the configured one. Pages opened under another loopback name on the same port redirect there. Hosted origins never redirect, because their proxy decides the host header.
+
 ## Access and data behavior
 
 Accounts are immutable issuer+subject identities. A verified email only redeems a one-use seven-day invitation; it cannot claim a manager. Session hashes live in PostgreSQL, with 30-day idle and 90-day absolute expiry. A completed login replaces the session that browser presented; other devices stay signed in, up to ten. Members can review and end devices in Preferences. HttpOnly, host-scoped, SameSite=Lax cookies are Secure over HTTPS. CSRF token and exact Origin checks protect mutations. Single-use browser-bound state, nonce and PKCE verifier expire in ten minutes; consumed secrets are wiped, expired flows pruned and active flows capped100. The maintained Authlib/joserfc path validates RS256 signature, issuer/audience/nonce/time and applicable access-token hash. Provider HTTP has fixed HTTPS hosts, no redirect/environment proxy and bounded responses; provider access tokens are never stored.

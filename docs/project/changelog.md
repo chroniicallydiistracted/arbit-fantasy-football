@@ -1,5 +1,10 @@
 # Development Changelog
 
+## 2026-11-01 — Sign-in from another local address
+
+- The owner saw "Your account can't open this" when signing in. Their account and session were fine: the page was open at another name for this machine, which has no cookie and fails the sign-in origin check (R-036).
+- Other loopback names now redirect to the configured address with path and query kept, checked in a real browser that already had a service worker installed on `localhost`. A refused sign-in now names the address. Not yet on the running app.
+
 ## 2026-11-01 — Scoreboards running and first slate measured
 
 - Upgraded the running app with scoreboards after PHI at WSH ended, by owner approval: about 5 seconds offline, no schema change, backup taken.
