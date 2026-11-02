@@ -249,7 +249,11 @@ function matchupSummary(game: Game): string {
 
 /** ESPN's text often opens with its own type, so the label would just repeat it. */
 function lastPlayKind(play: { kind: string | null; text: string | null }): string | null {
-  return play.kind && !play.text?.trim().startsWith(play.kind) ? play.kind : null;
+  const opensWithKind = play.text
+    ?.trim()
+    .toLowerCase()
+    .startsWith(play.kind?.toLowerCase() ?? "");
+  return play.kind && !opensWithKind ? play.kind : null;
 }
 
 export function GameBoard({ game }: { game: Game }) {

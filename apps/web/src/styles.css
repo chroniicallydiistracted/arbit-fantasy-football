@@ -1527,6 +1527,9 @@ label {
   background: var(--surface-sunk);
   font-weight: 600;
 }
+.play-text .tag {
+  margin-left: var(--space-2);
+}
 .play-list li[data-cancelled="true"] .play-text {
   color: var(--ink-muted);
   text-decoration: line-through;

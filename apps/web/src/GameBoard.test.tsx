@@ -77,6 +77,12 @@ it("shows the live state and every quarter", () => {
   expect(screen.getByRole("img", { name: "3 timeouts left" })).toBeTruthy();
 });
 
+it("doesn't repeat a last play label that differs from ESPN's text only in capitals", () => {
+  const last_play = { kind: "Two-minute warning", text: "Two-Minute Warning", yards: null };
+  const { container } = render(<GameBoard game={game({ situation: { ...live, last_play } })} />);
+  expect(container.textContent?.match(/two-minute warning/gi)).toHaveLength(1);
+});
+
 it("keeps an unplayed game's score unknown rather than zero", () => {
   render(
     <GameBoard
