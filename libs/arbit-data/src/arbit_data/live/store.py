@@ -12,7 +12,7 @@ from uuid import UUID
 
 from arbit_core.identity import ProviderRef, require_aware
 from sqlalchemy import and_, func, or_, select, update
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.dialects.postgresql import distinct_on, insert
 
 from arbit_data.db import UnitOfWork
 from arbit_data.events import emit
@@ -578,23 +578,60 @@ def read_plays(
                 )
             )
         ).all()
-        corrected: set[str] = set(
-            c.scalars(
-                select(nfl_play_revision.c.play_id)
+        first_reported: dict[str, dict[str, Any]] = {
+            first.play_id: first.payload
+            for first in c.execute(
+                select(nfl_play_revision.c.play_id, nfl_play_revision.c.payload)
                 .where(nfl_play_revision.c.event_id == event_id)
-                .group_by(nfl_play_revision.c.play_id)
-                .having(func.count() > 1)
+                .ext(distinct_on(nfl_play_revision.c.play_id))
+                .order_by(
+                    nfl_play_revision.c.play_id,
+                    nfl_play_revision.c.first_observed_at,
+                    nfl_play_revision.c.modified_at.asc().nulls_first(),
+                )
             )
-        )
+        }
     plays = []
     for row in rows:
         ids = {p["espn_id"] for p in row.payload.get("participants", [])}
         if espn_ids is not None and not ids & espn_ids:
             continue
-        plays.append({**row.payload, "corrected": row.play_id in corrected})
+        first = first_reported.get(row.play_id, row.payload)
+        plays.append({**row.payload, "corrected": _play_corrected(first, row.payload)})
         if len(plays) >= limit:
             break
     return plays
+
+
+_PLAY_RESULT = ("period", "stat_yardage", "kind", "scoring_play", "score_value")
+_CREDITED_ROLES = frozenset(
+    {"passer", "rusher", "receiver", "returner", "kicker", "punter", "scorer", "fumbler"}
+)
+
+
+def _credited(payload: dict[str, Any]) -> dict[str, set[str]]:
+    credited: dict[str, set[str]] = {}
+    for participant in payload.get("participants", ()):
+        if participant["role"] in _CREDITED_ROLES:
+            credited.setdefault(participant["role"], set()).add(participant["espn_id"])
+    return credited
+
+
+def _play_corrected(first: dict[str, Any], current: dict[str, Any]) -> bool:
+    """Whether the result or a credited player differs from what ESPN first reported.
+
+    A new revision alone doesn't mean that. ESPN re-stamps most plays, and its first drafts settle:
+    tacklers get added, "right end" becomes "right tackle", the clock moves a second, blanks get
+    filled in, and a touchdown's score rises when its extra point is attached. An overturned score
+    changes `scoring_play` or `score_value`. Every revision is still kept in the history.
+    """
+    if any(
+        first.get(field) is not None and first.get(field) != current.get(field)
+        for field in _PLAY_RESULT
+    ):
+        return True
+    now = _credited(current)
+    return any(now.get(role, set()) != players for role, players in _credited(first).items())
 
 
 def athlete_espn_ids(uow: UnitOfWork, entity_ids: set[UUID], as_of: datetime) -> dict[str, UUID]:

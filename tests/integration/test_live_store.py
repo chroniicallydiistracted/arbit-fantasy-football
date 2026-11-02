@@ -151,15 +151,79 @@ def test_correction_keeps_history_and_marks_only_the_new_revision_current(uow):
     store.publish_scoreboard(uow, board(game()), NOW)
     store.publish_plays(uow, "401", (play(),), NOW, body_hash="a" * 64)
     later = NOW + timedelta(seconds=30)
-    change = store.publish_plays(
-        uow, "401", (play(text="Pass complete for 8 yards"),), later, body_hash="b" * 64
-    )
+    fixed = play(text="Pass complete for 8 yards").model_copy(update={"stat_yardage": "8"})
+    change = store.publish_plays(uow, "401", (fixed,), later, body_hash="b" * 64)
     assert change.revised == ("1",)
     rows = revisions(uow)
     assert len(rows) == 2 and sum(r.is_current for r in rows) == 1
     assert event_types(uow)[-1] == "game.corrected"
     current = store.read_plays(uow, "401")
     assert current[0]["text"] == "Pass complete for 8 yards" and current[0]["corrected"] is True
+
+
+def publish_versions(uow, *versions: LivePlay) -> dict[str, Any]:
+    store.publish_scoreboard(uow, board(game()), NOW)
+    for step, version in enumerate(versions):
+        store.publish_plays(
+            uow,
+            "401",
+            (version,),
+            NOW + timedelta(seconds=30 * step),
+            body_hash=str(step).rjust(64, "a"),
+        )
+    return store.read_plays(uow, "401")[0]
+
+
+RECEIVER = Participant(espn_id="11", role="receiver")
+
+
+@pytest.mark.parametrize(
+    "unchanged",
+    [
+        {"modified_at": "2026-11-01T18:05:00Z"},
+        {"text": " Pass complete  for 12 yards "},
+        {"text": "Pass complete right end for 12 yards (A.Tackler)"},
+        {"clock": "4:13"},
+        {"home_score": "8"},
+        {"effects": ("first_down",), "can_connect_endpoints": False},
+        {"participants": (RECEIVER, Participant(espn_id="22", role="tackler"))},
+    ],
+    ids=["re-stamped", "spacing", "wording", "clock", "extra-point", "not-shown", "tackler-added"],
+)
+def test_a_revision_that_leaves_the_result_alone_is_not_a_correction(uow, unchanged):
+    """Real ESPN first drafts settle like this, on about a third of the plays seen live."""
+    first = play().model_copy(update={"participants": (RECEIVER,)})
+    update = {"participants": (RECEIVER,), **unchanged}
+    assert publish_versions(uow, first, first.model_copy(update=update))["corrected"] is False
+    assert len(revisions(uow)) == 2, "every revision stays in the history"
+
+
+def test_filling_in_what_a_first_draft_left_out_is_not_a_correction(uow):
+    first = play().model_copy(update={"stat_yardage": None, "participants": ()})
+    filled = first.model_copy(update={"stat_yardage": "12", "participants": (RECEIVER,)})
+    assert publish_versions(uow, first, filled)["corrected"] is False
+
+
+@pytest.mark.parametrize(
+    "changed",
+    [
+        {"period": 4},
+        {"stat_yardage": "8"},
+        {"kind": "penalty"},
+        {"scoring_play": True},
+        {"score_value": "6"},
+        {"participants": (Participant(espn_id="12", role="receiver"),)},
+    ],
+    ids=lambda changed: next(iter(changed)),
+)
+def test_a_changed_result_or_credited_player_is_a_correction(uow, changed):
+    first = play().model_copy(update={"participants": (RECEIVER,)})
+    assert publish_versions(uow, first, first.model_copy(update=changed))["corrected"] is True
+
+
+def test_a_correction_later_withdrawn_is_labeled_by_what_now_shows(uow):
+    fixed = play().model_copy(update={"stat_yardage": "8"})
+    assert publish_versions(uow, play(), fixed, play())["corrected"] is False
 
 
 def test_explicit_cancellation_is_reported_but_a_missing_play_is_not_a_deletion(uow):

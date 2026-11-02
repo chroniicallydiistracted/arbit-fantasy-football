@@ -93,5 +93,8 @@ it("keeps an unplayed game's score unknown rather than zero", () => {
   );
   expect(screen.queryByRole("table", { name: "Score by quarter" })).toBeNull();
   expect(screen.getAllByText("—")).toHaveLength(2);
+  const announced = screen.getByRole("status").textContent ?? "";
+  expect(announced).toContain("AWY at HOM.");
+  expect(announced).not.toContain("unknown");
   expect(trailing(game({ phase: "scheduled" }), team("A", null), team("B", null))).toBe(false);
 });

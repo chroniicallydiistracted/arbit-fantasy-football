@@ -237,9 +237,12 @@ function clockLines(game: Game): string[] {
 }
 
 function matchupSummary(game: Game): string {
-  const score = `${game.away.abbreviation ?? "Away"} ${game.away.score ?? "unknown"}, ${
-    game.home.abbreviation ?? "Home"
-  } ${game.home.score ?? "unknown"}.`;
+  const away = game.away.abbreviation ?? "Away";
+  const home = game.home.abbreviation ?? "Home";
+  const score =
+    game.away.score == null && game.home.score == null
+      ? `${away} at ${home}.`
+      : `${away} ${game.away.score ?? "unknown"}, ${home} ${game.home.score ?? "unknown"}.`;
   const down = game.situation?.short_text;
   return [statusLine(game), score, down, game.situation?.field_text].filter(Boolean).join(" ");
 }
