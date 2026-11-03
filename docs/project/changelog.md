@@ -1,5 +1,10 @@
 # Development Changelog
 
+## 2026-11-02 — Sprite review and the first Monday game
+
+- The owner judged the 34 drawn sprite frames a stark downgrade from the 6 original poses (OWN-025). The app won't use them; new poses need a source at the original's quality.
+- The PC slept until 53 minutes into CHI at SEA. The worker resumed by itself, filled in the first half and tracked the rest live. Sunday's delayed final checks ran on wake and filled in drives and team stats, closing R-032.
+
 ## 2026-11-01 — Sign-in from another local address
 
 - The owner saw "Your account can't open this" when signing in. Their account and session were fine: the page was open at another name for this machine, which has no cookie and fails the sign-in origin check (R-036).

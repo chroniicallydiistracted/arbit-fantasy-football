@@ -23,7 +23,7 @@ The owner accepted the design (OWN-018) and moved Live ahead of M3 (OWN-019), as
 
 ## Owner inputs needed
 
-Approval for the next upgrade, which carries the sign-in fix for other local addresses (R-036). Until then the app works at `http://127.0.0.1:8000`. The owner approved the scoreboard upgrade, which ran 2026-11-01 21:25 (UTC−7) after PHI at WSH ended, offline about 5 seconds with a backup taken. Signed-in pages on the running app are the owner's to confirm, since only they hold that session.
+Where new sprite poses come from: the owner judged the drawn frames a stark downgrade from the 6 originals (OWN-025). Approval for the next upgrade, which carries the sign-in fix for other local addresses (R-036). Until then the app works at `http://127.0.0.1:8000`. The owner approved the scoreboard upgrade, which ran 2026-11-01 21:25 (UTC−7) after PHI at WSH ended, offline about 5 seconds with a backup taken. Signed-in pages on the running app are the owner's to confirm, since only they hold that session.
 
 The GitHub repository is public. Only `claude/sprite-art` is pushed from this work: the sprite art alone (OWN-024). `claude/platform-reset` stays local until the owner asks. Review renders in `data/sprites/` include Gridiron field art, so they stay ignored (OWN-015).
 

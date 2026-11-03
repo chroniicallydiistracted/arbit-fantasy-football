@@ -105,6 +105,9 @@ Weakest frames: `ground`, `snap_ready` and `snap_release` (flat torso), `catch_h
 
 Colors and pixel size can match exactly, but drawing habits can't. Close-up comparison will always show some difference; the realistic target is that it can't be spotted at game size. These are judgments from stills and consecutive frames, because real-time motion can't be watched here. The owner reviews frames by group.
 
+
+**Owner review, 2026-11-02 (OWN-025):** "the additional sprites you created are a good attempt, but overall are a stark downgrade from the original set I have." The 34 drawn frames stay in `assets/sprites/frames` as a record but are not used in the app. Only the 6 original poses meet the bar. More poses need a source at that quality, which the owner chooses.
+
 ## Proposed order
 
 1. **Done 2026-11-01:** raw copies of the responses the worker already fetches, adding no ESPN requests (OWN-020).
