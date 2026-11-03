@@ -12,6 +12,7 @@ Run everything from the private work folder `data/sprites/pixellab-test`, which 
 4. **Convert.** `assemble.py staging BATCH ...` maps colors to classes (`convert.py`), removes smears, specks and any ball the model drew, applies the reviewed hand fixes in `MANUAL`, and records each frame's hands, chest and lift. The approved fall keeps its Arizona pixels and takes ambiguous classes from a key redraw (`hybrid.py`).
 5. **Review.** `review.py BATCH` shows raw output beside two recolored teams; `teams.py` renders every frame in all 64 color sets; `showcase.py` plays each motion with the ball.
 6. **Install.** `install.py staging` writes the frame files, `assets/sprites/anchors.json` and `assets/sprites/ball.txt`. The six originals in `base.txt` are never touched.
+7. **Regions.** `regions.py` writes `assets/sprites/regions`, saying which uniform part each pixel shows, from the skeleton each frame was drawn from. `regions.py check` draws them for review. Rerun it whenever frames change.
 
 ## Known limits
 

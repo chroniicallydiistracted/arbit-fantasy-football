@@ -58,3 +58,52 @@ def test_frames_drawn_without_the_ball_say_where_the_hand_is():
     drawn = [name for group, found in groups.items() if group != "base" for name in found]
     missing = [name for name in drawn if "near_hand" not in anchors.get(name, {})]
     assert missing == []
+
+
+# Which uniform parts a pixel of each class may show (assets/sprites/regions, OWN-028).
+SOCKS = set("0123456789")
+ALLOWED_PARTS = {
+    **dict.fromkeys("jnba", {"H", "P"}),
+    **dict.fromkeys("echf", {"J"} | SOCKS),
+    **dict.fromkeys("kmioq", {"H", "J", "P"} | SOCKS),
+    **dict.fromkeys("lp", {"M", "."}),
+    "#": {"K", "."},
+}
+
+
+def load_regions():
+    regions = {}
+    for path in sorted((ROOT / "assets/sprites/regions").glob("*.txt")):
+        for chunk in path.read_text().split("== "):
+            if chunk.strip():
+                name, *rows = chunk.strip("\n").split("\n")
+                regions[name] = rows
+    return regions
+
+
+def test_every_frame_has_a_region_map_of_its_size():
+    regions = load_regions()
+    for name, rows in frames.all_frames().items():
+        width = max(map(len, rows))
+        assert name in regions, name
+        assert [len(row) for row in regions[name]] == [width] * len(rows), name
+
+
+def test_region_maps_only_give_a_pixel_a_part_its_color_can_show():
+    regions = load_regions()
+    wrong = []
+    for name, rows in frames.all_frames().items():
+        width = max(map(len, rows))
+        for y, row in enumerate(rows):
+            for x, cell in enumerate(row.ljust(width, ".")):
+                part = regions[name][y][x]
+                if part not in ALLOWED_PARTS.get(cell, {"."}):
+                    wrong.append(f"{name} {x},{y}: {cell} as {part}")
+    assert wrong == []
+
+
+def test_every_frame_shows_a_helmet_jersey_pants_and_socks():
+    regions = load_regions()
+    for name in frames.all_frames():
+        parts = {part for row in regions[name] for part in row}
+        assert {"H", "J", "P"} <= parts and parts & SOCKS, name

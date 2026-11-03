@@ -69,6 +69,8 @@ All 28 uniforms are stored, along with every 2026 variant for home teams with no
 | PHI at WSH | 401873035 | PHI `B`, WSH `F` | 1 candidate |
 | CHI at SEA | 401873036 | **CHI TBA**, SEA `E` | 3 candidates |
 
+Rechecked 2026-11-03: the page now lists CHI `B2` and field `SEA_2023-2026^3` for CHI at SEA. See [real uniforms](uniform-measurement-2026-11-03.md).
+
 ## Not done or not verified
 
 `config/gridiron-assets.json` is still empty, and nothing in the application reads these files yet. No sync lane exists, so this fetch goes stale as the site updates. The published art was not compared with what teams actually wore. A larger field source may exist under a route not linked from these pages; none was found.

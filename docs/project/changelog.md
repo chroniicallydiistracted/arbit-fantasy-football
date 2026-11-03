@@ -1,5 +1,13 @@
 # Development Changelog
 
+## 2026-11-03 — Real uniforms on the sprites
+
+- The owner added their full 2026 uniform set and said not to infer uniform colors (OWN-028). The real plays now use what Gridiron's week 8 page lists for CHI at SEA: Chicago `B2`, Seattle `E` and field `SEA_2023-2026^3`. This replaces the white stand-in for Chicago and the guessed field `^1` used on 2026-11-02.
+- Every frame has a map of which uniform part each pixel shows (`assets/sprites/regions`), made from the skeletons the frames were drawn from. The owner's art ties helmet to pants and jersey to socks, which real uniforms don't.
+- `scripts/sprites/uniforms.py` measures each part at fixed places on Gridiron's sheet template and shades it with the owner's sheet's own ratios, which reproduce all 64 of its sets. All 202 single-version sheets measured, each checked beside its painted sprites. Three animated sheets show two versions and are refused until one is named ([research](../research/uniform-measurement-2026-11-03.md), ENG-027).
+- GIFs now keep every sprite color exactly. The old encoder had turned Chicago's orange stripe yellow. The public preview plays were rebuilt with it.
+- Limits are in R-037: one trim color per part, no helmet logos, thin sock stripes, placeholder skin tones.
+
 ## 2026-11-02 — Every sprite pose, drawn by PixelLab
 
 - The owner connected PixelLab and approved its first frames as "incredibly close to the original" (OWN-026). Its skeleton animator redraws one of the owner's six originals into poses given as joints.

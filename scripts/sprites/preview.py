@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import frames as sprite_frames
+import uniforms
 
 OUT = sprite_frames.ASSETS / "preview"
 FRAMES = sprite_frames.all_frames()
@@ -49,6 +50,27 @@ def rgba(rows: list[str], color_set: int) -> Image.Image:
                 pixels[y, x, :3] = PALETTE[cell][color_set]
                 pixels[y, x, 3] = 255
     return Image.fromarray(pixels)
+
+
+REGIONS: dict[str, list[str]] = {}
+PAINTED: dict[tuple[str, int, int], Image.Image] = {}
+
+
+def painted(name: str, uniform: dict, skin_set: int) -> Image.Image:
+    """A frame in a real uniform measured from its sheet, with skin from `skin_set` (OWN-028)."""
+    key = (name, id(uniform), skin_set)
+    if key not in PAINTED:
+        if not REGIONS:
+            REGIONS.update(uniforms.load_regions())
+        rows = FRAMES[name]
+        colors = uniforms.paint(rows, REGIONS[name.removesuffix("_e")], uniform, {cls: sets[skin_set] for cls, sets in PALETTE.items()})
+        pixels = np.zeros((len(rows), max(map(len, rows)), 4), np.uint8)
+        for y, line in enumerate(colors):
+            for x, color in enumerate(line):
+                if color is not None:
+                    pixels[y, x] = (*color, 255)
+        PAINTED[key] = Image.fromarray(pixels)
+    return PAINTED[key]
 
 
 def without_ball(rows: list[str]) -> list[str]:
@@ -165,6 +187,7 @@ class Actor:
         self.previous: tuple[float, float] | None = None
         self.carries: list[tuple[float, float]] = []
         self.label: str | None = None
+        self.uniform: dict | None = None  # measured from a Gridiron sheet; private renders only
 
     def carry(self, start: float, end: float = 1e9) -> "Actor":
         self.carries.append((start, end))
@@ -219,6 +242,30 @@ def flight(start_time: float, end_time: float, start: Point, end: Point, g: floa
     return at
 
 
+def opaque_colors(image: Image.Image) -> set[tuple[int, int, int]]:
+    pixels = np.asarray(image)
+    found = np.unique(pixels[pixels[..., 3] == 255][:, :3], axis=0)
+    return {(int(r), int(g), int(b)) for r, g, b in found}
+
+
+def exact_palette(images: list[Image.Image], kept: set[tuple[int, int, int]]) -> list[Image.Image]:
+    """GIF frames that keep every sprite color exactly, so a uniform's colors survive encoding.
+    The field and text share what is left of the 256 colors a GIF allows."""
+    keep = sorted(kept)
+    if len(keep) > 200:
+        raise ValueError(f"{len(keep)} sprite colors leave too few for the field")
+    # Every frame at a quarter size, so a line seen only in a corner for a moment still gets a color.
+    width, height = images[0].width // 4, images[0].height // 4
+    sample = Image.new("RGB", (width, height * len(images)))
+    for index, image in enumerate(images):
+        sample.paste(image.convert("RGB").resize((width, height), Image.NEAREST), (0, index * height))
+    rest = sample.quantize(colors=256 - len(keep), dither=Image.Dither.NONE).getpalette() or []
+    flat = [channel for color in keep for channel in color] + rest[: 3 * (256 - len(keep))]
+    palette = Image.new("P", (1, 1))
+    palette.putpalette(flat + [0] * (768 - len(flat)))
+    return [image.convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE) for image in images]
+
+
 def render(
     name: str,
     seconds: float,
@@ -231,6 +278,7 @@ def render(
     overlay: Callable[[ImageDraw.ImageDraw, "Camera"], None] | None = None,
 ) -> None:
     images: list[Image.Image] = []
+    kept: set[tuple[int, int, int]] = {(112, 60, 22), (20, 10, 4)}  # the ball in flight
     camera_x, tilt = follow(0), 0.0
     for index in range(int(seconds * FPS)):
         t = index / FPS
@@ -252,7 +300,11 @@ def render(
         for actor, x, z, pose in sorted(placed, key=lambda item: -item[2]):
             screen_x, screen_y, per_yard = camera.project(x, 0, z)
             art = per_yard * ART_PIXEL_YARDS
-            sprite = rgba(FRAMES[pose], actor.color_set)
+            if actor.uniform is not None:
+                sprite = painted(pose, actor.uniform, actor.color_set)
+            else:
+                sprite = rgba(FRAMES[pose], actor.color_set)
+            kept.update(opaque_colors(sprite))
             if actor.facing_left:
                 sprite = sprite.transpose(Image.FLIP_LEFT_RIGHT)
             width, height = max(1, round(sprite.width * art)), max(1, round(sprite.height * art))
@@ -275,6 +327,7 @@ def render(
                 held = ANCHORS[spot_name]["near_hand" if pose.startswith(("throw", "punt")) else "chest"]
                 hand_x = sprite.width - held[0] if actor.facing_left else held[0]
                 ball_sprite = rgba(BALL, 0)
+                kept.update(opaque_colors(ball_sprite))
                 bw, bh = max(1, round(ball_sprite.width * art)), max(1, round(ball_sprite.height * art))
                 ball_scaled = ball_sprite.resize((bw, bh), Image.NEAREST)
                 left = round(screen_x - anchor * art + hand_x * art - bw / 2)
@@ -308,9 +361,7 @@ def render(
         note = "Re-creation from play-by-play"
         draw.text((WIDTH - 16 - draw.textlength(note, font=SMALL), bottom - 28), note, font=SMALL, fill=(200, 205, 200, 255))
         images.append(image)
-    palettized = [
-        image.convert("P", palette=Image.ADAPTIVE, colors=128, dither=Image.NONE) for image in images
-    ]
+    palettized = exact_palette(images, kept)
     palettized[0].save(
         OUT / f"play-{name}.gif",
         save_all=True,

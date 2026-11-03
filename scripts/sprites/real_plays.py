@@ -2,7 +2,8 @@
 
 Facts come from the stored play-by-play: spots, yardage, players and their roles. Only players the
 play names are drawn (OWN-021); motion between ESPN's spots is generated, so every frame carries the
-re-creation label (ENG-023). The field is the owner's Gridiron art, so output stays in ignored data/.
+re-creation label (ENG-023). The field and uniforms are the owner's Gridiron art, listed for this game
+on Gridiron's week page, so output stays in ignored data/ (OWN-015).
 Offense always attacks to the right; the feed does not say which end each team defended.
 
 Usage: uv run --no-project --with pillow --with numpy python scripts/sprites/real_plays.py
@@ -16,37 +17,25 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/sprites"))
 import preview as P  # noqa: E402
+import uniforms as U  # noqa: E402
 
-FIELD_PATH = ROOT / "data/Gridiron_2026_Fields/Seattle_Seahawks/SEA_2023-2026_1.png"
+# What Gridiron's week 8 page lists for this game, rechecked 2026-11-03 (on 2026-10-31 Chicago was
+# still TBA and the field unlisted). Colors are measured from these sheets, never chosen (OWN-028).
+WEEK_PAGE = "https://www.gridiron-uniforms.com/GUD/controller/controller.php?action=weekly&year=2026&week=8&league=NFL"
+FIELD_PATH = ROOT / "data/Gridiron_2026_Fields/Seattle_Seahawks/SEA_2023-2026_3.png"
+SHEETS = ROOT / "data/Gridiron_2026_Uniforms/uniform_combinations"
 P.OUT = ROOT / "data/sprites/review/real-plays"
 P.FIELD = Image.open(FIELD_PATH).convert("RGB").resize((1024 * P.SCALE, 486 * P.SCALE), Image.LANCZOS)
 MID = 26.67
+SKIN_SETS = (0, 32)  # the owner's sheet: darker and lighter skin; only skin is taken from it here
+SEA = U.measure_file(SHEETS / "SEA/2026_SEA_E.png")
+CHI = U.measure_file(SHEETS / "CHI/2026_CHI_B2.png")
 
 
-def away_whites(home: int) -> tuple[int, int]:
-    """The sheet only has home colors. Approximate a road uniform: white jersey and socks, the home
-    jersey's navy and the trim's orange moved onto the trim. Stand-in until real uniform recoloring."""
-    white = {"e": (255, 255, 255), "c": (232, 232, 236), "f": (196, 196, 204), "h": (150, 150, 160)}
-    added = []
-    for skin in (0, 32):
-        for cls, sets in P.PALETTE.items():
-            color = list(sets[home + skin])
-            if cls in white:
-                color = list(white[cls])
-            elif cls in "ki":
-                color = list(P.PALETTE["e" if cls == "k" else "c"][home + skin])  # home jersey navy
-            sets.append(color)
-        added.append(len(P.PALETTE["#"]) - 1)
-    return added[0], added[1]
-
-
-SEA = (28, 28 + 32)  # rows of the owner's sheet: darker and lighter skin
-CHI = away_whites(5)
-
-
-def player(name: str, team: tuple[int, int], espn_id: int, x: float, z: float, facing_left: bool = False) -> P.Actor:
+def player(name: str, team: dict, espn_id: int, x: float, z: float, facing_left: bool = False) -> P.Actor:
     # Skin tone is a placeholder: alternated by ESPN id, not taken from the real player.
-    actor = P.Actor(team[espn_id % 2], x, z, facing_left)
+    actor = P.Actor(SKIN_SETS[espn_id % 2], x, z, facing_left)
+    actor.uniform = team
     actor.label = name
     return actor
 
