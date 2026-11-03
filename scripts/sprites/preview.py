@@ -164,6 +164,7 @@ class Actor:
         self.clock, self.x, self.z, self.travel = 0.0, x, z, 0.0
         self.previous: tuple[float, float] | None = None
         self.carries: list[tuple[float, float]] = []
+        self.label: str | None = None
 
     def carry(self, start: float, end: float = 1e9) -> "Actor":
         self.carries.append((start, end))
@@ -227,6 +228,7 @@ def render(
     lines: list[tuple[float, tuple[int, int, int, int]]],
     caption: str,
     tilted: bool = False,
+    overlay: Callable[[ImageDraw.ImageDraw, "Camera"], None] | None = None,
 ) -> None:
     images: list[Image.Image] = []
     camera_x, tilt = follow(0), 0.0
@@ -243,6 +245,9 @@ def render(
         for x, color in lines:
             corners = [(x - 0.28, 0), (x + 0.28, 0), (x + 0.28, 53.3), (x - 0.28, 53.3)]
             draw.polygon([camera.project(a, 0, b)[:2] for a, b in corners], fill=color)
+        if overlay is not None:
+            overlay(draw, camera)
+        tags: list[tuple[float, float, str]] = []
         placed = [(actor, *actor.frame(t)) for actor in actors]
         for actor, x, z, pose in sorted(placed, key=lambda item: -item[2]):
             screen_x, screen_y, per_yard = camera.project(x, 0, z)
@@ -263,6 +268,8 @@ def render(
             )
             scaled = sprite.resize((width, height), Image.NEAREST)
             image.paste(scaled, (round(screen_x - anchor * art), round(screen_y - height)), scaled)
+            if actor.label:
+                tags.append((screen_x, screen_y - height - 6, actor.label))
             spot_name = pose.removesuffix("_e")
             if actor.carrying(t) and spot_name in ANCHORS:
                 held = ANCHORS[spot_name]["near_hand" if pose.startswith(("throw", "punt")) else "chest"]
@@ -273,6 +280,10 @@ def render(
                 left = round(screen_x - anchor * art + hand_x * art - bw / 2)
                 image.paste(ball_scaled, (left, round(screen_y - height + held[1] * art - bh / 2)), ball_scaled)
         draw = ImageDraw.Draw(image, "RGBA")
+        for tag_x, tag_y, text in tags:
+            width_px = draw.textlength(text, font=SMALL)
+            draw.rectangle((tag_x - width_px / 2 - 4, tag_y - 18, tag_x + width_px / 2 + 4, tag_y), fill=(10, 12, 14, 170))
+            draw.text((tag_x - width_px / 2, tag_y - 17), text, font=SMALL, fill=(240, 240, 235, 255))
         if ball_now is not None:
             x, y, per_yard = camera.project(ball_now[0], 0, ball_now[2])
             draw.ellipse(
@@ -294,6 +305,8 @@ def render(
         bottom = HEIGHT - CROP
         draw.rectangle((0, bottom - 40, WIDTH, bottom), fill=(10, 12, 14, 228))
         draw.text((16, bottom - 32), caption, font=BIG, fill=(240, 240, 235, 255))
+        note = "Re-creation from play-by-play"
+        draw.text((WIDTH - 16 - draw.textlength(note, font=SMALL), bottom - 28), note, font=SMALL, fill=(200, 205, 200, 255))
         images.append(image)
     palettized = [
         image.convert("P", palette=Image.ADAPTIVE, colors=128, dither=Image.NONE) for image in images

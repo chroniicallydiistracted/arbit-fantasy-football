@@ -6,6 +6,7 @@
 - 53 new frames replace the 34 hand-drawn ones: run in-betweens around the original three, dropback and throw, high, low and diving catches, the tackler's lunge, dive, wrap and drive, falling forward and backward, getting up, fumble recovery, kick, punt, snap, hold, slide, spike and celebrations. The stiff-arm attempt was dropped.
 - Each pose is drawn once in a key palette and maps back to the 21 color classes, so it renders in all 32 teams and both skin tones (ENG-026). All 3,392 renders were produced and spot-checked by team.
 - Poses carry no ball (OWN-027). One ball sprite from the owner's `arm` pose is drawn at the hand or chest from `assets/sprites/anchors.json`, which also records lift for jumps and dives. Preview plays use it.
+- Re-created seven real plays from CHI at SEA with the new frames on the owner's Seattle field: a touchdown pass, a completed pass and tackle, a run with two tacklers, a sack, a field goal, a punt return and an interception (`scripts/sprites/real_plays.py`). Renders stay in ignored `data/` because the field is Gridiron art. Chicago wears a stand-in white road palette because the sheet only has home colors, and skin tones are placeholders.
 - The pipeline is in `scripts/sprites/pixellab`, with every hand fix listed. It used 33.1 of the trial's 40 generations, including the color tests and two redraws.
 
 ## 2026-11-02 — Sprite review and the first Monday game
