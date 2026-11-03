@@ -18,17 +18,23 @@ MOTIONS = {
         "run_knee",
         "run_float",
         "run3",
+        "run_far_pass",
         "run2",
-        "run_far_knee",
         "run_far_float",
     ],
     "dropback": ["drop_a", "drop_b", "drop_c"],
     "throw": ["throw_cock", "throw_mid", "throw_rel", "throw_follow"],
-    "catch": ["catch_reach", "catch_high", "catch_secure"],
-    "tackle": ["lunge", "wrap", "hit", "fall_30", "fall_60", "ground", "rise_1"],
+    "catch": ["catch_reach", "catch_high", "catch_secure", "catch_low", "dive_catch"],
+    "tackle": ["lunge", "tackle_dive", "wrap", "drive"],
+    "tackled": ["hit", "stumble", "fall_30", "fall_60", "ground"],
+    "knocked back": ["hit_back", "fall_back_30", "fall_back_60", "ground_back"],
+    "get up": ["rise_1", "rise_2", "rise_3"],
+    "fumble": ["recover"],
     "kick": ["kick_plant", "kick_swing", "kick_strike", "kick_follow"],
-    "specialists": ["punt_hold", "hold_place", "hold_empty", "snap_ready", "snap_release"],
-    "celebrate": ["arm", "arms_up", "arms_jump"],
+    "punt": ["punt_hold", "punt_drop", "punt_strike", "punt_follow"],
+    "specialists": ["hold_ready", "hold_catch", "hold_place", "snap_ready", "snap_release"],
+    "quarterback extras": ["slide", "spike"],
+    "celebrate": ["arm", "arms_up", "arms_jump", "point"],
 }
 
 
@@ -44,3 +50,11 @@ def test_every_motion_has_its_frames():
 
 def test_palette_has_every_color_set_for_every_class():
     assert {len(sets) for sets in frames.palette().values()} == {64}
+
+
+def test_frames_drawn_without_the_ball_say_where_the_hand_is():
+    anchors = frames.anchors()
+    groups = frames.load_groups()
+    drawn = [name for group, found in groups.items() if group != "base" for name in found]
+    missing = [name for name in drawn if "near_hand" not in anchors.get(name, {})]
+    assert missing == []

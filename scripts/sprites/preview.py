@@ -29,7 +29,7 @@ YARD = 8.08
 GOAL_LEFT, NEAR_SIDELINE = 107.5, 458
 CYCLES = {
     "RUN": (
-        ["run1", "run_pass", "run_knee", "run_float", "run3", "run2", "run_far_knee", "run_far_float"],
+        ["run1", "run_pass", "run_knee", "run_float", "run3", "run_far_pass", "run2", "run_far_float"],
         0.62,
     ),
     "DROP": (["drop_a", "drop_b", "drop_c", "drop_b"], 0.55),
@@ -71,11 +71,19 @@ for carried in ("catch_reach", "catch_high", "snap_ready"):
     FRAMES[f"{carried}_e"] = without_ball(FRAMES[carried])
 
 
+ANCHORS = sprite_frames.anchors()
+# One ball sprite, drawn over a carrier's frame: frames themselves never include the ball.
+BALL = [line for line in (sprite_frames.ASSETS / "ball.txt").read_text().splitlines() if line and not line.startswith("==")]
+
+
 def ball_offset(name: str) -> tuple[float, float]:
     rows = FRAMES[name]
     points = [(x, y) for y, row in enumerate(rows) for x, cell in enumerate(row) if cell in "BC"]
-    center_x = sum(p[0] for p in points) / len(points)
-    center_y = sum(p[1] for p in points) / len(points)
+    if points:
+        center_x = sum(p[0] for p in points) / len(points)
+        center_y = sum(p[1] for p in points) / len(points)
+    else:  # Drawn without the ball: it sits in the near hand.
+        center_x, center_y = ANCHORS[name.removesuffix("_e")]["near_hand"]
     return (center_x - torso_x(rows)) * ART_PIXEL_YARDS, (len(rows) - center_y) * ART_PIXEL_YARDS
 
 
@@ -155,6 +163,14 @@ class Actor:
         self.segments: list[tuple[float, float, float, float, float, float, str]] = []
         self.clock, self.x, self.z, self.travel = 0.0, x, z, 0.0
         self.previous: tuple[float, float] | None = None
+        self.carries: list[tuple[float, float]] = []
+
+    def carry(self, start: float, end: float = 1e9) -> "Actor":
+        self.carries.append((start, end))
+        return self
+
+    def carrying(self, t: float) -> bool:
+        return any(start <= t < end for start, end in self.carries)
 
     def hold(self, pose: str, seconds: float) -> "Actor":
         return self.move(pose, seconds, self.x, self.z)
@@ -247,6 +263,15 @@ def render(
             )
             scaled = sprite.resize((width, height), Image.NEAREST)
             image.paste(scaled, (round(screen_x - anchor * art), round(screen_y - height)), scaled)
+            spot_name = pose.removesuffix("_e")
+            if actor.carrying(t) and spot_name in ANCHORS:
+                held = ANCHORS[spot_name]["near_hand" if pose.startswith(("throw", "punt")) else "chest"]
+                hand_x = sprite.width - held[0] if actor.facing_left else held[0]
+                ball_sprite = rgba(BALL, 0)
+                bw, bh = max(1, round(ball_sprite.width * art)), max(1, round(ball_sprite.height * art))
+                ball_scaled = ball_sprite.resize((bw, bh), Image.NEAREST)
+                left = round(screen_x - anchor * art + hand_x * art - bw / 2)
+                image.paste(ball_scaled, (left, round(screen_y - height + held[1] * art - bh / 2)), ball_scaled)
         draw = ImageDraw.Draw(image, "RGBA")
         if ball_now is not None:
             x, y, per_yard = camera.project(ball_now[0], 0, ball_now[2])
@@ -287,7 +312,7 @@ def render(
 
 
 def tackled(actor: Actor, spot: float, z: float) -> Actor:
-    actor.move("hit", 0.13, spot - 0.3, z).move("fall_30", 0.12, spot - 0.1, z)
+    actor.move("hit", 0.1, spot - 0.4, z).move("stumble", 0.1, spot - 0.25, z).move("fall_30", 0.1, spot - 0.1, z)
     return actor.move("fall_60", 0.15, spot, z).hold("ground", 4)
 
 
@@ -295,16 +320,16 @@ def tackler(actor: Actor, wait: float, contact: float, spot: float, z: float, si
     actor.hold("ready", wait).move("RUN", contact - 0.3 - wait, spot + 2.4 * sign, z - 0.3)
     actor.move("lunge", 0.25, spot + 1.1 * sign, z - 0.2).move("wrap", 0.2, spot + 0.5 * sign, z - 0.2)
     actor.move("fall_60", 0.2, spot + 0.2 * sign, z - 0.2).move("ground", 1.0, spot + 0.2 * sign, z - 0.2)
-    return actor.hold("rise_1", 0.25).hold("kneel", 0.3).hold("ready", 3)
+    return actor.hold("rise_1", 0.25).hold("rise_2", 0.3).hold("rise_3", 0.25).hold("ready", 3)
 
 
 def pass_play() -> None:
     los, spot, catch_time, contact = 62, 86, 2.95, 4.4
     catch_x, catch_z = 73, 38.5
-    passer = Actor(GREEN_SET, 57, 27).hold("ready", 0.8).move("DROP", 0.7, 54.5, 27)
+    passer = Actor(GREEN_SET, 57, 27).carry(0, 2.1).hold("ready", 0.8).move("DROP", 0.7, 54.5, 27)
     passer.hold("drop_b", 0.2).hold("throw_cock", 0.3).hold("throw_mid", 0.1)
     passer.hold("throw_rel", 0.15).hold("throw_follow", 0.35).hold("stand", 4)
-    receiver = Actor(GREEN_SET, los, 44).hold("ready", 0.8)
+    receiver = Actor(GREEN_SET, los, 44).carry(catch_time).hold("ready", 0.8)
     receiver.move("RUN", catch_time - 0.95, catch_x - 1.3, catch_z + 0.2)
     receiver.move("catch_reach_e", 0.15, catch_x, catch_z).move("catch_reach", 0.12, catch_x + 1, catch_z - 0.1)
     receiver.move("catch_secure", 0.2, catch_x + 2.8, catch_z - 0.3)
@@ -329,7 +354,7 @@ def pass_play() -> None:
 
 def run_play() -> None:
     los, spot, contact = 62, 71, 2.5
-    runner = Actor(SILVER_SET, los - 3.5, 27).hold("ready", 0.8)
+    runner = Actor(SILVER_SET, los - 3.5, 27).carry(0).hold("ready", 0.8)
     runner.move("RUN", contact - 0.93, spot - 0.7, 31)
     tackled(runner, spot, 31)
     defender = tackler(Actor(GREEN_SET, spot + 2, 38, True), 1.1, contact, spot, 31)
@@ -346,9 +371,9 @@ def run_play() -> None:
 
 def sack_play() -> None:
     los, spot, contact = 85, 79, 2.5
-    passer = Actor(SILVER_SET, 80.5, 27).hold("ready", 0.8).move("DROP", 0.7, 78.5, 27)
+    passer = Actor(SILVER_SET, 80.5, 27).carry(0).hold("ready", 0.8).move("DROP", 0.7, 78.5, 27)
     passer.hold("drop_b", contact - 1.63)
-    passer.move("hit", 0.13, 78.7, 27).move("fall_30", 0.12, spot, 27)
+    passer.move("hit", 0.1, 78.7, 27).move("stumble", 0.08, 78.9, 27).move("fall_30", 0.1, spot, 27)
     passer.move("fall_60", 0.15, spot, 27).hold("ground", 4)
     rusher = tackler(Actor(GREEN_SET, los + 0.5, 34, True), 1.0, contact, spot, 27)
     render(
@@ -365,7 +390,7 @@ def sack_play() -> None:
 def field_goal() -> None:
     los, hold_x, z, kick_z = 79, 72, 26.2, 27.7
     snapper = Actor(SILVER_SET, los, z).hold("snap_ready", 0.8).hold("snap_release", 0.5).hold("ready", 5)
-    holder = Actor(SILVER_SET, hold_x, z).hold("hold_empty", 1.15).hold("hold_place", 0.4).hold("hold_empty", 4)
+    holder = Actor(SILVER_SET, hold_x, z).hold("hold_ready", 1.0).hold("hold_catch", 0.15).hold("hold_place", 0.4).hold("hold_ready", 4)
     kicker = Actor(SILVER_SET, hold_x - 3.6, kick_z).hold("ready", 0.75)
     kicker.move("RUN", 0.55, hold_x - 1.8, kick_z).move("kick_plant", 0.12, hold_x - 1.4, kick_z)
     kicker.move("kick_swing", 0.08, hold_x - 1.1, kick_z).move("kick_strike", 0.12, hold_x - 0.9, kick_z)
@@ -393,13 +418,13 @@ def field_goal() -> None:
 
 def punt() -> None:
     los, start, landing, z, hang, kick_time = 60, 47, 89, 27, 3.7, 1.14
-    punter = Actor(GREEN_SET, start, z).hold("ready", 0.7).hold("punt_hold", 0.35)
-    punter.move("run2", 0.15, start + 0.6, z).move("kick_plant", 0.12, start + 1, z)
-    punter.move("kick_strike", 0.12, start + 1.4, z).move("kick_follow", 0.6, start + 1.6, z).hold("stand", 8)
+    punter = Actor(GREEN_SET, start, z).carry(0, kick_time).hold("ready", 0.7).hold("punt_hold", 0.35)
+    punter.move("punt_drop", 0.15, start + 0.6, z).move("punt_strike", 0.12, start + 1.2, z)
+    punter.move("punt_follow", 0.6, start + 1.6, z).hold("stand", 8)
     arrival = kick_time + hang
-    returner = Actor(SILVER_SET, landing, 30, True).hold("ready", arrival - 0.3)
+    returner = Actor(SILVER_SET, landing, 30, True).carry(arrival).hold("ready", arrival - 0.3)
     returner.hold("catch_high_e", 0.3).hold("catch_high", 0.12).move("catch_secure", 0.2, landing - 0.3, 30)
-    returner.move("hit", 0.13, landing - 0.6, 30).move("fall_30", 0.12, landing - 0.8, 30)
+    returner.move("hit", 0.1, landing - 0.6, 30).move("stumble", 0.1, landing - 0.7, 30).move("fall_30", 0.1, landing - 0.8, 30)
     returner.move("fall_60", 0.15, landing - 1, 30).hold("ground", 4)
     coverage = Actor(GREEN_SET, 72, 24).hold("ready", 0.9)
     coverage.move("RUN", arrival + 0.42 - 0.3 - 0.9, landing - 3, 29.7).move("lunge", 0.25, landing - 1.8, 29.8)

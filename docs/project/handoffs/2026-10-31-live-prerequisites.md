@@ -23,11 +23,11 @@ The owner accepted the design (OWN-018) and moved Live ahead of M3 (OWN-019), as
 
 ## Owner inputs needed
 
-Where new sprite poses come from: the owner judged the drawn frames a stark downgrade from the 6 originals (OWN-025). Approval for the next upgrade, which carries the sign-in fix for other local addresses (R-036). Until then the app works at `http://127.0.0.1:8000`. The owner approved the scoreboard upgrade, which ran 2026-11-01 21:25 (UTC−7) after PHI at WSH ended, offline about 5 seconds with a backup taken. Signed-in pages on the running app are the owner's to confirm, since only they hold that session.
+Review of the motion GIFs for the 53 PixelLab frames (OWN-026); frames they reject can be redrawn. Approval for the next upgrade, which carries the sign-in fix for other local addresses (R-036). Until then the app works at `http://127.0.0.1:8000`. The owner approved the scoreboard upgrade, which ran 2026-11-01 21:25 (UTC−7) after PHI at WSH ended, offline about 5 seconds with a backup taken. Signed-in pages on the running app are the owner's to confirm, since only they hold that session.
 
 The GitHub repository is public. Only `claude/sprite-art` is pushed from this work: the sprite art alone (OWN-024). `claude/platform-reset` stays local until the owner asks. Review renders in `data/sprites/` include Gridiron field art, so they stay ignored (OWN-015).
 
 ## Resume here
 
 1. Done: the [first slate](../../research/live-slate-receipt-2026-11-01.md) is measured, and R-025, R-026 and R-030 are closed. Check that drives and team stats appeared on Sunday's finals after their 12-hour checks (R-032), and watch CHI at SEA on 2026-11-03 01:15 UTC as the first live game on the running app.
-2. Build the Gridiron sync lane and private delivery, then recoloring to real uniforms and the app's play renderer, using `assets/sprites`. Scoreboard follow-ups: player box scores, scoring plays and injuries. The full frame set is drawn ([status](../../research/live-animation-prerequisites-2026-10-31.md#sprite-direction--owner-decision-2026-11-01)), so only the weakest frames and missing poses remain. Refetch KC and CHI uniforms and newly listed fields before using them.
+2. Build the Gridiron sync lane and private delivery, then recoloring to real uniforms and the app's play renderer, using `assets/sprites`. Scoreboard follow-ups: player box scores, scoring plays and injuries. Every planned pose is drawn by PixelLab and installed ([method](../../research/live-animation-prerequisites-2026-10-31.md#pixellab-frames--2026-11-02)); the renderer draws the ball from `assets/sprites/anchors.json` (OWN-027). Refetch KC and CHI uniforms and newly listed fields before using them.

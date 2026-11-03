@@ -117,3 +117,18 @@ Colors and pixel size can match exactly, but drawing habits can't. Close-up comp
 5. **All play types:** pass, run, sneak, sack, interception, field goal, PAT, punt, kickoff, fumble and penalty, plus corrections, accessibility and full-slate performance.
 
 Not ready for tomorrow's games: the animation. M3 and M4 move later as a result, with the league in week 8 of 14 and the trade deadline on 2026-12-02.
+
+## PixelLab frames — 2026-11-02
+
+The owner connected PixelLab (OWN-026). Its skeleton animator redraws one original frame into poses given as 18 joints, so the character comes from the owner's art rather than from new drawing. Joints for the originals were placed by hand from their pixels; PixelLab's own estimator put the head on the shoulders.
+
+| Question | Result |
+| --- | --- |
+| Close to the originals? | The owner called the first five "incredibly close". Proportions, helmet, outline and palette hold; jersey detail is simpler |
+| One drawing for every team? | Yes, through a key palette (ENG-026). A real team set drifted across classes, Seattle's navy into the black outline, and a loud synthetic key bled into the helmet. The owner's Arizona colors with the trims and whites made distinct worked |
+| Same drawing twice? | The same poses and seed give the same drawing to within 84–94% of the silhouette, which let the approved Arizona fall take its classes from a key redraw |
+| Color accuracy | Varies by frame, not palette: some frames are 100% exact, others about half, with most of the rest close enough to classify |
+| Model habits | Motion streaks, a ball drawn in hands or at the foot, and specks. Removed by rule or by listed hand fixes. Rules that judged by shape alone ate thin legs and pants, so they were narrowed and checked against the six originals |
+| Cost | 3 generations per batch of 4–14 frames. 53 frames used 33.1 generations including tests and two redraws. The trial runs one job at a time, about 2–7 minutes each |
+
+Poses carry no ball, at the owner's suggestion (OWN-027). That removed the ball-against-dark-skin confusion and stops receivers holding a ball in shared poses. Frames: [`assets/sprites`](../../assets/sprites/README.md). Pipeline: [`scripts/sprites/pixellab`](../../scripts/sprites/pixellab/README.md).

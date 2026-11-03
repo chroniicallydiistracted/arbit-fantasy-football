@@ -29,6 +29,13 @@ def load_groups() -> dict[str, dict[str, list[str]]]:
     return groups
 
 
+def anchors() -> dict[str, dict[str, list[float] | int]]:
+    """Hand positions and lift for frames drawn without the ball. Pixels from the frame's top left."""
+    path = ASSETS / "anchors.json"
+    data: dict[str, dict[str, list[float] | int]] = json.loads(path.read_text()) if path.exists() else {}
+    return data
+
+
 def all_frames() -> dict[str, list[str]]:
     merged: dict[str, list[str]] = {}
     for frames in load_groups().values():
