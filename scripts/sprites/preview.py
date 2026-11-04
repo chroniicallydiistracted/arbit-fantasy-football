@@ -9,7 +9,9 @@ field: that art is licensed for the private app only (OWN-015).
 import math
 import sys
 from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -140,10 +142,39 @@ FIELD = plain_field()
 SCALE = 3
 
 
+@dataclass(frozen=True)
+class Shot:
+    """Where the camera sits, in yards: `back` behind the near sideline and `rise` above the turf,
+    aimed at `look` (height, depth). `crop` is the kept band of rows; None fits it to the field.
+    With `fixed_x` the camera stays put and the plays' follow paths are ignored."""
+
+    width: int
+    height: int
+    rise: float
+    back: float
+    look: tuple[float, float]
+    focal: float
+    crop: tuple[int, int] | None
+    fixed_x: float | None = None
+    min_art: float = 0.0  # never shrink a sprite below this many screen pixels per art pixel
+    caption_size: int = 19
+    tag_size: int = 14
+    ball_radius: float = 0.0  # least screen radius of the ball in flight, so a far kick stays visible
+
+
+CLOSE = Shot(WIDTH, HEIGHT, 22.0, 40.0, (0.0, 40.0), 3000.0, (CROP, HEIGHT))
+# The whole field, both end zones and the sideline strip, from a camera high behind the near
+# sideline. At 1920 pixels the far sideline is about one screen pixel per art pixel, so sprites
+# are kept at no less than their own size rather than dropping rows.
+WIDE = Shot(1920, 1080, 50.0, 75.0, (0.0, 26.67), 1314.0, None, fixed_x=50.0, min_art=1.0, caption_size=24, tag_size=16, ball_radius=6.0)
+SHOT = CLOSE
+
+
 class Camera:
-    def __init__(self, x: float, tilt: float = 0.0):
-        self.position = np.array([x, 22.0, -40.0])
-        forward = np.array([x, tilt, 40.0]) - self.position
+    def __init__(self, x: float, tilt: float = 0.0, shot: Shot = CLOSE):
+        self.shot = shot
+        self.position = np.array([x, shot.rise, -shot.back])
+        forward = np.array([x, shot.look[0] + tilt, shot.look[1]]) - self.position
         self.forward = forward / np.linalg.norm(forward)
         right = np.cross([0, 1, 0], self.forward)
         self.right = right / np.linalg.norm(right)
@@ -152,31 +183,43 @@ class Camera:
     def project(self, x: float, y: float, z: float) -> tuple[float, float, float]:
         offset = np.array([x, y, z]) - self.position
         depth = offset @ self.forward
+        focal = self.shot.focal
         return (
-            WIDTH / 2 + 3000 * (offset @ self.right) / depth,
-            HEIGHT / 2 - 3000 * (offset @ self.up) / depth,
-            3000 / depth,
+            self.shot.width / 2 + focal * (offset @ self.right) / depth,
+            self.shot.height / 2 - focal * (offset @ self.up) / depth,
+            focal / depth,
         )
+
+    def field_corners(self) -> list[tuple[float, float]]:
+        corners = []
+        for px, py in [(0, 0), (FIELD.width, 0), (FIELD.width, FIELD.height), (0, FIELD.height)]:
+            x = (px / SCALE - GOAL_LEFT) / YARD
+            z = (NEAR_SIDELINE - py / SCALE) / YARD
+            corners.append(self.project(x, 0, z)[:2])
+        return corners
 
     def ground(self) -> Image.Image:
         source = [(0, 0), (FIELD.width, 0), (FIELD.width, FIELD.height), (0, FIELD.height)]
-        target = []
-        for px, py in source:
-            x = (px / SCALE - GOAL_LEFT) / YARD
-            z = (NEAR_SIDELINE - py / SCALE) / YARD
-            target.append(self.project(x, 0, z)[:2])
         matrix, values = [], []
-        for (x, y), (u, v) in zip(target, source, strict=True):
+        for (x, y), (u, v) in zip(self.field_corners(), source, strict=True):
             matrix += [[x, y, 1, 0, 0, 0, -u * x, -u * y], [0, 0, 0, x, y, 1, -v * x, -v * y]]
             values += [u, v]
         coefficients = np.linalg.solve(np.array(matrix, float), np.array(values, float))
         return FIELD.transform(
-            (WIDTH, HEIGHT),
+            (self.shot.width, self.shot.height),
             Image.PERSPECTIVE,
             coefficients,
             Image.BILINEAR,
             fillcolor=(14, 18, 16),
         )
+
+    def band(self) -> tuple[int, int]:
+        """Rows to keep: the shot's own crop, or the field with room above for goalposts and below for the caption."""
+        if self.shot.crop is not None:
+            return self.shot.crop
+        rows = [y for _, y in self.field_corners()]
+        post_top = self.project(110, POST_TOP, POST_Z)[1]
+        return max(0, round(min(*rows, post_top)) - 24), min(self.shot.height, round(max(rows)) + 56)
 
 
 class Actor:
@@ -242,6 +285,113 @@ def flight(start_time: float, end_time: float, start: Point, end: Point, g: floa
     return at
 
 
+# Goalposts on the end line, in yards: crossbar 10 ft up, uprights 18 ft 6 in apart.
+POST_Z, POST_HALF, CROSSBAR, POST_TOP = 26.67, 3.08, 3.33, 11.7
+POST_YELLOW = (250, 210, 40, 255)
+Drawing = Callable[[ImageDraw.ImageDraw], None]
+
+
+def goalpost(camera: "Camera", x: float) -> list[tuple[float, Drawing]]:
+    """A goalpost as pieces, each with its distance across the field, so the scene can draw them in
+    depth order: a good kick passes behind the near upright and in front of the far one."""
+
+    def piece(start: Point, end: Point, thickness: float, at: Point) -> Drawing:
+        def draw(target: ImageDraw.ImageDraw) -> None:
+            width = max(2, round(camera.project(*at)[2] * thickness))
+            target.line([camera.project(*start)[:2], camera.project(*end)[:2]], fill=POST_YELLOW, width=width)
+
+        return draw
+
+    near, far = POST_Z - POST_HALF, POST_Z + POST_HALF
+    base, bar = (x, 0.0, POST_Z), (x, CROSSBAR, POST_Z)
+    return [
+        (POST_Z, piece(base, bar, 0.18, base)),
+        (POST_Z, piece((x, CROSSBAR, near), (x, CROSSBAR, far), 0.14, bar)),
+        (near, piece((x, CROSSBAR, near), (x, POST_TOP, near), 0.12, (x, CROSSBAR, near))),
+        (far, piece((x, CROSSBAR, far), (x, POST_TOP, far), 0.12, (x, CROSSBAR, far))),
+    ]
+
+
+@dataclass(frozen=True)
+class Ball:
+    """The ball off the hand, and how its long axis turns.
+
+    "spiral": the nose follows the flight, with a slight wobble (passes, snaps and punts).
+    "tumble": end over end from `since`, starting upright, the top turning back toward the kicker
+    (place kicks). "upright": standing on its tip for the hold. "flat": lying on the turf.
+    A play's ball function may return a plain Point, which is a spiral. `depth` draws a ball that a
+    player is touching at that player's distance, so the hold shows the ball in front of the holder."""
+
+    at: Point
+    spin: str = "spiral"
+    since: float = 0.0
+    depth: float | None = None
+
+
+BALL_HALF = 0.26  # yards: half the drawn length, drawn larger than life so it reads at broadcast size
+BALL_WIDTH = 0.62  # width over length, as on a real ball (6.7 in by 11 in)
+WOBBLE = math.radians(3)  # how far a spiral's nose circles its path
+TUMBLE = 2.0  # end-over-end turns a second, slower than life so it reads at 20 frames a second
+
+
+def as_ball(value: "Ball | Point | None") -> "Ball | None":
+    return value if value is None or isinstance(value, Ball) else Ball(value)
+
+
+def ball_axis(ball: Callable[[float], "Ball | Point | None"], t: float) -> np.ndarray:
+    """Unit vector along the ball's long axis at time t, in field yards."""
+    now = as_ball(ball(t))
+    assert now is not None
+    if now.spin == "upright":
+        return np.array([0.0, 1.0, 0.0])
+    step = 0.02
+    before, after = as_ball(ball(t - step)), as_ball(ball(t + step))
+    ends = [b.at for b in (before, after) if b is not None and b.spin == now.spin]
+    if len(ends) == 2:
+        velocity = (np.array(ends[1]) - np.array(ends[0])) / (2 * step)
+    elif after is not None and after.spin == now.spin:
+        velocity = (np.array(after.at) - np.array(now.at)) / step
+    elif before is not None and before.spin == now.spin:
+        velocity = (np.array(now.at) - np.array(before.at)) / step
+    else:
+        velocity = np.array([1.0, 0.0, 0.0])
+    heading = np.array([velocity[0], 0.0, velocity[2]])
+    heading = heading / np.linalg.norm(heading) if np.linalg.norm(heading) > 1e-6 else np.array([1.0, 0.0, 0.0])
+    if now.spin == "flat":
+        return heading
+    if now.spin == "tumble":
+        turn = math.pi / 2 + 2 * math.pi * TUMBLE * (t - now.since)
+        return math.cos(turn) * heading + math.sin(turn) * np.array([0.0, 1.0, 0.0])
+    nose = velocity / np.linalg.norm(velocity) if np.linalg.norm(velocity) > 1e-6 else heading
+    side = np.cross(nose, [0.0, 1.0, 0.0])
+    side = side / np.linalg.norm(side) if np.linalg.norm(side) > 1e-6 else np.array([0.0, 0.0, 1.0])
+    lift = np.cross(side, nose)
+    circle = 2 * math.pi * 3 * t
+    wobbled = nose + math.tan(WOBBLE) * (math.cos(circle) * side + math.sin(circle) * lift)
+    return wobbled / np.linalg.norm(wobbled)
+
+
+def draw_flying_ball(draw: ImageDraw.ImageDraw, camera: "Camera", ball: Ball, axis: np.ndarray, least_radius: float) -> None:
+    """The ball and its shadow on the turf. The long axis is projected through the camera, so a ball
+    flying away from it shortens and one tumbling across it turns in the picture."""
+    x, y, per_yard = camera.project(ball.at[0], 0, ball.at[2])
+    shadow = max(per_yard * 0.2, least_radius * 0.8)
+    draw.ellipse((x - shadow, y - shadow * 0.4, x + shadow, y + shadow * 0.4), fill=(0, 0, 0, 80))
+    x, y, per_yard = camera.project(*ball.at)
+    radius = max(per_yard * BALL_HALF, least_radius)
+    nose = camera.project(*(np.array(ball.at) + axis * BALL_HALF))
+    reach = np.array([nose[0] - x, nose[1] - y]) * radius / (per_yard * BALL_HALF)
+    length = float(np.linalg.norm(reach))
+    along = reach / length if length > 1e-6 else np.array([1.0, 0.0])
+    across = np.array([-along[1], along[0]])
+    major, minor = max(length, radius * BALL_WIDTH), radius * BALL_WIDTH
+    outline = [
+        tuple(np.array([x, y]) + math.cos(angle) * major * along + math.sin(angle) * minor * across)
+        for angle in np.linspace(0, 2 * math.pi, 16)
+    ]
+    draw.polygon(outline, fill=(112, 60, 22, 255), outline=(20, 10, 4, 255))
+
+
 def opaque_colors(image: Image.Image) -> set[tuple[int, int, int]]:
     pixels = np.asarray(image)
     found = np.unique(pixels[pixels[..., 3] == 255][:, :3], axis=0)
@@ -270,24 +420,37 @@ def render(
     name: str,
     seconds: float,
     actors: list[Actor],
-    ball: Callable[[float], Point | None],
+    ball: Callable[[float], Ball | Point | None],
     follow: Callable[[float], float],
     lines: list[tuple[float, tuple[int, int, int, int]]],
     caption: str,
     tilted: bool = False,
     overlay: Callable[[ImageDraw.ImageDraw, "Camera"], None] | None = None,
+    posts: tuple[float, ...] = (),
 ) -> None:
+    """Write play-{name}.gif. `overlay` paints on the turf under everything; `posts` are goalposts
+    by yard line, drawn in depth order with the players and the ball."""
+    shot = SHOT
+    big, small = ImageFont.load_default(size=shot.caption_size), ImageFont.load_default(size=shot.tag_size)
     images: list[Image.Image] = []
     kept: set[tuple[int, int, int]] = {(112, 60, 22), (20, 10, 4)}  # the ball in flight
-    camera_x, tilt = follow(0), 0.0
+    camera_x, tilt = (follow(0) if shot.fixed_x is None else shot.fixed_x), 0.0
+    band = None
+    if shot.fixed_x is not None:
+        # A still camera can't tilt up after a punt, so the kept rows reach the ball's highest point.
+        still = Camera(shot.fixed_x, 0.0, shot)
+        top, bottom = still.band()
+        heights = [still.project(*state.at)[1] for index in range(int(seconds * FPS)) if (state := as_ball(ball(index / FPS))) is not None]
+        band = (max(0, min([top, *(round(y) - 16 for y in heights)])), bottom)
     for index in range(int(seconds * FPS)):
         t = index / FPS
-        camera_x += (follow(t) - camera_x) * 0.14
-        ball_now = ball(t)
-        if tilted:
-            wanted = min(3.2, ball_now[1] * 0.22) if ball_now and ball_now[1] > 4 else 0.0
-            tilt += (wanted - tilt) * 0.1
-        camera = Camera(camera_x, tilt)
+        ball_now = as_ball(ball(t))
+        if shot.fixed_x is None:
+            camera_x += (follow(t) - camera_x) * 0.14
+            if tilted:
+                wanted = min(3.2, ball_now.at[1] * 0.22) if ball_now and ball_now.at[1] > 4 else 0.0
+                tilt += (wanted - tilt) * 0.1
+        camera = Camera(camera_x, tilt, shot)
         image = camera.ground()
         draw = ImageDraw.Draw(image, "RGBA")
         for x, color in lines:
@@ -296,10 +459,27 @@ def render(
         if overlay is not None:
             overlay(draw, camera)
         tags: list[tuple[float, float, str]] = []
-        placed = [(actor, *actor.frame(t)) for actor in actors]
-        for actor, x, z, pose in sorted(placed, key=lambda item: -item[2]):
+
+        # Everything standing on the field, drawn from the far sideline in: players, goalpost pieces and
+        # the ball in flight. The ball goes last among equals, so a ball at a player's depth stays in front.
+        scene: list[tuple[float, int, str, Any]] = []
+        for actor in actors:
+            x, z, pose = actor.frame(t)
+            scene.append((z, 0, "actor", (actor, x, z, pose)))
+        for post_x in posts:
+            scene += [(z, 0, "post", piece) for z, piece in goalpost(camera, post_x)]
+        if ball_now is not None:
+            scene.append((ball_now.at[2] if ball_now.depth is None else ball_now.depth, 1, "ball", ball_now))
+        for _z, _order, kind, item in sorted(scene, key=lambda entry: (-entry[0], entry[1])):
+            if kind == "post":
+                item(draw)
+                continue
+            if kind == "ball":
+                draw_flying_ball(draw, camera, item, ball_axis(ball, t), shot.ball_radius)
+                continue
+            actor, x, z, pose = item
             screen_x, screen_y, per_yard = camera.project(x, 0, z)
-            art = per_yard * ART_PIXEL_YARDS
+            art = max(shot.min_art, per_yard * ART_PIXEL_YARDS)
             if actor.uniform is not None:
                 sprite = painted(pose, actor.uniform, actor.color_set)
             else:
@@ -333,33 +513,26 @@ def render(
                 left = round(screen_x - anchor * art + hand_x * art - bw / 2)
                 image.paste(ball_scaled, (left, round(screen_y - height + held[1] * art - bh / 2)), ball_scaled)
         draw = ImageDraw.Draw(image, "RGBA")
-        for tag_x, tag_y, text in tags:
-            width_px = draw.textlength(text, font=SMALL)
-            draw.rectangle((tag_x - width_px / 2 - 4, tag_y - 18, tag_x + width_px / 2 + 4, tag_y), fill=(10, 12, 14, 170))
-            draw.text((tag_x - width_px / 2, tag_y - 17), text, font=SMALL, fill=(240, 240, 235, 255))
-        if ball_now is not None:
-            x, y, per_yard = camera.project(ball_now[0], 0, ball_now[2])
-            draw.ellipse(
-                (x - per_yard * 0.2, y - per_yard * 0.08, x + per_yard * 0.2, y + per_yard * 0.08),
-                fill=(0, 0, 0, 80),
-            )
-            x, y, per_yard = camera.project(*ball_now)
-            radius, turn = per_yard * 0.26, abs(math.cos(t * 20))
-            outline = [
-                (
-                    x + math.cos(angle) * radius * (0.45 + 0.55 * turn),
-                    y + math.sin(angle) * radius * 0.62,
-                )
-                for angle in np.linspace(0, 2 * math.pi, 14)
-            ]
-            draw.polygon(outline, fill=(112, 60, 22, 255), outline=(20, 10, 4, 255))
-        image = image.crop((0, CROP, WIDTH, HEIGHT))
+        tag_h = shot.tag_size + 4
+        boxes: list[tuple[float, float, float, float]] = []
+        for tag_x, tag_y, text in sorted(tags, key=lambda tag: -tag[1]):
+            half = draw.textlength(text, font=small) / 2 + 4
+            # Players who meet would cover each other's names, so a later tag moves up above an earlier one.
+            while any(tag_x - half < right and left < tag_x + half and tag_y - tag_h < bottom and top < tag_y for left, top, right, bottom in boxes):
+                tag_y -= 1
+            boxes.append((tag_x - half, tag_y - tag_h, tag_x + half, tag_y))
+            draw.rectangle(boxes[-1], fill=(10, 12, 14, 170))
+            draw.text((tag_x - half + 4, tag_y - tag_h + 1), text, font=small, fill=(240, 240, 235, 255))
+        top, bottom = band or camera.band()
+        image = image.crop((0, top, shot.width, bottom))
         draw = ImageDraw.Draw(image, "RGBA")
-        bottom = HEIGHT - CROP
-        draw.rectangle((0, bottom - 40, WIDTH, bottom), fill=(10, 12, 14, 228))
-        draw.text((16, bottom - 32), caption, font=BIG, fill=(240, 240, 235, 255))
+        bottom -= top
+        bar = shot.caption_size + 21
+        draw.rectangle((0, bottom - bar, shot.width, bottom), fill=(10, 12, 14, 228))
+        draw.text((16, bottom - bar + 8), caption, font=big, fill=(240, 240, 235, 255))
         note = "Re-creation from play-by-play"
-        draw.text((WIDTH - 16 - draw.textlength(note, font=SMALL), bottom - 28), note, font=SMALL, fill=(200, 205, 200, 255))
+        note_y = bottom - bar / 2 - shot.tag_size / 2 - 1
+        draw.text((shot.width - 16 - draw.textlength(note, font=small), note_y), note, font=small, fill=(200, 205, 200, 255))
         images.append(image)
     palettized = exact_palette(images, kept)
     palettized[0].save(
@@ -467,12 +640,17 @@ def field_goal() -> None:
     snap = flight(0.8, 1.15, (los + sx, sy, z), (hold_x + hx, hy, z), g=2.0)
     kick = flight(1.5, 3.7, (hold_x + hx, hy, z), (110, 6.5, 26.67))
 
-    def ball(t: float) -> Point | None:
+    def ball(t: float) -> Ball | Point | None:
         if 0.8 <= t < 1.15:
             return snap(t)
+        if 1.15 <= t < 1.5:
+            return Ball((hold_x + hx, 0.25, z), "upright")
         if 1.5 <= t < 3.7:
-            return kick(t)
-        return (min(113, 110 + (t - 3.7) * 8), max(0.2, 6.5 - (t - 3.7) * 5), 26.67) if t >= 3.7 else None
+            return Ball(kick(t), "tumble", 1.5)
+        if t < 3.7:
+            return None
+        landed = (min(113, 110 + (t - 3.7) * 8), max(0.2, 6.5 - (t - 3.7) * 5), 26.67)
+        return Ball(landed, "flat" if landed[1] <= 0.2 else "tumble", 1.5)
 
     def follow(t: float) -> float:
         return 74 if t < 1.5 else 74 + (min(t, 3.7) - 1.5) * 13.5

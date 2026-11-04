@@ -6,13 +6,17 @@ re-creation label (ENG-023). The field and uniforms are the owner's Gridiron art
 on Gridiron's week page, so output stays in ignored data/ (OWN-015).
 Offense always attacks to the right; the feed does not say which end each team defended.
 
-Usage: uv run --no-project --with pillow --with numpy python scripts/sprites/real_plays.py
+Usage: uv run --no-project --with pillow --with numpy python scripts/sprites/real_plays.py [--close]
+
+The whole field stays in view from a fixed camera, the standard view (OWN-030), written to
+data/sprites/review/real-plays-wide. --close uses the earlier following camera instead
+(data/sprites/review/real-plays).
 """
 
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/sprites"))
@@ -70,6 +74,11 @@ def catch(receiver: P.Actor, catch_time: float, x: float, z: float, run_from: fl
     receiver.move("catch_reach_e", 0.15, x, z).move("catch_reach", 0.12, x + 1, z).carry(catch_time)
 
 
+def render(*args, posts: tuple[float, ...] = (), **kwargs) -> None:
+    """P.render, with both goalposts whenever the shot shows both end zones."""
+    P.render(*args, posts=(-10.0, 110.0) if P.SHOT.fixed_x is not None else posts, **kwargs)
+
+
 def lines(los: float, to_gain: float | None = None) -> list[tuple[float, tuple[int, int, int, int]]]:
     out = [(los, P.LOS_COLOR)]
     if to_gain is not None:
@@ -95,7 +104,7 @@ def touchdown_pass() -> None:  # 193900
     def follow(t: float) -> float:
         return 58 if t < release else path(min(t, catch_time))[0] + 2 if t < catch_time else min(101, receiver.where(t)[0])
 
-    P.render("td-pass", 8.0, [passer, receiver], lambda t: path(t) if release <= t < catch_time else None, follow,
+    render("td-pass", 8.0, [passer, receiver], lambda t: path(t) if release <= t < catch_time else None, follow,
              lines(los, 67), "Q2 0:30 · 3rd & 10 · S.Darnold deep left to J.Smith-Njigba, 43-yard TOUCHDOWN")
 
 
@@ -116,7 +125,7 @@ def pass_and_tackle() -> None:  # 124000
     def follow(t: float) -> float:
         return 30 if t < release else path(min(t, catch_time))[0] + 2 if t < catch_time else receiver.where(t)[0] + 1
 
-    P.render("pass-tackle", 6.8, [passer, receiver, defender], lambda t: path(t) if release <= t < catch_time else None,
+    render("pass-tackle", 6.8, [passer, receiver, defender], lambda t: path(t) if release <= t < catch_time else None,
              follow, lines(los, 38), "Q2 9:34 · 1st & 10 · C.Williams deep middle to L.Burden for 23 yards (J.Love)")
 
 
@@ -127,7 +136,7 @@ def run_two_tacklers() -> None:  # 41000
     tackled(runner, spot, z)
     first = tackler(player("T.Okada", SEA, 4247808, 67, 31, True), 0.8, contact, spot, z, 1)
     second = tackler(player("E.Jones", SEA, 4362851, 76, 14, True), 0.7, contact + 0.08, spot + 0.3, z - 1.6, 1)
-    P.render("run", 5.6, [runner, first, second], lambda _t: None, lambda t: runner.where(t)[0] + 2,
+    render("run", 5.6, [runner, first, second], lambda _t: None, lambda t: runner.where(t)[0] + 2,
              lines(los, 70), "Q1 8:08 · 2nd & 10 · R.Johnson right tackle for 9 yards (T.Okada; E.Jones)")
 
 
@@ -138,53 +147,93 @@ def sack() -> None:  # 231600
     passer.move("hit_back", 0.1, spot + 0.6, MID).move("fall_back_30", 0.12, spot + 0.3, MID)
     passer.move("fall_back_60", 0.15, spot, MID).hold("ground_back", 6)
     rusher = tackler(player("M.Sweat", CHI, 3134690, los + 1, 19, True), 0.55, contact, spot + 0.4, MID + 0.3, 1)
-    P.render("sack", 5.6, [passer, rusher], lambda _t: None, lambda _t: 22, lines(los, 37),
+    render("sack", 5.6, [passer, rusher], lambda _t: None, lambda _t: 22, lines(los, 37),
              "Q3 13:27 · 2nd & 10 · S.Darnold sacked at SEA 19 for -8 yards (M.Sweat)")
 
 
-def goalposts(draw: ImageDraw.ImageDraw, camera: P.Camera) -> None:
-    yellow, x = (250, 210, 40, 255), 110.0
-    base = camera.project(x, 0, MID)
-    bar = camera.project(x, 3.33, MID)
-    draw.line([base[:2], bar[:2]], fill=yellow, width=max(2, round(base[2] * 0.18)))
-    left, right = camera.project(x, 3.33, MID - 3.08), camera.project(x, 3.33, MID + 3.08)
-    draw.line([left[:2], right[:2]], fill=yellow, width=max(2, round(bar[2] * 0.14)))
-    for z in (MID - 3.08, MID + 3.08):
-        low, high = camera.project(x, 3.33, z), camera.project(x, 11.7, z)
-        draw.line([low[:2], high[:2]], fill=yellow, width=max(2, round(low[2] * 0.12)))
+def kick_through(start_time: float, cross_time: float, start: P.Point, cross: P.Point, net_x: float = 113.0):
+    """A place kick that crosses the end line at `cross` and keeps its arc until the net behind the
+    goalposts stops it, then drops. Good kicks cross between the uprights and above the crossbar."""
+    arc = P.flight(start_time, cross_time, start, cross)
+    speed = (cross[0] - start[0]) / (cross_time - start_time)
+    net_time = cross_time + (net_x - cross[0]) / speed
+    caught = arc(net_time)
+
+    def at(t: float) -> P.Point:
+        if t < net_time:
+            return arc(t)
+        fall = t - net_time
+        return (net_x, max(0.2, caught[1] - 0.5 * 10.7 * fall * fall), caught[2])
+
+    return at
 
 
-def field_goal() -> None:  # 140700
-    los, hold_x, z = 75, 68, MID
-    snapper = player("S.Daly", CHI, 2980138, los, z).hold("snap_ready", 0.8).hold("snap_release", 0.5).hold("ready", 6)
-    holder = player("T.Taylor", CHI, 4686889, hold_x, z - 0.6)
-    holder.hold("hold_ready", 1.0).hold("hold_catch", 0.15).hold("hold_place", 0.45).hold("hold_ready", 6)
-    kicker = player("C.Santos", CHI, 17427, hold_x - 3.6, z + 1.4).hold("ready", 0.75)
+def place_kick(
+    name: str,
+    team: dict,
+    los: float,
+    unit: tuple[tuple[str, int], tuple[str, int], tuple[str, int]],
+    flight_time: float,
+    cross: tuple[float, float],
+    good: bool,
+    caption: str,
+    to_gain: float | None = None,
+) -> None:
+    """Snap, hold and kick from seven yards behind `los`. `cross` is the ball's height and spot across
+    the field as it reaches the end line. For an offense going right, the kicker's left is the near side."""
+    hold_x, z = los - 7, MID
+    (snap_name, snap_id), (hold_name, hold_id), (kick_name, kick_id) = unit
+    snapper = player(snap_name, team, snap_id, los, z).hold("snap_ready", 0.8).hold("snap_release", 0.5).hold("ready", 8)
+    holder = player(hold_name, team, hold_id, hold_x, z - 0.6)
+    holder.hold("hold_ready", 1.0).hold("hold_catch", 0.15).hold("hold_place", 0.45).hold("hold_ready", 8)
+    kicker = player(kick_name, team, kick_id, hold_x - 3.6, z + 1.4).hold("ready", 0.75)
     kicker.move("RUN", 0.55, hold_x - 1.8, z + 0.8).move("kick_plant", 0.12, hold_x - 1.4, z + 0.6)
     kicker.move("kick_swing", 0.08, hold_x - 1.1, z + 0.4).move("kick_strike", 0.12, hold_x - 0.9, z + 0.3)
     kicker.move("kick_follow", 0.5, hold_x - 0.6, z + 0.3).hold("stand", 1.3)
-    for pose in ("arms_up", "arms_jump", "arms_up", "arms_jump", "point"):
-        kicker.hold(pose, 0.3)
-    kicker.hold("arms_up", 3)
+    if good:
+        for pose in ("arms_up", "arms_jump", "arms_up", "arms_jump", "point"):
+            kicker.hold(pose, 0.3)
+        kicker.hold("arms_up", 4)
+    else:
+        kicker.hold("stand", 6)
     sx, sy = P.ball_offset("snap_ready")
     hx, hy = P.ball_offset("hold_place")
     snap = P.flight(0.8, 1.15, (los + sx, sy, z), (hold_x + hx, hy, z), g=2.0)
-    kick = P.flight(1.62, 3.9, (hold_x + hx, hy, z), (110, 6.5, MID))
+    kick = kick_through(1.62, 1.62 + flight_time, (hold_x + hx, hy, z), (110, cross[0], cross[1]))
 
-    def ball(t: float) -> P.Point | None:
+    def ball(t: float) -> P.Ball | P.Point | None:
         if 0.8 <= t < 1.15:
-            return snap(t)
+            return snap(t)  # a spiral back to the holder
         if 1.15 <= t < 1.62:
-            return (hold_x + hx, 0.25, z)
-        if 1.62 <= t < 3.9:
-            return kick(t)
-        return (min(113, 110 + (t - 3.9) * 8), max(0.2, 6.5 - (t - 3.9) * 5), MID) if t >= 3.9 else None
+            return P.Ball((hold_x + hx, 0.25, z), "upright", depth=z - 0.6)  # under the holder's hand
+        if t < 1.62:
+            return None
+        at = kick(t)
+        return P.Ball(at, "flat" if at[1] <= 0.2 else "tumble", 1.62)
 
     def follow(t: float) -> float:
-        return 74 if t < 1.62 else 74 + (min(t, 3.9) - 1.62) * 12.5
+        return los - 1 if t < 1.62 else los - 1 + (min(t, 1.62 + flight_time) - 1.62) * 12.5
 
-    P.render("field-goal", 6.0, [snapper, holder, kicker], ball, follow, lines(los), "Q2 6:07 · 4th & 4 · C.Santos 44-yard field goal is GOOD",
-             tilted=True, overlay=goalposts)
+    render(name, 1.62 + flight_time + 2.6, [snapper, holder, kicker], ball, follow, lines(los, to_gain), caption,
+           tilted=True, posts=(110.0,))
+
+
+def field_goal() -> None:  # 140700
+    unit = (("S.Daly", 2980138), ("T.Taylor", 4686889), ("C.Santos", 17427))
+    place_kick("field-goal", CHI, 75, unit, 2.28, (6.5, MID), True, "Q2 6:07 · 4th & 4 · C.Santos 44-yard field goal is GOOD")
+
+
+def extra_point() -> None:  # 2598, after D.Swift's 1-yard touchdown run; snapped from the 15
+    unit = (("S.Daly", 2980138), ("T.Taylor", 4686889), ("C.Santos", 17427))
+    place_kick("extra-point", CHI, 85, unit, 1.75, (7.0, MID), True, "Q3 5:38 · Extra point · C.Santos extra point is GOOD")
+
+
+def extra_point_miss() -> None:  # 1939, after J.Smith-Njigba's 43-yard touchdown catch
+    # C.Stoll is named only in the text, without an ESPN id; 0 only picks his placeholder skin.
+    unit = (("C.Stoll", 0), ("M.Dickson", 3929851), ("J.Myers", 2473037))
+    wide_left = MID - P.POST_HALF - 1.3  # outside the near upright
+    place_kick("extra-point-miss", SEA, 85, unit, 1.75, (7.0, wide_left), False,
+               "Q2 0:30 · Extra point · J.Myers extra point is No Good, Wide Left")
 
 
 def punt_return() -> None:  # 226000
@@ -216,7 +265,7 @@ def punt_return() -> None:  # 226000
             return 20
         return min(80, path(min(t, arrival))[0] + 1) if t < arrival else returner.where(t)[0] - 1
 
-    P.render("punt-return", contact + 2.4, [snapper, punter, returner, cover], ball, follow, lines(los),
+    render("punt-return", contact + 2.4, [snapper, punter, returner, cover], ball, follow, lines(los),
              "Q3 13:41 · 4th & 2 · T.Taylor punts 57 yards, T.Horton returns 9 (J.Blackwell)", tilted=True)
 
 
@@ -241,11 +290,16 @@ def interception() -> None:  # 367900
     def follow(t: float) -> float:
         return 22 if t < catch_time else max(10, picker.where(t)[0] - 1)
 
-    P.render("interception", contact + 2.4, [passer, picker, chaser], lambda t: path(t) if release <= t < catch_time else None,
+    render("interception", contact + 2.4, [passer, picker, chaser], lambda t: path(t) if release <= t < catch_time else None,
              follow, lines(los, 32), "Q4 6:01 · 3rd & 7 · S.Darnold INTERCEPTED by J.Lynch, returned 16 yards (A.Lucas)")
 
 
 if __name__ == "__main__":
+    if "--close" not in sys.argv:
+        P.SHOT, P.OUT = P.WIDE, ROOT / "data/sprites/review/real-plays-wide"
     P.OUT.mkdir(parents=True, exist_ok=True)
-    for play in (touchdown_pass, pass_and_tackle, run_two_tacklers, sack, field_goal, punt_return, interception):
-        play()
+    plays = (touchdown_pass, pass_and_tackle, run_two_tacklers, sack, field_goal, extra_point, extra_point_miss, punt_return, interception)
+    only = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+    for play in plays:
+        if not only or play.__name__ in only:
+            play()
