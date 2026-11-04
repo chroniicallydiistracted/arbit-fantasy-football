@@ -1496,6 +1496,10 @@
             "title": "Fixture",
             "type": "boolean"
           },
+          "observer": {
+            "title": "Observer",
+            "type": "boolean"
+          },
           "preferences": {
             "$ref": "#/components/schemas/Preferences"
           },
@@ -1531,7 +1535,8 @@
           "teams",
           "season",
           "preferences",
-          "fixture"
+          "fixture",
+          "observer"
         ],
         "title": "Me",
         "type": "object"

@@ -869,6 +869,8 @@ export interface components {
             current_team_id: string | null;
             /** Fixture */
             fixture: boolean;
+            /** Observer */
+            observer: boolean;
             preferences: components["schemas"]["Preferences"];
             /** Season */
             season: number;

@@ -24,6 +24,13 @@ SESSION_IDLE = timedelta(days=30)
 SESSION_ABSOLUTE = timedelta(days=90)
 # Oldest sessions beyond this are ended when a new device signs in.
 MAX_DEVICES = 10
+# The read-only dev account. No sign-in provider can produce this issuer, so only
+# `issue_observer_session`, run on the server's machine, can create its sessions.
+OBSERVER_ISSUER = "urn:arbit:observer"
+OBSERVER_SUBJECT = "dev-account"
+OBSERVER_EMAIL = "dev-account@arbit.invalid"
+OBSERVER_NAME = "Dev account (read-only)"
+OBSERVER_SESSION = timedelta(hours=12)
 
 
 class MemberError(ValueError):
@@ -598,3 +605,60 @@ def manager_ids(uow: UnitOfWork, account_id: UUID, season: int) -> set[UUID]:
                 )
             )
         )
+
+
+def is_observer(member: dict[str, Any] | None) -> bool:
+    return member is not None and member.get("issuer") == OBSERVER_ISSUER
+
+
+def issue_observer_session(
+    uow: UnitOfWork, *, lifetime: timedelta = OBSERVER_SESSION, now: datetime | None = None
+) -> tuple[str, datetime]:
+    """Create the dev account if needed and give it one new session, ending any earlier one.
+
+    The account can see every team and the administrator pages and change nothing; the API
+    enforces that. The session lasts `lifetime`, at most 24 hours.
+    """
+    if not timedelta(minutes=5) <= lifetime <= timedelta(hours=24):
+        raise MemberError("INVALID_SESSION_LIFETIME")
+    now = now or datetime.now(UTC)
+    invite = (
+        None
+        if account_exists(uow, OBSERVER_ISSUER, OBSERVER_SUBJECT)
+        else create_invitation(uow, OBSERVER_ISSUER, OBSERVER_EMAIL, now=now)
+    )
+    end_observer_sessions(uow, now=now)
+    token, row = sign_in(
+        uow,
+        OBSERVER_ISSUER,
+        OBSERVER_SUBJECT,
+        OBSERVER_EMAIL,
+        True,
+        invitation=invite,
+        display_name=OBSERVER_NAME,
+        device_label="Dev account (local command)",
+        now=now,
+    )
+    expires = now + lifetime
+    with uow.engine.begin() as c:
+        c.execute(update(session).where(session.c.hash == digest(token)).values(expires_at=expires))
+    return token, expires
+
+
+def end_observer_sessions(uow: UnitOfWork, *, now: datetime | None = None) -> int:
+    """End every session of the dev account. Returns how many were still open."""
+    now = now or datetime.now(UTC)
+    with uow.engine.begin() as c:
+        result = c.execute(
+            update(session)
+            .where(
+                session.c.revoked_at.is_(None),
+                session.c.account_id.in_(
+                    select(account.c.id).where(
+                        account.c.issuer == OBSERVER_ISSUER, account.c.subject == OBSERVER_SUBJECT
+                    )
+                ),
+            )
+            .values(revoked_at=now)
+        )
+        return int(result.rowcount or 0)

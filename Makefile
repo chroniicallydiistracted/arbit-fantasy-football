@@ -58,6 +58,14 @@ web-build:
 member-api: local-env
 	uv run --env-file .env.local --env-file .env.auth.local uvicorn arbit_api.main:create_app --factory --host 127.0.0.1 --port 8000 --no-proxy-headers --no-access-log --timeout-graceful-shutdown 5
 
+.PHONY: dev-account dev-account-end
+# The read-only dev account on the running app: a 12-hour session saved for Playwright in
+# data/observer/storage-state.json (this user only). See services/api/src/arbit_api/observer.py.
+dev-account: local-env
+	uv run --env-file .env.local --env-file .env.auth.local python -m arbit_api.observer session
+dev-account-end: local-env
+	uv run --env-file .env.local --env-file .env.auth.local python -m arbit_api.observer end
+
 .PHONY: local-worker local-upgrade services-install services-status services-remove
 # Back up, migrate and rebuild the client. Stop the API and worker first: the new client needs new routes.
 # Backups hold member data, so only the owner of the files can read them.

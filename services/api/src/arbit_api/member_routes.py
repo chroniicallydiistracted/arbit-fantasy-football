@@ -24,6 +24,7 @@ from arbit_data.members import (
     create_flow,
     create_invitation,
     csrf_token,
+    is_observer,
     list_accounts,
     list_sessions,
     logout,
@@ -101,6 +102,8 @@ from arbit_api.problems import (
 from arbit_api.realtime import EventHub, describe_device, event_stream, parse_cursor
 from arbit_api.settings import RuntimeSettings
 
+# What the read-only dev account may still change: its own session and preferences.
+OBSERVER_WRITES = ("/auth/logout", "/api/v1/me/preferences")
 COOKIE = "arbit_session"
 SESSION_COOKIE_SECONDS = int(SESSION_ABSOLUTE.total_seconds())
 FLOW_COOKIE = "arbit_flow"
@@ -235,6 +238,13 @@ def install_member_routes(
         try:
             token = request.cookies.get(COOKIE, "")
             principal = authenticate(uow, token) if token else None
+            if is_observer(principal):
+                if settings.environment == "production":
+                    principal = None  # the dev account never opens a production app
+                elif (
+                    request.method not in ("GET", "HEAD", "OPTIONS") and path not in OBSERVER_WRITES
+                ):
+                    return problem_response(request, 403, "OBSERVER_READ_ONLY")
             request.state.principal = principal
             if request.method not in ("GET", "HEAD", "OPTIONS"):
                 if request.headers.get("origin") != settings.public_origin:
@@ -301,7 +311,8 @@ def install_member_routes(
         result: dict[str, Any] | None = request.state.principal
         if result is None:
             raise HTTPException(401, "AUTH_REQUIRED")
-        if admin and result["role"] != "admin":
+        # The dev account reads administrator pages; the boundary refuses its changes.
+        if admin and result["role"] != "admin" and not is_observer(result):
             raise HTTPException(403, "ADMIN_REQUIRED")
         return result
 
@@ -339,18 +350,20 @@ def install_member_routes(
         )
         return result, document, snapshot
 
-    def member_teams(account_id: UUID, document: LeagueDocument) -> list[Team]:
-        approved = manager_ids(uow, account_id, season)
+    def member_teams(member: dict[str, Any], document: LeagueDocument) -> list[Team]:
+        if is_observer(member):
+            return [_team(t) for t in document.teams]  # the dev account can view any team
+        approved = manager_ids(uow, member["id"], season)
         return [_team(t) for t in document.teams if approved.intersection(t.managers)]
 
     def require_binding(
         member: dict[str, Any], document: LeagueDocument | None = None
     ) -> LeagueDocument:
-        if not manager_ids(uow, member["id"], season):
+        if not is_observer(member) and not manager_ids(uow, member["id"], season):
             raise HTTPException(403, "BINDING_REQUIRED")
         if document is None:
             _, document, _ = stored()
-        if not member_teams(member["id"], document):
+        if not member_teams(member, document):
             raise HTTPException(403, "BINDING_REQUIRED")
         return document
 
@@ -465,7 +478,7 @@ def install_member_routes(
         member = principal(request)
         current = read_current(uow, season)
         teams = (
-            member_teams(member["id"], LeagueDocument.model_validate(current["league"]))
+            member_teams(member, LeagueDocument.model_validate(current["league"]))
             if current
             else []
         )
@@ -479,6 +492,7 @@ def install_member_routes(
             season=season,
             preferences=Preferences.model_validate(read_preferences(uow, member["id"])),
             fixture=settings.auth_mode == "fixture",
+            observer=is_observer(member),
         )
 
     @router.get("/api/v1/front-office", response_model=FrontOffice)
@@ -489,7 +503,7 @@ def install_member_routes(
     ) -> FrontOffice:
         member = principal(request)
         stored_result, document, snapshot = stored()
-        allowed = member_teams(member["id"], document)
+        allowed = member_teams(member, document)
         if not allowed:
             raise HTTPException(403, "BINDING_REQUIRED")
         chosen = next((t for t in allowed if t.id == team_id), None) if team_id else allowed[0]
@@ -607,7 +621,7 @@ def install_member_routes(
         )
 
     def own_team_players(member: dict[str, Any], document: LeagueDocument) -> list[Player]:
-        allowed = {t.id for t in member_teams(member["id"], document)}
+        allowed = {t.id for t in member_teams(member, document)}
         return [p for p in document.players if p.team_id in allowed]
 
     def game_row(

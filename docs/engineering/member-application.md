@@ -65,6 +65,27 @@ The service worker has a closed static allow-list and build-content version. `/a
 
 Manager assignment choices prefer the ESPN-provided first name followed by canonical team names. Missing first names fall back to the original ESPN display name; colliding labels additionally show that handle. Labels never establish identity or assign a team: existing canonical manager IDs remain the binding keys. Optional name fields are omitted when absent to preserve old capture hashes and canonical serialization. The explicitly used first name stays in private captures; unused surnames, email and notification settings remain excluded.
 
+## Dev account (read-only)
+
+A read-only account that lets Claude, or anyone working on this machine, see the running app signed in, without the owner's Google account.
+
+```sh
+make dev-account       # a 12-hour session, saved for Playwright in data/observer/storage-state.json
+make dev-account-end   # end every dev account session at once
+```
+
+- **What it can do.**
+  - It opens every team: the Front Office team switcher shows any manager's view.
+  - It reads the administrator pages.
+  - A yellow band on every page says it's the read-only dev account.
+  - It can change only its own preferences and sign out. The API refuses everything else with `OBSERVER_READ_ONLY`, and the administrator buttons are disabled.
+- **How it signs in.** Its identity, issuer `urn:arbit:observer`, can't come from Google or any other sign-in, so only the local command gives it a session.
+  - One session at a time, 12 hours by default (`python -m arbit_api.observer session --hours N`, at most 24).
+  - The session goes into a storage-state file only this user can read, and the token is never printed.
+  - Playwright loads the file with `storageState`.
+- **The administrator's control.** The account appears in League access as "Dev account (read-only)". Revoking its sessions or suspending it works like any member's, and `make dev-account` refuses while it's suspended.
+- **Production.** It is off when `ARBIT_ENV=production`: the API treats its sessions as signed out.
+
 ## Upgrading a running local app and keeping it running
 
 `make local-upgrade` backs up the database, applies migrations and rebuilds the client. Stop the member API and worker first (`systemctl --user stop arbit-api arbit-worker`, then `start` afterward), since a new client needs new routes. Avoid `pkill -f` with the server's command line through the prompt's `!` prefix or a script: the calling shell matches the pattern and kills itself. To run as supervised services, `make services-install` installs `arbit-worker` and `arbit-api` as systemd user units that restart on failure and survive logout; this enables linger for your user, and `make services-remove` undoes it. Without services, run `make member-api` and `make local-worker` in two terminals. Logs: `journalctl --user -u arbit-worker -f`. On WSL the services stop with WSL, and Postgres does not restart by itself (R-029): after a Windows restart, start Ubuntu and run `make db-up`.

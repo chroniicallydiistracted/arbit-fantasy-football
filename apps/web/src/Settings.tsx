@@ -62,7 +62,7 @@ export function Settings() {
             Your team is assigned by the league administrator. Ask them if it needs to change.
           </p>
         </section>
-        {me?.account.role === "admin" && <AdminAccess />}
+        {(me?.account.role === "admin" || me?.observer) && <AdminAccess />}
         <section className="settings-section">
           <h2>Install</h2>
           <p>

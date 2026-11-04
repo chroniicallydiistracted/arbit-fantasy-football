@@ -18,6 +18,7 @@ function managerLabel(manager: Manager, all: Manager[]): string {
 
 export function AdminAccess() {
   const { auth, me, refresh } = useSession();
+  const readOnly = !!me?.observer;
   const query = useQuery({
     queryKey: ["admin-directory"],
     queryFn: ({ signal }) => http<Directory>("/api/v1/admin/directory", { signal }),
@@ -80,6 +81,9 @@ export function AdminAccess() {
       {me?.fixture && (
         <Notice>Test data. Invitations need Google sign-in and are disabled here.</Notice>
       )}
+      {readOnly && (
+        <Notice>The dev account is read-only: it can see league access, not change it.</Notice>
+      )}
       {message && <Notice danger={error}>{message}</Notice>}
       <form
         onSubmit={(event) => {
@@ -98,7 +102,7 @@ export function AdminAccess() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-        <button type="submit" disabled={busy || me?.fixture}>
+        <button type="submit" disabled={busy || me?.fixture || readOnly}>
           Create invitation
         </button>
       </form>
@@ -178,7 +182,7 @@ export function AdminAccess() {
             <div className="admin-actions">
               <button
                 type="button"
-                disabled={busy || !account || !manager || !!selected?.suspended}
+                disabled={busy || readOnly || !account || !manager || !!selected?.suspended}
                 onClick={() =>
                   void run(() => bind(), "Team assigned. The member must sign in again.")
                 }
@@ -187,7 +191,13 @@ export function AdminAccess() {
               </button>
               <button
                 type="button"
-                disabled={busy || !account || !manager || !selected?.manager_ids.includes(manager)}
+                disabled={
+                  busy ||
+                  readOnly ||
+                  !account ||
+                  !manager ||
+                  !selected?.manager_ids.includes(manager)
+                }
                 onClick={() =>
                   void run(() => bind(true), "Team removed. The member’s sessions were ended.")
                 }
@@ -201,7 +211,7 @@ export function AdminAccess() {
                 {selected.suspended && (
                   <button
                     type="button"
-                    disabled={busy}
+                    disabled={busy || readOnly}
                     onClick={() =>
                       void run(async () => {
                         await http("/api/v1/admin/accounts/reactivate", {
@@ -221,7 +231,7 @@ export function AdminAccess() {
                 </p>
                 <button
                   type="button"
-                  disabled={busy || account === me?.account.id}
+                  disabled={busy || readOnly || account === me?.account.id}
                   onClick={() => void run(() => revoke(false), "Sessions ended.")}
                 >
                   Revoke sessions
@@ -229,7 +239,7 @@ export function AdminAccess() {
                 {selected.role !== "admin" && !selected.suspended && (
                   <button
                     type="button"
-                    disabled={busy || account === me?.account.id}
+                    disabled={busy || readOnly || account === me?.account.id}
                     onClick={() => {
                       if (
                         window.confirm(`Suspend ${selected.display_name} and revoke their access?`)

@@ -13,6 +13,7 @@ const member: Me = {
   season: 2026,
   teams: [],
   fixture: true,
+  observer: false,
   preferences: { version: 0, theme: "dark", watchlist: [] },
 };
 function Probe() {

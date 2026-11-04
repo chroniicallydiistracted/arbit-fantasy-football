@@ -58,6 +58,8 @@ class Me(WireModel):
     season: int
     preferences: Preferences
     fixture: bool
+    # The read-only dev account: it sees every team and the administrator pages, and changes nothing.
+    observer: bool
 
 
 class AuthStatus(WireModel):

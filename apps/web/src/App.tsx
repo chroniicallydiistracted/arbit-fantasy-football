@@ -102,6 +102,12 @@ export function App({ invitation }: { invitation?: string }) {
       {me.fixture && (
         <div className="fixture-banner">Test data. Fictional league, no real FFA data.</div>
       )}
+      {me.observer && (
+        <div className="fixture-banner">
+          Dev account, read-only. It can open every team and the administrator pages, and can’t
+          change anything.
+        </div>
+      )}
       <div className="stripe-edge" aria-hidden="true" />
       <header className="band">
         <Brand />

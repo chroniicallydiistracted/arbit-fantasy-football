@@ -55,12 +55,14 @@ SAFE_CODES = frozenset(
         "REQUEST_FAILED",
         "SESSION_NOT_FOUND",
         "GAME_NOT_FOUND",
+        "OBSERVER_READ_ONLY",
     }
 )
 DETAILS = {
     "AUTH_REQUIRED": "Sign in to continue.",
     "BINDING_REQUIRED": "An administrator must approve your manager binding first.",
     "ADMIN_REQUIRED": "Administrator access is required.",
+    "OBSERVER_READ_ONLY": "The dev account is read-only.",
     "ORIGIN_REQUIRED": "The request origin could not be verified.",
     "CSRF_REQUIRED": "The request could not be verified.",
     "INVALID_REQUEST": "The request did not match the API contract.",
