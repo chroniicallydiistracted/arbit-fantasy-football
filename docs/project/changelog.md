@@ -1,5 +1,11 @@
 # Development Changelog
 
+## 2026-11-03 — Where richer live play detail can come from
+
+- nflverse's raw play-by-play comes from a private `nflapi` package whose route isn't public. It works live, but nflverse releases a game only after FINAL. Working out the route means using NFL's own API, which NFL's terms prohibit collecting from (Q-012, [research](../research/live-play-detail-2026-11-03.md)).
+- Checked nflreadr's 372-field play-by-play dictionary against ESPN. Only two play-specific facts are NFL-only during a game: exact air yards on incomplete passes and interceptions, and the play clock at the snap. The descriptions are the same NFL text on 94.5% of week 8 plays; nflverse's look longer because of the game clock and jersey numbers.
+- ESPN's live summary already sends yards after catch on 506 of 508 receptions, within a yard of NFL's official value on 94.6%. The play interpreter will use it for the catch spot (ENG-032); the worker's normalizer drops it today, but the raw captures keep it.
+
 ## 2026-11-03 — Dev account, a ball that flies right, and NGS tracking
 
 - **Dev account** (OWN-032, ENG-031). A read-only account on the running app, so Claude can see it signed in. `make dev-account` gives it a 12-hour session, saved where only this user can read it; the token is never printed.
