@@ -1,0 +1,560 @@
+{
+ "version": 1,
+ "event_id": "401873036",
+ "provider_id": "4018730361939",
+ "seed": "pass_catch_spot_and_missed_pat:example",
+ "template": "pass",
+ "duration": 9.75,
+ "offense": "26",
+ "defense": "3",
+ "actors": [
+  {
+   "key": "passer",
+   "espn_id": "3912547",
+   "role": "passer",
+   "side": "offense",
+   "label": "S.Darnold",
+   "facing": "right",
+   "segments": [
+    {
+     "start": 0.0,
+     "end": 0.9,
+     "pose": "ready",
+     "x0": 52.0,
+     "z0": 23.776,
+     "x1": 52.0,
+     "z1": 23.776,
+     "facing": null
+    },
+    {
+     "start": 0.9,
+     "end": 1.5945,
+     "pose": "DROP",
+     "x0": 52.0,
+     "z0": 23.776,
+     "x1": 49.4,
+     "z1": 23.776,
+     "facing": null
+    },
+    {
+     "start": 1.5945,
+     "end": 1.8145,
+     "pose": "drop_b",
+     "x0": 49.4,
+     "z0": 23.776,
+     "x1": 49.5,
+     "z1": 23.776,
+     "facing": null
+    },
+    {
+     "start": 1.8145,
+     "end": 2.0345,
+     "pose": "drop_c",
+     "x0": 49.5,
+     "z0": 23.776,
+     "x1": 49.6,
+     "z1": 23.936,
+     "facing": null
+    },
+    {
+     "start": 2.0345,
+     "end": 2.1719,
+     "pose": "drop_b",
+     "x0": 49.6,
+     "z0": 23.936,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 2.1719,
+     "end": 2.3219,
+     "pose": "drop_b",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 2.3219,
+     "end": 2.6219,
+     "pose": "throw_cock",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 2.6219,
+     "end": 2.7219,
+     "pose": "throw_mid",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 2.7219,
+     "end": 2.8719,
+     "pose": "throw_rel",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 2.8719,
+     "end": 3.3219,
+     "pose": "throw_follow",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 3.3219,
+     "end": 3.6219,
+     "pose": "stand",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 3.6219,
+     "end": 3.9219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 3.9219,
+     "end": 4.2219,
+     "pose": "drop_b",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 24.056,
+     "facing": null
+    },
+    {
+     "start": 4.2219,
+     "end": 4.5219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 24.056,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 4.5219,
+     "end": 4.8219,
+     "pose": "drop_c",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.616,
+     "facing": null
+    },
+    {
+     "start": 4.8219,
+     "end": 5.1219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 23.616,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 5.1219,
+     "end": 5.4219,
+     "pose": "drop_b",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 24.056,
+     "facing": null
+    },
+    {
+     "start": 5.4219,
+     "end": 5.7219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 24.056,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 5.7219,
+     "end": 6.0219,
+     "pose": "drop_c",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.616,
+     "facing": null
+    },
+    {
+     "start": 6.0219,
+     "end": 6.3219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 23.616,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 6.3219,
+     "end": 6.6219,
+     "pose": "drop_b",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 24.056,
+     "facing": null
+    },
+    {
+     "start": 6.6219,
+     "end": 6.9219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 24.056,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 6.9219,
+     "end": 7.2219,
+     "pose": "drop_c",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.616,
+     "facing": null
+    },
+    {
+     "start": 7.2219,
+     "end": 7.5219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 23.616,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 7.5219,
+     "end": 7.8219,
+     "pose": "drop_b",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 24.056,
+     "facing": null
+    },
+    {
+     "start": 7.8219,
+     "end": 8.1219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 24.056,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 8.1219,
+     "end": 8.4219,
+     "pose": "drop_c",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.616,
+     "facing": null
+    },
+    {
+     "start": 8.4219,
+     "end": 8.7219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 23.616,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 8.7219,
+     "end": 9.0219,
+     "pose": "drop_b",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 24.056,
+     "facing": null
+    },
+    {
+     "start": 9.0219,
+     "end": 9.3219,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 24.056,
+     "x1": 49.662,
+     "z1": 23.836,
+     "facing": null
+    },
+    {
+     "start": 9.3219,
+     "end": 9.6219,
+     "pose": "drop_c",
+     "x0": 49.662,
+     "z0": 23.836,
+     "x1": 49.662,
+     "z1": 23.616,
+     "facing": null
+    },
+    {
+     "start": 9.6219,
+     "end": 9.75,
+     "pose": "ready",
+     "x0": 49.662,
+     "z0": 23.616,
+     "x1": 49.662,
+     "z1": 23.71,
+     "facing": null
+    }
+   ]
+  },
+  {
+   "key": "receiver",
+   "espn_id": "4430878",
+   "role": "receiver",
+   "side": "offense",
+   "label": "J.Smith-Njigba",
+   "facing": "right",
+   "segments": [
+    {
+     "start": 0.0,
+     "end": 0.7,
+     "pose": "ready",
+     "x0": 56.7,
+     "z0": 14.177,
+     "x1": 56.7,
+     "z1": 14.177,
+     "facing": null
+    },
+    {
+     "start": 0.7,
+     "end": 4.5104,
+     "pose": "RUN",
+     "x0": 56.7,
+     "z0": 14.177,
+     "x1": 85.929,
+     "z1": 14.13,
+     "facing": null
+    },
+    {
+     "start": 4.5104,
+     "end": 4.6604,
+     "pose": "catch_high_e",
+     "x0": 85.929,
+     "z0": 14.13,
+     "x1": 87.068,
+     "z1": 14.13,
+     "facing": null
+    },
+    {
+     "start": 4.6604,
+     "end": 4.7804,
+     "pose": "catch_high",
+     "x0": 87.068,
+     "z0": 14.13,
+     "x1": 88.0,
+     "z1": 14.13,
+     "facing": null
+    },
+    {
+     "start": 4.7804,
+     "end": 4.9804,
+     "pose": "catch_secure",
+     "x0": 88.0,
+     "z0": 14.13,
+     "x1": 89.534,
+     "z1": 14.13,
+     "facing": null
+    },
+    {
+     "start": 4.9804,
+     "end": 6.5502,
+     "pose": "RUN",
+     "x0": 89.534,
+     "z0": 14.13,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    },
+    {
+     "start": 6.5502,
+     "end": 6.9002,
+     "pose": "spike",
+     "x0": 101.562,
+     "z0": 13.542,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    },
+    {
+     "start": 6.9002,
+     "end": 7.2502,
+     "pose": "arms_up",
+     "x0": 101.562,
+     "z0": 13.542,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    },
+    {
+     "start": 7.2502,
+     "end": 7.5502,
+     "pose": "arms_jump",
+     "x0": 101.562,
+     "z0": 13.542,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    },
+    {
+     "start": 7.5502,
+     "end": 7.8502,
+     "pose": "arms_up",
+     "x0": 101.562,
+     "z0": 13.542,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    },
+    {
+     "start": 7.8502,
+     "end": 8.1502,
+     "pose": "point",
+     "x0": 101.562,
+     "z0": 13.542,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    },
+    {
+     "start": 8.1502,
+     "end": 9.75,
+     "pose": "point",
+     "x0": 101.562,
+     "z0": 13.542,
+     "x1": 101.562,
+     "z1": 13.542,
+     "facing": null
+    }
+   ]
+  }
+ ],
+ "ball": [
+  {
+   "start": 0.0,
+   "end": 0.6,
+   "state": "rest",
+   "actor": null,
+   "at": [
+    57.0,
+    0.15,
+    23.776
+   ],
+   "origin": null,
+   "target": null,
+   "spin": "flat"
+  },
+  {
+   "start": 0.6,
+   "end": 0.9,
+   "state": "flight",
+   "actor": null,
+   "at": null,
+   "origin": {
+    "actor": null,
+    "hold": null,
+    "point": [
+     57.0,
+     0.3,
+     23.77568867528459
+    ]
+   },
+   "target": {
+    "actor": "passer",
+    "hold": "hand",
+    "point": null
+   },
+   "spin": "spiral"
+  },
+  {
+   "start": 0.9,
+   "end": 2.7219,
+   "state": "held",
+   "actor": "passer",
+   "at": null,
+   "origin": null,
+   "target": null,
+   "spin": "spiral"
+  },
+  {
+   "start": 2.7219,
+   "end": 4.7804,
+   "state": "flight",
+   "actor": null,
+   "at": null,
+   "origin": {
+    "actor": "passer",
+    "hold": "hand",
+    "point": null
+   },
+   "target": {
+    "actor": "receiver",
+    "hold": "hands",
+    "point": null
+   },
+   "spin": "spiral"
+  },
+  {
+   "start": 4.7804,
+   "end": 9.75,
+   "state": "held",
+   "actor": "receiver",
+   "at": null,
+   "origin": null,
+   "target": null,
+   "spin": "spiral"
+  }
+ ],
+ "lines": [
+  {
+   "kind": "scrimmage",
+   "x": 57.0
+  },
+  {
+   "kind": "to_gain",
+   "x": 67.0
+  }
+ ],
+ "caption": "Q2 0:30 · 3rd & 10 · S.Darnold pass deep left to J.Smith-Njigba for 43 yards, TOUCHDOWN",
+ "label": "Re-creation from play-by-play"
+}

@@ -6,6 +6,7 @@ addFormats(ajv);
 for (const [schemaPath, examplePath] of [
   ['packages/contracts/schemas/league-config.schema.json', 'config/league.json'],
   ['packages/contracts/schemas/recommendation.schema.json', 'tests/fixtures/recommendation.example.json'],
+  ['packages/contracts/schemas/play-script.schema.json', 'tests/fixtures/live/play-script.example.json'],
 ]) {
   const validate = ajv.compile(JSON.parse(readFileSync(schemaPath, 'utf8')));
   if (!validate(JSON.parse(readFileSync(examplePath, 'utf8')))) {

@@ -619,6 +619,11 @@ def _judge(facts: PlayFacts, play: LivePlay, main: str) -> PlayFacts:
         return facts.model_copy(update={"reason": "lateral"})
     if re.search(r"\(Aborted\)", main):
         return facts.model_copy(update={"reason": "aborted"})
+    if facts.shape in ("pass", "spike", "interception", "sack") and re.search(
+        r"\bDirect snap to\b", main
+    ):
+        # A trick play: someone else took the snap, so the passer's usual drop doesn't fit.
+        return facts.model_copy(update={"reason": "trick_play"})
     roles = {p.role for p in facts.players}
     have = {
         "start": facts.start is not None,

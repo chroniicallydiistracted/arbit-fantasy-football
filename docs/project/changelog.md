@@ -1,5 +1,19 @@
 # Development Changelog
 
+## 2026-11-03 — Play scripts (automation slice 2)
+
+- `choreography.choreograph` turns a play's facts into a `PlayScript`: each named player's timed poses and moves, where the ball is at every moment, the lines and the caption. It covers passes (complete, incomplete, thrown away, screens), interceptions, sacks, runs by gap, scrambles, sneaks and kneels. The contract is published as `packages/contracts/schemas/play-script.schema.json` (ENG-034).
+- Every play ends on ESPN's spot. A catch lands at the spot yards after catch puts it, and tacklers meet the carrier there. Speeds are bounded by pose, so nobody slides, and the same play gives the same script.
+- All 1,706 captured plays with these templates get a script that keeps every rule: no speed over its pose class, no gap in a timeline or in the ball, every carrier on ESPN's spot, and no unnamed player and no one drawn twice.
+- `scripts/sprites/render_script.py` draws scripts with the review renderer.
+- **Reworked after the owner's first look (OWN-033).** Receivers had run in slow motion to meet the throw, and the quarterback froze before throwing.
+  - Every player now keeps one natural pace, and routes set the timing: short receivers settle and come back to the ball, deep ones catch in stride.
+  - The quarterback's drop fits the throw, and he works his feet in the pocket.
+  - Anyone waiting sets with a side step.
+- **Names** come from the roster by ESPN ID. Five labels in CHI at SEA had been wrong: an eligibility report, a trick play, and two tacklers swapped.
+- **Trick plays.** A pass after a direct snap to someone else now shows its text.
+- **Re-rendered.** CHI at SEA was rendered again for review.
+
 ## 2026-11-03 — Second upgrade of the day
 
 - With the owner's approval, the running app was upgraded at 21:16. It was offline 5 seconds, a backup was written to `data/backups/2026-11-03/before-upgrade-211633.dump`, and no migration was needed.

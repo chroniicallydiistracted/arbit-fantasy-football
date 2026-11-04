@@ -1,0 +1,406 @@
+{
+  "$defs": {
+    "Actor": {
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "espn_id": {
+          "title": "Espn Id",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "offense",
+            "defense"
+          ],
+          "title": "Side",
+          "type": "string"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "facing": {
+          "enum": [
+            "right",
+            "left"
+          ],
+          "title": "Facing",
+          "type": "string"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/Segment"
+          },
+          "title": "Segments",
+          "type": "array"
+        }
+      },
+      "required": [
+        "key",
+        "espn_id",
+        "role",
+        "side",
+        "facing",
+        "segments"
+      ],
+      "title": "Actor",
+      "type": "object"
+    },
+    "BallEnd": {
+      "additionalProperties": false,
+      "description": "Where a flight starts or ends: an actor's hand, chest or catching hands, or a point.",
+      "properties": {
+        "actor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actor"
+        },
+        "hold": {
+          "anyOf": [
+            {
+              "enum": [
+                "hand",
+                "chest",
+                "hands"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hold"
+        },
+        "point": {
+          "anyOf": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Point"
+        }
+      },
+      "title": "BallEnd",
+      "type": "object"
+    },
+    "BallSegment": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "title": "Start",
+          "type": "number"
+        },
+        "end": {
+          "title": "End",
+          "type": "number"
+        },
+        "state": {
+          "enum": [
+            "rest",
+            "held",
+            "flight"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "actor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actor"
+        },
+        "at": {
+          "anyOf": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "origin": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BallEnd"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BallEnd"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "spin": {
+          "default": "spiral",
+          "enum": [
+            "spiral",
+            "tumble",
+            "upright",
+            "flat"
+          ],
+          "title": "Spin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "state"
+      ],
+      "title": "BallSegment",
+      "type": "object"
+    },
+    "Line": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "scrimmage",
+            "to_gain"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "x": {
+          "title": "X",
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "x"
+      ],
+      "title": "Line",
+      "type": "object"
+    },
+    "Segment": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "title": "Start",
+          "type": "number"
+        },
+        "end": {
+          "title": "End",
+          "type": "number"
+        },
+        "pose": {
+          "title": "Pose",
+          "type": "string"
+        },
+        "x0": {
+          "title": "X0",
+          "type": "number"
+        },
+        "z0": {
+          "title": "Z0",
+          "type": "number"
+        },
+        "x1": {
+          "title": "X1",
+          "type": "number"
+        },
+        "z1": {
+          "title": "Z1",
+          "type": "number"
+        },
+        "facing": {
+          "anyOf": [
+            {
+              "enum": [
+                "right",
+                "left"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Facing"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "pose",
+        "x0",
+        "z0",
+        "x1",
+        "z1"
+      ],
+      "title": "Segment",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1,
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "provider_id": {
+      "title": "Provider Id",
+      "type": "string"
+    },
+    "seed": {
+      "title": "Seed",
+      "type": "string"
+    },
+    "template": {
+      "title": "Template",
+      "type": "string"
+    },
+    "duration": {
+      "title": "Duration",
+      "type": "number"
+    },
+    "offense": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Offense"
+    },
+    "defense": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Defense"
+    },
+    "actors": {
+      "items": {
+        "$ref": "#/$defs/Actor"
+      },
+      "title": "Actors",
+      "type": "array"
+    },
+    "ball": {
+      "items": {
+        "$ref": "#/$defs/BallSegment"
+      },
+      "title": "Ball",
+      "type": "array"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/Line"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "caption": {
+      "title": "Caption",
+      "type": "string"
+    },
+    "label": {
+      "default": "Re-creation from play-by-play",
+      "title": "Label",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "provider_id",
+    "seed",
+    "template",
+    "duration",
+    "offense",
+    "defense",
+    "actors",
+    "ball",
+    "lines",
+    "caption"
+  ],
+  "title": "PlayScript",
+  "type": "object"
+}

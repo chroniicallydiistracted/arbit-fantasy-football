@@ -201,3 +201,18 @@ def test_new_fields_stay_out_of_the_payload_when_espn_omits_them():
     assert (
         kept.penalty is not None and kept.penalty.status == "accepted" and kept.penalty.yards == 3
     )
+
+
+def test_a_pass_after_a_direct_snap_to_someone_else_is_left_as_text():
+    case = CASES["pass_without_yards_after_catch"]
+    raw = {
+        **case["play"],
+        "text": "(Shotgun) Direct snap to D.Swift.  "
+        + case["play"]["text"].removeprefix("(Shotgun) "),
+    }
+    play = normalize_play(raw, case["event_id"], 2026)
+    teams = GameTeams.build(
+        case["home"], case["away"], case["home_code"], case["away_code"], case["text_codes"]
+    )
+    facts = interpret(play, teams)
+    assert facts.template is None and facts.reason == "trick_play" and not ready(facts)
