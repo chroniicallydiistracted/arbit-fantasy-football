@@ -1,5 +1,11 @@
 # Development Changelog
 
+## 2026-11-03 — Second upgrade of the day
+
+- With the owner's approval, the running app was upgraded at 21:16. It was offline 5 seconds, a backup was written to `data/backups/2026-11-03/before-upgrade-211633.dump`, and no migration was needed.
+- **Normalizer.** The worker now stores `yardLine`, yards after catch, and the penalty and review objects (ENG-033, R-040).
+- **Live team context.** The dev account's Live board follows the team it picks (R-039). Checked signed in as the dev account.
+
 ## 2026-11-03 — Play facts (automation slice 1)
 
 - `play_facts.interpret` turns a stored ESPN play into facts for animating it:
