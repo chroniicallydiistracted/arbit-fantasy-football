@@ -1,5 +1,20 @@
 # Development Changelog
 
+## 2026-11-03 — Play facts (automation slice 1)
+
+- `play_facts.interpret` turns a stored ESPN play into facts for animating it:
+  - shape and template
+  - offense and defense, with spots in the offense's frame, plus down, distance and line to gain
+  - named players by role, and formation
+  - pass depth, side, catch spot, air yards and QB hits
+  - run direction and gap
+  - kick distance, landing, result and miss
+  - penalties, fumbles, the extra point or two-point try, touchdowns, turnovers and replay result
+- Over all 14 captured games, 2,032 of 2,196 football plays (92.5%) have a template with nothing missing. Every other play has a stated reason: fumbles and no-play penalties wait for slice 3, plus 2 laterals.
+- Checked against ESPN's own spots and text, the end spot matches the text on 1,627 of 1,627 plain plays, and so does start plus yards.
+- Found that ESPN's `yardsToEndzone` often isn't flipped for the home team: 54 of 114 punts (R-040). The normalizer now keeps `yardLine`, yards after catch, the penalty object and the review object, and spots come from `yardLine` (ENG-033). This reaches the running worker with the next approved upgrade.
+- 45 tests on 28 real captured plays, one per shape and text form.
+
 ## 2026-11-03 — Where richer live play detail can come from
 
 - nflverse's raw play-by-play comes from a private `nflapi` package whose route isn't public. It works live, but nflverse releases a game only after FINAL. Working out the route means using NFL's own API, which NFL's terms prohibit collecting from (Q-012, [research](../research/live-play-detail-2026-11-03.md)).

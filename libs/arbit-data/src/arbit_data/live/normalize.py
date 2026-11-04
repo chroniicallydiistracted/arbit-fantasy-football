@@ -17,6 +17,8 @@ from arbit_data.live.contracts import (
     LivePlay,
     Participant,
     PlayKind,
+    PlayPenalty,
+    PlayReview,
     Situation,
     TeamLine,
     Venue,
@@ -133,6 +135,7 @@ def _point(raw: Any, season: int, event_id: str) -> FieldPoint:
         down=None if raw.get("down") in (-1, "-1") else _integer(raw.get("down"), 4),
         source_down=_number(raw.get("down")),
         distance=_integer(raw.get("distance"), 100),
+        yard_line=_bounded(raw.get("yardLine"), 0, 100),
     )
 
 
@@ -272,6 +275,33 @@ def normalize_play(raw: dict[str, Any], event_id: str, season: int) -> LivePlay:
         point_after=json_ready(point_after),
         stat_yardage=_number(raw.get("statYardage")),
         source_flags={"isTurnover": turnover, "isPenalty": penalty},
+        yards_after_catch=_bounded(raw.get("yardsAfterCatch"), -120, 120),
+        penalty=_lenient(_penalty, raw.get("penalty")) if raw.get("penalty") is not None else None,
+        review=_lenient(_review, raw.get("review")) if raw.get("review") is not None else None,
+    )
+
+
+def _penalty(value: Any) -> PlayPenalty | None:
+    raw = _dict(value)
+    if not raw:
+        return None
+    kind, status = _dict(raw.get("type")), _dict(raw.get("status"))
+    return PlayPenalty(
+        slug=_text(kind.get("slug"), 64),
+        text=_text(kind.get("text"), 128),
+        yards=_bounded(raw.get("yards"), -120, 120),
+        status=_text(status.get("slug"), 32),
+    )
+
+
+def _review(value: Any) -> PlayReview | None:
+    raw = _dict(value)
+    if not raw:
+        return None
+    upheld = raw.get("upheld")
+    return PlayReview(
+        type=_text(raw.get("type"), 32),
+        upheld=upheld if isinstance(upheld, bool) else None,
     )
 
 

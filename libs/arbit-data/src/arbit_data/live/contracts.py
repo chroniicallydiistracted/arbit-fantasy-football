@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class LiveModel(BaseModel):
@@ -12,12 +12,31 @@ class Participant(LiveModel):
     role: str
 
 
+def _absent(value: Any) -> bool:
+    return value is None
+
+
 class FieldPoint(LiveModel):
     yards_to_endzone: int | None = None
     team_id: str | None = None
     down: int | None = None
     source_down: str | None = None
     distance: int | None = None
+    # ESPN's `yardLine`, counted from the home team's goal line. `yards_to_endzone` sometimes
+    # repeats it instead of flipping it while the home team has the ball (ENG-033).
+    yard_line: int | None = Field(default=None, exclude_if=_absent)
+
+
+class PlayPenalty(LiveModel):
+    slug: str | None = None
+    text: str | None = None
+    yards: int | None = None
+    status: str | None = None
+
+
+class PlayReview(LiveModel):
+    type: str | None = None
+    upheld: bool | None = None
 
 
 PlayKind = Literal[
@@ -63,6 +82,10 @@ class LivePlay(LiveModel):
     point_after: dict[str, Any] | None
     stat_yardage: str | None
     source_flags: dict[str, bool | None]
+    # Left out of the stored payload when ESPN doesn't send them, so such plays keep their hash.
+    yards_after_catch: int | None = Field(default=None, exclude_if=_absent)
+    penalty: PlayPenalty | None = Field(default=None, exclude_if=_absent)
+    review: PlayReview | None = Field(default=None, exclude_if=_absent)
     coordinate_basis: Literal["source_yards_to_endzone_separate_team_frames"] = (
         "source_yards_to_endzone_separate_team_frames"
     )
