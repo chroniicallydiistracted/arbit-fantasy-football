@@ -1,5 +1,40 @@
 # Development Changelog
 
+## 2026-11-03 — Dev account, a ball that flies right, and NGS tracking
+
+- **Dev account** (OWN-032, ENG-031). A read-only account on the running app, so Claude can see it signed in. `make dev-account` gives it a 12-hour session, saved where only this user can read it; the token is never printed.
+  - It opens every team through the Front Office team switcher and reads the administrator pages.
+  - The API refuses every change it makes except to its own preferences and signing out.
+  - It is off in production, and the administrator can end its sessions or suspend it in League access.
+  - A yellow band marks it on every page.
+- **The ball** (ENG-030). It no longer changes width every frame.
+  - Passes and snaps fly nose-first along the arc with a slight wobble.
+  - Punts spiral and turn over at the top.
+  - Field goals and extra points tumble end over end, and the ball stands upright for the hold, in front of the holder.
+  - The review plays and the public previews were rebuilt.
+- **NGS tracking** ([research](../research/ngs-highlights-2026-11-03.md)). nflverse's Next Gen Stats tables have no positions. The NGS site has real tracking for highlights only, and NFL's terms prohibit collecting it into a database. The owner chose to skip it for now (Q-011).
+- **Only the players in the play** (OWN-032). A family member found plays easier to follow that way, so supporting players are on hold in the plan.
+- **Upgraded the running app** at 17:50 with the owner's approval. It was offline 25 seconds, with a backup taken first and no migration. It now has the dev account and the R-036 sign-in fix. Checked signed in as the dev account in Chromium:
+  - The team switcher lists all 8 teams, and Riding Hurts's Front Office shows its own roster and matchup.
+  - All seven workspaces, the watchlist, Preferences with League access read-only, and the CHI at SEA game page all load.
+  - A test change was refused with `OBSERVER_READ_ONLY`.
+  - One flaw is in R-039: Live counts every team's players as the dev account's own.
+
+## 2026-11-03 — Kicks through the uprights, and the full-field view as standard
+
+- The owner made the full-field view the standard and dropped 2D (OWN-030). `real_plays.py` now renders it by default; `--close` gives the earlier following camera.
+- Fix: a good kick seemed to pass in front of the near upright, because the ball was drawn over everything. Players, goalpost pieces and the ball in flight are now drawn by distance from the camera, and a kick keeps its arc across the end line into the net (ENG-029). Checked frame by frame: a good kick passes in front of the far upright and behind the near one.
+- Two extra points from CHI at SEA added to the review set: C.Santos's good kick in the third quarter, and J.Myers's miss wide left in the second, which passes in front of the near upright.
+- The public preview plays rebuilt: the punt has no visible change, and the field goal differs by 2 pixels where the holder now covers the ball's edge.
+- The [automation plan](../superpowers/plans/2026-11-03-live-play-automation.md) gains supporting players, a jumbotron, a field that persists between plays, and the kick results. nflverse's Next Gen Stats turned out to be weekly averages per player, with no positions. FTN's per-play charting is the best formation source for finished games.
+- The PC restarted during the session, and the dev database didn't come back with the services (R-029). It was started again and recovered cleanly; the worker resumed by itself.
+
+## 2026-11-03 — Full-field view and the automation plan
+
+- The owner accepted the real-uniform plays (OWN-029) and asked to see more of the field. `real_plays.py --wide` renders the seven CHI at SEA plays from a fixed camera that shows both end zones and goalposts (`data/sprites/review/real-plays-wide`, ignored). Players are about 35 pixels tall on a 1,920-pixel frame and are never drawn below their own pixel size. The punt's frame is taller so the ball stays in view (ENG-028).
+- Name tags of players who meet now stack instead of covering each other. The public preview plays rebuilt byte-for-byte unchanged, so the close camera is untouched.
+- [Plan](../superpowers/plans/2026-11-03-live-play-automation.md) for animating every play as it arrives: a server interpreter and choreographer make a small play script from each stored revision, and the browser draws it. Real art appears once Gridiron lists it, with a labeled plain fallback until then. Measured on the 14 stored games, 827 of 834 passes state depth and side, and 784 of 785 runs state a direction.
+
 ## 2026-11-03 — Real uniforms on the sprites
 
 - The owner added their full 2026 uniform set and said not to infer uniform colors (OWN-028). The real plays now use what Gridiron's week 8 page lists for CHI at SEA: Chicago `B2`, Seattle `E` and field `SEA_2023-2026^3`. This replaces the white stand-in for Chicago and the guessed field `^1` used on 2026-11-02.

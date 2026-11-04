@@ -23,4 +23,4 @@ Owner direction (OWN-019): "Begin on the scoreboards now." Requirements: LV-001,
 
 ## Not done
 
-Running since 2026-11-01 21:25 (UTC−7). Signed-in pages on the running app are the owner's to confirm. Player box scores, scoring-play and injury panels, and fantasy points are not built.
+Running since 2026-11-01 21:25 (UTC−7). Signed-in pages on the running app were checked with the dev account on 2026-11-03 (ENG-031): the Live board and a game page load; R-039 covers the one flaw found. Player box scores, scoring-play and injury panels, and fantasy points are not built.
