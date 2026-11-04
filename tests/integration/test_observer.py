@@ -158,3 +158,63 @@ def test_session_file_is_private_and_holds_only_the_cookie(tmp_path):
         "sameSite": "Lax",
     }
     assert list(path.parent.iterdir()) == [path]
+
+
+def test_dev_account_live_board_shows_one_chosen_managers_players(uow, engine):
+    from arbit_api.fixture import seed
+    from arbit_api.main import create_app
+    from arbit_data.members import issue_observer_session
+
+    configured = settings(engine)
+    seed(configured, engine)
+    token, _ = issue_observer_session(uow)
+    app = create_app(configured, engine=engine)
+    with TestClient(app, client=("127.0.0.1", 50000)) as member:
+        member.post("/auth/fixture", json={"member": "one"}, headers={"Origin": ORIGIN})
+        team = member.get("/api/v1/me").json()["teams"][0]["id"]
+    put_players_in_the_fictional_game(uow, engine, team)
+    with TestClient(app, client=("127.0.0.1", 50000)) as member:
+        member.post("/auth/fixture", json={"member": "one"}, headers={"Origin": ORIGIN})
+        theirs = member.get("/api/v1/live/games").json()["games"][0]["own_players"]
+    assert len(theirs) == 2
+    with observer_client(app, token) as client:
+        unchosen = client.get("/api/v1/live/games").json()["games"][0]
+        assert unchosen["own_players"] == []  # no team of its own until it picks one
+        chosen = client.get("/api/v1/live/games", params={"team_id": team}).json()["games"][0]
+        assert chosen["own_players"] == theirs
+        event = chosen["event_id"]
+        detail = client.get(f"/api/v1/live/games/{event}", params={"team_id": team}).json()
+        assert detail["game"]["own_players"] == theirs
+        plays = client.get(
+            f"/api/v1/live/games/{event}/plays", params={"team_id": team, "own": "true"}
+        )
+        assert plays.status_code == 200
+        stranger = "00000000-0000-0000-0000-000000000999"
+        refused = client.get("/api/v1/live/games", params={"team_id": stranger})
+        assert refused.status_code == 403 and refused.json()["code"] == "TEAM_CONTEXT_DENIED"
+
+
+def put_players_in_the_fictional_game(uow, engine, team_id):
+    """The fictional roster has no NFL teams; give two of one team's players the home team."""
+    from arbit_data.live import store as live_store
+    from arbit_data.schema import current_snapshot, league_document
+    from sqlalchemy import select, update
+
+    home = next(uid for uid, row in live_store.read_directory(uow).items() if row.espn_id == "9901")
+    with engine.begin() as c:
+        snapshot = c.scalar(
+            select(current_snapshot.c.snapshot_id).where(current_snapshot.c.season == 2026)
+        )
+        payload = c.scalar(
+            select(league_document.c.payload).where(league_document.c.snapshot_id == snapshot)
+        )
+        moved = 0
+        for player in payload["players"]:
+            if player.get("team_id") == team_id and moved < 2:
+                player["nfl_team_id"] = str(home)
+                moved += 1
+        c.execute(
+            update(league_document)
+            .where(league_document.c.snapshot_id == snapshot)
+            .values(payload=payload)
+        )

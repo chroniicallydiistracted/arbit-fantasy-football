@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Link, useSearchParams } from "react-router";
 import type { FrontOffice as Office, Player, Sources, Team } from "./api";
 import { useFallbackInterval } from "./events";
@@ -7,6 +7,7 @@ import { ageLabel, dateLabel, points, record } from "./format";
 import { Arrow, Busy, Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
+import { setViewingTeam, useViewingTeam } from "./viewing";
 
 const GROUPS = [
   { key: "starters", title: "Starters" },
@@ -24,7 +25,12 @@ export function FrontOffice() {
   const { me } = useSession();
   const requestedTeam = params.get("team");
   const period = params.get("period");
-  const teamId = requestedTeam ?? me?.current_team_id;
+  const viewing = useViewingTeam();
+  const teamId = requestedTeam ?? (me?.observer ? viewing : null) ?? me?.current_team_id;
+  useEffect(() => {
+    // The dev account remembers the team it's viewing, so Live shows that manager's players.
+    if (me?.observer && teamId && teamId !== viewing) setViewingTeam(teamId);
+  }, [me?.observer, teamId, viewing]);
   const search = new URLSearchParams();
   if (teamId) search.set("team_id", teamId);
   if (period) search.set("matchup_period", period);

@@ -2066,7 +2066,9 @@ export interface operations {
     };
     live_games_api_v1_live_games_get: {
         parameters: {
-            query?: never;
+            query?: {
+                team_id?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2165,7 +2167,9 @@ export interface operations {
     };
     live_game_api_v1_live_games__event_id__get: {
         parameters: {
-            query?: never;
+            query?: {
+                team_id?: string | null;
+            };
             header?: never;
             path: {
                 event_id: string;
@@ -2269,6 +2273,7 @@ export interface operations {
             query?: {
                 own?: boolean;
                 limit?: number;
+                team_id?: string | null;
             };
             header?: never;
             path: {

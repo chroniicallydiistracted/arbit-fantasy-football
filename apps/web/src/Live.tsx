@@ -21,7 +21,9 @@ import {
 } from "./GameBoard";
 import type { components } from "./generated/api";
 import { Busy, Notice, PageTitle, StatePanel } from "./primitives";
+import { useSession } from "./session";
 import { http } from "./transport";
+import { useViewingTeam } from "./viewing";
 
 type Games = components["schemas"]["LiveGames"];
 type Plays = components["schemas"]["LivePlays"];
@@ -34,12 +36,25 @@ const PHASE_ORDER: Record<string, number> = {
   scheduled: 1,
   final: 2,
 };
+// The dev account shows the players of the team it chose to view in Front Office (R-039).
+function useTeamContext() {
+  const { me } = useSession();
+  const viewing = useViewingTeam();
+  return me?.observer && viewing ? viewing : null;
+}
+
+function withTeam(path: string, team: string | null) {
+  if (!team) return path;
+  return `${path}${path.includes("?") ? "&" : "?"}team_id=${encodeURIComponent(team)}`;
+}
+
 export function LiveBoard() {
   const interval = useFallbackInterval();
   const { eventId } = useParams();
+  const team = useTeamContext();
   const query = useQuery({
-    queryKey: ["live-games"],
-    queryFn: ({ signal }) => http<Games>("/api/v1/live/games", { signal }),
+    queryKey: ["live-games", team],
+    queryFn: ({ signal }) => http<Games>(withTeam("/api/v1/live/games", team), { signal }),
     refetchInterval: interval,
   });
   if (query.isPending) return <Busy label="Loading games…" />;
@@ -139,10 +154,13 @@ function GameTile({ game, selected }: { game: Game; selected: boolean }) {
 
 function GameDetailPanel({ eventId }: { eventId: string }) {
   const interval = useFallbackInterval();
+  const team = useTeamContext();
   const query = useQuery({
-    queryKey: ["live-game", eventId],
+    queryKey: ["live-game", eventId, team],
     queryFn: ({ signal }) =>
-      http<GameDetail>(`/api/v1/live/games/${encodeURIComponent(eventId)}`, { signal }),
+      http<GameDetail>(withTeam(`/api/v1/live/games/${encodeURIComponent(eventId)}`, team), {
+        signal,
+      }),
     refetchInterval: interval,
   });
   if (query.isPending) return <Busy label="Loading game…" />;
@@ -174,10 +192,14 @@ function PlayFeed({ eventId }: { eventId: string }) {
   const interval = useFallbackInterval();
   const [params, setParams] = useSearchParams();
   const own = params.get("own") === "true";
+  const team = useTeamContext();
   const query = useQuery({
-    queryKey: ["live-plays", eventId, own],
+    queryKey: ["live-plays", eventId, own, team],
     queryFn: ({ signal }) =>
-      http<Plays>(`/api/v1/live/games/${encodeURIComponent(eventId)}/plays?own=${own}`, { signal }),
+      http<Plays>(
+        withTeam(`/api/v1/live/games/${encodeURIComponent(eventId)}/plays?own=${own}`, team),
+        { signal },
+      ),
     refetchInterval: interval,
   });
   return (

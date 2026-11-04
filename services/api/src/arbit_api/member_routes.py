@@ -620,9 +620,19 @@ def install_member_routes(
             ]
         )
 
-    def own_team_players(member: dict[str, Any], document: LeagueDocument) -> list[Player]:
-        allowed = {t.id for t in member_teams(member, document)}
-        return [p for p in document.players if p.team_id in allowed]
+    def own_team_players(
+        member: dict[str, Any], document: LeagueDocument, team_id: UUID | None = None
+    ) -> list[Player]:
+        """A member's players, or one of their teams' when `team_id` is given. The dev account has
+        no team of its own: it sees one manager's players only once it picks that team (R-039)."""
+        teams = {t.id for t in member_teams(member, document)}
+        if team_id is not None:
+            if team_id not in teams:
+                raise HTTPException(403, "TEAM_CONTEXT_DENIED")
+            teams = {team_id}
+        elif is_observer(member):
+            teams = set()
+        return [p for p in document.players if p.team_id in teams]
 
     def game_row(
         game: dict[str, Any], teams: dict[str, Any], own_by_team: dict[str, list[str]]
@@ -701,10 +711,12 @@ def install_member_routes(
             else None,
         )
 
-    def own_by_nfl_team(member: dict[str, Any], document: LeagueDocument) -> dict[str, list[str]]:
+    def own_by_nfl_team(
+        member: dict[str, Any], document: LeagueDocument, team_id: UUID | None = None
+    ) -> dict[str, list[str]]:
         directory = live_store.read_directory(uow)
         result: dict[str, list[str]] = {}
-        for player in own_team_players(member, document):
+        for player in own_team_players(member, document, team_id):
             row = directory.get(player.nfl_team_id) if player.nfl_team_id else None
             if row is not None:
                 result.setdefault(row.espn_id, []).append(player.display_name)
@@ -716,7 +728,7 @@ def install_member_routes(
         )
 
     @router.get("/api/v1/live/games", response_model=LiveGames)
-    def live_games(request: Request) -> LiveGames:
+    def live_games(request: Request, team_id: UUID | None = None) -> LiveGames:
         member = principal(request)
         _, document, _ = stored()
         require_binding(member, document)
@@ -730,7 +742,7 @@ def install_member_routes(
                 source_state=status.state,
                 last_success_at=status.last_success_at,
             )
-        own = own_by_nfl_team(member, document)
+        own = own_by_nfl_team(member, document, team_id)
         return LiveGames(
             week=board["week"],
             season_type=board["season_type"],
@@ -744,7 +756,9 @@ def install_member_routes(
 
     @router.get("/api/v1/live/games/{event_id}", response_model=LiveGameDetail)
     def live_game(
-        request: Request, event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$")
+        request: Request,
+        event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$"),
+        team_id: UUID | None = None,
     ) -> LiveGameDetail:
         member = principal(request)
         _, document, _ = stored()
@@ -762,7 +776,7 @@ def install_member_routes(
 
         detail = stored_game["detail"]
         return LiveGameDetail(
-            game=game_row(game, teams, own_by_nfl_team(member, document)),
+            game=game_row(game, teams, own_by_nfl_team(member, document, team_id)),
             leaders=[
                 LiveLeader(
                     category=x["category"],
@@ -799,6 +813,7 @@ def install_member_routes(
         event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$"),
         own: bool = False,
         limit: int = Query(default=100, ge=1, le=400),
+        team_id: UUID | None = None,
     ) -> LivePlays:
         member = principal(request)
         _, document, _ = stored()
@@ -807,7 +822,7 @@ def install_member_routes(
         game = next((g for g in (board or {}).get("games", []) if g["event_id"] == event_id), None)
         if board is None or game is None:
             raise HTTPException(404, "GAME_NOT_FOUND")
-        roster = {p.id for p in own_team_players(member, document)}
+        roster = {p.id for p in own_team_players(member, document, team_id)}
         aliases = live_store.athlete_espn_ids(uow, roster, datetime.now(UTC))
         plays = live_store.read_plays(
             uow, event_id, limit=limit, espn_ids=set(aliases) if own else None

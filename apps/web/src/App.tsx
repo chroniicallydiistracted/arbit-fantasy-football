@@ -13,6 +13,7 @@ import { PlayerSearchBox } from "./Search";
 import { Settings, Watchlist } from "./Settings";
 import { useSession } from "./session";
 import { http } from "./transport";
+import { setViewingTeam, useViewingTeam } from "./viewing";
 
 const workspaces = [
   { path: "/front-office", title: "Front Office" },
@@ -31,6 +32,7 @@ export function App({ invitation }: { invitation?: string }) {
   const location = useLocation();
   const [more, setMore] = useState(false);
   const [error, setError] = useState("");
+  const viewing = useViewingTeam();
   useEffect(() => {
     setMore(false);
     setError("");
@@ -50,6 +52,7 @@ export function App({ invitation }: { invitation?: string }) {
   async function logout() {
     try {
       await session.logout();
+      setViewingTeam(null);
     } catch (value) {
       setError(value instanceof Error ? value.message : "Sign-out failed. Try again.");
     }
@@ -81,6 +84,7 @@ export function App({ invitation }: { invitation?: string }) {
   if (!session.auth?.authenticated || session.error || !session.me)
     return <SignIn invitation={invitation} />;
   const me = session.me;
+  const viewingName = me.teams.find((value) => value.id === viewing)?.name;
   const team = me.teams.find((value) => value.id === me.current_team_id);
   const bound = me.binding_status === "bound";
   const memberLinks = (
@@ -104,8 +108,9 @@ export function App({ invitation }: { invitation?: string }) {
       )}
       {me.observer && (
         <div className="fixture-banner">
-          Dev account, read-only. It can open every team and the administrator pages, and can’t
-          change anything.
+          {viewingName
+            ? `Dev account, read-only, viewing ${viewingName}. It can’t change anything.`
+            : "Dev account, read-only. Choose a team in Front Office to see that manager’s view."}
         </div>
       )}
       <div className="stripe-edge" aria-hidden="true" />

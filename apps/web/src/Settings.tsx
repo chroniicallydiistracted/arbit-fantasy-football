@@ -75,7 +75,7 @@ export function Settings() {
   );
 }
 function Devices() {
-  const { auth, refresh } = useSession();
+  const { auth, me, refresh } = useSession();
   const query = useQuery({
     queryKey: ["sessions"],
     queryFn: ({ signal }) =>
@@ -119,7 +119,11 @@ function Devices() {
           </li>
         ))}
       </ul>
-      <p className="muted">Sessions end after 30 days without use, and always after 90 days.</p>
+      <p className="muted">
+        {me?.observer
+          ? "Dev account sessions end 12 hours after they start."
+          : "Sessions end after 30 days without use, and always after 90 days."}
+      </p>
     </section>
   );
 }
