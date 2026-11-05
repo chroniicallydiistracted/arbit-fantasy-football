@@ -122,6 +122,13 @@ def stand_like(dx=0.0, dy=0.0, **kw):
     return base
 
 
+def ground(p, at=44.0):
+    """The pose moved up or down until its lower foot rests on the ground line."""
+    j = P(p)
+    low = max(j["RIGHT LEG"][1], j["LEFT LEG"][1])
+    return {**p, "hip": (p["hip"][0], p["hip"][1] + at - low)}
+
+
 BATCHES = {
     # The approved fall, redrawn in the key colours. Same poses and seed as the first test.
     "run": ("run1", 48, "sprint, running cycle", [
@@ -185,6 +192,33 @@ BATCHES = {
         ("hold_ready", {**KN, "na": (60, 80), "fa": (55, 75)}),
         ("hold_catch", {**KN, "t": KN["t"] + 4, "na": (88, 105), "fa": (82, 100)}),
         ("hold_place", {**KN, "t": KN["t"] + 14, "na": (40, 15), "fa": (70, 120)}),
+    ]),
+    # Owner review of the play-type clips (OWN-037): waiting and idle poses that aren't the
+    # quarterback's, a defender's backpedal without the ball, and the handoff.
+    "situational": ("stand", 56, "ready stance, idle weight shift, backpedal, quarterback handoff, running back takes the ball", [
+        ("stance_1", ground(stand_like(t=30, na=(40, 18), fa=(30, 12), nl=(30, -14), fl=(6, -22)))),
+        ("stance_2", ground(stand_like(dx=0.6, t=28, na=(34, 14), fa=(38, 20), nl=(26, -16), fl=(10, -18)))),
+        ("idle_1", ground(stand_like(dx=0.5, t=4, na=(-6, 0), fa=(8, 4), nl=(-4, 0), fl=(10, 2)))),
+        ("idle_2", ground(stand_like(dx=-0.5, t=7, na=(-9, -3), fa=(5, 9), nl=(5, 0), fl=(6, 0)))),
+        ("bp_1", ground(stand_like(dx=-1.0, t=22, na=(-20, 60), fa=(-6, 72), nl=(-28, -10), fl=(26, -16)))),
+        ("bp_2", ground(stand_like(dx=-0.5, t=24, na=(-12, 66), fa=(-12, 66), nl=(14, -14), fl=(8, -18)))),
+        ("bp_3", ground(stand_like(dx=-1.0, t=22, na=(-6, 72), fa=(-20, 60), nl=(26, -16), fl=(-28, -10)))),
+        ("bp_4", ground(stand_like(dx=-0.5, t=24, na=(-12, 66), fa=(-12, 66), nl=(8, -18), fl=(14, -14)))),
+        ("handoff_give", ground(stand_like(dx=0.5, t=14, na=(68, 82), fa=(52, 78), nl=(-22, -6), fl=(24, -4)))),
+        ("handoff_follow", ground(stand_like(dx=1.0, t=16, na=(30, 62), fa=(-18, 22), nl=(14, -4), fl=(-26, -12)))),
+        ("take", ground({"hip": (24.0, 28.5), "t": 16, "na": (90, -90), "fa": (20, 92), "nl": F2["nl"], "fl": F2["fl"]})),
+    ]),
+    # Officials (OWN-037), drawn from the owner's standing player edited into an official
+    # (gen/official/1.png): idle, a jog, reaching for the flag, throwing it, following through.
+    "official": ("stand", 56, "game official jogs, reaches for a yellow flag and throws it", [
+        ("off_idle", ground(stand_like(dx=0.3, t=4, na=(-6, 0), fa=(8, 4), nl=(-3, 0), fl=(9, 2)))),
+        ("off_run_1", ground({**F1, "t": 12})),
+        ("off_run_2", ground({**F2, "t": 12})),
+        ("off_run_3", ground({**F5, "t": 12})),
+        ("off_run_4", ground({**F6, "t": 12})),
+        ("off_reach", ground(stand_like(dx=0.5, t=10, na=(-35, -15), fa=(20, 30), nl=(-14, 0), fl=(16, 2)))),
+        ("off_throw", ground(stand_like(dx=1.0, t=16, na=(150, 125), fa=(-20, -10), nl=(-24, -4), fl=(20, 0)))),
+        ("off_follow", ground(stand_like(dx=1.5, t=22, na=(100, 85), fa=(-25, -15), nl=(-28, -8), fl=(18, 0)))),
     ]),
 }
 

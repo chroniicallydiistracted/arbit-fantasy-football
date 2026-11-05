@@ -18,6 +18,8 @@ def submit(name):
             jobs = json.loads(jobs_path.read_text()) if jobs_path.exists() else {}
             jobs[name] = {'job': text.split('job_id: ')[1].split()[0], 'frames': [n for n, _ in b['frames']], 'ref': b['ref'], 'size': b['size']}
             jobs_path.write_text(json.dumps(jobs, indent=1)); return jobs[name]
+        if 'validation error' in text or 'Error' in text and 'slot' not in text.lower():
+            raise SystemExit(f'{name}: refused: {text[:300]}')
         print(name, 'waiting for a free slot', flush=True); time.sleep(20)
     raise SystemExit(f'{name}: no slot after 20 minutes')
 for name in sys.argv[1:]:

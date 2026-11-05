@@ -17,6 +17,9 @@ GROUPS = {
     "kick": ["kick_plant", "kick_swing", "kick_strike", "kick_follow", "punt_hold", "punt_drop", "punt_strike", "punt_follow",
              "snap_ready", "snap_release", "hold_ready", "hold_catch", "hold_place"],
     "celebrate": ["arms_up", "arms_jump", "point"],
+    # OWN-037: waiting and idle poses that aren't the quarterback's, the backpedal and the handoff.
+    "situational": ["stance_1", "stance_2", "idle_1", "idle_2", "bp_1", "bp_2", "bp_3", "bp_4",
+                    "handoff_give", "handoff_follow", "take"],
 }
 
 if __name__ == "__main__":

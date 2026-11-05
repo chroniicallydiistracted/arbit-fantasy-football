@@ -6,6 +6,17 @@ Pixel art for Arbit's play animations. Owned by the project owner (OWN-024, OWN-
 
 `palette.json` gives every color class its color in each of the 64 sets, so one drawing serves every team and both skin tones.
 
+## Situational poses and officials
+
+`frames/situational.txt` holds 11 poses PixelLab drew from the owner's standing player for the play review (OWN-037, OWN-038):
+- `stance_1` and `stance_2`, for players waiting
+- `idle_1` and `idle_2`, for players done with the play
+- `bp_1` to `bp_4`, a defender's backpedal without the ball
+- `handoff_give` and `handoff_follow`, the quarterback's handoff
+- `take`, the back taking it
+
+`officials/` holds the game official, who never takes team colors. `official.txt` holds his 8 frames: idle, a 4-frame jog, reaching for the flag, the throw and the follow-through. `palette.json` gives his fixed colors. His shirt uses the jersey letters, so a renderer centers him like a player. `scripts/sprites/pixellab/officials.py` made them, without the flag the model painted in; the flag is drawn on its own as it flies.
+
 ## The ball
 
 Frames never include the ball (OWN-027). `ball.txt` is the one ball sprite, taken from the owner's `arm` pose, and a renderer draws it over the frame. `anchors.json` gives each frame's near and far hands and its chest, in pixels from the frame's top left, plus `lift`, how far the frame's lowest pixel sits above the ground for jumps and dives. Carriers hold the ball at the chest; passers and punters hold it in the near hand.
