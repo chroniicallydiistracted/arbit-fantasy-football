@@ -14,6 +14,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import play_facts_coverage as coverage  # noqa: E402
 
+POSITIONS = Path("tests/fixtures/live/play-positions.example.json")
+TEAMS = Path("tests/fixtures/live/team-units.example.json")
 OUT = Path("tests/fixtures/live/play-facts.examples.json")
 KEEP = (
     "$ref",
@@ -72,7 +74,16 @@ CASES = [
     ("no_play_penalty", "401873026", "PENALTY on BUF-D.Walker, Encroachment"),
     ("declined_penalty", "401873030", "J.Goff pass incomplete short right to S.LaPorta"),
     ("fumble_lost", "401873034", "D.Maye pass short left to E.Chism to NE 18"),
+    ("penalty_wipes_out_pass", "401873036", "(Shotgun) S.Darnold pass incomplete short right to C.Kupp (J.Johnson).PENALTY"),
+    ("delay_of_game", "401873036", "PENALTY on CHI, Delay of Game, 5 yards"),
+    ("fumble_recovered_and_returned", "401873036", "(Shotgun) C.Williams pass short right to C.Loveland to CHI 21"),
     ("two_point_success", "401873030", "K.Murray pass short middle to T.Hockenson for 8 yards, TOUCHDOWN. TWO-POINT"),
+    # Owner review of the play-type clips (OWN-037): the plays each fix is checked against.
+    ("pass_deep_tackled_by_safety", "401873036", "(Shotgun) C.Williams pass deep middle to L.Burden"),
+    ("interception_intended_receiver", "401873025", "(Shotgun) M.Penix pass short middle intended for J.Dotson"),
+    ("defensive_holding_wipes_out_sack", "401873036", "(No Huddle, Shotgun) S.Darnold sacked at CHI 37"),
+    ("offensive_pass_interference", "401873036", "S.Darnold pass short left to J.Smith-Njigba pushed ob at CHI 1"),
+    ("illegal_contact_declined", "401873036", "(Shotgun) S.Darnold pass short middle to J.Smith-Njigba to CHI 24"),
     ("lateral", "401873023", "(Shotgun) B.Young pass short middle to T.McMillan to CAR 24"),
     ("timeout", "401873036", "Timeout #1 by SEA"),
 ]
@@ -129,6 +140,46 @@ def main() -> None:
         + "\n"
     )
     print(f"Wrote {len(cases)} cases to {OUT}")
+    # Their players' 2026 depth chart positions, for the alignment tests (OWN-036).
+    import positions as depth
+
+    known = depth.load()
+    ids = sorted(
+        {
+            participant["athlete"]["$ref"].split("/athletes/")[1].split("?")[0]
+            for case in cases
+            for participant in case["play"]["participants"]
+        }
+    )
+    POSITIONS.write_text(
+        json.dumps(
+            {
+                "synthetic": False,
+                "projection": "2026 depth chart positions (nflverse, ESPN-sourced) of the players in "
+                "play-facts.examples.json, by ESPN ID, best first; the latest snapshot imported.",
+                "positions": {espn_id: list(known[espn_id]) for espn_id in ids if espn_id in known},
+            },
+            indent=1,
+        )
+        + "\n"
+    )
+    print(f"Wrote positions for {sum(1 for i in ids if i in known)} of {len(ids)} players to {POSITIONS}")
+    # Each team's starting center, long snapper and quarterback, and its colors (OWN-037).
+    TEAMS.write_text(
+        json.dumps(
+            {
+                "synthetic": False,
+                "projection": "Each team's rank-1 center, long snapper and quarterback in its latest 2026 "
+                "depth chart snapshot imported, as [ESPN ID, text name], and the colors nflverse lists "
+                "for it, first to fourth, by nflverse team abbreviation.",
+                "units": {team: {k: list(v) for k, v in found.items()} for team, found in depth.units().items()},
+                "colors": depth.team_colors(),
+            },
+            indent=1,
+        )
+        + "\n"
+    )
+    print(f"Wrote team units and colors to {TEAMS}")
 
 
 if __name__ == "__main__":

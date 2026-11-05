@@ -216,3 +216,15 @@ def test_a_pass_after_a_direct_snap_to_someone_else_is_left_as_text():
     )
     facts = interpret(play, teams)
     assert facts.template is None and facts.reason == "trick_play" and not ready(facts)
+
+
+def test_the_play_before_a_fumble_or_a_flag_that_wiped_it_out_is_read_like_any_other():
+    fumbled = read("fumble_lost")[1].before
+    assert fumbled is not None and fumbled.template == "pass" and fumbled.before is None
+    assert fumbled.passing.result == "complete" and fumbled.action_end == 18
+    assert "FUMBLES" not in fumbled.text
+    wiped = read("penalty_wipes_out_pass")[1].before
+    assert wiped is not None and wiped.template == "pass" and wiped.passing.result == "incomplete"
+    assert not wiped.penalties and "PENALTY" not in wiped.text
+    for name in ("no_play_penalty", "delay_of_game", "run_gap", "declined_penalty"):
+        assert read(name)[1].before is None, name  # before the snap, or a play that counts

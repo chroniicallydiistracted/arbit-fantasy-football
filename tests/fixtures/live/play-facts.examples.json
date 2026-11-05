@@ -1978,6 +1978,279 @@
    }
   },
   {
+   "name": "penalty_wipes_out_pass",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730361794?lang=en&region=us",
+    "id": "4018730361794",
+    "sequenceNumber": "179400",
+    "type": {
+     "id": "8",
+     "text": "Penalty",
+     "abbreviation": "PEN"
+    },
+    "text": "(Shotgun) S.Darnold pass incomplete short right to C.Kupp (J.Johnson).PENALTY on CHI-J.Johnson, Defensive Pass Interference, 16 yards, enforced at SEA 29 - No Play.",
+    "period": {
+     "number": 2
+    },
+    "clock": {
+     "value": 63.0,
+     "displayValue": "1:03"
+    },
+    "homeScore": 3,
+    "awayScore": 13,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": 16,
+    "penalty": {
+     "yards": 16,
+     "type": {
+      "slug": "defensive-pass-interference",
+      "text": "Defensive Pass Interference"
+     },
+     "status": {
+      "slug": "accepted",
+      "text": "Accepted"
+     }
+    },
+    "isTurnover": false,
+    "isPenalty": true,
+    "start": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 29,
+     "yardsToEndzone": 71,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 45,
+     "yardsToEndzone": 55,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3912547?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/2977187?lang=en&region=us"
+      },
+      "type": "receiver"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/2977187?lang=en&region=us"
+      },
+      "type": "receiver"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4243253?lang=en&region=us"
+      },
+      "type": "passDefender"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4243253?lang=en&region=us"
+      },
+      "type": "penalized"
+     }
+    ]
+   }
+  },
+  {
+   "name": "delay_of_game",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730363410?lang=en&region=us",
+    "id": "4018730363410",
+    "sequenceNumber": "341000",
+    "type": {
+     "id": "8",
+     "text": "Penalty",
+     "abbreviation": "PEN"
+    },
+    "text": "PENALTY on CHI, Delay of Game, 5 yards, enforced at SEA 39 - No Play.",
+    "period": {
+     "number": 4
+    },
+    "clock": {
+     "value": 541.0,
+     "displayValue": "9:01"
+    },
+    "homeScore": 17,
+    "awayScore": 20,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": -5,
+    "penalty": {
+     "yards": 5,
+     "type": {
+      "slug": "delay-of-game",
+      "text": "Delay of Game"
+     },
+     "status": {
+      "slug": "accepted",
+      "text": "Accepted"
+     }
+    },
+    "isTurnover": false,
+    "isPenalty": true,
+    "start": {
+     "down": 3,
+     "distance": 4,
+     "yardLine": 39,
+     "yardsToEndzone": 39,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/3?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 3,
+     "distance": 9,
+     "yardLine": 44,
+     "yardsToEndzone": 44,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/3?lang=en&region=us"
+     }
+    },
+    "participants": []
+   }
+  },
+  {
+   "name": "fumble_recovered_and_returned",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730363095?lang=en&region=us",
+    "id": "4018730363095",
+    "sequenceNumber": "309500",
+    "type": {
+     "id": "29",
+     "text": "Fumble Recovery (Opponent)"
+    },
+    "text": "(Shotgun) C.Williams pass short right to C.Loveland to CHI 21 for 8 yards (D.Lawrence; J.Jobe). FUMBLES (D.Lawrence), RECOVERED by SEA-D.Lawrence at CHI 25. D.Lawrence to CHI 25 for no gain (J.Jackson).",
+    "period": {
+     "number": 4
+    },
+    "clock": {
+     "value": 794.0,
+     "displayValue": "13:14"
+    },
+    "homeScore": 9,
+    "awayScore": 20,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": 0,
+    "yardsAfterCatch": 11,
+    "isTurnover": true,
+    "isPenalty": false,
+    "start": {
+     "down": 3,
+     "distance": 20,
+     "yardLine": 87,
+     "yardsToEndzone": 87,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/3?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 75,
+     "yardsToEndzone": 25,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4431611?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4723086?lang=en&region=us"
+      },
+      "type": "receiver"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4723086?lang=en&region=us"
+      },
+      "type": "fumbler"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3930040?lang=en&region=us"
+      },
+      "type": "tackler"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/16802?lang=en&region=us"
+      },
+      "type": "assistedBy"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4372020?lang=en&region=us"
+      },
+      "type": "assistedBy"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/16802?lang=en&region=us"
+      },
+      "type": "forcedBy"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/16802?lang=en&region=us"
+      },
+      "type": "recoverer"
+     }
+    ]
+   }
+  },
+  {
    "name": "two_point_success",
    "event_id": "401873030",
    "home": "8",
@@ -2068,6 +2341,441 @@
        "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4429205?lang=en&region=us"
       },
       "type": "patScorer"
+     }
+    ]
+   }
+  },
+  {
+   "name": "pass_deep_tackled_by_safety",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730361240?lang=en&region=us",
+    "id": "4018730361240",
+    "sequenceNumber": "124000",
+    "type": {
+     "id": "24",
+     "text": "Pass Reception",
+     "abbreviation": "REC"
+    },
+    "text": "(Shotgun) C.Williams pass deep middle to L.Burden to SEA 49 for 23 yards (J.Love).",
+    "period": {
+     "number": 2
+    },
+    "clock": {
+     "value": 574.0,
+     "displayValue": "9:34"
+    },
+    "homeScore": 3,
+    "awayScore": 7,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": 23,
+    "yardsAfterCatch": 6,
+    "isTurnover": false,
+    "isPenalty": false,
+    "start": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 72,
+     "yardsToEndzone": 72,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/3?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 49,
+     "yardsToEndzone": 49,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/3?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4431611?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4685278?lang=en&region=us"
+      },
+      "type": "receiver"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4046675?lang=en&region=us"
+      },
+      "type": "tackler"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4372020?lang=en&region=us"
+      },
+      "type": "other"
+     }
+    ]
+   }
+  },
+  {
+   "name": "interception_intended_receiver",
+   "event_id": "401873025",
+   "home": "27",
+   "away": "1",
+   "home_code": "TB",
+   "away_code": "ATL",
+   "text_codes": [
+    "ATL",
+    "TB"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873025/competitions/401873025/plays/401873025644?lang=en&region=us",
+    "id": "401873025644",
+    "sequenceNumber": "64400",
+    "type": {
+     "id": "26",
+     "text": "Pass Interception Return",
+     "abbreviation": "INTR"
+    },
+    "text": "(Shotgun) M.Penix pass short middle intended for J.Dotson INTERCEPTED by A.Anzalone at ATL 31. A.Anzalone to ATL 19 for 12 yards (Z.Branch).",
+    "period": {
+     "number": 1
+    },
+    "clock": {
+     "value": 344.0,
+     "displayValue": "5:44"
+    },
+    "homeScore": 3,
+    "awayScore": 0,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-01T21:00Z",
+    "statYardage": 12,
+    "isTurnover": true,
+    "isPenalty": false,
+    "start": {
+     "down": 3,
+     "distance": 10,
+     "yardLine": 80,
+     "yardsToEndzone": 80,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/1?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 81,
+     "yardsToEndzone": 19,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/27?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4360423?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3043107?lang=en&region=us"
+      },
+      "type": "passDefender"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3043107?lang=en&region=us"
+      },
+      "type": "returner"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4870612?lang=en&region=us"
+      },
+      "type": "tackler"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4361409?lang=en&region=us"
+      },
+      "type": "other"
+     }
+    ]
+   }
+  },
+  {
+   "name": "defensive_holding_wipes_out_sack",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730362785?lang=en&region=us",
+    "id": "4018730362785",
+    "sequenceNumber": "278500",
+    "type": {
+     "id": "8",
+     "text": "Penalty",
+     "abbreviation": "PEN"
+    },
+    "text": "(No Huddle, Shotgun) S.Darnold sacked at CHI 37 for -5 yards (M.Sweat).PENALTY on CHI-K.Gordon, Defensive Holding, 5 yards, enforced at CHI 32 - No Play.",
+    "period": {
+     "number": 3
+    },
+    "clock": {
+     "value": 141.0,
+     "displayValue": "2:21"
+    },
+    "homeScore": 9,
+    "awayScore": 20,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": 5,
+    "penalty": {
+     "yards": 5,
+     "type": {
+      "slug": "defensive-holding",
+      "text": "Defensive Holding"
+     },
+     "status": {
+      "slug": "accepted",
+      "text": "Accepted"
+     }
+    },
+    "isTurnover": false,
+    "isPenalty": true,
+    "start": {
+     "down": 3,
+     "distance": 10,
+     "yardLine": 68,
+     "yardsToEndzone": 32,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 73,
+     "yardsToEndzone": 27,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3912547?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3134690?lang=en&region=us"
+      },
+      "type": "sackedBy"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3134690?lang=en&region=us"
+      },
+      "type": "tackler"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4361093?lang=en&region=us"
+      },
+      "type": "penalized"
+     }
+    ]
+   }
+  },
+  {
+   "name": "offensive_pass_interference",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730362895?lang=en&region=us",
+    "id": "4018730362895",
+    "sequenceNumber": "289500",
+    "type": {
+     "id": "8",
+     "text": "Penalty",
+     "abbreviation": "PEN"
+    },
+    "text": "S.Darnold pass short left to J.Smith-Njigba pushed ob at CHI 1 for 10 yards (T.Stevenson).PENALTY on SEA-J.Smith-Njigba, Offensive Pass Interference, 10 yards, enforced at CHI 11 - No Play.",
+    "period": {
+     "number": 3
+    },
+    "clock": {
+     "value": 14.0,
+     "displayValue": "0:14"
+    },
+    "homeScore": 9,
+    "awayScore": 20,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": -10,
+    "yardsAfterCatch": 0,
+    "penalty": {
+     "yards": 10,
+     "type": {
+      "slug": "offensive-pass-interference",
+      "text": "Offensive Pass Interference"
+     },
+     "status": {
+      "slug": "accepted",
+      "text": "Accepted"
+     }
+    },
+    "isTurnover": false,
+    "isPenalty": true,
+    "start": {
+     "down": 2,
+     "distance": 8,
+     "yardLine": 89,
+     "yardsToEndzone": 11,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 2,
+     "distance": 18,
+     "yardLine": 79,
+     "yardsToEndzone": 21,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3912547?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4430878?lang=en&region=us"
+      },
+      "type": "receiver"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4430878?lang=en&region=us"
+      },
+      "type": "penalized"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4426374?lang=en&region=us"
+      },
+      "type": "tackler"
+     }
+    ]
+   }
+  },
+  {
+   "name": "illegal_contact_declined",
+   "event_id": "401873036",
+   "home": "26",
+   "away": "3",
+   "home_code": "SEA",
+   "away_code": "CHI",
+   "text_codes": [
+    "CHI",
+    "SEA"
+   ],
+   "play": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401873036/competitions/401873036/plays/4018730363977?lang=en&region=us",
+    "id": "4018730363977",
+    "sequenceNumber": "397700",
+    "type": {
+     "id": "24",
+     "text": "Pass Reception",
+     "abbreviation": "REC"
+    },
+    "text": "(Shotgun) S.Darnold pass short middle to J.Smith-Njigba to CHI 24 for 15 yards (T.Stevenson).Penalty on CHI-K.Gordon, Illegal Contact, declined.",
+    "period": {
+     "number": 4
+    },
+    "clock": {
+     "value": 243.0,
+     "displayValue": "4:03"
+    },
+    "homeScore": 17,
+    "awayScore": 34,
+    "scoringPlay": false,
+    "scoreValue": 0,
+    "modified": "2026-11-03T04:32Z",
+    "statYardage": 15,
+    "yardsAfterCatch": 1,
+    "isTurnover": false,
+    "isPenalty": false,
+    "start": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 61,
+     "yardsToEndzone": 39,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "end": {
+     "down": 1,
+     "distance": 10,
+     "yardLine": 76,
+     "yardsToEndzone": 24,
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/teams/26?lang=en&region=us"
+     }
+    },
+    "participants": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3912547?lang=en&region=us"
+      },
+      "type": "passer"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4430878?lang=en&region=us"
+      },
+      "type": "receiver"
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4426374?lang=en&region=us"
+      },
+      "type": "tackler"
      }
     ]
    }

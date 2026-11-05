@@ -221,6 +221,9 @@ class PlayFacts(LiveModel):
     out_of_bounds: bool = False
     review: Literal["upheld", "reversed"] | None = None
     text: str = Field(default="", max_length=2000)
+    # The play as the text tells it before a fumble or a flag that wiped it out, read like any
+    # other play, so it can be drawn up to the fumble or the flag.
+    before: "PlayFacts | None" = None
 
 
 def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
@@ -273,7 +276,55 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
         facts["kick"] = _kick(play, main, shape, offense, teams)
     if "FUMBLE" in main.upper():
         facts["fumble"] = _fumble(main, offense, teams)
-    return _judge(PlayFacts.model_validate(facts), play, main)
+    judged = _judge(PlayFacts.model_validate(facts), play, main)
+    if judged.reason in ("fumble", "no_play"):
+        judged = judged.model_copy(update={"before": _before(play, main, teams)})
+    return judged
+
+
+_KINDS: tuple[tuple[str, str, str], ...] = (
+    (r"\bINTERCEPTED\b", "interception", "Pass Interception Return"),
+    (r"\bsacked\b", "sack", "Sack"),
+    (r"\bpass incomplete\b", "pass", "Pass Incompletion"),
+    (r"\bpass\b", "pass", "Pass Reception"),
+    (r"\bpunts\b", "punt", "Punt"),
+    (r"\bkicks\b", "kickoff", "Kickoff"),
+    (r"\bfield goal\b", "field_goal", "Field Goal Good"),
+    (
+        r"\b(?:left|right) (?:end|tackle|guard)\b|\bup the middle\b|\bscrambles\b|\bkneels\b",
+        "rush",
+        "Rush",
+    ),
+)
+
+
+def _before(play: LivePlay, main: str, teams: GameTeams) -> PlayFacts | None:
+    """The play the text describes before a fumble or a no-play flag, or None if it describes none."""
+    text = re.split(r"\s*\bFUMBLES\b", main)[0].strip()
+    if not text:
+        return None
+    found = next(
+        ((kind, label) for pattern, kind, label in _KINDS if re.search(pattern, text)), None
+    )
+    if found is None:
+        return None
+    kind, label = found
+    gained = re.search(r"\bfor (-?\d+) yards?\b|\bfor (no gain)\b", text)
+    yards = None if gained is None else "0" if gained.group(2) else gained.group(1)
+    inner = play.model_copy(
+        update={
+            "kind": kind,
+            "provider_type_text": label,
+            "text": text,
+            "cancelled": False,
+            "stat_yardage": yards,
+            "penalty": None,
+            "end": play.start,  # where it ended comes from the text's own spot
+            "source_flags": {"isTurnover": False, "isPenalty": False},
+        }
+    )
+    facts = interpret(inner, teams)
+    return facts if facts.template is not None else None
 
 
 def _effective_text(text: str) -> tuple[str, Literal["upheld", "reversed"] | None]:
@@ -385,8 +436,14 @@ def _pass(
     if play.provider_type_text in ("Pass Incompletion",) or re.search(r"\bpass incomplete\b", main):
         return PassFacts(result="incomplete", depth=depth, side=side, qb_hit_by=hits)
     yac = play.yards_after_catch
-    gained = _int(play.stat_yardage)
+    # The catch's own gain is the text's "for N yards": ESPN's stat yardage is the net after an
+    # accepted penalty. Yards after catch that don't fit the gain or the depth are ESPN's slip
+    # and are dropped, so the catch falls back to the depth's range (ENG-032).
+    said = re.search(r"\bfor (-?\d+) yards?\b|\bfor (no gain)\b", main)
+    gained = (0 if said.group(2) else int(said.group(1))) if said else _int(play.stat_yardage)
     air = gained - yac if yac is not None and gained is not None else None
+    if air is not None and (air < -10 or (depth == "deep" and air < 10)):
+        yac = air = None
     catch = start + air if air is not None and start is not None else None
     return PassFacts(
         result="complete",

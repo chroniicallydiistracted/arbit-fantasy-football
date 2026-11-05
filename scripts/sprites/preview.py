@@ -6,6 +6,7 @@ The field here is drawn from nothing, so these previews can be published. Never 
 field: that art is licensed for the private app only (OWN-015).
 """
 
+import json
 import math
 import sys
 from collections.abc import Callable
@@ -36,11 +37,44 @@ CYCLES = {
         0.62,
     ),
     "DROP": (["drop_a", "drop_b", "drop_c", "drop_b"], 0.55),
+    # A defender's backpedal, without the quarterback's ball-holding arms (OWN-037).
+    "BACKPEDAL": (["bp_1", "bp_2", "bp_3", "bp_4"], 0.5),
+    "OFF_RUN": (["off_run_1", "off_run_2", "off_run_3", "off_run_4"], 0.55),  # an official's jog
 }
 LOS_COLOR = (40, 110, 230, 215)
 FIRST_DOWN_COLOR = (250, 215, 40, 225)
 BIG = ImageFont.load_default(size=19)
 SMALL = ImageFont.load_default(size=14)
+
+
+def _officials() -> tuple[dict[str, list[str]], dict[str, tuple[int, int, int]]]:
+    """The officials' frames and fixed palette (OWN-037): they never take team colors."""
+    import re as _re
+
+    folder = sprite_frames.ASSETS / "officials"
+    frames: dict[str, list[str]] = {}
+    for path in sorted(folder.glob("*.txt")):
+        for chunk in _re.split(r"(?m)^== ", path.read_text()):
+            if chunk.strip():
+                name, *rows = chunk.strip("\n").split("\n")
+                frames[name] = rows
+    palette = {k: tuple(v) for k, v in json.loads((folder / "palette.json").read_text()).items()}
+    return frames, palette  # type: ignore[return-value]
+
+
+OFFICIAL_FRAMES, OFFICIAL_PALETTE = _officials()
+FRAMES.update(OFFICIAL_FRAMES)  # so they center and check like any frame
+
+
+def official_rgba(rows: list[str]) -> Image.Image:
+    width = max(map(len, rows))
+    pixels = np.zeros((len(rows), width, 4), np.uint8)
+    for y, row in enumerate(rows):
+        for x, cell in enumerate(row):
+            if cell != ".":
+                pixels[y, x, :3] = OFFICIAL_PALETTE[cell]
+                pixels[y, x, 3] = 255
+    return Image.fromarray(pixels)
 
 
 def rgba(rows: list[str], color_set: int) -> Image.Image:
@@ -480,7 +514,9 @@ def render(
             actor, x, z, pose = item
             screen_x, screen_y, per_yard = camera.project(x, 0, z)
             art = max(shot.min_art, per_yard * ART_PIXEL_YARDS)
-            if actor.uniform is not None:
+            if getattr(actor, "official", False):
+                sprite = official_rgba(FRAMES[pose])
+            elif actor.uniform is not None:
                 sprite = painted(pose, actor.uniform, actor.color_set)
             else:
                 sprite = rgba(FRAMES[pose], actor.color_set)
@@ -501,10 +537,13 @@ def render(
             scaled = sprite.resize((width, height), Image.NEAREST)
             image.paste(scaled, (round(screen_x - anchor * art), round(screen_y - height)), scaled)
             if actor.label:
-                tags.append((screen_x, screen_y - height - 6, actor.label))
+                colors = getattr(actor, "tag_colors", None)
+                tags.append((screen_x, screen_y - height - 6, actor.label, colors))
+                if colors:
+                    kept.update(tuple(color[:3]) for color in colors)
             spot_name = pose.removesuffix("_e")
             if actor.carrying(t) and spot_name in ANCHORS:
-                held = ANCHORS[spot_name]["near_hand" if pose.startswith(("throw", "punt")) else "chest"]
+                held = ANCHORS[spot_name]["near_hand" if pose.startswith(("throw", "punt", "handoff")) else "chest"]
                 hand_x = sprite.width - held[0] if actor.facing_left else held[0]
                 ball_sprite = rgba(BALL, 0)
                 kept.update(opaque_colors(ball_sprite))
@@ -515,14 +554,19 @@ def render(
         draw = ImageDraw.Draw(image, "RGBA")
         tag_h = shot.tag_size + 4
         boxes: list[tuple[float, float, float, float]] = []
-        for tag_x, tag_y, text in sorted(tags, key=lambda tag: -tag[1]):
+        for tag_x, tag_y, text, colors in sorted(tags, key=lambda tag: -tag[1]):
             half = draw.textlength(text, font=small) / 2 + 4
             # Players who meet would cover each other's names, so a later tag moves up above an earlier one.
             while any(tag_x - half < right and left < tag_x + half and tag_y - tag_h < bottom and top < tag_y for left, top, right, bottom in boxes):
                 tag_y -= 1
             boxes.append((tag_x - half, tag_y - tag_h, tag_x + half, tag_y))
-            draw.rectangle(boxes[-1], fill=(10, 12, 14, 170))
-            draw.text((tag_x - half + 4, tag_y - tag_h + 1), text, font=small, fill=(240, 240, 235, 255))
+            if colors:  # the owner's style C: team colors, a second-color shadow, no box (OWN-037)
+                fill, shadow = colors
+                draw.text((tag_x - half + 5, tag_y - tag_h + 2), text, font=small, fill=shadow)
+                draw.text((tag_x - half + 4, tag_y - tag_h + 1), text, font=small, fill=fill)
+            else:
+                draw.rectangle(boxes[-1], fill=(10, 12, 14, 170))
+                draw.text((tag_x - half + 4, tag_y - tag_h + 1), text, font=small, fill=(240, 240, 235, 255))
         top, bottom = band or camera.band()
         image = image.crop((0, top, shot.width, bottom))
         draw = ImageDraw.Draw(image, "RGBA")

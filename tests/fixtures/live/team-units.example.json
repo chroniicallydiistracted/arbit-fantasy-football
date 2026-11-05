@@ -1,0 +1,668 @@
+{
+ "synthetic": false,
+ "projection": "Each team's rank-1 center, long snapper and quarterback in its latest 2026 depth chart snapshot imported, as [ESPN ID, text name], and the colors nflverse lists for it, first to fourth, by nflverse team abbreviation.",
+ "units": {
+  "ARI": {
+   "center": [
+    "3886633",
+    "H.Froholdt"
+   ],
+   "long_snapper": [
+    "17304",
+    "C.Kreiter"
+   ],
+   "quarterback": [
+    "2578570",
+    "J.Brissett"
+   ]
+  },
+  "ATL": {
+   "center": [
+    "4036444",
+    "R.Neuzil"
+   ],
+   "long_snapper": [
+    "3915528",
+    "L.McCullough"
+   ],
+   "quarterback": [
+    "4360423",
+    "M.Penix"
+   ]
+  },
+  "BAL": {
+   "center": [
+    "4361178",
+    "C.Jurgens"
+   ],
+   "long_snapper": [
+    "3915184",
+    "N.Moore"
+   ],
+   "quarterback": [
+    "3916387",
+    "L.Jackson"
+   ]
+  },
+  "BUF": {
+   "center": [
+    "4033748",
+    "C.McGovern"
+   ],
+   "long_snapper": [
+    "2976549",
+    "R.Ferguson"
+   ],
+   "quarterback": [
+    "3918298",
+    "J.Allen"
+   ]
+  },
+  "CAR": {
+   "center": [
+    "4035048",
+    "L.Fortner"
+   ],
+   "long_snapper": [
+    "11759",
+    "J.Jansen"
+   ],
+   "quarterback": [
+    "4685720",
+    "B.Young"
+   ]
+  },
+  "CHI": {
+   "center": [
+    "3116729",
+    "G.Bradbury"
+   ],
+   "long_snapper": [
+    "2980138",
+    "S.Daly"
+   ],
+   "quarterback": [
+    "4431611",
+    "C.Williams"
+   ]
+  },
+  "CIN": {
+   "center": [
+    "2576188",
+    "T.Karras"
+   ],
+   "long_snapper": [
+    "4572051",
+    "W.Wagner"
+   ],
+   "quarterback": [
+    "3915511",
+    "J.Burrow"
+   ]
+  },
+  "CLE": {
+   "center": [
+    "3115485",
+    "E.Jenkins"
+   ],
+   "long_snapper": [
+    "3913293",
+    "R.Sunahara"
+   ],
+   "quarterback": [
+    "3122840",
+    "D.Watson"
+   ]
+  },
+  "DAL": {
+   "center": [
+    "4426663",
+    "C.Beebe"
+   ],
+   "long_snapper": [
+    "3052357",
+    "T.Sieg"
+   ],
+   "quarterback": [
+    "2577417",
+    "D.Prescott"
+   ]
+  },
+  "DEN": {
+   "center": [
+    "4039018",
+    "L.Wattenberg"
+   ],
+   "long_snapper": [
+    "3139166",
+    "M.Fraboni"
+   ],
+   "quarterback": [
+    "4426338",
+    "B.Nix"
+   ]
+  },
+  "DET": {
+   "center": [
+    "4361788",
+    "C.Mays"
+   ],
+   "long_snapper": [
+    "4571755",
+    "H.Hatten"
+   ],
+   "quarterback": [
+    "3046779",
+    "J.Goff"
+   ]
+  },
+  "GB": {
+   "center": [
+    "4426411",
+    "S.Rhyan"
+   ],
+   "long_snapper": [
+    "4422336",
+    "M.Orzech"
+   ],
+   "quarterback": [
+    "4036378",
+    "J.Love"
+   ]
+  },
+  "HOU": {
+   "center": [
+    "3128412",
+    "E.Brown"
+   ],
+   "long_snapper": [
+    "4690999",
+    "A.Brinkman"
+   ],
+   "quarterback": [
+    "4432577",
+    "C.Stroud"
+   ]
+  },
+  "IND": {
+   "center": [
+    "4430957",
+    "T.Bortolini"
+   ],
+   "long_snapper": [
+    "2566045",
+    "L.Rhodes"
+   ],
+   "quarterback": [
+    "3917792",
+    "D.Jones"
+   ]
+  },
+  "JAX": {
+   "center": [
+    "4242391",
+    "R.Hainsey"
+   ],
+   "long_snapper": [
+    "3928931",
+    "R.Matiscik"
+   ],
+   "quarterback": [
+    "4360310",
+    "T.Lawrence"
+   ]
+  },
+  "KC": {
+   "center": [
+    "4241385",
+    "C.Humphrey"
+   ],
+   "long_snapper": [
+    "16665",
+    "J.Winchester"
+   ],
+   "quarterback": [
+    "3139477",
+    "P.Mahomes"
+   ]
+  },
+  "LA": {
+   "center": [
+    "3052180",
+    "C.Shelton"
+   ],
+   "long_snapper": [
+    "2575907",
+    "J.Cardona"
+   ],
+   "quarterback": [
+    "12483",
+    "M.Stafford"
+   ]
+  },
+  "LAC": {
+   "center": [
+    "4682506",
+    "J.Slaughter"
+   ],
+   "long_snapper": [
+    "15151",
+    "J.Harris"
+   ],
+   "quarterback": [
+    "4038941",
+    "J.Herbert"
+   ]
+  },
+  "LV": {
+   "center": [
+    "4360499",
+    "T.Linderbaum"
+   ],
+   "long_snapper": [
+    "4243545",
+    "A.Ward"
+   ],
+   "quarterback": [
+    "14880",
+    "K.Cousins"
+   ]
+  },
+  "MIA": {
+   "center": [
+    "4040537",
+    "A.Brewer"
+   ],
+   "long_snapper": [
+    "4034729",
+    "T.Addington"
+   ],
+   "quarterback": [
+    "4242512",
+    "M.Willis"
+   ]
+  },
+  "MIN": {
+   "center": [
+    "3930270",
+    "B.Brandel"
+   ],
+   "long_snapper": [
+    "15726",
+    "A.DePaola"
+   ],
+   "quarterback": [
+    "3917315",
+    "K.Murray"
+   ]
+  },
+  "NE": {
+   "center": [
+    "4599198",
+    "J.Wilson"
+   ],
+   "long_snapper": [
+    "4695254",
+    "J.Ashby"
+   ],
+   "quarterback": [
+    "4431452",
+    "D.Maye"
+   ]
+  },
+  "NO": {
+   "center": [
+    "3917331",
+    "E.McCoy"
+   ],
+   "long_snapper": [
+    "2575788",
+    "Z.Wood"
+   ],
+   "quarterback": [
+    "4360689",
+    "T.Shough"
+   ]
+  },
+  "NYG": {
+   "center": [
+    "4426489",
+    "B.Hudson"
+   ],
+   "long_snapper": [
+    "4883114",
+    "B.Mann"
+   ],
+   "quarterback": [
+    "4433970",
+    "J.McCarthy"
+   ]
+  },
+  "NYJ": {
+   "center": [
+    "4242000",
+    "J.Myers"
+   ],
+   "long_snapper": [
+    "2983155",
+    "T.Hennessy"
+   ],
+   "quarterback": [
+    "15864",
+    "G.Smith"
+   ]
+  },
+  "PHI": {
+   "center": [
+    "4567802",
+    "D.Kendall"
+   ],
+   "long_snapper": [
+    "4686566",
+    "R.Underwood"
+   ],
+   "quarterback": [
+    "4685201",
+    "T.McKee"
+   ]
+  },
+  "PIT": {
+   "center": [
+    "4429775",
+    "Z.Frazier"
+   ],
+   "long_snapper": [
+    "2978524",
+    "C.Kuntz"
+   ],
+   "quarterback": [
+    "8439",
+    "A.Rodgers"
+   ]
+  },
+  "SEA": {
+   "center": [
+    "4383409",
+    "J.Sundell"
+   ],
+   "long_snapper": [
+    "4259606",
+    "C.Stoll"
+   ],
+   "quarterback": [
+    "3912547",
+    "S.Darnold"
+   ]
+  },
+  "SF": {
+   "center": [
+    "2577185",
+    "J.Brendel"
+   ],
+   "long_snapper": [
+    "13729",
+    "J.Weeks"
+   ],
+   "quarterback": [
+    "4361741",
+    "B.Purdy"
+   ]
+  },
+  "TB": {
+   "center": [
+    "4429251",
+    "G.Barton"
+   ],
+   "long_snapper": [
+    "4361727",
+    "E.Deckers"
+   ],
+   "quarterback": [
+    "3052587",
+    "B.Mayfield"
+   ]
+  },
+  "TEN": {
+   "center": [
+    "4038544",
+    "A.Schlottmann"
+   ],
+   "long_snapper": [
+    "13848",
+    "M.Cox"
+   ],
+   "quarterback": [
+    "4688380",
+    "C.Ward"
+   ]
+  },
+  "WAS": {
+   "center": [
+    "2576736",
+    "L.Patrick"
+   ],
+   "long_snapper": [
+    "17378",
+    "T.Ott"
+   ],
+   "quarterback": [
+    "4426348",
+    "J.Daniels"
+   ]
+  }
+ },
+ "colors": {
+  "ARI": [
+   "#97233F",
+   "#000000",
+   "#ffb612",
+   "#a5acaf"
+  ],
+  "ATL": [
+   "#A71930",
+   "#000000",
+   "#a5acaf",
+   "#a30d2d"
+  ],
+  "BAL": [
+   "#241773",
+   "#9E7C0C",
+   "#9e7c0c",
+   "#c60c30"
+  ],
+  "BUF": [
+   "#00338D",
+   "#C60C30",
+   "#0c2e82",
+   "#d50a0a"
+  ],
+  "CAR": [
+   "#0085CA",
+   "#000000",
+   "#bfc0bf",
+   "#0085ca"
+  ],
+  "CHI": [
+   "#0B162A",
+   "#E64100",
+   "#0b162a",
+   "#E64100"
+  ],
+  "CIN": [
+   "#FB4F14",
+   "#000000",
+   "#000000",
+   "#d32f1e"
+  ],
+  "CLE": [
+   "#FF3C00",
+   "#311D00",
+   "#a5acaf",
+   "#d32f1e"
+  ],
+  "DAL": [
+   "#002244",
+   "#B0B7BC",
+   "#acc0c6",
+   "#a5acaf"
+  ],
+  "DEN": [
+   "#002244",
+   "#FB4F14",
+   "#00234c",
+   "#ff5200"
+  ],
+  "DET": [
+   "#0076B6",
+   "#B0B7BC",
+   "#000000",
+   "#004e89"
+  ],
+  "GB": [
+   "#203731",
+   "#FFB612",
+   "#1c2d25",
+   "#eead1e"
+  ],
+  "HOU": [
+   "#03202F",
+   "#A71930",
+   "#00071c",
+   "#a30d2d"
+  ],
+  "IND": [
+   "#002C5F",
+   "#a5acaf",
+   "#013369",
+   "#9ba1a2"
+  ],
+  "JAX": [
+   "#006778",
+   "#000000",
+   "#9f792c",
+   "#d7a22a"
+  ],
+  "KC": [
+   "#E31837",
+   "#FFB612",
+   "#000000",
+   "#e31837"
+  ],
+  "LA": [
+   "#003594",
+   "#FFD100",
+   "#001532",
+   "#af925d"
+  ],
+  "LAC": [
+   "#007BC7",
+   "#ffc20e",
+   "#ffb612",
+   "#001532"
+  ],
+  "LAR": [
+   "#003594",
+   "#FFD100",
+   "#001532",
+   "#af925d"
+  ],
+  "LV": [
+   "#000000",
+   "#A5ACAF",
+   "#a6aeb0",
+   "#000000"
+  ],
+  "MIA": [
+   "#008E97",
+   "#F58220",
+   "#005778",
+   "#008e97"
+  ],
+  "MIN": [
+   "#4F2683",
+   "#FFC62F",
+   "#e9bf9b",
+   "#000000"
+  ],
+  "NE": [
+   "#002244",
+   "#C60C30",
+   "#b0b7bc",
+   "#001532"
+  ],
+  "NO": [
+   "#D3BC8D",
+   "#000000",
+   "#9f8958",
+   "#000000"
+  ],
+  "NYG": [
+   "#0B2265",
+   "#A71930",
+   "#a5acaf",
+   "#012352"
+  ],
+  "NYJ": [
+   "#003F2D",
+   "#000000"
+  ],
+  "OAK": [
+   "#000000",
+   "#A5ACAF",
+   "#a6aeb0",
+   "#000000"
+  ],
+  "PHI": [
+   "#004C54",
+   "#A5ACAF",
+   "#acc0c6",
+   "#000000"
+  ],
+  "PIT": [
+   "#000000",
+   "#FFB612",
+   "#c60c30",
+   "#00539b"
+  ],
+  "SD": [
+   "#007BC7",
+   "#ffc20e",
+   "#ffb612",
+   "#001532"
+  ],
+  "SEA": [
+   "#002244",
+   "#69be28",
+   "#a5acaf",
+   "#001532"
+  ],
+  "SF": [
+   "#AA0000",
+   "#B3995D",
+   "#000000",
+   "#a5acaf"
+  ],
+  "STL": [
+   "#003594",
+   "#FFD100",
+   "#001532",
+   "#af925d"
+  ],
+  "TB": [
+   "#A71930",
+   "#322F2B",
+   "#000000",
+   "#ff7900"
+  ],
+  "TEN": [
+   "#4495D2",
+   "#D50A0A"
+  ],
+  "WAS": [
+   "#5A1414",
+   "#FFB612",
+   "#000000",
+   "#5b2b2f"
+  ]
+ }
+}

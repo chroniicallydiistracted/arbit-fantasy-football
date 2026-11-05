@@ -8,8 +8,15 @@
           "type": "string"
         },
         "espn_id": {
-          "title": "Espn Id",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Espn Id"
         },
         "role": {
           "title": "Role",
@@ -18,7 +25,8 @@
         "side": {
           "enum": [
             "offense",
-            "defense"
+            "defense",
+            "official"
           ],
           "title": "Side",
           "type": "string"
@@ -34,6 +42,18 @@
           ],
           "default": null,
           "title": "Label"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Position"
         },
         "facing": {
           "enum": [
@@ -246,6 +266,68 @@
       "title": "Line",
       "type": "object"
     },
+    "Prop": {
+      "additionalProperties": false,
+      "description": "Something else on the field. A flag is thrown at `start` by the nearest official, who\nisn't drawn, from `origin`, and lands at `at` at `land`, where it stays.",
+      "properties": {
+        "kind": {
+          "const": "flag",
+          "title": "Kind",
+          "type": "string"
+        },
+        "start": {
+          "title": "Start",
+          "type": "number"
+        },
+        "land": {
+          "title": "Land",
+          "type": "number"
+        },
+        "origin": {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Origin",
+          "type": "array"
+        },
+        "at": {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "At",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "start",
+        "land",
+        "origin",
+        "at"
+      ],
+      "title": "Prop",
+      "type": "object"
+    },
     "Segment": {
       "additionalProperties": false,
       "properties": {
@@ -381,6 +463,14 @@
     "caption": {
       "title": "Caption",
       "type": "string"
+    },
+    "props": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Prop"
+      },
+      "title": "Props",
+      "type": "array"
     },
     "label": {
       "default": "Re-creation from play-by-play",

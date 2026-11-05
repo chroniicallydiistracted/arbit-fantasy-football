@@ -1,0 +1,564 @@
+{
+ "version": 1,
+ "event_id": "401873035",
+ "provider_id": "4018730351951",
+ "seed": "punt_touchback_with_penalty:example",
+ "template": "punt",
+ "duration": 9.16,
+ "offense": "21",
+ "defense": "28",
+ "actors": [
+  {
+   "key": "snapper",
+   "espn_id": null,
+   "role": "snapper",
+   "side": "offense",
+   "label": "R.Underwood",
+   "position": null,
+   "facing": "right",
+   "segments": [
+    {
+     "start": 0.0,
+     "end": 0.8,
+     "pose": "snap_ready",
+     "x0": 44.0,
+     "z0": 29.415,
+     "x1": 44.0,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 0.8,
+     "end": 1.25,
+     "pose": "snap_release",
+     "x0": 44.0,
+     "z0": 29.415,
+     "x1": 44.0,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 1.25,
+     "end": 1.55,
+     "pose": "snap_ready",
+     "x0": 44.0,
+     "z0": 29.415,
+     "x1": 44.0,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 1.55,
+     "end": 9.16,
+     "pose": "snap_ready",
+     "x0": 44.0,
+     "z0": 29.415,
+     "x1": 44.0,
+     "z1": 29.415,
+     "facing": null
+    }
+   ]
+  },
+  {
+   "key": "punter",
+   "espn_id": "4035239",
+   "role": "punter",
+   "side": "offense",
+   "label": "B.Mann",
+   "position": null,
+   "facing": "right",
+   "segments": [
+    {
+     "start": 0.0,
+     "end": 0.3,
+     "pose": "stance_1",
+     "x0": 29.0,
+     "z0": 29.415,
+     "x1": 29.0,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 0.3,
+     "end": 0.6,
+     "pose": "stance_2",
+     "x0": 29.0,
+     "z0": 29.415,
+     "x1": 29.0,
+     "z1": 29.635,
+     "facing": null
+    },
+    {
+     "start": 0.6,
+     "end": 0.9,
+     "pose": "stance_1",
+     "x0": 29.0,
+     "z0": 29.635,
+     "x1": 29.0,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 0.9,
+     "end": 1.2,
+     "pose": "stance_2",
+     "x0": 29.0,
+     "z0": 29.415,
+     "x1": 29.0,
+     "z1": 29.195,
+     "facing": null
+    },
+    {
+     "start": 1.2,
+     "end": 1.5,
+     "pose": "stance_1",
+     "x0": 29.0,
+     "z0": 29.195,
+     "x1": 29.0,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 1.5,
+     "end": 1.55,
+     "pose": "stance_2",
+     "x0": 29.0,
+     "z0": 29.415,
+     "x1": 29.0,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 1.55,
+     "end": 1.85,
+     "pose": "punt_hold",
+     "x0": 29.0,
+     "z0": 29.451,
+     "x1": 29.0,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 1.85,
+     "end": 2.0,
+     "pose": "punt_drop",
+     "x0": 29.0,
+     "z0": 29.451,
+     "x1": 29.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 2.0,
+     "end": 2.12,
+     "pose": "punt_strike",
+     "x0": 29.6,
+     "z0": 29.415,
+     "x1": 30.2,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 2.12,
+     "end": 2.72,
+     "pose": "punt_follow",
+     "x0": 30.2,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 2.72,
+     "end": 3.02,
+     "pose": "stand",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 3.02,
+     "end": 3.42,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 3.42,
+     "end": 3.82,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.565,
+     "facing": null
+    },
+    {
+     "start": 3.82,
+     "end": 4.22,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.565,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 4.22,
+     "end": 4.62,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.265,
+     "facing": null
+    },
+    {
+     "start": 4.62,
+     "end": 5.02,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.265,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 5.02,
+     "end": 5.42,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.565,
+     "facing": null
+    },
+    {
+     "start": 5.42,
+     "end": 5.82,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.565,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 5.82,
+     "end": 6.22,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.265,
+     "facing": null
+    },
+    {
+     "start": 6.22,
+     "end": 6.62,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.265,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 6.62,
+     "end": 7.02,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.565,
+     "facing": null
+    },
+    {
+     "start": 7.02,
+     "end": 7.42,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.565,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 7.42,
+     "end": 7.82,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.265,
+     "facing": null
+    },
+    {
+     "start": 7.82,
+     "end": 8.22,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.265,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 8.22,
+     "end": 8.62,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.565,
+     "facing": null
+    },
+    {
+     "start": 8.62,
+     "end": 9.02,
+     "pose": "idle_1",
+     "x0": 30.6,
+     "z0": 29.565,
+     "x1": 30.6,
+     "z1": 29.415,
+     "facing": null
+    },
+    {
+     "start": 9.02,
+     "end": 9.16,
+     "pose": "idle_2",
+     "x0": 30.6,
+     "z0": 29.415,
+     "x1": 30.6,
+     "z1": 29.362,
+     "facing": null
+    }
+   ]
+  },
+  {
+   "key": "official_1",
+   "espn_id": null,
+   "role": "official",
+   "side": "official",
+   "label": null,
+   "position": null,
+   "facing": "right",
+   "segments": [
+    {
+     "start": 0.0,
+     "end": 2.6428,
+     "pose": "off_idle",
+     "x0": 64.0,
+     "z0": 27.372,
+     "x1": 64.0,
+     "z1": 27.372,
+     "facing": null
+    },
+    {
+     "start": 2.6428,
+     "end": 5.6939,
+     "pose": "OFF_RUN",
+     "x0": 64.0,
+     "z0": 27.372,
+     "x1": 80.652,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 5.6939,
+     "end": 5.9939,
+     "pose": "off_reach",
+     "x0": 80.652,
+     "z0": 29.451,
+     "x1": 80.652,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 5.9939,
+     "end": 6.1939,
+     "pose": "off_throw",
+     "x0": 80.652,
+     "z0": 29.451,
+     "x1": 80.652,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 6.1939,
+     "end": 6.5939,
+     "pose": "off_follow",
+     "x0": 80.652,
+     "z0": 29.451,
+     "x1": 80.652,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 6.5939,
+     "end": 6.9939,
+     "pose": "off_idle",
+     "x0": 80.652,
+     "z0": 29.451,
+     "x1": 80.652,
+     "z1": 29.451,
+     "facing": null
+    },
+    {
+     "start": 6.9939,
+     "end": 9.16,
+     "pose": "off_idle",
+     "x0": 80.652,
+     "z0": 29.451,
+     "x1": 80.652,
+     "z1": 29.451,
+     "facing": null
+    }
+   ]
+  }
+ ],
+ "ball": [
+  {
+   "start": 0.0,
+   "end": 0.8,
+   "state": "rest",
+   "actor": null,
+   "at": [
+    44.0,
+    0.15,
+    29.415
+   ],
+   "origin": null,
+   "target": null,
+   "spin": "flat"
+  },
+  {
+   "start": 0.8,
+   "end": 1.55,
+   "state": "flight",
+   "actor": null,
+   "at": null,
+   "origin": {
+    "actor": null,
+    "hold": null,
+    "point": [
+     44.0,
+     0.3,
+     29.41481679214729
+    ]
+   },
+   "target": {
+    "actor": "punter",
+    "hold": "hand",
+    "point": null
+   },
+   "spin": "spiral"
+  },
+  {
+   "start": 1.55,
+   "end": 2.12,
+   "state": "held",
+   "actor": "punter",
+   "at": null,
+   "origin": null,
+   "target": null,
+   "spin": "spiral"
+  },
+  {
+   "start": 2.12,
+   "end": 6.96,
+   "state": "flight",
+   "actor": null,
+   "at": null,
+   "origin": {
+    "actor": "punter",
+    "hold": "hand",
+    "point": null
+   },
+   "target": {
+    "actor": null,
+    "hold": null,
+    "point": [
+     106.981316215395,
+     0.12,
+     25.629078615356192
+    ]
+   },
+   "spin": "spiral"
+  },
+  {
+   "start": 6.96,
+   "end": 7.56,
+   "state": "flight",
+   "actor": null,
+   "at": null,
+   "origin": {
+    "actor": null,
+    "hold": null,
+    "point": [
+     106.981316215395,
+     0.12,
+     25.629078615356192
+    ]
+   },
+   "target": {
+    "actor": null,
+    "hold": null,
+    "point": [
+     107.84498996391535,
+     0.12,
+     25.629078615356192
+    ]
+   },
+   "spin": "flat"
+  },
+  {
+   "start": 7.56,
+   "end": 9.16,
+   "state": "rest",
+   "actor": null,
+   "at": [
+    107.845,
+    0.12,
+    25.629
+   ],
+   "origin": null,
+   "target": null,
+   "spin": "flat"
+  }
+ ],
+ "lines": [
+  {
+   "kind": "scrimmage",
+   "x": 44.0
+  },
+  {
+   "kind": "to_gain",
+   "x": 56.0
+  }
+ ],
+ "caption": "Q2 2:40 · 4th & 12 · B.Mann punts 56 yards to end zone, Touchback · PENALTY on WAS-T.Owens, Illegal Block Above the Waist",
+ "props": [
+  {
+   "kind": "flag",
+   "start": 6.0939,
+   "land": 6.7822,
+   "origin": [
+    80.652,
+    2.0,
+    29.451
+   ],
+   "at": [
+    87.462,
+    0.05,
+    27.283
+   ]
+  }
+ ],
+ "label": "Re-creation from play-by-play"
+}
