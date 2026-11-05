@@ -1,5 +1,35 @@
 # Development Changelog
 
+## 2026-11-05 — The board after the owner's review (OWN-039)
+
+- **Results scroll in** from the side of the team they're for, instead of wiping in.
+- **Colors:** scores are green, turnovers and missed kicks red, and penalties yellow, using the design system's `gain`, `challenge` and `flag` signals. The library sets each result's tone, so every renderer agrees.
+- **Penalties on the board:** each flag shows the foul's name, the team and the player's jersey number, plus DECLINED or OFFSETTING.
+  - **Numbers:** from the flagged team's nflverse roster for the game's week, by ESPN ID or else by the text's name. 214 of the 226 flags in the captures get a number. The rest are 11 team fouls and one player missing from his team's roster that week.
+- **Team logos:** every team's logo is drawn in LED dots at its outer edge of the board. All 32 logos were fetched into the ignored `data/logos/`; they're the teams' trademarks, kept private like the Gridiron art.
+- **Clock:** the board runs the clock from the snap to the end of the play when a source gives the end time, ready for the owner's NFL feed. Without one it holds.
+- **Checks:** 1,155 tests pass. The board check and the renderer audit show no problems.
+- **Accepted:** the owner: "The scoreboard looks phenomenal!" (OWN-040). Slice 5 is committed.
+
+## 2026-11-05 — The stadium board (automation slice 5)
+
+- **The board in the scene:** a stadium board above the far sideline in the full-field view (OWN-030), drawn as LED pixels with our own glyphs, never a licensed font or a logo.
+- **What it shows**, as the game stood at the play on screen:
+  - both teams' codes in their name tag colors, their scores and timeouts left
+  - the quarter and the clock at the snap
+  - possession
+  - down and distance, kickoff or the try
+  - the ball's spot
+- **After the play:** the board turns to the game once the play is over. After scoring plays, turnovers and missed kicks it shows the result in large type for two seconds, such as "TOUCHDOWN", "FIELD GOAL GOOD", "INTERCEPTED" or "NO GOOD". A turnover returned for a score shows both.
+- **One implementation:** `arbit_data.live.board` gives the board's facts from the stored plays, with the `play-board` contract. The browser will draw the same facts in slice 7.
+- **Timeouts** come from ESPN's own numbering in the play text, lost challenges included.
+- **The script** gains `whistle`, the moment the play is over.
+- **Checked against ESPN's scoreboard** over all 14 captured games (`scripts/live/check_boards.py`): every final score, plus score and timeouts after 691 plays, down and distance after 641 and possession after 602. The board never differs where ESPN agrees with itself.
+- **The check found two problems, both fixed:**
+  - A flag on a try made the score drop by the extra point.
+  - A challenge naming only "Los Angeles" would have been charged to the wrong team.
+- **Tests and renders:** 1,143 tests pass. The 19 comparison plays are rendered with the board in `data/sprites/review/board/`, and the whole CHI at SEA game was re-rendered.
+
 ## 2026-11-04 — Play realism from the owner's video comparison (OWN-037, OWN-038)
 
 - **Passes:** the receiver and the ball arrive together, timed by the throw. Short passes can be bullets, deep passes keep their pace, and receivers never wait or slow.

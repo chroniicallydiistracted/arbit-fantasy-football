@@ -96,6 +96,22 @@ Numeric columns right-align; identities left-align. Precision follows the rule s
 
 The field plane is normalized 0–100 between goal lines with separate end zones and width proportional to 53⅓ yards. A play can mirror to the viewer's orientation without changing data. Mark the line of scrimmage in `los`, the first-down line in `flag`, ball direction and start and end positions. Plays are pixel-sprite re-creations of the players ESPN names and the ball, seen side-on (OWN-022), labeled "Re-creation from play-by-play" and never claimed as tracking (OWN-021). Pass, rush, turnover, sack and kicking events each have their own motion and text treatment, and unknown events keep their narrative. Verified Gridiron fields and uniforms use the asset manifest and are served only inside the private application (OWN-015); a generic fallback is labeled. The timeline and fantasy facts stay useful if images fail.
 
+**The stadium board** (slice 5, ENG-039, ENG-040) stands above the far sideline in the full-field view and shows the game at the play on screen. It is drawn as an LED board in pixels, with Arbit's own squared glyphs (`assets/sprites/board/glyphs.txt`), never a licensed font.
+- **Team logos:** each team's logo sits at its outer edge in the same LED dots (OWN-039). Logos are the teams' trademarks: they are kept privately and served only inside the invite-only app, like the Gridiron art.
+- **Colors follow the signals:**
+  - team codes in the same team colors as the players' name tags
+  - down and distance in the line to gain's yellow
+  - the ball's spot in the line of scrimmage's blue
+  - scores and the clock in white, the quarter dimmer
+  - a small ball marks possession, and lit pips are timeouts left
+- **Unknown values:** an unknown score is a dash, and unknown timeouts show no pips.
+- **Results:** after the whistle each result scrolls in from the side of the team it's for and holds for two seconds. It never flashes.
+  - `gain` green for a score
+  - `challenge` red for a turnover or a missed kick
+  - `flag` yellow for a penalty, with the foul's name, the team and the player's number
+- **The clock** runs from the snap to the end-of-play time where a source gives one, and otherwise holds.
+- **Accessibility:** the board is decoration. The page's ScoreBoard stays the readable source of the same facts, so the board is hidden from screen readers.
+
 UI transitions run 120–200 ms; play re-creations run at game speed with visible controls. Playback is user-triggered by default; reduced motion uses static start and end frames with narrative. Corrections are labeled and old effects updated, never played as another score. Screen readers receive throttled summaries and can pause announcements.
 
 ## Loading, failure and freshness
