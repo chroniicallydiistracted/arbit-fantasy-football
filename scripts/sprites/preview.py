@@ -461,13 +461,18 @@ def render(
     tilted: bool = False,
     overlay: Callable[[ImageDraw.ImageDraw, "Camera"], None] | None = None,
     posts: tuple[float, ...] = (),
+    backdrop: Any = None,
 ) -> None:
     """Write play-{name}.gif. `overlay` paints on the turf under everything; `posts` are goalposts
-    by yard line, drawn in depth order with the players and the ball."""
+    by yard line, drawn in depth order with the players and the ball. `backdrop`, such as the
+    stadium board, is drawn behind the field: it has `top(camera)`, `draw(image, camera, t)` and
+    `colors_used()`."""
     shot = SHOT
     big, small = ImageFont.load_default(size=shot.caption_size), ImageFont.load_default(size=shot.tag_size)
     images: list[Image.Image] = []
     kept: set[tuple[int, int, int]] = {(112, 60, 22), (20, 10, 4)}  # the ball in flight
+    if backdrop is not None:
+        kept.update(backdrop.colors_used())
     camera_x, tilt = (follow(0) if shot.fixed_x is None else shot.fixed_x), 0.0
     band = None
     if shot.fixed_x is not None:
@@ -475,6 +480,8 @@ def render(
         still = Camera(shot.fixed_x, 0.0, shot)
         top, bottom = still.band()
         heights = [still.project(*state.at)[1] for index in range(int(seconds * FPS)) if (state := as_ball(ball(index / FPS))) is not None]
+        if backdrop is not None:
+            top = min(top, backdrop.top(still) - 10)
         band = (max(0, min([top, *(round(y) - 16 for y in heights)])), bottom)
     for index in range(int(seconds * FPS)):
         t = index / FPS
@@ -486,6 +493,8 @@ def render(
                 tilt += (wanted - tilt) * 0.1
         camera = Camera(camera_x, tilt, shot)
         image = camera.ground()
+        if backdrop is not None:
+            backdrop.draw(image, camera, t)
         draw = ImageDraw.Draw(image, "RGBA")
         for x, color in lines:
             corners = [(x - 0.28, 0), (x + 0.28, 0), (x + 0.28, 53.3), (x - 0.28, 53.3)]

@@ -19,6 +19,8 @@ re-creates by hand, so the two can be watched side by side. --slice3 renders the
 tries, fumbles and penalties. A try is selected as its touchdown's suffix with "+try".
 --position-tags adds each player's depth chart position to his name tag ("J.Jackson RG").
 --types renders one play of each type, with position tags, into data/sprites/review/play-types.
+--board renders the same plays with name tags only into data/sprites/review/board, to review the
+stadium board (slice 5). Every clip has the board, built from the game's plays in order.
 Players line up by those positions, as of the depth charts before the game (OWN-036). Name tags come from the stored 2026
 nflverse roster by ESPN ID; a player missing from it is named from the text only when that is
 unambiguous.
@@ -33,11 +35,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/sprites"))
 sys.path.insert(0, str(ROOT / "scripts/live"))
+import board as B  # noqa: E402
+import check_boards  # noqa: E402
 import play_facts_coverage as coverage  # noqa: E402
 import positions as depth  # noqa: E402
 import preview as P  # noqa: E402
 import real_plays as R  # noqa: E402  (loads the game's field and measured uniforms)
 from arbit_data.league import content_hash  # noqa: E402
+from arbit_data.live.board import GameBoard, PlayBoard  # noqa: E402
 from arbit_data.live.choreography import PlayScript, choreograph  # noqa: E402
 from arbit_data.live.kicking import choreograph_try  # noqa: E402
 from arbit_data.live.normalize import normalize_play  # noqa: E402
@@ -108,6 +113,11 @@ def scripts() -> dict[str, PlayScript]:
     names = roster_names()
     positions = depth.load(before=KICKOFF)
     game = depth.GameUnits(depth.units(before=KICKOFF), teams[EVENT])  # OWN-037
+    competitors = check_boards.snapshots()[1][EVENT]["competitions"][0]["competitors"]
+    names = {c["team"]["id"]: [c["team"]["location"], c["team"]["displayName"]] for c in competitors}
+    home, away, home_code, away_code = teams[EVENT]
+    roster = depth.week_rosters(depth.game_weeks()[EVENT], {home: home_code, away: away_code})  # OWN-039
+    board = GameBoard(context, home_code, away_code, names, roster)  # slice 5
     made = {}
     for play in normalized:
         seed = f"{play.provider_id}:{content_hash(play.model_dump(mode='json'))}"
@@ -115,6 +125,8 @@ def scripts() -> dict[str, PlayScript]:
         key = play.provider_id.removeprefix(EVENT)
         units = game.now()
         game.saw(facts)
+        for part in board.boards(play, facts):
+            BOARDS[key if part.part == "play" else f"{key}+try"] = part
         script = choreograph(facts, seed, names, positions, units)
         if script is not None:
             made[key] = script
@@ -202,9 +214,15 @@ def tag_colors() -> dict[str, tuple[tuple[int, int, int, int], tuple[int, int, i
 
 
 TAGS: dict = {}
+BOARDS: dict[str, PlayBoard] = {}  # by play key, as `scripts` names them
 
 
-def draw(script: PlayScript, name: str) -> None:
+def team_color(team: str) -> tuple[int, int, int]:
+    """A team's color on the board: its name tag fill, so the two match (slice 5)."""
+    return tuple(TAGS[team][0][:3]) if team in TAGS else B.WHITE  # type: ignore[return-value]
+
+
+def draw(script: PlayScript, name: str, board: PlayBoard | None = None) -> None:
     actors: dict[str, P.Actor] = {}
     for spec in script.actors:
         team = (
@@ -265,7 +283,9 @@ def draw(script: PlayScript, name: str) -> None:
         return None
 
     lines = [(line.x, P.LOS_COLOR if line.kind == "scrimmage" else P.FIRST_DOWN_COLOR) for line in script.lines]
-    R.render(name, script.duration, list(actors.values()), ball, lambda _t: 50.0, lines, script.caption, overlay=flags(script))
+    shown = B.Board(board, script.whistle, team_color) if board is not None else None
+    seconds = max(script.duration, shown.length) if shown is not None else script.duration
+    R.render(name, seconds, list(actors.values()), ball, lambda _t: 50.0, lines, script.caption, overlay=flags(script), backdrop=shown)
     (P.OUT / f"{name}.json").write_text(script.model_dump_json(indent=1) + "\n")
 
 
@@ -277,6 +297,9 @@ def main(args: list[str]) -> None:
     P.SHOT, P.OUT = P.WIDE, OUT
     if "--types" in args:
         TAG_POSITIONS, P.OUT = True, OUT.parent / "play-types-2"  # the second comparison (OWN-037)
+    if "--board" in args:
+        P.OUT = OUT.parent / "board"  # slice 5
+        args = [*args, "--types"]
     P.OUT.mkdir(parents=True, exist_ok=True)
     made = scripts()
     if "--types" in args:
@@ -296,7 +319,7 @@ def main(args: list[str]) -> None:
         )
         return
     for key, name in wanted.items():
-        draw(made[key], name)
+        draw(made[key], name, BOARDS.get(key))
 
 
 if __name__ == "__main__":
