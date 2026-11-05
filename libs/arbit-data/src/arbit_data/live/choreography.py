@@ -166,6 +166,9 @@ class PlayScript(LiveModel):
     seed: str
     template: str
     duration: float
+    # When the play is over: its last movement, before the closing hold. The board shows the
+    # play's result from here (slice 5).
+    whistle: float
     offense: str | None
     defense: str | None
     actors: tuple[Actor, ...]
@@ -1722,6 +1725,17 @@ def _finish(play: _Play, template: str | None = None, caption: str | None = None
     ends += [seg.end for seg in play.ball if seg.end < 1e8]  # a thrown-away ball may land last
     ends += [prop.land for prop in play.props]
     duration = round(max(ends) + 1.6, 3)
+    # The whistle: the play's last movement, or a player going down, whichever is later. Players
+    # lying on the turf, getting up or shifting their weight afterwards aren't the play.
+    segments = [seg for *_, t, _ in play.actors for seg in t.segments]
+    moved = [
+        seg.end
+        for seg in segments
+        if (seg.x0, seg.z0) != (seg.x1, seg.z1) and not seg.pose.startswith(("idle_", "stance_"))
+    ]
+    moved += [seg.start for seg in segments if seg.pose.startswith(("ground", "kneel"))]
+    moved += [seg.end for seg in play.ball if seg.state == "flight" and seg.end < 1e8]
+    whistle = round(min(max(moved, default=max(ends)), max(ends)), 4)
     actors = []
     for key, espn_id, role, side, track, facing in play.actors:
         last = track.segments[-1]
@@ -1764,6 +1778,7 @@ def _finish(play: _Play, template: str | None = None, caption: str | None = None
         seed=play.seed,
         template=template or facts.template or "",
         duration=duration,
+        whistle=whistle,
         offense=facts.offense,
         defense=facts.defense,
         actors=tuple(actors),

@@ -1,0 +1,310 @@
+{
+  "$defs": {
+    "BoardResult": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "touchdown",
+            "field_goal",
+            "extra_point",
+            "two_point",
+            "no_good",
+            "blocked",
+            "safety",
+            "interception",
+            "fumble",
+            "downs",
+            "penalty"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "team_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Team Id"
+        },
+        "tone": {
+          "enum": [
+            "good",
+            "bad",
+            "flag"
+          ],
+          "title": "Tone",
+          "type": "string"
+        },
+        "jersey": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Jersey"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        }
+      },
+      "required": [
+        "kind",
+        "text",
+        "team_id",
+        "tone"
+      ],
+      "title": "BoardResult",
+      "type": "object"
+    },
+    "BoardSide": {
+      "additionalProperties": false,
+      "properties": {
+        "team_id": {
+          "title": "Team Id",
+          "type": "string"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Score"
+        },
+        "timeouts": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Timeouts"
+        }
+      },
+      "required": [
+        "team_id",
+        "code",
+        "score",
+        "timeouts"
+      ],
+      "title": "BoardSide",
+      "type": "object"
+    },
+    "BoardSpot": {
+      "additionalProperties": false,
+      "properties": {
+        "team_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Team Id"
+        },
+        "yard": {
+          "title": "Yard",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "team_id",
+        "yard"
+      ],
+      "title": "BoardSpot",
+      "type": "object"
+    },
+    "BoardState": {
+      "additionalProperties": false,
+      "properties": {
+        "period": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Period"
+        },
+        "clock": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Clock"
+        },
+        "away": {
+          "$ref": "#/$defs/BoardSide"
+        },
+        "home": {
+          "$ref": "#/$defs/BoardSide"
+        },
+        "possession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Possession"
+        },
+        "situation": {
+          "anyOf": [
+            {
+              "enum": [
+                "down",
+                "kickoff",
+                "extra_point",
+                "two_point"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Situation"
+        },
+        "down": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Down"
+        },
+        "distance": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Distance"
+        },
+        "goal_to_go": {
+          "default": false,
+          "title": "Goal To Go",
+          "type": "boolean"
+        },
+        "spot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BoardSpot"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "period",
+        "clock",
+        "away",
+        "home"
+      ],
+      "title": "BoardState",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1,
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "provider_id": {
+      "title": "Provider Id",
+      "type": "string"
+    },
+    "part": {
+      "default": "play",
+      "enum": [
+        "play",
+        "try"
+      ],
+      "title": "Part",
+      "type": "string"
+    },
+    "before": {
+      "$ref": "#/$defs/BoardState"
+    },
+    "after": {
+      "$ref": "#/$defs/BoardState"
+    },
+    "results": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/BoardResult"
+      },
+      "title": "Results",
+      "type": "array"
+    }
+  },
+  "required": [
+    "event_id",
+    "provider_id",
+    "before",
+    "after"
+  ],
+  "title": "PlayBoard",
+  "type": "object"
+}

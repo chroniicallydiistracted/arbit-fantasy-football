@@ -417,6 +417,10 @@
       "title": "Duration",
       "type": "number"
     },
+    "whistle": {
+      "title": "Whistle",
+      "type": "number"
+    },
     "offense": {
       "anyOf": [
         {
@@ -484,6 +488,7 @@
     "seed",
     "template",
     "duration",
+    "whistle",
     "offense",
     "defense",
     "actors",

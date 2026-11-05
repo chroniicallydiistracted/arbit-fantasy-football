@@ -81,6 +81,25 @@ def _text_name(full: str) -> str:
 ESPN_TO_NFLVERSE = {"LAR": "LA", "WSH": "WAS"}  # ESPN's team codes where nflverse's differ
 
 
+def game_weeks(season: int = 2026) -> dict[str, int]:
+    """ESPN game ID to its week, from nflverse's schedule."""
+    return {str(g["espn"]): int(g["week"]) for g in _table("schedules/games") if str(g.get("season")) == str(season) and g.get("espn")}
+
+
+def week_rosters(week: int, codes: dict[str, str]) -> dict[str, list[tuple[str | None, str, str]]]:
+    """Each team's players that week, by ESPN team ID, as (ESPN player ID or None, full name,
+    jersey number), from nflverse's weekly roster. `codes` maps ESPN team IDs to ESPN codes. The
+    board names a foul's player by number from it (OWN-039)."""
+    wanted = {ESPN_TO_NFLVERSE.get(code, code): team for team, code in codes.items()}
+    found: dict[str, list[tuple[str | None, str, str]]] = {team: [] for team in codes}
+    for row in _table("weekly_rosters/roster_weekly_2026"):
+        team = wanted.get(row["team"])
+        if row["week"] == week and team and row.get("full_name") and row.get("jersey_number") is not None:
+            espn = str(row["espn_id"]) if row.get("espn_id") else None
+            found[team].append((espn, row["full_name"], str(int(row["jersey_number"]))))
+    return found
+
+
 class GameUnits:
     """Each team's center, long snapper and quarterback through one game (OWN-037), by ESPN team
     ID for the choreographer. The quarterback is the team's last passer in the game so far, else

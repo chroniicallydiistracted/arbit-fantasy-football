@@ -5,6 +5,7 @@
  "seed": "punt_touchback_with_penalty:example",
  "template": "punt",
  "duration": 9.16,
+ "whistle": 7.56,
  "offense": "21",
  "defense": "28",
  "actors": [

@@ -5,6 +5,7 @@
  "seed": "pass_catch_spot_and_missed_pat:example",
  "template": "pass",
  "duration": 9.75,
+ "whistle": 6.5502,
  "offense": "26",
  "defense": "3",
  "actors": [

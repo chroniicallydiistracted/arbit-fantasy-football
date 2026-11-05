@@ -1,0 +1,63 @@
+{
+ "version": 1,
+ "event_id": "401873036",
+ "provider_id": "401873036542",
+ "part": "play",
+ "before": {
+  "period": 1,
+  "clock": "5:25",
+  "away": {
+   "team_id": "3",
+   "code": "CHI",
+   "score": 0,
+   "timeouts": 3
+  },
+  "home": {
+   "team_id": "26",
+   "code": "SEA",
+   "score": 0,
+   "timeouts": 3
+  },
+  "possession": "3",
+  "situation": "down",
+  "down": 2,
+  "distance": 1,
+  "goal_to_go": true,
+  "spot": {
+   "team_id": "26",
+   "yard": 1
+  }
+ },
+ "after": {
+  "period": 1,
+  "clock": "5:25",
+  "away": {
+   "team_id": "3",
+   "code": "CHI",
+   "score": 6,
+   "timeouts": 3
+  },
+  "home": {
+   "team_id": "26",
+   "code": "SEA",
+   "score": 0,
+   "timeouts": 3
+  },
+  "possession": "3",
+  "situation": "extra_point",
+  "down": null,
+  "distance": null,
+  "goal_to_go": false,
+  "spot": null
+ },
+ "results": [
+  {
+   "kind": "touchdown",
+   "text": "TOUCHDOWN",
+   "team_id": "3",
+   "tone": "good",
+   "jersey": null,
+   "detail": null
+  }
+ ]
+}

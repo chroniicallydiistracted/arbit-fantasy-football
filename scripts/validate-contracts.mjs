@@ -8,6 +8,7 @@ for (const [schemaPath, examplePath] of [
   ['packages/contracts/schemas/recommendation.schema.json', 'tests/fixtures/recommendation.example.json'],
   ['packages/contracts/schemas/play-script.schema.json', 'tests/fixtures/live/play-script.example.json'],
   ['packages/contracts/schemas/play-script.schema.json', 'tests/fixtures/live/play-script.punt.example.json'],
+  ['packages/contracts/schemas/play-board.schema.json', 'tests/fixtures/live/play-board.example.json'],
 ]) {
   const validate = ajv.compile(JSON.parse(readFileSync(schemaPath, 'utf8')));
   if (!validate(JSON.parse(readFileSync(examplePath, 'utf8')))) {

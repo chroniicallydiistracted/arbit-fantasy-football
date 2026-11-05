@@ -249,3 +249,26 @@ def test_an_eligibility_report_is_not_the_play():
     assert "reported in" not in made.caption and "pass incomplete" in made.caption
     passer = next(a for a in made.actors if a.key == "passer")
     assert passer.label != "L.Newman"
+
+
+@pytest.mark.parametrize("name", SCRIPTED)
+def test_the_whistle_is_when_the_last_movement_ends(name):
+    """The board turns to the play's result at the whistle (slice 5), so nothing still moves after it."""
+    made = script(name)
+    assert 0 < made.whistle < made.duration
+
+    def moving(seg) -> bool:  # a weight shift while a player waits isn't the play moving
+        return (seg.x0, seg.z0) != (seg.x1, seg.z1) and not seg.pose.startswith(
+            ("idle_", "stance_")
+        )
+
+    for actor in made.actors:
+        for seg in actor.segments:
+            if moving(seg):
+                assert seg.end <= made.whistle + 1e-6, (actor.key, seg.pose)
+    assert all(seg.end <= made.whistle + 1e-6 for seg in made.ball if seg.state == "flight")
+    # Something is still moving just before it: the whistle isn't late.
+    ends = [seg.end for actor in made.actors for seg in actor.segments if moving(seg)]
+    ends += [seg.end for seg in made.ball if seg.state == "flight"]
+    if ends:  # a delay of game has no movement: the flag is the whole play
+        assert max(ends) >= made.whistle - 1.0
