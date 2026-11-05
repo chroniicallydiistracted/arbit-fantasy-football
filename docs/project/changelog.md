@@ -1,5 +1,80 @@
 # Development Changelog
 
+## 2026-11-04 — Play realism from the owner's video comparison (OWN-037, OWN-038)
+
+- **Passes:** the receiver and the ball arrive together, timed by the throw. Short passes can be bullets, deep passes keep their pace, and receivers never wait or slow.
+- **Coverage:**
+  - Defenders named on a pass cover the receiver from the snap with a zone drop and a natural backpedal in new frames, keeping a cushion.
+  - They break only as late as gets them there.
+  - Tacklers meet the carrier from their own side and never back off to come again.
+- **Waiting and idle:** players use new stance and idle frames. The quarterback's ball-holding frames are his alone.
+- **Interceptions:** the intended receiver is drawn and the interceptor undercuts him. A pass tipped at the line, as on CHI at SEA Q4 6:01, pops up to the interceptor.
+- **Sacks:** the quarterback works the pocket and escapes right into the sack.
+- **Snaps:** the team's center snaps every play and stays over the ball, and the long snapper snaps kicks.
+- **Runs:** the quarterback takes the snap and hands off at once; receiver sweeps come in jet motion.
+- **Coverage fouls:**
+  - **Pass interference:** contact while the ball is in the air, more than a yard past the line, on a catchable ball, in the owner's three actions.
+  - **Holding, illegal contact and offensive pass interference** are drawn as they happen, and only on the player called.
+  - **Officials:** each flag is thrown by a drawn official.
+- **Sprites:** 11 new player frames and an official with 8 frames, from PixelLab.
+- **Name tags:** style C, in team colors without the box.
+- **Checks:** the rule check gains the new rules, `test_realism.py` covers each item, and the full suite has 1,085 tests passing. 19 comparison clips are in `data/sprites/review/play-types-2/`.
+
+## 2026-11-04 — Players line up by position and play their role (OWN-036)
+
+- **Positions** (`alignment.py`, ENG-037). Every drawn player starts at his position's general spot, from his team's 2026 depth chart by ESPN ID:
+  - the offensive line across the ball
+  - the tight end inline on the strong side
+  - backs and the quarterback by shotgun or under center
+  - the defensive front on the line, with a 3-4's outside linebackers on the edge
+  - linebackers off the ball, corners wide, safeties deep
+- **Context from the play.** The play's side and description move players:
+  - a defensive back who makes the play lines up on its side, a corner over his receiver
+  - receivers and ball carriers line up by position, with wide receivers at least in the slot
+  - two-way players line up for their side of the ball
+- **First moves after the snap.**
+  - **Pass plays:** linemen rush the passer, and linebackers and defensive backs backpedal into coverage.
+  - **Run plays:** linemen take on a block.
+  - **Offense:** receivers release, and blockers set or drive.
+- **Contract.** Scripts carry each player's `position`. Kick specialists show their job's slot (P, PK, H, LS, PR, KR).
+- **Audit.**
+  - `check_play_scripts.py` checks starting boxes and overlaps, and has a `--no-positions` mode.
+  - The new `scripts/sprites/audit_render.py` checks scripts against the renderer's frames, anchors, flights, tags and captions.
+  - Both report nothing wrong over all 2,254 captured scripts.
+- **Fixed on the way.**
+  - Air yards on penalty plays now come from the play's own gain (amends ENG-032).
+  - Overlapping starts and a slow-motion encroachment are gone.
+  - Name tags now fall back to the depth charts when the roster lacks a player's ESPN ID.
+- **Renders.** `render_script.py --types` renders one clip of each play type, with position tags, to `data/sprites/review/play-types/` for the owner to compare with the game's video.
+
+## 2026-11-04 — Kicks, tries, fumbles and penalties (automation slice 3)
+
+- **Kicks** (`kicking.py`, ENG-035).
+  - **Field goals:** a snap to a holder 8 yards back, as measured, and a kicker who approaches at his own pace. Good kicks tumble between the uprights into the net. Wide left and wide right pass outside their uprights, kicks off an upright or the crossbar come back, short kicks fall in front, and blocked kicks come off the blocker.
+  - **Punts:** a 15-yard snap and a spiral.
+  - **Kickoffs:** off a tee, with the coverage held at the receiving 40 until the catch.
+  - **Results:** returns end on ESPN's spot, tackled by the kicking team. Also drawn: fair catches, touchbacks, kicks out of bounds, downed kicks, muffs, kicks short of the landing zone and onside kicks.
+- **Tries.** The extra point or two-point try after a touchdown is its own script, named from the try's own sentence.
+- **Spikes.** A spike is drawn too.
+- **Fumbles** (`incidents.py`). The play is drawn up to the hit. The ball bounces to ESPN's recovery spot, and the recoverer falls on it, or scoops it and returns it when the text says so. The player who forced it stays up and goes after it.
+- **Penalties.**
+  - **Before the snap:** the penalized player and a flag.
+  - **Plays wiped out:** the play, a flag and "No Play".
+  - **Plays that count:** a flag for an accepted or declined penalty, and the caption names it.
+  - **Flags:** a new `props` list in the script, each flag tossed by the nearest official.
+- **Facts.** Play facts gain `before`, the play the text describes before a fumble or a flag that wiped it out.
+- **Names.** Players ESPN gives no ID, such as a long snapper, appear under the text's name. Kickers, punters, returners and blockers can now be named from the text.
+- **Contract.** The script contract gains `props`, and an actor's `espn_id` may be empty. There is a second example, a punt with a flag (`tests/fixtures/live/play-script.punt.example.json`).
+- **Rule check.** `scripts/live/check_play_scripts.py` checks every captured play against the animation rules.
+- **Renderer.** `render_script.py --slice3` renders a game's kicks, tries, fumbles and penalties, with flags drawn.
+- **Owner review fixes (OWN-035, ENG-036).**
+  - **Where players start:** the offense on or behind the line of scrimmage, and the defense on or beyond it, no deeper than a safety.
+  - **No early movement:** nobody runs before the snap; the committed slice 2 code had started 441 tacklers early.
+  - **Fumble:** CHI's J.Jackson, who tackles Lawrence on the return, now starts on Chicago's side of the line.
+  - **Punt coverage** releases at the snap.
+  - **Kickoff coverage** stays at the receiving 40, as the 2026 rule requires, now measured from any tee.
+  - **Re-rendered:** CHI at SEA in full.
+
 ## 2026-11-03 — Play scripts (automation slice 2)
 
 - `choreography.choreograph` turns a play's facts into a `PlayScript`: each named player's timed poses and moves, where the ball is at every moment, the lines and the caption. It covers passes (complete, incomplete, thrown away, screens), interceptions, sacks, runs by gap, scrambles, sneaks and kneels. The contract is published as `packages/contracts/schemas/play-script.schema.json` (ENG-034).
