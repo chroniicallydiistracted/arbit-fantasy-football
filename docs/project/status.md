@@ -1,6 +1,6 @@
 # Project Status
 
-Updated **2026-11-05**. M2, the accepted design reset, and the real-time platform run locally on `claude/platform-reset`. **Live (M6) is in progress ahead of M3** (OWN-019). The Week 9 NFL collector and public browser recorder are running ahead of Jacksonville at Baltimore. The live slate proof is pending (R-042). [Kickoff handoff](handoffs/2026-11-05-live-feed-observation.md).
+Updated **2026-11-05**. M2, the accepted design reset, and the real-time platform are integrated into `main` and run on the local app. **Live (M6) is in progress ahead of M3** (OWN-019). The Week 9 NFL collector and public browser recorder are running ahead of Jacksonville at Baltimore. The live slate proof is pending (R-042). [Release handoff](handoffs/2026-11-05-main-release.md).
 
 ## Confirmed context
 

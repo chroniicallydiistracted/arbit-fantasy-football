@@ -1,5 +1,10 @@
 # Development Changelog
 
+## 2026-11-05 — Live platform integrated into main
+
+- Published the platform branch and integrated the milestone and sprite branch histories into `main`. The merge kept the newer reviewed sprite frames and renderer.
+- Loaded the merged web build, API and worker on the local app. Verified the served bundle and service worker against the staged build. The live database was already at the current schema, and the older fixture database was upgraded. [Release handoff](handoffs/2026-11-05-main-release.md).
+
 ## 2026-11-05 — Week 9 live-feed observation
 
 - The NFL worker pursues a changed summary through a cached detail response. Final details are retried after failures and polled until their phase catches up. ESPN's comparison reads have a separate schedule from the fallback's publication timestamp.
