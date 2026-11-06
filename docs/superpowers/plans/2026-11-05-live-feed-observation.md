@@ -1,0 +1,10 @@
+# Week 9 live-feed observation
+
+Status: collector and recorder running ahead of Jacksonville at Baltimore on November 5, 2026, at 18:15 Arizona time. Live verification remains open. [Handoff and evidence](../../project/handoffs/2026-11-05-live-feed-observation.md).
+
+- **Requirements:** LV-001, LV-003, LV-005, DATA-006, DATA-008 and ENG-005. The NFL API supplies primary plays under OWN-041. ESPN remains the emergency fallback. See the [primary feed plan](2026-11-05-nfl-api-primary.md), [real-time sync plan](2026-10-31-realtime-sync.md), and [ADR-004](../../architecture/decisions/004-access-live-and-pwa.md).
+- **Baseline:** The morning worker is running. The workspace already has a summary-driven cache chase, NFL request logging, a separate route probe, and ESPN shadow capture. The live evidence and its analysis are pending.
+- **Collector:** Finish `nfl_feed.py`, `nfl_log.py`, `nfl_probe.py`, ESPN shadow scheduling, and worker supervision. Verify a lagged final snapshot, provider failure, correction capture, and ESPN fallback using isolated PostgreSQL and recorded payloads. Keep the existing app event and database interfaces.
+- **Research:** Run a time-bounded, anonymous browser on the public NFL.com game page. Record sanitized route, timing, cache and transport metadata for that browser only, alongside compact NFL play observations and existing ESPN captures. Keep files under ignored `data/` with owner-only permissions. The comparison must report play arrival, correction visibility, coverage, and observed browser transport activity separately.
+- **Activation:** Validate locally, then restart the existing worker before kickoff to load the changes. The browser capture is a separate supervised session. Rollback uses the existing ESPN fallback and can omit the probe lane. No migration is needed.
+- **Acceptance:** Fixture tests cover failures and comparisons. Pregame smoke evidence shows the collector, logs and browser recorder work on the local machine. Live claims require actual observations and remain open under R-042 until the game is recorded.

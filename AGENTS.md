@@ -4,7 +4,7 @@ Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, seas
 
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-11-05-jumbotron.md).
+1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-11-05-live-feed-observation.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.
@@ -12,7 +12,7 @@ Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, seas
 ## Non-negotiable project invariants
 
 - Single FFA league, annual redraft; do not add tenancy or a second league provider. Never guess PPR, roster slots, draft structure, waiver rules or first-season history.
-- ESPN is league authority; nflverse is the primary statistical foundation. Sleeper is eligible only for verified relevant NFL live-game/PBP data. Do not use Sleeper fantasy leagues, directories/crosswalk hints, roster/ownership, trends, rankings, projections or fantasy-stat/scoring inputs; no such eligible live route is currently enabled. Gridiron assets require verified variants; the owner obtained permission privately for personal use only, so they may be served only inside the invite-only application, never publicly or commercially.
+- ESPN is league authority; nflverse is the primary statistical foundation. For live NFL game data (plays, scores, clock, game state) the NFL API (`api.nfl.com`) is the primary source by owner direction (OWN-041), and ESPN's live game feed is the emergency fallback; ESPN's lane runs until the NFL lane is wired ([plan](docs/superpowers/plans/2026-11-05-nfl-api-primary.md)). Sleeper is eligible only for verified relevant NFL live-game/PBP data. Do not use Sleeper fantasy leagues, directories/crosswalk hints, roster/ownership, trends, rankings, projections or fantasy-stat/scoring inputs; no such eligible live route is currently enabled. Gridiron assets require verified variants; the owner obtained permission privately for personal use only, so they may be served only inside the invite-only application, never publicly or commercially.
 - Shared identity, scoring, eligibility and versioned player evaluations serve all modules. No advisor or client duplicates provider parsing or fantasy arithmetic.
 - Unknown data is not zero. The documented sparse-counter exception applies only to complete actual GP=1 stat maps; provider-zero no-game references remain separate. Unknown rules/identity or stale ownership must limit or block affected advice explicitly. Official ESPN totals, live estimates and model projections are visibly distinct.
 - Preserve point-in-time lineage and corrections. No future information in a model backtest, fabricated route tracking, or unsupported numerical acceptance probability.

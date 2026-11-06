@@ -34,7 +34,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from arbit_worker.sync_commands import local_database_url
 
-LANES = ("league", "live", "statistics")
+LANES = ("league", "live", "nfl", "nfl_probe", "statistics")
 Clock = Callable[[], datetime]
 
 
@@ -201,6 +201,34 @@ class LiveLane:
         return result.wait_seconds
 
 
+class NflLane:
+    """The NFL API, the primary live source (OWN-041): discover, poll, detect and publish."""
+
+    name = "nfl"
+
+    def __init__(self, uow: UnitOfWork, season: int, *, feed: Any | None = None):
+        from arbit_data.live.nfl_feed import NflFeed
+
+        self.feed = feed or NflFeed(uow, season, log=lambda **fields: log(self.name, **fields))
+
+    def step(self) -> float:
+        return self.feed.step()
+
+
+class NflProbeLane:
+    """Probes the NFL API's other routes during live games and logs them (OWN-041 follow-up)."""
+
+    name = "nfl_probe"
+
+    def __init__(self, uow: UnitOfWork, season: int):
+        from arbit_data.live.nfl_probe import NflProbe
+
+        self.probe = NflProbe(uow, season, log=lambda **fields: log(self.name, **fields))
+
+    def step(self) -> float:
+        return self.probe.step()
+
+
 class StatisticsLane:
     """Daily nflverse catalog check and import of changed files, as a child process.
 
@@ -320,6 +348,8 @@ def execute(arguments: argparse.Namespace, parser: argparse.ArgumentParser) -> N
     factories: dict[str, Callable[[], Any]] = {
         "league": lambda: LeagueLane(uow, config.season),
         "live": lambda: LiveLane(uow, config.season),
+        "nfl": lambda: NflLane(uow, config.season),
+        "nfl_probe": lambda: NflProbeLane(uow, config.season),
         "statistics": lambda: StatisticsLane(uow),
     }
     stop = threading.Event()
@@ -348,5 +378,7 @@ def add_command(subcommands: Any) -> None:
         "run", help="Keep every changing source current until stopped (supervised worker)"
     )
     run.add_argument(
-        "--lanes", default=",".join(LANES), help="Comma-separated lanes: league,live,statistics"
+        "--lanes",
+        default=",".join(LANES),
+        help="Comma-separated lanes: league,live,nfl,nfl_probe,statistics",
     )

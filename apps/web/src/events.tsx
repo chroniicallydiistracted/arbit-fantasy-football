@@ -16,8 +16,8 @@ const AFFECTS: Record<string, string[]> = {
   "league.updated": ["front-office", "player", "search", "sources"],
   "source.status": ["sources", "front-office"],
   "games.updated": ["live-games", "live-game", "live-plays", "sources"],
-  "game.plays": ["live-plays", "sources"],
-  "game.corrected": ["live-plays", "sources"],
+  "game.plays": ["live-plays", "live-animation", "sources"],
+  "game.corrected": ["live-plays", "live-animation", "sources"],
   "game.summary": ["live-game"],
   "schedule.updated": ["front-office", "live-games"],
 };

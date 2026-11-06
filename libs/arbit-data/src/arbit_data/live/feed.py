@@ -11,6 +11,7 @@ from arbit_data.db import UnitOfWork
 from arbit_data.errors import SourceError
 from arbit_data.espn.gate import DatabaseGate
 from arbit_data.live import cadence, store
+from arbit_data.live.nfl_feed import nfl_primary
 from arbit_data.live.normalize import _dict, _integer
 from arbit_data.live.reader import (
     collect_play_pages,
@@ -59,6 +60,7 @@ class LiveFeed:
         self.gate = gate or DatabaseGate(uow, provider="espn_nfl")
         self.board_due: datetime | None = None
         self.mode: cadence.Mode = "idle"
+        self.shadow_due: dict[str, datetime] = {}
 
     def _fetch(self, request: SourceRequest) -> PublicResponse:
         with self.gate.request():
@@ -95,6 +97,20 @@ class LiveFeed:
             pages.append(normalize_collection(more.payload, event_id, self.season, number))
         plays = collect_play_pages(pages, event_id, self.season)
         return store.publish_plays(self.uow, event_id, plays, now, body_hash=digest)
+
+    def shadow_plays(self, event_id: str) -> None:
+        """Read a game's plays from ESPN without storing them; the capturing transport keeps
+        each read with its time."""
+        first = self._fetch(
+            build_source_request("espn.plays", event_id=event_id, season=self.season, page=1)
+        )
+        page = normalize_collection(first.payload, event_id, self.season, 1)
+        for number in range(2, page["page_count"] + 1):
+            self._fetch(
+                build_source_request(
+                    "espn.plays", event_id=event_id, season=self.season, page=number
+                )
+            )
 
     def read_summary(self, event_id: str, season_type: int = 2) -> None:
         response = self._fetch(
@@ -146,6 +162,7 @@ class LiveFeed:
         active = [t for t in timings if t.phase in cadence.ACTIVE_PHASES]
         interval = cadence.play_seconds(len(active)) if active else None
         stale_after = cadence.PLAY_STALE_SECONDS if active else None
+        self.shadow_due = {event: due for event, due in self.shadow_due.items() if due > now}
         for game in timings:
             final_due = (
                 game.final_at is not None
@@ -167,12 +184,21 @@ class LiveFeed:
                     or now - game.summary_observed_at >= timedelta(seconds=cadence.SUMMARY_SECONDS)
                 )
             )
-            if not plays_due and not summary_due:
+            shadow_due = final_due or (
+                game.phase in cadence.ACTIVE_PHASES and game.event_id not in self.shadow_due
+            )
+            if not plays_due and not summary_due and not shadow_due:
                 continue
             try:
                 change = None
-                if plays_due:
+                primary = (plays_due or shadow_due) and nfl_primary(self.uow, game.event_id, now)
+                if primary and shadow_due:
+                    self.shadow_due[game.event_id] = now + timedelta(seconds=interval or 30)
+                    self.shadow_plays(game.event_id)
+                elif plays_due and not primary:
                     change = self.read_plays(game.event_id)
+                elif not summary_due:
+                    continue
                 if summary_due:
                     self.read_summary(game.event_id)
                 if final_due:

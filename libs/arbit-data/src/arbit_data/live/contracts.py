@@ -86,6 +86,14 @@ class LivePlay(LiveModel):
     yards_after_catch: int | None = Field(default=None, exclude_if=_absent)
     penalty: PlayPenalty | None = Field(default=None, exclude_if=_absent)
     review: PlayReview | None = Field(default=None, exclude_if=_absent)
+    # The NFL API's play record (OWN-041), when the play came from it rather than ESPN. Absent on
+    # ESPN plays, so their stored hashes are unchanged.
+    source: Literal["nfl"] | None = Field(default=None, exclude_if=_absent)
+    snap_at: str | None = Field(default=None, exclude_if=_absent)  # UTC, the snap
+    whistle_at: str | None = Field(default=None, exclude_if=_absent)  # UTC, the whistle
+    clock_end: str | None = Field(default=None, exclude_if=_absent)  # the game clock at the whistle
+    jerseys: dict[str, str] | None = Field(default=None, exclude_if=_absent)  # ESPN ID → number
+    nfl: dict[str, Any] | None = Field(default=None, exclude_if=_absent)  # every field, as sent
     coordinate_basis: Literal["source_yards_to_endzone_separate_team_frames"] = (
         "source_yards_to_endzone_separate_team_frames"
     )

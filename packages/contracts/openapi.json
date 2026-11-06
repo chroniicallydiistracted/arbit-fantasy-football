@@ -30,6 +30,86 @@
         "title": "Account",
         "type": "object"
       },
+      "Actor": {
+        "additionalProperties": false,
+        "properties": {
+          "espn_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Espn Id"
+          },
+          "facing": {
+            "enum": [
+              "right",
+              "left"
+            ],
+            "title": "Facing",
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "segments": {
+            "items": {
+              "$ref": "#/components/schemas/Segment"
+            },
+            "title": "Segments",
+            "type": "array"
+          },
+          "side": {
+            "enum": [
+              "offense",
+              "defense",
+              "official"
+            ],
+            "title": "Side",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "espn_id",
+          "role",
+          "side",
+          "facing",
+          "segments"
+        ],
+        "title": "Actor",
+        "type": "object"
+      },
       "AdminAccount": {
         "additionalProperties": false,
         "properties": {
@@ -199,6 +279,160 @@
         "title": "AuthStatus",
         "type": "object"
       },
+      "BallEnd": {
+        "additionalProperties": false,
+        "description": "Where a flight starts or ends: an actor's hand, chest or catching hands, or a point.",
+        "properties": {
+          "actor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor"
+          },
+          "hold": {
+            "anyOf": [
+              {
+                "enum": [
+                  "hand",
+                  "chest",
+                  "hands"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hold"
+          },
+          "point": {
+            "anyOf": [
+              {
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Point"
+          }
+        },
+        "title": "BallEnd",
+        "type": "object"
+      },
+      "BallSegment": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor"
+          },
+          "at": {
+            "anyOf": [
+              {
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At"
+          },
+          "end": {
+            "title": "End",
+            "type": "number"
+          },
+          "origin": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BallEnd"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "spin": {
+            "default": "spiral",
+            "enum": [
+              "spiral",
+              "tumble",
+              "upright",
+              "flat"
+            ],
+            "title": "Spin",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "number"
+          },
+          "state": {
+            "enum": [
+              "rest",
+              "held",
+              "flight"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BallEnd"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "state"
+        ],
+        "title": "BallSegment",
+        "type": "object"
+      },
       "BindingRequest": {
         "additionalProperties": false,
         "properties": {
@@ -218,6 +452,257 @@
           "manager_id"
         ],
         "title": "BindingRequest",
+        "type": "object"
+      },
+      "BoardResult": {
+        "additionalProperties": false,
+        "properties": {
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "jersey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jersey"
+          },
+          "kind": {
+            "enum": [
+              "touchdown",
+              "field_goal",
+              "extra_point",
+              "two_point",
+              "no_good",
+              "blocked",
+              "safety",
+              "interception",
+              "fumble",
+              "downs",
+              "penalty"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "team_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Id"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "tone": {
+            "enum": [
+              "good",
+              "bad",
+              "flag"
+            ],
+            "title": "Tone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "text",
+          "team_id",
+          "tone"
+        ],
+        "title": "BoardResult",
+        "type": "object"
+      },
+      "BoardSide": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "team_id": {
+            "title": "Team Id",
+            "type": "string"
+          },
+          "timeouts": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeouts"
+          }
+        },
+        "required": [
+          "team_id",
+          "code",
+          "score",
+          "timeouts"
+        ],
+        "title": "BoardSide",
+        "type": "object"
+      },
+      "BoardSpot": {
+        "additionalProperties": false,
+        "properties": {
+          "team_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Id"
+          },
+          "yard": {
+            "title": "Yard",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "team_id",
+          "yard"
+        ],
+        "title": "BoardSpot",
+        "type": "object"
+      },
+      "BoardState": {
+        "additionalProperties": false,
+        "properties": {
+          "away": {
+            "$ref": "#/components/schemas/BoardSide"
+          },
+          "clock": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clock"
+          },
+          "distance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance"
+          },
+          "down": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Down"
+          },
+          "goal_to_go": {
+            "default": false,
+            "title": "Goal To Go",
+            "type": "boolean"
+          },
+          "home": {
+            "$ref": "#/components/schemas/BoardSide"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "possession": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Possession"
+          },
+          "situation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "down",
+                  "kickoff",
+                  "extra_point",
+                  "two_point"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Situation"
+          },
+          "spot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BoardSpot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "period",
+          "clock",
+          "away",
+          "home"
+        ],
+        "title": "BoardState",
         "type": "object"
       },
       "DeviceSession": {
@@ -426,6 +911,222 @@
           "invitation_url"
         ],
         "title": "InviteResponse",
+        "type": "object"
+      },
+      "Line": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "scrimmage",
+              "to_gain"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "x": {
+            "title": "X",
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "x"
+        ],
+        "title": "Line",
+        "type": "object"
+      },
+      "LiveAnimation": {
+        "additionalProperties": false,
+        "properties": {
+          "art": {
+            "$ref": "#/components/schemas/LiveArt"
+          },
+          "away": {
+            "title": "Away",
+            "type": "string"
+          },
+          "away_code": {
+            "title": "Away Code",
+            "type": "string"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/LiveAnimationEntry"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "event_id": {
+            "title": "Event Id",
+            "type": "string"
+          },
+          "home": {
+            "title": "Home",
+            "type": "string"
+          },
+          "home_code": {
+            "title": "Home Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "event_id",
+          "home",
+          "away",
+          "home_code",
+          "away_code",
+          "art",
+          "entries"
+        ],
+        "title": "LiveAnimation",
+        "type": "object"
+      },
+      "LiveAnimationEntry": {
+        "additionalProperties": false,
+        "description": "One play or try, drawn by the browser's live field (OWN-042).",
+        "properties": {
+          "board": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlayBoard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cancelled": {
+            "title": "Cancelled",
+            "type": "boolean"
+          },
+          "clock": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clock"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "part": {
+            "enum": [
+              "play",
+              "try"
+            ],
+            "title": "Part",
+            "type": "string"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "play_id": {
+            "title": "Play Id",
+            "type": "string"
+          },
+          "script": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlayScript"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "snap_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snap At"
+          },
+          "source": {
+            "enum": [
+              "nfl",
+              "espn"
+            ],
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "whistle_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Whistle At"
+          }
+        },
+        "required": [
+          "play_id",
+          "part",
+          "period",
+          "clock",
+          "kind",
+          "text",
+          "cancelled",
+          "source",
+          "snap_at",
+          "whistle_at",
+          "script",
+          "board"
+        ],
+        "title": "LiveAnimationEntry",
+        "type": "object"
+      },
+      "LiveArt": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "labels": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Labels",
+            "type": "object"
+          }
+        },
+        "required": [
+          "available",
+          "labels"
+        ],
+        "title": "LiveArt",
         "type": "object"
       },
       "LiveDrive": {
@@ -1541,6 +2242,167 @@
         "title": "Me",
         "type": "object"
       },
+      "PlayBoard": {
+        "additionalProperties": false,
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/BoardState"
+          },
+          "before": {
+            "$ref": "#/components/schemas/BoardState"
+          },
+          "event_id": {
+            "title": "Event Id",
+            "type": "string"
+          },
+          "part": {
+            "default": "play",
+            "enum": [
+              "play",
+              "try"
+            ],
+            "title": "Part",
+            "type": "string"
+          },
+          "provider_id": {
+            "title": "Provider Id",
+            "type": "string"
+          },
+          "results": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/BoardResult"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "version": {
+            "const": 1,
+            "default": 1,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "event_id",
+          "provider_id",
+          "before",
+          "after"
+        ],
+        "title": "PlayBoard",
+        "type": "object"
+      },
+      "PlayScript": {
+        "additionalProperties": false,
+        "properties": {
+          "actors": {
+            "items": {
+              "$ref": "#/components/schemas/Actor"
+            },
+            "title": "Actors",
+            "type": "array"
+          },
+          "ball": {
+            "items": {
+              "$ref": "#/components/schemas/BallSegment"
+            },
+            "title": "Ball",
+            "type": "array"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "defense": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Defense"
+          },
+          "duration": {
+            "title": "Duration",
+            "type": "number"
+          },
+          "event_id": {
+            "title": "Event Id",
+            "type": "string"
+          },
+          "label": {
+            "default": "Re-creation from play-by-play",
+            "title": "Label",
+            "type": "string"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/Line"
+            },
+            "title": "Lines",
+            "type": "array"
+          },
+          "offense": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offense"
+          },
+          "props": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Prop"
+            },
+            "title": "Props",
+            "type": "array"
+          },
+          "provider_id": {
+            "title": "Provider Id",
+            "type": "string"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "string"
+          },
+          "template": {
+            "title": "Template",
+            "type": "string"
+          },
+          "version": {
+            "const": 1,
+            "default": 1,
+            "title": "Version",
+            "type": "integer"
+          },
+          "whistle": {
+            "title": "Whistle",
+            "type": "number"
+          }
+        },
+        "required": [
+          "event_id",
+          "provider_id",
+          "seed",
+          "template",
+          "duration",
+          "whistle",
+          "offense",
+          "defense",
+          "actors",
+          "ball",
+          "lines",
+          "caption"
+        ],
+        "title": "PlayScript",
+        "type": "object"
+      },
       "PlayerFacts": {
         "additionalProperties": false,
         "properties": {
@@ -1743,6 +2605,68 @@
           "error"
         ],
         "title": "Problem",
+        "type": "object"
+      },
+      "Prop": {
+        "additionalProperties": false,
+        "description": "Something else on the field. A flag is thrown at `start` by the nearest official, who\nisn't drawn, from `origin`, and lands at `at` at `land`, where it stays.",
+        "properties": {
+          "at": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "At",
+            "type": "array"
+          },
+          "kind": {
+            "const": "flag",
+            "title": "Kind",
+            "type": "string"
+          },
+          "land": {
+            "title": "Land",
+            "type": "number"
+          },
+          "origin": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Origin",
+            "type": "array"
+          },
+          "start": {
+            "title": "Start",
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "start",
+          "land",
+          "origin",
+          "at"
+        ],
+        "title": "Prop",
         "type": "object"
       },
       "ReactivateRequest": {
@@ -2019,6 +2943,65 @@
           "result"
         ],
         "title": "SeasonCell",
+        "type": "object"
+      },
+      "Segment": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "title": "End",
+            "type": "number"
+          },
+          "facing": {
+            "anyOf": [
+              {
+                "enum": [
+                  "right",
+                  "left"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Facing"
+          },
+          "pose": {
+            "title": "Pose",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "number"
+          },
+          "x0": {
+            "title": "X0",
+            "type": "number"
+          },
+          "x1": {
+            "title": "X1",
+            "type": "number"
+          },
+          "z0": {
+            "title": "Z0",
+            "type": "number"
+          },
+          "z1": {
+            "title": "Z1",
+            "type": "number"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "pose",
+          "x0",
+          "z0",
+          "x1",
+          "z1"
+        ],
+        "title": "Segment",
         "type": "object"
       },
       "Snapshot": {
@@ -3810,6 +4793,180 @@
         "summary": "Teams"
       }
     },
+    "/api/v1/live/art/{event_id}/{name}": {
+      "get": {
+        "description": "A game's private art: Gridiron fields and uniforms, and team logos, are for the\ninvite-only app only (OWN-015, OWN-039), so never cached by anything shared.",
+        "operationId": "live_art_api_v1_live_art__event_id___name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[1-9][0-9]{0,19}$",
+              "title": "Event Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "pattern": "^(meta\\.json|field\\.png|officials\\.png|ball\\.png|sprites-[A-Z]{2,4}\\.png)$",
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Entity",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until retry",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Live Art"
+      }
+    },
     "/api/v1/live/games": {
       "get": {
         "operationId": "live_games_api_v1_live_games_get",
@@ -4172,6 +5329,177 @@
           }
         },
         "summary": "Live Game"
+      }
+    },
+    "/api/v1/live/games/{event_id}/animation": {
+      "get": {
+        "description": "Every play's script and board, for the browser's live field (OWN-042).",
+        "operationId": "live_animation_api_v1_live_games__event_id__animation_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[1-9][0-9]{0,19}$",
+              "title": "Event Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveAnimation"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Entity",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until retry",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "description": "Server-generated safe request correlation ID",
+                "schema": {
+                  "pattern": "^[a-f0-9]{32}$",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Live Animation"
       }
     },
     "/api/v1/live/games/{event_id}/plays": {

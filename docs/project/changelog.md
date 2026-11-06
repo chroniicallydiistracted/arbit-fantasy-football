@@ -1,5 +1,36 @@
 # Development Changelog
 
+## 2026-11-05 — Week 9 live-feed observation
+
+- The NFL worker pursues a changed summary through a cached detail response. Final details are retried after failures and polled until their phase catches up. ESPN's comparison reads have a separate schedule from the fallback's publication timestamp.
+- Private request receipts include cache headers, gzip sizes, play fingerprints, whistle times and app commit times. A separate probe compares alternate NFL routes and observes the event-stream response type. ESPN play captures supply a second timestamp for matched IDs.
+- An isolated browser records public Game Center routes and transport activity. The postgame report compares first sightings and summary offsets around observed revisions. [Handoff](handoffs/2026-11-05-live-feed-observation.md).
+
+## 2026-11-05 — Live by kickoff: the NFL API lane, real-time pacing and the browser's live field (ENG-041 to ENG-043)
+
+- **The NFL API is the primary live source.** A new worker lane follows the owner's four steps: it discovers the week's games, polls the week's 11 kB summaries every 2 seconds during games, fetches a game's full record when it changes (and every 20 seconds anyway, for corrections), and publishes the changes. Plays are stored under ESPN's own IDs, so everything built on them works unchanged.
+- **ESPN is the emergency fallback.** It steps aside while the NFL lane has a game fresh, takes over if the NFL lane goes stale for 90 seconds, and keeps any game whose NFL record has no plays yet.
+- **Facts from the NFL record:**
+  - **The clock:** the board runs it from the snap to the whistle.
+  - **Foul numbers:** from the game's own record.
+  - **Scoring plays:** they show the snap's clock, not ESPN's after-play clock.
+  - **Wiped-out plays:** they name their players again.
+- **Plays run at real time.** The action slows by one factor, so the quarterback throws later and runners cover less ground. It stops before anything looks like slow motion; the rest of the real time is the end of the play.
+- **The browser's live field.** The game page draws each play in the full-field view with the stadium board, from the same scripts and art as the reviewed clips. New plays play in turn as they arrive. You can step back, replay, pause, use the keyboard, or get each play's end with reduced motion. Before the first play it shows the empty field.
+- **Tonight's art:** JAX at BAL has the uniforms Gridiron lists and Baltimore's usual field, labeled (OWN-044).
+- **On the running app** since 07:47 Arizona time, with migration `0008`. The NFL lane linked all 15 week-9 games.
+
+## 2026-11-05 — The NFL API as the primary live source: direction and survey (OWN-040 to OWN-042)
+
+- **The owner's route tests** checked out, and CHI at SEA was fetched with the owner's script.
+- **Matching ESPN:** NFL plays join ESPN's exactly, since ESPN's play ID is the event ID followed by NFL's play ID.
+- **Timing:** the NFL's snap and whistle times are real, and the clock at the whistle matches ESPN's scoring plays to the second.
+- **Jersey numbers:** they come from the game's own record.
+- **Pace:** our animations run at about 0.53 to 0.63 of real time.
+- **Direction (OWN-041):** the NFL API becomes the primary live source using every field, and ESPN's live data the emergency fallback. ESPN Fantasy stays the league authority. Plays are paced to real time by changing timing first. The live worker comes last.
+- **Slice A survey:** discovery, the 11 kB game summaries to poll, two complementary game detail versions, statistics, rosters, video metadata linked to plays, and the 60-minute token.
+- **Target (OWN-042):** everything live, including the browser renderer, for JAX at BAL at 18:15 Arizona time on 2026-11-05.
+
 ## 2026-11-05 — The board after the owner's review (OWN-039)
 
 - **Results scroll in** from the side of the team they're for, instead of wiping in.

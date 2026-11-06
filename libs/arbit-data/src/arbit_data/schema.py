@@ -314,6 +314,23 @@ nfl_game = Table(
     Column("final_at", DateTime(timezone=True)),
     Column("final_checks", Integer, nullable=False),
 )
+nfl_api_game = Table(
+    "nfl_api_game",
+    metadata,
+    Column("game_id", String, primary_key=True),
+    Column("season", Integer, nullable=False),
+    Column("season_type", String, nullable=False),
+    Column("week", Integer, nullable=False),
+    Column("event_id", String),
+    Column("slug", String),
+    Column("kickoff", DateTime(timezone=True)),
+    Column("phase", String),
+    Column("summary", JSON),
+    Column("summary_hash", String(64)),
+    Column("details_hash", String(64)),
+    Column("details_observed_at", DateTime(timezone=True)),
+    Column("observed_at", DateTime(timezone=True), nullable=False),
+)
 nfl_play_revision = Table(
     "nfl_play_revision",
     metadata,

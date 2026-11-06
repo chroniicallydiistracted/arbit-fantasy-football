@@ -28,6 +28,7 @@ from arbit_data.live.normalize import normalize_play  # noqa: E402
 from arbit_data.live.play_facts import GameTeams, PlayFacts, interpret, text_codes  # noqa: E402
 
 SEASON = 2026
+PACED = False
 # Poses a player may hold still: on the ground, kneeling, holding for a kick, on a recovered ball,
 # celebrating. Anyone else standing still longer than LONGEST_STILL after the snap is frozen.
 RESTING = ("ground", "rise", "kneel", "point", "arms", "spike", "hold_", "recover", "snap_", "off_")
@@ -350,17 +351,44 @@ def outcome(script: C.PlayScript, facts: PlayFacts, report: Report) -> None:
         report.flag("penalty without a flag", facts, script.template)
 
 
-def main(root: Path, use_positions: bool = True) -> None:
+def espn_games(root: Path):
+    """Each captured game's plays as ESPN gave them."""
     plays, teams = coverage.captured(root)
-    made, none, report = Counter(), Counter(), Report()
+    for event, items in plays.items():
+        normalized = [normalize_play(raw, event, SEASON) for raw in items.values()]
+        yield event, normalized, teams[event]
+
+
+def nfl_games(root: Path, details: Path):
+    """Each game in an NFL API weekly game details response, as the NFL lane stores it (OWN-041):
+    joined to ESPN's event through nflverse's schedule, players through its players table."""
+    import json
+
+    from arbit_data.live.nfl_api import GameLink, to_live_plays
+
+    _plays, teams = coverage.captured(root)
+    ids = {r["gsis_id"]: str(r["espn_id"]) for r in depth._table("players/players") if r.get("gsis_id") and r.get("espn_id")}
+    events = {str(g["old_game_id"]): str(g["espn"]) for g in depth._table("schedules/games") if g.get("espn")}
+    for game in json.loads(details.read_text()):
+        elias = next(x["id"] for x in game["externalIds"] if x["source"] == "elias")
+        event = events.get(elias)
+        if event not in teams:
+            continue
+        home, away, home_code, away_code = teams[event]
+        link = GameLink(game["id"], event, home, away, home_code, away_code)
+        yield event, list(to_live_plays(game, link, ids, SEASON)), teams[event]
+
+
+def main(root: Path, use_positions: bool = True, details: Path | None = None) -> None:
+    made, none, report, paced = Counter(), Counter(), Report(), Counter()
     positions = depth.load() if use_positions else {}
     units = depth.units() if use_positions else {}
     football = 0
-    for event, items in plays.items():
-        normalized = [normalize_play(raw, event, SEASON) for raw in items.values()]
+    games = nfl_games(root, details) if details else espn_games(root)
+    for event, normalized, game_teams in games:
         normalized.sort(key=lambda p: int(p.sequence or 0))
-        context = GameTeams.build(*teams[event], seen=text_codes(p.text for p in normalized))
-        game = depth.GameUnits(units, teams[event])
+        context = GameTeams.build(*game_teams, seen=text_codes(p.text for p in normalized))
+        game = depth.GameUnits(units, game_teams)
         for play in normalized:
             facts = interpret(play, context)
             if facts.shape in ("timeout", "other"):
@@ -370,6 +398,15 @@ def main(root: Path, use_positions: bool = True) -> None:
             now = game.now()
             game.saw(facts)
             script = C.choreograph(facts, seed, positions=positions, units=now)
+            if PACED and script is not None and play.snap_at and play.whistle_at:
+                from datetime import datetime
+
+                from arbit_data.live.pacing import pace
+
+                real = (datetime.fromisoformat(play.whistle_at.replace("Z", "+00:00")) - datetime.fromisoformat(play.snap_at.replace("Z", "+00:00"))).total_seconds()
+                script = pace(script, real)
+                paced["plays"] += 1
+                paced["at real time" if abs(script.whistle - C.SNAP - real) < 0.05 else "kept Arbit's timing"] += 1
             if script is None:
                 none[f"{facts.shape} ({facts.reason or facts.template or 'no template'})"] += 1
             else:
@@ -397,6 +434,8 @@ def main(root: Path, use_positions: bool = True) -> None:
                 ):
                     report.flag("extra point wide left not on the near side", facts, str(cross))
     print(f"Football plays: {football}. Scripts: {sum(made.values())}.\n")
+    if PACED:
+        print(f"Paced to the NFL's snap-to-whistle times (OWN-041): {dict(paced)}\n")
     print("| Script | Count |\n| --- | ---: |")
     for name, count in made.most_common():
         print(f"| {name} | {count} |")
@@ -415,4 +454,7 @@ def main(root: Path, use_positions: bool = True) -> None:
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    main(Path(args[0]) if args else Path("data/live-captures"), "--no-positions" not in sys.argv)
+    # --nfl=PATH: the plays of an NFL API weekly game details response, as the NFL lane stores them.
+    nfl = next((Path(a.split("=", 1)[1]) for a in sys.argv if a.startswith("--nfl=")), None)
+    PACED = "--paced" in sys.argv  # pace each NFL play to its real snap-to-whistle time
+    main(Path(args[0]) if args else Path("data/live-captures"), "--no-positions" not in sys.argv, nfl)

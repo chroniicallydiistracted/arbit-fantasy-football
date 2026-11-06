@@ -157,6 +157,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/live/art/{event_id}/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Live Art
+         * @description A game's private art: Gridiron fields and uniforms, and team logos, are for the
+         *     invite-only app only (OWN-015, OWN-039), so never cached by anything shared.
+         */
+        get: operations["live_art_api_v1_live_art__event_id___name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/live/games": {
         parameters: {
             query?: never;
@@ -183,6 +204,26 @@ export interface paths {
         };
         /** Live Game */
         get: operations["live_game_api_v1_live_games__event_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/live/games/{event_id}/animation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Live Animation
+         * @description Every play's script and board, for the browser's live field (OWN-042).
+         */
+        get: operations["live_animation_api_v1_live_games__event_id__animation_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -465,6 +506,31 @@ export interface components {
              */
             role: "member" | "admin";
         };
+        /** Actor */
+        Actor: {
+            /** Espn Id */
+            espn_id: string | null;
+            /**
+             * Facing
+             * @enum {string}
+             */
+            facing: "right" | "left";
+            /** Key */
+            key: string;
+            /** Label */
+            label?: string | null;
+            /** Position */
+            position?: string | null;
+            /** Role */
+            role: string;
+            /** Segments */
+            segments: components["schemas"]["Segment"][];
+            /**
+             * Side
+             * @enum {string}
+             */
+            side: "offense" | "defense" | "official";
+        };
         /** AdminAccount */
         AdminAccount: {
             /** Display Name */
@@ -532,6 +598,50 @@ export interface components {
             /** Fixture */
             fixture: boolean;
         };
+        /**
+         * BallEnd
+         * @description Where a flight starts or ends: an actor's hand, chest or catching hands, or a point.
+         */
+        BallEnd: {
+            /** Actor */
+            actor?: string | null;
+            /** Hold */
+            hold?: ("hand" | "chest" | "hands") | null;
+            /** Point */
+            point?: [
+                number,
+                number,
+                number
+            ] | null;
+        };
+        /** BallSegment */
+        BallSegment: {
+            /** Actor */
+            actor?: string | null;
+            /** At */
+            at?: [
+                number,
+                number,
+                number
+            ] | null;
+            /** End */
+            end: number;
+            origin?: components["schemas"]["BallEnd"] | null;
+            /**
+             * Spin
+             * @default spiral
+             * @enum {string}
+             */
+            spin: "spiral" | "tumble" | "upright" | "flat";
+            /** Start */
+            start: number;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "rest" | "held" | "flight";
+            target?: components["schemas"]["BallEnd"] | null;
+        };
         /** BindingRequest */
         BindingRequest: {
             /**
@@ -544,6 +654,68 @@ export interface components {
              * Format: uuid
              */
             manager_id: string;
+        };
+        /** BoardResult */
+        BoardResult: {
+            /** Detail */
+            detail?: string | null;
+            /** Jersey */
+            jersey?: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "touchdown" | "field_goal" | "extra_point" | "two_point" | "no_good" | "blocked" | "safety" | "interception" | "fumble" | "downs" | "penalty";
+            /** Team Id */
+            team_id: string | null;
+            /** Text */
+            text: string;
+            /**
+             * Tone
+             * @enum {string}
+             */
+            tone: "good" | "bad" | "flag";
+        };
+        /** BoardSide */
+        BoardSide: {
+            /** Code */
+            code: string;
+            /** Score */
+            score: number | null;
+            /** Team Id */
+            team_id: string;
+            /** Timeouts */
+            timeouts: number | null;
+        };
+        /** BoardSpot */
+        BoardSpot: {
+            /** Team Id */
+            team_id: string | null;
+            /** Yard */
+            yard: number;
+        };
+        /** BoardState */
+        BoardState: {
+            away: components["schemas"]["BoardSide"];
+            /** Clock */
+            clock: string | null;
+            /** Distance */
+            distance?: number | null;
+            /** Down */
+            down?: number | null;
+            /**
+             * Goal To Go
+             * @default false
+             */
+            goal_to_go: boolean;
+            home: components["schemas"]["BoardSide"];
+            /** Period */
+            period: number | null;
+            /** Possession */
+            possession?: string | null;
+            /** Situation */
+            situation?: ("down" | "kickoff" | "extra_point" | "two_point") | null;
+            spot?: components["schemas"]["BoardSpot"] | null;
         };
         /** DeviceSession */
         DeviceSession: {
@@ -618,6 +790,75 @@ export interface components {
         InviteResponse: {
             /** Invitation Url */
             invitation_url: string;
+        };
+        /** Line */
+        Line: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "scrimmage" | "to_gain";
+            /** X */
+            x: number;
+        };
+        /** LiveAnimation */
+        LiveAnimation: {
+            art: components["schemas"]["LiveArt"];
+            /** Away */
+            away: string;
+            /** Away Code */
+            away_code: string;
+            /** Entries */
+            entries: components["schemas"]["LiveAnimationEntry"][];
+            /** Event Id */
+            event_id: string;
+            /** Home */
+            home: string;
+            /** Home Code */
+            home_code: string;
+        };
+        /**
+         * LiveAnimationEntry
+         * @description One play or try, drawn by the browser's live field (OWN-042).
+         */
+        LiveAnimationEntry: {
+            board: components["schemas"]["PlayBoard"] | null;
+            /** Cancelled */
+            cancelled: boolean;
+            /** Clock */
+            clock: string | null;
+            /** Kind */
+            kind: string;
+            /**
+             * Part
+             * @enum {string}
+             */
+            part: "play" | "try";
+            /** Period */
+            period: number | null;
+            /** Play Id */
+            play_id: string;
+            script: components["schemas"]["PlayScript"] | null;
+            /** Snap At */
+            snap_at: string | null;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "nfl" | "espn";
+            /** Text */
+            text: string;
+            /** Whistle At */
+            whistle_at: string | null;
+        };
+        /** LiveArt */
+        LiveArt: {
+            /** Available */
+            available: boolean;
+            /** Labels */
+            labels: {
+                [key: string]: string | null;
+            };
         };
         /** LiveDrive */
         LiveDrive: {
@@ -879,6 +1120,75 @@ export interface components {
             /** Teams */
             teams: components["schemas"]["Team"][];
         };
+        /** PlayBoard */
+        PlayBoard: {
+            after: components["schemas"]["BoardState"];
+            before: components["schemas"]["BoardState"];
+            /** Event Id */
+            event_id: string;
+            /**
+             * Part
+             * @default play
+             * @enum {string}
+             */
+            part: "play" | "try";
+            /** Provider Id */
+            provider_id: string;
+            /**
+             * Results
+             * @default []
+             */
+            results: components["schemas"]["BoardResult"][];
+            /**
+             * Version
+             * @default 1
+             * @constant
+             */
+            version: 1;
+        };
+        /** PlayScript */
+        PlayScript: {
+            /** Actors */
+            actors: components["schemas"]["Actor"][];
+            /** Ball */
+            ball: components["schemas"]["BallSegment"][];
+            /** Caption */
+            caption: string;
+            /** Defense */
+            defense: string | null;
+            /** Duration */
+            duration: number;
+            /** Event Id */
+            event_id: string;
+            /**
+             * Label
+             * @default Re-creation from play-by-play
+             */
+            label: string;
+            /** Lines */
+            lines: components["schemas"]["Line"][];
+            /** Offense */
+            offense: string | null;
+            /**
+             * Props
+             * @default []
+             */
+            props: components["schemas"]["Prop"][];
+            /** Provider Id */
+            provider_id: string;
+            /** Seed */
+            seed: string;
+            /** Template */
+            template: string;
+            /**
+             * Version
+             * @default 1
+             * @constant
+             */
+            version: 1;
+            /** Whistle */
+            whistle: number;
+        };
         /** PlayerFacts */
         PlayerFacts: {
             analysis?: components["schemas"]["Analysis"];
@@ -944,6 +1254,34 @@ export interface components {
             title: string;
             /** Type */
             type: string;
+        };
+        /**
+         * Prop
+         * @description Something else on the field. A flag is thrown at `start` by the nearest official, who
+         *     isn't drawn, from `origin`, and lands at `at` at `land`, where it stays.
+         */
+        Prop: {
+            /** At */
+            at: [
+                number,
+                number,
+                number
+            ];
+            /**
+             * Kind
+             * @constant
+             */
+            kind: "flag";
+            /** Land */
+            land: number;
+            /** Origin */
+            origin: [
+                number,
+                number,
+                number
+            ];
+            /** Start */
+            start: number;
         };
         /** ReactivateRequest */
         ReactivateRequest: {
@@ -1037,6 +1375,25 @@ export interface components {
             own_points: string | null;
             /** Result */
             result: ("win" | "loss" | "tie") | null;
+        };
+        /** Segment */
+        Segment: {
+            /** End */
+            end: number;
+            /** Facing */
+            facing?: ("right" | "left") | null;
+            /** Pose */
+            pose: string;
+            /** Start */
+            start: number;
+            /** X0 */
+            x0: number;
+            /** X1 */
+            x1: number;
+            /** Z0 */
+            z0: number;
+            /** Z1 */
+            z1: number;
         };
         /** Snapshot */
         Snapshot: {
@@ -2064,6 +2421,106 @@ export interface operations {
             };
         };
     };
+    live_art_api_v1_live_art__event_id___name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     live_games_api_v1_live_games_get: {
         parameters: {
             query?: {
@@ -2185,6 +2642,107 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LiveGameDetail"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    /** @description Seconds until retry */
+                    "Retry-After"?: number;
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    /** @description Server-generated safe request correlation ID */
+                    "X-Request-ID"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    live_animation_api_v1_live_games__event_id__animation_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiveAnimation"];
                 };
             };
             /** @description Unauthorized */

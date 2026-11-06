@@ -20,6 +20,7 @@ import {
   WinChart,
 } from "./GameBoard";
 import type { components } from "./generated/api";
+import { LiveField } from "./live/LiveField";
 import { Busy, Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
@@ -169,6 +170,7 @@ function GameDetailPanel({ eventId }: { eventId: string }) {
   return (
     <div className="game-page">
       <GameBoard game={detail.game} />
+      <LiveField eventId={eventId} />
       <p className="table-foot game-read">
         <ReadAt when={detail.game.observed_at} /> from ESPN.{" "}
         <Link className="link-button quiet" to="/live">

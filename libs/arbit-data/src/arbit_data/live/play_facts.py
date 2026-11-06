@@ -80,6 +80,7 @@ Miss = Literal[
 # Gamebook codes in ESPN's text that differ from its team directory.
 TEXT_CODES = {
     "ARZ": "ARI",
+    "AZ": "ARI",  # the NFL API's own text (OWN-041)
     "BLT": "BAL",
     "CLV": "CLE",
     "HST": "HOU",

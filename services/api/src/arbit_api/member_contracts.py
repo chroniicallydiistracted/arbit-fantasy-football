@@ -6,6 +6,8 @@ from typing import Literal
 from uuid import UUID
 
 from arbit_data.league import Matchup, Player
+from arbit_data.live.board import PlayBoard
+from arbit_data.live.choreography import PlayScript
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -295,6 +297,38 @@ class LivePlays(WireModel):
     plays: list[LivePlayRow]
     plays_observed_at: datetime | None
     has_participants: bool
+
+
+class LiveAnimationEntry(WireModel):
+    """One play or try, drawn by the browser's live field (OWN-042)."""
+
+    play_id: str
+    part: Literal["play", "try"]
+    period: int | None
+    clock: str | None
+    kind: str
+    text: str
+    cancelled: bool
+    source: Literal["nfl", "espn"]  # the NFL API, or ESPN as the emergency fallback (OWN-041)
+    snap_at: str | None
+    whistle_at: str | None
+    script: PlayScript | None
+    board: PlayBoard | None
+
+
+class LiveArt(WireModel):
+    available: bool
+    labels: dict[str, str | None]
+
+
+class LiveAnimation(WireModel):
+    event_id: str
+    home: str
+    away: str
+    home_code: str
+    away_code: str
+    art: LiveArt
+    entries: list[LiveAnimationEntry]
 
 
 class DeviceSession(WireModel):

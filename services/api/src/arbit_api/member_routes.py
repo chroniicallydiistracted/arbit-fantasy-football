@@ -2,10 +2,13 @@
 
 import asyncio
 import hmac
+import json
+import os
 from collections.abc import Awaitable, Callable, Iterable
 from datetime import UTC, datetime
 from decimal import ROUND_HALF_UP, Decimal
 from ipaddress import ip_address
+from pathlib import Path as PathLib
 from typing import Any, Literal, cast
 from uuid import UUID
 
@@ -14,6 +17,7 @@ from arbit_data.db import UnitOfWork
 from arbit_data.league import LeagueDocument, Matchup, MatchupSide, Player
 from arbit_data.league_store import read_current, read_snapshot
 from arbit_data.live import store as live_store
+from arbit_data.live.animation import build as live_animation_build
 from arbit_data.members import (
     SESSION_ABSOLUTE,
     MemberError,
@@ -40,7 +44,7 @@ from arbit_data.members import (
 from fastapi import APIRouter, FastAPI, HTTPException, Path, Query, Request, Response
 from fastapi.exception_handlers import http_exception_handler, request_validation_exception_handler
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi.responses import FileResponse, RedirectResponse, StreamingResponse
 from pydantic import ValidationError
 from sqlalchemy import Engine
 from sqlalchemy.exc import SQLAlchemyError
@@ -57,6 +61,9 @@ from arbit_api.member_contracts import (
     FrontOffice,
     InviteRequest,
     InviteResponse,
+    LiveAnimation,
+    LiveAnimationEntry,
+    LiveArt,
     LiveDrive,
     LiveGameDetail,
     LiveGameRow,
@@ -850,6 +857,47 @@ def install_member_routes(
             plays_observed_at=detail.get("plays_observed_at"),
             has_participants=any(p["participants"] for p in plays),
         )
+
+    art_root = PathLib(os.environ.get("ARBIT_LIVE_ART_PATH", "data/live-art"))
+
+    @router.get("/api/v1/live/games/{event_id}/animation", response_model=LiveAnimation)
+    def live_animation(
+        request: Request, event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$")
+    ) -> LiveAnimation:
+        """Every play's script and board, for the browser's live field (OWN-042)."""
+        member = principal(request)
+        _, document, _ = stored()
+        require_binding(member, document)
+        made = live_animation_build(uow, event_id)
+        if made is None:
+            raise HTTPException(404, "GAME_NOT_FOUND")
+        meta = art_root / event_id / "meta.json"
+        labels: dict[str, str | None] = {}
+        if meta.is_file():
+            labels = json.loads(meta.read_text()).get("labels", {})
+        return LiveAnimation(
+            **{k: v for k, v in made.items() if k != "entries"},
+            art=LiveArt(available=meta.is_file(), labels=labels),
+            entries=[LiveAnimationEntry(**entry) for entry in made["entries"]],
+        )
+
+    @router.get("/api/v1/live/art/{event_id}/{name}", response_class=FileResponse)
+    def live_art(
+        request: Request,
+        event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$"),
+        name: str = Path(
+            pattern=r"^(meta\.json|field\.png|officials\.png|ball\.png|sprites-[A-Z]{2,4}\.png)$"
+        ),
+    ) -> FileResponse:
+        """A game's private art: Gridiron fields and uniforms, and team logos, are for the
+        invite-only app only (OWN-015, OWN-039), so never cached by anything shared."""
+        member = principal(request)
+        _, document, _ = stored()
+        require_binding(member, document)
+        target = art_root / event_id / name
+        if not target.is_file():
+            raise HTTPException(404, "ART_NOT_FOUND")
+        return FileResponse(target, headers={"Cache-Control": "private, max-age=600"})
 
     hub = EventHub(uow)
 

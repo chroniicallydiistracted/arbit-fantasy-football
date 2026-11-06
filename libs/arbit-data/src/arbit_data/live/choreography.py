@@ -1809,7 +1809,8 @@ def _label(play: _Play, role: str, espn_id: str) -> str | None:
     return names[0] if len(set(ids)) == 1 and len(names) == 1 else None
 
 
-_NAME = r"[A-Z][a-z]{0,3}\.[A-Z][A-Za-z'\-]*(?:\.? [A-Z][A-Za-z'\-]+)?"
+# A second word ("A.St. Brown") has lowercase letters, so "A.Barner INTERCEPTED" stops at Barner.
+_NAME = r"[A-Z][a-z]{0,3}\.[A-Z][A-Za-z'\-]*(?:\.? [A-Z][a-z][A-Za-z'\-]*)?"
 # A sentence ends at a period after a word, a number or a parenthesis, never after an initial,
 # so "S.Darnold" and "A.St. Brown" stay whole and "TOUCHDOWN. J.Myers" splits.
 _SENTENCE = r"(?:(?<=[A-Za-z]{3})|(?<=[0-9)]))\.\s*(?=[A-Z(])"

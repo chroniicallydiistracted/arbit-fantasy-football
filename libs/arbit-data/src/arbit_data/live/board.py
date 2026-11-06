@@ -321,6 +321,17 @@ class GameBoard:
         """A card for each flag: the foul, the team and the player's number (OWN-039)."""
         penalized = {person.espn_id for person in play.participants if person.role == "penalized"}
         named = [penalty for penalty in facts.penalties if penalty.player]
+        # The NFL's own record of the game names each fouling player with his number that night
+        # ("PENALTY on SEA-53-Q.Nelson"), declined fouls included (OWN-041).
+        text = str(
+            ((play.nfl or {}).get("play") or {}).get("playDescriptionWithJerseyNumbers") or ""
+        )
+        numbered = {
+            name.strip(): number
+            for number, name in re.findall(
+                r"(?:PENALTY|Penalty) on [A-Z]{2,4}-(\d{1,2})-([A-Z][a-z]*\.[A-Za-z' .-]+?),", text
+            )
+        }
         cards = []
         for penalty in facts.penalties:
             cards.append(
@@ -329,7 +340,8 @@ class GameBoard:
                     text=(penalty.type or "Penalty").upper(),
                     team_id=penalty.team if penalty.team in self.codes else None,
                     tone="flag",
-                    jersey=self._number(penalty.team, penalty.player, penalized, len(named) == 1),
+                    jersey=numbered.get(penalty.player or "")
+                    or self._number(penalty.team, penalty.player, penalized, len(named) == 1),
                     detail={"declined": "DECLINED", "offsetting": "OFFSETTING"}.get(penalty.status),
                 )
             )
@@ -369,6 +381,7 @@ class GameBoard:
         The game then moves past the play: its score, and any timeout it records. `clock_end` is
         the clock when the play ended, where a source gives it: the board runs to it."""
         self._enter(play.period)
+        clock_end = clock_end or play.clock_end  # the NFL record's clock at the whistle
         before_scores = dict(self.scores)
         espn = {self.teams.home: _score(play.home_score), self.teams.away: _score(play.away_score)}
         known = all(value is not None for value in espn.values())
