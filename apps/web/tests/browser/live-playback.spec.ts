@@ -329,3 +329,50 @@ test("stoppage and final update the existing Jumbotron in place", async ({ page 
     "true",
   );
 });
+
+test("a revised motion script shows the corrected endpoint without swapping paths mid-play", async ({
+  page,
+}) => {
+  const original = entry("41", "4:12", "Fictional run.", 65);
+  const withMotion = (row: Entry, end: number): Entry => ({
+    ...row,
+    script: {
+      version: 2,
+      event_id: eventId,
+      provider_id: row.play_id,
+      template: "run",
+      duration: 15,
+      whistle: 13,
+      motion_end: 13,
+      offense: home.team_id,
+      defense: away.team_id,
+      actors: [],
+      ball: [
+        { start: 0, end: 12, style: "rest", origin: { point: [20, 0.2, 26] } },
+        { start: 12, end: 15, style: "rest", origin: { point: [end, 0.2, 26] } },
+      ],
+      milestones: [],
+      timing: { overrun: 0, unfilled: 0 },
+      lines: [],
+      label: "Re-creation from play-by-play",
+      caption: row.text,
+    },
+  });
+  const { field, canvas, publish } = await openPlayback(page, [withMotion(original, 65)]);
+  await page
+    .getByRole("region", { name: "Plays" })
+    .getByRole("link", { name: original.text })
+    .click();
+  await field.getByRole("button", { name: "Pause", exact: true }).click();
+  await expect.poll(() => ballX(canvas)).toBeLessThan(400);
+
+  const captionOnly = entry("41", "4:12", "Fictional run with an updated caption.", 65);
+  await publish([withMotion(captionOnly, 65)], ["41"]);
+  await expect(page.getByRole("link", { name: captionOnly.text })).toBeVisible();
+  await expect.poll(() => ballX(canvas)).toBeLessThan(400);
+
+  const fixed = entry("41", "4:11", "Fictional run with a corrected endpoint.", 78);
+  await publish([withMotion(fixed, 78)], ["41"]);
+  await expect(page).toHaveURL(/play=41$/);
+  await expect.poll(() => ballX(canvas)).toBeGreaterThan(610);
+});

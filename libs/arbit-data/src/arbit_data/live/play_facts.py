@@ -21,7 +21,7 @@ from typing import Literal
 
 from pydantic import Field
 
-from arbit_data.live.contracts import FieldPoint, LiveModel, LivePlay
+from arbit_data.live.contracts import FieldPoint, LiveModel, LivePlay, MotionPerson
 
 Shape = Literal[
     "pass",
@@ -162,6 +162,7 @@ class KickFacts(LiveModel):
     result: KickResult | None = None
     miss: Miss | None = None
     return_yards: int | None = None
+    return_spot: int | None = None
     onside: bool = False
 
 
@@ -204,6 +205,7 @@ class PlayFacts(LiveModel):
     start: int | None = None
     end: int | None = None
     action_end: int | None = None  # where the play itself ended, before any penalty yards
+    action_end_source: Literal["description", "next_state", "start"] | None = None
     spot_source: Literal["yard_line", "yards_to_endzone"] | None = None
     down: int | None = None
     distance: int | None = None
@@ -214,6 +216,7 @@ class PlayFacts(LiveModel):
     no_huddle: bool = False
     direct_snap: str | None = None
     passing: PassFacts | None = None
+    intended_receiver: MotionPerson | None = None
     run: RunFacts | None = None
     kick: KickFacts | None = None
     fumble: FumbleFacts | None = None
@@ -269,7 +272,11 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
             "line_to_gain": min(100, start + play.start.distance),
         }
     spots = [_spot(m, "", offense, teams) for m in re.finditer(_AFTER + _SPOT.format(""), main)]
-    facts["action_end"] = next((s for s in reversed(spots) if s is not None), end)
+    text_end = next((s for s in reversed(spots) if s is not None), None)
+    facts["action_end"] = text_end if text_end is not None else end
+    facts["action_end_source"] = (
+        "description" if text_end is not None else "next_state" if end is not None else None
+    )
     facts["touchdown"] = "TOUCHDOWN" in main.upper() and "NULLIFIED" not in text.upper()
     facts["safety"] = bool(re.search(r"\bSAFETY\b", main))
     facts["out_of_bounds"] = bool(re.search(r"\b(?:ran|pushed|sacked) ob\b|out of bounds", main))
@@ -281,8 +288,16 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
             play, main, shape, start, offense, teams, reversed_call=review == "reversed"
         )
         facts["passing"] = passing
+        candidates = [
+            p
+            for p in (play.motion_evidence.people if play.motion_evidence else ())
+            if "intendedReceiver" in p.roles and p.team_id in (None, offense)
+        ]
+        if len(candidates) == 1:
+            facts["intended_receiver"] = candidates[0]
         if passing.result in ("incomplete", "spiked"):
             facts["action_end"] = start  # the next snap can reflect intervening enforcement
+            facts["action_end_source"] = "start"
     elif shape in ("run", "scramble", "kneel"):
         facts["run"] = _run(play, main, shape)
     elif shape in ("punt", "kickoff", "field_goal", "extra_point"):
@@ -532,7 +547,8 @@ def _kick(
         if landing is not None and landing > 100:
             landing = min(landing, 110)
     returned = re.search(
-        rf"\. {_NAME}(?: \([^)]*\))? (?:to|pushed ob at|ran ob at) .*? for (-?\d+|no gain)", main
+        rf"\. {_NAME}(?: \([^)]*\))? (?:to|pushed ob at|ran ob at) {_SPOT.format('r')} for (?P<yards>-?\d+|no gain)",
+        main,
     )
     result: KickResult | None
     if re.search(r"\bBLOCKED\b", main):
@@ -555,12 +571,13 @@ def _kick(
         result = "returned"
     else:
         result = None
-    back = returned.group(1) if returned else None
+    back = returned.group("yards") if returned else None
     return KickFacts(
         distance=int(sent.group(1)) if sent else None,
         landing=landing,
         result=result,
         return_yards=0 if back == "no gain" else int(back) if back else None,
+        return_spot=_spot(returned, "r", offense, teams) if returned else None,
         onside=bool(re.search(r"\bkicks onside\b", main)),
     )
 

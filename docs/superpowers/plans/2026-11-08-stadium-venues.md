@@ -1,12 +1,12 @@
 # Task: Each home stadium's own design
 
-Status: implemented, 2026-11-08 (OWN-050, OWN-054, ENG-047). The owner reviews the designs before they are published to a week's bundles.
+Status: implemented, 2026-11-08 (OWN-050, OWN-059, ENG-047). The owner reviews the designs before they are published to a week's bundles.
 
 - **Requirement IDs.**
   - LV-003: canonical play graphics.
 - **Specifications and decisions.**
   - **OWN-050:** each team's actual stadium, with international games kept generic.
-  - **OWN-054:** recreate each stadium as Arbit's own art from the owner's references, not the references themselves.
+  - **OWN-059:** recreate each stadium as Arbit's own art from the owner's references, not the references themselves.
   - **OWN-049 and ENG-045:** the generic surround this extends.
   - **OWN-022:** the pixel character.
 - **Baseline.** `stadium.py` draws a generic traced bowl in the home team's colors behind the field. `live_art.py` bakes it into each game's private `field.png`.

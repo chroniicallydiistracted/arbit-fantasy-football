@@ -1,4 +1,4 @@
-"""A stadium as a real 3D model behind the live field (OWN-050, OWN-054): its own shape and parts,
+"""A stadium as a real 3D model behind the live field (OWN-050, OWN-059): its own shape and parts,
 not a recolored generic bowl.
 
 A venue's model is built from its private references:

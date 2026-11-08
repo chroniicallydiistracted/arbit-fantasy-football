@@ -17,7 +17,19 @@
 
 ## 2026-11-08 — Each home stadium's own design
 
-- The live field's surround can now take each home stadium's own design, recreated in Arbit's pixel style from the owner's midfield references (OWN-054): seat colors by level, concrete, suites, ribbons and roofs. Shared buildings follow the home team, and neutral sites keep the generic stadium. The design is ready for the owner's review and not yet published. [Handoff](handoffs/2026-11-08-stadium-venues.md).
+- The live field's surround can now take each home stadium's own design, recreated in Arbit's pixel style from the owner's midfield references (OWN-059): seat colors by level, concrete, suites, ribbons and roofs. Shared buildings follow the home team, and neutral sites keep the generic stadium. The design is ready for the owner's review and not yet published. [Handoff](handoffs/2026-11-08-stadium-venues.md).
+
+## 2026-11-08 — Live motion calibration
+
+- Revised receiver release, pass flight, pursuit, shared contact and movement beyond the goal line. Measured the field scale and manually reviewed thirteen browser replays before updating the local opt-in preview. [Handoff](handoffs/2026-11-08-live-motion-calibration.md).
+
+## 2026-11-07 — Local web preview activation
+
+- Updated the local browser build and member API for the opt-in Live animation rebuild. The Thursday replay is available for member review. The sync worker and database were outside the update. [Activation handoff](handoffs/2026-11-07-live-animation-preview-activation.md).
+
+## 2026-11-07 — Live animation rebuild preview
+
+- Added typed live action evidence, continuous trajectories and an opt-in browser preview for supported runs, passes, interceptions and kickoffs. The preview can depict a return, fumble and recovery in the same clip. A player has one identity across their credited roles. [Preview handoff](handoffs/2026-11-07-live-animation-rebuild-preview.md).
 
 ## 2026-11-07 — Live animation calibration and rebuild design
 
@@ -34,7 +46,7 @@
 - It also found three defects:
   - a receiver drawn twice when the text and the roster spell his first name differently
   - a kickoff return lost when the play's text carries a challenge
-  - a short pass's flight about 50% too long
+  - short pass flight timing that ran long
 
   The findings stay private with the captures. [Handoff](handoffs/2026-11-07-play-timing.md#ngs-comparison).
 

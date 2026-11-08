@@ -57,7 +57,7 @@
 - **R-053:** the owner adds `https://ffa.westfam.media/auth/callback` in Google. A family member needs an Access allowance, an Arbit invitation, and a test-user entry if the consent screen is in Testing.
 - **R-029:** the public site is down whenever this PC sleeps or WSL stops.
 - **cloudflared:** version 2026.2.0 is installed at `/usr/local/bin`, and 2026.10.7 is available. Upgrading needs `sudo`.
-- **Decision numbering:** `main` has OWN-054 twice. OWN-058 and ENG-049 were numbered to avoid Codex's OWN-055–057 on `codex/live-animation-rebuild`. Reconcile when the branches merge.
+- **Decision numbering:** OWN-058 and ENG-049 were numbered after Codex's OWN-055–057. At the merge, the stadium decision that `main` had also numbered OWN-054 became OWN-059.
 
 ## Resume here
 

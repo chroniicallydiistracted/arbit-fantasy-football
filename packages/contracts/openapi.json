@@ -1055,9 +1055,13 @@
                 "$ref": "#/components/schemas/PlayScript"
               },
               {
+                "$ref": "#/components/schemas/PlayScriptV2"
+              },
+              {
                 "type": "null"
               }
-            ]
+            ],
+            "title": "Script"
           },
           "snap_at": {
             "anyOf": [
@@ -2264,6 +2268,235 @@
         "title": "Me",
         "type": "object"
       },
+      "Milestone": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "default": "estimated",
+            "enum": [
+              "observed",
+              "derived",
+              "estimated",
+              "unknown"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "snap",
+              "kick",
+              "exchange",
+              "release",
+              "arrival",
+              "possession",
+              "advance",
+              "contact",
+              "loose",
+              "recovery",
+              "out_of_bounds",
+              "score",
+              "dead"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "t": {
+            "title": "T",
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "t"
+        ],
+        "title": "Milestone",
+        "type": "object"
+      },
+      "MotionActor": {
+        "additionalProperties": false,
+        "properties": {
+          "espn_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Espn Id"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "poses": {
+            "items": {
+              "$ref": "#/components/schemas/PoseCue"
+            },
+            "title": "Poses",
+            "type": "array"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "side": {
+            "enum": [
+              "offense",
+              "defense",
+              "official"
+            ],
+            "title": "Side",
+            "type": "string"
+          },
+          "track": {
+            "items": {
+              "$ref": "#/components/schemas/MotionKey"
+            },
+            "title": "Track",
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "side",
+          "role",
+          "track",
+          "poses"
+        ],
+        "title": "MotionActor",
+        "type": "object"
+      },
+      "MotionBall": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "title": "End",
+            "type": "number"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/BallEnd"
+          },
+          "start": {
+            "title": "Start",
+            "type": "number"
+          },
+          "style": {
+            "enum": [
+              "rest",
+              "snap",
+              "exchange",
+              "held",
+              "pass",
+              "kick",
+              "bounce",
+              "roll"
+            ],
+            "title": "Style",
+            "type": "string"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BallEnd"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "style",
+          "origin"
+        ],
+        "title": "MotionBall",
+        "type": "object"
+      },
+      "MotionKey": {
+        "additionalProperties": false,
+        "properties": {
+          "heading": {
+            "title": "Heading",
+            "type": "number"
+          },
+          "t": {
+            "title": "T",
+            "type": "number"
+          },
+          "vx": {
+            "title": "Vx",
+            "type": "number"
+          },
+          "vz": {
+            "title": "Vz",
+            "type": "number"
+          },
+          "x": {
+            "title": "X",
+            "type": "number"
+          },
+          "z": {
+            "title": "Z",
+            "type": "number"
+          }
+        },
+        "required": [
+          "t",
+          "x",
+          "z",
+          "vx",
+          "vz",
+          "heading"
+        ],
+        "title": "MotionKey",
+        "type": "object"
+      },
+      "MotionTiming": {
+        "additionalProperties": false,
+        "properties": {
+          "overrun": {
+            "title": "Overrun",
+            "type": "number"
+          },
+          "provider_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Seconds"
+          },
+          "unfilled": {
+            "title": "Unfilled",
+            "type": "number"
+          }
+        },
+        "required": [
+          "overrun",
+          "unfilled"
+        ],
+        "title": "MotionTiming",
+        "type": "object"
+      },
       "PlayBoard": {
         "additionalProperties": false,
         "properties": {
@@ -2436,6 +2669,132 @@
         "title": "PlayScript",
         "type": "object"
       },
+      "PlayScriptV2": {
+        "additionalProperties": false,
+        "properties": {
+          "actors": {
+            "items": {
+              "$ref": "#/components/schemas/MotionActor"
+            },
+            "title": "Actors",
+            "type": "array"
+          },
+          "ball": {
+            "items": {
+              "$ref": "#/components/schemas/MotionBall"
+            },
+            "title": "Ball",
+            "type": "array"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "defense": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Defense"
+          },
+          "duration": {
+            "title": "Duration",
+            "type": "number"
+          },
+          "event_id": {
+            "title": "Event Id",
+            "type": "string"
+          },
+          "label": {
+            "default": "Re-creation from play-by-play",
+            "title": "Label",
+            "type": "string"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/Line"
+            },
+            "title": "Lines",
+            "type": "array"
+          },
+          "milestones": {
+            "items": {
+              "$ref": "#/components/schemas/Milestone"
+            },
+            "title": "Milestones",
+            "type": "array"
+          },
+          "motion_end": {
+            "title": "Motion End",
+            "type": "number"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "offense": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Offense"
+          },
+          "provider_id": {
+            "title": "Provider Id",
+            "type": "string"
+          },
+          "template": {
+            "title": "Template",
+            "type": "string"
+          },
+          "timing": {
+            "$ref": "#/components/schemas/MotionTiming"
+          },
+          "version": {
+            "const": 2,
+            "default": 2,
+            "title": "Version",
+            "type": "integer"
+          },
+          "whistle": {
+            "title": "Whistle",
+            "type": "number"
+          }
+        },
+        "required": [
+          "event_id",
+          "provider_id",
+          "template",
+          "duration",
+          "whistle",
+          "motion_end",
+          "offense",
+          "defense",
+          "actors",
+          "ball",
+          "milestones",
+          "timing",
+          "lines",
+          "caption"
+        ],
+        "title": "PlayScriptV2",
+        "type": "object"
+      },
       "PlayerFacts": {
         "additionalProperties": false,
         "properties": {
@@ -2549,6 +2908,25 @@
           "players"
         ],
         "title": "PlayerSearch",
+        "type": "object"
+      },
+      "PoseCue": {
+        "additionalProperties": false,
+        "properties": {
+          "pose": {
+            "title": "Pose",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "number"
+          }
+        },
+        "required": [
+          "start",
+          "pose"
+        ],
+        "title": "PoseCue",
         "type": "object"
       },
       "Preferences": {
@@ -5394,6 +5772,18 @@
               "pattern": "^[1-9][0-9]{0,19}$",
               "title": "Event Id",
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "script_version",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 2,
+              "minimum": 1,
+              "title": "Script Version",
+              "type": "integer"
             }
           }
         ],

@@ -8,6 +8,7 @@ from uuid import UUID
 from arbit_data.league import Matchup, Player
 from arbit_data.live.board import PlayBoard
 from arbit_data.live.choreography import PlayScript
+from arbit_data.live.motion import PlayScriptV2
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -312,7 +313,7 @@ class LiveAnimationEntry(WireModel):
     source: Literal["nfl", "espn"]  # the NFL API, or ESPN as the emergency fallback (OWN-041)
     snap_at: str | None
     whistle_at: str | None
-    script: PlayScript | None
+    script: PlayScript | PlayScriptV2 | None
     board: PlayBoard | None
 
 

@@ -29,16 +29,20 @@
 - Motion data can be late, contradictory or impossible within the provider interval. Preserve authoritative state and classify the partial/overrun outcome.
 - Same-key corrections and queue backlogs must not silently replace a selected action or flash its old score after correction.
 
+## Preview checkpoint
+
+Supported runs, passes, interceptions and kickoffs reach the new motion planner and browser through the opt-in script version. The default remains the current script version. Unsupported scenarios continue through the existing builder. Shared tackle credits now survive interpretation and continue through the existing renderer until the replacement can place each credited participant. The remaining first-class families and validation are tracked below. [Preview handoff](../../project/handoffs/2026-11-07-live-animation-rebuild-preview.md).
+
 ## Slice 1 · Typed evidence and ordered actions
 
 **Files:** `libs/arbit-data/src/arbit_data/live/{contracts,nfl_api,play_facts,actions,animation,choreography}.py`. Tests in `libs/arbit-data/tests/{test_nfl_api,test_live_actions}.py`.
 
 **Interfaces:** `nfl_api.motion_evidence(record, ids) -> MotionEvidence` is used at ingest and to enrich older retained NFL records on read. `actions.sequence(play: LivePlay, facts: PlayFacts) -> ActionSequence` returns unique identified participants, ordered steps, provenance and unknowns without building motion. It receives the current revision via the canonical play. Use `interpret` for source-neutral football semantics.
 
-- [ ] Add focused failures for a stored/converted interception with one multi-role athlete and one with separate athletes. Assert the typed target ID, correct side and role reuse. Add a kickoff reversal, a missing crosswalk and an ESPN unknown-duration case.
-- [ ] Normalize the relevant raw NFL names, provider identities, credited roles, numbered description and unique yardage evidence once. Preserve the existing scoring-facing participants and consume typed roles in the animation interpreter.
+- [x] Add focused failures for a stored/converted interception with one multi-role athlete and one with separate athletes. Assert the typed target ID, correct side and role reuse. Add a kickoff reversal, a missing crosswalk and an ESPN unknown-duration case.
+- [x] Normalize the relevant raw NFL names, provider identities, credited roles, numbered description and unique yardage evidence once. Preserve the existing scoring-facing participants and consume typed roles in the animation interpreter.
 - [ ] Build ordered events for scrimmage passes, runs and sacks, kicks and their returns, possession changes and recoveries. Carry official state separately. Express unknown landmarks and provider evidence without defaulting missing numeric values to zero.
-- [ ] Verify focused tests and a read-only archived replay through the application builder. Verify no player-name branches, no real provider dependency, and existing replay behavior for other plays.
+- [x] Verify focused tests and a read-only archived replay through the application builder. Verify no player-name branches, no real provider dependency, and existing replay behavior for other plays.
 
 ## Slice 2 · Phase timing and trajectories
 

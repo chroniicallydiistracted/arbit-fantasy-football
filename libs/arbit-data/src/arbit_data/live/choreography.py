@@ -228,15 +228,26 @@ class _Track:
         facing: str | None = None,
         wait_first: bool = True,
     ) -> None:
-        """Run to (x, z) at this actor's pace and get there at `arrive`. With time to spare the
-        path bends out to `side`, up to a third longer, and any time still left is spent set in
-        place: first for a defender, who then breaks at full speed; last for a ball carrier, who
-        shouldn't stand holding the ball."""
+        """Run to the meeting point. A carrier uses spare time before reaching it."""
         distance = math.hypot(x - self.x, z - self.z)
         window = arrive - self.t
-        if distance < 0.05:
+        if distance < 0.05 and wait_first:
             settle(self, arrive, facing=facing)
             return
+        if not wait_first and window > distance / self.speed + 1e-3:
+            # Keep the approach moving. Use a cut in space and a short driving
+            # approach when the available room would make a sprint look too slow.
+            desired = min(window * self.speed, max(distance + 2.6, distance * 1.35))
+            mid = _waypoint((self.x, self.z), (x, z), desired, side or 1)
+            first = math.hypot(mid[0] - self.x, mid[1] - self.z)
+            last = math.hypot(x - mid[0], z - mid[1])
+            if first + last > 0.05:
+                duration = max(window, (first + last) / self.speed)
+                pace = (first + last) / duration
+                pose = "RUN" if pace >= 5.5 else "drive"
+                self.move(pose, first / pace, *mid, facing)
+                self.move(pose, last / pace, x, z, facing)
+                return
         path = min(max(distance, window * self.speed), distance * 1.35)
         spare = window - path / self.speed
         if wait_first and spare > 0:
@@ -1134,7 +1145,15 @@ def _interception(play: _Play) -> _Play | None:
     )
     _drop(play, qb, steps)
     earliest = qb.t + 0.55
-    intended = _named(play, rf"intended for ({_NAME})", "offense")
+    target_person = facts.intended_receiver
+    intended = (
+        (
+            target_person.espn_id,
+            target_person.name or play.names.get(target_person.espn_id or "", ""),
+        )
+        if target_person
+        else _named(play, rf"intended for ({_NAME})", "offense")
+    )
     tip = _named(play, rf"INTERCEPTED by {_NAME} \(({_NAME})\)", "defense")
     tipped = tip is not None and air < 4.0
     picker = play.add(
@@ -1166,7 +1185,7 @@ def _interception(play: _Play) -> _Play | None:
             "offense",
             play.track(*start, "receiver"),
             "right",
-            None if intended[0] else intended[1],
+            intended[1] if target_person or intended[0] is None else None,
         )
         arrive, release, _ = _route(
             play, receiver, target, air >= 18, air, qb.x, earliest, 0.0 if tipped else needed
@@ -1887,9 +1906,8 @@ def _carry(
         plans.append((index, offset, tackler, False, choice, facing))
     if running:
         track.run_by(before, z, contact - 0.13, weave, wait_first=False)
-    elif abs(track.x - before) > 0.05:
-        track.move("stumble", max(0.2, abs(track.x - before) / 3.0), before, z)
-        settle(track, contact - 0.13)
+    elif contact - 0.13 > track.t:
+        track.run_by(before, z, contact - 0.13, 1 if z < FIELD_WIDTH / 2 else -1, wait_first=False)
     track.move("hit", 0.1, hit - way * 0.4, z)
     if drive > 0:  # legs churning, the pile moving to the spot
         _churn(track, ("drive", "stumble"), drive, spot - way * 0.4, down_z)

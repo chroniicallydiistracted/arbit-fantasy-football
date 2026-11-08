@@ -18,6 +18,7 @@ import { type Game, GameBoard, GameScoreStatus } from "../GameBoard";
 import type { components } from "../generated/api";
 import { http } from "../transport";
 import { drawBoard, LedBoard, type Team } from "./led";
+import { MotionScene } from "./motion_scene";
 import { type Art, type Meta, Scene } from "./scene";
 
 type Animation = components["schemas"]["LiveAnimation"];
@@ -100,10 +101,15 @@ export function LiveField({ eventId, game }: { eventId: string; game: Game }) {
 
 function Field({ eventId, game }: { eventId: string; game: Game }) {
   const interval = useFallbackInterval();
+  const [params, setParams] = useSearchParams();
+  const preview = params.get("script_version") === "2";
   const animation = useQuery({
-    queryKey: ["live-animation", eventId],
+    queryKey: ["live-animation", eventId, preview ? 2 : 1],
     queryFn: ({ signal }) =>
-      http<Animation>(`/api/v1/live/games/${encodeURIComponent(eventId)}/animation`, { signal }),
+      http<Animation>(
+        `/api/v1/live/games/${encodeURIComponent(eventId)}/animation${preview ? "?script_version=2" : ""}`,
+        { signal },
+      ),
     refetchInterval: interval,
   });
   const art = useQuery({
@@ -114,7 +120,6 @@ function Field({ eventId, game }: { eventId: string; game: Game }) {
   });
   const reduced = usePrefersReducedMotion();
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [params, setParams] = useSearchParams();
   const selectedId = params.get("play");
   const selectedKey = selectedId
     ? `${selectedId}:${params.get("part") === "try" ? "try" : "play"}`
@@ -125,6 +130,7 @@ function Field({ eventId, game }: { eventId: string; game: Game }) {
   const [drawFailed, setDrawFailed] = useState(false);
   const [epoch, setEpoch] = useState(0); // a replay restarts the same play
   const clock = useRef({ started: performance.now(), frozen: 0 });
+  const timeline = useRef<{ key: string | undefined; epoch: number; clip?: Clip } | null>(null);
 
   const entries = animation.data?.entries;
   const home = animation.data?.home;
@@ -158,7 +164,10 @@ function Field({ eventId, game }: { eventId: string; game: Game }) {
         : null;
       const clip = {
         entry,
-        scene: new Scene(script, artData, home),
+        scene:
+          script.version === 2
+            ? new MotionScene(script, artData, home)
+            : new Scene(script, artData, home),
         board,
         length: Math.max(script.duration, board?.length ?? 0),
       };
@@ -202,10 +211,45 @@ function Field({ eventId, game }: { eventId: string; game: Game }) {
     [stillEntry, teams],
   );
   const targetKey = entry && keyOf(entry);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: a new play or replay restarts the clock
   useEffect(() => {
-    clock.current = { started: performance.now(), frozen: 0 };
-  }, [targetKey, epoch]);
+    const script = current?.entry.script;
+    const previous = timeline.current;
+    const previousScript = previous?.clip?.entry.script;
+    if (!previous || previous.key !== targetKey || previous.epoch !== epoch) {
+      clock.current = { started: performance.now(), frozen: 0 };
+    } else if (
+      current &&
+      previousScript &&
+      script &&
+      (previousScript.version === 2 || script.version === 2)
+    ) {
+      // The query retains structurally equal subtrees on revision. Caption edits
+      // leave those tracks intact and should keep the current time.
+      const motionChanged =
+        previousScript.version !== script.version ||
+        (previousScript.version === 2 &&
+          script.version === 2 &&
+          (previousScript.actors !== script.actors ||
+            previousScript.ball !== script.ball ||
+            previousScript.whistle !== script.whistle ||
+            previousScript.motion_end !== script.motion_end));
+      const was = previous.clip?.entry.board?.after;
+      const now = current.entry.board?.after;
+      const outcomeChanged =
+        was?.home.score !== now?.home.score ||
+        was?.away.score !== now?.away.score ||
+        was?.possession !== now?.possession ||
+        was?.spot !== now?.spot;
+      if (motionChanged || outcomeChanged) {
+        // Show the corrected endpoint and leave a replay of revised motion to the member.
+        clock.current = {
+          started: performance.now() - current.length * 1000,
+          frozen: current.length,
+        };
+      }
+    }
+    timeline.current = { key: targetKey, epoch, clip: current };
+  }, [targetKey, epoch, current]);
 
   const final = !selectedKey && current === newest && game.phase === "final";
   const font = useMemo(() => getComputedStyle(document.body).fontFamily || "sans-serif", []);

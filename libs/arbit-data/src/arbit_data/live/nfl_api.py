@@ -27,7 +27,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from arbit_data.live.contracts import FieldPoint, LivePlay, Participant
+from arbit_data.live.contracts import (
+    FieldPoint,
+    LivePlay,
+    MotionEvidence,
+    MotionPerson,
+    Participant,
+)
 from arbit_data.live.normalize import _kind
 from arbit_data.live.play_facts import TEXT_CODES
 
@@ -262,6 +268,77 @@ def _label(record: Mapping[str, Any], text: str, stats: set[int]) -> str:
     return "Unknown"
 
 
+def _only[T](values: set[T]) -> T | None:
+    return next(iter(values)) if len(values) == 1 else None
+
+
+def _provided_text(value: Any) -> str | None:
+    return value.strip() if isinstance(value, str) and value.strip() else None
+
+
+def motion_evidence(
+    record: Mapping[str, Any],
+    ids: Mapping[str, str],
+    teams: Mapping[str, str] | None = None,
+) -> MotionEvidence:
+    """Retain the NFL's own identities and roles alongside scoring-facing participants."""
+    people: dict[str, list[tuple[int, Mapping[str, Any]]]] = {}
+    air: set[tuple[int, int]] = set()
+    stats = record.get("stats")
+    for stat in stats if isinstance(stats, list) else ():
+        if not isinstance(stat, Mapping):
+            continue
+        kind, player = stat.get("statType"), _provided_text(stat.get("gsisPlayerId"))
+        if type(kind) is not int or not player or kind not in STAT_ROLES:
+            continue
+        people.setdefault(player, []).append((kind, stat))
+        yards = stat.get("yards")
+        if kind in (111, 112) and type(yards) is int:
+            air.add((kind, yards))
+
+    def detail(stats: list[tuple[int, Mapping[str, Any]]], key: str) -> str | None:
+        return _only({value for _, stat in stats if (value := _provided_text(stat.get(key)))})
+
+    athletes = []
+    for player, credited in people.items():
+        source_team = detail(credited, "teamId")
+        jersey = detail(credited, "gsisPlayerJerseyNumber")
+        athletes.append(
+            MotionPerson(
+                source_id=player,
+                espn_id=ids.get(player),
+                team_id=teams.get(source_team) if teams and source_team else None,
+                name=detail(credited, "gsisPlayerName"),
+                jersey=str(int(jersey))
+                if jersey and jersey.isascii() and jersey.isdecimal() and len(jersey) <= 2
+                else None,
+                roles=tuple(
+                    dict.fromkeys(
+                        role
+                        for kind, _ in credited
+                        for role in (("intendedReceiver",) if kind == 115 else STAT_ROLES[kind])
+                    )
+                ),
+                stat_types=tuple(dict.fromkeys(kind for kind, _ in credited)),
+            )
+        )
+    reported = _only(air)
+    return MotionEvidence(
+        people=tuple(athletes),
+        numbered_text=_provided_text(record.get("playDescriptionWithJerseyNumbers")),
+        air_yards=reported[1] if reported else None,
+        air_stat_type=(111 if reported[0] == 111 else 112) if reported else None,
+    )
+
+
+def with_motion_evidence(play: LivePlay, ids: Mapping[str, str]) -> LivePlay:
+    """Older stored NFL revisions use the same adapter without modifying storage."""
+    raw = (play.nfl or {}).get("play")
+    if play.motion_evidence is not None or not isinstance(raw, Mapping):
+        return play
+    return play.model_copy(update={"motion_evidence": motion_evidence(raw, ids)})
+
+
 def _participants(
     records: list[tuple[Mapping[str, Any], Mapping[int, tuple[str, ...]]]],
     ids: Mapping[str, str],
@@ -402,7 +479,11 @@ def to_live_plays(
             running[link.home if team == nfl_home else link.away] += SCORE_VALUES[kind]
         after[id(record)] = dict(running)
     summary = game.get("summary") or {}
-    nfl_home = (game.get("homeTeam") or {}).get("id")
+    nfl_teams = {
+        source_id: team
+        for side, team in (("homeTeam", link.home), ("awayTeam", link.away))
+        if (source_id := _provided_text((game.get(side) or {}).get("id")))
+    }
     players = _game_players(records, ids)
     plays: list[LivePlay] = []
     for record in records:
@@ -497,6 +578,7 @@ def to_live_plays(
                 clock_end=clock_end(record),
                 jerseys=jerseys or None,
                 nfl={"play": dict(record), **({"try": dict(tried)} if tried else {})},
+                motion_evidence=motion_evidence(record, ids, nfl_teams),
             )
         )
     return tuple(plays)

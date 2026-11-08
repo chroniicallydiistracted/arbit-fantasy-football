@@ -2,7 +2,7 @@
 
 ## Current state
 
-The owner supplied midfield references for every NFL stadium in `data/nfl_stadium_mockups/`. They want the generic surround replaced by each home stadium's design (OWN-050), recreated as Arbit's own art rather than the references themselves (OWN-054). This is implemented (ENG-047) and awaits the owner's review.
+The owner supplied midfield references for every NFL stadium in `data/nfl_stadium_mockups/`. They want the generic surround replaced by each home stadium's design (OWN-050), recreated as Arbit's own art rather than the references themselves (OWN-059). This is implemented (ENG-047) and awaits the owner's review.
 - **Not published.** It is game day, and publishing changes the running app's art, which needs the owner's approval outside game windows.
 - **Codex** is refactoring the choreographer and renderer at the same time; its plan includes `live_art.py` atlas tooling. This work changes `live_art.py` by one venue lookup, and otherwise only `stadium.py` and the new `venues.py`.
 

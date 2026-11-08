@@ -263,7 +263,11 @@ function PlayFeed({ eventId }: { eventId: string }) {
               </span>
               <span className="play-text">
                 <Link
-                  to={`?${new URLSearchParams({ ...(own ? { own: "true" } : {}), play: play.id })}`}
+                  to={`?${new URLSearchParams({
+                    ...(own ? { own: "true" } : {}),
+                    ...(params.get("script_version") === "2" ? { script_version: "2" } : {}),
+                    play: play.id,
+                  })}`}
                   className="link-button quiet"
                   aria-current={params.get("play") === play.id ? "true" : undefined}
                   onClick={() => document.getElementById("live-field")?.scrollIntoView()}

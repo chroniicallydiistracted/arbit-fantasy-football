@@ -874,13 +874,15 @@ def install_member_routes(
 
     @router.get("/api/v1/live/games/{event_id}/animation", response_model=LiveAnimation)
     def live_animation(
-        request: Request, event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$")
+        request: Request,
+        event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$"),
+        script_version: int = Query(default=1, ge=1, le=2),
     ) -> LiveAnimation:
         """Every play's script and board, for the browser's live field (OWN-042)."""
         member = principal(request)
         _, document, _ = stored()
         require_binding(member, document)
-        made = live_animation_build(uow, event_id)
+        made = live_animation_build(uow, event_id, script_version=script_version)
         if made is None:
             raise HTTPException(404, "GAME_NOT_FOUND")
         revision = art_revision(event_id)

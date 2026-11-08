@@ -10,7 +10,7 @@ type Actor = components["schemas"]["Actor"];
 type Segment = components["schemas"]["Segment"];
 type BallSegment = components["schemas"]["BallSegment"];
 type BallEnd = components["schemas"]["BallEnd"];
-type Vec = [number, number, number];
+export type Vec = [number, number, number];
 
 export type FrameInfo = {
   w: number;
@@ -89,6 +89,8 @@ const norm = (a: Vec): Vec => {
 const css = (c: number[]) =>
   c.length > 3 ? `rgba(${c[0]},${c[1]},${c[2]},${c[3] / 255})` : `rgb(${c[0]},${c[1]},${c[2]})`;
 
+const FIELD_WIDTH_YARDS = 160 / 3;
+
 export class Camera {
   position: Vec;
   forward: Vec;
@@ -139,6 +141,26 @@ export function actorAt(actor: Actor, t: number, cycles: Meta["cycles"]) {
   return { x, z, pose, base: seg.pose, left: facing === "left" };
 }
 
+export type ActorNow = ReturnType<typeof actorAt> & { widthScale?: number };
+
+export function spritePlacement(
+  meta: Meta,
+  now: ActorNow,
+  frame: FrameInfo,
+  sx: number,
+  sy: number,
+  perYard: number,
+  width = frame.w,
+  height = frame.h,
+) {
+  const scaleY = Math.max(meta.camera.min_art, perYard * meta.art_pixel_yards);
+  const scaleX = scaleY * (now.widthScale ?? 1);
+  const w = Math.max(1, Math.round(width * scaleX));
+  const h = Math.max(1, Math.round(height * scaleY));
+  const anchor = now.left ? width - frame.torso : frame.torso;
+  return { left: Math.round(sx - anchor * scaleX), top: Math.round(sy - h), w, h, scaleX, scaleY };
+}
+
 // The flight of a pass, kick or snap: straight across the ground, an arc under gravity above it.
 function flight(start: number, end: number, from: Vec, to: Vec) {
   const duration = end - start;
@@ -154,7 +176,7 @@ function flight(start: number, end: number, from: Vec, to: Vec) {
   };
 }
 
-type BallNow = { at: Vec; spin: string; since: number } | null;
+export type BallNow = { at: Vec; spin: string; since: number; depth?: number } | null;
 
 export class Scene {
   camera: Camera;
@@ -268,6 +290,10 @@ export class Scene {
     );
   }
 
+  protected stateAt(actor: Actor, t: number): ActorNow {
+    return actorAt(actor, t, this.art.meta.cycles);
+  }
+
   // Draw the moment t into a canvas the size of the band (the full frame from band.top).
   draw(ctx: CanvasRenderingContext2D, t: number, tagFont: string) {
     const { meta } = this.art;
@@ -285,8 +311,8 @@ export class Scene {
       [
         [line.x - 0.28, 0],
         [line.x + 0.28, 0],
-        [line.x + 0.28, 53.3],
-        [line.x - 0.28, 53.3],
+        [line.x + 0.28, FIELD_WIDTH_YARDS],
+        [line.x - 0.28, FIELD_WIDTH_YARDS],
       ].forEach(([a, b], i) => {
         const [sx, sy] = P(a, 0, b);
         if (i === 0) ctx.moveTo(sx, sy);
@@ -302,7 +328,7 @@ export class Scene {
     const tags: { x: number; y: number; text: string; colors: [number[], number[]] | null }[] = [];
     const carrier = this.carrier(t);
     for (const actor of this.script.actors) {
-      const now = actorAt(actor, t, meta.cycles);
+      const now = this.stateAt(actor, t);
       items.push({
         z: now.z,
         order: 0,
@@ -314,7 +340,12 @@ export class Scene {
         items.push({ z, order: 0, draw: () => piece(ctx) });
     }
     const ball = this.ball(t);
-    if (ball) items.push({ z: ball.at[2], order: 1, draw: () => this.drawBall(ctx, t, ball, P) });
+    if (ball)
+      items.push({
+        z: ball.depth ?? ball.at[2],
+        order: 1,
+        draw: () => this.drawBall(ctx, t, ball, P),
+      });
     items.sort((a, b) => b.z - a.z || a.order - b.order);
     for (const item of items) item.draw();
     this.drawTags(ctx, tags, tagFont);
@@ -323,7 +354,7 @@ export class Scene {
   private drawActor(
     ctx: CanvasRenderingContext2D,
     actor: Actor,
-    now: ReturnType<typeof actorAt>,
+    now: ActorNow,
     P: (x: number, y: number, z: number) => [number, number, number],
     tags: { x: number; y: number; text: string; colors: [number[], number[]] | null }[],
     carrying: boolean,
@@ -348,16 +379,20 @@ export class Scene {
       : meta.teams[side ?? "home"].sprites.rects[`${now.pose}|${skin}`];
     if (!rect) return;
     const [sx, sy, perYard] = P(now.x, 0, now.z);
-    const art = Math.max(meta.camera.min_art, perYard * meta.art_pixel_yards);
-    const w = Math.max(1, Math.round(rect[2] * art));
-    const h = Math.max(1, Math.round(rect[3] * art));
-    const anchor = now.left ? rect[2] - info.torso : info.torso;
+    const { left, top, w, h, scaleX, scaleY } = spritePlacement(
+      meta,
+      now,
+      info,
+      sx,
+      sy,
+      perYard,
+      rect[2],
+      rect[3],
+    );
     ctx.fillStyle = SHADOW;
     ctx.beginPath();
     ctx.ellipse(sx, sy - perYard * 0.01, w * 0.42, perYard * 0.21, 0, 0, Math.PI * 2);
     ctx.fill();
-    const left = Math.round(sx - anchor * art);
-    const top = Math.round(sy - h);
     ctx.save();
     if (now.left) {
       ctx.translate(left + w, top);
@@ -379,13 +414,13 @@ export class Scene {
     if (carrying && anchors) {
       const held = /^(throw|punt|handoff)/.test(now.pose) ? anchors.near_hand : anchors.chest;
       if (held) {
-        const hand = now.left ? rect[2] - held[0] : held[0];
-        const bw = Math.max(1, Math.round(this.art.ball.width * art));
-        const bh = Math.max(1, Math.round(this.art.ball.height * art));
+        const hand = now.left ? w - held[0] * scaleX : held[0] * scaleX;
+        const bw = Math.max(1, Math.round(this.art.ball.width * scaleX));
+        const bh = Math.max(1, Math.round(this.art.ball.height * scaleY));
         ctx.drawImage(
           this.art.ball,
-          Math.round(sx - anchor * art + hand * art - bw / 2),
-          Math.round(top + held[1] * art - bh / 2),
+          Math.round(left + hand - bw / 2),
+          Math.round(top + held[1] * scaleY - bh / 2),
           bw,
           bh,
         );
