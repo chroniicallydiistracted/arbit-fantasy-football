@@ -4,13 +4,11 @@ The owner's four steps, run by the worker's `nfl` lane:
 1. **Discover.** The NFL week containing today (`/football/v2/weeks/date/{date}`), then that
    week's schedule, gives each game's UUID and kickoff. Each is linked to ESPN's event, which the
    ESPN scoreboard lane keeps, by kickoff time and teams.
-2. **Poll.** One small request (`/football/v2/stats/live/game-summaries`, about 11 kB for the
-   week) gives every game's phase, clock, down, spot and score. It is read every 2 seconds while a
-   game is on, every 30 within half an hour of a kickoff, and every 5 minutes otherwise.
-3. **Detect.** A game whose summary changed is fetched in full (`/experience/v2/gamedetails`),
-   and an active game is refetched every 20 seconds anyway, so corrections to earlier plays are
-   seen. Its plays become ESPN-shaped plays (`nfl_api.to_live_plays`) and are compared with the
-   stored revisions play by play.
+2. **Poll.** Each active game gets a full `/experience/v2/gamedetails` read every two-second
+   round. The week summaries still provide game state, with 30-second pregame and five-minute
+   idle rounds. Each summary or detail request uses a new CDN cache key.
+3. **Detect.** Convert changed responses to canonical plays and compare them with the stored
+   revisions, including corrections to earlier plays.
 4. **Publish.** `store.publish_plays` appends changed plays and emits `game.plays` or
    `game.corrected` in the same transaction, so the app's events follow the commit.
 
@@ -29,17 +27,19 @@ import re
 import time
 import uuid
 from collections.abc import Callable, Mapping
+from concurrent.futures import ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from http.client import HTTPException
 from io import BytesIO
 from pathlib import Path
+from threading import local
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, build_opener
 
-from sqlalchemy import and_, select, update
+from sqlalchemy import and_, or_, select, update
 from sqlalchemy.dialects.postgresql import insert
 
 from arbit_data import freshness
@@ -48,19 +48,18 @@ from arbit_data.errors import SourceError
 from arbit_data.espn.http_deadline import DeadlineHTTPSHandler
 from arbit_data.espn.transport import _NoRedirect, _retry_after
 from arbit_data.live import nfl_log, store
+from arbit_data.live.contracts import LivePlay
 from arbit_data.live.nfl_api import NFL_CODES, GameLink, to_live_plays
 from arbit_data.public_sources.transport import MAX_BYTES
-from arbit_data.schema import entity_alias, nfl_api_game, nfl_game, nfl_play_revision, nfl_team
+from arbit_data.schema import entity_alias, nfl_api_game, nfl_game, nfl_team
 
 HOST = "https://api.nfl.com"
 SOURCE = "nfl.api.plays"
 ACTIVE_SECONDS, PREGAME_SECONDS, IDLE_SECONDS = 2.0, 30.0, 300.0
-REFRESH_SECONDS = 20.0  # an active game is refetched this often, for corrections
-UNLISTED_SECONDS = 5.0  # a live game the summaries don't list is fetched in full this often
-CHASE_SECONDS = 30.0  # after the summary changes, how long to keep fetching a record still cached
+MAX_DETAIL_WORKERS = 8
 DISCOVER_SECONDS = 6 * 3600
-STALE_SECONDS = 90  # past this the ESPN lane takes the game's plays back (the fallback)
-FINAL = {"FINAL", "FINAL_OVERTIME"}
+STALE_SECONDS = store.NFL_STALE_SECONDS
+FINAL = store.NFL_FINAL_PHASES
 FINISHED = FINAL | {"CANCELLED", "POSTPONED"}
 NOT_ACTIVE = FINISHED | {None, "", "PREGAME", "SCHEDULED"}
 INCLUDES = {
@@ -312,41 +311,32 @@ def _instant(value: Any) -> datetime | None:
     return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
 
 
-def retire_espn_leftovers(uow: UnitOfWork, event_id: str, nfl_ids: set[str]) -> int:
-    """ESPN numbers timeouts and two-minute warnings itself, so once the NFL has a game, ESPN's
-    administrative plays without an NFL record would show twice. They stop being current; their
-    history stays. ESPN football plays always share the NFL's IDs and are never touched here."""
-    with uow.engine.begin() as c:
-        rows = c.execute(
-            select(nfl_play_revision.c.play_id, nfl_play_revision.c.payload).where(
-                nfl_play_revision.c.event_id == event_id, nfl_play_revision.c.is_current
-            )
-        ).all()
-        stale = [
-            r.play_id
-            for r in rows
-            if r.play_id not in nfl_ids
-            and (r.payload or {}).get("source") != "nfl"
-            and (r.payload or {}).get("kind") in ("administrative", "unknown")
-        ]
-        if stale:
-            c.execute(
-                update(nfl_play_revision)
-                .where(
-                    nfl_play_revision.c.event_id == event_id, nfl_play_revision.c.play_id.in_(stale)
-                )
-                .values(is_current=False)
-            )
-    return len(stale)
-
-
 def nfl_primary(uow: UnitOfWork, event_id: str, now: datetime) -> bool:
-    """Whether the NFL lane has this game's plays fresh, so the ESPN lane leaves them alone."""
+    """A fresh NFL read or a confirmed NFL final owns this game's play feed."""
     with uow.engine.connect() as c:
-        seen = c.scalar(
-            select(nfl_api_game.c.details_observed_at).where(nfl_api_game.c.event_id == event_id)
-        )
-    return seen is not None and now - seen <= timedelta(seconds=STALE_SECONDS)
+        return store.nfl_detail_primary(c, event_id, now)
+
+
+def _usable_final(plays: tuple[LivePlay, ...], summary: dict[str, Any], phase: str | None) -> bool:
+    """A final needs football through the last period, an end marker, and matching totals."""
+    last = plays[-1]
+    if last.cancelled or (last.nfl or {}).get("play", {}).get("playType") != "END_GAME":
+        return False
+    periods = {
+        play.period
+        for play in plays
+        if not play.cancelled and play.kind not in ("administrative", "unknown")
+    }
+    last_period = 5 if phase == "FINAL_OVERTIME" else 4
+    if not set(range(1, last_period + 1)).issubset(periods):
+        return False
+    for side, score in (("homeTeam", last.home_score), ("awayTeam", last.away_score)):
+        team = summary.get(side)
+        totals = team.get("score") if isinstance(team, dict) else None
+        total = totals.get("total") if isinstance(totals, dict) else None
+        if type(total) is not int or str(total) != score:
+            return False
+    return True
 
 
 @dataclass
@@ -358,6 +348,7 @@ class Watched:
     phase: str | None
     summary_hash: str | None
     details_at: datetime | None
+    details_phase: str | None = None
 
 
 class NflFeed:
@@ -374,6 +365,10 @@ class NflFeed:
     ):
         self.uow, self.season, self.clock, self.log, self.lane = uow, season, clock, log, lane
         self.client = client or NflApiClient()
+        self.detail_pool = (
+            ThreadPoolExecutor(max_workers=MAX_DETAIL_WORKERS) if client is None else None
+        )
+        self.detail_clients = local()
         self.week: tuple[str, int] | None = None  # (season type, week)
         self.discovered_at: datetime | None = None
         self.summaries_due: datetime | None = None
@@ -383,24 +378,34 @@ class NflFeed:
         self.live_log = live_log or nfl_log.LiveLog(
             on_problem=lambda code: self.log(event="capture_problem", code=code)
         )
-        self.chasing: dict[str, datetime] = {}  # game → until when to refetch a stale record
-        self.plays_seen: dict[str, str] = {}  # game → fingerprint of its plays last fetched
 
     def _get(
-        self, route: str, path: str, params: Mapping[str, Any] | None = None, **context: Any
+        self,
+        route: str,
+        path: str,
+        params: Mapping[str, Any] | None = None,
+        *,
+        fresh: bool = False,
+        client: NflApiClient | None = None,
+        **context: Any,
     ) -> tuple[Any, bytes]:
         """A request, written to the live log with its timing, cache headers and what it says."""
+        client = client or self.client
+        if fresh:
+            cache_key = uuid.uuid4().hex
+            params = {**(params or {}), "_cache_probe": cache_key}
+            context["cache_key"] = cache_key
         try:
-            payload, body = self.client.get(path, params)
+            payload, body = client.get(path, params)
         except SourceError as error:
-            self.live_log.request(self.lane, route, self.client, error=error.code, **context)
+            self.live_log.request(self.lane, route, client, error=error.code, **context)
             raise
         facts: dict[str, Any] = {}
         if route == "summaries":
             facts = nfl_log.summaries(payload)
         elif route in ("v2", "v1", "slug", "weekly"):
             facts = nfl_log.plays(payload)
-        self.live_log.request(self.lane, route, self.client, **context, **facts)
+        self.live_log.request(self.lane, route, client, **context, **facts)
         return payload, body
 
     # 1. Discover --------------------------------------------------------------------------------
@@ -474,11 +479,19 @@ class NflFeed:
         with self.uow.engine.connect() as c:
             rows = c.execute(
                 select(nfl_api_game).where(
-                    and_(
-                        nfl_api_game.c.season == self.season,
-                        nfl_api_game.c.season_type == self.week[0],
-                        nfl_api_game.c.week == self.week[1],
-                    )
+                    nfl_api_game.c.season == self.season,
+                    or_(
+                        and_(
+                            nfl_api_game.c.season_type == self.week[0],
+                            nfl_api_game.c.week == self.week[1],
+                        ),
+                        # A linked legacy final may still need reconciliation after rollover.
+                        and_(
+                            nfl_api_game.c.event_id.is_not(None),
+                            nfl_api_game.c.phase.in_(FINAL),
+                            nfl_api_game.c.details_phase.is_(None),
+                        ),
+                    ),
                 )
             ).all()
         return [
@@ -490,98 +503,154 @@ class NflFeed:
                 r.phase,
                 r.summary_hash,
                 r.details_observed_at,
+                r.details_phase,
             )
             for r in rows
         ]
 
     def poll(self, now: datetime) -> float:
-        """Read the week's summaries and fetch every game that changed. Returns the next wait."""
+        """Refresh week state and read every active game's full record."""
         assert self.week is not None
-        payload, _ = self._get(
-            "summaries",
-            "/football/v2/stats/live/game-summaries",
-            {"season": self.season, "seasonType": self.week[0], "week": self.week[1]},
-        )
-        if not isinstance(payload, dict) or not isinstance(payload.get("data"), list):
-            raise SourceError("NFL_API_SUMMARIES_INVALID")
-        summaries = {
-            str(s["gameId"]): s for s in payload["data"] if isinstance(s, dict) and s.get("gameId")
-        }
+        summary_error = None
+        try:
+            payload, _ = self._get(
+                "summaries",
+                "/football/v2/stats/live/game-summaries",
+                {"season": self.season, "seasonType": self.week[0], "week": self.week[1]},
+                fresh=True,
+            )
+            if not isinstance(payload, dict) or not isinstance(payload.get("data"), list):
+                raise SourceError("NFL_API_SUMMARIES_INVALID")
+            summaries = {
+                str(s["gameId"]): s
+                for s in payload["data"]
+                if isinstance(s, dict) and s.get("gameId")
+            }
+        except SourceError as error:
+            if error.code == "RATE_LIMITED":
+                raise
+            summary_error = error
+            summaries = {}
+
         watched = self._watched()
-        any_active = False
-        for game in watched:
-            summary = summaries.get(game.game_id)
-            phase = (summary or {}).get("phase") or game.phase
-            digest = (
-                hashlib.sha256(json.dumps(summary, sort_keys=True).encode()).hexdigest()
-                if summary
-                else None
-            )
-            # Live from kickoff until the summary says final, whatever the summary shows: a
-            # game the summaries don't list yet is still watched by its own record.
-            near_kickoff = game.kickoff is not None and game.kickoff - timedelta(
-                minutes=5
-            ) <= now <= game.kickoff + timedelta(hours=6)
-            active = phase not in NOT_ACTIVE or (near_kickoff and phase not in FINISHED)
-            any_active = any_active or active
-            changed = digest is not None and digest != game.summary_hash
-            every = REFRESH_SECONDS if summary is not None else UNLISTED_SECONDS
-            refresh = active and (
-                game.details_at is None or (now - game.details_at).total_seconds() >= every
-            )
-            finished_unread = phase in FINAL and game.details_at is None and summary is not None
-            deadline = self.chasing.get(game.game_id)
-            chase = deadline is not None and now <= deadline
-            moved = changed and (active or phase in FINAL)
-            # If a final detail still lags after the fast chase, retry at the correction cadence.
-            final_pending = phase in FINAL and changed and deadline is not None
-            if final_pending and not chase and near_kickoff:
-                moved = game.details_at is None or now - game.details_at >= timedelta(
-                    seconds=REFRESH_SECONDS
+        if self.ids_at is None or now - self.ids_at > timedelta(hours=6):
+            self.ids, self.ids_at = gsis_to_espn(self.uow), now
+        if self.detail_pool is not None and len(watched) > 1:
+            # Each thread keeps its own transport and request receipts. Wait for the whole
+            # round so the same game can never be published by two overlapping rounds.
+            reads = [
+                self.detail_pool.submit(
+                    self._poll_in_thread, game, summaries.get(game.game_id), now
                 )
-                any_active = True
-            acknowledged = not final_pending
-            if game.event_id and (moved or chase or refresh or finished_unread):
-                reason = (
-                    "summary" if moved else "chase" if chase else "refresh" if refresh else "final"
+                for game in watched
+            ]
+            wait(reads)
+            errors = [failure for read in reads if (failure := read.exception()) is not None]
+            for failure in errors:
+                if not isinstance(failure, (SourceError, ValueError, KeyError, TypeError)):
+                    raise failure
+            limits = [e for e in errors if isinstance(e, SourceError) and e.code == "RATE_LIMITED"]
+            if limits:
+                raise max(limits, key=lambda error: error.retry_after_seconds or 0)
+            any_active = any(read.result() for read in reads if read.exception() is None)
+            if errors and not any_active:
+                raise errors[0]
+            for failure in errors:
+                self.log(
+                    event="game_error",
+                    code=failure.code if isinstance(failure, SourceError) else "NFL_API_INVALID",
                 )
-                before = self.plays_seen.get(game.game_id)
-                detail_phase = self.read_game(game, reason=reason)
-                acknowledged = True
-                if phase in FINAL and detail_phase not in FINAL and near_kickoff:
-                    self.chasing.setdefault(game.game_id, now + timedelta(seconds=CHASE_SECONDS))
-                    any_active = True
-                    acknowledged = False
-                elif phase in FINISHED or self.plays_seen.get(game.game_id) != before:
-                    self.chasing.pop(game.game_id, None)  # the record caught up
-                elif moved:
-                    # The summary moved but the record is still the cached copy: keep fetching it.
-                    self.chasing[game.game_id] = now + timedelta(seconds=CHASE_SECONDS)
-            if summary is not None and changed and (acknowledged or not near_kickoff):
-                # A failed detail read must leave the summary eligible for retry, including final.
-                with self.uow.engine.begin() as c:
-                    c.execute(
-                        update(nfl_api_game)
-                        .where(nfl_api_game.c.game_id == game.game_id)
-                        .values(summary=summary, summary_hash=digest, phase=phase, observed_at=now)
-                    )
-            if not any_active and game.game_id in self.chasing:
-                any_active = now <= self.chasing[game.game_id]
-            if game.game_id in self.chasing and not active and not near_kickoff:
-                self.chasing.pop(game.game_id)
+        else:
+            results = [self._poll_game(game, summaries.get(game.game_id), now) for game in watched]
+            any_active = any(results)
+
+        if summary_error is not None:
+            if not any_active:
+                raise summary_error
+            self.log(event="summary_error", code=summary_error.code)
         pregame = any(
             g.kickoff is not None and timedelta(0) <= g.kickoff - now <= timedelta(minutes=30)
             for g in watched
         )
         return ACTIVE_SECONDS if any_active else PREGAME_SECONDS if pregame else IDLE_SECONDS
 
-    def read_game(self, game: Watched, *, reason: str) -> str | None:
+    def _poll_in_thread(self, game: Watched, summary: dict[str, Any] | None, now: datetime) -> bool:
+        if not hasattr(self.detail_clients, "client"):
+            self.detail_clients.client = NflApiClient()
+        client: NflApiClient = self.detail_clients.client
+        return self._poll_game(game, summary, now, client=client)
+
+    def _poll_game(
+        self,
+        game: Watched,
+        summary: dict[str, Any] | None,
+        now: datetime,
+        *,
+        client: NflApiClient | None = None,
+    ) -> bool:
+        reported = (summary or {}).get("phase")
+        phase = reported if isinstance(reported, str) and reported else game.phase
+        if game.details_phase in FINAL:
+            phase = game.details_phase
+        elif game.phase in FINAL and phase not in FINISHED:
+            phase = game.phase  # a lagging summary cannot reopen a completed record
+        near_kickoff = game.kickoff is not None and (
+            game.kickoff - timedelta(minutes=5) <= now <= game.kickoff + timedelta(hours=6)
+        )
+        active = phase not in FINISHED and (phase not in NOT_ACTIVE or near_kickoff)
+        final_pending = (
+            game.event_id is not None and phase in FINAL and game.details_phase not in FINAL
+        )
+        active = active or (final_pending and near_kickoff)
+        digest = (
+            hashlib.sha256(json.dumps(summary, sort_keys=True).encode()).hexdigest()
+            if summary
+            else None
+        )
+        changed = digest is not None and digest != game.summary_hash
+        check_final = game.event_id is not None and phase in FINAL and (final_pending or changed)
+
+        if game.event_id and (active or check_final):
+            detail_phase = self.read_game(
+                game, reason="active" if active else "final", client=client
+            )
+            if detail_phase in FINAL:
+                phase, active, check_final = detail_phase, False, False
+            elif detail_phase not in NOT_ACTIVE and not check_final:
+                phase = detail_phase
+        values: dict[str, Any] = {}
+        if changed and not check_final:
+            values.update(summary=summary, summary_hash=digest, observed_at=now)
+        # Linked finals set their phase when they publish. Keep unlinked summary
+        # phases so discovery can retry their details once an event is found.
+        if phase != game.phase and (phase not in FINAL or not game.event_id) and not check_final:
+            values["phase"] = phase
+        if values:
+            statement = update(nfl_api_game).where(
+                nfl_api_game.c.game_id == game.game_id, nfl_api_game.c.observed_at <= now
+            )
+            if phase not in FINAL:
+                statement = statement.where(
+                    or_(
+                        nfl_api_game.c.details_phase.is_(None),
+                        nfl_api_game.c.details_phase.not_in(FINAL),
+                    )
+                )
+            with self.uow.engine.begin() as c:
+                c.execute(statement.values(**values))
+        return active
+
+    def read_game(
+        self, game: Watched, *, reason: str, client: NflApiClient | None = None
+    ) -> str | None:
         game_id, event_id = game.game_id, game.event_id
         assert event_id is not None
         details, body = self._get(
             "v2",
             f"/experience/v2/gamedetails/{game_id}",
             INCLUDES,
+            fresh=True,
+            client=client,
             game=game_id,
             event_id=event_id,
             reason=reason,
@@ -595,11 +664,16 @@ class NflFeed:
                 c.execute(
                     update(nfl_api_game).where(nfl_api_game.c.game_id == game_id).values(slug=slug)
                 )
-        phase = (details.get("summary") or {}).get("phase")
+        summary = details.get("summary")
+        summary = summary if isinstance(summary, dict) else {}
+        reported = summary.get("phase")
+        phase = reported if isinstance(reported, str) else None
+        if game.details_phase in FINAL and phase not in FINAL:
+            return None
         digest = hashlib.sha256(body).hexdigest()
-        fingerprint = nfl_log.fingerprint((details.get("driveChart") or {}).get("plays"))
-        if self.ids_at is None or now - self.ids_at > timedelta(hours=6):
-            self.ids, self.ids_at = gsis_to_espn(self.uow), now
+        nfl_read = store.NflPlayRead(game_id, phase)
+        if store.plays_unchanged(self.uow, event_id, digest, now, nfl_read=nfl_read):
+            return phase
         with self.uow.engine.connect() as c:
             espn = c.execute(
                 select(nfl_game.c.payload).where(nfl_game.c.event_id == event_id)
@@ -612,7 +686,11 @@ class NflFeed:
         plays = to_live_plays(details, link, self.ids, self.season)
         if not any(p.kind != "administrative" for p in plays):
             return None  # nothing to show yet: ESPN keeps the game
-        change = store.publish_plays(self.uow, event_id, plays, now, body_hash=digest)
+        if phase in FINAL and not _usable_final(plays, summary, phase):
+            return None
+        change = store.publish_plays(
+            self.uow, event_id, plays, now, body_hash=digest, nfl_read=nfl_read
+        )
         if change.any:
             self.live_log.write(
                 self.lane,
@@ -626,14 +704,6 @@ class NflFeed:
                 revised=change.revised,
                 cancelled=change.cancelled,
             )
-        retire_espn_leftovers(self.uow, event_id, {p.provider_id for p in plays})
-        with self.uow.engine.begin() as c:
-            c.execute(
-                update(nfl_api_game)
-                .where(nfl_api_game.c.game_id == game_id)
-                .values(details_hash=digest, details_observed_at=now)
-            )
-        self.plays_seen[game_id] = fingerprint
         if change.any:
             self.log(
                 event="plays",
@@ -642,10 +712,12 @@ class NflFeed:
                 revised=len(change.revised),
                 cancelled=len(change.cancelled),
             )
-        return phase if isinstance(phase, str) else None
+        return phase
 
     def step(self) -> float:
         now = self.clock()
+        if self.summaries_due is not None and now < self.summaries_due:
+            return min(1.0, (self.summaries_due - now).total_seconds())
         try:
             if (
                 self.week is None
@@ -653,9 +725,8 @@ class NflFeed:
                 or (now - self.discovered_at).total_seconds() >= DISCOVER_SECONDS
             ):
                 self.discover(now)
-            if self.summaries_due is not None and now < self.summaries_due:
-                return min(1.0, (self.summaries_due - now).total_seconds())
-            wait = self.poll(now)
+            started = self.clock()
+            wait = self.poll(started)
         except (SourceError, ValueError, KeyError, TypeError) as error:
             code = error.code if isinstance(error, SourceError) else "NFL_API_INVALID"
             self.failures += 1
@@ -681,5 +752,5 @@ class NflFeed:
             stale_after_seconds=int(max(STALE_SECONDS, 3 * wait)),
             changed=False,
         )
-        self.summaries_due = self.clock() + timedelta(seconds=wait)
-        return min(1.0, wait)
+        self.summaries_due = started + timedelta(seconds=wait)
+        return min(1.0, max(0.0, (self.summaries_due - self.clock()).total_seconds()))

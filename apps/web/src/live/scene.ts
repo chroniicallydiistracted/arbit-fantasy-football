@@ -207,7 +207,8 @@ export class Scene {
     return [now.x + (now.left ? -dx : dx), dy, now.z];
   }
 
-  ball(t: number): BallNow {
+  ball(time: number): BallNow {
+    const t = Math.min(time, this.script.duration - 1e-6);
     for (let i = 0; i < this.script.ball.length; i += 1) {
       const seg: BallSegment = this.script.ball[i];
       if (seg.start <= t && t < seg.end) {
@@ -227,7 +228,8 @@ export class Scene {
     return null;
   }
 
-  carrier(t: number): string | null {
+  carrier(time: number): string | null {
+    const t = Math.min(time, this.script.duration - 1e-6);
     const held = this.script.ball.find(
       (seg) => seg.state === "held" && seg.start <= t && t < seg.end,
     );

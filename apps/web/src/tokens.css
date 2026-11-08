@@ -57,6 +57,7 @@
   --radius: 2px;
   --content-max: 1520px;
   --rail: 22rem;
+  --game-tile-width: 16rem;
   --tabbar: 3.5rem;
   --motion-fast: 120ms;
   --motion-normal: 200ms;

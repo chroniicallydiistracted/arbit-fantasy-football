@@ -22,6 +22,7 @@ from arbit_data.live.board import GameBoard, PlayBoard
 from arbit_data.live.choreography import PlayScript, choreograph
 from arbit_data.live.contracts import LivePlay
 from arbit_data.live.kicking import choreograph_try
+from arbit_data.live.nfl_api import attached_try
 from arbit_data.live.pacing import pace
 from arbit_data.live.play_facts import GameTeams, interpret, text_codes
 from arbit_data.schema import nfl_game, nfl_play_revision, nfl_team
@@ -35,9 +36,12 @@ def real_seconds(play: LivePlay) -> float | None:
     """The play's snap-to-whistle time from the NFL record, when it has both."""
     if not play.snap_at or not play.whistle_at:
         return None
-    start = datetime.fromisoformat(play.snap_at.replace("Z", "+00:00"))
-    end = datetime.fromisoformat(play.whistle_at.replace("Z", "+00:00"))
-    seconds = (end - start).total_seconds()
+    try:
+        start = datetime.fromisoformat(play.snap_at.replace("Z", "+00:00"))
+        end = datetime.fromisoformat(play.whistle_at.replace("Z", "+00:00"))
+        seconds = (end - start).total_seconds()
+    except (TypeError, ValueError):
+        return None
     return seconds if 0 < seconds < 60 else None
 
 
@@ -117,7 +121,8 @@ def build(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
         revision = content_hash(play.model_dump(mode="json"))
         now = units.now()
         units.saw(facts)
-        boards: Iterable[PlayBoard] = board.boards(play, facts)
+        attempt = attached_try(play)
+        boards: Iterable[PlayBoard] = board.boards(play, facts, attempt=attempt)
         key = (event_id, play.provider_id, revision + content_hash(now))
         with _LOCK:
             cached = _CACHE.get(key)
@@ -126,17 +131,33 @@ def build(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
             script = (
                 None
                 if facts.shape in ("timeout", "other")
-                else choreograph(facts, seed, names, positions, now)
+                else choreograph(facts, seed, names, positions, now, real_seconds(play))
             )
-            if script is not None:
+            if script is not None and script.note is None:
                 script = pace(
                     script, real_seconds(play)
                 )  # the NFL's snap-to-whistle time (OWN-041)
-            tried = (
-                choreograph_try(facts, seed, names, positions, now)
-                if facts.point_after and facts.touchdown
-                else None
-            )
+            tried = None
+            if facts.point_after and facts.touchdown:
+                try_facts = facts
+                if attempt is not None:
+                    try_facts = facts.model_copy(
+                        update={
+                            "text": attempt.text,
+                            "clock": attempt.clock,
+                            "period": attempt.period,
+                        }
+                    )
+                tried = choreograph_try(
+                    try_facts,
+                    seed,
+                    names,
+                    positions,
+                    now,
+                    real_seconds(attempt) if attempt is not None else None,
+                )
+                if tried is not None and attempt is not None:
+                    tried = pace(tried, real_seconds(attempt))
             cached = (script, tried)
             with _LOCK:
                 _CACHE[key] = cached
@@ -156,8 +177,20 @@ def build(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
         entries.append(
             {**common, "part": "play", "script": script, "board": made[0] if made else None}
         )
-        if tried is not None and len(made) > 1:
-            entries.append({**common, "part": "try", "script": tried, "board": made[1]})
+        if len(made) > 1:
+            metadata = (
+                {
+                    "period": attempt.period,
+                    "clock": attempt.clock,
+                    "text": attempt.text,
+                    "snap_at": attempt.snap_at,
+                    "whistle_at": attempt.whistle_at,
+                    "cancelled": attempt.cancelled,
+                }
+                if attempt is not None
+                else {"snap_at": None, "whistle_at": None}
+            )
+            entries.append({**common, **metadata, "part": "try", "script": tried, "board": made[1]})
     return {
         "event_id": event_id,
         "home": game["home"],

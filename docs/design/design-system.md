@@ -112,6 +112,12 @@ The field plane is normalized 0–100 between goal lines with separate end zones
 - **The clock** runs from the snap to the end-of-play time where a source gives one, and otherwise holds.
 - **Accessibility:** the board is decoration. The page's ScoreBoard stays the readable source of the same facts, so the board is hidden from screen readers.
 
+**The stadium** (ENG-045, OWN-049) fills the full-field view around the field. It has sideline turf, the far benches, a padded wall, a lower bowl, a lit club level and an upper deck, traced through the same fixed camera so the seats line up with the field.
+- **Home colors:** the walls, seats and most of the crowd wear the home team's colors. A neutral site gets gray walls and an even crowd.
+- **Kept behind the play:** the stands are dimmed and desaturated so the field and the play stay the brightest, most saturated things in the frame.
+- **Generic:** no logos, wordmarks or real-venue likeness. Only the field and kits are the owner's Gridiron art.
+- **Decoration:** the stadium carries no information and is never animated to imitate crowd reaction.
+
 UI transitions run 120–200 ms; play re-creations run at game speed with visible controls. Playback is user-triggered by default; reduced motion uses static start and end frames with narrative. Corrections are labeled and old effects updated, never played as another score. Screen readers receive throttled summaries and can pause announcements.
 
 ## Loading, failure and freshness

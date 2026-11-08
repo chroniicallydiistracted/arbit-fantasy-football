@@ -40,7 +40,7 @@ SCRIMMAGE = (
 RESTING = ("ground", "rise", "kneel", "point", "arms", "spike", "hold_", "recover", "snap_", "off_")
 
 
-def test_every_play_but_a_lateral_and_a_timeout_has_a_script():
+def test_every_play_but_a_timeout_has_a_script():
     for name in CASES:
         made = script(name)
         assert (made is not None) == (name in SCRIPTED), name

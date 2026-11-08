@@ -25,6 +25,7 @@ ${block(space, 'space-')}
   --radius: ${tokens.radiusPx}px;
   --content-max: ${layout.maxContentPx}px;
   --rail: ${rem(layout.railPx)};
+  --game-tile-width: ${rem(layout.gameTileWidthPx)};
   --tabbar: ${rem(layout.tabBarPx)};
   --motion-fast: ${motion.fast}ms;
   --motion-normal: ${motion.normal}ms;

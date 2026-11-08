@@ -502,6 +502,24 @@ def to_live_plays(
     return tuple(plays)
 
 
+def attached_try(play: LivePlay) -> LivePlay | None:
+    """The NFL try folded into this touchdown, with its own provider facts."""
+    raw = (play.nfl or {}).get("try")
+    if not isinstance(raw, Mapping):
+        return None
+    return play.model_copy(
+        update={
+            "period": raw.get("quarter"),
+            "clock": _clock(_seconds(raw.get("clockTime"))),
+            "clock_end": None,  # tries do not run the game clock
+            "text": _CLOCK_PREFIX.sub("", raw.get("playDescription") or "").strip(),
+            "snap_at": raw.get("playStartTime"),
+            "whistle_at": raw.get("playEndTime"),
+            "cancelled": play.cancelled or bool(raw.get("playDeleted")),
+        }
+    )
+
+
 def _summary_point(link: GameLink, summary: Mapping[str, Any], nfl_home: str | None) -> FieldPoint:
     """The game's state now, for the last play: after it, until the next play arrives."""
     if not summary or summary.get("phase") not in ("INGAME", "HALFTIME"):

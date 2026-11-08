@@ -4,6 +4,7 @@ import asyncio
 import hmac
 import json
 import os
+import re
 from collections.abc import Awaitable, Callable, Iterable
 from datetime import UTC, datetime
 from decimal import ROUND_HALF_UP, Decimal
@@ -860,6 +861,17 @@ def install_member_routes(
 
     art_root = PathLib(os.environ.get("ARBIT_LIVE_ART_PATH", "data/live-art"))
 
+    def art_revision(event_id: str) -> str | None:
+        pointer = art_root / event_id / "current.txt"
+        if not pointer.is_file():
+            return None
+        revision = pointer.read_text().strip()
+        return revision if re.fullmatch(r"[a-f0-9]{64}", revision) else None
+
+    def art_folder(event_id: str, revision: str | None) -> PathLib:
+        folder = art_root / event_id
+        return folder / revision if revision is not None else folder
+
     @router.get("/api/v1/live/games/{event_id}/animation", response_model=LiveAnimation)
     def live_animation(
         request: Request, event_id: str = Path(pattern=r"^[1-9][0-9]{0,19}$")
@@ -871,13 +883,14 @@ def install_member_routes(
         made = live_animation_build(uow, event_id)
         if made is None:
             raise HTTPException(404, "GAME_NOT_FOUND")
-        meta = art_root / event_id / "meta.json"
+        revision = art_revision(event_id)
+        meta = art_folder(event_id, revision) / "meta.json"
         labels: dict[str, str | None] = {}
         if meta.is_file():
             labels = json.loads(meta.read_text()).get("labels", {})
         return LiveAnimation(
             **{k: v for k, v in made.items() if k != "entries"},
-            art=LiveArt(available=meta.is_file(), labels=labels),
+            art=LiveArt(available=meta.is_file(), labels=labels, revision=revision),
             entries=[LiveAnimationEntry(**entry) for entry in made["entries"]],
         )
 
@@ -888,13 +901,14 @@ def install_member_routes(
         name: str = Path(
             pattern=r"^(meta\.json|field\.png|officials\.png|ball\.png|sprites-[A-Z]{2,4}\.png)$"
         ),
+        revision: str | None = Query(default=None, pattern=r"^[a-f0-9]{64}$"),
     ) -> FileResponse:
         """A game's private art: Gridiron fields and uniforms, and team logos, are for the
         invite-only app only (OWN-015, OWN-039), so never cached by anything shared."""
         member = principal(request)
         _, document, _ = stored()
         require_binding(member, document)
-        target = art_root / event_id / name
+        target = art_folder(event_id, revision or art_revision(event_id)) / name
         if not target.is_file():
             raise HTTPException(404, "ART_NOT_FOUND")
         return FileResponse(target, headers={"Cache-Control": "private, max-age=600"})

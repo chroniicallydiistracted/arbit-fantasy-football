@@ -716,8 +716,11 @@ label {
 }
 
 /* Agate tables */
-.table-wrap {
+.table-wrap,
+.table-scroll {
   overflow-x: auto;
+}
+.table-wrap {
   background: var(--surface);
 }
 .agate {
@@ -1045,14 +1048,15 @@ label {
 .game-grid li {
   display: grid;
 }
-.live-split {
-  display: grid;
-  grid-template-columns: minmax(14rem, 16rem) minmax(0, 1fr);
-  gap: var(--space-4);
+.game-strip {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: min(100%, var(--game-tile-width));
   align-items: start;
+  overflow-x: auto;
 }
-.live-split .game-grid {
-  grid-template-columns: minmax(0, 1fr);
+.game-strip .game-tile:focus-visible {
+  outline-offset: calc(-1 * var(--space-1));
 }
 .game-tile {
   --focus: var(--board-flag);
@@ -1236,6 +1240,7 @@ label {
 }
 .game-rail {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
   min-width: 0;
 }
@@ -1442,6 +1447,7 @@ label {
 }
 .win-chart {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-2);
   margin: 0;
   padding: var(--space-3);
@@ -1460,7 +1466,7 @@ label {
 }
 .win-plot {
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-1);
 }
 .win-plot svg {
@@ -1738,12 +1744,6 @@ label {
   .gb-team[data-side="home"] .gb-points {
     order: 0;
   }
-  .live-split {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .live-split .game-grid li:not(:has(.game-tile[aria-current="true"])) {
-    display: none;
-  }
 }
 
 @media (max-width: 767px) {
@@ -1895,4 +1895,11 @@ label {
 .live-field-note {
   margin: 0;
   color: var(--ink-muted);
+}
+.game-score-details > summary {
+  width: fit-content;
+  min-height: var(--tabbar);
+  align-content: center;
+  cursor: pointer;
+  font-size: var(--type-ui);
 }

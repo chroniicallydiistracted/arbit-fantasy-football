@@ -1,9 +1,8 @@
 """Probe the NFL API's other routes during live games, to confirm the fastest consistent sync.
 
-The `nfl` lane detects change from the week's summaries (cached about 5 seconds) and then reads the
-v2 game record. This lane, with its own sign-in so it can never slow that one, polls the other
-routes for each live game on their own schedules, and the live log (`nfl_log`) records every
-response with its cache headers and contents:
+The `nfl` lane reads v2 details on each active round with a fresh cache key. This lane uses its own
+sign-in and keeps ordinary cache keys so its observations can be compared with the primary lane.
+It polls these routes for each selected game, with receipts from `nfl_log`.
 
 | Route | Every |
 | --- | --- |

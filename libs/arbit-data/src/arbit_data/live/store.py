@@ -5,13 +5,13 @@ an explicit source cancellation removes a play's effect. No fantasy arithmetic h
 """
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from typing import Any
 from uuid import UUID
 
 from arbit_core.identity import ProviderRef, require_aware
-from sqlalchemy import and_, func, or_, select, update
+from sqlalchemy import Connection, Row, and_, func, or_, select, update
 from sqlalchemy.dialects.postgresql import distinct_on, insert
 
 from arbit_data.db import UnitOfWork
@@ -22,6 +22,7 @@ from arbit_data.live.cadence import GamePhase
 from arbit_data.live.contracts import LivePlay
 from arbit_data.schema import (
     entity_alias,
+    nfl_api_game,
     nfl_game,
     nfl_play_revision,
     nfl_schedule_game,
@@ -129,6 +130,49 @@ class PlayChange:
         return bool(self.introduced or self.revised or self.cancelled)
 
 
+NFL_FINAL_PHASES = frozenset({"FINAL", "FINAL_OVERTIME"})
+NFL_STALE_SECONDS = 90
+
+
+@dataclass(frozen=True)
+class NflPlayRead:
+    game_id: str
+    phase: str | None
+
+    def lock_detail(self, c: Connection, event_id: str) -> Row[Any] | None:
+        # Take this lock after the nfl_game lock used for both play sources.
+        return c.execute(
+            select(nfl_api_game.c.details_phase)
+            .where(nfl_api_game.c.game_id == self.game_id, nfl_api_game.c.event_id == event_id)
+            .with_for_update()
+        ).one_or_none()
+
+    def record(self, c: Connection, body_hash: str, observed_at: datetime) -> None:
+        values: dict[str, Any] = {
+            "details_hash": body_hash,
+            "details_observed_at": observed_at,
+            "details_phase": self.phase,
+        }
+        if self.phase in NFL_FINAL_PHASES:
+            values["phase"] = self.phase
+        c.execute(
+            update(nfl_api_game).where(nfl_api_game.c.game_id == self.game_id).values(**values)
+        )
+
+
+def nfl_detail_primary(c: Connection, event_id: str, now: datetime) -> bool:
+    detail = c.execute(
+        select(nfl_api_game.c.details_observed_at, nfl_api_game.c.details_phase).where(
+            nfl_api_game.c.event_id == event_id
+        )
+    ).one_or_none()
+    if detail is None or detail.details_observed_at is None:
+        return False
+    return detail.details_phase in NFL_FINAL_PHASES or (
+        now - detail.details_observed_at <= timedelta(seconds=NFL_STALE_SECONDS)
+    )
+
+
 def publish_plays(
     uow: UnitOfWork,
     event_id: str,
@@ -136,6 +180,8 @@ def publish_plays(
     observed_at: datetime,
     *,
     body_hash: str,
+    nfl_read: NflPlayRead | None = None,
+    fallback: bool = False,
 ) -> PlayChange:
     """Append changed plays as revisions. Same content twice produces nothing new."""
     require_aware(observed_at)
@@ -152,6 +198,14 @@ def publish_plays(
             raise ValueError("UNKNOWN_GAME")
         if game.plays_observed_at is not None and observed_at < game.plays_observed_at:
             return PlayChange()
+        if fallback and nfl_detail_primary(c, event_id, observed_at):
+            return PlayChange()
+        if nfl_read is not None:
+            detail = nfl_read.lock_detail(c, event_id)
+            if detail is None or (
+                detail.details_phase in NFL_FINAL_PHASES and nfl_read.phase not in NFL_FINAL_PHASES
+            ):
+                return PlayChange()
         current = {
             row.play_id: row
             for row in c.execute(
@@ -159,6 +213,7 @@ def publish_plays(
                     nfl_play_revision.c.play_id,
                     nfl_play_revision.c.revision_hash,
                     nfl_play_revision.c.modified_at,
+                    nfl_play_revision.c.payload,
                 ).where(nfl_play_revision.c.event_id == event_id, nfl_play_revision.c.is_current)
             ).all()
         }
@@ -219,6 +274,29 @@ def publish_plays(
                 cancelled.append(play.provider_id)
             else:
                 revised.append(play.provider_id)
+        if nfl_read is not None:
+            nfl_read.record(c, body_hash, observed_at)
+            nfl_ids = {play.provider_id for play in plays}
+            # A verified NFL final is the complete primary replay. During a live
+            # handover, retire only provider-specific administrative duplicates.
+            for play_id, row in current.items():
+                if play_id in nfl_ids or row.payload.get("source") == "nfl":
+                    continue
+                if nfl_read.phase not in NFL_FINAL_PHASES and row.payload.get("kind") not in (
+                    "administrative",
+                    "unknown",
+                ):
+                    continue
+                c.execute(
+                    update(nfl_play_revision)
+                    .where(
+                        nfl_play_revision.c.event_id == event_id,
+                        nfl_play_revision.c.play_id == play_id,
+                        nfl_play_revision.c.is_current,
+                    )
+                    .values(is_current=False)
+                )
+                cancelled.append(play_id)
         c.execute(
             update(nfl_game)
             .where(nfl_game.c.event_id == event_id)
@@ -238,16 +316,39 @@ def publish_plays(
     return PlayChange(tuple(introduced), tuple(revised), tuple(cancelled))
 
 
-def plays_unchanged(uow: UnitOfWork, event_id: str, body_hash: str, observed_at: datetime) -> bool:
-    """Record a read whose bytes match the last one. True means there is nothing to process."""
+def plays_unchanged(
+    uow: UnitOfWork,
+    event_id: str,
+    body_hash: str,
+    observed_at: datetime,
+    *,
+    nfl_read: NflPlayRead | None = None,
+    fallback: bool = False,
+) -> bool:
+    """Record a matching read under the same game lock as play publication."""
     with uow.engine.begin() as c:
-        return bool(
+        if fallback or nfl_read is not None:
             c.execute(
-                update(nfl_game)
-                .where(nfl_game.c.event_id == event_id, nfl_game.c.plays_body_hash == body_hash)
-                .values(plays_observed_at=observed_at)
-            ).rowcount
-        )
+                select(nfl_game.c.event_id).where(nfl_game.c.event_id == event_id).with_for_update()
+            )
+        if fallback and nfl_detail_primary(c, event_id, observed_at):
+            return True
+        if nfl_read is not None:
+            detail = nfl_read.lock_detail(c, event_id)
+            if detail is None or detail.details_phase != nfl_read.phase:
+                return False  # a new source phase must go through full reconciliation
+        changed = c.execute(
+            update(nfl_game)
+            .where(
+                nfl_game.c.event_id == event_id,
+                nfl_game.c.plays_body_hash == body_hash,
+                nfl_game.c.plays_observed_at <= observed_at,
+            )
+            .values(plays_observed_at=observed_at)
+        ).rowcount
+        if changed and nfl_read is not None:
+            nfl_read.record(c, body_hash, observed_at)
+        return bool(changed)
 
 
 def publish_summary(

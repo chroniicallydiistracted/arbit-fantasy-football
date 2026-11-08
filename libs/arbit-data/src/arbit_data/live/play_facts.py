@@ -85,12 +85,13 @@ TEXT_CODES = {
     "CLV": "CLE",
     "HST": "HOU",
     "LA": "LAR",
+    "LARC": "LAC",
     "WAS": "WSH",
     "JAC": "JAX",
     "SD": "LAC",
     "OAK": "LV",
 }
-_SPOT = r"(?:(?P<{0}code>[A-Z]{{2,3}}) (?P<{0}yard>-?\d{{1,2}})|(?P<{0}mid>50))\b"
+_SPOT = r"(?:(?P<{0}code>[A-Z]{{2,4}}) (?P<{0}yard>-?\d{{1,2}})|(?P<{0}mid>50))\b"
 # A spot in running text: only after the words ESPN puts before one, so "for 50 yards" isn't a spot.
 _AFTER = r"(?:(?<=\bto )|(?<=\bat )|(?<=\bfrom )|(?<=\bthe ))"
 _NAME = r"[A-Z][a-z]{0,3}\.[A-Z][A-Za-z'\-]*(?:\.? [A-Z][A-Za-z'\-]+)?"
@@ -101,7 +102,7 @@ def text_codes(texts: Iterable[str]) -> set[str]:
     return {
         m.group(1)
         for text in texts
-        for m in re.finditer(_AFTER + r"([A-Z]{2,3}) -?\d{1,2}\b", text)
+        for m in re.finditer(_AFTER + r"([A-Z]{2,4}) -?\d{1,2}\b", text)
     }
 
 
@@ -178,6 +179,7 @@ class FumbleFacts(LiveModel):
     recovered_by: str | None = None  # team
     lost: bool | None = None
     spot: int | None = None
+    loose: int | None = None
 
 
 class PointAfter(LiveModel):
@@ -210,6 +212,7 @@ class PlayFacts(LiveModel):
     players: tuple[PlayerRole, ...] = ()
     shotgun: bool = False
     no_huddle: bool = False
+    direct_snap: str | None = None
     passing: PassFacts | None = None
     run: RunFacts | None = None
     kick: KickFacts | None = None
@@ -232,6 +235,9 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
     main, penalties_text = _split_penalties(text)
     offense = play.start.team_id if play.start.team_id in (teams.home, teams.away) else None
     shape = _shape(play, main)
+    snap = re.search(rf"\bDirect snap to ({_NAME})\.", main)
+    if snap:
+        main = main[snap.end() :].lstrip()
     facts: dict[str, object] = {
         "event_id": play.event_id,
         "provider_id": play.provider_id,
@@ -242,7 +248,8 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
         "offense": offense,
         "defense": teams.other(offense),
         "players": tuple(PlayerRole(role=p.role, espn_id=p.espn_id) for p in play.participants),
-        "shotgun": bool(re.search(r"^\((?:[^)]*\b)?Shotgun\)", main)),
+        "shotgun": snap is not None or bool(re.search(r"^\((?:[^)]*\b)?Shotgun\)", main)),
+        "direct_snap": snap.group(1) if snap else None,
         "no_huddle": bool(re.search(r"^\((?:[^)]*\b)?No Huddle\b", main)),
         "turnover": bool(play.source_flags.get("isTurnover")),
         "review": review or _review(play),
@@ -270,7 +277,12 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
     if shape == "kickoff":
         facts["players"] = _kicker_from_penalty(play, main, facts["penalties"])  # type: ignore[arg-type]
     if shape in ("pass", "spike", "interception"):
-        facts["passing"] = _pass(play, main, shape, start, offense, teams)
+        passing = _pass(
+            play, main, shape, start, offense, teams, reversed_call=review == "reversed"
+        )
+        facts["passing"] = passing
+        if passing.result in ("incomplete", "spiked"):
+            facts["action_end"] = start  # the next snap can reflect intervening enforcement
     elif shape in ("run", "scramble", "kneel"):
         facts["run"] = _run(play, main, shape)
     elif shape in ("punt", "kickoff", "field_goal", "extra_point"):
@@ -278,7 +290,7 @@ def interpret(play: LivePlay, teams: GameTeams) -> PlayFacts:
     if "FUMBLE" in main.upper():
         facts["fumble"] = _fumble(main, offense, teams)
     judged = _judge(PlayFacts.model_validate(facts), play, main)
-    if judged.reason in ("fumble", "no_play"):
+    if judged.reason in ("fumble", "lateral", "no_play"):
         judged = judged.model_copy(update={"before": _before(play, main, teams)})
     return judged
 
@@ -301,7 +313,7 @@ _KINDS: tuple[tuple[str, str, str], ...] = (
 
 def _before(play: LivePlay, main: str, teams: GameTeams) -> PlayFacts | None:
     """The play the text describes before a fumble or a no-play flag, or None if it describes none."""
-    text = re.split(r"\s*\bFUMBLES\b", main)[0].strip()
+    text = re.split(r"\s*\b(?:FUMBLES|Lateral)\b", main, maxsplit=1)[0].strip()
     if not text:
         return None
     found = next(
@@ -319,6 +331,7 @@ def _before(play: LivePlay, main: str, teams: GameTeams) -> PlayFacts | None:
             "text": text,
             "cancelled": False,
             "stat_yardage": yards,
+            "yards_after_catch": None if "Lateral" in main else play.yards_after_catch,
             "penalty": None,
             "end": play.start,  # where it ended comes from the text's own spot
             "source_flags": {"isTurnover": False, "isPenalty": False},
@@ -406,6 +419,8 @@ def _pass(
     start: int | None,
     offense: str | None,
     teams: GameTeams,
+    *,
+    reversed_call: bool = False,
 ) -> PassFacts:
     aim = re.search(r"\bpass (?:incomplete )?(short|deep) (left|middle|right)\b", main)
     hits = tuple(
@@ -434,7 +449,9 @@ def _pass(
             catch_spot=spot,
             qb_hit_by=hits,
         )
-    if play.provider_type_text in ("Pass Incompletion",) or re.search(r"\bpass incomplete\b", main):
+    if (not reversed_call and play.provider_type_text == "Pass Incompletion") or re.search(
+        r"\bpass incomplete\b", main
+    ):
         return PassFacts(result="incomplete", depth=depth, side=side, qb_hit_by=hits)
     yac = play.yards_after_catch
     # The catch's own gain is the text's "for N yards": ESPN's stat yardage is the net after an
@@ -573,10 +590,27 @@ def _point_after(play: LivePlay, text: str) -> PointAfter | None:
 
 
 def _fumble(main: str, offense: str | None, teams: GameTeams) -> FumbleFacts:
-    forced = bool(re.search(r"FUMBLES \(", main))
+    forced = bool(re.search(r"FUMBLES \((?!Aborted\))", main))
+    loss = re.search(rf"\bFUMBLES(?: \([^)]*\))? at {_SPOT.format('f')}", main)
+    loose = _spot(loss, "f", offense, teams) if loss else None
+    if loose is None:
+        prior = re.split(r"\bFUMBLES\b", main, maxsplit=1)[0]
+        spots = [
+            _spot(m, "", offense, teams) for m in re.finditer(_AFTER + _SPOT.format(""), prior)
+        ]
+        loose = next((spot for spot in reversed(spots) if spot is not None), None)
     other = re.search(
-        rf"\b(?:RECOVERED|recovered) by ([A-Z]{{2,3}})-.*? at {_SPOT.format('r')}", main
+        rf"\b(?:RECOVERED|recovered) by ([A-Z]{{2,4}})-.*? at {_SPOT.format('r')}", main
     )
+    own = re.search(rf"\band recovers at {_SPOT.format('r')}", main)
+    if own and (other is None or own.start() < other.start()):
+        return FumbleFacts(
+            forced=forced,
+            recovered_by=offense,
+            lost=False,
+            spot=_spot(own, "r", offense, teams),
+            loose=loose,
+        )
     if other:
         team = teams.codes.get(other.group(1))
         return FumbleFacts(
@@ -584,19 +618,15 @@ def _fumble(main: str, offense: str | None, teams: GameTeams) -> FumbleFacts:
             recovered_by=team,
             lost=None if team is None or offense is None else team != offense,
             spot=_spot(other, "r", offense, teams),
+            loose=loose,
         )
-    own = re.search(rf"\band recovers at {_SPOT.format('r')}", main)
-    if own:
-        return FumbleFacts(
-            forced=forced, recovered_by=offense, lost=False, spot=_spot(own, "r", offense, teams)
-        )
-    return FumbleFacts(forced=forced)
+    return FumbleFacts(forced=forced, loose=loose)
 
 
 def _penalties(text: str, teams: GameTeams) -> tuple[PenaltyFacts, ...]:
     found = []
     for clause in re.split(r"(?=\b(?:PENALTY|Penalty) on\b)", text):
-        hit = re.match(r"(?:PENALTY|Penalty) on ([A-Z]{2,3})(?:-([^,]+))?, ([^,.]+)", clause)
+        hit = re.match(r"(?:PENALTY|Penalty) on ([A-Z]{2,4})(?:-([^,]+))?, ([^,.]+)", clause)
         if not hit:
             continue
         yards = re.search(r", (\d+) yards?, enforced", clause)
@@ -677,21 +707,23 @@ def _judge(facts: PlayFacts, play: LivePlay, main: str) -> PlayFacts:
         return facts.model_copy(update={"reason": "lateral"})
     if re.search(r"\(Aborted\)", main):
         return facts.model_copy(update={"reason": "aborted"})
-    if facts.shape in ("pass", "spike", "interception", "sack") and re.search(
-        r"\bDirect snap to\b", main
-    ):
-        # A trick play: someone else took the snap, so the passer's usual drop doesn't fit.
-        return facts.model_copy(update={"reason": "trick_play"})
+    if facts.direct_snap and facts.shape in ("pass", "spike", "interception", "sack"):
+        passer = re.search(rf"({_NAME}) (?:pass|spiked|sacked)\b", main)
+        if not passer or passer.group(1) != facts.direct_snap:
+            return facts.model_copy(update={"reason": "trick_play"})
     roles = {p.role for p in facts.players}
     have = {
         "start": facts.start is not None,
-        "end": facts.end is not None,
+        "end": facts.action_end is not None or facts.end is not None,
         "interception_spot": facts.passing is not None and facts.passing.catch_spot is not None,
         "landing": facts.kick is not None and facts.kick.landing is not None,
         "kick_result": facts.kick is not None and facts.kick.result is not None,
         "distance": facts.kick is not None and facts.kick.distance is not None,
     }
-    if facts.shape == "pass" and facts.passing and facts.passing.result == "complete":
+    needs: tuple[str, ...]
+    if facts.shape == "punt" and facts.kick and facts.kick.result == "blocked":
+        needs = ("start", "kick_result")
+    elif facts.shape == "pass" and facts.passing and facts.passing.result == "complete":
         needs = (*_NEEDS["pass"], "receiver")
     else:
         needs = _NEEDS[facts.shape]

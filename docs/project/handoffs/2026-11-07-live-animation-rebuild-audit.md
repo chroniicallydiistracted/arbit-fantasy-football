@@ -1,0 +1,18 @@
+# Handoff · 2026-11-07 · Live animation rebuild audit
+
+The owner requested an independent audit before a full Live Game choreographer and renderer rebuild. The audit covers LV-003 and LV-005 and their interfaces with LV-001, LV-002 and LV-004. It reviewed the current working tree, including the unreleased run timing slice, from the primary NFL game detail through fallback, stored revisions, identity, fact interpretation, choreography, pacing, Jumbotron, private art, browser rendering and playback. The audit also reviewed the existing comparison tool and its private inputs and outputs. The detailed report is CODEX-AUDIT.md in the ignored data/sprites/review/ngs-compare-2026-11-07 directory. OWN-053 governs that evidence.
+
+R-049 through R-051 record three M6 gates. The interpretation layer needs ordered action and possession with canonical identity across roles. The motion plan and the renderer need continuous trajectory and ball attachment evidence. Private reviews need one sampling clock and a distinction between observed coordinates and inferred pose and possession. Source phase times and actual poses cannot be assumed from play-by-play. Live first-seen field availability remains the separate R-042 measurement. The audit creates no new source or product decision.
+
+## Verification
+
+- Read-only local animation build of event 401873037 with PostgreSQL default transactions set to read-only. Compared the private saved scripts with regenerated scripts, inspected raw records and checked compound action interpretation. Independently sampled the TypeScript Scene with the installed private art metadata.
+- `uv run --offline --env-file .env.local python scripts/live/check_play_timing.py --weekly data/NFL_API_Expanded_Route_Tests/work/expanded/results/direct_weekly_details_full_raw.json --weekly data/nfl-api/2026-11-05-week8-survey/expanded/direct_only_results/direct_weekly_details_week8_raw.json --event 401873037` exited 0 with 4,285 timed eligible clips in 31 games. It reported 480 action overruns beyond 50 ms and 14% with over 1.5 seconds between scripted action and provider end. This is NFL PBP corpus evidence.
+- `uv run --offline python scripts/live/check_play_scripts.py --nfl=data/nfl-api/2026-11-05-week8-survey/expanded/direct_only_results/direct_weekly_details_week8_raw.json --paced` exited 0 with 2,199 plays and zero reported rule violations.
+- `.venv/bin/python -m pytest -q -p no:cacheprovider libs/arbit-data/tests/{test_play_facts,test_play_timing,test_timing,test_choreography,test_kicks_fumbles_penalties}.py` passed 338 tests. `node_modules/.bin/vitest run src/live/led.test.ts src/live/scene.test.ts` from apps/web passed three tests.
+- Vite built to a temporary directory. The fictional member preview on port 8027 passed all four scenarios in `node_modules/.bin/playwright test live-playback.spec.ts` after setting ARBIT_BROWSER_PATH to the installed Chromium 1228 executable. The first attempt failed at launch because the package's default Chromium 1248 was absent. The preview process was stopped after the suite.
+- `python3 scripts/validate_foundation.py` passed, and `git check-ignore` confirmed the private audit is ignored.
+
+The running application and provider state were outside this audit. Isolated browser tests used fictional data. The full provider-to-display latency and visual behavior on other devices remain open. The next executable task is to plan the rebuild around an ordered action and evidence contract, phase and trajectory constraints, and one browser review path. The earlier incremental timing plan remains the record of existing code and its coverage.
+
+[Status](../status.md) · [Issues](../known-issues.md) · [Timing handoff](2026-11-07-play-timing.md)

@@ -1,7 +1,7 @@
 // The stadium board (slice 5, ENG-039, ENG-040), drawn as scripts/sprites/board.py draws it for the
 // review clips: LED dots three screen pixels apart, our own glyphs, team logos in the same dots,
 // results scrolling in from their team's side in the game's signal colors, and the clock running
-// from the snap to the whistle when the play's end clock is known. Colors here are the board's own
+// in real time from the snap to the play's end clock when it is known. Colors here are the board's own
 // LED art, not interface styling.
 import glyphText from "../../../../assets/sprites/board/glyphs.txt?raw";
 import type { components } from "../generated/api";
@@ -172,7 +172,7 @@ function stateCanvas(state: State, teams: Record<string, Team>, clock?: string |
   };
   team(state.away, LEFT, AWAY_LOGO);
   team(state.home, RIGHT, HOME_LOGO);
-  canvas.centered(periodText(state.period), CENTER, 2, DIM);
+  canvas.centered(state.status ?? periodText(state.period), CENTER, 2, DIM);
   const shown = clock ?? state.clock;
   if (shown) canvas.centered(shown, CENTER, 11, WHITE, 2);
   const down = downText(state);
@@ -230,15 +230,29 @@ function seconds(clock: string | null | undefined) {
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
 }
 
+/** The game clock `t` seconds into a clip: it runs one second per second from the snap, as the
+ * real clock did, and stops on the play's recorded end clock (OWN-051). A re-creation that
+ * finishes after the real whistle shows the clock already stopped. */
+export function runningClock(
+  before: string | null | undefined,
+  after: string | null | undefined,
+  t: number,
+) {
+  const start = seconds(before);
+  const end = seconds(after);
+  if (start == null || end == null || end >= start || t < SNAP) return before ?? null;
+  const left = Math.max(end, Math.ceil(start - (t - SNAP)));
+  return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
+}
+
 export class LedBoard {
   private cache = new Map<string, HTMLCanvasElement>();
   private cards: { canvas: Canvas; sign: number; start: number }[];
-  private start: number | null;
-  private end: number | null;
   constructor(
     private board: Board,
     private whistle: number,
     private teams: Record<string, Team>,
+    private runClock = true,
   ) {
     const away = board.before.away.team_id;
     this.cards = board.results.map((result, index) => {
@@ -252,8 +266,6 @@ export class LedBoard {
         start: whistle + CARD_DELAY + index * CARD_SECONDS,
       };
     });
-    this.start = seconds(board.before.clock);
-    this.end = seconds(board.after.clock);
   }
 
   get length() {
@@ -265,11 +277,8 @@ export class LedBoard {
   }
 
   private clockAt(t: number) {
-    if (this.start == null || this.end == null || this.end >= this.start || t < SNAP)
-      return this.board.before.clock ?? null;
-    const share = Math.min(1, (t - SNAP) / Math.max(0.1, this.whistle - SNAP));
-    const left = Math.ceil(this.start - (this.start - this.end) * share);
-    return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
+    if (!this.runClock) return this.board.before.clock ?? null;
+    return runningClock(this.board.before.clock, this.board.after.clock, t);
   }
 
   private memo(key: string, make: () => HTMLCanvasElement) {
@@ -297,7 +306,18 @@ export class LedBoard {
       (!this.cards.length && t < this.whistle + SETTLE)
     )
       return before(this.clockAt(t));
-    return this.memo("a", () => stateCanvas(this.board.after, this.teams).render());
+    return this.after();
+  }
+
+  after(status?: "FINAL"): HTMLCanvasElement {
+    return this.memo(`a:${status ?? ""}`, () => {
+      const state = this.board.after;
+      const shown =
+        status && state.status !== status
+          ? { ...state, status, clock: null, possession: null, situation: null, spot: null }
+          : state;
+      return stateCanvas(shown, this.teams).render();
+    });
   }
 }
 

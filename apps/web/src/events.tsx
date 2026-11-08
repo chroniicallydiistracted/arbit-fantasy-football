@@ -31,7 +31,7 @@ export function LiveEvents({ children }: { children: ReactNode }) {
   const client = useQueryClient();
   const { refresh } = useSession();
   const [state, setState] = useState<StreamState>("connecting");
-  const pending = useRef(new Set<string>());
+  const pending = useRef(new Map<string, string[]>());
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => {
     if (typeof EventSource === "undefined") {
@@ -41,19 +41,36 @@ export function LiveEvents({ children }: { children: ReactNode }) {
     const source = new EventSource("/api/v1/events");
     const flush = () => {
       timer.current = undefined;
-      for (const key of pending.current) void client.invalidateQueries({ queryKey: [key] });
+      for (const key of pending.current.values()) void client.invalidateQueries({ queryKey: key });
       pending.current.clear();
     };
     // Coalesce bursts: a busy NFL Sunday shouldn't cause a read per event.
-    const schedule = (keys: string[]) => {
-      for (const key of keys) pending.current.add(key);
+    const schedule = (keys: string[], eventId?: string) => {
+      for (const key of keys) {
+        const target =
+          eventId && ["live-animation", "live-plays", "live-game"].includes(key)
+            ? [key, eventId]
+            : [key];
+        pending.current.set(target.join(":"), target);
+      }
       timer.current ??= window.setTimeout(flush, 250);
     };
     source.onopen = () => setState("open");
     source.onerror = () =>
       setState(source.readyState === EventSource.CLOSED ? "down" : "connecting");
     for (const [type, keys] of Object.entries(AFFECTS)) {
-      source.addEventListener(type, () => schedule(keys));
+      source.addEventListener(type, (event: MessageEvent<string>) => {
+        let eventId: string | undefined;
+        if (type.startsWith("game.") && typeof event.data === "string") {
+          try {
+            const id: unknown = JSON.parse(event.data)?.event;
+            if (typeof id === "string") eventId = id;
+          } catch {
+            // Older or malformed events still invalidate the entire query family.
+          }
+        }
+        schedule(keys, eventId);
+      });
     }
     source.addEventListener("snapshot.required", () => {
       void client.invalidateQueries();

@@ -19,16 +19,20 @@ feet in the pocket. Anyone waiting sets with a small side step instead of freezi
 needs longer to get there, the carrier weaves rather than slowing down.
 """
 
+import copy
 import hashlib
 import math
 import random
 import re
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
+from contextvars import ContextVar
 from typing import Literal
 
 from arbit_data.live import alignment as A
 from arbit_data.live.contracts import LiveModel
 from arbit_data.live.play_facts import PenaltyFacts, PlayFacts
+from arbit_data.live.timing import Phase
+from arbit_data.live.timing import fit as fit_phases
 
 FIELD_WIDTH = 160 / 3
 HASHES = (23.58, 29.75)  # NFL hash marks, 70 ft 9 in from each sideline
@@ -177,6 +181,7 @@ class PlayScript(LiveModel):
     caption: str
     props: tuple[Prop, ...] = ()
     label: str = LABEL
+    note: str | None = None
 
 
 class _Track:
@@ -285,6 +290,11 @@ def _waypoint(
     return mx + side * nx * reach, min(FIELD_WIDTH - 1.0, max(1.0, z))
 
 
+# The real snap-to-whistle time of the play being choreographed, set by `choreograph` and
+# `kicking.choreograph_try` for every play state they make.
+REAL_SECONDS: ContextVar[float | None] = ContextVar("real_seconds", default=None)
+
+
 class _Play:
     """Shared state while one play is choreographed."""
 
@@ -304,6 +314,8 @@ class _Play:
         self.z = self.rng.uniform(*HASHES)
         self.actors: list[tuple[str, str | None, str, str, _Track, str]] = []
         self.ball: list[BallSegment] = []
+        self.note: str | None = None
+        self.catch: tuple[float, float, float] | None = None
         self.props: list[Prop] = []
         self.names = names
         self.positions = positions or {}
@@ -315,6 +327,15 @@ class _Play:
         self._context: A.Context | None = None
         self.text_names = _text_names(facts.text)
         self.labels: dict[str, str] = {}  # by actor key, for players named only in the text
+        # The NFL's snap-to-whistle time, when known: templates fit their phases to it (OWN-052).
+        self.budget = REAL_SECONDS.get()
+        self.extra: dict[str, float] = {}  # seconds each flexible phase adds in this build
+        self.timed = False  # built to the real time: the whistle is the real whistle
+        self._made = (facts, seed, names, positions, units)
+
+    def again(self) -> "_Play":
+        """A fresh state for the same play, which draws the same random choices."""
+        return _Play(*self._made)
 
     def ids(self, role: str) -> list[str]:
         return list(dict.fromkeys(p.espn_id for p in self.facts.players if p.role == role))
@@ -503,12 +524,32 @@ def choreograph(
     names: Mapping[str, str] | None = None,
     positions: Mapping[str, tuple[str, ...]] | None = None,
     units: Units | None = None,
+    real_seconds: float | None = None,
 ) -> PlayScript | None:
     """A script for the play, or None when its facts have no template here or miss a fact.
     `names` gives display names by ESPN ID, from the rosters; the text fills in only a role that
-    names exactly one player. Kicks, fumbles and penalties are drawn by `kicking` and `incidents`."""
+    names exactly one player. Kicks, fumbles and penalties are drawn by `kicking` and `incidents`.
+    `real_seconds` is the NFL's snap-to-whistle time, which the play is built to (OWN-052)."""
+    token = REAL_SECONDS.set(real_seconds)
+    try:
+        return _choreograph(facts, seed, names, positions, units)
+    finally:
+        REAL_SECONDS.reset(token)
+
+
+def _choreograph(
+    facts: PlayFacts,
+    seed: str,
+    names: Mapping[str, str] | None,
+    positions: Mapping[str, tuple[str, ...]] | None,
+    units: Units | None,
+) -> PlayScript | None:
     from arbit_data.live import incidents
 
+    if facts.reason in ("trick_play", "lateral") or (
+        facts.shape == "fumble" and " Lateral " in facts.text
+    ):
+        return incidents.partial(facts, seed, names or {}, positions or {}, units or {})
     if facts.shape in INCIDENTS and facts.reason in ("fumble", "no_play"):
         return incidents.choreograph(facts, seed, names or {}, positions or {}, units or {})
     if facts.template not in TEMPLATES or facts.missing or facts.start is None:
@@ -528,7 +569,7 @@ def _build(play: _Play) -> _Play | None:
     if facts.template in ("punt", "kickoff", "field_goal"):
         return kicking.build(play)
     if facts.template == "kneel" or (facts.run and facts.run.style == "kneel"):
-        return None if facts.end is None else _kneel(play)
+        return _kneel(play)
     if facts.template == "spike":
         return _spike(play)
     if facts.template == "pass" and facts.passing:
@@ -538,8 +579,94 @@ def _build(play: _Play) -> _Play | None:
     if facts.template == "sack":
         return _sack(play)
     if facts.template in ("run", "scramble"):
-        return _run(play)
+        return _to_time(play, _run, _run_phases)
     return None
+
+
+DEAD_BALL = Phase("dead", 0.4, 0.7, 1.5)  # from the end of the action to a natural whistle
+HANDOFF_BY = SNAP + 0.9  # the run's handoff comes right after the snap (OWN-037)
+SCRAMBLE_LOOK = 0.4  # seconds of a scrambler's look in the pocket that timing may take back
+MOST_DRIVE = 2.5  # seconds a pile may last: a carrier driving through contact, tacklers on him
+DRIVE_PACE = 1.6  # yards a second a pile moves
+
+
+def _to_time(
+    play: _Play,
+    build: Callable[[_Play], _Play | None],
+    flexible: Callable[[_Play], list[Phase]],
+) -> _Play | None:
+    """Build the play to its real snap-to-whistle time (OWN-052). The natural build fixes the
+    action; the template's flexible phases and the dead ball share out the rest, and the play is
+    built again from the same seed with them. A carry can absorb or add a little time around its
+    tacklers, so any difference comes out of, or goes into, the phases that add directly to the
+    end: the drive through contact first, then the path, then the mesh."""
+    if play.budget is None:
+        return build(play)
+
+    def ends(built: _Play) -> float:
+        """When the play is over as it will be drawn: with any flag thrown in it (OWN-038)."""
+        from arbit_data.live import incidents
+
+        if not any(not p.no_play for p in built.facts.penalties):
+            return _moments(built)[1] - SNAP
+        flagged = copy.deepcopy(built)
+        incidents.flags(flagged)
+        return _moments(flagged)[1] - SNAP
+
+    natural = build(play.again())
+    if natural is None:
+        return None
+    action = ends(natural)
+    phases = [Phase("action", action, action, action), *flexible(play), DEAD_BALL]
+    fitted = fit_phases(phases, play.budget)
+    most = {p.name: p.most for p in phases}
+    extra = {k: v for k, v in fitted.seconds.items() if k not in ("action", "dead")}
+    built: _Play | None = None
+    for _ in range(4):
+        attempt = play.again()
+        attempt.extra = dict(extra)
+        built = build(attempt)
+        if built is None:
+            return None
+        error = ends(built) + fitted.seconds["dead"] - play.budget
+        if abs(error) < 0.05:
+            break
+        before = dict(extra)
+        for name in ("drive", "path", "mesh"):
+            if name in extra and abs(error) >= 0.05:
+                changed = min(most[name], max(0.0, extra[name] - error))
+                error -= extra[name] - changed
+                extra[name] = changed
+        if all(abs(extra[k] - before[k]) < 0.01 for k in extra):
+            break
+    assert built is not None
+    built.timed = True
+    play.__dict__.update(built.__dict__)  # callers keep the state they passed in
+    return play
+
+
+_PATH_ROOM = {"end": 1.5, "tackle": 1.2}  # seconds a back's path may bend, by the hole
+
+
+def _run_phases(play: _Play) -> list[Phase]:
+    """A run's flexible phases: a slower mesh or a longer look in the pocket, a path to the hole
+    that bends wider, and the drive through contact when he's tackled."""
+    facts = play.facts
+    style = facts.run.style if facts.run else "run"
+    gap = facts.run.gap if facts.run and facts.run.gap else ""
+    tackled = not facts.touchdown and not facts.out_of_bounds
+    if style == "scramble":
+        # Shorter or longer in the pocket before he takes off.
+        phases = [Phase("mesh", 0.0, SCRAMBLE_LOOK, SCRAMBLE_LOOK + 1.5)]
+    elif style == "sneak":
+        phases = []
+    else:
+        phases = [Phase("mesh", 0.0, 0.0, 0.3)]
+        if play.end > play.los + 1:
+            phases.append(Phase("path", 0.0, 0.0, _PATH_ROOM.get(gap, 1.0)))
+    if tackled:
+        phases.append(Phase("drive", 0.0, 0.0, MOST_DRIVE))
+    return phases
 
 
 # The quarterback -----------------------------------------------------------------------------
@@ -548,7 +675,12 @@ def _build(play: _Play) -> _Play | None:
 def _center(play: _Play) -> None:
     """The team's center over the ball (OWN-037): he snaps it and stays down in his stance."""
     unit = play.unit("center")
-    if unit is None or any(espn_id == unit[0] for _, espn_id, *_ in play.actors):
+    on_ball = (*play.ids("passer"), *play.ids("receiver"), *play.ids("rusher"))
+    if (
+        unit is None
+        or unit[0] in on_ball
+        or any(espn_id == unit[0] for _, espn_id, *_ in play.actors)
+    ):
         return
     track = play.add(
         "snapper",
@@ -565,7 +697,7 @@ def _center(play: _Play) -> None:
 def _snap(
     play: _Play,
     key: str,
-    espn_id: str,
+    espn_id: str | None,
     role: str,
     start_x: float,
     shotgun: bool,
@@ -678,7 +810,9 @@ def _pass(play: _Play) -> _Play | None:
     # A tight end starts inline and a back in the backfield, on the side of the pass (OWN-036).
     kind = A.group(play.position(receivers[0], "offense"))
     toward = 1 if catch_z >= play.z else -1
-    if kind == "TE":
+    if kind == "OL":
+        start_x, start_z = play.los - 0.3, play.z
+    elif kind == "TE":
         start_x, start_z = play.los - 0.7, play.z + 4.2 * play.context().strong
     elif kind in ("RB", "FB"):
         depth = 4.5 if kind == "FB" else 5.0 if facts.shotgun else 7.0
@@ -753,6 +887,7 @@ def _pass(play: _Play) -> _Play | None:
     catch_t, release, flight = _route(
         play, receiver, (catch_x, catch_z), deep, air, qb_x, earliest, needed
     )
+    play.catch = (catch_x, catch_z, catch_t)
     _throw(qb, release)
     play.release("passer", release)
     for cover, gap, after in covers if complete else []:
@@ -1163,6 +1298,11 @@ def _kneel(play: _Play) -> _Play:
     track.hold("ready", SNAP)
     play.rest(0.0, SNAP, (play.los, 0.15, play.z))
     play.hold_ball("rusher", SNAP)
+    shift = play.end - track.x
+    kneel_reach = 0.45 * STILL
+    if abs(shift) > kneel_reach:
+        step = shift - math.copysign(kneel_reach, shift)
+        track.move("DROP", max(0.2, abs(step) / 3.5), track.x + step, track.z)
     track.move("kneel", 0.5, play.end, play.z).hold("kneel", 0.3)
     return play
 
@@ -1193,7 +1333,9 @@ def _run(play: _Play) -> _Play:
             facts.shotgun,
         )
         _drop(play, qb, 3)
-        settle(qb, qb.t + play.rng.uniform(0.7, 1.3), "pocket")
+        # His look in the pocket, which a play built to time lengthens or shortens (OWN-052).
+        look = play.rng.uniform(0.7, 1.3) - SCRAMBLE_LOOK + play.extra.get("mesh", SCRAMBLE_LOOK)
+        settle(qb, qb.t + look, "pocket")
         out = min(FIELD_WIDTH - 3.0, max(3.0, play.z + sign * play.rng.uniform(4.0, 9.0)))
         qb.run(max(qb.x, play.los - 3.0), out)
         _carry(play, qb, "rusher", out, way=1)
@@ -1201,7 +1343,8 @@ def _run(play: _Play) -> _Play:
     if style == "sneak":
         qb = _snap(play, "rusher", rusher, "rusher", play.los - UNDER, False)
         # A push in the pile: the drive pose, at a pile's pace.
-        qb.move("drive", max(0.4, (play.end - qb.x) / 3.0), play.end, play.z).hold("ground", 0.3)
+        push = max(0.4, (play.end - qb.x) / 3.0) + play.extra.get("drive", 0.0)
+        qb.move("drive", push, play.end, play.z).hold("ground", 0.3)
         return play
     back = 5.0 if facts.shotgun else 7.0
     start_z = play.z + (play.rng.choice((-1.5, 1.5)) if facts.shotgun else 0.0)
@@ -1226,9 +1369,10 @@ def _run(play: _Play) -> _Play:
         _handoff(play, track, quarterback, start_z, jet=kind in ("WR", "TE"))
     else:
         _center(play)
-        track.hold(STANCE, SNAP + 0.1)
+        delay = min(play.extra.get("mesh", 0.0), HANDOFF_BY - 0.02 - (SNAP + 0.55))
+        track.hold(STANCE, SNAP + 0.1 + delay)
         play.rest(0.0, SNAP, (play.los, 0.15, play.z))
-        handoff = SNAP + 0.55
+        handoff = SNAP + 0.55 + delay
         play.fly(
             SNAP,
             handoff,
@@ -1237,7 +1381,15 @@ def _run(play: _Play) -> _Play:
         )
         play.hold_ball("rusher", handoff)
     if play.end > play.los + 1:
-        track.run(play.los + 0.3, hole_z)
+        hole = (play.los + 0.3, hole_z)
+        bend = play.extra.get("path", 0.0)
+        straight = math.hypot(hole[0] - track.x, hole[1] - track.z)
+        if bend > 0 and straight > 0.5:
+            # A wider path to the hole at his own pace: he presses outside, then cuts up.
+            length = min(straight + bend * track.speed, straight * 3.0)
+            side = 1 if hole_z >= track.z else -1
+            track.run(*_waypoint((track.x, track.z), hole, length, side))
+        track.run(*hole)
     _carry(play, track, "rusher", hole_z, way=1)
     return play
 
@@ -1274,7 +1426,10 @@ def _handoff(
         back.hold(STANCE, max(0.2, max(ready, SNAP + 0.45) - 0.12 - travel))
     else:
         reach = SNAP + 0.1 + travel + 0.12
-        back.hold(STANCE, SNAP + 0.1 + max(0.0, ready - reach))
+        wait = max(0.0, ready - reach)
+        # A slower mesh, but the handoff stays right after the snap (OWN-037).
+        delay = min(play.extra.get("mesh", 0.0), max(0.0, HANDOFF_BY - 0.02 - (reach + wait)))
+        back.hold(STANCE, SNAP + 0.1 + wait + delay)
     back.run(*into)
     handoff = back.t + 0.12
     back.move("take", 0.25, mesh[0] + ux * 0.9, mesh[1] + uz * 0.9)
@@ -1354,6 +1509,12 @@ def _soonest(track: _Track, x: float, z: float) -> float:
     return SNAP + 0.2 + math.hypot(track.x - x, track.z - z) / track.speed
 
 
+def _waiting_at_catch(play: _Play, x: float, z: float, time: float) -> bool:
+    return play.catch is not None and (
+        time < play.catch[2] - 0.3 and math.hypot(x - play.catch[0], z - play.catch[1]) < 1.3
+    )
+
+
 def _close(
     play: _Play,
     track: _Track,
@@ -1384,7 +1545,11 @@ def _close(
             if pose == "RUN":
                 seconds = math.hypot(rx - track.x, rz - track.z) / track.speed
             after = math.hypot(x - rx, z - rz) / track.speed
-            if seconds > 0.05 and start + seconds + after <= arrive:
+            if (
+                seconds > 0.05
+                and start + seconds + after <= arrive
+                and not _waiting_at_catch(play, rx, rz, start + seconds)
+            ):
                 settle(track, start, facing=facing)
                 track.move(pose, seconds, rx, rz, face)
                 settle(track, arrive - after, facing=facing)
@@ -1447,22 +1612,53 @@ def _side_point(
     return x + dx * share, z + dz * share
 
 
-def _wrap_toward(track: _Track, x: float, z: float, facing: str | None = None) -> None:
+def _wrap_toward(
+    track: _Track,
+    x: float,
+    z: float,
+    facing: str | None = None,
+    pile: tuple[float, float, float] = (0.0, 0.0, 0.0),
+) -> None:
     """The tackler's finish from whichever side he comes: lunge, wrap, drive and fall into the
-    carrier at (x, z), then get up."""
+    carrier at (x, z), then get up. With a `pile` of (yards along, yards across, seconds) he stays
+    wrapped on the carrier while the pile moves, then goes down with him."""
     dx, dz = track.x - x, track.z - z
     distance = math.hypot(dx, dz) or 1.0
     ux, uz = dx / distance, dz / distance
     facing = facing or ("left" if dx > 0 else "right")
-    for pose, seconds, gap in (
-        ("lunge", max(0.2, (distance - 1.1) / 7.0), 1.1),  # lunges cover their distance in time
-        ("wrap", 0.15, 0.5),
-        ("drive", 0.1, 0.3),
-        ("fall_60", 0.2, 0.2),
-    ):
-        track.move(pose, seconds, x + ux * gap, z + uz * gap, facing)
+    track.move("lunge", max(0.2, (distance - 1.1) / 7.0), x + ux * 1.1, z + uz * 1.1, facing)
+    track.move("wrap", 0.15, x + ux * 0.5, z + uz * 0.5, facing)
+    along, across, seconds = pile
+    if seconds > 0:
+        x, z = x + along, z + across
+        _churn(track, ("drive", "wrap"), seconds, x + ux * 0.5, z + uz * 0.5, facing)
+    for pose, step, gap in (("drive", 0.1, 0.3), ("fall_60", 0.2, 0.2)):
+        track.move(pose, step, x + ux * gap, z + uz * gap, facing)
     track.hold("ground", 1.4, facing).hold("rise_1", 0.3, facing).hold("rise_2", 0.3, facing)
     track.hold("rise_3", 0.3, facing).hold(IDLE, 0.3, facing)
+
+
+def _churn(
+    track: _Track,
+    poses: tuple[str, str],
+    seconds: float,
+    x: float,
+    z: float,
+    facing: str | None = None,
+) -> None:
+    """Move to (x, z) over `seconds` in steps of about 0.2 s, alternating two contact poses, so a
+    pile moves with legs churning rather than as a still frame."""
+    steps = max(1, round(seconds / 0.2))
+    x0, z0 = track.x, track.z
+    for i in range(1, steps + 1):
+        share = i / steps
+        track.move(
+            poses[(i - 1) % 2],
+            seconds / steps,
+            x0 + (x - x0) * share,
+            z0 + (z - z0) * share,
+            facing,
+        )
 
 
 def _cover(
@@ -1513,6 +1709,11 @@ def _cover(
             pose, face = ("BACKPEDAL", facing) if moving > 1.0 else (STANCE, facing)
             if pose == STANCE:
                 nx, nz = x, z + max(-STILL * dt * 0.9, min(STILL * dt * 0.9, want_z - z))
+        if pose == STANCE and math.hypot(x - around[0], z - around[1]) < 1.3:
+            # Keep moving through this part of the coverage; the defender should
+            # not settle at the future catch spot while the receiver is still on his route.
+            nx = min(around[0] + 1.5, x + BACKPEDAL * dt)
+            pose = "BACKPEDAL"
         steps.append((t, t + dt, x, z, nx, nz, pose, face))
         t, x, z = t + dt, nx, nz
     keep = len(steps) if stay else 0
@@ -1530,9 +1731,13 @@ def _cover(
         return track.x, track.z
     meet = _side_point(*around, track.x, track.z, gap)
     leave = meet_t - math.hypot(meet[0] - track.x, meet[1] - track.z) / track.speed
-    if leave > track.t + 1e-3:
-        settle(track, leave, facing=facing)
-    track.run(*meet, "right" if meet[0] > track.x + 0.3 else facing)
+    heading = "right" if meet[0] > track.x + 0.3 else facing
+    if leave > track.t + 1e-3 and _waiting_at_catch(play, track.x, track.z, track.t):
+        track.run_by(*meet, meet_t, play.rng.choice((-1, 1)), heading, wait_first=False)
+    else:
+        if leave > track.t + 1e-3:
+            settle(track, leave, facing=facing)
+        track.run(*meet, heading)
     return meet
 
 
@@ -1607,6 +1812,16 @@ def _carry(
     running = way * (before - track.x) > 0.3
     if not running:  # no ground left to gain: absorb it where he is, in his lane
         z = track.z
+    # Built to the real time, a run may meet the tacklers sooner and drive the pile to the spot
+    # (OWN-052). With no ground left ahead of him, the pile shifts sideways as well: it always
+    # moves at least half a yard a second, so it never reads as a still frame.
+    drive = play.extra.get("drive", 0.0)
+    room = max(0.0, way * (before - track.x) - 0.3) if running else 0.0
+    pile = min(drive * DRIVE_PACE, room)
+    shift = math.sqrt(max(0.0, (0.5 * drive) ** 2 - pile**2))
+    hit = spot - way * pile  # where contact comes
+    down_z = min(FIELD_WIDTH - 2.0, max(2.0, z + (shift if z < FIELD_WIDTH / 2 else -shift)))
+    before = hit - way * 0.7
     reach = math.hypot(before - track.x, z - track.z)
     contact = (
         track.t + (reach / track.speed if running else max(0.2, abs(track.x - before) / 3.0)) + 0.13
@@ -1618,7 +1833,7 @@ def _carry(
             # Already on the field, such as a cover man or a passer tackling the interceptor: he
             # chases from where he is, at his pace, and the carrier weaves so he can get there.
             chaser = drawn[espn_id][0]
-            near = _side_point(spot, z, chaser.x, chaser.z, 2.4)
+            near = _side_point(hit, z, chaser.x, chaser.z, 2.4)
             gap = math.hypot(chaser.x - near[0], chaser.z - near[1])
             contact = max(contact, chaser.t + gap / chaser.speed + 0.45)
     weave = rng.choice((-1, 1)) if running else 0
@@ -1647,7 +1862,7 @@ def _carry(
             toward if behind else ("left" if way > 0 else "right"),
         )
         facing = toward if behind else None
-        guess = (spot + side_x * 2.4, z + offset - 0.3)
+        guess = (hit + side_x * 2.4, z + offset - 0.3)
         if start_line is not None:
             # Kick coverage: from its line, never past it, held until the release.
             tackler.x = start_line - abs(rng.uniform(-1.0, 1.0))
@@ -1660,13 +1875,13 @@ def _carry(
                 tackler.z = min(FIELD_WIDTH - 2.0, max(2.0, cz))
             tackler.z = _apart(play, tackler, tackler.x, tackler.z)[1]
             choice = rng.choice((-1, 1))
-            near = _side_point(spot, z + offset - 0.3, tackler.x, tackler.z, 2.4)
+            near = _side_point(hit, z + offset - 0.3, tackler.x, tackler.z, 2.4)
             soonest = (released or 0.0) + math.hypot(
                 tackler.x - near[0], tackler.z - near[1]
             ) / tackler.speed
         else:
             _place(play, tackler, *guess, meet - 0.45, meet - 3.0)
-            near = _side_point(spot, z + offset - 0.3, tackler.x, tackler.z, 2.4)
+            near = _side_point(hit, z + offset - 0.3, tackler.x, tackler.z, 2.4)
             choice, soonest = 0, _soonest(tackler, *near)
         contact = max(contact, soonest + 0.45 - 0.08 * index)
         plans.append((index, offset, tackler, False, choice, facing))
@@ -1675,8 +1890,11 @@ def _carry(
     elif abs(track.x - before) > 0.05:
         track.move("stumble", max(0.2, abs(track.x - before) / 3.0), before, z)
         settle(track, contact - 0.13)
-    track.move("hit", 0.1, spot - way * 0.4, z).move("stumble", 0.1, spot - way * 0.25, z)
-    track.move("fall_30", 0.1, spot - way * 0.1, z).move("fall_60", 0.15, spot, z).hold(
+    track.move("hit", 0.1, hit - way * 0.4, z)
+    if drive > 0:  # legs churning, the pile moving to the spot
+        _churn(track, ("drive", "stumble"), drive, spot - way * 0.4, down_z)
+    track.move("stumble", 0.1, spot - way * 0.25, down_z)
+    track.move("fall_30", 0.1, spot - way * 0.1, down_z).move("fall_60", 0.15, spot, down_z).hold(
         "ground", 0.3
     )
     for index, offset, tackler, chasing, choice, facing in plans:
@@ -1685,7 +1903,7 @@ def _carry(
         if chasing:
             # From where he is, straight in: set facing the carrier, then break, so a chaser who
             # is already close never bends away and comes again (OWN-037).
-            near = _side_point(spot, target_z - 0.3, tackler.x, tackler.z, 2.4)
+            near = _side_point(hit, target_z - 0.3, tackler.x, tackler.z, 2.4)
             heading = "right" if near[0] > tackler.x else "left"
             leave = (
                 meet - 0.45 - math.hypot(near[0] - tackler.x, near[1] - tackler.z) / tackler.speed
@@ -1694,13 +1912,13 @@ def _carry(
                 settle(tackler, leave, facing="left" if spot < tackler.x else "right")
             tackler.run(*near, heading)
         elif start_line is not None:
-            near = _side_point(spot, target_z - 0.3, tackler.x, tackler.z, 2.4)
+            near = _side_point(hit, target_z - 0.3, tackler.x, tackler.z, 2.4)
             settle(tackler, released or 0.0, facing=facing)
             tackler.run_by(*near, meet - 0.45, choice, facing)
         else:
-            near = _side_point(spot, target_z - 0.3, tackler.x, tackler.z, 2.4)
+            near = _side_point(hit, target_z - 0.3, tackler.x, tackler.z, 2.4)
             _close(play, tackler, *near, meet - 0.45, meet - 3.0, facing, placed=True)
-        _wrap_toward(tackler, spot, target_z)
+        _wrap_toward(tackler, hit, target_z, pile=(spot - hit, down_z - z, drive))
 
 
 # A kick specialist shows the slot for his job on the play, such as a punter who also holds.
@@ -1719,14 +1937,13 @@ def _shown_position(play: _Play, espn_id: str | None, role: str, side: str) -> s
     return slot or play.position(espn_id, side) or play.position(espn_id)
 
 
-def _finish(play: _Play, template: str | None = None, caption: str | None = None) -> PlayScript:
-    facts = play.facts
+def _moments(play: _Play) -> tuple[float, float]:
+    """The last moment anything is drawn, and when the play is over: its last movement, or a
+    player going down, whichever is later. Players lying on the turf, getting up or shifting their
+    weight afterwards aren't the play."""
     ends = [seg.end for *_, t, _ in play.actors for seg in t.segments]
     ends += [seg.end for seg in play.ball if seg.end < 1e8]  # a thrown-away ball may land last
     ends += [prop.land for prop in play.props]
-    duration = round(max(ends) + 1.6, 3)
-    # The whistle: the play's last movement, or a player going down, whichever is later. Players
-    # lying on the turf, getting up or shifting their weight afterwards aren't the play.
     segments = [seg for *_, t, _ in play.actors for seg in t.segments]
     moved = [
         seg.end
@@ -1735,11 +1952,25 @@ def _finish(play: _Play, template: str | None = None, caption: str | None = None
     ]
     moved += [seg.start for seg in segments if seg.pose.startswith(("ground", "kneel"))]
     moved += [seg.end for seg in play.ball if seg.state == "flight" and seg.end < 1e8]
-    whistle = round(min(max(moved, default=max(ends)), max(ends)), 4)
+    return max(ends), round(min(max(moved, default=max(ends)), max(ends)), 4)
+
+
+def _finish(play: _Play, template: str | None = None, caption: str | None = None) -> PlayScript:
+    facts = play.facts
+    drawn_until, whistle = _moments(play)
+    if play.timed and play.budget is not None:
+        # Built to the real time: the whistle is the real one, after a natural dead ball. If even
+        # the least plan runs past it, the play finishes naturally after it (OWN-052).
+        whistle = round(max(whistle, SNAP + play.budget), 4)
+    duration = round(max(drawn_until, whistle) + 1.6, 3)
     actors = []
     for key, espn_id, role, side, track, facing in play.actors:
         last = track.segments[-1]
-        if last.pose in ("stand", IDLE, STANCE) and duration - track.t > 0.3 and role != "official":
+        if (
+            (last.pose in ("stand", IDLE, STANCE) or last.pose in CYCLES)
+            and duration - track.t > 0.3
+            and role != "official"
+        ):
             settle(track, duration, "idle")  # done with the play: idle weight shifts to the end
         segments = [
             s.model_copy(update={"end": min(s.end, duration)})
@@ -1785,6 +2016,7 @@ def _finish(play: _Play, template: str | None = None, caption: str | None = None
         ball=ball,
         lines=tuple(lines),
         caption=caption or _caption(facts),
+        note=play.note,
         props=tuple(sorted(play.props, key=lambda prop: prop.start)),
     )
 
@@ -1820,7 +2052,8 @@ def _body(text: str) -> str:
     """The play's own words: no formation, no eligibility report, no direct-snap note."""
     body = re.sub(r"^(?:\([^)]*\)\s*)+", "", text)
     body = re.sub(r"^(?:.*? reported in as eligible\.\s*)+", "", body)  # names hold periods
-    return re.sub(r"^\([^)]*\)\s*", "", body)
+    body = re.sub(r"^\([^)]*\)\s*", "", body)
+    return re.sub(rf"^Direct snap to {_NAME}\.\s*", "", body)
 
 
 def _text_names(text: str) -> dict[str, list[str]]:

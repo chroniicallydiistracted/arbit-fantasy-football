@@ -716,6 +716,8 @@ export interface components {
             /** Situation */
             situation?: ("down" | "kickoff" | "extra_point" | "two_point") | null;
             spot?: components["schemas"]["BoardSpot"] | null;
+            /** Status */
+            status?: string | null;
         };
         /** DeviceSession */
         DeviceSession: {
@@ -859,6 +861,8 @@ export interface components {
             labels: {
                 [key: string]: string | null;
             };
+            /** Revision */
+            revision?: string | null;
         };
         /** LiveDrive */
         LiveDrive: {
@@ -1167,6 +1171,8 @@ export interface components {
             label: string;
             /** Lines */
             lines: components["schemas"]["Line"][];
+            /** Note */
+            note?: string | null;
             /** Offense */
             offense: string | null;
             /**
@@ -2423,7 +2429,9 @@ export interface operations {
     };
     live_art_api_v1_live_art__event_id___name__get: {
         parameters: {
-            query?: never;
+            query?: {
+                revision?: string | null;
+            };
             header?: never;
             path: {
                 event_id: string;

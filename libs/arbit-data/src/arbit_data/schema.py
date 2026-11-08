@@ -329,6 +329,7 @@ nfl_api_game = Table(
     Column("summary_hash", String(64)),
     Column("details_hash", String(64)),
     Column("details_observed_at", DateTime(timezone=True)),
+    Column("details_phase", String),
     Column("observed_at", DateTime(timezone=True), nullable=False),
 )
 nfl_play_revision = Table(

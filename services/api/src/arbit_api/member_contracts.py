@@ -319,6 +319,7 @@ class LiveAnimationEntry(WireModel):
 class LiveArt(WireModel):
     available: bool
     labels: dict[str, str | None]
+    revision: str | None = None
 
 
 class LiveAnimation(WireModel):
