@@ -255,7 +255,9 @@ def _blocked(play: _Play, kick_t: float, spot: tuple[float, float, float]) -> _P
 
 def _punt(play: _Play, kick: KickFacts) -> _Play | None:
     punter_id = _first(play, "punter")
-    if punter_id is None or kick.result in (None, "blocked"):
+    blocked = kick.result == "blocked"
+    named = re.search(rf"({C._NAME}) punt is BLOCKED", play.facts.text) if blocked else None
+    if (punter_id is None and not named) or kick.result is None:
         return None
     rng = play.rng
     los, z = play.los, play.z
@@ -281,12 +283,18 @@ def _punt(play: _Play, kick: KickFacts) -> _Play | None:
         "offense",
         play.track(los - PUNT_DEPTH, z, "defense"),
         "right",
+        named.group(1) if named and punter_id is None else None,
     )
     play.rest(0.0, snap_t, (los, 0.15, z))
     play.fly(snap_t, caught, BallEnd(point=(los, 0.3, z)), BallEnd(actor="punter", hold="hand"))
     play.hold_ball("punter", caught)
     settle(punter, caught)
     punter.hold("punt_hold", 0.3).move("punt_drop", 0.15, punter.x + 0.6, z)
+    if blocked:
+        play.note = (
+            "The punt setup is shown. The block and recovery are described in the play text."
+        )
+        return play
     punter.move("punt_strike", 0.12, punter.x + 0.6, z)
     kick_t = punter.t
     punter.move("punt_follow", 0.6, punter.x + 0.4, z).hold("stand", 0.3)
@@ -457,9 +465,24 @@ def choreograph_try(
     names: dict[str, str] | None = None,
     positions: dict[str, tuple[str, ...]] | None = None,
     units: C.Units | None = None,
+    real_seconds: float | None = None,
 ) -> PlayScript | None:
     """The extra point or two-point try that follows a touchdown, as its own script, from the 15
-    or the 2 in the scoring team's frame."""
+    or the 2 in the scoring team's frame, built to the try's own real time (OWN-052)."""
+    token = C.REAL_SECONDS.set(real_seconds)
+    try:
+        return _choreograph_try(facts, seed, names, positions, units)
+    finally:
+        C.REAL_SECONDS.reset(token)
+
+
+def _choreograph_try(
+    facts: PlayFacts,
+    seed: str,
+    names: dict[str, str] | None,
+    positions: dict[str, tuple[str, ...]] | None,
+    units: C.Units | None,
+) -> PlayScript | None:
     after = facts.point_after
     if after is None or not facts.touchdown or facts.offense is None:
         return None

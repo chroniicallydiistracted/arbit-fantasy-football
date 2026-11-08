@@ -9,36 +9,34 @@ one script, not the game's.
 """
 
 import threading
+from collections import OrderedDict
 from collections.abc import Iterable
-from datetime import datetime
 from typing import Any
 
 from sqlalchemy import select
 
 from arbit_data.db import UnitOfWork
 from arbit_data.league import content_hash
-from arbit_data.live import context
+from arbit_data.live import context, motion
+from arbit_data.live.actions import elapsed_seconds as real_seconds
+from arbit_data.live.actions import sequence
 from arbit_data.live.board import GameBoard, PlayBoard
 from arbit_data.live.choreography import PlayScript, choreograph
 from arbit_data.live.contracts import LivePlay
 from arbit_data.live.kicking import choreograph_try
+from arbit_data.live.nfl_api import attached_try, with_motion_evidence
+from arbit_data.live.nfl_feed import gsis_to_espn
 from arbit_data.live.pacing import pace
 from arbit_data.live.play_facts import GameTeams, interpret, text_codes
 from arbit_data.schema import nfl_game, nfl_play_revision, nfl_team
 
-_CACHE: dict[tuple[str, str, str], tuple[PlayScript | None, PlayScript | None]] = {}
+_CACHE_LIMIT = 4096
+_CACHE: OrderedDict[
+    tuple[str, str, str, int],
+    tuple[PlayScript | motion.PlayScriptV2 | None, PlayScript | None],
+] = OrderedDict()
 _LOCK = threading.Lock()
 _CONTEXT: dict[str, Any] = {}
-
-
-def real_seconds(play: LivePlay) -> float | None:
-    """The play's snap-to-whistle time from the NFL record, when it has both."""
-    if not play.snap_at or not play.whistle_at:
-        return None
-    start = datetime.fromisoformat(play.snap_at.replace("Z", "+00:00"))
-    end = datetime.fromisoformat(play.whistle_at.replace("Z", "+00:00"))
-    seconds = (end - start).total_seconds()
-    return seconds if 0 < seconds < 60 else None
 
 
 def current_plays(uow: UnitOfWork, event_id: str) -> list[LivePlay]:
@@ -90,7 +88,7 @@ def _shared(
         return found
 
 
-def build(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
+def build(uow: UnitOfWork, event_id: str, *, script_version: int = 1) -> dict[str, Any] | None:
     """Every play's animation entry in game order, or None for an unknown game."""
     game = _game(uow, event_id)
     if game is None:
@@ -112,34 +110,62 @@ def build(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
     )
     board = GameBoard(teams, game["home_code"], game["away_code"], game["names"])
     entries: list[dict[str, Any]] = []
+    needs_evidence = any(p.source == "nfl" and p.nfl and p.motion_evidence is None for p in plays)
+    ids = gsis_to_espn(uow) if needs_evidence else {}
     for play in plays:
-        facts = interpret(play, teams)
         revision = content_hash(play.model_dump(mode="json"))
+        if needs_evidence and play.source == "nfl":
+            play = with_motion_evidence(play, ids)
+        facts = interpret(play, teams)
         now = units.now()
         units.saw(facts)
-        boards: Iterable[PlayBoard] = board.boards(play, facts)
-        key = (event_id, play.provider_id, revision + content_hash(now))
+        attempt = attached_try(play)
+        boards: Iterable[PlayBoard] = board.boards(play, facts, attempt=attempt)
+        key = (event_id, play.provider_id, revision + content_hash(now), script_version)
         with _LOCK:
             cached = _CACHE.get(key)
+            if cached is not None:
+                _CACHE.move_to_end(key)
         if cached is None:
             seed = f"{play.provider_id}:{revision}"
-            script = (
-                None
-                if facts.shape in ("timeout", "other")
-                else choreograph(facts, seed, names, positions, now)
-            )
-            if script is not None:
-                script = pace(
-                    script, real_seconds(play)
-                )  # the NFL's snap-to-whistle time (OWN-041)
-            tried = (
-                choreograph_try(facts, seed, names, positions, now)
-                if facts.point_after and facts.touchdown
-                else None
-            )
+            script: PlayScript | motion.PlayScriptV2 | None = None
+            if script_version == 2 and facts.shape in motion.PREVIEW_SHAPES:
+                script = motion.plan(
+                    sequence(play, facts), motion.MotionContext(facts, names, positions, now)
+                )
+            if script is None and facts.shape not in ("timeout", "other"):
+                elapsed = real_seconds(play)
+                legacy = choreograph(facts, seed, names, positions, now, elapsed)
+                script = (
+                    pace(legacy, elapsed) if legacy is not None and legacy.note is None else legacy
+                )
+            tried = None
+            if facts.point_after and facts.touchdown:
+                try_facts = facts
+                if attempt is not None:
+                    try_facts = facts.model_copy(
+                        update={
+                            "text": attempt.text,
+                            "clock": attempt.clock,
+                            "period": attempt.period,
+                        }
+                    )
+                tried = choreograph_try(
+                    try_facts,
+                    seed,
+                    names,
+                    positions,
+                    now,
+                    real_seconds(attempt) if attempt is not None else None,
+                )
+                if tried is not None and attempt is not None:
+                    tried = pace(tried, real_seconds(attempt))
             cached = (script, tried)
             with _LOCK:
                 _CACHE[key] = cached
+                _CACHE.move_to_end(key)
+                if len(_CACHE) > _CACHE_LIMIT:
+                    _CACHE.popitem(last=False)
         script, tried = cached
         made = list(boards)
         common = {
@@ -156,8 +182,20 @@ def build(uow: UnitOfWork, event_id: str) -> dict[str, Any] | None:
         entries.append(
             {**common, "part": "play", "script": script, "board": made[0] if made else None}
         )
-        if tried is not None and len(made) > 1:
-            entries.append({**common, "part": "try", "script": tried, "board": made[1]})
+        if len(made) > 1:
+            metadata = (
+                {
+                    "period": attempt.period,
+                    "clock": attempt.clock,
+                    "text": attempt.text,
+                    "snap_at": attempt.snap_at,
+                    "whistle_at": attempt.whistle_at,
+                    "cancelled": attempt.cancelled,
+                }
+                if attempt is not None
+                else {"snap_at": None, "whistle_at": None}
+            )
+            entries.append({**common, **metadata, "part": "try", "script": tried, "board": made[1]})
     return {
         "event_id": event_id,
         "home": game["home"],

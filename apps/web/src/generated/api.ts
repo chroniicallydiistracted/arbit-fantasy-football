@@ -716,6 +716,8 @@ export interface components {
             /** Situation */
             situation?: ("down" | "kickoff" | "extra_point" | "two_point") | null;
             spot?: components["schemas"]["BoardSpot"] | null;
+            /** Status */
+            status?: string | null;
         };
         /** DeviceSession */
         DeviceSession: {
@@ -838,7 +840,8 @@ export interface components {
             period: number | null;
             /** Play Id */
             play_id: string;
-            script: components["schemas"]["PlayScript"] | null;
+            /** Script */
+            script: components["schemas"]["PlayScript"] | components["schemas"]["PlayScriptV2"] | null;
             /** Snap At */
             snap_at: string | null;
             /**
@@ -859,6 +862,8 @@ export interface components {
             labels: {
                 [key: string]: string | null;
             };
+            /** Revision */
+            revision?: string | null;
         };
         /** LiveDrive */
         LiveDrive: {
@@ -1120,6 +1125,80 @@ export interface components {
             /** Teams */
             teams: components["schemas"]["Team"][];
         };
+        /** Milestone */
+        Milestone: {
+            /**
+             * Confidence
+             * @default estimated
+             * @enum {string}
+             */
+            confidence: "observed" | "derived" | "estimated" | "unknown";
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "snap" | "kick" | "exchange" | "release" | "arrival" | "possession" | "advance" | "contact" | "loose" | "recovery" | "out_of_bounds" | "score" | "dead";
+            /** T */
+            t: number;
+        };
+        /** MotionActor */
+        MotionActor: {
+            /** Espn Id */
+            espn_id?: string | null;
+            /** Key */
+            key: string;
+            /** Label */
+            label?: string | null;
+            /** Poses */
+            poses: components["schemas"]["PoseCue"][];
+            /** Role */
+            role: string;
+            /**
+             * Side
+             * @enum {string}
+             */
+            side: "offense" | "defense" | "official";
+            /** Track */
+            track: components["schemas"]["MotionKey"][];
+        };
+        /** MotionBall */
+        MotionBall: {
+            /** End */
+            end: number;
+            origin: components["schemas"]["BallEnd"];
+            /** Start */
+            start: number;
+            /**
+             * Style
+             * @enum {string}
+             */
+            style: "rest" | "snap" | "exchange" | "held" | "pass" | "kick" | "bounce" | "roll";
+            target?: components["schemas"]["BallEnd"] | null;
+        };
+        /** MotionKey */
+        MotionKey: {
+            /** Heading */
+            heading: number;
+            /** T */
+            t: number;
+            /** Vx */
+            vx: number;
+            /** Vz */
+            vz: number;
+            /** X */
+            x: number;
+            /** Z */
+            z: number;
+        };
+        /** MotionTiming */
+        MotionTiming: {
+            /** Overrun */
+            overrun: number;
+            /** Provider Seconds */
+            provider_seconds?: number | null;
+            /** Unfilled */
+            unfilled: number;
+        };
         /** PlayBoard */
         PlayBoard: {
             after: components["schemas"]["BoardState"];
@@ -1167,6 +1246,8 @@ export interface components {
             label: string;
             /** Lines */
             lines: components["schemas"]["Line"][];
+            /** Note */
+            note?: string | null;
             /** Offense */
             offense: string | null;
             /**
@@ -1186,6 +1267,49 @@ export interface components {
              * @constant
              */
             version: 1;
+            /** Whistle */
+            whistle: number;
+        };
+        /** PlayScriptV2 */
+        PlayScriptV2: {
+            /** Actors */
+            actors: components["schemas"]["MotionActor"][];
+            /** Ball */
+            ball: components["schemas"]["MotionBall"][];
+            /** Caption */
+            caption: string;
+            /** Defense */
+            defense: string | null;
+            /** Duration */
+            duration: number;
+            /** Event Id */
+            event_id: string;
+            /**
+             * Label
+             * @default Re-creation from play-by-play
+             */
+            label: string;
+            /** Lines */
+            lines: components["schemas"]["Line"][];
+            /** Milestones */
+            milestones: components["schemas"]["Milestone"][];
+            /** Motion End */
+            motion_end: number;
+            /** Note */
+            note?: string | null;
+            /** Offense */
+            offense: string | null;
+            /** Provider Id */
+            provider_id: string;
+            /** Template */
+            template: string;
+            timing: components["schemas"]["MotionTiming"];
+            /**
+             * Version
+             * @default 2
+             * @constant
+             */
+            version: 2;
             /** Whistle */
             whistle: number;
         };
@@ -1220,6 +1344,13 @@ export interface components {
             /** Players */
             players: components["schemas"]["RosterPlayer"][];
             snapshot: components["schemas"]["Snapshot"];
+        };
+        /** PoseCue */
+        PoseCue: {
+            /** Pose */
+            pose: string;
+            /** Start */
+            start: number;
         };
         /** Preferences */
         Preferences: {
@@ -2423,7 +2554,9 @@ export interface operations {
     };
     live_art_api_v1_live_art__event_id___name__get: {
         parameters: {
-            query?: never;
+            query?: {
+                revision?: string | null;
+            };
             header?: never;
             path: {
                 event_id: string;
@@ -2727,7 +2860,9 @@ export interface operations {
     };
     live_animation_api_v1_live_games__event_id__animation_get: {
         parameters: {
-            query?: never;
+            query?: {
+                script_version?: number;
+            };
             header?: never;
             path: {
                 event_id: string;

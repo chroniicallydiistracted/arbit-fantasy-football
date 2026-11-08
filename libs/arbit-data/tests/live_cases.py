@@ -47,8 +47,8 @@ def units(name: str) -> dict[str, dict[str, tuple[str, str]]]:
     }
 
 
-# Every case gets a script except a lateral (left as text) and a timeout (not a play).
-UNSCRIPTED = ("lateral", "timeout")
+# Every case gets a script except the timeout. A lateral gets a partial recreation.
+UNSCRIPTED = ("timeout",)
 SCRIPTED = tuple(name for name in CASES if name not in UNSCRIPTED)
 
 

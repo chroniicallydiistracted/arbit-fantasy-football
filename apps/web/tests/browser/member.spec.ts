@@ -232,6 +232,16 @@ test("an open client updates without a reload when the server publishes a change
 
 test("the Live workspace deep-links to a game and survives a hard reload", async ({ page }) => {
   await login(page);
+  await page.route("**/api/v1/live/games", async (route) => {
+    const response = await route.fetch();
+    const data = await response.json();
+    const current = data.games.find((game: { event_id: string }) => game.event_id === "990000001");
+    const others = Array.from({ length: 7 }, (_, i) => ({
+      ...current,
+      event_id: String(990000002 + i),
+    }));
+    await route.fulfill({ response, json: { ...data, games: [...others, current] } });
+  });
   await page.goto("/live/games/990000001");
   await expect(page.getByRole("heading", { name: "TST at FIC" })).toBeVisible();
   await page.reload();
@@ -248,6 +258,20 @@ test("the Live workspace deep-links to a game and survives a hard reload", async
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/live/games/990000001");
     await expect(board).toBeVisible();
+    const strip = page.getByRole("list", { name: "Games", exact: true });
+    await expect(strip.getByRole("link")).toHaveCount(8);
+    const stripLayout = await strip.evaluate((element) => {
+      const tops = Array.from(element.children, (tile) => tile.getBoundingClientRect().top);
+      const selected = element.querySelector('[aria-current="true"]')?.getBoundingClientRect();
+      return {
+        rowCount: new Set(tops).size,
+        scrollable: element.scrollWidth > element.clientWidth,
+        selectedVisible: selected && selected.right <= element.getBoundingClientRect().right + 1,
+      };
+    });
+    expect(stripLayout).toEqual({ rowCount: 1, scrollable: true, selectedVisible: true });
+    await strip.getByRole("link").first().focus();
+    expect(await strip.evaluate((element) => element.scrollLeft)).toBe(0);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );

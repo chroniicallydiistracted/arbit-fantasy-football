@@ -203,7 +203,7 @@ def test_new_fields_stay_out_of_the_payload_when_espn_omits_them():
     )
 
 
-def test_a_pass_after_a_direct_snap_to_someone_else_is_left_as_text():
+def test_a_pass_after_a_direct_snap_to_someone_else_only_shows_the_verified_snap():
     case = CASES["pass_without_yards_after_catch"]
     raw = {
         **case["play"],
@@ -216,6 +216,12 @@ def test_a_pass_after_a_direct_snap_to_someone_else_is_left_as_text():
     )
     facts = interpret(play, teams)
     assert facts.template is None and facts.reason == "trick_play" and not ready(facts)
+    from arbit_data.live.choreography import choreograph
+
+    clip = choreograph(facts, "direct-snap")
+    assert clip is not None and clip.note
+    assert [actor.label for actor in clip.actors if actor.role == "snap_receiver"] == ["D.Swift"]
+    assert clip.ball[-1].actor == "snap_receiver"
 
 
 def test_the_play_before_a_fumble_or_a_flag_that_wiped_it_out_is_read_like_any_other():
@@ -228,3 +234,27 @@ def test_the_play_before_a_fumble_or_a_flag_that_wiped_it_out_is_read_like_any_o
     assert not wiped.penalties and "PENALTY" not in wiped.text
     for name in ("no_play_penalty", "delay_of_game", "run_gap", "declined_penalty"):
         assert read(name)[1].before is None, name  # before the snap, or a play that counts
+
+
+def test_last_kneel_uses_its_action_spot_without_a_next_snap():
+    from arbit_data.live.choreography import choreograph
+    from arbit_data.live.contracts import FieldPoint
+
+    play, _, teams = read("kneel")
+    facts = interpret(play.model_copy(update={"end": FieldPoint()}), teams)
+    assert facts.end is None and facts.action_end is not None
+    assert choreograph(facts, "final-kneel") is not None
+
+
+def test_four_letter_nfl_team_code_resolves_a_kickoff_spot():
+    play, _, _ = read("home_punt_downed")
+    teams = GameTeams.build("26", "24", "LAR", "LAC")
+    changed = play.model_copy(
+        update={
+            "text": "J.Karty kicks 56 yards from LAR 35 to LARC 9. D.Davis to LARC 23 for 14 yards.",
+            "provider_type_text": "Kickoff",
+            "kind": "kickoff",
+        }
+    )
+    facts = interpret(changed, teams)
+    assert facts.kick and facts.kick.landing == 91

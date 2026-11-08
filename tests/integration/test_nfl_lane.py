@@ -9,13 +9,14 @@ list it.
 import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from threading import Barrier
 from typing import Any
 from unittest.mock import Mock
 from uuid import uuid4
 
 import pytest
 from arbit_data.errors import SourceError
-from arbit_data.live import cadence, store
+from arbit_data.live import cadence, nfl_feed, store
 from arbit_data.live.contracts import LivePlay
 from arbit_data.live.feed import LiveFeed
 from arbit_data.live.nfl_feed import STALE_SECONDS, NflFeed, nfl_primary
@@ -36,12 +37,18 @@ FIXTURE = json.loads(
 GAME_ID = FIXTURE["game"]["id"]
 EVENT = "401873036"
 KICKOFF = datetime(2026, 11, 3, 1, 15, tzinfo=UTC)
+LIVE_GAME = {
+    **FIXTURE["game"],
+    "summary": {**FIXTURE["game"]["summary"], "phase": "INGAME"},
+}
 
 
 class FakeClient:
     def __init__(self, details: dict[str, Any], summaries: list[dict[str, Any]] | None = None):
         self.details, self.summaries, self.calls = details, summaries or [], []
+        self.queries: list[tuple[str, dict[str, Any]]] = []
         self.detail_error: SourceError | None = None
+        self.summary_error: SourceError | None = None
         # What the real client keeps of a response: Varnish's cache headers among them.
         self.last = {
             "status": 200,
@@ -50,6 +57,7 @@ class FakeClient:
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> tuple[Any, bytes]:
         self.calls.append(path)
+        self.queries.append((path, params or {}))
         if path.startswith("/football/v2/weeks/date/"):
             body: Any = {"season": 2026, "seasonType": "REG", "week": 8}
         elif path == "/football/v2/games/season/2026/seasonType/REG/week/8":
@@ -65,6 +73,8 @@ class FakeClient:
                 ]
             }
         elif path == "/football/v2/stats/live/game-summaries":
+            if self.summary_error is not None:
+                raise self.summary_error
             body = {"data": self.summaries}
         elif path == f"/experience/v2/gamedetails/{GAME_ID}":
             if self.detail_error is not None:
@@ -121,7 +131,7 @@ def feed(uow, client: FakeClient, at: datetime, log: LiveLog | None = None) -> N
 def test_a_kicked_off_game_is_discovered_read_and_published(seeded):
     uow = seeded
     at = KICKOFF + timedelta(hours=1)
-    client = FakeClient(FIXTURE["game"])
+    client = FakeClient(LIVE_GAME)
     wait = feed(uow, client, at).step()
     assert wait <= 1.0
     with uow.engine.connect() as c:
@@ -144,7 +154,7 @@ def test_a_kicked_off_game_is_discovered_read_and_published(seeded):
 def test_an_unchanged_game_publishes_nothing_more(seeded):
     uow = seeded
     at = KICKOFF + timedelta(hours=1)
-    client = FakeClient(FIXTURE["game"])
+    client = FakeClient(LIVE_GAME)
     feed(uow, client, at).step()
     with uow.engine.connect() as c:
         before = c.scalar(select(func.count()).select_from(outbox_event))
@@ -160,11 +170,15 @@ def test_an_unchanged_game_publishes_nothing_more(seeded):
 def test_a_correction_to_an_earlier_play_is_published_as_one(seeded):
     uow = seeded
     at = KICKOFF + timedelta(hours=1)
-    feed(uow, FakeClient(FIXTURE["game"]), at).step()
-    corrected = json.loads(json.dumps(FIXTURE["game"]))
+    client = FakeClient(LIVE_GAME, [summary(1)])
+    lane = feed(uow, client, at)
+    lane.step()
+    corrected = json.loads(json.dumps(LIVE_GAME))
     play = next(p for p in corrected["driveChart"]["plays"] if p["playType"] == "RUSH")
     play["playDescription"] = play["playDescription"].replace(" yard", " yards", 1) + " (corrected)"
-    feed(uow, FakeClient(corrected), at + timedelta(seconds=30)).step()
+    client.details = corrected
+    lane.clock = lambda: at + timedelta(seconds=2)
+    lane.step()
     with uow.engine.connect() as c:
         published = c.execute(select(outbox_event.c.event_type)).scalars().all()
     assert published.count("game.corrected") == 1
@@ -173,7 +187,7 @@ def test_a_correction_to_an_earlier_play_is_published_as_one(seeded):
 def test_the_espn_lane_leaves_a_game_the_nfl_lane_has_fresh(seeded):
     uow = seeded
     at = KICKOFF + timedelta(hours=1)
-    feed(uow, FakeClient(FIXTURE["game"]), at).step()
+    feed(uow, FakeClient(LIVE_GAME), at).step()
     assert nfl_primary(uow, EVENT, at + timedelta(seconds=30))
     # Past the stale limit, ESPN's feed is the emergency fallback again.
     assert not nfl_primary(uow, EVENT, at + timedelta(seconds=STALE_SECONDS + 1))
@@ -255,34 +269,112 @@ def summary(offset: int) -> dict[str, Any]:
     }
 
 
-def test_a_summary_change_keeps_fetching_a_stale_record_until_it_catches_up(seeded):
-    """The summaries are cached for 5 seconds and a record can be cached longer. When the summary
-    moves but the record hasn't, the collector fetches the record again each poll until it does."""
-    uow = seeded
+def test_unchanged_summary_still_gets_fresh_details_every_two_seconds(seeded, monkeypatch):
     at = KICKOFF + timedelta(hours=1)
-    older = {
-        **FIXTURE["game"],
-        "driveChart": {"plays": FIXTURE["game"]["driveChart"]["plays"][:-5]},
-    }
-    client = FakeClient(older, [summary(1)])
-    lane = feed(uow, client, at)
-    lane.step()  # the summary appears: the record is read
-    reads = lambda: client.calls.count(f"/experience/v2/gamedetails/{GAME_ID}")  # noqa: E731
-    assert reads() == 1
-    client.summaries = [summary(2)]  # a new play: the summary moves, the record is still cached
+    now = at
+    client = FakeClient(LIVE_GAME, [summary(1)])
+    lane = feed(seeded, client, at)
+    lane.clock = lambda: now
+    detail_path = f"/experience/v2/gamedetails/{GAME_ID}"
+    get = client.get
+
+    def get_with_latency(path, params=None):
+        nonlocal now
+        response = get(path, params)
+        if path == detail_path:
+            now += timedelta(milliseconds=300)
+        return response
+
+    monkeypatch.setattr(client, "get", get_with_latency)
+    lane.step()
+    now = at + timedelta(seconds=1, milliseconds=999)
+    lane.step()
+    assert client.calls.count(detail_path) == 1
+    now = at + timedelta(seconds=2)
+    lane.step()
+    assert client.calls.count(detail_path) == 2
+    polling = [
+        params
+        for path, params in client.queries
+        if path in (detail_path, "/football/v2/stats/live/game-summaries")
+    ]
+    assert len({p.get("_cache_probe") for p in polling if p.get("_cache_probe")}) == 4
+
+
+def test_summary_failure_does_not_gate_active_detail_reads(seeded):
+    at = KICKOFF + timedelta(hours=1)
+    client = FakeClient(LIVE_GAME)
+    client.summary_error = SourceError("NFL_API_UNREACHABLE")
+    lane = feed(seeded, client, at)
+    lane.step()
     lane.clock = lambda: at + timedelta(seconds=2)
-    lane.summaries_due = None
     lane.step()
-    assert reads() == 2 and GAME_ID in lane.chasing
-    lane.clock = lambda: at + timedelta(seconds=4)
-    lane.summaries_due = None
-    lane.step()  # still cached: fetched again
-    assert reads() == 3
-    client.details = FIXTURE["game"]  # the record catches up
-    lane.clock = lambda: at + timedelta(seconds=6)
-    lane.summaries_due = None
+    assert client.calls.count(f"/experience/v2/gamedetails/{GAME_ID}") == 2
+    assert nfl_primary(seeded, EVENT, at + timedelta(seconds=2))
+    with seeded.engine.connect() as c:
+        assert c.scalar(select(nfl_api_game.c.phase)) == "INGAME"
+
+
+def test_provider_retry_after_pauses_fresh_requests(seeded):
+    at = KICKOFF + timedelta(hours=1)
+    client = FakeClient(LIVE_GAME)
+    client.detail_error = SourceError("RATE_LIMITED", retry_after_seconds=17)
+    lane = feed(seeded, client, at)
     lane.step()
-    assert reads() == 4 and GAME_ID not in lane.chasing
+    lane.clock = lambda: at + timedelta(seconds=16)
+    lane.step()
+    assert client.calls.count(f"/experience/v2/gamedetails/{GAME_ID}") == 1
+    client.detail_error = None
+    lane.clock = lambda: at + timedelta(seconds=17)
+    lane.step()
+    assert client.calls.count(f"/experience/v2/gamedetails/{GAME_ID}") == 2
+
+
+def test_overlapping_games_fetch_details_concurrently(seeded, monkeypatch):
+    at = KICKOFF + timedelta(hours=1)
+    second_game, second_event = str(uuid4()), "401873038"
+    with seeded.engine.begin() as c:
+        first = c.execute(select(nfl_game).where(nfl_game.c.event_id == EVENT)).mappings().one()
+        c.execute(insert(nfl_game).values(dict(first) | {"event_id": second_event}))
+        for game, event in ((GAME_ID, EVENT), (second_game, second_event)):
+            c.execute(
+                insert(nfl_api_game).values(
+                    game_id=game,
+                    event_id=event,
+                    season=2026,
+                    season_type="REG",
+                    week=8,
+                    kickoff=KICKOFF,
+                    observed_at=at,
+                )
+            )
+
+    both_fetching = Barrier(2, timeout=3)
+    keys = []
+
+    class ParallelClient(FakeClient):
+        def __init__(self):
+            super().__init__(LIVE_GAME)
+
+        def get(self, path, params=None):
+            if not path.startswith("/experience/v2/gamedetails/"):
+                return super().get(path, params)
+            keys.append(params["_cache_probe"])
+            both_fetching.wait()
+            body = LIVE_GAME | {"id": path.rsplit("/", 1)[-1]}
+            return body, json.dumps(body).encode()
+
+    monkeypatch.setattr(nfl_feed, "NflApiClient", ParallelClient)
+    lane = NflFeed(seeded, 2026, clock=lambda: at, live_log=LiveLog(enabled=False))
+    lane.week, lane.discovered_at = ("REG", 8), at
+    lane.ids, lane.ids_at = FIXTURE["ids"], at
+    try:
+        lane.step()
+        assert len(set(keys)) == 2
+        assert nfl_primary(seeded, EVENT, at) and nfl_primary(seeded, second_event, at)
+    finally:
+        if lane.detail_pool is not None:
+            lane.detail_pool.shutdown()
 
 
 def test_the_live_log_keeps_cache_headers_and_what_each_response_says(seeded, tmp_path):
@@ -302,8 +394,9 @@ def test_the_live_log_keeps_cache_headers_and_what_each_response_says(seeded, tm
     assert (
         record["count"] >= 150
         and record["newest_timed"]["whistle_at"]
-        and record["reason"] == "summary"
+        and record["reason"] == "active"
     )
+    assert record["cache_key"] and summaries["cache_key"] != record["cache_key"]
     assert len(record["fingerprints"]) == record["count"]
     text = "\n".join(path.read_text() for path in tmp_path.glob("*.jsonl"))
     assert "Bearer" not in text and "accessToken" not in text
@@ -334,9 +427,149 @@ def test_final_summary_retries_failed_and_cached_live_details(seeded):
         assert c.scalar(select(nfl_api_game.c.phase)) == "FINAL"
 
 
+def test_confirmed_nfl_final_keeps_ownership_after_freshness_expires(seeded):
+    at = KICKOFF + timedelta(hours=3)
+    feed(seeded, FakeClient(FIXTURE["game"]), at).step()
+    assert nfl_primary(seeded, EVENT, at + timedelta(hours=12))
+
+
+def test_final_reconciles_a_mixed_replay_and_rejects_a_late_fallback(seeded):
+    at = KICKOFF + timedelta(hours=3)
+    feed(seeded, FakeClient(LIVE_GAME), at).step()
+    payload = store.read_plays(seeded, EVENT, limit=1)[0]
+    payload.pop("corrected")
+    prior = LivePlay.model_validate(payload)
+    espn = prior.model_copy(update={"source": None, "snap_at": None, "text": "Fallback"})
+    extra = espn.model_copy(update={"provider_id": EVENT + "999999"})
+    store.publish_plays(
+        seeded,
+        EVENT,
+        (espn, extra),
+        at + timedelta(seconds=91),
+        body_hash="fallback",
+        fallback=True,
+    )
+    assert {p["provider_id"] for p in store.read_plays(seeded, EVENT, limit=400)} >= {
+        extra.provider_id
+    }
+    final_at = at + timedelta(seconds=93)
+    feed(seeded, FakeClient(FIXTURE["game"]), final_at).step()
+    later = final_at + timedelta(hours=12)
+    assert not store.publish_plays(
+        seeded, EVENT, (espn, extra), later, body_hash="fallback", fallback=True
+    ).any
+    active = store.read_plays(seeded, EVENT, limit=400)
+    assert all(p["source"] == "nfl" and p["provider_id"] != extra.provider_id for p in active)
+    with seeded.engine.connect() as c:
+        retired = c.scalar(
+            select(nfl_play_revision.c.is_current).where(
+                nfl_play_revision.c.play_id == extra.provider_id
+            )
+        )
+    assert retired is False
+
+
+def test_late_final_summary_cannot_claim_a_live_detail_as_final(seeded):
+    at = KICKOFF + timedelta(hours=7)
+    client = FakeClient(LIVE_GAME, [{**summary(1), "phase": "FINAL"}])
+    feed(seeded, client, at).step()
+    assert not nfl_primary(seeded, EVENT, at + timedelta(seconds=STALE_SECONDS + 1))
+    with seeded.engine.connect() as c:
+        assert c.scalar(select(nfl_api_game.c.phase)) != "FINAL"
+
+
+def test_a_live_poll_started_before_the_final_cannot_reopen_it(seeded):
+    at = KICKOFF + timedelta(hours=3)
+    client = FakeClient(LIVE_GAME, [summary(1)])
+    stale = feed(seeded, client, at)
+    stale.step()
+    watched = stale._watched()[0]
+    final_at = at + timedelta(seconds=2)
+    feed(seeded, FakeClient(FIXTURE["game"]), final_at).step()
+
+    stale.clock = lambda: at + timedelta(seconds=4)
+    client.details = {**LIVE_GAME, "summary": {"phase": "HALFTIME"}}
+    stale._poll_game(watched, {**summary(2), "phase": "HALFTIME"}, stale.clock())
+
+    with seeded.engine.connect() as c:
+        row = c.execute(select(nfl_api_game)).one()
+        assert (row.phase, row.details_phase, row.details_observed_at) == (
+            "FINAL",
+            "FINAL",
+            final_at,
+        )
+    assert nfl_primary(seeded, EVENT, at + timedelta(hours=12))
+
+
+@pytest.mark.parametrize("problem", ["no_end", "truncated", "score_mismatch"])
+def test_unusable_final_detail_leaves_the_game_available_to_fallback(seeded, problem):
+    at = KICKOFF + timedelta(hours=3)
+    final = json.loads(json.dumps(FIXTURE["game"]))
+    if problem == "no_end":
+        final["driveChart"]["plays"].pop()
+    elif problem == "truncated":
+        final["driveChart"]["plays"] = final["driveChart"]["plays"][-20:]
+    else:
+        final["summary"]["homeTeam"]["score"]["total"] = 18
+    client = FakeClient(final, [{**summary(2), "phase": "FINAL"}])
+    lane = feed(seeded, client, at)
+    lane.step()
+    assert not nfl_primary(seeded, EVENT, at)
+    assert store.read_plays(seeded, EVENT) == []
+
+    client.details = FIXTURE["game"]
+    lane.clock = lambda: at + timedelta(seconds=2)
+    lane.step()
+    assert nfl_primary(seeded, EVENT, at + timedelta(hours=12))
+
+
+def test_final_correction_retries_when_the_changed_summary_arrives_first(seeded):
+    at = KICKOFF + timedelta(hours=3)
+    client = FakeClient(FIXTURE["game"], [{**summary(1), "phase": "FINAL"}])
+    lane = feed(seeded, client, at)
+    lane.step()
+
+    client.summaries = [{**summary(2), "phase": "FINAL"}]
+    client.details = LIVE_GAME  # this detail has not caught up with the new summary
+    lane.clock = lambda: at + timedelta(minutes=5)
+    lane.step()
+
+    corrected = json.loads(json.dumps(FIXTURE["game"]))
+    play = next(p for p in corrected["driveChart"]["plays"] if p["playType"] == "RUSH")
+    play["playDescription"] += " (corrected)"
+    client.details = corrected
+    lane.clock = lambda: at + timedelta(minutes=10)
+    lane.step()
+    assert any(
+        p["text"].endswith(" (corrected)") for p in store.read_plays(seeded, EVENT, limit=400)
+    )
+
+
+def test_an_unconfirmed_final_is_recovered_after_its_week_rolls_over(seeded):
+    at = KICKOFF + timedelta(days=7)
+    with seeded.engine.begin() as c:
+        c.execute(
+            insert(nfl_api_game).values(
+                game_id=GAME_ID,
+                event_id=EVENT,
+                season=2026,
+                season_type="REG",
+                week=7,
+                kickoff=KICKOFF,
+                phase="FINAL",
+                details_observed_at=KICKOFF + timedelta(hours=3),
+                observed_at=KICKOFF + timedelta(hours=3),
+            )
+        )
+    lane = feed(seeded, FakeClient(FIXTURE["game"]), at)
+    lane.week, lane.discovered_at = ("REG", 8), at
+    lane.step()
+    assert nfl_primary(seeded, EVENT, at + timedelta(hours=12))
+
+
 def test_espn_shadow_reads_on_its_own_cadence_then_yields_to_fallback(seeded, monkeypatch):
     at = KICKOFF + timedelta(hours=1)
-    feed(seeded, FakeClient(FIXTURE["game"]), at).step()
+    feed(seeded, FakeClient(LIVE_GAME), at).step()
     with seeded.engine.begin() as c:
         c.execute(update(nfl_game).where(nfl_game.c.event_id == EVENT).values(phase="in_progress"))
     espn = LiveFeed(seeded, Mock(), 2026, clock=lambda: at)
@@ -354,3 +587,18 @@ def test_espn_shadow_reads_on_its_own_cadence_then_yields_to_fallback(seeded, mo
     fallback.assert_not_called()
     espn._games_step(at + timedelta(seconds=STALE_SECONDS + 1))
     fallback.assert_called_once_with(EVENT)
+
+
+def test_animation_uses_the_try_clock_and_keeps_the_final_board(seeded):
+    from arbit_data.live import animation
+
+    at = KICKOFF + timedelta(hours=3)
+    feed(seeded, FakeClient(FIXTURE["game"]), at).step()
+    data = animation.build(seeded, EVENT)
+    assert data is not None
+    tried = next(e for e in data["entries"] if e["part"] == "try")
+    assert tried["snap_at"] == "2026-11-03T01:31:27Z"
+    assert tried["whistle_at"] is None
+    assert tried["clock"] == tried["board"].before.clock == "5:25"
+    assert tried["board"].after.home.score == 0
+    assert data["entries"][-1]["board"].after.status == "FINAL"

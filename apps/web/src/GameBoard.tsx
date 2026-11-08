@@ -256,7 +256,15 @@ function lastPlayKind(play: { kind: string | null; text: string | null }): strin
   return play.kind && !opensWithKind ? play.kind : null;
 }
 
-export function GameBoard({ game }: { game: Game }) {
+export function GameScoreStatus({ game }: { game: Game }) {
+  return (
+    <p className="sr-only" role="status">
+      {matchupSummary(game)}
+    </p>
+  );
+}
+
+export function GameBoard({ game, announce = true }: { game: Game; announce?: boolean }) {
   const situation = game.situation;
   const place = [game.venue?.name, game.venue?.city].filter(Boolean).join(", ");
   const weather = game.venue?.indoor
@@ -273,9 +281,7 @@ export function GameBoard({ game }: { game: Game }) {
       data-live={IN_PLAY.has(game.phase)}
       aria-labelledby="game-heading"
     >
-      <p className="sr-only" role="status">
-        {matchupSummary(game)}
-      </p>
+      {announce && <GameScoreStatus game={game} />}
       <header className="gb-meta">
         <h2 id="game-heading">
           {game.away.abbreviation ?? "—"} at {game.home.abbreviation ?? "—"}

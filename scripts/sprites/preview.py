@@ -233,18 +233,22 @@ class Camera:
         return corners
 
     def ground(self) -> Image.Image:
-        source = [(0, 0), (FIELD.width, 0), (FIELD.width, FIELD.height), (0, FIELD.height)]
+        return self.warp(FIELD, (14, 18, 16))
+
+    def warp(self, image: Image.Image, fill: tuple[int, ...] | int) -> Image.Image:
+        """An image the size of the field art, laid on the field as this camera sees it."""
+        source = [(0, 0), (image.width, 0), (image.width, image.height), (0, image.height)]
         matrix, values = [], []
         for (x, y), (u, v) in zip(self.field_corners(), source, strict=True):
             matrix += [[x, y, 1, 0, 0, 0, -u * x, -u * y], [0, 0, 0, x, y, 1, -v * x, -v * y]]
             values += [u, v]
         coefficients = np.linalg.solve(np.array(matrix, float), np.array(values, float))
-        return FIELD.transform(
+        return image.transform(
             (self.shot.width, self.shot.height),
             Image.PERSPECTIVE,
             coefficients,
             Image.BILINEAR,
-            fillcolor=(14, 18, 16),
+            fillcolor=fill,
         )
 
     def band(self) -> tuple[int, int]:

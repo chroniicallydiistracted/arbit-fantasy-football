@@ -1,5 +1,75 @@
 # Development Changelog
 
+## 2026-11-08 — Live motion calibration
+
+- Revised receiver release, pass flight, pursuit, shared contact and movement beyond the goal line. Measured the field scale and manually reviewed thirteen browser replays before updating the local opt-in preview. [Handoff](handoffs/2026-11-08-live-motion-calibration.md).
+
+## 2026-11-07 — Local web preview activation
+
+- Updated the local browser build and member API for the opt-in Live animation rebuild. The Thursday replay is available for member review. The sync worker and database were outside the update. [Activation handoff](handoffs/2026-11-07-live-animation-preview-activation.md).
+
+## 2026-11-07 — Live animation rebuild preview
+
+- Added typed live action evidence, continuous trajectories and an opt-in browser preview for supported runs, passes, interceptions and kickoffs. The preview can depict a return, fumble and recovery in the same clip. A player has one identity across their credited roles. [Preview handoff](handoffs/2026-11-07-live-animation-rebuild-preview.md).
+
+## 2026-11-07 — Live animation calibration and rebuild design
+
+- Verified the expanded private NGS archive, checked overlap against archived NFL play-by-play, and split the reference by game. Recorded the proposed evidence, motion and rendering design and the owner's clarification on multi-role players. [Calibration handoff](handoffs/2026-11-07-live-animation-calibration.md).
+
+## 2026-11-07 — Independent Live animation audit
+
+- Audited the current NFL-to-browser path and repeated the archived timing and isolated playback checks. Recorded action sequencing, movement, ball attachment and review synchronization issues for the M6 rebuild. Detailed comparison evidence stays private under OWN-053. [Audit handoff](handoffs/2026-11-07-live-animation-rebuild-audit.md).
+
+## 2026-11-07 — Our plays against real tracking
+
+- Six of Jacksonville–Baltimore's highlights were rendered twice with the same renderer: as our choreographer builds them, and from the owner's private NGS tracking (OWN-053).
+- The comparison found five gaps: throw and handoff timing, speeds, paths, alignment depth, and players we hold still.
+- It also found three defects:
+  - a receiver drawn twice when the text and the roster spell his first name differently
+  - a kickoff return lost when the play's text carries a challenge
+  - short pass flight timing that ran long
+
+  The findings stay private with the captures. [Handoff](handoffs/2026-11-07-play-timing.md#ngs-comparison).
+
+## 2026-11-07 — Play timing, slice 2: runs built to their real time
+
+- Runs and scrambles now fill their real snap-to-whistle time with football, at natural speeds: a slower mesh, a wider path to the hole, a churning pile through contact, a longer or shorter look for a scrambler, then a natural dead ball before the whistle. Across 31 games, runs with more than 1.5 s of standing time went from 36% to 2%. Not released. [Handoff](handoffs/2026-11-07-play-timing.md).
+
+## 2026-11-07 — Play timing, slice 1
+
+- The Live board's game clock now runs one second per second from the snap and stops on the play's recorded end clock. Plays that run long no longer slow the clock.
+- The choreographer receives each play's real snap-to-whistle time, and a phase fitter is ready for the templates. Plays are built to their real time from slice 2, starting with runs (OWN-051, OWN-052).
+- A 31-game baseline found 27% of 4,285 timed plays leave more than 1.5 s of standing time, and 492 keep moving after the real whistle. [Research](../research/live-play-timing-2026-11-07.md) and [handoff](handoffs/2026-11-07-play-timing.md).
+
+## 2026-11-07 — Stadium around the live field
+
+- The space around the live field now shows a stadium in the home team's colors: sideline turf, benches, a padded wall, a crowded lower bowl, a lit club level and an upper deck. Neutral sites get an even crowd and gray walls. The field art is unchanged. Published to all 15 Week 9 games on the owner's approval. [Handoff](handoffs/2026-11-07-live-stadium.md).
+
+## 2026-11-07 — Week 9 artwork refresh
+
+- The wake check verified the installed repair and active NFL polling. Denver–Carolina now uses Denver's newly listed B3 kit. [Verification](handoffs/2026-11-06-live-animation-repairs.md#november-7-wake-check).
+
+## 2026-11-06 — Live animation audit repairs
+
+- A verified NFL final retains ownership of play revisions. New reads reconcile fallback-only rows and guard against late provider writes.
+- Live replay follows new plays in reduced motion, keeps selected play identity across corrections and holds the ball in the ending frame. Stoppages update the Jumbotron in place. Play-log rows open their replay or text and can load earlier rows.
+- Play facts recover known spots, aliases and reviewed try timing. Direct snaps, laterals, complex fumbles and blocked punts show verified portions with a readable note. Animation reads support gzip and game-specific events invalidate only affected game queries. Private artwork builds publish complete, versioned bundles. [Handoff](handoffs/2026-11-06-live-animation-repairs.md).
+- Activated migration 0009 and the verified build locally. The NFL worker restored Thursday's replay, and 15 private Week 9 art bundles now use exact fields or the approved season-use fallback. Madrid uses a labeled plain field while its listed image is unavailable.
+
+## 2026-11-05 — Animation pipeline audit
+
+- Verified production script generation across 31 NFL games and sampled 2,912 browser-rendered frames. Reproduced final-source ownership, reduced-motion following, replay identity, terminal ball and try metadata gaps. [Audit](../research/live-animation-pipeline-audit-2026-11-05.md) and [handoff](handoffs/2026-11-05-live-animation-pipeline-audit.md).
+
+## 2026-11-05 — Game cards, field and Jumbotron
+
+- On the game page the existing cards sit in one horizontally scrolling row, and the wider field's Jumbotron is the main scoreboard. Quarter scoring and game details expand below the field. The full scoreboard stays visible when the field cannot show a board.
+- Audited 5,881 NFL records through normalization, animation and browser eligibility. [Coverage](../research/live-play-coverage-2026-11-05.md) and [handoff](handoffs/2026-11-05-live-field-layout.md).
+
+## 2026-11-05 — Fresh NFL polls every two seconds
+
+- The primary NFL worker requests full details for each active game in each two-second round, even if its summary is identical. Primary summary and detail reads each get a new `_cache_probe` value, and concurrent reads cover overlapping games.
+- Loaded locally after Thursday's game. An isolated pregame run returned six cold responses. Sunday will measure whistle-to-arrival time and slate-wide cadence. [Polling handoff](handoffs/2026-11-05-nfl-fresh-polling.md).
+
 ## 2026-11-05 — Live platform integrated into main
 
 - Published the platform branch and integrated the milestone and sprite branch histories into `main`. The merge kept the newer reviewed sprite frames and renderer.

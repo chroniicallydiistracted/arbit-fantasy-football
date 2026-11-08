@@ -290,3 +290,21 @@ def test_a_delay_of_game_is_the_ball_the_lines_and_a_flag():
 @pytest.mark.parametrize("name", ["home_punt_downed", "field_goal_good", "fumble_lost"])
 def test_plays_without_a_penalty_have_no_flag(name):
     assert script(name).props == ()
+
+
+def test_lateral_stops_the_recreation_at_the_verified_first_catch():
+    from arbit_data.live.choreography import choreograph
+
+    clip = choreograph(facts("lateral"), "verified-lateral")
+    assert clip is not None and clip.note
+    assert (
+        len(
+            [
+                segment
+                for segment in clip.ball
+                if segment.target and segment.target.actor == "receiver"
+            ]
+        )
+        == 1
+    )
+    assert next(a for a in clip.actors if a.key == "receiver").segments[-1].x1 == 24

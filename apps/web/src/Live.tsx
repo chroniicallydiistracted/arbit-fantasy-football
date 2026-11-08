@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { useFallbackInterval } from "./events";
 import { ageLabel } from "./format";
@@ -7,7 +8,6 @@ import {
   Drives,
   FieldStrip,
   type Game,
-  GameBoard,
   type GameDetail,
   IN_PLAY,
   Leaders,
@@ -90,20 +90,30 @@ export function LiveBoard() {
           <p>No games have been read yet. The sync worker fills this once it reaches ESPN.</p>
         </section>
       ) : (
-        <div className={eventId ? "live-split" : ""}>
-          <ul className="game-grid" aria-label="Games">
+        <>
+          <ul className={eventId ? "game-grid game-strip" : "game-grid"} aria-label="Games">
             {games.map((game) => (
               <GameTile key={game.event_id} game={game} selected={game.event_id === eventId} />
             ))}
           </ul>
           {eventId && <GameDetailPanel eventId={eventId} />}
-        </div>
+        </>
       )}
     </>
   );
 }
 
 function GameTile({ game, selected }: { game: Game; selected: boolean }) {
+  const link = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    if (!selected || !link.current) return;
+    const strip = link.current.closest(".game-strip");
+    if (!strip) return;
+    const tile = link.current.getBoundingClientRect();
+    const viewport = strip.getBoundingClientRect();
+    if (tile.left < viewport.left) strip.scrollLeft += tile.left - viewport.left;
+    else if (tile.right > viewport.right) strip.scrollLeft += tile.right - viewport.right;
+  }, [selected]);
   const situation = game.situation;
   const sides = [
     { key: "away", team: game.away, other: game.home },
@@ -112,6 +122,7 @@ function GameTile({ game, selected }: { game: Game; selected: boolean }) {
   return (
     <li>
       <Link
+        ref={link}
         className="game-tile"
         to={`/live/games/${game.event_id}`}
         data-live={IN_PLAY.has(game.phase)}
@@ -169,8 +180,7 @@ function GameDetailPanel({ eventId }: { eventId: string }) {
   const detail = query.data;
   return (
     <div className="game-page">
-      <GameBoard game={detail.game} />
-      <LiveField eventId={eventId} />
+      <LiveField eventId={eventId} game={detail.game} />
       <p className="table-foot game-read">
         <ReadAt when={detail.game.observed_at} /> from ESPN.{" "}
         <Link className="link-button quiet" to="/live">
@@ -178,7 +188,7 @@ function GameDetailPanel({ eventId }: { eventId: string }) {
         </Link>
       </p>
       <div className="game-columns">
-        <PlayFeed eventId={eventId} />
+        <PlayFeed key={eventId} eventId={eventId} />
         <div className="game-rail">
           <WinChart detail={detail} />
           <TeamStats detail={detail} />
@@ -194,12 +204,16 @@ function PlayFeed({ eventId }: { eventId: string }) {
   const interval = useFallbackInterval();
   const [params, setParams] = useSearchParams();
   const own = params.get("own") === "true";
+  const [limit, setLimit] = useState(100);
   const team = useTeamContext();
   const query = useQuery({
-    queryKey: ["live-plays", eventId, own, team],
+    queryKey: ["live-plays", eventId, own, team, limit],
     queryFn: ({ signal }) =>
       http<Plays>(
-        withTeam(`/api/v1/live/games/${encodeURIComponent(eventId)}/plays?own=${own}`, team),
+        withTeam(
+          `/api/v1/live/games/${encodeURIComponent(eventId)}/plays?own=${own}&limit=${limit}`,
+          team,
+        ),
         { signal },
       ),
     refetchInterval: interval,
@@ -248,7 +262,18 @@ function PlayFeed({ eventId }: { eventId: string }) {
                 {periodLabel(play.period)} {play.clock}
               </span>
               <span className="play-text">
-                {play.text}
+                <Link
+                  to={`?${new URLSearchParams({
+                    ...(own ? { own: "true" } : {}),
+                    ...(params.get("script_version") === "2" ? { script_version: "2" } : {}),
+                    play: play.id,
+                  })}`}
+                  className="link-button quiet"
+                  aria-current={params.get("play") === play.id ? "true" : undefined}
+                  onClick={() => document.getElementById("live-field")?.scrollIntoView()}
+                >
+                  {play.text}
+                </Link>
                 {play.cancelled && <span className="tag tag-fault"> No play</span>}
                 {play.corrected && !play.cancelled && (
                   <span className="tag tag-caution"> Corrected</span>
@@ -260,6 +285,11 @@ function PlayFeed({ eventId }: { eventId: string }) {
             </li>
           ))}
         </ol>
+      )}
+      {limit < 400 && query.data?.plays.length === limit && (
+        <button type="button" className="link-button quiet" onClick={() => setLimit(limit + 100)}>
+          Show 100 more plays
+        </button>
       )}
       {query.data?.plays_observed_at && (
         <p className="table-foot">

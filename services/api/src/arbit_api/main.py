@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy import Engine, String, Uuid, column, create_engine, select, table, text
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
+from starlette.middleware.gzip import GZipMiddleware
 
 from arbit_api.local_league import install_operator_routes
 from arbit_api.member_routes import install_member_routes
@@ -92,5 +93,6 @@ def create_app(settings: RuntimeSettings | None = None, *, engine: Engine | None
 
     install_operator_routes(app, settings, database, config.season)
     install_member_routes(app, settings, database, config.season)
+    app.add_middleware(GZipMiddleware, minimum_size=4096, compresslevel=3)
     install_static_shell(app, settings.web_dist_path, settings.public_origin)
     return app

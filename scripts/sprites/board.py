@@ -8,8 +8,9 @@ or unlit LED, with our own glyphs from assets/sprites/board/glyphs.txt.
   it are its code in its name tag color (OWN-038), its score and its timeouts left.
 - **Signals.** Down and distance are in the yellow of the line to gain, and the ball's spot in the
   blue of the line of scrimmage. Scores and the clock are white.
-- **The clock** shows the snap's time until the snap, then runs to the end-of-play time once a
-  source gives one, landing on it at the whistle. Without one it holds.
+- **The clock** shows the snap's time until the snap, then runs one second per second, as the real
+  clock did, and stops on the end-of-play time once a source gives one (OWN-051). Without one it
+  holds.
 - **Results.** After the whistle each result scrolls in from the side of the team it is for. It
   is green for a score, red for a turnover or a miss, and yellow for a flag, which also names the
   foul, the team and the player's number. The board then turns to the game after the play.
@@ -343,11 +344,10 @@ class Board:
         return self.whistle + cards + HOLD_AFTER
 
     def clock_at(self, t: float) -> str | None:
-        """The clock from the snap to the whistle: run down to the end of the play when known."""
+        """The clock in real time from the snap, stopping on the end of the play when known."""
         if self.start is None or self.end is None or self.end >= self.start or t < SNAP:
             return self.board.before.clock
-        share = min(1.0, (t - SNAP) / max(0.1, self.whistle - SNAP))
-        left = math.ceil(self.start - (self.start - self.end) * share)
+        left = max(self.end, math.ceil(self.start - (t - SNAP)))
         return f"{left // 60}:{left % 60:02d}"
 
     def at(self, t: float) -> Image.Image:

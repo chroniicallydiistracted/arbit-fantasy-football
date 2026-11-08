@@ -12,6 +12,23 @@ class Participant(LiveModel):
     role: str
 
 
+class MotionPerson(LiveModel):
+    source_id: str
+    espn_id: str | None = None
+    team_id: str | None = None
+    name: str | None = None
+    jersey: str | None = None
+    roles: tuple[str, ...]
+    stat_types: tuple[int, ...]
+
+
+class MotionEvidence(LiveModel):
+    people: tuple[MotionPerson, ...] = ()
+    numbered_text: str | None = None
+    air_yards: int | None = None
+    air_stat_type: Literal[111, 112] | None = None
+
+
 def _absent(value: Any) -> bool:
     return value is None
 
@@ -94,6 +111,7 @@ class LivePlay(LiveModel):
     clock_end: str | None = Field(default=None, exclude_if=_absent)  # the game clock at the whistle
     jerseys: dict[str, str] | None = Field(default=None, exclude_if=_absent)  # ESPN ID → number
     nfl: dict[str, Any] | None = Field(default=None, exclude_if=_absent)  # every field, as sent
+    motion_evidence: MotionEvidence | None = Field(default=None, exclude_if=_absent)
     coordinate_basis: Literal["source_yards_to_endzone_separate_team_frames"] = (
         "source_yards_to_endzone_separate_team_frames"
     )

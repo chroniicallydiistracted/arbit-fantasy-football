@@ -82,7 +82,9 @@ class LiveFeed:
         now = self.clock()
         digest = hashlib.sha256(first.body).hexdigest()
         page = normalize_collection(first.payload, event_id, self.season, 1)
-        if page["page_count"] == 1 and store.plays_unchanged(self.uow, event_id, digest, now):
+        if page["page_count"] == 1 and store.plays_unchanged(
+            self.uow, event_id, digest, now, fallback=True
+        ):
             return store.PlayChange()
         pages = [page]
         for number in range(2, page["page_count"] + 1):
@@ -96,7 +98,7 @@ class LiveFeed:
             ).hexdigest()
             pages.append(normalize_collection(more.payload, event_id, self.season, number))
         plays = collect_play_pages(pages, event_id, self.season)
-        return store.publish_plays(self.uow, event_id, plays, now, body_hash=digest)
+        return store.publish_plays(self.uow, event_id, plays, now, body_hash=digest, fallback=True)
 
     def shadow_plays(self, event_id: str) -> None:
         """Read a game's plays from ESPN without storing them; the capturing transport keeps

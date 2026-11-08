@@ -107,6 +107,7 @@ class BoardState(LiveModel):
     distance: int | None = None
     goal_to_go: bool = False
     spot: BoardSpot | None = None
+    status: str | None = None
 
 
 class BoardResult(LiveModel):
@@ -300,6 +301,8 @@ class GameBoard:
             results.append(_result("touchdown", scorer or (defense if results else offense)))
         if facts.safety:
             results.append(_result("safety", defense))
+        if facts.shape == "punt" and facts.kick and facts.kick.result == "blocked":
+            results.append(_result("blocked", defense))
         if facts.shape == "field_goal" and facts.kick is not None:
             if facts.kick.result == "good":
                 results.append(_result("field_goal", offense))
@@ -375,7 +378,12 @@ class GameBoard:
     # --- one play --------------------------------------------------------------------------------
 
     def boards(
-        self, play: LivePlay, facts: PlayFacts, clock_end: str | None = None
+        self,
+        play: LivePlay,
+        facts: PlayFacts,
+        clock_end: str | None = None,
+        *,
+        attempt: LivePlay | None = None,
     ) -> tuple[PlayBoard, ...]:
         """The board for this play, then its try's when it scored a touchdown with one attached.
         The game then moves past the play: its score, and any timeout it records. `clock_end` is
@@ -429,6 +437,16 @@ class GameBoard:
         else:
             after_rest = self._end(play.end)
         self._charge(play.text)  # a lost challenge costs its timeout once the play is over
+        kind = ((play.nfl or {}).get("play") or {}).get("playType")
+        text = play.text.strip().upper()
+        if kind == "END_GAME" or text == "END GAME":
+            after_rest = {"status": "FINAL"}
+        elif kind == "END_QUARTER" or text.startswith("END QUARTER"):
+            after_rest = {"status": "HALFTIME" if play.period == 2 else "END OF PERIOD"}
+        elif facts.shape == "timeout":
+            after_rest["status"] = "TWO-MINUTE WARNING" if "TWO-MINUTE" in text else "TIMEOUT"
+        elif play.cancelled and facts.penalties:
+            after_rest["status"] = "NO PLAY"
         after = self._state(play, play_scores, clock_end, after_rest)
         made = [
             PlayBoard(
@@ -440,13 +458,22 @@ class GameBoard:
             )
         ]
         if tried:
+            try_before = (
+                after if attempt is None else self._state(attempt, play_scores, rest=after_rest)
+            )
+            try_after = self._state(
+                attempt or play,
+                final,
+                clock_end if attempt is None else attempt.clock,
+                {"possession": scorer},
+            )
             made.append(
                 PlayBoard(
                     event_id=play.event_id,
                     provider_id=play.provider_id,
                     part="try",
-                    before=after,
-                    after=self._state(play, final, clock_end, {"possession": scorer}),
+                    before=try_before,
+                    after=try_after,
                     results=tuple(self._try_results(facts, scorer)),
                 )
             )

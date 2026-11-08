@@ -26,7 +26,8 @@
   "spot": {
    "team_id": "26",
    "yard": 1
-  }
+  },
+  "status": null
  },
  "after": {
   "period": 1,
@@ -48,7 +49,8 @@
   "down": null,
   "distance": null,
   "goal_to_go": false,
-  "spot": null
+  "spot": null,
+  "status": null
  },
  "results": [
   {

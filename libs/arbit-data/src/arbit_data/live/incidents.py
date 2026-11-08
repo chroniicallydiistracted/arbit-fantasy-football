@@ -29,10 +29,84 @@ def choreograph(
     units: C.Units | None = None,
 ) -> PlayScript | None:
     if facts.shape == "fumble":
-        return _fumble(facts, seed, names, positions or {}, units or {})
+        return _fumble(facts, seed, names, positions or {}, units or {}) or partial(
+            facts, seed, names, positions or {}, units or {}
+        )
     if facts.shape == "penalty":
         return _penalty(facts, seed, names, positions or {}, units or {})
     return None
+
+
+def partial(
+    facts: PlayFacts,
+    seed: str,
+    names: Mapping[str, str],
+    positions: Mapping[str, tuple[str, ...]],
+    units: C.Units,
+) -> PlayScript | None:
+    """Draw the verified portion of a sequence with an explicit handoff to the play text."""
+    if facts.start is None or facts.offense is None:
+        return None
+    if facts.reason == "trick_play" and facts.direct_snap:
+        play = _Play(facts, seed, names, positions, units)
+        receiver = C._snap(
+            play,
+            "snap_receiver",
+            None,
+            "snap_receiver",
+            play.los - 5.0,
+            True,
+            facts.direct_snap,
+        )
+        receiver.hold("ready", 0.25).hold("stand", 0.25)
+        play.note = "Direct snap shown. The transfer to the passer is unconfirmed."
+        return C._finish(play, "direct_snap", C.fit("Direct snap to", facts.direct_snap))
+
+    if " Lateral " in facts.text and facts.before is not None:
+        before = facts.before
+        receivers = [person for person in before.players if person.role == "receiver"]
+        named = C._text_names(before.text).get("receiver", [])
+        if len(receivers) > 1 and len(named) == 1:
+            from arbit_data.live.board import _same_player
+
+            receivers = [
+                person
+                for person in receivers
+                if names.get(person.espn_id) == named[0]
+                or _same_player(named[0], names.get(person.espn_id, ""))
+            ]
+        if len(receivers) == 1 and before.template == "pass" and not before.missing:
+            first = before.model_copy(
+                update={
+                    "players": (*[p for p in before.players if p.role == "passer"], *receivers),
+                }
+            )
+            part = _Play(first, seed, names, positions, units)
+            part.budget = None  # a partial re-creation keeps its natural timing
+            built = C._build(part)
+            if built is not None:
+                built.note = (
+                    "The first catch is shown. See the play text for the lateral and result."
+                )
+                return C._finish(built, "pass", C._caption(first))
+
+    fumble = facts.fumble
+    if fumble is None or (fumble.loose is None and fumble.spot is None):
+        return None
+    play = _Play(facts, seed, names, positions, units)
+    known = fumble.loose if fumble.loose is not None else fumble.spot
+    assert known is not None
+    loose = (float(known), 0.12, play.z)
+    recovery = (float(fumble.spot), 0.12, play.z) if fumble.spot is not None else loose
+    play.rest(0.0, C.SNAP, loose)
+    arrived = C.SNAP
+    if recovery != loose:
+        arrived += max(0.25, abs(loose[0] - recovery[0]) / 7.0)
+        play.fly(C.SNAP, arrived, BallEnd(point=loose), BallEnd(point=recovery), "tumble")
+    play.rest(arrived, 1e9, recovery)
+    play.note = "The recorded loose-ball or recovery spot is shown. See the play text for the sequence and result."
+    # This reconstruction begins during the fumble, so it has no formation or snap lines.
+    return C._finish(play, "fumble", _fumble_caption(facts)).model_copy(update={"lines": ()})
 
 
 def flags(play: _Play, facts: PlayFacts | None = None) -> None:
@@ -291,6 +365,7 @@ def _fumble(
     play = _Play(
         before.model_copy(update={"players": kept + tacklers}), seed, names, positions, units
     )
+    play.budget = None  # the real time covers the fumble and recovery too, not this carry alone
     built = C._build(play)
     if built is None:
         return None

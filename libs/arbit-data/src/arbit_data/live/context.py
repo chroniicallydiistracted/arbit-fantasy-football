@@ -105,6 +105,15 @@ def game_weeks(season: int = 2026) -> dict[str, int]:
     }
 
 
+def neutral_sites() -> set[str]:
+    """ESPN IDs of games nflverse's schedule places at a neutral site, such as international games."""
+    return {
+        str(g["espn"])
+        for g in _table("schedules/games")
+        if g.get("espn") and g.get("location") == "Neutral"
+    }
+
+
 def week_rosters(week: int, codes: dict[str, str]) -> dict[str, list[tuple[str | None, str, str]]]:
     """Each team's players that week, by ESPN team ID, as (ESPN player ID or None, full name,
     jersey number), from nflverse's weekly roster. `codes` maps ESPN team IDs to ESPN codes. The

@@ -28,4 +28,28 @@ def test_upgrade_preserves_existing_snapshots_jobs_and_outbox(engine, candidate)
     with engine.connect() as c:
         assert c.scalar(text("SELECT count(*) FROM outbox_event")) == 1
         assert c.scalar(text("SELECT count(*) FROM league_document")) == 0
-        assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0008_nfl_api"
+        assert c.scalar(text("SELECT version_num FROM alembic_version")) == "0009_nfl_detail_phase"
+
+
+def test_upgrade_preserves_legacy_nfl_details_without_claiming_final_authority(engine):
+    config = Config("alembic.ini")
+    with engine.begin() as c:
+        config.attributes["connection"] = c
+        command.upgrade(config, "0008_nfl_api")
+        c.execute(
+            text("""
+                INSERT INTO nfl_api_game
+                    (game_id, season, season_type, week, event_id, phase, details_hash,
+                     details_observed_at, observed_at)
+                VALUES
+                    ('legacy', 2026, 'REG', 9, '401873037', 'FINAL', :hash,
+                     '2026-11-06 04:15:00+00', '2026-11-06 04:16:00+00')
+            """),
+            {"hash": "d" * 64},
+        )
+        command.upgrade(config, "head")
+
+        detail = c.execute(
+            text("SELECT event_id, phase, details_hash, details_phase FROM nfl_api_game")
+        ).one()
+        assert detail == ("401873037", "FINAL", "d" * 64, None)

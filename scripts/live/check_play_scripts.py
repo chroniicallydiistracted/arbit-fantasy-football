@@ -218,7 +218,14 @@ def realism(script: C.PlayScript, facts: PlayFacts, report: Report) -> None:
     lines = [line.x for line in script.lines if line.kind == "scrimmage"]
     snapper = actors.get("snapper")
     if snapper is not None and lines and script.template not in ("punt", "field_goal", "extra_point", "two_point"):
-        if any(abs(s.x0 - lines[0]) > 0.5 or abs(s.x1 - lines[0]) > 0.5 for s in snapper.segments):
+        named_tackler = any(p.espn_id == snapper.espn_id and p.role in ("tackler", "assistedBy") for p in facts.players)
+        picked_at = next((s.start for s in script.ball if s.state == "held" and s.actor == "interceptor"), None)
+        before_return = (
+            snapper.segments
+            if not named_tackler or picked_at is None
+            else [seg for seg in snapper.segments if seg.start < picked_at]
+        )
+        if any(abs(s.x0 - lines[0]) > 0.5 or abs(s.x1 - lines[0]) > 0.5 for s in before_return):
             report.flag("snapper leaves the ball", facts, "")
     quarterback = actors.get("quarterback")
     if quarterback is not None and script.template == "run":
@@ -274,6 +281,14 @@ def between_the_posts(point: tuple[float, float, float] | None) -> bool:
 
 def outcome(script: C.PlayScript, facts: PlayFacts, report: Report) -> None:
     """The script shows what ESPN says happened."""
+    if script.note:
+        # A partial clip shows only the observed sequence segment. The board and
+        # original play text carry the rest of the result.
+        if script.template == "fumble" and facts.fumble and facts.fumble.spot is not None:
+            endpoint = script.ball[-1].at
+            if endpoint is None or abs(endpoint[0] - facts.fumble.spot) > 0.05:
+                report.flag("partial fumble misses its recorded spot", facts, str(endpoint))
+        return
     kick, held = facts.kick, [seg for seg in script.ball if seg.state == "held"]
     if script.template in ("punt", "kickoff") and kick and kick.landing is not None:
         if kick.result in (
@@ -397,13 +412,17 @@ def main(root: Path, use_positions: bool = True, details: Path | None = None) ->
             seed = f"{play.provider_id}:{content_hash(play.model_dump(mode='json'))}"
             now = game.now()
             game.saw(facts)
-            script = C.choreograph(facts, seed, positions=positions, units=now)
-            if PACED and script is not None and play.snap_at and play.whistle_at:
+            real = None
+            if PACED and play.snap_at and play.whistle_at:
                 from datetime import datetime
 
+                real = (datetime.fromisoformat(play.whistle_at.replace("Z", "+00:00")) - datetime.fromisoformat(play.snap_at.replace("Z", "+00:00"))).total_seconds()
+            # As the API builds it: to the real time (OWN-052), then the uniform stretch for any
+            # template not yet built to time.
+            script = C.choreograph(facts, seed, positions=positions, units=now, real_seconds=real)
+            if real is not None and script is not None:
                 from arbit_data.live.pacing import pace
 
-                real = (datetime.fromisoformat(play.whistle_at.replace("Z", "+00:00")) - datetime.fromisoformat(play.snap_at.replace("Z", "+00:00"))).total_seconds()
                 script = pace(script, real)
                 paced["plays"] += 1
                 paced["at real time" if abs(script.whistle - C.SNAP - real) < 0.05 else "kept Arbit's timing"] += 1
@@ -450,6 +469,9 @@ def main(root: Path, use_positions: bool = True, details: Path | None = None) ->
     for kind, count in report.problems.most_common():
         text, detail = report.examples[kind]
         print(f"- {kind}: {count}, such as {detail!r} in {text!r}")
+
+    if report.problems and "--strict" in sys.argv:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

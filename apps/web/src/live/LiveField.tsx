@@ -12,10 +12,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { useSearchParams } from "react-router";
 import { useFallbackInterval } from "../events";
+import { type Game, GameBoard, GameScoreStatus } from "../GameBoard";
 import type { components } from "../generated/api";
 import { http } from "../transport";
 import { drawBoard, LedBoard, type Team } from "./led";
+import { MotionScene } from "./motion_scene";
 import { type Art, type Meta, Scene } from "./scene";
 
 type Animation = components["schemas"]["LiveAnimation"];
@@ -30,15 +33,16 @@ async function image(url: string): Promise<HTMLImageElement> {
   return element;
 }
 
-async function loadArt(eventId: string): Promise<Art> {
+async function loadArt(eventId: string, revision?: string | null): Promise<Art> {
   const base = `/api/v1/live/art/${encodeURIComponent(eventId)}`;
-  const meta = await http<Meta>(`${base}/meta.json`);
+  const asset = (name: string) => `${base}/${name}${revision ? `?revision=${revision}` : ""}`;
+  const meta = await http<Meta>(asset("meta.json"));
   const [field, home, away, officials, ball] = await Promise.all([
-    image(`${base}/field.png`),
-    image(`${base}/${meta.teams.home.sprites.image}`),
-    image(`${base}/${meta.teams.away.sprites.image}`),
-    image(`${base}/officials.png`),
-    image(`${base}/ball.png`),
+    image(asset("field.png")),
+    image(asset(meta.teams.home.sprites.image)),
+    image(asset(meta.teams.away.sprites.image)),
+    image(asset("officials.png")),
+    image(asset("ball.png")),
   ]);
   return { meta, field, sprites: { home, away }, officials, ball };
 }
@@ -59,113 +63,215 @@ function usePrefersReducedMotion() {
 
 type Clip = { entry: Entry; scene: Scene; board: LedBoard | null; length: number };
 
+const keyOf = (entry: Entry) => `${entry.play_id}:${entry.part}`;
+
 // A failure in the field hides the field only: the scoreboard and the play feed stay up.
-class FieldBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class FieldBoundary extends Component<{ children: ReactNode; game: Game }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   render() {
     return this.state.failed ? (
-      <p className="live-field-note">The field couldn’t be drawn for this game.</p>
+      <FieldUnavailable game={this.props.game}>
+        The field couldn’t be drawn for this game.
+      </FieldUnavailable>
     ) : (
       this.props.children
     );
   }
 }
 
-export function LiveField({ eventId }: { eventId: string }) {
+function FieldUnavailable({ game, children }: { game: Game; children: ReactNode }) {
   return (
-    <FieldBoundary>
-      <Field eventId={eventId} />
+    <>
+      <GameBoard game={game} />
+      <p className="live-field-note">{children}</p>
+    </>
+  );
+}
+
+export function LiveField({ eventId, game }: { eventId: string; game: Game }) {
+  return (
+    <FieldBoundary key={eventId} game={game}>
+      <Field eventId={eventId} game={game} />
     </FieldBoundary>
   );
 }
 
-function Field({ eventId }: { eventId: string }) {
+function Field({ eventId, game }: { eventId: string; game: Game }) {
   const interval = useFallbackInterval();
+  const [params, setParams] = useSearchParams();
+  const preview = params.get("script_version") === "2";
   const animation = useQuery({
-    queryKey: ["live-animation", eventId],
+    queryKey: ["live-animation", eventId, preview ? 2 : 1],
     queryFn: ({ signal }) =>
-      http<Animation>(`/api/v1/live/games/${encodeURIComponent(eventId)}/animation`, { signal }),
+      http<Animation>(
+        `/api/v1/live/games/${encodeURIComponent(eventId)}/animation${preview ? "?script_version=2" : ""}`,
+        { signal },
+      ),
     refetchInterval: interval,
   });
   const art = useQuery({
-    queryKey: ["live-art", eventId],
-    queryFn: () => loadArt(eventId),
+    queryKey: ["live-art", eventId, animation.data?.art.revision],
+    queryFn: () => loadArt(eventId, animation.data?.art.revision),
     enabled: animation.data?.art.available === true,
     staleTime: 10 * 60_000,
   });
   const reduced = usePrefersReducedMotion();
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [index, setIndex] = useState<number | null>(null); // null follows the game live
-  const [live, setLive] = useState(-1); // the play shown while following live
+  const selectedId = params.get("play");
+  const selectedKey = selectedId
+    ? `${selectedId}:${params.get("part") === "try" ? "try" : "play"}`
+    : null;
+  const [live, setLive] = useState<string | null>(null);
+  const remembered = useRef<Entry | null>(null);
   const [paused, setPaused] = useState(false);
+  const [drawFailed, setDrawFailed] = useState(false);
   const [epoch, setEpoch] = useState(0); // a replay restarts the same play
   const clock = useRef({ started: performance.now(), frozen: 0 });
+  const timeline = useRef<{ key: string | undefined; epoch: number; clip?: Clip } | null>(null);
 
-  const clips: Clip[] = useMemo(() => {
-    if (!animation.data || !art.data) return [];
-    const data = animation.data;
-    const meta = art.data.meta;
-    const teams: Record<string, Team> = {
-      [data.home]: {
+  const entries = animation.data?.entries;
+  const home = animation.data?.home;
+  const away = animation.data?.away;
+  const teams = useMemo(() => {
+    if (!home || !away || !art.data) return {};
+    const { meta } = art.data;
+    return {
+      [home]: {
         color: meta.teams.home.tag[0] as [number, number, number],
         logo: meta.teams.home.logo,
       },
-      [data.away]: {
+      [away]: {
         color: meta.teams.away.tag[0] as [number, number, number],
         logo: meta.teams.away.logo,
       },
-    };
-    return data.entries.flatMap((entry) => {
+    } satisfies Record<string, Team>;
+  }, [home, away, art.data]);
+  // React Query preserves unchanged entry objects. Keep their scenes and board frames on refetch.
+  const rendered = useRef(new WeakMap<Entry, Clip>());
+  const clips = useMemo(() => {
+    const artData = art.data;
+    if (!entries || !home || !artData) return [];
+    return entries.flatMap((entry) => {
       const script = entry.script;
       if (!script || entry.cancelled) return [];
-      const board = entry.board ? new LedBoard(entry.board, script.whistle, teams) : null;
-      return [
-        {
-          entry,
-          scene: new Scene(script, art.data, data.home),
-          board,
-          length: Math.max(script.duration, board?.length ?? 0),
-        },
-      ];
+      const existing = rendered.current.get(entry);
+      if (existing?.scene.art === artData) return [existing];
+      const board = entry.board
+        ? new LedBoard(entry.board, script.whistle, teams, !script.note)
+        : null;
+      const clip = {
+        entry,
+        scene:
+          script.version === 2
+            ? new MotionScene(script, artData, home)
+            : new Scene(script, artData, home),
+        board,
+        length: Math.max(script.duration, board?.length ?? 0),
+      };
+      rendered.current.set(entry, clip);
+      return [clip];
     });
-  }, [animation.data, art.data]);
-
-  // Following live, a new play plays after the one on screen; a backlog of more than three
-  // skips ahead to the last three.
+  }, [home, art.data, entries, teams]);
+  const newest = clips.at(-1);
+  const liveIndex = clips.findIndex((clip) => keyOf(clip.entry) === live);
+  const liveClip =
+    reduced || liveIndex < 0
+      ? newest
+      : clips[clips.length - 1 - liveIndex > 3 ? clips.length - 3 : liveIndex];
+  const followKey = liveClip && keyOf(liveClip.entry);
   useEffect(() => {
-    if (!clips.length) return;
-    if (live < 0) setLive(clips.length - 1);
-    else if (clips.length - 1 - live > 3) setLive(clips.length - 3);
-  }, [clips.length, live]);
-  const target = Math.max(
-    0,
-    Math.min(index ?? (live >= 0 ? live : clips.length - 1), clips.length - 1),
+    if (!selectedKey && followKey) setLive(followKey);
+  }, [selectedKey, followKey]);
+  const selected = selectedKey ? entries?.find((entry) => keyOf(entry) === selectedKey) : undefined;
+  useEffect(() => {
+    if (selected) remembered.current = selected;
+  }, [selected]);
+  const missing = Boolean(selectedKey && !selected && entries);
+  const parentPlay =
+    missing && selectedId && params.get("part") === "try"
+      ? entries?.find((item) => item.play_id === selectedId && item.part === "play")
+      : undefined;
+  const current = selectedKey ? clips.find((clip) => keyOf(clip.entry) === selectedKey) : liveClip;
+  const entry = selectedKey
+    ? (selected ??
+      parentPlay ??
+      (remembered.current && keyOf(remembered.current) === selectedKey
+        ? remembered.current
+        : undefined))
+    : (current?.entry ?? entries?.at(-1));
+  const last = entries?.at(-1);
+  const laterBoardEntry =
+    !selectedKey && current === newest && last !== current?.entry ? last : undefined;
+  const stillEntry = current ? laterBoardEntry : (selected ?? (!selectedKey ? last : undefined));
+  const stillBoard = useMemo(
+    () => (stillEntry?.board ? new LedBoard(stillEntry.board, 0, teams) : null),
+    [stillEntry, teams],
   );
-  // A new play, or a replay of the same one, starts its clock again.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the clock restarts when these change
+  const targetKey = entry && keyOf(entry);
   useEffect(() => {
-    clock.current = { started: performance.now(), frozen: 0 };
-  }, [target, epoch]);
+    const script = current?.entry.script;
+    const previous = timeline.current;
+    const previousScript = previous?.clip?.entry.script;
+    if (!previous || previous.key !== targetKey || previous.epoch !== epoch) {
+      clock.current = { started: performance.now(), frozen: 0 };
+    } else if (
+      current &&
+      previousScript &&
+      script &&
+      (previousScript.version === 2 || script.version === 2)
+    ) {
+      // The query retains structurally equal subtrees on revision. Caption edits
+      // leave those tracks intact and should keep the current time.
+      const motionChanged =
+        previousScript.version !== script.version ||
+        (previousScript.version === 2 &&
+          script.version === 2 &&
+          (previousScript.actors !== script.actors ||
+            previousScript.ball !== script.ball ||
+            previousScript.whistle !== script.whistle ||
+            previousScript.motion_end !== script.motion_end));
+      const was = previous.clip?.entry.board?.after;
+      const now = current.entry.board?.after;
+      const outcomeChanged =
+        was?.home.score !== now?.home.score ||
+        was?.away.score !== now?.away.score ||
+        was?.possession !== now?.possession ||
+        was?.spot !== now?.spot;
+      if (motionChanged || outcomeChanged) {
+        // Show the corrected endpoint and leave a replay of revised motion to the member.
+        clock.current = {
+          started: performance.now() - current.length * 1000,
+          frozen: current.length,
+        };
+      }
+    }
+    timeline.current = { key: targetKey, epoch, clip: current };
+  }, [targetKey, epoch, current]);
 
+  const final = !selectedKey && current === newest && game.phase === "final";
   const font = useMemo(() => getComputedStyle(document.body).fontFamily || "sans-serif", []);
 
   const drawAt = useCallback(
-    (clip: Clip, t: number) => {
+    (clip: Clip | undefined, t: number, terminal: boolean) => {
       const element = canvas.current;
       if (!element || !art.data) return;
       const ctx = element.getContext("2d");
-      if (!ctx) return;
+      if (!ctx) throw new Error("Canvas unavailable");
       const meta = art.data.meta;
       ctx.drawImage(art.data.field, 0, 0);
-      if (clip.board) {
+      const boardImage =
+        terminal && (stillBoard || final)
+          ? (stillBoard ?? clip?.board)?.after(final ? "FINAL" : undefined)
+          : clip?.board?.at(t);
+      if (boardImage) {
         const top = meta.board.top - meta.band.top;
-        const image = clip.board.at(t);
+        const image = boardImage;
         drawBoard(ctx, image, meta.camera.width, top, top + image.height + 16);
       }
-      clip.scene.draw(ctx, t, font);
+      clip?.scene.draw(ctx, t, font);
       const bar = meta.camera.caption_size + 21;
       const bottom = element.height;
       ctx.fillStyle = "rgba(10,12,14,0.894)";
@@ -173,11 +279,14 @@ function Field({ eventId }: { eventId: string }) {
       ctx.textBaseline = "top";
       ctx.fillStyle = "rgb(240,240,235)";
       ctx.font = `${meta.camera.caption_size}px ${font}`;
-      ctx.fillText(clip.scene.script.caption, 16, bottom - bar + 8, element.width - 560);
+      const caption = clip?.scene.script.caption ?? entry?.text;
+      if (caption) ctx.fillText(caption, 16, bottom - bar + 8, element.width - 560);
       const notes = [
         NOTE,
         ...Object.values(meta.labels).filter(Boolean),
-        clip.entry.source === "espn" ? "Fallback source: ESPN" : null,
+        (terminal ? (stillEntry ?? entry) : entry)?.source === "espn"
+          ? "Fallback source: ESPN"
+          : null,
       ]
         .filter(Boolean)
         .join(" · ");
@@ -189,114 +298,210 @@ function Field({ eventId }: { eventId: string }) {
         bottom - bar / 2 - meta.camera.tag_size / 2 - 1,
       );
     },
-    [art.data, font],
+    [art.data, font, entry, final, stillBoard, stillEntry],
   );
 
+  const currentIndex = current ? clips.indexOf(current) : -1;
+  const nextLive = currentIndex >= 0 ? clips[currentIndex + 1] : undefined;
   // biome-ignore lint/correctness/useExhaustiveDependencies: a replay (epoch) redraws from the start
   useEffect(() => {
-    if (!clips.length || target < 0) return;
-    const clip = clips[target];
+    if (drawFailed || !art.data || (!current && !stillBoard && !entry && !missing)) return;
     let frame = 0;
     const tick = (now: number) => {
       const elapsed = paused ? clock.current.frozen : (now - clock.current.started) / 1000;
-      const t = reduced ? clip.length : Math.min(elapsed, clip.length);
-      drawAt(clip, t);
-      if (reduced || paused) return;
-      if (elapsed < clip.length) frame = requestAnimationFrame(tick);
-      else if (index === null && target < clips.length - 1) setLive(target + 1);
+      const length = current?.length ?? 0;
+      const terminal = !current || reduced || elapsed >= length;
+      const t = terminal ? length : elapsed;
+      try {
+        drawAt(current, t, terminal);
+      } catch {
+        setDrawFailed(true);
+        return;
+      }
+      if (!current || reduced || paused) return;
+      if (!terminal) frame = requestAnimationFrame(tick);
+      else if (!selectedKey && nextLive) setLive(keyOf(nextLive.entry));
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [clips, target, reduced, paused, drawAt, index, epoch]);
+  }, [
+    art.data,
+    current,
+    drawAt,
+    drawFailed,
+    entry,
+    epoch,
+    missing,
+    nextLive,
+    paused,
+    reduced,
+    selectedKey,
+    stillBoard,
+  ]);
 
   const togglePause = () => {
+    if (!current) return;
     if (!paused) clock.current.frozen = (performance.now() - clock.current.started) / 1000;
     else clock.current.started = performance.now() - clock.current.frozen * 1000;
     setPaused(!paused);
   };
-  const go = (next: number | null) => {
+  const go = (clip: Clip | null) => {
     setPaused(false);
-    setIndex(next === null ? null : Math.max(0, Math.min(clips.length - 1, next)));
-    setEpoch((e) => e + 1);
+    setParams(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+        if (clip) next.set("play", clip.entry.play_id);
+        else next.delete("play");
+        if (clip?.entry.part === "try") next.set("part", "try");
+        else next.delete("part");
+        return next;
+      },
+      { replace: true },
+    );
+    if (!clip) setLive(newest ? keyOf(newest.entry) : null);
+    setEpoch((value) => value + 1);
   };
+  const order = selected && entries ? entries.indexOf(selected) : -1;
+  const previous = current
+    ? clips[currentIndex - 1]
+    : order >= 0
+      ? clips.filter((clip) => (entries?.indexOf(clip.entry) ?? -1) < order).at(-1)
+      : undefined;
+  const next = current
+    ? nextLive
+    : order >= 0
+      ? clips.find((clip) => (entries?.indexOf(clip.entry) ?? -1) > order)
+      : undefined;
   const onKey = (event: React.KeyboardEvent) => {
     if (event.key === "k") togglePause();
-    else if (event.key === "ArrowLeft") go(target - 1);
-    else if (event.key === "ArrowRight") go(target + 1);
-    else if (event.key === "r") go(target);
+    else if (event.key === "ArrowLeft" && previous) go(previous);
+    else if (event.key === "ArrowRight" && next) go(next);
+    else if (event.key === "r" && current) go(current);
     else if (event.key === "l") go(null);
     else return;
     event.preventDefault();
   };
+  const noPlay = missing || selected?.cancelled;
+  const noArt = !art.data || art.isError || drawFailed;
+  const note = current?.scene.script.note;
+  const notice = (note ||
+    (selectedKey && (noPlay || (selected && (!selected.script || noArt))))) && (
+    <p className="live-field-note" role="status">
+      <b>{noPlay ? "No Play" : note ? "Partial re-creation" : "Text replay"}</b>{" "}
+      {note && `${note} `}
+      {entry?.text ?? "This play is no longer in the feed."}
+    </p>
+  );
 
-  if (animation.isPending) return null;
-  if (animation.isError || !animation.data) return null;
+  if (!animation.data) return <GameBoard game={game} />;
   if (!animation.data.art.available) {
     return (
-      <p className="live-field-note">
-        The field for this game isn't ready: its art hasn't been built yet.
-      </p>
+      <>
+        <FieldUnavailable game={game}>
+          The field art for this game is still pending.
+        </FieldUnavailable>
+        {notice}
+      </>
     );
   }
-  if (art.isError) return <p className="live-field-note">The field's art couldn't be loaded.</p>;
-  if (!art.data) return null;
-  if (!clips.length) return <EmptyField art={art.data} />;
+  if (art.isError)
+    return (
+      <>
+        <FieldUnavailable game={game}>The field's art couldn't be loaded.</FieldUnavailable>
+        {notice}
+      </>
+    );
+  if (drawFailed)
+    return (
+      <>
+        <FieldUnavailable game={game}>The field couldn’t be drawn for this game.</FieldUnavailable>
+        {notice}
+      </>
+    );
+  if (!art.data) return <GameBoard game={game} />;
+  if (!entry && !missing)
+    return (
+      <>
+        <GameBoard game={game} />
+        <EmptyField art={art.data} />
+      </>
+    );
   const meta = art.data.meta;
-  const current = clips[Math.min(target, clips.length - 1)];
+  const hasBoard = Boolean(current?.board || stillBoard);
   return (
-    <section className="live-field" aria-label="Live field">
-      <button
-        type="button"
-        className="live-field-stage"
-        onClick={togglePause}
-        onKeyDown={onKey}
-        aria-label={`Live field, ${paused ? "paused" : "playing"}. Press to ${paused ? "play" : "pause"}; arrow keys step between plays.`}
-        aria-describedby="live-field-keys"
-      >
-        <canvas ref={canvas} width={meta.camera.width} height={meta.band.bottom - meta.band.top} />
-      </button>
-      <div className="live-field-controls">
+    <>
+      {hasBoard ? <GameScoreStatus game={game} /> : <GameBoard game={game} />}
+      <section id="live-field" className="live-field" aria-label="Live field">
         <button
           type="button"
-          className="quiet"
-          onClick={() => go(target - 1)}
-          disabled={target <= 0}
+          className="live-field-stage"
+          onClick={togglePause}
+          onKeyDown={onKey}
+          aria-label={`Live field, ${paused ? "paused" : "playing"}. Press to ${paused ? "play" : "pause"}; arrow keys step between plays.`}
+          aria-describedby="live-field-keys"
         >
-          Previous play
+          <canvas
+            ref={canvas}
+            width={meta.camera.width}
+            height={meta.band.bottom - meta.band.top}
+          />
         </button>
-        <button type="button" className="quiet" onClick={() => go(target)}>
-          Replay
-        </button>
-        <button type="button" className="quiet" onClick={togglePause} aria-pressed={paused}>
-          {paused ? "Play" : "Pause"}
-        </button>
-        <button
-          type="button"
-          className="quiet"
-          onClick={() => go(target + 1)}
-          disabled={target >= clips.length - 1}
-        >
-          Next play
-        </button>
-        <button
-          type="button"
-          className="quiet"
-          onClick={() => go(null)}
-          aria-pressed={index === null}
-        >
-          Live
-        </button>
-        <span className="live-field-now">
-          {current.entry.period ? `Q${current.entry.period} ${current.entry.clock ?? ""}` : ""}{" "}
-          {current.entry.part === "try" ? "· Try" : ""}
-        </span>
-      </div>
-      <p id="live-field-keys" className="live-field-note">
-        Keys on the field: Enter or space pauses, arrows step between plays, R replays, L follows
-        the game live.
-        {reduced ? " Motion is reduced: each play shows where it ended." : ""}
-      </p>
-    </section>
+        <div className="live-field-controls">
+          <button
+            type="button"
+            className="quiet"
+            onClick={() => previous && go(previous)}
+            disabled={!previous}
+          >
+            Previous play
+          </button>
+          <button
+            type="button"
+            className="quiet"
+            onClick={() => current && go(current)}
+            disabled={!current}
+          >
+            Replay
+          </button>
+          <button
+            type="button"
+            className="quiet"
+            onClick={togglePause}
+            aria-pressed={paused}
+            disabled={!current}
+          >
+            {paused ? "Play" : "Pause"}
+          </button>
+          <button type="button" className="quiet" onClick={() => next && go(next)} disabled={!next}>
+            Next play
+          </button>
+          <button
+            type="button"
+            className="quiet"
+            onClick={() => go(null)}
+            aria-pressed={!selectedKey}
+          >
+            Live
+          </button>
+          <span className="live-field-now">
+            {entry?.period ? `Q${entry.period} ${entry.clock ?? ""}` : ""}{" "}
+            {entry?.part === "try" ? "· Try" : ""}
+          </span>
+        </div>
+        {notice}
+        <p id="live-field-keys" className="live-field-note">
+          Keys on the field: Enter or space pauses, arrows step between plays, R replays, L follows
+          the game live.
+          {reduced ? " Motion is reduced: each play shows where it ended." : ""}
+        </p>
+      </section>
+      {hasBoard && (
+        <details className="game-score-details">
+          <summary>Game details and score by quarter</summary>
+          <GameBoard game={game} announce={false} />
+        </details>
+      )}
+    </>
   );
 }
 

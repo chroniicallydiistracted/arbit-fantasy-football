@@ -1,13 +1,13 @@
 """Build one game's art for the browser's live field (OWN-042), into private data/live-art/<event>/.
 
 The browser draws plays from their scripts in the full-field view, the standard (OWN-030). Its
-camera is fixed, so the field is drawn here once, warped for that camera, exactly as the review
-renderer draws it. Each team's sprites are painted here with the colors measured from the
-Gridiron sheet listed for the game (OWN-028), in every pose and both skin sets, with the anchors
-the browser needs to stand them and put the ball in their hands. The officials, the ball, the
-teams' logo dots for the board and their name tag colors go with them. Everything is the owner's
-private art (OWN-015, OWN-039): it stays in ignored data/ and the API serves it only behind a
-session.
+camera is fixed, so the field is drawn here once, warped for that camera exactly as the review
+renderer draws it, inside a stadium in the home team's colors (`stadium.py`). Each team's
+sprites are painted here with the colors measured from the Gridiron sheet listed for the game
+(OWN-028), in every pose and both skin sets, with the anchors the browser needs to stand them and
+put the ball in their hands. The officials, the ball, the teams' logo dots for the board and
+their name tag colors go with them. Everything is the owner's private art (OWN-015, OWN-039): it
+stays in ignored data/ and the API serves it only behind a session.
 
 Usage:
   uv run --with pillow --with numpy --with pyarrow python scripts/sprites/live_art.py EVENT \\
@@ -16,9 +16,11 @@ Usage:
 """
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 from PIL import Image
@@ -30,6 +32,7 @@ import board as B  # noqa: E402
 import name_tag_preview as N  # noqa: E402
 import positions as depth  # noqa: E402
 import preview as P  # noqa: E402
+import stadium as S  # noqa: E402
 import uniforms as U  # noqa: E402
 
 OUT = ROOT / "data/live-art"
@@ -53,16 +56,49 @@ def atlas(images: dict[str, Image.Image]) -> tuple[Image.Image, dict[str, list[i
     return sheet, rects
 
 
-def team_sprites(uniform: dict | None, folder: Path, name: str) -> dict:
+def plain_uniform(side: str) -> dict:
+    """Neutral contrasting practice kits for games without verified uniform art."""
+    dark, light = (35, 39, 46), (218, 223, 230)
+    base, trim = (dark, light) if side == "home" else (light, dark)
+    return {
+        "helmet": base,
+        "helmet_stripe": None,
+        "jersey": base,
+        "numbers": trim,
+        "pants": base,
+        "pants_stripe": None,
+        "socks": [base] * 10,
+        "facemask": trim,
+        "cleats": dark,
+    }
+
+
+def team_sprites(uniform: dict, folder: Path, name: str) -> dict:
     images = {}
     for pose in P.FRAMES:
         if pose.startswith("off_"):
             continue
         for skin in SKIN_SETS:
-            images[f"{pose}|{skin}"] = P.painted(pose, uniform, skin) if uniform else P.rgba(P.FRAMES[pose], skin)
+            images[f"{pose}|{skin}"] = P.painted(pose, uniform, skin)
     sheet, rects = atlas(images)
     sheet.save(folder / f"{name}.png")
     return {"image": f"{name}.png", "rects": rects}
+
+
+def frame_band(camera: P.Camera) -> tuple[int, int, int]:
+    """The rows the browser draws (top, bottom) and the board's top row, in frame rows."""
+    far = min(y for _x, y in camera.field_corners())
+    board_height = (B.HEIGHT + 2 * B.HOUSING) * B.DOT
+    board_top = round(far - 16 - board_height)
+    top, bottom = camera.band()
+    top = max(0, min(top, board_top - 10) - 60)  # room above the board for a punt's arc
+    return top, bottom, board_top
+
+
+def team_rgb(colors: dict[str, list[str]], spec: str) -> tuple[S.RGB, ...]:
+    """A team's colors from nflverse, first to last, for its stadium and its fans."""
+    code = spec.partition("=")[0]
+    return tuple(S.rgb(value) for value in colors[depth.ESPN_TO_NFLVERSE.get(code, code)])
 
 
 def frame_info() -> dict:
@@ -97,29 +133,67 @@ def main() -> None:
     parser.add_argument("--home", required=True, help="CODE=sheet path, or CODE for plain kits")
     parser.add_argument("--away", required=True)
     parser.add_argument("--field", help="the field image; omitted for the plain field")
-    parser.add_argument("--uniforms", default="listed", choices=("listed", "usual", "plain"))
-    parser.add_argument("--field-status", default="listed", choices=("listed", "usual", "plain"))
+    parser.add_argument("--uniforms", choices=("listed", "usual", "plain"))
+    parser.add_argument("--home-uniform-status", choices=("listed", "usual", "plain"))
+    parser.add_argument("--away-uniform-status", choices=("listed", "usual", "plain"))
+    parser.add_argument("--field-status", choices=("listed", "usual", "plain"))
+    parser.add_argument("--output-root", type=Path, default=OUT)
     args = parser.parse_args()
-    folder = OUT / args.event
-    folder.mkdir(parents=True, exist_ok=True)
+    if not args.event.isascii() or not args.event.isdecimal() or args.event.startswith("0"):
+        parser.error("event must be a positive decimal ID")
+    target = args.output_root / args.event
+    target.mkdir(mode=0o700, parents=True, exist_ok=True)
+    with TemporaryDirectory(prefix=".stage-", dir=target) as work:
+        stage = Path(work) / "bundle"
+        stage.mkdir()
+        build(args, stage)
+        sha = hashlib.sha256()
+        for file in sorted(stage.iterdir()):
+            sha.update(file.name.encode())
+            sha.update(file.read_bytes())
+        revision = sha.hexdigest()
+        destination = target / revision
+        try:
+            stage.rename(destination)
+        except OSError:
+            if not destination.is_dir():
+                raise
+        pointer = Path(work) / "current.txt"
+        pointer.write_text(revision + "\n")
+        pointer.replace(target / "current.txt")
+    print(f"published {target} ({revision})")
 
+
+def build(args: argparse.Namespace, folder: Path) -> None:
     if args.field:
         P.FIELD = Image.open(args.field).convert("RGB").resize((1024 * P.SCALE, 486 * P.SCALE), Image.LANCZOS)
     P.SHOT = P.WIDE
     camera = P.Camera(P.WIDE.fixed_x, 0.0, P.WIDE)
-    far = min(y for _x, y in camera.field_corners())
-    board_height = (B.HEIGHT + 2 * B.HOUSING) * B.DOT
-    board_top = round(far - 16 - board_height)
-    top, bottom = camera.band()
-    top = max(0, min(top, board_top - 10) - 60)  # room above the board for a punt's arc
-    ground = camera.ground().crop((0, top, P.WIDE.width, bottom))
-    ground.save(folder / "field.png")
-
+    top, bottom, board_top = frame_band(camera)
     colors = depth.team_colors()
+    venue = S.Colors(
+        home=team_rgb(colors, args.home),
+        away=team_rgb(colors, args.away),
+        turf=S.turf_color(P.FIELD),
+        neutral=args.event in depth.neutral_sites(),
+    )
+    S.surround(camera, P.FIELD, (top, bottom), venue, seed=int(args.event)).save(folder / "field.png")
+
     teams = {}
+    labels = {}
     for side, spec in (("home", args.home), ("away", args.away)):
         code, _, sheet = spec.partition("=")
-        uniform = U.measure_file(Path(sheet)) if sheet else None
+        status = getattr(args, f"{side}_uniform_status") or args.uniforms
+        if not sheet:
+            status = "plain"
+        elif status in (None, "plain"):
+            status = "listed"
+        labels[f"{side}_uniform"] = {
+            "listed": None,
+            "usual": f"{code} usual uniform",
+            "plain": f"{code} plain uniform",
+        }[status]
+        uniform = U.measure_file(Path(sheet)) if sheet else plain_uniform(side)
         nflverse = depth.ESPN_TO_NFLVERSE.get(code, code)
         fill, second, _ = N.pair(colors[nflverse])
         teams[side] = {
@@ -133,6 +207,12 @@ def main() -> None:
     sheet.save(folder / "officials.png")
     ball = P.rgba(P.BALL, 0)
     ball.save(folder / "ball.png")
+    field_status = (args.field_status or "listed") if args.field else "plain"
+    labels["field"] = {
+        "listed": None,
+        "usual": "Usual field",
+        "plain": "Plain field",
+    }[field_status]
     shot = P.WIDE
     meta = {
         "version": 1,
@@ -161,13 +241,9 @@ def main() -> None:
         "officials": {"image": "officials.png", "rects": rects},
         "skin_sets": list(SKIN_SETS),
         "teams": teams,
-        "labels": {
-            "uniforms": {"listed": None, "usual": "Usual uniforms; this game's not listed yet", "plain": "Uniforms not listed yet"}[args.uniforms],
-            "field": {"listed": None, "usual": "Usual field; this game's not listed yet", "plain": "Field not listed yet"}[args.field_status],
-        },
+        "labels": labels,
     }
     (folder / "meta.json").write_text(json.dumps(meta, separators=(",", ":")))
-    print(f"wrote {folder}: field {ground.size}, {len(teams['home']['sprites']['rects'])} sprites a team")
 
 
 if __name__ == "__main__":

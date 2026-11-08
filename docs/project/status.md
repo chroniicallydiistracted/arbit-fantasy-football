@@ -1,6 +1,20 @@
 # Project Status
 
-Updated **2026-11-05**. M2, the accepted design reset, and the real-time platform are integrated into `main` and run on the local app. **Live (M6) is in progress ahead of M3** (OWN-019). The Week 9 NFL collector and public browser recorder are running ahead of Jacksonville at Baltimore. The live slate proof is pending (R-042). [Release handoff](handoffs/2026-11-05-main-release.md).
+Updated **2026-11-08**. M2, the accepted design reset, and the real-time platform are integrated into `main` and run on the local app. **Live (M6) is in progress ahead of M3** (OWN-019). After the Jacksonville–Baltimore capture, the local worker now reads active NFL games' full details every two-second round with a fresh cache key (OWN-045). Sunday will measure the change in live latency and request volume (R-042). [Polling handoff](handoffs/2026-11-05-nfl-fresh-polling.md).
+
+The locally running game detail view puts the existing game cards in one scrolling row and gives the field the full content width. The Jumbotron is the main scoreboard when it can draw. In 31 games, the coverage audit found 67 football actions or tries without a clip, plus 328 cancelled entries the browser skips (R-045). [Layout handoff](handoffs/2026-11-05-live-field-layout.md) and [coverage audit](../research/live-play-coverage-2026-11-05.md).
+
+The animation pipeline audit traced 4,919 NFL scripts and reproduced browser failures in reduced-motion following, replay selection and the final ball frame. It also confirmed that the ESPN postgame check displaced the NFL replay for Jacksonville–Baltimore. R-045–048 track the remaining play, source, browser and board work. [Audit](../research/live-animation-pipeline-audit-2026-11-05.md).
+
+The November 6 repairs are active on the local app. Jacksonville–Baltimore was reconciled to 166 current NFL rows, and Week 9 has 15 private art bundles. The November 7 wake check verified the installed release and refreshed Denver's exact B3 kit. All 67 previously missing football actions have full or labeled partial clips on the recorded sample. The verified-final source guard, in-place Jumbotron updates and stable replay selection passed isolated checks. [Repair handoff](handoffs/2026-11-06-live-animation-repairs.md).
+
+The stadium around the live field (OWN-049, ENG-045) is published to all 15 Week 9 games on the local app, on the owner's approval. [Handoff](handoffs/2026-11-07-live-stadium.md). Plays are being rebuilt to their real snap-to-whistle time (OWN-051, OWN-052). Slices 1 and 2 are implemented, but not released: the board clock runs in real time, and runs and scrambles are built to time. Runs with more than 1.5 s of standing time went from 36% to 2% across 31 games. Passes are next. [Handoff](handoffs/2026-11-07-play-timing.md).
+
+The independent Live animation audit is complete. It traced the current NFL-to-browser path and separated action interpretation, phase timing, rendering and review-tool defects. The private comparison evidence stays under ignored data/ (OWN-053). The rebuild is pending its own implementation plan. [Audit handoff](handoffs/2026-11-07-live-animation-rebuild-audit.md).
+
+The owner expanded the offline tracking archive for inference research and clarified role continuity (OWN-054). The archive was surveyed, with whole games reserved for validation. The [rebuild design](../superpowers/specs/2026-11-07-live-animation-rebuild-design.md) is approved (OWN-055). [Calibration handoff](handoffs/2026-11-07-live-animation-calibration.md).
+
+The local web stack serves the revised opt-in rebuild preview (OWN-056, OWN-057). It includes shared tackles on runs and passes, earlier receiver release, calibrated ball flight and visible motion beyond scores and inferred uncaught touchbacks. Thirteen Thursday renders were manually reviewed. Family coverage, first-contact and scoring timing, directional art and default activation remain open. [Motion handoff](handoffs/2026-11-08-live-motion-calibration.md).
 
 ## Confirmed context
 
