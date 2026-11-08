@@ -53,6 +53,35 @@ Externally served environments must use `ARBIT_ENV=production`, complete OIDC co
 
 The app's address is exactly `ARBIT_PUBLIC_ORIGIN`, which is `http://127.0.0.1:8000` locally. Browsers treat `localhost` and `127.0.0.1` as separate sites, so the session cookie and the sign-in origin check only work on the configured one. Pages opened under another loopback name on the same port redirect there. Hosted origins never redirect, because their proxy decides the host header.
 
+## Public address
+
+Since 2026-11-08 the app on this PC is served at `https://ffa.westfam.media` through a Cloudflare Tunnel (OWN-058, ENG-049), and that is its only address: `127.0.0.1:8000` still serves pages, but sign-in there fails the origin check. HTTPS is required anyway: the app refuses HTTP sign-in except on loopback, and Google won't redirect to a plain-HTTP address. The app still listens only on `127.0.0.1:8000`:
+
+```text
+browser → Cloudflare (TLS) → Cloudflare Access (team "chroniic") → tunnel `arbit`
+        → cloudflared (`arbit-tunnel` user service) → 127.0.0.1:8000 (arbit-api)
+        /internal/* is answered 404 at the tunnel
+```
+
+**Cloudflare Access** already covered the name from the owner's Zero Trust setup, and the owner chose to keep it (OWN-058). Visitors pass Access first, then Arbit's own invite-only Google sign-in, so a family member needs both an Access allowance and an Arbit invitation. Give this application a long Access session: when Access expires, the page's requests are redirected to Access's login, and live updates stop until the page reloads (R-052). Automated checks can't pass Access; check signed-in pages on `127.0.0.1:8000` with a copy of the dev account's cookie rescoped to that host, as in the [handoff](../project/handoffs/2026-11-08-public-address.md).
+
+Setup, in order (done 2026-11-08; kept for rebuilds):
+
+1. **Tunnel.** `sh infra/tunnel/install.sh` needs `cloudflared` and the existing Cloudflare login (`~/.cloudflared/cert.pem`). It creates or reuses the tunnel `arbit`, checks its ingress rules, starts `arbit-tunnel` and routes `ffa.westfam.media` to it. Until step 3, that address shows the app signed out, and sign-in there fails the origin check.
+2. **Google.** Add `https://ffa.westfam.media/auth/callback` to the OAuth client's redirect URIs. Keep the `127.0.0.1` one for rollback. If the consent screen is in Testing, other members' Google accounts must also be listed as test users.
+3. **Switch, with the owner's approval of the time.** It restarts the API for about 5 s; the worker isn't touched.
+
+   ```sh
+   (umask 077; mkdir -p data/backups/$(date +%F))
+   cp -p .env.auth.local data/backups/$(date +%F)/env.auth.local.before-public-origin
+   sed -i 's#^ARBIT_PUBLIC_ORIGIN=.*#ARBIT_PUBLIC_ORIGIN=https://ffa.westfam.media#' .env.auth.local
+   systemctl --user restart arbit-api
+   ```
+
+   Sessions don't carry over: sign in again at the new address on every device, this PC included, since `127.0.0.1:8000` no longer passes the origin check. Run `make dev-account` again for the new address.
+
+Rollback: restore the backed-up `.env.auth.local` and restart `arbit-api`; `sh infra/tunnel/install.sh --remove` stops the tunnel service. The site is down whenever this PC sleeps or WSL stops (R-029), and Cloudflare shows its own error page then.
+
 ## Access and data behavior
 
 Accounts are immutable issuer+subject identities. A verified email only redeems a one-use seven-day invitation; it cannot claim a manager. Session hashes live in PostgreSQL, with 30-day idle and 90-day absolute expiry. A completed login replaces the session that browser presented; other devices stay signed in, up to ten. Members can review and end devices in Preferences. HttpOnly, host-scoped, SameSite=Lax cookies are Secure over HTTPS. CSRF token and exact Origin checks protect mutations. Single-use browser-bound state, nonce and PKCE verifier expire in ten minutes; consumed secrets are wiped, expired flows pruned and active flows capped100. The maintained Authlib/joserfc path validates RS256 signature, issuer/audience/nonce/time and applicable access-token hash. Provider HTTP has fixed HTTPS hosts, no redirect/environment proxy and bounded responses; provider access tokens are never stored.
@@ -90,4 +119,4 @@ make dev-account-end   # end every dev account session at once
 
 `make local-upgrade` backs up the database, applies migrations and rebuilds the client. Stop the member API and worker first (`systemctl --user stop arbit-api arbit-worker`, then `start` afterward), since a new client needs new routes. Avoid `pkill -f` with the server's command line through the prompt's `!` prefix or a script: the calling shell matches the pattern and kills itself. To run as supervised services, `make services-install` installs `arbit-worker` and `arbit-api` as systemd user units that restart on failure and survive logout; this enables linger for your user, and `make services-remove` undoes it. Without services, run `make member-api` and `make local-worker` in two terminals. Logs: `journalctl --user -u arbit-worker -f`. On WSL the services stop with WSL, and Postgres does not restart by itself (R-029): after a Windows restart, start Ubuntu and run `make db-up`.
 
-Hosting is deferred until development finishes (OWN-014). At that point the production origin is `https://ffa.westfam.media`, and Google needs `https://ffa.westfam.media/auth/callback` registered as a redirect URI. The worker's database guard currently allows local databases only and will need a production path then. Second-member acceptance moves to that release gate unless a member signs in on this machine.
+Choosing a hosting platform is deferred until development finishes (OWN-014). Since OWN-058 this PC serves the production origin, `https://ffa.westfam.media`, through a Cloudflare Tunnel (see [Public address](#public-address)), so a second member can sign in from their own device once invited. The worker's database guard allows local databases only and will need a production path when the app moves to a host.

@@ -1,0 +1,16 @@
+# Cloudflare Tunnel for Arbit at its public address (owner direction 2026-11-08). The app keeps
+# listening on 127.0.0.1:8000; cloudflared connects out to Cloudflare, so no router port is open.
+# install.sh fills in the @...@ values.
+tunnel: @TUNNEL_ID@
+credentials-file: @CREDENTIALS@
+no-autoupdate: true
+
+ingress:
+  # Operator reads answer loopback callers only, and every tunneled request arrives from
+  # loopback, so they must never be routed.
+  - hostname: @HOST@
+    path: ^/internal
+    service: http_status:404
+  - hostname: @HOST@
+    service: http://127.0.0.1:8000
+  - service: http_status:404
