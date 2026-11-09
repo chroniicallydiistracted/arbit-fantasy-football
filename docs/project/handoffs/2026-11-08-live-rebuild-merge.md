@@ -2,11 +2,12 @@
 
 ## Current state
 
-At the owner's request ("commit all work thus far, and merge all branches to main"), `main` now holds all the uncommitted work from the shared working tree and Codex's `codex/live-animation-rebuild` (`8074c8f`). That was the only branch not already merged. Nothing was pushed.
+At the owner's request ("commit all work thus far, and merge all branches to main"), `main` now holds all the uncommitted work from the shared working tree and Codex's `codex/live-animation-rebuild` (`8074c8f`). That was the only branch not already merged. The owner pushed `main` to GitHub afterwards.
 
 - **Running app:**
   - The member API still serves the release snapshot of `8074c8f` through its systemd drop-in, and that commit is now in `main`.
-  - The worker kept running the code it loaded. It picks up the merged tree at its next restart; there's no new migration (0009 was already applied).
+  - The worker was restarted on the merged tree at 17:45 on 2026-11-08 (UTC−7), by owner request, between the late games and the night game. No migration was needed (0009 was already applied). All five lanes started, the NFL lane found week 9's 15 games, and the first minute had no errors or restarts.
+  - Its first read republished the finished game 401873049 once: every current play gained `motion_evidence`, and 10 plays got corrected end positions (punts and a turnover on downs now end where the play text says; the final run leaves the next down unknown). The 8 plays logged as cancelled were already cancelled; none changed state.
 - **Public address and stadiums:** both are unchanged by the merge ([public address](2026-11-08-public-address.md), [M&T Bank](2026-11-08-mt-bank-refinement.md)).
 
 ## Completed work
@@ -58,8 +59,6 @@ All checks ran on the merged tree in a separate scratch worktree before `main` w
 
 ## Resume here
 
-- Push `main` only when the owner asks.
-- The worker loads the merged code at its next restart. Choose a time outside games.
 - Remaining work is unchanged:
   - Live default activation (M6 gates in the [motion handoff](2026-11-08-live-motion-calibration.md))
   - the M&T Bank likeness review
