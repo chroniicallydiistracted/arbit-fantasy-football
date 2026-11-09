@@ -12,6 +12,8 @@ from arbit_data.events import emit
 from arbit_data.schema import dataset_manifest, source_health, sync_state
 
 LEAGUE = "espn.league"
+LINEUPS = "espn.league.lineups"
+TRANSACTIONS = "espn.league.transactions"
 SCOREBOARD = "espn.nfl.scoreboard"
 PLAYS = "espn.nfl.plays"
 DIRECTORY = "espn.nfl.teams"
@@ -20,6 +22,8 @@ STATISTICS = "nflverse"
 # Member-facing names, in display order. Every source that changes must appear here.
 SOURCES: tuple[tuple[str, str], ...] = (
     (LEAGUE, "FFA league"),
+    (LINEUPS, "FFA weekly lineups"),
+    (TRANSACTIONS, "FFA transactions"),
     (SCOREBOARD, "NFL scores"),
     (PLAYS, "NFL plays"),
     (DIRECTORY, "NFL teams and schedule"),

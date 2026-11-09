@@ -246,6 +246,7 @@ def seed(settings: RuntimeSettings, engine: Engine) -> None:
                             active=True,
                             injured=i == 11,
                             injury_status="OUT" if i == 11 else None,
+                            injury="out" if i == 11 else None,
                             availability="owned",
                             team_id=t,
                             lineup_slot=slot,
@@ -296,12 +297,16 @@ def seed(settings: RuntimeSettings, engine: Engine) -> None:
                         scoring_periods=(7,),
                         home=MatchupSide(team_id=team_one, official_points=Decimal("128.25")),
                         away=MatchupSide(team_id=team_two, official_points=Decimal("119.50")),
+                        winner="home",
                     ),
                     Matchup(
                         id=UUID(int=801),
                         matchup_period=8,
                         scoring_periods=(8,),
-                        home=MatchupSide(team_id=team_one, official_points=None),
+                        # In progress: a live total for a side that has played, none before.
+                        home=MatchupSide(
+                            team_id=team_one, official_points=None, live_points=Decimal("64.30")
+                        ),
                         away=MatchupSide(team_id=team_two, official_points=None),
                     ),
                 ),

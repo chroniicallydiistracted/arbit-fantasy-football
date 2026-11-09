@@ -17,12 +17,15 @@ from pathlib import Path
 from typing import Any
 
 from arbit_core.config import load_league_config
-from arbit_data import events, freshness
+from arbit_data import events, freshness, league_history
 from arbit_data.archives import CaptureArchive
 from arbit_data.db import UnitOfWork
 from arbit_data.errors import SourceError
+from arbit_data.espn.client import EspnClient
 from arbit_data.espn.endpoints import Endpoint, EndpointOptions
 from arbit_data.espn.gate import DatabaseGate, GatedEspnTransport
+from arbit_data.league import LeagueDocument
+from arbit_data.league_store import read_current
 from arbit_data.live import cadence, store
 from arbit_data.live.capture import CapturingTransport
 from arbit_data.live.feed import LiveFeed
@@ -36,6 +39,9 @@ from arbit_worker.sync_commands import local_database_url
 
 LANES = ("league", "live", "nfl", "nfl_probe", "statistics")
 Clock = Callable[[], datetime]
+# Between consecutive history reads while catching up, and before re-reading a week that didn't settle.
+HISTORY_SPACING_SECONDS = 20
+LINEUP_RETRY_SECONDS = 3600
 
 
 def log(lane: str, **fields: Any) -> None:
@@ -60,9 +66,13 @@ class LeagueLane:
         *,
         service: SyncService | None = None,
         directory_fetch: Callable[[], Any] | None = None,
+        history_client: EspnClient | None = None,
         clock: Clock = lambda: datetime.now(UTC),
     ):
         self.uow, self.season, self.clock = uow, season, clock
+        self.history_client = history_client or EspnClient(GatedEspnTransport(DatabaseGate(uow)))
+        self.history_next: datetime | None = None
+        self.lineup_wait: dict[int, datetime] = {}
         self.service = service or SyncService(
             uow,
             CaptureArchive(Path(os.environ.get("ARBIT_STORAGE_PATH", "data/source-archives"))),
@@ -162,6 +172,108 @@ class LeagueLane:
         )
         log(self.name, event="directory_read", changed=changed, teams=len(directory.teams))
 
+    def _sync_lineups(self, document: LeagueDocument, now: datetime, mode: cadence.Mode) -> bool:
+        """Store each finished week's reconciled lineups, and again after a stat correction."""
+        seconds = cadence.league_seconds(mode)
+        stale_after = cadence.league_stale_seconds(mode)
+        try:
+            due = [
+                (scoring, matchup)
+                for scoring, matchup in league_history.due_lineup_periods(self.uow, document)
+                if self.lineup_wait.get(scoring, now) <= now
+            ]
+            outcome = None
+            if due:
+                scoring, matchup = due[0]
+                try:
+                    outcome = league_history.capture_lineups(
+                        self.uow, self.history_client, self.season, scoring, matchup, now=now
+                    )
+                finally:
+                    # A week that still disagrees after a read waits before the next attempt.
+                    self.lineup_wait[scoring] = now + timedelta(seconds=LINEUP_RETRY_SECONDS)
+                if outcome == "stored":
+                    self.lineup_wait.pop(scoring, None)
+                log(self.name, event="lineups_read", period=scoring, outcome=outcome)
+        except (SourceError, ValueError) as error:
+            code = error.code if isinstance(error, SourceError) else "LINEUPS_INVALID"
+            freshness.record_failure(
+                self.uow,
+                freshness.LINEUPS,
+                code,
+                now=self.clock(),
+                cadence_seconds=seconds,
+                stale_after_seconds=stale_after,
+            )
+            log(self.name, event="lineups_failed", code=code)
+            return True
+        freshness.record_success(
+            self.uow,
+            freshness.LINEUPS,
+            now=self.clock(),
+            cadence_seconds=seconds,
+            stale_after_seconds=stale_after,
+            changed=outcome == "stored",
+        )
+        return bool(due)
+
+    def _sync_transactions(
+        self, document: LeagueDocument, now: datetime, mode: cadence.Mode
+    ) -> bool:
+        """Read every period's transactions once, then keep the current and previous ones fresh."""
+        seconds = cadence.league_seconds(mode)
+        stale_after = cadence.league_stale_seconds(mode)
+        periods = league_history.due_transaction_periods(
+            self.uow, self.season, document.scoring_period, now, seconds
+        )
+        if not periods:
+            return False
+        try:
+            changed = 0
+            for period in periods:
+                page, receipt = league_history.fetch_transactions(
+                    self.history_client, self.season, period
+                )
+                changed += league_history.store_transactions(
+                    self.uow, self.season, page, receipt_sha256=receipt, now=self.clock()
+                )
+        except (SourceError, ValueError) as error:
+            code = error.code if isinstance(error, SourceError) else "TRANSACTIONS_INVALID"
+            freshness.record_failure(
+                self.uow,
+                freshness.TRANSACTIONS,
+                code,
+                now=self.clock(),
+                cadence_seconds=seconds,
+                stale_after_seconds=stale_after,
+            )
+            log(self.name, event="transactions_failed", code=code)
+            return True
+        freshness.record_success(
+            self.uow,
+            freshness.TRANSACTIONS,
+            now=self.clock(),
+            cadence_seconds=seconds,
+            stale_after_seconds=stale_after,
+            changed=changed > 0,
+        )
+        if changed:
+            log(self.name, event="transactions_changed", periods=periods, changed=changed)
+        return True
+
+    def _sync_history(self, now: datetime) -> None:
+        if self.history_next is not None and now < self.history_next:
+            return
+        current = read_current(self.uow, self.season)
+        if current is None:
+            return
+        document = LeagueDocument.model_validate(current["league"])
+        mode = current_mode(self.uow, self.season, now)
+        read = self._sync_lineups(document, now, mode)
+        read = self._sync_transactions(document, now, mode) or read
+        pause = HISTORY_SPACING_SECONDS if read else min(cadence.league_seconds(mode), 60)
+        self.history_next = now + timedelta(seconds=pause)
+
     def _trim(self, now: datetime) -> None:
         if self.next_trim is not None and now < self.next_trim:
             return
@@ -172,6 +284,7 @@ class LeagueLane:
         now = self.clock()
         self._sync_league(now)
         self._sync_directory(self.clock())
+        self._sync_history(self.clock())
         self._trim(self.clock())
         return 5.0
 

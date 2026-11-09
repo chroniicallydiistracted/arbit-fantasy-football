@@ -221,6 +221,9 @@ def test_synthetic_rehearsal_two_members_history_and_nulls(uow, engine):
         assert home["team"]["id"] != away["team"]["id"]
         assert len(home["roster"]) == 12
         assert home["matchup"]["home"]["official_points"] is None
+        assert home["matchup"]["home"]["live_points"] == "64.30", "live, apart from official"
+        assert home["matchup"]["away"]["live_points"] is None, "no starter has played: unknown"
+        assert home["roster_state"] == "current"
         assert home["roster"][0]["nfl_team_id"] is None
         assert home["roster"][0]["official_current_points"] is None
         assert (
@@ -228,8 +231,8 @@ def test_synthetic_rehearsal_two_members_history_and_nulls(uow, engine):
             == 403
         )
         historical = first.get("/api/v1/front-office?matchup_period=7").json()
-        assert historical["historical_roster_unavailable"] is True
-        assert historical["roster"] == []
+        assert historical["roster_state"] == "not_captured", "no stored lineup for that week"
+        assert historical["roster"] == [] and historical["lineup"] == []
         assert historical["matchup"]["home"]["official_points"] == "128.25"
         player_id = home["roster"][0]["id"]
         pinned = first.get(
@@ -748,7 +751,9 @@ def test_front_office_season_strip_and_roster_order_come_from_stored_facts(uow, 
         strip = {cell["matchup_period"]: cell for cell in office["season_strip"]}
         assert strip[7]["result"] == "win", "a completed period reports its result"
         assert strip[8]["result"] is None, "the current period has no result, even with totals"
-        assert office["playoff_team_count"] is None, "an absent rule stays unknown, not a default"
+        league = office["league"]
+        assert league["playoff_team_count"] is None, "an absent rule stays unknown, not a default"
+        assert league["trade_deadline"] is None and league["lineup_slots"] == []
 
 
 def test_official_totals_never_show_provider_float_noise(uow, engine):
@@ -897,7 +902,12 @@ def test_sources_hide_provider_codes_from_members(uow, engine):
             "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
         )
         rows = client.get("/api/v1/sources").json()["sources"]
-    assert [r["source"] for r in rows][:2] == ["espn.league", "espn.nfl.scoreboard"]
+    assert [r["source"] for r in rows][:4] == [
+        "espn.league",
+        "espn.league.lineups",
+        "espn.league.transactions",
+        "espn.nfl.scoreboard",
+    ]
     assert all(r["error_code"] is None for r in rows)
 
 
@@ -923,3 +933,121 @@ def test_device_sessions_require_csrf_and_stay_with_their_owner(uow, engine):
         denied = two.post("/api/v1/me/sessions/revoke", json=body, headers=csrf)
         assert denied.status_code == 403 and denied.json()["code"] == "SESSION_NOT_FOUND"
         assert one.get("/api/v1/me").status_code == 200, "another member can't end this session"
+
+
+def test_front_office_shows_a_stored_week_league_rules_moves_and_who_owns_a_player(uow, engine):
+    """R-054 to R-058: facts the league already holds reach the page, in the league's terms."""
+    from datetime import timedelta
+    from decimal import Decimal
+    from uuid import uuid4
+
+    from arbit_api.fixture import seed
+    from arbit_api.main import create_app
+    from arbit_data.schema import (
+        fantasy_lineup_capture,
+        fantasy_lineup_entry,
+        fantasy_transaction,
+        league_document,
+        rule_version,
+    )
+    from sqlalchemy import insert, select, update
+
+    configured = settings(engine)
+    seed(configured, engine)
+    team_one, quarterback, prospect = UUID(int=201), UUID(int=1000 + 201 * 100), UUID(int=4000)
+    now = datetime.now(UTC)
+    with engine.begin() as c:
+        rules = dict(c.scalar(select(rule_version.c.payload)))
+        rules["lineup_slots"] = {"QB": 1, "WR": 2, "FLEX": 1, "BENCH": 7}
+        rules["provider_policy"] = {
+            "acquisitionSettings": {"acquisitionType": "WAIVERS_TRADITIONAL", "waiverHours": 24},
+            "tradeSettings": {"deadlineDate": 1796230800000, "vetoVotesRequired": 3},
+        }
+        c.execute(update(rule_version).values(payload=rules))
+        document = c.scalar(select(league_document.c.payload))
+        future = dict(document["matchups"][-1], id=str(uuid4()), matchup_period=9)
+        future["scoring_periods"] = [9]
+        document["matchups"].append(future)
+        for player in document["players"]:
+            if player["id"] == str(prospect):
+                player["eligible_slots"] = ["RB_WR", "WR", "WR_TE", "OP", "FLEX", "BENCH"]
+        c.execute(update(league_document).values(payload=document))
+        capture = uuid4()
+        c.execute(
+            insert(fantasy_lineup_capture).values(
+                id=capture,
+                season=2026,
+                scoring_period=7,
+                matchup_period=7,
+                content_hash="f" * 64,
+                receipt_sha256="f" * 64,
+                captured_at=now,
+                verification={"lineupsMatched": 2},
+            )
+        )
+        c.execute(
+            insert(fantasy_lineup_entry).values(
+                capture_id=capture,
+                player_id=uuid4(),
+                team_id=team_one,
+                slot="QB",
+                official_points=Decimal("128.25"),
+                display_name="A Since-Dropped Passer",
+                position="QB",
+                nfl_team_espn_id=None,
+            )
+        )
+        c.execute(
+            insert(fantasy_transaction).values(
+                season=2026,
+                espn_id="w1",
+                scoring_period=8,
+                type="WAIVER",
+                status="EXECUTED",
+                team_id=team_one,
+                proposed_at=now - timedelta(hours=1),
+                processed_at=now,
+                items=[
+                    {
+                        "type": "ADD",
+                        "player_id": str(prospect),
+                        "from_team_id": None,
+                        "to_team_id": str(team_one),
+                        "from_slot": None,
+                        "to_slot": "BENCH",
+                    },
+                ],
+                content_hash="0" * 64,
+                first_observed_at=now,
+                last_changed_at=now,
+            )
+        )
+    with TestClient(create_app(configured, engine=engine), client=("127.0.0.1", 50000)) as client:
+        client.post(
+            "/auth/fixture", json={"member": "one"}, headers={"Origin": "http://testserver"}
+        )
+        office = client.get("/api/v1/front-office").json()
+        assert office["team"]["managers"] == ["Fictional manager one", "Fictional co-manager"]
+        assert office["league"]["trade_deadline"].startswith("2026-12-02T17:00:00")
+        assert office["league"]["uses_bidding"] is None, "absent from the rules: unknown"
+        assert office["league"]["lineup_slots"] == ["QB", "WR", "FLEX", "BENCH"]
+        (move,) = office["recent_moves"]
+        assert move["kind"] == "waiver" and move["items"][0]["action"] == "added"
+        assert move["items"][0]["player_name"] == "Fictional Prospect 1"
+        assert move["items"][0]["team_name"] == office["team"]["name"]
+        injured = next(p for p in office["roster"] if p["injury_status"] == "OUT")
+        assert injured["injury"] == "out"
+
+        past = client.get("/api/v1/front-office?matchup_period=7").json()
+        assert past["roster_state"] == "lineup" and past["roster"] == []
+        assert past["lineup"][0]["display_name"] == "A Since-Dropped Passer"
+        assert past["lineup"][0]["official_points"] == "128.25"
+        assert past["lineup_captured_at"] is not None
+        coming = client.get("/api/v1/front-office?matchup_period=9").json()
+        assert coming["roster_state"] == "not_played" and coming["lineup"] == []
+
+        owned = client.get(f"/api/v1/players/{quarterback}").json()
+        assert owned["owner"]["name"] == office["team"]["name"]
+        free = client.get(f"/api/v1/players/{prospect}").json()
+        assert free["owner"] is None
+        assert free["player"]["eligible_slots"] == ["WR", "FLEX", "BENCH"], "only FFA's slots"

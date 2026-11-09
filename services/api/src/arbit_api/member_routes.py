@@ -13,9 +13,10 @@ from pathlib import Path as PathLib
 from typing import Any, Literal, cast
 from uuid import UUID
 
-from arbit_data import freshness
+from arbit_data import freshness, league_history
 from arbit_data.db import UnitOfWork
 from arbit_data.league import LeagueDocument, Matchup, MatchupSide, Player
+from arbit_data.league_policy import LeaguePolicy, read_policy
 from arbit_data.league_store import read_current, read_snapshot
 from arbit_data.live import store as live_store
 from arbit_data.live.animation import build as live_animation_build
@@ -62,6 +63,8 @@ from arbit_api.member_contracts import (
     FrontOffice,
     InviteRequest,
     InviteResponse,
+    LeagueRules,
+    LineupPlayer,
     LiveAnimation,
     LiveAnimationEntry,
     LiveArt,
@@ -80,11 +83,13 @@ from arbit_api.member_contracts import (
     LiveWeather,
     LiveWinPoint,
     Me,
+    MoveItem,
     PlayerFacts,
     PlayerNfl,
     PlayerSearch,
     Preferences,
     ReactivateRequest,
+    RecentMove,
     RevokeDevice,
     RevokeRequest,
     RosterPlayer,
@@ -96,6 +101,7 @@ from arbit_api.member_contracts import (
     StartResponse,
     Success,
     Team,
+    TeamRef,
     Teams,
 )
 from arbit_api.oidc import OidcClient
@@ -129,8 +135,18 @@ def _cents(value: Decimal | None) -> Decimal | None:
     return None if value is None else value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
-def _team(team: Any) -> Team:
-    facts = Team.model_validate(team.model_dump(exclude={"managers", "primary_manager"}))
+def _manager_names(document: LeagueDocument) -> dict[UUID, str]:
+    return {m.id: m.first_name or m.display_name for m in document.managers}
+
+
+def _team(team: Any, names: dict[UUID, str] | None = None) -> Team:
+    ordered = sorted(team.managers, key=lambda manager: manager != team.primary_manager)
+    facts = Team.model_validate(
+        {
+            **team.model_dump(exclude={"managers", "primary_manager"}),
+            "managers": [names[m] for m in ordered if names and m in names],
+        }
+    )
     return facts.model_copy(
         update={
             "points_for": _cents(facts.points_for),
@@ -157,7 +173,7 @@ def _standing_key(team: Team) -> tuple[bool, int, str]:
 
 
 def _season_strip(document: LeagueDocument, team_id: UUID) -> list[SeasonCell]:
-    """Own results by period. Totals only count as a result once the period has completed."""
+    """Own results by period, as ESPN decided them. Undecided periods have no points or result."""
     cells = []
     for matchup in sorted(document.matchups, key=lambda m: m.matchup_period):
         sides = [side for side in (matchup.home, matchup.away) if side is not None]
@@ -166,18 +182,10 @@ def _season_strip(document: LeagueDocument, team_id: UUID) -> list[SeasonCell]:
             continue
         other = next((side for side in sides if side.team_id != team_id), None)
         result: Literal["win", "loss", "tie"] | None = None
-        if (
-            matchup.matchup_period < document.matchup_period
-            and other is not None
-            and own.official_points is not None
-            and other.official_points is not None
-        ):
+        if matchup.winner is not None and other is not None:
+            side = "home" if matchup.home is own else "away"
             result = (
-                "win"
-                if own.official_points > other.official_points
-                else "loss"
-                if own.official_points < other.official_points
-                else "tie"
+                "tie" if matchup.winner == "tie" else "win" if matchup.winner == side else "loss"
             )
         cells.append(
             SeasonCell(
@@ -191,10 +199,31 @@ def _season_strip(document: LeagueDocument, team_id: UUID) -> list[SeasonCell]:
     return cells
 
 
-def _playoff_team_count(rules: dict[str, Any] | None) -> int | None:
-    schedule = ((rules or {}).get("provider_policy") or {}).get("scheduleSettings") or {}
-    count = schedule.get("playoffTeamCount")
-    return count if type(count) is int and count > 0 else None
+def _rules(policy: LeaguePolicy) -> LeagueRules:
+    return LeagueRules(
+        lineup_slots=list(policy.lineup_slots),
+        waiver_type=policy.waiver_type,
+        waiver_hours=policy.waiver_hours,
+        waiver_days=list(policy.waiver_days),
+        uses_bidding=policy.uses_bidding,
+        trade_deadline=policy.trade_deadline,
+        trade_veto_votes=policy.trade_veto_votes,
+        trade_review_hours=policy.trade_review_hours,
+        regular_season_matchups=policy.regular_season_matchups,
+        playoff_team_count=policy.playoff_team_count,
+        playoff_tiebreaker=policy.playoff_tiebreaker,
+    )
+
+
+MOVE_KINDS: dict[str, Literal["waiver", "free_agent", "trade", "other"]] = {
+    "WAIVER": "waiver",
+    "FREEAGENT": "free_agent",
+}
+MOVE_ACTIONS: dict[str, Literal["added", "dropped", "traded"]] = {
+    "ADD": "added",
+    "DROP": "dropped",
+    "TRADE": "traded",
+}
 
 
 def install_member_routes(
@@ -360,9 +389,14 @@ def install_member_routes(
 
     def member_teams(member: dict[str, Any], document: LeagueDocument) -> list[Team]:
         if is_observer(member):
-            return [_team(t) for t in document.teams]  # the dev account can view any team
+            # the dev account can view any team
+            return [_team(t, _manager_names(document)) for t in document.teams]
         approved = manager_ids(uow, member["id"], season)
-        return [_team(t) for t in document.teams if approved.intersection(t.managers)]
+        return [
+            _team(t, _manager_names(document))
+            for t in document.teams
+            if approved.intersection(t.managers)
+        ]
 
     def require_binding(
         member: dict[str, Any], document: LeagueDocument | None = None
@@ -375,8 +409,13 @@ def install_member_routes(
             raise HTTPException(403, "BINDING_REQUIRED")
         return document
 
-    def with_nfl(document: LeagueDocument, players: Iterable[Player]) -> list[RosterPlayer]:
-        """Attach NFL team, bye and this period's game. Missing directory data stays unknown."""
+    def with_nfl(
+        document: LeagueDocument, players: Iterable[Player], slots: tuple[str, ...] = ()
+    ) -> list[RosterPlayer]:
+        """Attach NFL team, bye and this period's game. Missing directory data stays unknown.
+
+        Eligible slots are limited to the ones the league's rules use, in lineup order.
+        """
         directory = live_store.read_directory(uow)
         games = live_store.read_period_games(uow, season, document.scoring_period)
         by_espn = {row.espn_id: row for row in directory.values()}
@@ -399,11 +438,68 @@ def install_member_routes(
                     home=home,
                     kickoff=game.kickoff if game else None,
                 )
-            result.append(RosterPlayer.model_validate({**player.model_dump(), "nfl": nfl}))
+            facts = player.model_dump()
+            if slots:
+                facts["eligible_slots"] = [slot for slot in slots if slot in player.eligible_slots]
+            result.append(RosterPlayer.model_validate({**facts, "nfl": nfl}))
         return result
 
     def team_facts(document: LeagueDocument) -> list[Team]:
-        return sorted((_team(t) for t in document.teams), key=_standing_key)
+        names = _manager_names(document)
+        return sorted((_team(t, names) for t in document.teams), key=_standing_key)
+
+    def lineup_for(team_id: UUID, matchup: Matchup | None) -> tuple[Any, list[LineupPlayer]]:
+        """A finished week's stored lineup for one team, or None if none was stored."""
+        if matchup is None or len(matchup.scoring_periods) != 1:
+            return None, []
+        stored_lineup = league_history.read_lineup(uow, season, matchup.scoring_periods[0])
+        if stored_lineup is None:
+            return None, []
+        entries = sorted(
+            (e for e in stored_lineup.entries if e.team_id == team_id),
+            key=lambda e: (SLOT_ORDER.get(e.slot, len(SLOT_ORDER)), e.display_name),
+        )
+        return stored_lineup, [
+            LineupPlayer(
+                player_id=e.player_id,
+                display_name=e.display_name,
+                position=e.position,
+                slot=e.slot,
+                official_points=e.official_points,
+            )
+            for e in entries
+        ]
+
+    def recent_moves(document: LeagueDocument) -> list[RecentMove]:
+        rows = league_history.recent_moves(uow, season, limit=8)
+        names = {p.id: p.display_name for p in document.players}
+        wanted = {UUID(item["player_id"]) for row in rows for item in row.items}
+        names.update(league_history.lineup_names(uow, wanted - names.keys()))
+        teams = {t.id: t.name for t in document.teams}
+
+        def team_name(value: str | None) -> str | None:
+            return teams.get(UUID(value)) if value else None
+
+        return [
+            RecentMove(
+                id=row.espn_id,
+                at=row.at,
+                kind="trade" if row.type.startswith("TRADE") else MOVE_KINDS.get(row.type, "other"),
+                team_name=teams.get(row.team_id) if row.team_id else None,
+                items=[
+                    MoveItem(
+                        action=MOVE_ACTIONS[item["type"]],
+                        player_id=UUID(item["player_id"]),
+                        player_name=names.get(UUID(item["player_id"])),
+                        team_name=team_name(
+                            item["from_team_id"] if item["type"] == "DROP" else item["to_team_id"]
+                        ),
+                    )
+                    for item in row.items
+                ],
+            )
+            for row in rows
+        ]
 
     @router.get("/auth/status", response_model=AuthStatus)
     def auth_status(request: Request) -> AuthStatus:
@@ -530,23 +626,36 @@ def install_member_routes(
             ),
             None,
         )
-        historical = period != document.matchup_period
-        roster = (
-            []
-            if historical
-            else sorted((p for p in document.players if p.team_id == chosen.id), key=_roster_key)
-        )
+        policy = read_policy(stored_result.get("rules"))
+        roster: list[Player] = []
+        lineup: list[LineupPlayer] = []
+        captured_at = None
+        state: Literal["current", "lineup", "not_captured", "not_played"]
+        if period == document.matchup_period:
+            state = "current"
+            roster = sorted(
+                (p for p in document.players if p.team_id == chosen.id), key=_roster_key
+            )
+        elif period > document.matchup_period:
+            state = "not_played"
+        else:
+            stored_lineup, lineup = lineup_for(chosen.id, matchup)
+            state = "lineup" if lineup else "not_captured"
+            captured_at = stored_lineup.captured_at if lineup else None
         return FrontOffice(
             snapshot=snapshot,
             team=chosen,
             matchup=_matchup(matchup) if matchup else None,
-            roster=with_nfl(document, roster),
+            roster=with_nfl(document, roster, policy.lineup_slots),
+            roster_state=state,
+            lineup=lineup,
+            lineup_captured_at=captured_at,
             standings=team_facts(document),
             matchup_periods=periods,
             selected_matchup_period=period,
             season_strip=_season_strip(document, chosen.id),
-            playoff_team_count=_playoff_team_count(stored_result.get("rules")),
-            historical_roster_unavailable=historical,
+            league=_rules(policy),
+            recent_moves=recent_moves(document),
             fixture=settings.auth_mode == "fixture",
         )
 
@@ -564,8 +673,9 @@ def install_member_routes(
         limit: int = Query(default=20, ge=1, le=20),
     ) -> PlayerSearch:
         member = principal(request)
-        _, document, snapshot = stored()
+        stored_result, document, snapshot = stored()
         require_binding(member, document)
+        slots = read_policy(stored_result.get("rules")).lineup_slots
         needle = query.strip().casefold()
         if len(needle) < 2:
             raise HTTPException(422, "INVALID_SEARCH")
@@ -573,17 +683,25 @@ def install_member_routes(
             (p for p in document.players if needle in p.display_name.casefold()),
             key=lambda p: (p.display_name, str(p.id)),
         )[:limit]
-        return PlayerSearch(snapshot=snapshot, players=with_nfl(document, found))
+        return PlayerSearch(snapshot=snapshot, players=with_nfl(document, found, slots))
 
     @router.get("/api/v1/players/{entity_id}", response_model=PlayerFacts)
     def player(request: Request, entity_id: UUID, snapshot_id: UUID | None = None) -> PlayerFacts:
         member = principal(request)
         require_binding(member)
-        _, document, snapshot = stored(snapshot_id)
+        stored_result, document, snapshot = stored(snapshot_id)
         found = next((p for p in document.players if p.id == entity_id), None)
         if found is None:
             raise HTTPException(404, "PLAYER_NOT_FOUND")
-        return PlayerFacts(snapshot=snapshot, player=with_nfl(document, [found])[0])
+        owner = next((t for t in document.teams if t.id == found.team_id), None)
+        slots = read_policy(stored_result.get("rules")).lineup_slots
+        return PlayerFacts(
+            snapshot=snapshot,
+            player=with_nfl(document, [found], slots)[0],
+            owner=TeamRef(id=owner.id, name=owner.name, abbreviation=owner.abbreviation)
+            if owner
+            else None,
+        )
 
     @router.put("/api/v1/me/preferences", response_model=Preferences)
     def preferences(request: Request, body: Preferences) -> Preferences:

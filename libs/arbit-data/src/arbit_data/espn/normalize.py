@@ -15,12 +15,14 @@ from arbit_data.identities import resolve_native
 from arbit_data.league import (
     DraftPick,
     FantasyTeam,
+    InjuryDesignation,
     LeagueDocument,
     Manager,
     Matchup,
     MatchupSide,
     NflTeam,
     Player,
+    TransactionCounts,
     content_hash,
 )
 
@@ -136,14 +138,44 @@ def rule_material(league: League) -> tuple[str, dict[str, Any], str]:
     return content_hash(payload), payload, scoring_key
 
 
+INJURIES: dict[str, InjuryDesignation | None] = {
+    "ACTIVE": None,
+    "NORMAL": None,
+    "QUESTIONABLE": "questionable",
+    "DOUBTFUL": "doubtful",
+    "OUT": "out",
+    "INJURY_RESERVE": "injured_reserve",
+    "SUSPENSION": "suspended",
+    "PROBABLE": "probable",
+    "DAY_TO_DAY": "day_to_day",
+}
+WINNERS: dict[str | None, Literal["home", "away", "tie"] | None] = {
+    "HOME": "home",
+    "AWAY": "away",
+    "TIE": "tie",
+    "UNDECIDED": None,
+    None: None,
+}
+BENCH_OR_IR = (20, 21)
+
+
+def injury_designation(status: str | None, injured: bool) -> InjuryDesignation | None:
+    """ESPN's code in plain terms. An unlisted code is still an injury listing, not health."""
+    if status is None:
+        return "other" if injured else None
+    return INJURIES.get(status, "other")
+
+
 def _actual_points(pool: PoolEntry, season: int, period: int) -> Decimal | None:
+    """Official points for one period (split 1), or the season (period 0, split 0)."""
+    split = 0 if period == 0 else 1
     blocks = [
         b
         for b in pool.player.stats
         if b.season_id == season
         and b.scoring_period_id == period
         and b.stat_source_id == 0
-        and b.stat_split_type_id == 1
+        and b.stat_split_type_id == split
     ]
     if len(blocks) > 1:
         raise ValueError("AMBIGUOUS_ACTUAL_POINTS")
@@ -241,6 +273,15 @@ def normalize_acquisition(
                 points_against=record.points_against,
                 waiver_rank=team.waiver_rank,
                 playoff_seed=team.playoff_seed,
+                transactions=TransactionCounts(
+                    acquisitions=team.transaction_counter.acquisitions,
+                    drops=team.transaction_counter.drops,
+                    trades=team.transaction_counter.trades,
+                    move_to_active=team.transaction_counter.move_to_active,
+                    move_to_ir=team.transaction_counter.move_to_ir,
+                )
+                if team.transaction_counter
+                else None,
             )
         )
     players = []
@@ -271,9 +312,19 @@ def normalize_acquisition(
                 roster_locked=pool.roster_locked,
                 trade_locked=pool.trade_locked,
                 official_current_points=_actual_points(pool, season, league.scoring_period_id),
+                official_season_points=_actual_points(pool, season, 0),
+                injury=injury_designation(player.injury_status, player.injured),
             )
         )
     mapping = league.settings.schedule_settings.get("matchupPeriods", {})
+    # A team has a live total only once one of its starters has an actual stat line this period.
+    started = {
+        t.id
+        for t in league.teams
+        for e in t.roster.entries
+        if e.lineup_slot_id not in BENCH_OR_IR
+        and _actual_points(e.player_pool_entry, season, league.scoring_period_id) is not None
+    }
     matchups = []
     for m in sorted(league.schedule, key=lambda m: m.id):
         periods = mapping.get(str(m.matchup_period_id))
@@ -283,23 +334,31 @@ def normalize_acquisition(
             or any(type(p) is not int or p < 1 for p in periods)
         ):
             raise ValueError("UNKNOWN_MATCHUP_PERIOD_MAPPING")
+        if m.winner not in WINNERS:
+            raise ValueError("UNKNOWN_MATCHUP_WINNER")
+        winner = WINNERS[m.winner]
+        decided = m.winner in ("HOME", "AWAY", "TIE")
+        current = periods == [league.scoring_period_id]
+
+        def side(source: Any, decided: bool = decided, current: bool = current) -> MatchupSide:
+            live = source.total_points_live
+            if current and source.team_id not in started:
+                live = None  # ESPN reads 0 before kickoff; that is not a score
+            return MatchupSide(
+                team_id=identity("fantasy_team", source.team_id),
+                official_points=source.total_points if decided else None,
+                live_points=None if decided else live,
+            )
+
         matchups.append(
             Matchup(
                 id=identity("fantasy_matchup", m.id),
                 matchup_period=m.matchup_period_id,
                 scoring_periods=tuple(periods),
-                home=MatchupSide(
-                    team_id=identity("fantasy_team", m.home.team_id),
-                    official_points=m.home.total_points,
-                )
-                if m.home
-                else None,
-                away=MatchupSide(
-                    team_id=identity("fantasy_team", m.away.team_id),
-                    official_points=m.away.total_points,
-                )
-                if m.away
-                else None,
+                home=side(m.home) if m.home else None,
+                away=side(m.away) if m.away else None,
+                winner=winner,
+                playoff_tier=m.playoff_tier_type,
             )
         )
     document = LeagueDocument(

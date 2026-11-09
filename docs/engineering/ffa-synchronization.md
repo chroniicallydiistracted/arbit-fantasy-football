@@ -58,6 +58,15 @@ uv run --env-file .env.local arbit-worker sync-replay <known-manifest-hash>
 
 Replay makes no provider requests. It re-runs canonical publication when needed and reuses stored scoring evidence; it does not independently re-fetch or recompute a completed-week scoring audit. The previous scoring slice separately archives/replays completed-week raw-stat inputs. Restore the database and private archives together; arbitrary external paths/unregistered captures are not accepted by this CLI.
 
+## League history: weekly lineups and transactions
+
+The league document is current state. Two tables keep what it doesn't (migration 0010, ENG-050):
+
+- **Weekly lineups** (`fantasy_lineup_capture`, `fantasy_lineup_entry`). After each league read, the league lane looks for finished one-week matchup periods with no capture, or whose official totals no longer match the latest capture. It reads one per step (`mSettings`, `mStatus`, `mRoster`, `mBoxscore`, `mMatchupScore` for that period), reconciles it with `reconcile_period`, and stores it only when every lineup reproduces ESPN's official total. Captures are append-only. A week that doesn't reconcile is retried after an hour. Source `espn.league.lineups`.
+- **Transactions** (`fantasy_transaction`, `fantasy_transaction_read`). Every scoring period is read once, oldest first, then the current and previous periods each league interval. Rows are keyed by ESPN's transaction ID and updated when their status or items change. Who proposed a transaction isn't read. Source `espn.league.transactions`.
+
+Both run through the shared ESPN pacing gate, 20 seconds apart while catching up. Both emit `league.updated` when something changes, so open pages refresh. Reads: `arbit_data.league_history`. League settings for display and advice come from `arbit_data.league_policy.read_policy(rules)`.
+
 ## Failures, retries and freshness
 
 One active sync job per season is enforced in PostgreSQL. Workers claim only `espn.sync` jobs, heartbeat every ten seconds against a 120-second lease, and fence capture registration, publication, success and failure writes. A replaced/expired worker cannot publish or overwrite another worker's health. A final lease check rolls back a transaction that outlives its lease. Five exhausted/crashed attempts enter a 15-minute recovery delay before automatic scheduling can start another job.

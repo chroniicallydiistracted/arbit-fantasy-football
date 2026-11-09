@@ -346,3 +346,52 @@ nfl_play_revision = Table(
     Column("is_current", Boolean, nullable=False),
     Column("payload", JSON, nullable=False),
 )
+fantasy_lineup_capture = Table(
+    "fantasy_lineup_capture",
+    metadata,
+    Column("id", Uuid, primary_key=True),
+    Column("season", Integer, nullable=False),
+    Column("scoring_period", Integer, nullable=False),
+    Column("matchup_period", Integer, nullable=False),
+    Column("content_hash", String(64), nullable=False),
+    Column("receipt_sha256", String(64), nullable=False),
+    Column("captured_at", DateTime(timezone=True), nullable=False),
+    Column("verification", JSON, nullable=False),
+)
+fantasy_lineup_entry = Table(
+    "fantasy_lineup_entry",
+    metadata,
+    Column("capture_id", Uuid, ForeignKey("fantasy_lineup_capture.id"), primary_key=True),
+    Column("player_id", Uuid, primary_key=True),
+    Column("team_id", Uuid, nullable=False),
+    Column("slot", String, nullable=False),
+    Column("official_points", Numeric),
+    Column("display_name", String, nullable=False),
+    Column("position", String, nullable=False),
+    Column("nfl_team_espn_id", Integer),
+)
+fantasy_transaction = Table(
+    "fantasy_transaction",
+    metadata,
+    Column("season", Integer, primary_key=True),
+    Column("espn_id", String, primary_key=True),
+    Column("scoring_period", Integer, nullable=False),
+    Column("type", String, nullable=False),
+    Column("status", String, nullable=False),
+    Column("team_id", Uuid),
+    Column("proposed_at", DateTime(timezone=True)),
+    Column("processed_at", DateTime(timezone=True)),
+    Column("related_espn_id", String),
+    Column("items", JSON, nullable=False),
+    Column("content_hash", String(64), nullable=False),
+    Column("first_observed_at", DateTime(timezone=True), nullable=False),
+    Column("last_changed_at", DateTime(timezone=True), nullable=False),
+)
+fantasy_transaction_read = Table(
+    "fantasy_transaction_read",
+    metadata,
+    Column("season", Integer, primary_key=True),
+    Column("scoring_period", Integer, primary_key=True),
+    Column("last_read_at", DateTime(timezone=True), nullable=False),
+    Column("transaction_count", Integer, nullable=False),
+)

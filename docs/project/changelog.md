@@ -1,5 +1,16 @@
 # Development Changelog
 
+## 2026-11-08 — ESPN league facts shown as ESPN means them, and league history stored
+
+- Audited what members see against a fresh ESPN read: 1,437 served facts matched, but the current week read 0.00–0.00 "Official" all week, stored past lineups were hidden, and raw ESPN codes reached the page (R-054 to R-058).
+- On branch `claude/league-surfacing` (ENG-050, [plan](../superpowers/plans/2026-11-08-league-surfacing.md)):
+  - Matchups keep ESPN's decision, an official total only once decided, and a labeled live total.
+  - Each finished week's lineup is read, reconciled with the official totals and shown with that week's points.
+  - League transactions are synced per scoring period, and recent adds, drops and trades are shown.
+  - Front Office also gains manager names, season points, plain injury labels, the league's slots, waiver priority, trade deadline and playoff format. The player drawer names the owning team.
+  - Two new freshness sources: FFA weekly lineups and FFA transactions. Migration 0010 adds the history tables.
+- On a restored copy of the database against ESPN: weeks 1–8 stored with 64 of 64 team-weeks matching, 435 transactions across 9 periods, and 1,344 served facts matching ESPN. Not on the running app yet. [Handoff](handoffs/2026-11-08-league-surfacing.md).
+
 ## 2026-11-08 — Fresh NFL polling measured live
 
 - Measured the fresh-key, two-second NFL polling on the first live Sunday (R-042, OWN-045). Fresh reads saw new plays a median 17.9 s after the whistle, against 39.4 s for ordinary cached reads of the same games, and were first on all 263 paired plays. Cadence held at 2.0 s with no 429s. Added `scripts/live/check_fresh_polling.py` to rerun it. The browser leg, from announcement to the play's text in an open page, took a median 1.0 s (`scripts/live/time_browser_leg.cjs`, `browser_leg_report.py`). [Measurement](../research/nfl-fresh-polling-2026-11-08.md).

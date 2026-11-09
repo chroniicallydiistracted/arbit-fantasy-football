@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from sqlalchemy import Engine
 
-SCHEMA_REVISION = "0009_nfl_detail_phase"
+SCHEMA_REVISION = "0010_league_history"
 
 
 @dataclass(frozen=True)

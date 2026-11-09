@@ -177,6 +177,29 @@ def test_wrong_scope_or_shape_is_a_typed_failure(monkeypatch, endpoint, options,
         assert error.value.code == code
 
 
+def test_a_periods_transactions_may_include_lineups_set_ahead_as_espn_lists_them(monkeypatch):
+    """Observed in FFA period 8 (2026-11-08): FUTURE_ROSTER for period 9 and a ROSTER at 0."""
+    body = {
+        "id": 1729878439,
+        "scoringPeriodId": 8,
+        "transactions": [
+            {"id": "a", "type": "WAIVER", "scoringPeriodId": 8},
+            {"id": "b", "type": "FUTURE_ROSTER", "scoringPeriodId": 9},
+            {"id": "c", "type": "ROSTER", "scoringPeriodId": 0},
+        ],
+    }
+    options = EndpointOptions(season=2026, views=("mTransactions2",), scoring_period=8)
+    with server(monkeypatch, body=json.dumps(body).encode()) as (transport, _, _):
+        assert (
+            len(EspnClient(transport).fetch(Endpoint.LEAGUE, options).payload["transactions"]) == 3
+        )
+    body["transactions"].append({"id": "d", "type": "WAIVER", "scoringPeriodId": 9})
+    with server(monkeypatch, body=json.dumps(body).encode()) as (transport, _, _):
+        with pytest.raises(EspnError) as error:
+            EspnClient(transport).fetch(Endpoint.LEAGUE, options)
+        assert error.value.code == "SCOPE_MISMATCH", "any other period is still drift"
+
+
 def test_player_cards_do_not_claim_missing_or_wrong_requested_ids(monkeypatch):
     with server(monkeypatch, body=b'{"players":[{"id":42}]}') as (transport, _, _):
         with pytest.raises(EspnError) as error:

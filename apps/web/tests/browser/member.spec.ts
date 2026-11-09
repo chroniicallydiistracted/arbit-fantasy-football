@@ -27,12 +27,16 @@ test("two members, official nulls, historical context, player focus, private wat
 }) => {
   await login(page);
   await expect(page.getByRole("heading", { name: "Fictional Juniper Club" })).toBeVisible();
-  await expect(page.locator(".matchup-score").first()).toContainText("—");
+  // An in-progress week: a labeled live total, and a dash for the side with no game yet.
+  await expect(page.locator(".matchup-score").first()).toContainText("64.30");
+  await expect(page.locator(".matchup-score").nth(1)).toContainText("—");
+  await expect(page.locator(".authority")).toHaveText("Live");
   await page.getByRole("link", { name: /^Matchup 7/ }).click();
   await expect(
-    page.getByRole("heading", { name: "No roster saved for this matchup" }),
+    page.getByRole("heading", { name: "This week’s lineup isn’t stored yet" }),
   ).toBeVisible();
   await expect(page.locator(".matchup-score").first()).toContainText("128.25");
+  await expect(page.locator(".authority")).toHaveText("Official");
   await page.getByRole("link", { name: /^Matchup 8/ }).click();
   await page.getByLabel("Position", { exact: true }).selectOption("QB");
   const player = page.getByRole("button", { name: /^Avery Juniper/ });

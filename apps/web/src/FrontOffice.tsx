@@ -1,9 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { Fragment, useEffect } from "react";
 import { Link, useSearchParams } from "react-router";
-import type { FrontOffice as Office, Player, Sources, Team } from "./api";
+import type {
+  LeagueRules,
+  LineupPlayer,
+  MatchupSide,
+  FrontOffice as Office,
+  Player,
+  RecentMove,
+  Sources,
+  Team,
+} from "./api";
 import { useFallbackInterval } from "./events";
-import { ageLabel, dateLabel, points, record } from "./format";
+import { ageLabel, dateLabel, injuryLabel, injuryRulesOut, points, record } from "./format";
 import { Arrow, Busy, Notice, PageTitle, StatePanel } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
@@ -14,10 +23,17 @@ const GROUPS = [
   { key: "bench", title: "Bench" },
   { key: "reserve", title: "Injured reserve" },
 ] as const;
-function groupOf(player: Player) {
-  if (player.lineup_slot === "BENCH") return "bench";
-  if (player.lineup_slot === "IR") return "reserve";
+function groupOf(slot: string | null) {
+  if (slot === "BENCH") return "bench";
+  if (slot === "IR") return "reserve";
   return "starters";
+}
+
+/** ESPN's official total once it has decided the week; otherwise its running total, labeled. */
+function shown(side: MatchupSide | null | undefined) {
+  if (side?.official_points != null) return { value: side.official_points, live: false };
+  if (side?.live_points != null) return { value: side.live_points, live: true };
+  return { value: null, live: false };
 }
 
 export function FrontOffice() {
@@ -81,9 +97,22 @@ export function FrontOffice() {
         ? data.matchup.home
         : null;
   const opponent = data.standings.find((team) => team.id === other?.team_id);
-  const scored = own?.official_points != null && other?.official_points != null;
-  const ownTrails = scored && Number(own.official_points) < Number(other.official_points);
-  const otherTrails = scored && Number(other.official_points) < Number(own.official_points);
+  const ownScore = shown(own);
+  const otherScore = shown(other);
+  const scored = ownScore.value != null && otherScore.value != null;
+  const ownTrails = scored && Number(ownScore.value) < Number(otherScore.value);
+  const otherTrails = scored && Number(otherScore.value) < Number(ownScore.value);
+  const live = ownScore.live || otherScore.live;
+  const official = !live && (ownScore.value != null || otherScore.value != null);
+  const selected = data.selected_matchup_period;
+  const current = data.snapshot.matchup_period;
+  const state = data.matchup?.winner
+    ? "Final"
+    : selected === current
+      ? "In progress"
+      : selected > current
+        ? "Not started"
+        : "Awaiting ESPN’s final";
   function openPlayer(id: string) {
     const next = new URLSearchParams(params);
     next.set("player", id);
@@ -126,15 +155,14 @@ export function FrontOffice() {
       <section className="score-board" aria-labelledby="matchup-heading">
         <div className="score-head">
           <div className="score-title">
-            <h2 id="matchup-heading">Matchup {data.selected_matchup_period}</h2>
-            <span className="authority">Official</span>
-            <span>
-              {data.selected_matchup_period < data.snapshot.matchup_period
-                ? "Final"
-                : data.selected_matchup_period === data.snapshot.matchup_period
-                  ? "In progress"
-                  : "Not started"}
-            </span>
+            <h2 id="matchup-heading">Matchup {selected}</h2>
+            {official && <span className="authority">Official</span>}
+            {live && (
+              <span className="authority" data-kind="live">
+                Live
+              </span>
+            )}
+            <span>{state}</span>
           </div>
           <a
             href="https://fantasy.espn.com/football/league?leagueId=1729878439"
@@ -145,8 +173,8 @@ export function FrontOffice() {
           </a>
         </div>
         <div className="score-sides">
-          <ScoreTeam team={data.team} score={own?.official_points} own trailing={ownTrails} />
-          <ScoreTeam team={opponent} score={other?.official_points} trailing={otherTrails} />
+          <ScoreTeam team={data.team} score={ownScore.value} own trailing={ownTrails} />
+          <ScoreTeam team={opponent} score={otherScore.value} trailing={otherTrails} />
         </div>
         <nav aria-label="Matchups this season">
           <ol className="season-strip">
@@ -176,16 +204,19 @@ export function FrontOffice() {
             })}
           </ol>
         </nav>
+        {live && (
+          <p className="score-note">
+            Live totals from ESPN. The official score comes when ESPN closes the week.
+          </p>
+        )}
       </section>
       <div className="office-grid">
         <section aria-labelledby="roster-heading">
           <div className="section-head">
             <h2 id="roster-heading">
-              {data.historical_roster_unavailable
-                ? `Roster, matchup ${data.selected_matchup_period}`
-                : "Roster"}
+              {data.roster_state === "current" ? "Roster" : `Lineup, matchup ${selected}`}
             </h2>
-            {!data.historical_roster_unavailable && (
+            {data.roster_state === "current" && (
               <div className="section-tools">
                 <label htmlFor="roster-position">Position</label>
                 <select
@@ -211,10 +242,24 @@ export function FrontOffice() {
               </div>
             )}
           </div>
-          {data.historical_roster_unavailable ? (
+          {data.roster_state === "lineup" ? (
+            <LineupTable
+              lineup={data.lineup}
+              period={selected}
+              capturedAt={data.lineup_captured_at}
+            />
+          ) : data.roster_state !== "current" ? (
             <div className="inline-state">
-              <h3>No roster saved for this matchup</h3>
-              <p>The score above is the official total. Today’s roster isn’t shown in its place.</p>
+              <h3>
+                {data.roster_state === "not_played"
+                  ? `Matchup ${selected} hasn’t been played yet`
+                  : "This week’s lineup isn’t stored yet"}
+              </h3>
+              <p>
+                {data.roster_state === "not_played"
+                  ? "Lineups and scores appear here once the week is over."
+                  : "Finished weeks are read from ESPN one at a time. The score above is ESPN’s."}
+              </p>
               <button type="button" onClick={() => set("period", "")}>
                 Current roster
               </button>
@@ -235,16 +280,21 @@ export function FrontOffice() {
                     <th scope="col" className="numeric">
                       Pts
                     </th>
+                    <th scope="col" className="numeric season-cell">
+                      <abbr title="Official ESPN points this season">Season</abbr>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {GROUPS.map((group) => {
-                    const rows = roster.filter((player) => groupOf(player) === group.key);
+                    const rows = roster.filter(
+                      (player) => groupOf(player.lineup_slot) === group.key,
+                    );
                     if (!rows.length) return null;
                     return (
                       <Fragment key={group.key}>
                         <tr className="group-row">
-                          <th colSpan={4} scope="colgroup">
+                          <th colSpan={5} scope="colgroup">
                             {group.title}
                           </th>
                         </tr>
@@ -318,13 +368,16 @@ export function FrontOffice() {
                           {team.id === data.team.id && (
                             <span className="sr-only"> (your team)</span>
                           )}
+                          {team.managers.length > 0 && (
+                            <span className="team-managers">{team.managers.join(", ")}</span>
+                          )}
                         </th>
                         <td className="numeric">{record(team)}</td>
                         <td className="numeric">{points(team.points_for)}</td>
                         <td className="numeric">{team.playoff_seed ?? "—"}</td>
                       </tr>
-                      {data.playoff_team_count != null &&
-                        index + 1 === data.playoff_team_count &&
+                      {data.league.playoff_team_count != null &&
+                        index + 1 === data.league.playoff_team_count &&
                         index + 1 < data.standings.length && (
                           <tr className="playoff-line">
                             <td colSpan={4}>
@@ -338,6 +391,8 @@ export function FrontOffice() {
               </table>
             </div>
           </section>
+          <LeaguePanel rules={data.league} team={data.team} teams={data.standings.length} />
+          <MovesPanel moves={data.recent_moves} />
           <SourcePanel />
           <section className="fact-panel" aria-labelledby="recommendations-heading">
             <h2 id="recommendations-heading">Recommendations</h2>
@@ -426,9 +481,7 @@ function RosterRow({
   watched: boolean;
   open: () => void;
 }) {
-  const injury =
-    player.injury_status && player.injury_status !== "ACTIVE" ? player.injury_status : null;
-  const status = injury ?? (player.injured ? "Injured" : !player.active ? "Inactive" : null);
+  const status = injuryLabel(player.injury) ?? (!player.active ? "Inactive" : null);
   return (
     <tr>
       <td className="slot-cell">
@@ -454,7 +507,7 @@ function RosterRow({
       <td className="player-status">
         {status ? (
           <span
-            className={`tag ${status === "OUT" || status === "Inactive" ? "tag-fault" : "tag-caution"}`}
+            className={`tag ${injuryRulesOut(player.injury) || !player.active ? "tag-fault" : "tag-caution"}`}
           >
             {status}
           </span>
@@ -469,7 +522,214 @@ function RosterRow({
           <span className="sr-only"> Score unavailable</span>
         )}
       </td>
+      <td className="numeric season-cell">{points(player.official_season_points)}</td>
     </tr>
+  );
+}
+
+function LineupTable({
+  lineup,
+  period,
+  capturedAt,
+}: {
+  lineup: LineupPlayer[];
+  period: number;
+  capturedAt: string | null | undefined;
+}) {
+  return (
+    <div className="table-wrap">
+      <table className="agate roster-table">
+        <caption className="sr-only">
+          Lineup for matchup {period}, official ESPN points that week.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Slot</th>
+            <th scope="col">Player</th>
+            <th scope="col" className="numeric">
+              Pts
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {GROUPS.map((group) => {
+            const rows = lineup.filter((entry) => groupOf(entry.slot) === group.key);
+            if (!rows.length) return null;
+            return (
+              <Fragment key={group.key}>
+                <tr className="group-row">
+                  <th colSpan={3} scope="colgroup">
+                    {group.title}
+                  </th>
+                </tr>
+                {rows.map((entry) => (
+                  <tr key={entry.player_id}>
+                    <td className="slot-cell">
+                      <span className="slot-tag">{entry.slot}</span>
+                    </td>
+                    <td className="player-cell">
+                      <span className="player-name">{entry.display_name}</span>
+                      <span className="player-line">{entry.position}</span>
+                    </td>
+                    <td className="numeric score-cell">
+                      {points(entry.official_points)}
+                      {entry.official_points == null && (
+                        <span className="sr-only"> Did not play</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+      {capturedAt && (
+        <p className="table-foot">
+          Slots and points as ESPN recorded them that week, read{" "}
+          <time dateTime={capturedAt}>{dateLabel(capturedAt)}</time>.
+        </p>
+      )}
+    </div>
+  );
+}
+
+const WAIVER_TYPES: Record<string, string> = { WAIVERS_TRADITIONAL: "Traditional waivers" };
+const TIEBREAKERS: Record<string, string> = {
+  TOTAL_POINTS_SCORED: "total points",
+  H2H_RECORD: "head-to-head record",
+  TOTAL_POINTS_AGAINST: "points against",
+  INTRA_DIVISION_RECORD: "division record",
+};
+const DAYS: Record<string, string> = {
+  MONDAY: "Mon",
+  TUESDAY: "Tue",
+  WEDNESDAY: "Wed",
+  THURSDAY: "Thu",
+  FRIDAY: "Fri",
+  SATURDAY: "Sat",
+  SUNDAY: "Sun",
+};
+
+function untilLabel(when: string, now = Date.now()): string {
+  const days = Math.ceil((Date.parse(when) - now) / 86_400_000);
+  if (!Number.isFinite(days)) return "";
+  if (days < 0) return "passed";
+  if (days === 0) return "today";
+  return days === 1 ? "in 1 day" : `in ${days} days`;
+}
+
+function LeaguePanel({ rules, team, teams }: { rules: LeagueRules; team: Team; teams: number }) {
+  const waiver = [
+    rules.waiver_type ? (WAIVER_TYPES[rules.waiver_type] ?? "Waivers") : null,
+    rules.waiver_hours != null ? `${rules.waiver_hours}-hour hold` : null,
+    rules.uses_bidding === false ? "no bidding" : null,
+  ].filter(Boolean);
+  const moves = team.transactions;
+  return (
+    <section className="fact-panel" aria-labelledby="league-heading">
+      <h2 id="league-heading">League</h2>
+      <dl className="fact-list">
+        <div>
+          <dt>Your waiver priority</dt>
+          <dd>{team.waiver_rank != null ? `${team.waiver_rank} of ${teams}` : "—"}</dd>
+        </div>
+        <div>
+          <dt>Waivers</dt>
+          <dd>{waiver.length ? waiver.join(", ") : "—"}</dd>
+        </div>
+        {rules.waiver_days.length > 0 && (
+          <div>
+            <dt>Claims processed</dt>
+            <dd>{rules.waiver_days.map((day) => DAYS[day] ?? day).join(", ")}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Trade deadline</dt>
+          <dd>
+            {rules.trade_deadline ? (
+              <>
+                <time dateTime={rules.trade_deadline}>{dateLabel(rules.trade_deadline)}</time>
+                <span className="fine"> {untilLabel(rules.trade_deadline)}</span>
+              </>
+            ) : (
+              "—"
+            )}
+          </dd>
+        </div>
+        {rules.trade_veto_votes != null && (
+          <div>
+            <dt>Votes to veto a trade</dt>
+            <dd>{rules.trade_veto_votes}</dd>
+          </div>
+        )}
+        {rules.playoff_team_count != null && (
+          <div>
+            <dt>Playoffs</dt>
+            <dd>
+              {rules.playoff_team_count} teams
+              {rules.playoff_tiebreaker && TIEBREAKERS[rules.playoff_tiebreaker]
+                ? `, ties broken by ${TIEBREAKERS[rules.playoff_tiebreaker]}`
+                : ""}
+            </dd>
+          </div>
+        )}
+        {moves && (
+          <div>
+            <dt>Your moves this season</dt>
+            <dd>
+              {moves.acquisitions} adds, {moves.drops} drops, {moves.trades} trades
+            </dd>
+          </div>
+        )}
+      </dl>
+    </section>
+  );
+}
+
+const MOVE_KINDS: Record<RecentMove["kind"], string> = {
+  waiver: "Waiver claim",
+  free_agent: "Free agent",
+  trade: "Trade",
+  other: "Roster move",
+};
+
+function MovesPanel({ moves }: { moves: RecentMove[] }) {
+  return (
+    <section className="fact-panel" aria-labelledby="moves-heading">
+      <h2 id="moves-heading">Recent moves</h2>
+      {moves.length ? (
+        <ul className="move-list">
+          {moves.map((move) => (
+            <li key={move.id}>
+              <p>
+                {move.kind !== "trade" && <b>{move.team_name ?? "A team"} </b>}
+                {move.items
+                  .map((item) =>
+                    item.action === "traded"
+                      ? `${item.player_name ?? "a player no longer listed"} to ${item.team_name ?? "another team"}`
+                      : `${item.action} ${item.player_name ?? "a player no longer listed"}`,
+                  )
+                  .join(", ")}
+              </p>
+              <p className="fine">
+                {MOVE_KINDS[move.kind]}
+                {move.at ? (
+                  <>
+                    {" · "}
+                    <time dateTime={move.at} title={dateLabel(move.at)}>
+                      {ageLabel(move.at)}
+                    </time>
+                  </>
+                ) : null}
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="fine">No adds, drops or trades read from ESPN yet.</p>
+      )}
+    </section>
   );
 }
 
@@ -493,6 +753,7 @@ function ScoreTeam({
         <h3>{team?.name ?? "Opponent unavailable"}</h3>
         <p>
           {own ? "Your team · " : ""}
+          {team?.managers.length ? `${team.managers.join(", ")} · ` : ""}
           {team ? record(team) : "Record unavailable"}
           {team?.playoff_seed != null ? ` · Seed ${team.playoff_seed}` : ""}
         </p>

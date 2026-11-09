@@ -23,6 +23,28 @@ class Manager(DataModel):
     first_name: str | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
+InjuryDesignation = Literal[
+    "questionable",
+    "doubtful",
+    "out",
+    "injured_reserve",
+    "suspended",
+    "probable",
+    "day_to_day",
+    "other",
+]
+
+
+class TransactionCounts(DataModel):
+    """ESPN's season counters for one team. Lineup moves count as moves to active."""
+
+    acquisitions: int
+    drops: int
+    trades: int
+    move_to_active: int
+    move_to_ir: int
+
+
 class FantasyTeam(DataModel):
     id: UUID
     name: str
@@ -36,6 +58,7 @@ class FantasyTeam(DataModel):
     points_against: Decimal
     waiver_rank: int | None
     playoff_seed: int | None
+    transactions: TransactionCounts | None = None
 
 
 class Player(DataModel):
@@ -55,6 +78,9 @@ class Player(DataModel):
     roster_locked: bool
     trade_locked: bool
     official_current_points: Decimal | None
+    # Unknown until a stored document carries them; never zero by default.
+    official_season_points: Decimal | None = None
+    injury: InjuryDesignation | None = None  # canonical; injury_status keeps ESPN's code
 
 
 class NflTeam(DataModel):
@@ -64,7 +90,10 @@ class NflTeam(DataModel):
 
 class MatchupSide(DataModel):
     team_id: UUID
+    # ESPN's total, only once ESPN has decided the matchup.
     official_points: Decimal | None
+    # ESPN's running total while the matchup is undecided; unknown before a starter has played.
+    live_points: Decimal | None = None
 
 
 class Matchup(DataModel):
@@ -73,6 +102,8 @@ class Matchup(DataModel):
     scoring_periods: tuple[int, ...]
     home: MatchupSide | None
     away: MatchupSide | None
+    winner: Literal["home", "away", "tie"] | None = None  # None: not decided by ESPN yet
+    playoff_tier: str | None = None  # ESPN's playoffTierType, kept as the provider states it
 
 
 class DraftPick(DataModel):

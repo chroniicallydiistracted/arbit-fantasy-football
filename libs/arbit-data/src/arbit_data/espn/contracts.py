@@ -121,6 +121,14 @@ class TeamRecord(ProviderModel):
     overall: OverallRecord
 
 
+class TransactionCounter(ProviderModel):
+    acquisitions: NonNegativeInt
+    drops: NonNegativeInt
+    trades: NonNegativeInt
+    move_to_active: NonNegativeInt
+    move_to_ir: NonNegativeInt = Field(alias="moveToIR")
+
+
 class Team(ProviderModel):
     id: PositiveInt
     name: StrictStr
@@ -131,6 +139,7 @@ class Team(ProviderModel):
     primary_owner: StrictStr | None = None
     waiver_rank: PositiveInt | None = None
     playoff_seed: NonNegativeInt | None = None
+    transaction_counter: TransactionCounter | None = None
 
 
 class Member(ProviderModel):
@@ -141,7 +150,10 @@ class Member(ProviderModel):
 
 class MatchupSide(ProviderModel):
     team_id: PositiveInt
+    # ESPN fills totalPoints only once a week is final; before that it reads 0.
     total_points: Decimal | None = None
+    # The running total for the current matchup period. Absent for other periods.
+    total_points_live: Decimal | None = None
 
 
 class Matchup(ProviderModel):
@@ -149,6 +161,8 @@ class Matchup(ProviderModel):
     matchup_period_id: PositiveInt
     home: MatchupSide | None = None
     away: MatchupSide | None = None  # Byes may have only one side.
+    winner: StrictStr | None = None  # HOME, AWAY, TIE or UNDECIDED
+    playoff_tier_type: StrictStr | None = None
 
 
 class DraftPick(ProviderModel):
@@ -179,6 +193,37 @@ class League(ProviderModel):
     schedule: tuple[Matchup, ...]
     draft_detail: DraftDetail
     members: tuple[Member, ...] = ()
+
+
+class TransactionItem(ProviderModel):
+    type: StrictStr  # ADD, DROP, TRADE, LINEUP, DRAFT
+    player_id: StrictInt
+    from_team_id: NonNegativeInt
+    to_team_id: NonNegativeInt
+    from_lineup_slot_id: StrictInt
+    to_lineup_slot_id: StrictInt
+
+
+class Transaction(ProviderModel):
+    """One mTransactions2 entry. Member IDs are deliberately not read."""
+
+    id: Annotated[StrictStr, Field(min_length=1, max_length=64)]
+    type: StrictStr
+    status: StrictStr
+    # A period's page also lists next week's lineup moves (FUTURE_ROSTER) and, observed once, 0.
+    scoring_period_id: NonNegativeInt
+    team_id: NonNegativeInt
+    proposed_date: StrictInt | None = None
+    process_date: StrictInt | None = None
+    related_transaction_id: StrictStr | None = None
+    bid_amount: Decimal | None = None
+    items: tuple[TransactionItem, ...] = ()
+
+
+class TransactionPage(ProviderModel):
+    season_id: StrictInt
+    scoring_period_id: PositiveInt
+    transactions: tuple[Transaction, ...] = ()
 
 
 class AvailablePage(ProviderModel):

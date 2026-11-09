@@ -2,6 +2,14 @@
 
 Updated **2026-11-08**. M2, the accepted design reset, and the real-time platform are integrated into `main` and run on the local app. **Live (M6) is in progress ahead of M3** (OWN-019). After the Jacksonville–Baltimore capture, the local worker now reads active NFL games' full details every two-second round with a fresh cache key (OWN-045). On Sunday, fresh reads saw new plays a median 17.9 s after the whistle, against 39.4 s for ordinary cached reads of the same games (R-042 resolved, [measurement](../research/nfl-fresh-polling-2026-11-08.md)). [Polling handoff](handoffs/2026-11-05-nfl-fresh-polling.md).
 
+**ESPN league facts and history (2026-11-08, ENG-050), branch `claude/league-surfacing`, not released.** An audit matched 1,437 served facts with ESPN but found the current week reading 0.00–0.00 "Official" all week, stored past lineups hidden and raw ESPN codes on the page (R-054 to R-058). The fixes are done and were verified on a restored copy of the database:
+- live and official totals labeled apart
+- reconciled weekly lineups (64 of 64 team-weeks match)
+- league transactions (435 across 9 periods)
+- manager names, season points, plain injury labels, league rules, recent moves, and the owning team in the drawer
+
+1,344 served facts match a fresh ESPN read. Release needs the owner's approval: migration 0010, API release and worker restart together. [Handoff](handoffs/2026-11-08-league-surfacing.md).
+
 **Public address (2026-11-08, OWN-058).** The app on this PC is now served at `https://ffa.westfam.media` through the Cloudflare Tunnel `arbit`, behind the owner's Cloudflare Access, and that is its only sign-in address. Choosing a hosting platform is still deferred (OWN-014). The owner signed in there from an iPad; a second member is still to be shown (R-053). [Handoff](handoffs/2026-11-08-public-address.md).
 
 The locally running game detail view puts the existing game cards in one scrolling row and gives the field the full content width. The Jumbotron is the main scoreboard when it can draw. In 31 games, the coverage audit found 67 football actions or tries without a clip, plus 328 cancelled entries the browser skips (R-045). [Layout handoff](handoffs/2026-11-05-live-field-layout.md) and [coverage audit](../research/live-play-coverage-2026-11-05.md).

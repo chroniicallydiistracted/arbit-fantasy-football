@@ -530,11 +530,22 @@ label {
   padding: 0 var(--space-2);
   color: var(--board);
   background: var(--board-ink);
+  border: 1px solid var(--board-ink);
   font-family: var(--font-display);
   font-size: var(--type-ui);
   font-weight: 700;
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
+}
+.authority[data-kind="live"] {
+  color: var(--board-ink);
+  background: none;
+}
+.score-note {
+  padding: var(--space-2) var(--space-4);
+  color: var(--board-muted);
+  border-top: 1px solid var(--board-rule);
+  font-size: var(--type-data);
 }
 .score-sides {
   display: grid;
@@ -822,6 +833,19 @@ label {
 .score-cell {
   font-weight: 600;
 }
+.season-cell {
+  color: var(--ink-muted);
+}
+.player-name {
+  font-size: var(--type-ui);
+  font-weight: 600;
+}
+.team-managers {
+  display: block;
+  color: var(--ink-muted);
+  font-size: var(--type-agate);
+  font-weight: 400;
+}
 .own-standing th,
 .own-standing td {
   background: var(--surface-sunk);
@@ -882,6 +906,18 @@ label {
   border-bottom: 1px solid var(--rule);
 }
 .source-list li:last-child {
+  border-bottom: 0;
+}
+.move-list {
+  display: grid;
+}
+.move-list li {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.move-list li:last-child {
   border-bottom: 0;
 }
 .state-off {
@@ -1822,7 +1858,8 @@ label {
     height: 2.75rem;
   }
   .player-status-heading,
-  .player-status {
+  .player-status,
+  .season-cell {
     display: none;
   }
   .gate {

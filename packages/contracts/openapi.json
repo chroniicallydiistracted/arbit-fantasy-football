@@ -805,9 +805,27 @@
             "title": "Fixture",
             "type": "boolean"
           },
-          "historical_roster_unavailable": {
-            "title": "Historical Roster Unavailable",
-            "type": "boolean"
+          "league": {
+            "$ref": "#/components/schemas/LeagueRules"
+          },
+          "lineup": {
+            "items": {
+              "$ref": "#/components/schemas/LineupPlayer"
+            },
+            "title": "Lineup",
+            "type": "array"
+          },
+          "lineup_captured_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lineup Captured At"
           },
           "matchup": {
             "anyOf": [
@@ -826,16 +844,12 @@
             "title": "Matchup Periods",
             "type": "array"
           },
-          "playoff_team_count": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Playoff Team Count"
+          "recent_moves": {
+            "items": {
+              "$ref": "#/components/schemas/RecentMove"
+            },
+            "title": "Recent Moves",
+            "type": "array"
           },
           "roster": {
             "items": {
@@ -843,6 +857,17 @@
             },
             "title": "Roster",
             "type": "array"
+          },
+          "roster_state": {
+            "description": "current: today's roster; lineup: that week's stored lineup; not_captured: a finished week with no stored lineup; not_played: a future week",
+            "enum": [
+              "current",
+              "lineup",
+              "not_captured",
+              "not_played"
+            ],
+            "title": "Roster State",
+            "type": "string"
           },
           "season_strip": {
             "items": {
@@ -874,12 +899,15 @@
           "team",
           "matchup",
           "roster",
+          "roster_state",
+          "lineup",
+          "lineup_captured_at",
           "standings",
           "matchup_periods",
           "selected_matchup_period",
           "season_strip",
-          "playoff_team_count",
-          "historical_roster_unavailable",
+          "league",
+          "recent_moves",
           "fixture"
         ],
         "title": "FrontOffice",
@@ -924,6 +952,141 @@
         "title": "InviteResponse",
         "type": "object"
       },
+      "LeagueRules": {
+        "additionalProperties": false,
+        "description": "Settings from the stored rule version. Unknown stays null; nothing here is a default.",
+        "properties": {
+          "lineup_slots": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Lineup Slots",
+            "type": "array"
+          },
+          "playoff_team_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Playoff Team Count"
+          },
+          "playoff_tiebreaker": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Playoff Tiebreaker"
+          },
+          "regular_season_matchups": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Regular Season Matchups"
+          },
+          "trade_deadline": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trade Deadline"
+          },
+          "trade_review_hours": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trade Review Hours"
+          },
+          "trade_veto_votes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trade Veto Votes"
+          },
+          "uses_bidding": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uses Bidding"
+          },
+          "waiver_days": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Waiver Days",
+            "type": "array"
+          },
+          "waiver_hours": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waiver Hours"
+          },
+          "waiver_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waiver Type"
+          }
+        },
+        "required": [
+          "lineup_slots",
+          "waiver_type",
+          "waiver_hours",
+          "waiver_days",
+          "uses_bidding",
+          "trade_deadline",
+          "trade_veto_votes",
+          "trade_review_hours",
+          "regular_season_matchups",
+          "playoff_team_count",
+          "playoff_tiebreaker"
+        ],
+        "title": "LeagueRules",
+        "type": "object"
+      },
       "Line": {
         "additionalProperties": false,
         "properties": {
@@ -945,6 +1108,49 @@
           "x"
         ],
         "title": "Line",
+        "type": "object"
+      },
+      "LineupPlayer": {
+        "additionalProperties": false,
+        "description": "One player in a finished week's stored lineup: ESPN's slot and points for that week.",
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "official_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Points"
+          },
+          "player_id": {
+            "format": "uuid",
+            "title": "Player Id",
+            "type": "string"
+          },
+          "position": {
+            "title": "Position",
+            "type": "string"
+          },
+          "slot": {
+            "title": "Slot",
+            "type": "string"
+          }
+        },
+        "required": [
+          "player_id",
+          "display_name",
+          "position",
+          "slot",
+          "official_points"
+        ],
+        "title": "LineupPlayer",
         "type": "object"
       },
       "LiveAnimation": {
@@ -2148,12 +2354,39 @@
             "title": "Matchup Period",
             "type": "integer"
           },
+          "playoff_tier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Playoff Tier"
+          },
           "scoring_periods": {
             "items": {
               "type": "integer"
             },
             "title": "Scoring Periods",
             "type": "array"
+          },
+          "winner": {
+            "anyOf": [
+              {
+                "enum": [
+                  "home",
+                  "away",
+                  "tie"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Winner"
           }
         },
         "required": [
@@ -2169,6 +2402,17 @@
       "MatchupSide": {
         "additionalProperties": false,
         "properties": {
+          "live_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Points"
+          },
           "official_points": {
             "anyOf": [
               {
@@ -2497,6 +2741,56 @@
         "title": "MotionTiming",
         "type": "object"
       },
+      "MoveItem": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "added",
+              "dropped",
+              "traded"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "player_id": {
+            "format": "uuid",
+            "title": "Player Id",
+            "type": "string"
+          },
+          "player_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Player Name"
+          },
+          "team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The team that added, dropped or received him",
+            "title": "Team Name"
+          }
+        },
+        "required": [
+          "action",
+          "player_id",
+          "player_name",
+          "team_name"
+        ],
+        "title": "MoveItem",
+        "type": "object"
+      },
       "PlayBoard": {
         "additionalProperties": false,
         "properties": {
@@ -2801,6 +3095,17 @@
           "analysis": {
             "$ref": "#/components/schemas/Analysis"
           },
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TeamRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The FFA team that rosters him, if any"
+          },
           "player": {
             "$ref": "#/components/schemas/RosterPlayer"
           },
@@ -2810,7 +3115,8 @@
         },
         "required": [
           "snapshot",
-          "player"
+          "player",
+          "owner"
         ],
         "title": "PlayerFacts",
         "type": "object"
@@ -3095,6 +3401,64 @@
         "title": "ReactivateRequest",
         "type": "object"
       },
+      "RecentMove": {
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MoveItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "waiver",
+              "free_agent",
+              "trade",
+              "other"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Name"
+          }
+        },
+        "required": [
+          "id",
+          "at",
+          "kind",
+          "team_name",
+          "items"
+        ],
+        "title": "RecentMove",
+        "type": "object"
+      },
       "RevokeDevice": {
         "additionalProperties": false,
         "properties": {
@@ -3166,6 +3530,27 @@
             "title": "Injured",
             "type": "boolean"
           },
+          "injury": {
+            "anyOf": [
+              {
+                "enum": [
+                  "questionable",
+                  "doubtful",
+                  "out",
+                  "injured_reserve",
+                  "suspended",
+                  "probable",
+                  "day_to_day",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Injury"
+          },
           "injury_status": {
             "anyOf": [
               {
@@ -3233,6 +3618,17 @@
             ],
             "title": "Official Current Points"
           },
+          "official_season_points": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Season Points"
+          },
           "position": {
             "enum": [
               "QB",
@@ -3289,7 +3685,7 @@
       },
       "SeasonCell": {
         "additionalProperties": false,
-        "description": "One matchup period for the member's team. Result only once the period has completed.",
+        "description": "One matchup period for the member's team. Points and result only once ESPN decides it.",
         "properties": {
           "matchup_period": {
             "title": "Matchup Period",
@@ -3615,6 +4011,14 @@
             "title": "Losses",
             "type": "integer"
           },
+          "managers": {
+            "description": "First names ESPN lists, else display names",
+            "items": {
+              "type": "string"
+            },
+            "title": "Managers",
+            "type": "array"
+          },
           "name": {
             "title": "Name",
             "type": "string"
@@ -3642,6 +4046,16 @@
             "title": "Ties",
             "type": "integer"
           },
+          "transactions": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransactionCounts"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "waiver_rank": {
             "anyOf": [
               {
@@ -3668,9 +4082,36 @@
           "points_for",
           "points_against",
           "waiver_rank",
-          "playoff_seed"
+          "playoff_seed",
+          "managers",
+          "transactions"
         ],
         "title": "Team",
+        "type": "object"
+      },
+      "TeamRef": {
+        "additionalProperties": false,
+        "properties": {
+          "abbreviation": {
+            "title": "Abbreviation",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "abbreviation"
+        ],
+        "title": "TeamRef",
         "type": "object"
       },
       "Teams": {
@@ -3692,6 +4133,41 @@
           "teams"
         ],
         "title": "Teams",
+        "type": "object"
+      },
+      "TransactionCounts": {
+        "additionalProperties": false,
+        "description": "ESPN's season counters for one team. Lineup moves count as moves to active.",
+        "properties": {
+          "acquisitions": {
+            "title": "Acquisitions",
+            "type": "integer"
+          },
+          "drops": {
+            "title": "Drops",
+            "type": "integer"
+          },
+          "move_to_active": {
+            "title": "Move To Active",
+            "type": "integer"
+          },
+          "move_to_ir": {
+            "title": "Move To Ir",
+            "type": "integer"
+          },
+          "trades": {
+            "title": "Trades",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "acquisitions",
+          "drops",
+          "trades",
+          "move_to_active",
+          "move_to_ir"
+        ],
+        "title": "TransactionCounts",
         "type": "object"
       }
     }

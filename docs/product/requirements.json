@@ -55,7 +55,8 @@
       "acceptance": "One published snapshot consistently supplies all own-team overview panels.",
       "status": "verified",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit"
+        "docs/project/handoffs/2026-10-31-member-application.md — implemented M2 behavior; isolated fictional member/browser proof, actual stored snapshot compatibility; real Google/member/assistive-technology acceptance remains explicit",
+        "docs/project/handoffs/2026-11-08-league-surfacing.md"
       ]
     },
     {
@@ -456,7 +457,8 @@
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
         "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
-        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain",
+        "docs/project/handoffs/2026-11-08-league-surfacing.md"
       ]
     },
     {
@@ -795,7 +797,8 @@
       "acceptance": "Every changing source has a declared cadence and stale limit; a supervised worker keeps them current through restarts; members can see per-source age.",
       "status": "implemented",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-platform-reset.md — supervised worker, cadence policy and per-source health; real ESPN proof on a restored copy, no live game observed"
+        "docs/project/handoffs/2026-10-31-platform-reset.md — supervised worker, cadence policy and per-source health; real ESPN proof on a restored copy, no live game observed",
+        "docs/project/handoffs/2026-11-08-league-surfacing.md"
       ]
     },
     {

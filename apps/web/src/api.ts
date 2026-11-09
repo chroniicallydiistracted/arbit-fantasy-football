@@ -9,3 +9,7 @@ export type PlayerSearch = components["schemas"]["PlayerSearch"];
 export type Team = components["schemas"]["Team"];
 export type Snapshot = components["schemas"]["Snapshot"];
 export type Sources = components["schemas"]["Sources"];
+export type LineupPlayer = components["schemas"]["LineupPlayer"];
+export type LeagueRules = components["schemas"]["LeagueRules"];
+export type RecentMove = components["schemas"]["RecentMove"];
+export type MatchupSide = components["schemas"]["MatchupSide"];

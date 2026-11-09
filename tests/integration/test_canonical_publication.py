@@ -84,7 +84,9 @@ def test_changes_and_corrections_append_history_without_repromoting_old_capture(
     first = publish(uow, tmp_path, captured_input)
 
     def correction(d):
+        # A past week ESPN has decided; only a decided total is official.
         d["schedule"][0]["matchupPeriodId"] = 1
+        d["schedule"][0]["winner"] = "HOME"
 
     second_input = later(captured_input, change=correction)
     second = publish(uow, tmp_path, second_input)

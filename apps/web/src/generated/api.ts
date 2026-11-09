@@ -759,15 +759,24 @@ export interface components {
             analysis?: components["schemas"]["Analysis"];
             /** Fixture */
             fixture: boolean;
-            /** Historical Roster Unavailable */
-            historical_roster_unavailable: boolean;
+            league: components["schemas"]["LeagueRules"];
+            /** Lineup */
+            lineup: components["schemas"]["LineupPlayer"][];
+            /** Lineup Captured At */
+            lineup_captured_at: string | null;
             matchup: components["schemas"]["Matchup"] | null;
             /** Matchup Periods */
             matchup_periods: number[];
-            /** Playoff Team Count */
-            playoff_team_count: number | null;
+            /** Recent Moves */
+            recent_moves: components["schemas"]["RecentMove"][];
             /** Roster */
             roster: components["schemas"]["RosterPlayer"][];
+            /**
+             * Roster State
+             * @description current: today's roster; lineup: that week's stored lineup; not_captured: a finished week with no stored lineup; not_played: a future week
+             * @enum {string}
+             */
+            roster_state: "current" | "lineup" | "not_captured" | "not_played";
             /** Season Strip */
             season_strip: components["schemas"]["SeasonCell"][];
             /** Selected Matchup Period */
@@ -793,6 +802,34 @@ export interface components {
             /** Invitation Url */
             invitation_url: string;
         };
+        /**
+         * LeagueRules
+         * @description Settings from the stored rule version. Unknown stays null; nothing here is a default.
+         */
+        LeagueRules: {
+            /** Lineup Slots */
+            lineup_slots: string[];
+            /** Playoff Team Count */
+            playoff_team_count: number | null;
+            /** Playoff Tiebreaker */
+            playoff_tiebreaker: string | null;
+            /** Regular Season Matchups */
+            regular_season_matchups: number | null;
+            /** Trade Deadline */
+            trade_deadline: string | null;
+            /** Trade Review Hours */
+            trade_review_hours: number | null;
+            /** Trade Veto Votes */
+            trade_veto_votes: number | null;
+            /** Uses Bidding */
+            uses_bidding: boolean | null;
+            /** Waiver Days */
+            waiver_days: string[];
+            /** Waiver Hours */
+            waiver_hours: number | null;
+            /** Waiver Type */
+            waiver_type: string | null;
+        };
         /** Line */
         Line: {
             /**
@@ -802,6 +839,25 @@ export interface components {
             kind: "scrimmage" | "to_gain";
             /** X */
             x: number;
+        };
+        /**
+         * LineupPlayer
+         * @description One player in a finished week's stored lineup: ESPN's slot and points for that week.
+         */
+        LineupPlayer: {
+            /** Display Name */
+            display_name: string;
+            /** Official Points */
+            official_points: string | null;
+            /**
+             * Player Id
+             * Format: uuid
+             */
+            player_id: string;
+            /** Position */
+            position: string;
+            /** Slot */
+            slot: string;
         };
         /** LiveAnimation */
         LiveAnimation: {
@@ -1090,11 +1146,17 @@ export interface components {
             id: string;
             /** Matchup Period */
             matchup_period: number;
+            /** Playoff Tier */
+            playoff_tier?: string | null;
             /** Scoring Periods */
             scoring_periods: number[];
+            /** Winner */
+            winner?: ("home" | "away" | "tie") | null;
         };
         /** MatchupSide */
         MatchupSide: {
+            /** Live Points */
+            live_points?: string | null;
             /** Official Points */
             official_points: string | null;
             /**
@@ -1198,6 +1260,26 @@ export interface components {
             provider_seconds?: number | null;
             /** Unfilled */
             unfilled: number;
+        };
+        /** MoveItem */
+        MoveItem: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "added" | "dropped" | "traded";
+            /**
+             * Player Id
+             * Format: uuid
+             */
+            player_id: string;
+            /** Player Name */
+            player_name: string | null;
+            /**
+             * Team Name
+             * @description The team that added, dropped or received him
+             */
+            team_name: string | null;
         };
         /** PlayBoard */
         PlayBoard: {
@@ -1316,6 +1398,8 @@ export interface components {
         /** PlayerFacts */
         PlayerFacts: {
             analysis?: components["schemas"]["Analysis"];
+            /** @description The FFA team that rosters him, if any */
+            owner: components["schemas"]["TeamRef"] | null;
             player: components["schemas"]["RosterPlayer"];
             snapshot: components["schemas"]["Snapshot"];
         };
@@ -1422,6 +1506,22 @@ export interface components {
              */
             account_id: string;
         };
+        /** RecentMove */
+        RecentMove: {
+            /** At */
+            at: string | null;
+            /** Id */
+            id: string;
+            /** Items */
+            items: components["schemas"]["MoveItem"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "waiver" | "free_agent" | "trade" | "other";
+            /** Team Name */
+            team_name: string | null;
+        };
         /** RevokeDevice */
         RevokeDevice: {
             /**
@@ -1463,6 +1563,8 @@ export interface components {
             id: string;
             /** Injured */
             injured: boolean;
+            /** Injury */
+            injury?: ("questionable" | "doubtful" | "out" | "injured_reserve" | "suspended" | "probable" | "day_to_day" | "other") | null;
             /** Injury Status */
             injury_status: string | null;
             /**
@@ -1479,6 +1581,8 @@ export interface components {
             nfl_team_id: string | null;
             /** Official Current Points */
             official_current_points: string | null;
+            /** Official Season Points */
+            official_season_points?: string | null;
             /**
              * Position
              * @enum {string}
@@ -1493,7 +1597,7 @@ export interface components {
         };
         /**
          * SeasonCell
-         * @description One matchup period for the member's team. Result only once the period has completed.
+         * @description One matchup period for the member's team. Points and result only once ESPN decides it.
          */
         SeasonCell: {
             /** Matchup Period */
@@ -1610,6 +1714,11 @@ export interface components {
             id: string;
             /** Losses */
             losses: number;
+            /**
+             * Managers
+             * @description First names ESPN lists, else display names
+             */
+            managers: string[];
             /** Name */
             name: string;
             /** Playoff Seed */
@@ -1620,16 +1729,45 @@ export interface components {
             points_for: string;
             /** Ties */
             ties: number;
+            transactions: components["schemas"]["TransactionCounts"] | null;
             /** Waiver Rank */
             waiver_rank: number | null;
             /** Wins */
             wins: number;
+        };
+        /** TeamRef */
+        TeamRef: {
+            /** Abbreviation */
+            abbreviation: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
         };
         /** Teams */
         Teams: {
             snapshot: components["schemas"]["Snapshot"];
             /** Teams */
             teams: components["schemas"]["Team"][];
+        };
+        /**
+         * TransactionCounts
+         * @description ESPN's season counters for one team. Lineup moves count as moves to active.
+         */
+        TransactionCounts: {
+            /** Acquisitions */
+            acquisitions: number;
+            /** Drops */
+            drops: number;
+            /** Move To Active */
+            move_to_active: number;
+            /** Move To Ir */
+            move_to_ir: number;
+            /** Trades */
+            trades: number;
         };
     };
     responses: never;

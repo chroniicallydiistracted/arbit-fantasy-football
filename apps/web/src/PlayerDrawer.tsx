@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import type { PlayerFacts } from "./api";
-import { points } from "./format";
+import { injuryLabel, points } from "./format";
 import { Busy, SourceNote } from "./primitives";
 import { useSession } from "./session";
 import { http } from "./transport";
@@ -132,10 +132,18 @@ export function PlayerDrawer() {
                 </div>
               )}
               <div>
-                <dt>Availability</dt>
+                <dt>Season</dt>
+                <dd>
+                  {data.official_season_points != null
+                    ? `${points(data.official_season_points)} pts`
+                    : "No points yet"}
+                </dd>
+              </div>
+              <div>
+                <dt>{data.availability === "owned" ? "Rostered by" : "Availability"}</dt>
                 <dd>
                   {data.availability === "owned"
-                    ? "On an FFA roster"
+                    ? (query.data.owner?.name ?? "An FFA team")
                     : data.availability === "waivers"
                       ? "On waivers"
                       : "Free agent"}
@@ -151,9 +159,7 @@ export function PlayerDrawer() {
               </div>
               <div>
                 <dt>Injury</dt>
-                <dd>
-                  {data.injury_status || (data.injured ? "Injury reported" : "None reported")}
-                </dd>
+                <dd>{injuryLabel(data.injury) ?? "None reported"}</dd>
               </div>
               <div>
                 <dt>Roster status</dt>

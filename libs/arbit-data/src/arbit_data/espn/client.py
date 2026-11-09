@@ -101,6 +101,17 @@ def _section(payload: dict[str, Any], path: str, expected: type) -> bool:
     return True
 
 
+def _transaction_in_scope(transaction: dict[str, Any], period: int) -> bool:
+    """A period's transactions, plus what ESPN was observed to list with them (2026-11-08):
+    lineups already set for a later week (FUTURE_ROSTER) and a lineup move stamped period 0."""
+    stamped, kind = transaction["scoringPeriodId"], transaction.get("type")
+    return (
+        stamped == period
+        or (kind == "FUTURE_ROSTER" and stamped > period)
+        or (kind == "ROSTER" and stamped == 0)
+    )
+
+
 def _scope(endpoint: Endpoint, options: EndpointOptions, payload: dict[str, Any]) -> None:
     if endpoint == Endpoint.LEAGUE:
         pool_only = bool(options.views) and set(options.views) <= {
@@ -128,9 +139,8 @@ def _scope(endpoint: Endpoint, options: EndpointOptions, payload: dict[str, Any]
                     or type(transaction.get("scoringPeriodId")) is not int
                 ):
                     raise EspnError("SCHEMA_DRIFT")
-                if (
-                    options.scoring_period is not None
-                    and transaction["scoringPeriodId"] != options.scoring_period
+                if options.scoring_period is not None and not _transaction_in_scope(
+                    transaction, options.scoring_period
                 ):
                     raise EspnError("SCOPE_MISMATCH")
         if "kona_playercard" in options.views and options.fantasy_filter is not None:

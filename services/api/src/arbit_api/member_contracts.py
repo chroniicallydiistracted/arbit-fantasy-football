@@ -5,7 +5,7 @@ from decimal import Decimal
 from typing import Literal
 from uuid import UUID
 
-from arbit_data.league import Matchup, Player
+from arbit_data.league import Matchup, Player, TransactionCounts
 from arbit_data.live.board import PlayBoard
 from arbit_data.live.choreography import PlayScript
 from arbit_data.live.motion import PlayScriptV2
@@ -50,6 +50,14 @@ class Team(WireModel):
     points_against: Decimal
     waiver_rank: int | None
     playoff_seed: int | None
+    managers: list[str] = Field(description="First names ESPN lists, else display names")
+    transactions: TransactionCounts | None
+
+
+class TeamRef(WireModel):
+    id: UUID
+    name: str
+    abbreviation: str
 
 
 class Me(WireModel):
@@ -104,7 +112,7 @@ class Analysis(WireModel):
 
 
 class SeasonCell(WireModel):
-    """One matchup period for the member's team. Result only once the period has completed."""
+    """One matchup period for the member's team. Points and result only once ESPN decides it."""
 
     matchup_period: int
     opponent_team_id: UUID | None
@@ -129,18 +137,65 @@ class RosterPlayer(Player):
     nfl: PlayerNfl | None = None
 
 
+class LineupPlayer(WireModel):
+    """One player in a finished week's stored lineup: ESPN's slot and points for that week."""
+
+    player_id: UUID
+    display_name: str
+    position: str
+    slot: str
+    official_points: Decimal | None
+
+
+class LeagueRules(WireModel):
+    """Settings from the stored rule version. Unknown stays null; nothing here is a default."""
+
+    lineup_slots: list[str]
+    waiver_type: str | None
+    waiver_hours: int | None
+    waiver_days: list[str]
+    uses_bidding: bool | None
+    trade_deadline: datetime | None
+    trade_veto_votes: int | None
+    trade_review_hours: int | None
+    regular_season_matchups: int | None
+    playoff_team_count: int | None
+    playoff_tiebreaker: str | None
+
+
+class MoveItem(WireModel):
+    action: Literal["added", "dropped", "traded"]
+    player_id: UUID
+    player_name: str | None
+    team_name: str | None = Field(description="The team that added, dropped or received him")
+
+
+class RecentMove(WireModel):
+    id: str
+    at: datetime | None
+    kind: Literal["waiver", "free_agent", "trade", "other"]
+    team_name: str | None
+    items: list[MoveItem]
+
+
 class FrontOffice(WireModel):
     snapshot: Snapshot
     team: Team
     matchup: Matchup | None
     roster: list[RosterPlayer]
+    roster_state: Literal["current", "lineup", "not_captured", "not_played"] = Field(
+        description="current: today's roster; lineup: that week's stored lineup; "
+        "not_captured: a finished week with no stored lineup; not_played: a future week"
+    )
+    lineup: list[LineupPlayer]
+    lineup_captured_at: datetime | None
     standings: list[Team]
     analysis: Analysis = Field(default_factory=Analysis)
     matchup_periods: list[int]
     selected_matchup_period: int
     season_strip: list[SeasonCell]
-    playoff_team_count: int | None
-    historical_roster_unavailable: bool
+    league: LeagueRules
+    recent_moves: list[RecentMove]
     fixture: bool
 
 
@@ -152,6 +207,7 @@ class Teams(WireModel):
 class PlayerFacts(WireModel):
     snapshot: Snapshot
     player: RosterPlayer
+    owner: TeamRef | None = Field(description="The FFA team that rosters him, if any")
     analysis: Analysis = Field(default_factory=Analysis)
 
 

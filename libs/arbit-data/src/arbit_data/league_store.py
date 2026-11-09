@@ -125,9 +125,11 @@ def _changes(
     ):
         changes["period"] = True
     prior = {m.id: m for m in previous.matchups}
+    # ESPN deciding a matchup for the first time is news, not a correction of a final.
     corrected = any(
         m.id in prior
         and prior[m.id] != m
+        and prior[m.id].winner is not None
         and max(prior[m.id].scoring_periods) < previous.scoring_period
         and max(m.scoring_periods) < current.scoring_period
         for m in current.matchups
