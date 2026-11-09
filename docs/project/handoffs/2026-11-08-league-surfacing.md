@@ -4,7 +4,15 @@
 
 The owner asked to confirm that ESPN league data is both pulled and shown where it belongs before Model/Scout (M3) starts, then to fix everything the audit found. The audit and the fixes (R-054 to R-058, ENG-050) are done and verified on a restored copy of the database against ESPN.
 
-**Not released.** All work is on branch `claude/league-surfacing` in the worktree `/home/andre/arbit-league-surfacing`, uncommitted. The running app (`arbit-api` pinned to its release snapshot, `arbit-worker` on `main`'s tree) is unchanged. The work was kept off `main`'s tree because the worker loads that tree on restart, and the running API refuses league documents with fields it doesn't know (`extra="forbid"`).
+**Released at the owner's request** ("Commit everything, push to main, and update the webstack, including the worker").
+- Commits `a2ebb5e` (this work, built on branch `claude/league-surfacing`) and `486d431` (the Nov 8 restart record and `.github/skills/anti-ui-slop`) are on `main` and pushed.
+- At 18:49 (UTC−7), during Sunday Night Football:
+  - Database backup `data/backups/2026-11-08/before-upgrade-184906.dump` (82 MB).
+  - Migration `0010_league_history` applied.
+  - The API switched to release `.superpowers/releases/league-surfacing-2026-11-08/` (source from `486d431`, web built from it). The drop-in `30-release.conf` replaced `30-live-animation-preview.conf`, whose copy is kept in the release folder as `previous-api-dropin.conf` for rollback.
+  - `arbit-api` and `arbit-worker` restarted together.
+- After the restart, `/health/ready` reported ready, and `:8000` served the release's bundle byte for byte. The worker's live and NFL lanes resumed on the night game (401873050). The league lane republished with the new fields and began backfilling weeks and transactions.
+- No tests were rerun for the release, by owner instruction; the verification below is from before it.
 
 ## Completed work
 
@@ -81,8 +89,8 @@ New tests:
 
 ## Resume here
 
-1. **Release, with the owner's approval and outside a game window.** This needs commit and merge to `main`, a backup, migration 0010, a new API release snapshot and a worker restart, all together. The API's readiness requires the new schema revision, and the old API would refuse the new documents. The first league read republishes once with the new fields. The lane then backfills weeks 1–8 and all transaction periods in about 3 minutes.
-2. After release, check that the running app's Front Office shows week 9 as Live during Monday night, and as Official once ESPN closes the week. Week 9's lineup should be captured once the week is decided.
+1. **Rollback, if ever needed:** restore `previous-api-dropin.conf` in place of `30-release.conf`, run `systemctl --user daemon-reload`, and restore the backup dump. Migration 0010 only adds tables.
+2. Check that the running app's Front Office shows week 9 as Live during Monday night, and as Official once ESPN closes the week. Week 9's lineup should be captured once the week is decided.
 3. Then M3 Model/Scout, which can use `fantasy_lineup_entry` and `fantasy_transaction` as point-in-time FFA history.
 
 [Status](../status.md) · [Decisions](../decision-register.md) · [Known issues](../known-issues.md)
