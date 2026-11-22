@@ -137,6 +137,9 @@ def main() -> None:
     if arguments.command == "availability-capture":
         daemon.capture_once(parser)
         return
+    if arguments.command == "catchup":
+        daemon.catchup_once(arguments, parser)
+        return
     if arguments.command in source_commands.COMMANDS:
         source_commands.execute(arguments, parser)
         return

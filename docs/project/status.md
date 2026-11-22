@@ -3,6 +3,13 @@
 **Governance system (2026-11-22):** the owner pushed the repository-native Context Governance System to `main` as `ec5682a`. It includes Codex/Claude entry instructions, structured task and handoff records, the authority matrix, the football-operations advisor charter (a requirement, not a shipped feature), the governance CLI and PR traceability. See the [audit](../governance/AUDIT_2026-11-22.md) and [start guide](../governance/START_HERE.md).
 - **CI:** that commit failed Runtime validation at `make lint`, with 7 Ruff errors in `tests/governance/test_governance.py`, so its database suite never ran. TASK-20261122-001 fixes the file on branch `claude/catch-up-and-decisions`. Runtime validation on `main` is green again only once that branch merges.
 
+**Catch-up after downtime (2026-11-22, ENG-052, TASK-20261122-004), on branch `claude/catch-up-and-decisions`, not merged or released.** A new `catchup` worker lane recovers finished games the live lanes never read, from weeks that started and ended while the PC or database was down:
+- **What it reads:** ESPN's scoreboard, summary and plays, and the NFL API's full record. It waits while a slate is active and records each game's kickoff and read time in a private receipt for ADR-007 A1.
+- **Command:** `arbit-worker catchup --dry-run` reports what is outstanding.
+- **Already self-recovering:** league lineups and transactions, nflverse and the whole-season injury report.
+- **Fixes:** the live schedule now follows the season's latest week, and NFL games unlinked by a startup race relink within minutes (R-069).
+- **Why:** the database was down from 2026-11-10 to 2026-11-22 (R-068), leaving week 10 unread. [Guide](../engineering/catch-up.md).
+
 **Owner decisions (2026-11-22, TASK-20261122-003):**
 - **ADR-007 accepted with amendments (OWN-066).** A value fetched late after a capture gap counts from the source's own timestamp or family rule, never before the gap began. Every field states when it applies instead of being barred. Gaps come from Arbit's own read records.
 - **Betting lines (Q-014) conditionally approved (OWN-067).** They enter only after a research note and a backtest ablation show they improve FFA-point accuracy.

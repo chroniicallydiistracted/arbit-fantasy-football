@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-004",
+  "title": "Catch-up ingestion after downtime, NFL relink fix and stable live schedule scope (ENG-052)",
+  "objective": "When the PC wakes after missing data, the worker recovers every finished game the live lanes never read (ESPN scoreboard, summary and plays; NFL full record), records capture gaps and recovery times for ADR-007 A1/A3, and week 10 2026 is recovered; NFL games link to ESPN within minutes of a startup race",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "live",
+  "requirements": [
+    "DATA-008",
+    "MD-004",
+    "LV-001",
+    "GOVAI-011"
+  ],
+  "scope_files": [
+    "libs/arbit-data/src/arbit_data/live/store.py",
+    "libs/arbit-data/src/arbit_data/live/feed.py",
+    "libs/arbit-data/src/arbit_data/live/nfl_feed.py",
+    "services/worker/src/arbit_worker/catchup.py",
+    "services/worker/src/arbit_worker/daemon.py",
+    "services/worker/src/arbit_worker/main.py",
+    "tests/integration/test_catchup.py",
+    "services/worker/tests/test_daemon.py",
+    "docs/engineering/catch-up.md",
+    "docs/engineering/member-application.md",
+    "docs/project/decision-register.md",
+    "docs/project/known-issues.md",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    ".env.example",
+    "foundation-manifest.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-22T23:19:16Z",
+  "updated_at": "2026-11-22T23:29:13Z",
+  "baseline": "706ce55e98807f15aab0273530db1608b5db440d",
+  "next_action": "Push branch claude/catch-up-and-decisions and open a PR; after CI is green the owner merges, then restart arbit-worker (no migration) between games so the catchup lane and relink fix run; confirm a 'catchup' started line and receipts.",
+  "sections": {
+    "review": {
+      "summary": "Read daemon lanes, LiveFeed, NflFeed, live store, availability capture, league_history and tests. Self-healing on restart: league lane reads current state, every unrecorded lineup week and every period's transactions; statistics imports current nflverse revisions; the injury-report capture reads the whole season each time. Not self-healing: LiveFeed and NflFeed follow only the current week (store.game_timings scope = most recently observed week; NflFeed.discover = today's week), so a week that started and ended while nothing ran is never read. Read-only DB query 2026-11-22: periods 1-7 never captured (worker began week 8), 8 complete ESPN, 9 complete ESPN+NFL, 10 nothing (14 games), 11 current. Publishing a past week's board with observed_at=now would make it the most recently observed week and flip the live schedule scope. NflFeed rediscovers only every 6 h, so a startup race left all week 11 NFL games unlinked.",
+      "files": [
+        "services/worker/src/arbit_worker/daemon.py",
+        "libs/arbit-data/src/arbit_data/live/feed.py",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py",
+        "libs/arbit-data/src/arbit_data/live/store.py",
+        "libs/arbit-data/src/arbit_data/availability/capture.py",
+        "libs/arbit-data/src/arbit_data/league_history.py",
+        "tests/integration/test_nfl_lane.py",
+        "tests/integration/test_live_store.py"
+      ]
+    },
+    "plan": {
+      "summary": "(1) store.game_timings scopes by the season's latest (season_type, week), so a recovered past week never becomes the live schedule. (2) NflFeed: rediscover every 120 s while current-week games are unlinked; recover_week(season_type, week) links a past week's schedule and reads each linked game's full record once. (3) LiveFeed: read_week_board(week) for a past scoreboard; recover_game(event) reads the summary, plays unless the NFL record owns them, then completes final checks. (4) New arbit_worker.catchup: outstanding finished games (kickoff+5h) in periods from the first captured one (or --from-period), excluding the current week; recover oldest week first (ESPN board, NFL record from the first NFL-lane week, ESPN summary/plays); source-gap snapshot from source health; append-only private receipt (ARBIT_CATCHUP_PATH) with kickoff and read time per game, no bodies. (5) catchup lane in the default worker lanes: never while a slate is active, one week per step, 30 min idle checks. (6) arbit-worker catchup [--dry-run] [--from-period] [--games-only]: also runs due availability and statistics steps. Tests: real-PostgreSQL integration for scope, relink, plan, recovery, receipt, deferral. Docs: catch-up guide, ENG-052, R-068, R-069, status, changelog. Rollback: revert the commit; lanes are independent.",
+      "files": [
+        "libs/arbit-data/src/arbit_data/live/store.py",
+        "libs/arbit-data/src/arbit_data/live/feed.py",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py",
+        "services/worker/src/arbit_worker/catchup.py",
+        "services/worker/src/arbit_worker/daemon.py",
+        "services/worker/src/arbit_worker/main.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "implementation": {
+      "summary": "store.game_timings scopes by the season's latest (season_type, week); store.complete_final_checks. LiveFeed.read_week_board and recover_game. NflFeed: _store_schedule split from discover with unlinked count, RELINK_SECONDS=120 rediscovery while unlinked (R-069), recover_week for past weeks. New arbit_worker.catchup (outstanding_games, source_gaps, recover_week, run, plan_summary, append-only receipts under ARBIT_CATCHUP_PATH). daemon: CatchupLane (defers while active, one week per step, gap snapshot at construction) in default LANES; catchup_once CLI with --dry-run, --from-period, --with-lanes; main.py dispatch (and restored availability-capture's return). 12 real-PostgreSQL tests in tests/integration/test_catchup.py; the scope and relink tests fail with each fix reverted. Docs: catch-up guide, .env.example, member operations note, ENG-052, R-068, R-069.",
+      "files": [
+        "libs/arbit-data/src/arbit_data/live/store.py",
+        "libs/arbit-data/src/arbit_data/live/feed.py",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py",
+        "services/worker/src/arbit_worker/catchup.py",
+        "services/worker/src/arbit_worker/daemon.py",
+        "services/worker/src/arbit_worker/main.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md",
+        "docs/engineering/member-application.md",
+        "docs/project/decision-register.md",
+        "docs/project/known-issues.md",
+        ".env.example"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0 for foundation, live-replay, runtime-check (Ruff, strict mypy on 119 files, contracts, full pytest: 1341 passed in 52.6 s including real-PostgreSQL integration) and web-check (client generation, design rules, 32 Vitest tests, build, PWA). 12 new tests in tests/integration/test_catchup.py; the scope and relink tests fail with each fix reverted. Real-data dry run on a restored copy of arbit_local (arbit_catchup_test, 366 MB): first captured period 8, NFL records from 9, live week 11, outstanding exactly week 10's 14 unstored games. Not yet observed: network recovery against the copy and the real database (done in TASK-20261122-002 after the late games); the lane on the running worker (needs merge and restart).",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Status block (branch, not merged or released), changelog entry, catch-up operator guide, member operations note on restart policy and catch-up, ENG-052 decision row, R-068 outage and R-069 relink race in known issues, .env.example ARBIT_CATCHUP_PATH. Written before validation; unchanged since the checks.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/engineering/catch-up.md",
+        "docs/engineering/member-application.md",
+        "docs/project/decision-register.md",
+        "docs/project/known-issues.md",
+        ".env.example"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-22-task-20261122-004-governance-handoff.md",
+      "next_action": "Push branch claude/catch-up-and-decisions and open a PR; after CI is green the owner merges, then restart arbit-worker (no migration) between games so the catchup lane and relink fix run; confirm a 'catchup' started line and receipts.",
+      "unresolved": "Not merged or released. Postseason catch-up deferred (R-059). Weeks 1-7 only with --from-period. No alert when the database stays down (R-068)."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:26:48Z",
+      "exit_code": 0,
+      "duration_seconds": 0.226,
+      "stdout_stderr_sha256": "a56a19a3551d8e0ee994548e8171385d29294431bc00d6624d3bea6c89a41691",
+      "git_head": "706ce55e98807f15aab0273530db1608b5db440d",
+      "scope_sha256": {
+        "libs/arbit-data/src/arbit_data/live/store.py": "fb3c2b63ca1c65f556856c74c3aae1ad7d9600e0f831f7a8a6e8134914223d05",
+        "libs/arbit-data/src/arbit_data/live/feed.py": "50da5727b7ff0bdfbb056fa079d81890ac8141d3f8cc98f719e634a21fed90be",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py": "8fe6b371390e9d609816ddedcced6090499a5554716b1679f3e022b151159f5b",
+        "services/worker/src/arbit_worker/catchup.py": "5b5821e22e7013b489dfb0eff18a1a7a8cacd05781e8c81f59f24e40a37b214c",
+        "services/worker/src/arbit_worker/daemon.py": "ead5eb9ad51087ff0181b42db273d24bf9dee985b5785425e3bb8e1a18594a0b",
+        "services/worker/src/arbit_worker/main.py": "815ec9997fb279cd37704a5e5fc52a2ec4c8af2f1467d1e3324379283e396ce7",
+        "tests/integration/test_catchup.py": "d58279b1d4a029fbd1e76146f91eab40b41ff4d4c2b14ec2798ba83d2c20cb4c",
+        "services/worker/tests/test_daemon.py": "b5872303aaec281c95a605e5d79494d4746fd32007ebbd364f12ce76998094a6",
+        "docs/engineering/catch-up.md": "6ede5863ca11a45fc293ef8494866bcc1693e01a62676ecd10a2532f1390768d",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/decision-register.md": "63a097a8bc6104d1308d3076db275f3a95621f4b6e4e124466e8917ff6e38793",
+        "docs/project/known-issues.md": "6035dd1d0df19a8b25babdb16912b3932feb1f806dd765e2922d7f3f1c2544e2",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "ab16599f66fe2756c24165bd040823ee66c16bcbc2d31d4fc6fd2707911c10c8",
+        "docs/project/changelog.md": "62ac171f5a3126efa1d144e0d2f67e38e4a9ee462b5ee9ef47a5b35000d7ab35",
+        ".env.example": "2b5c30792a84aa24d5c568481a8a41c84f9816ca84bda39583bfcafd9053a6cb",
+        "foundation-manifest.json": "6c307cdf5ff9bd8f5746b050d51540906bed86a0256a7193ec9bcc898ace5301"
+      }
+    },
+    {
+      "name": "live-replay",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_live_actions.py",
+        "libs/arbit-data/tests/test_live_motion.py"
+      ],
+      "at": "2026-11-22T23:26:49Z",
+      "exit_code": 0,
+      "duration_seconds": 0.696,
+      "stdout_stderr_sha256": "f35eee7c7000a0d757965a7c81b0a12a144a59ffe2d98ba1fbfb28882f4f7eca",
+      "git_head": "706ce55e98807f15aab0273530db1608b5db440d",
+      "scope_sha256": {
+        "libs/arbit-data/src/arbit_data/live/store.py": "fb3c2b63ca1c65f556856c74c3aae1ad7d9600e0f831f7a8a6e8134914223d05",
+        "libs/arbit-data/src/arbit_data/live/feed.py": "50da5727b7ff0bdfbb056fa079d81890ac8141d3f8cc98f719e634a21fed90be",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py": "8fe6b371390e9d609816ddedcced6090499a5554716b1679f3e022b151159f5b",
+        "services/worker/src/arbit_worker/catchup.py": "5b5821e22e7013b489dfb0eff18a1a7a8cacd05781e8c81f59f24e40a37b214c",
+        "services/worker/src/arbit_worker/daemon.py": "ead5eb9ad51087ff0181b42db273d24bf9dee985b5785425e3bb8e1a18594a0b",
+        "services/worker/src/arbit_worker/main.py": "815ec9997fb279cd37704a5e5fc52a2ec4c8af2f1467d1e3324379283e396ce7",
+        "tests/integration/test_catchup.py": "d58279b1d4a029fbd1e76146f91eab40b41ff4d4c2b14ec2798ba83d2c20cb4c",
+        "services/worker/tests/test_daemon.py": "b5872303aaec281c95a605e5d79494d4746fd32007ebbd364f12ce76998094a6",
+        "docs/engineering/catch-up.md": "6ede5863ca11a45fc293ef8494866bcc1693e01a62676ecd10a2532f1390768d",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/decision-register.md": "63a097a8bc6104d1308d3076db275f3a95621f4b6e4e124466e8917ff6e38793",
+        "docs/project/known-issues.md": "6035dd1d0df19a8b25babdb16912b3932feb1f806dd765e2922d7f3f1c2544e2",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "ab16599f66fe2756c24165bd040823ee66c16bcbc2d31d4fc6fd2707911c10c8",
+        "docs/project/changelog.md": "62ac171f5a3126efa1d144e0d2f67e38e4a9ee462b5ee9ef47a5b35000d7ab35",
+        ".env.example": "2b5c30792a84aa24d5c568481a8a41c84f9816ca84bda39583bfcafd9053a6cb",
+        "foundation-manifest.json": "6c307cdf5ff9bd8f5746b050d51540906bed86a0256a7193ec9bcc898ace5301"
+      }
+    },
+    {
+      "name": "runtime-check",
+      "argv": [
+        "make",
+        "runtime-check"
+      ],
+      "at": "2026-11-22T23:27:47Z",
+      "exit_code": 0,
+      "duration_seconds": 57.837,
+      "stdout_stderr_sha256": "b67aa4a06af1bd38f4a547cecec2432c1d437979089aeac8bea787e231e62981",
+      "git_head": "706ce55e98807f15aab0273530db1608b5db440d",
+      "scope_sha256": {
+        "libs/arbit-data/src/arbit_data/live/store.py": "fb3c2b63ca1c65f556856c74c3aae1ad7d9600e0f831f7a8a6e8134914223d05",
+        "libs/arbit-data/src/arbit_data/live/feed.py": "50da5727b7ff0bdfbb056fa079d81890ac8141d3f8cc98f719e634a21fed90be",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py": "8fe6b371390e9d609816ddedcced6090499a5554716b1679f3e022b151159f5b",
+        "services/worker/src/arbit_worker/catchup.py": "5b5821e22e7013b489dfb0eff18a1a7a8cacd05781e8c81f59f24e40a37b214c",
+        "services/worker/src/arbit_worker/daemon.py": "ead5eb9ad51087ff0181b42db273d24bf9dee985b5785425e3bb8e1a18594a0b",
+        "services/worker/src/arbit_worker/main.py": "815ec9997fb279cd37704a5e5fc52a2ec4c8af2f1467d1e3324379283e396ce7",
+        "tests/integration/test_catchup.py": "d58279b1d4a029fbd1e76146f91eab40b41ff4d4c2b14ec2798ba83d2c20cb4c",
+        "services/worker/tests/test_daemon.py": "b5872303aaec281c95a605e5d79494d4746fd32007ebbd364f12ce76998094a6",
+        "docs/engineering/catch-up.md": "6ede5863ca11a45fc293ef8494866bcc1693e01a62676ecd10a2532f1390768d",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/decision-register.md": "63a097a8bc6104d1308d3076db275f3a95621f4b6e4e124466e8917ff6e38793",
+        "docs/project/known-issues.md": "6035dd1d0df19a8b25babdb16912b3932feb1f806dd765e2922d7f3f1c2544e2",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "ab16599f66fe2756c24165bd040823ee66c16bcbc2d31d4fc6fd2707911c10c8",
+        "docs/project/changelog.md": "62ac171f5a3126efa1d144e0d2f67e38e4a9ee462b5ee9ef47a5b35000d7ab35",
+        ".env.example": "2b5c30792a84aa24d5c568481a8a41c84f9816ca84bda39583bfcafd9053a6cb",
+        "foundation-manifest.json": "6c307cdf5ff9bd8f5746b050d51540906bed86a0256a7193ec9bcc898ace5301"
+      }
+    },
+    {
+      "name": "web-check",
+      "argv": [
+        "make",
+        "web-check"
+      ],
+      "at": "2026-11-22T23:27:52Z",
+      "exit_code": 0,
+      "duration_seconds": 5.458,
+      "stdout_stderr_sha256": "0c883eedbac7c49f0fa525ed4d5aba073033418adb6a8fb8e2fed7b1ccf2a2ca",
+      "git_head": "706ce55e98807f15aab0273530db1608b5db440d",
+      "scope_sha256": {
+        "libs/arbit-data/src/arbit_data/live/store.py": "fb3c2b63ca1c65f556856c74c3aae1ad7d9600e0f831f7a8a6e8134914223d05",
+        "libs/arbit-data/src/arbit_data/live/feed.py": "50da5727b7ff0bdfbb056fa079d81890ac8141d3f8cc98f719e634a21fed90be",
+        "libs/arbit-data/src/arbit_data/live/nfl_feed.py": "8fe6b371390e9d609816ddedcced6090499a5554716b1679f3e022b151159f5b",
+        "services/worker/src/arbit_worker/catchup.py": "5b5821e22e7013b489dfb0eff18a1a7a8cacd05781e8c81f59f24e40a37b214c",
+        "services/worker/src/arbit_worker/daemon.py": "ead5eb9ad51087ff0181b42db273d24bf9dee985b5785425e3bb8e1a18594a0b",
+        "services/worker/src/arbit_worker/main.py": "815ec9997fb279cd37704a5e5fc52a2ec4c8af2f1467d1e3324379283e396ce7",
+        "tests/integration/test_catchup.py": "d58279b1d4a029fbd1e76146f91eab40b41ff4d4c2b14ec2798ba83d2c20cb4c",
+        "services/worker/tests/test_daemon.py": "b5872303aaec281c95a605e5d79494d4746fd32007ebbd364f12ce76998094a6",
+        "docs/engineering/catch-up.md": "6ede5863ca11a45fc293ef8494866bcc1693e01a62676ecd10a2532f1390768d",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/decision-register.md": "63a097a8bc6104d1308d3076db275f3a95621f4b6e4e124466e8917ff6e38793",
+        "docs/project/known-issues.md": "6035dd1d0df19a8b25babdb16912b3932feb1f806dd765e2922d7f3f1c2544e2",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "ab16599f66fe2756c24165bd040823ee66c16bcbc2d31d4fc6fd2707911c10c8",
+        "docs/project/changelog.md": "62ac171f5a3126efa1d144e0d2f67e38e4a9ee462b5ee9ef47a5b35000d7ab35",
+        ".env.example": "2b5c30792a84aa24d5c568481a8a41c84f9816ca84bda39583bfcafd9053a6cb",
+        "foundation-manifest.json": "6c307cdf5ff9bd8f5746b050d51540906bed86a0256a7193ec9bcc898ace5301"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-22T23:29:13Z",
+      "kind": "risk",
+      "note": "Running worker (main, pre-fix game_timings) orders the schedule by most recent observation: a catch-up run against arbit_local before this branch is deployed briefly makes week 10 the live lane's schedule until its next current-board read. Run it only with no active games.",
+      "evidence": "libs/arbit-data/src/arbit_data/live/store.py before ENG-052; running worker started 15:25 MST on de72924"
+    },
+    {
+      "at": "2026-11-22T23:29:13Z",
+      "kind": "assumption",
+      "note": "Kickoff + 5 h marks a game as settled for catch-up; later games belong to the live lanes. Overtime and weather delays rarely exceed it; a game still not final is reported not_final and retried on the next start.",
+      "evidence": "catchup.GAME_LENGTH"
+    }
+  ],
+  "closed_at": "2026-11-22T23:29:13Z"
+}

@@ -1,5 +1,20 @@
 # Development Changelog
 
+## 2026-11-22 — Catch-up after downtime (ENG-052, TASK-20261122-004)
+
+- **New `catchup` worker lane, in the default lanes.**
+  - Recovers finished regular-season games from weeks that started and ended while nothing ran.
+  - Reads ESPN's scoreboard, the NFL API's full record (from the first NFL-lane week on) and ESPN's summary, plus ESPN's plays where no NFL record exists.
+  - Waits while a slate is active and takes one week per step.
+  - Appends private receipts with each game's kickoff and read time, and the sources behind at start, for ADR-007 A1/A3.
+- **New `arbit-worker catchup [--dry-run] [--from-period N] [--with-lanes]`.**
+- **Fixes:**
+  - `store.game_timings` follows the season's latest week, so a recovered week can't become the live schedule.
+  - R-069: the NFL lane rediscovers every 120 s while current-week games are unlinked.
+  - `availability-capture` returns after running.
+- **Tests:** 12 real-PostgreSQL tests in `tests/integration/test_catchup.py`; the scope and relink tests fail with each fix reverted.
+- **Docs:** [catch-up guide](../engineering/catch-up.md); R-068 records the 12-day outage, and R-069 the relink race.
+
 ## 2026-11-22 — Owner decisions on availability, betting lines and the first advisor (TASK-20261122-003)
 
 - **OWN-066:** [ADR-007](../architecture/decisions/007-model-availability.md) is accepted with owner amendments A1–A4.

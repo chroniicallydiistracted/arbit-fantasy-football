@@ -2,7 +2,7 @@
   "version": 1,
   "project": "arbit-fantasy-football",
   "active_task": null,
-  "latest_handoff": "docs/project/handoffs/2026-11-22-task-20261122-003-governance-handoff.md",
+  "latest_handoff": "docs/project/handoffs/2026-11-22-task-20261122-004-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "Initial governance packaging; source snapshot, not deployed changes.",
   "project_next_action": "Verify whether the Nov 22 M3 integration PR database-backed CI passed, independently check runtime activation, and obtain owner acceptance of proposed ADR-007 before any model backtest.",

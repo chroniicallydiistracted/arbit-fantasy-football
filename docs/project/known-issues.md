@@ -122,6 +122,23 @@ At 01:01 UTC on 2026-11-09 (Sunday evening, week 9), a cookie-free ESPN read was
 - **R-058: fixed in code, with limits.** Players carry ESPN's season points. Weekly lineups and league transactions are stored with canonical identities, and recent executed moves are shown. Still not stored: per-week ESPN points for unrostered players (M3 computes weekly FFA points from nflverse through the shared scoring service), ESPN projections and ownership (benchmark-only, MD-001), and team logos (remote images; CSP).
 - **R-059: unobserved shapes behind the new history.** No executed trade, playoff matchup or multi-week matchup has occurred in FFA yet. Trades are listed from executed transactions with `TRADE` items, without a real example. A playoff week's lineup read is unproven, and a multi-week matchup stops the lineup step with `MULTIWEEK_MATCHUPS_UNSUPPORTED` rather than guessing. Check the first trade and the first playoff week (period 15). Blocks AR-001 acceptance and trade display confidence.
 
+## Downtime and catch-up, 2026-11-22
+
+- **R-068 — the database was down for 12 days.**
+  - **Span:** from 2026-11-10 18:06 UTC to 2026-11-22 22:44 UTC, when a session found and started it (`docker start arbit-dev-postgres-1`; schema still at 0010).
+  - **Cause:** the container exited cleanly (code 0) with restart policy `no`. The services kept running and logging `DATABASE_UNAVAILABLE`, and nothing alerted anyone.
+  - **Never captured:** ESPN league revisions, and ESPN fantasy injury statuses as they were then (A4); live captures of every game played (week 10 entirely, and week 11's Thursday game live); nflverse import vintages (imports jump from 2026-11-10 04:00 to 2026-11-22 22:48 UTC).
+  - **Recovered or recoverable:** the league lane stored period 10's lineups at 22:45. nflverse current revisions were imported at 22:48. The injury report comes back for the whole season once the availability lane runs. Week 10's 14 games come back through the catch-up (ENG-052).
+  - **Prevention:**
+    - the restart policy `unless-stopped` (TASK-20261122-002);
+    - the catch-up lane;
+    - ADR-007 A1/A3, which treat this span as a capture gap.
+  - **Still open:** no alert when a source stays behind for hours. The data-status view shows it, but only to someone looking. **Owner:** Operations / release (OWN-014).
+- **R-069 — fixed in code: NFL games left unlinked for six hours after a restart.**
+  - **What happened:** on 2026-11-22 the NFL lane discovered week 11 at 22:44:52 UTC, six seconds before ESPN's scoreboard stored the week's games.
+  - **Impact:** all 13 NFL games stayed unlinked (`event_id` NULL), so no NFL detail was read. Every week 11 game ran on ESPN's fallback plays until the next discovery, six hours later.
+  - **Fix (ENG-052):** discovery retries every 120 s while current-week games are unlinked, at the lane's next poll. The worker restart in TASK-20261122-002 relinked the running worker's games.
+
 ## Governance continuity audit, 2026-11-22
 
 - **R-067 — Source-policy wording requires reconciliation.** Historical [decision-register Q-012](decision-register.md) says that nothing fetches from a particular proposed private NFL API route; current [project status](status.md) describes a running NFL API live lane. The proposed private `nflapi` path and the subsequently authorized `api.nfl.com` lane may be different, so no contradiction in executable behavior is yet proven. Before changing policy text or a live adapter, identify exact endpoints and relevant owner decision records (OWN-041 and subsequent releases), then write a dated correction preserving prior context. **Owner:** Integration / M6. No release is blocked on this documentation-only ambiguity, but new live-source changes must not silently pick one interpretation. **Resolved 2026-11-22.**

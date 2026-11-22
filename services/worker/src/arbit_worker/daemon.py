@@ -39,9 +39,10 @@ from arbit_data.sync import EspnSyncSource, SyncService, schedule_sync
 from sqlalchemy import create_engine, func, select
 from sqlalchemy.exc import SQLAlchemyError
 
+from arbit_worker import catchup
 from arbit_worker.sync_commands import local_database_url
 
-LANES = ("league", "live", "nfl", "nfl_probe", "statistics", "availability")
+LANES = ("league", "live", "nfl", "nfl_probe", "statistics", "availability", "catchup")
 Clock = Callable[[], datetime]
 # Between consecutive history reads while catching up, and before re-reading a week that didn't settle.
 HISTORY_SPACING_SECONDS = 20
@@ -428,6 +429,172 @@ class StatisticsLane:
             return "IMPORT_FAILED"
 
 
+class CatchupLane:
+    """Weeks played while nothing was reading (ENG-052): recovered once the PC is awake again.
+
+    Waits while a slate is active, so it never competes with live reads. One week per step,
+    oldest first; a week that can't be completed waits for the next worker start."""
+
+    name = "catchup"
+    IDLE_SECONDS = 1800.0
+    DEFER_SECONDS = 600.0
+    NEXT_WEEK_SECONDS = 30.0
+
+    def __init__(
+        self,
+        uow: UnitOfWork,
+        season: int,
+        *,
+        live: LiveFeed | None = None,
+        nfl: Any | None = None,
+        clock: Clock = lambda: datetime.now(UTC),
+        root: Path | None = None,
+    ):
+        self.uow, self.season, self.clock, self.root = uow, season, clock, root
+        self.live, self.nfl = live, nfl
+        self.attempted: set[int] = set()
+        self.gaps_logged = False
+        # Taken before the other lanes start, so a restart's gap is seen before they refresh it.
+        self.gaps: list[dict[str, Any]] | None
+        try:
+            self.gaps = catchup.source_gaps(uow, season, clock())
+        except SQLAlchemyError:
+            self.gaps = None  # the database was down at start; recovered games still show the gap
+
+    def _feeds(self) -> tuple[LiveFeed, Any]:
+        if self.live is None:
+            self.live = LiveFeed(
+                self.uow,
+                CapturingTransport(
+                    PublicTransport(),
+                    Path(os.environ.get("ARBIT_LIVE_CAPTURE_PATH", "data/live-captures")),
+                    on_problem=lambda code: log(self.name, event="capture_problem", code=code),
+                ),
+                self.season,
+            )
+        if self.nfl is None:
+            from arbit_data.live.nfl_feed import NflApiClient, NflFeed
+
+            self.nfl = NflFeed(
+                self.uow,
+                self.season,
+                client=NflApiClient(),
+                log=lambda **fields: log(self.name, **fields),
+                lane=self.name,
+            )
+        return self.live, self.nfl
+
+    def step(self) -> float:
+        now = self.clock()
+        if current_mode(self.uow, self.season, now) == "active":
+            return self.DEFER_SECONDS
+        plan = [
+            g
+            for g in catchup.outstanding_games(self.uow, self.season, now)
+            if g.period not in self.attempted
+        ]
+        gaps = None if self.gaps_logged else self.gaps
+        if not plan:
+            if gaps:
+                catchup.append_receipt(
+                    self.root or catchup.catchup_root(),
+                    {
+                        "format": catchup.FORMAT,
+                        "trigger": "lane",
+                        "startedAt": now.astimezone(UTC).isoformat(),
+                        "finishedAt": now.astimezone(UTC).isoformat(),
+                        "season": self.season,
+                        "sourcesBehindAtStart": gaps,
+                        "weeks": [],
+                        "stopped": None,
+                    },
+                )
+                log(self.name, event="gaps_recorded", sources=len(gaps))
+            self.gaps_logged = True
+            return self.IDLE_SECONDS
+        period = min(g.period for g in plan)
+        self.attempted.add(period)
+        live, nfl = self._feeds()
+        outcome = catchup.run(
+            self.uow,
+            self.season,
+            live=live,
+            nfl=nfl,
+            trigger="lane",
+            clock=self.clock,
+            periods=[period],
+            gaps=gaps,
+            root=self.root,
+        )
+        self.gaps_logged = True
+        log(
+            self.name,
+            event="week_recovered",
+            period=period,
+            recovered=outcome.recovered,
+            failed=outcome.failed,
+            remaining=len(outcome.remaining_periods),
+            stopped=outcome.stopped,
+        )
+        if outcome.stopped is not None:
+            self.attempted.discard(period)  # a source asked us to wait; try this week again
+            return self.DEFER_SECONDS
+        more = any(p not in self.attempted for p in outcome.remaining_periods)
+        return self.NEXT_WEEK_SECONDS if more else self.IDLE_SECONDS
+
+
+def catchup_once(arguments: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
+    """`catchup`: report or recover missed data now. Prints counts and periods, never paths."""
+    try:
+        url = local_database_url()
+        config = load_league_config(Path("config/league.json"))
+    except (ValueError, OSError):
+        parser.exit(2, '{"error":"LOCAL_DATABASE_REQUIRED"}\n')
+    engine = create_engine(url, hide_parameters=True, connect_args={"connect_timeout": 3})
+    uow = UnitOfWork(engine)
+    try:
+        now = datetime.now(UTC)
+        report: dict[str, Any] = {
+            "sourcesBehind": catchup.source_gaps(uow, config.season, now),
+            "plan": catchup.plan_summary(
+                uow, config.season, now, from_period=arguments.from_period
+            ),
+        }
+        if not arguments.dry_run:
+            lane = CatchupLane(uow, config.season)
+            live, nfl = lane._feeds()
+            outcome = catchup.run(
+                uow,
+                config.season,
+                live=live,
+                nfl=nfl,
+                trigger="command",
+                from_period=arguments.from_period,
+                gaps=report["sourcesBehind"],
+            )
+            report["recovered"] = {
+                "weeks": outcome.weeks,
+                "games": outcome.recovered,
+                "failed": outcome.failed,
+                "remainingPeriods": list(outcome.remaining_periods),
+                "stopped": outcome.stopped,
+            }
+            if arguments.with_lanes:
+                # The same steps the worker's lanes take; each reads only if it is due.
+                StatisticsLane(uow).step()
+                AvailabilityLane(uow, config.season).step()
+                report["lanes"] = {
+                    s.source: s.state
+                    for s in freshness.read_sources(uow, config.season, datetime.now(UTC))
+                    if s.source in (freshness.STATISTICS, freshness.AVAILABILITY)
+                }
+        print(json.dumps(report, sort_keys=True))
+        if report.get("recovered", {}).get("stopped"):
+            sys.exit(1)
+    finally:
+        engine.dispose()
+
+
 def availability_root() -> Path:
     return Path(os.environ.get("ARBIT_AVAILABILITY_PATH", "data/availability"))
 
@@ -561,6 +728,7 @@ def execute(arguments: argparse.Namespace, parser: argparse.ArgumentParser) -> N
         "nfl_probe": lambda: NflProbeLane(uow, config.season),
         "statistics": lambda: StatisticsLane(uow),
         "availability": lambda: AvailabilityLane(uow, config.season),
+        "catchup": lambda: CatchupLane(uow, config.season),
     }
     stop = threading.Event()
     previous = {
@@ -590,9 +758,25 @@ def add_command(subcommands: Any) -> None:
     run.add_argument(
         "--lanes",
         default=",".join(LANES),
-        help="Comma-separated lanes: league,live,nfl,nfl_probe,statistics,availability",
+        help="Comma-separated lanes: league,live,nfl,nfl_probe,statistics,availability,catchup",
     )
     subcommands.add_parser(
         "availability-capture",
         help="Read NFL's injury report once now (game status and practice)",
+    )
+    recover = subcommands.add_parser(
+        "catchup",
+        help="Recover games played while nothing was reading (the worker's catchup lane does this)",
+    )
+    recover.add_argument("--dry-run", action="store_true", help="Report only; read nothing")
+    recover.add_argument(
+        "--from-period",
+        type=int,
+        default=None,
+        help="Earliest week to consider (default: the first week Arbit captured)",
+    )
+    recover.add_argument(
+        "--with-lanes",
+        action="store_true",
+        help="Also run the statistics and injury-report steps once; only while the worker is stopped",
     )
