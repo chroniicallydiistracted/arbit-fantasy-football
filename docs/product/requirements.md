@@ -36,7 +36,7 @@ All original sections 1–12 map below. Shared requirements apply to every affec
 | LV-003 | Interactive passing/rushing/sneak/sack/interception/FG/PAT and other play graphics | 4.6 | M6 | Named event replay fixtures and unknown fallback work with keyboard and reduced motion. |
 | LV-004 | Gridiron field assets and verified matchup/week uniforms beside the field | 4.6, 5.5 | M6 | Asset manifest verifies source/variant/permission; missing variant is labeled fallback. |
 | LV-005 | Late, duplicate, canceled and revised events update score and graphics consistently | 4.6, 6.4 | M6 | Replaying overlapping/corrected events changes effective scores once and preserves revision history. |
-| MD-001 | nflverse-first shared intelligence and reusable evaluations across modules | 4.7, 5.2, 6.5 | M3 | All advisors consume common evaluation artifacts; external fantasy projections are benchmark-only. |
+| MD-001 | nflverse-only shared intelligence and reusable evaluations across modules | 4.7, 5.2, 6.5 | M3 | All advisors consume common evaluation artifacts; no other provider's fantasy points, rankings or projections enter the Model (OWN-061). |
 | MD-002 | Historical/statistical analysis, projections, rankings, matchups and roster values | 4.7 | M3 | A point-in-time evaluation set supports weekly/draft/rest-of-season horizons explicitly. |
 | MD-003 | Advanced comparisons, trends, archetypes and decision-specific analysis | 4.7 | M3 | Interpretable or measured ML features explain contribution and evidence coverage. |
 | MD-004 | Reproducibility, ML where appropriate, backtesting and validation | 4.7, 8.4 | M3 | Temporal holdout, baseline/subgroup metrics, leakage checks, lineage and rollback artifact recorded. |

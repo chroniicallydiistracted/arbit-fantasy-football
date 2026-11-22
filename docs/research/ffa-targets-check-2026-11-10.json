@@ -1,0 +1,29 @@
+{
+ "command": "scripts/model/verify_nflverse_scoring.py --replay <saved ESPN read> --pin docs/research/nflverse-ffa-scoring-2026-11-09.json --targets <index> --targets-store <root>",
+ "otherDetails": [],
+ "pinnedReceipt": "docs/research/nflverse-ffa-scoring-2026-11-09.json",
+ "playedWithoutStatisticsRowAndNoZeroLine": {
+  "game not in the pinned play-by-play (in progress at the receipt)": 28,
+  "label active_no_snaps (weekly_rosters+snap_counts): no snap recorded": 35,
+  "label not_active_roster (weekly_rosters): no snap recorded": 24,
+  "label unknown (no_snap_counts_for_player): no PFR ID, so snaps cannot be joined": 9
+ },
+ "purpose": "M3 slice 2: stored historical targets checked against the slice 1 verification, replayed with its pinned nflverse manifests",
+ "receiptReportSha256": "f503d6fff6cb22643c5edfbf28583808c290893c953dd4eedb3b18a8a387cdf4",
+ "replayedReportSha256": "f503d6fff6cb22643c5edfbf28583808c290893c953dd4eedb3b18a8a387cdf4",
+ "targetCheck": {
+  "bothRefused": 21,
+  "checked": 10771,
+  "noRowWithoutZeroLine": 96,
+  "noRowZeroLine": 1381,
+  "noRowZeroLineUnknown": 5,
+  "resolvedByR061MatchesEspn": 16,
+  "samePoints": 10734
+ },
+ "targetsCode": "de729245e844fc5459348081733deeeddf9a4837+uncommitted",
+ "targetsIndex": "994b30186f8a47d317ebc09847a393fdd65a682f17173dd9adc898fc6690ce3a",
+ "targetsRules": {
+  "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+  "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+ }
+}

@@ -12,6 +12,7 @@ members = [
     "arbit-api",
     "arbit-core",
     "arbit-data",
+    "arbit-model",
     "arbit-worker",
     "arbit-workspace",
 ]
@@ -127,6 +128,23 @@ requires-dist = [
 ]
 
 [[package]]
+name = "arbit-model"
+version = "0.1.0"
+source = { editable = "libs/arbit-model" }
+dependencies = [
+    { name = "arbit-core" },
+    { name = "arbit-data" },
+    { name = "pyarrow" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "arbit-core", editable = "libs/arbit-core" },
+    { name = "arbit-data", editable = "libs/arbit-data" },
+    { name = "pyarrow", specifier = ">=21,<30" },
+]
+
+[[package]]
 name = "arbit-worker"
 version = "0.1.0"
 source = { editable = "services/worker" }
@@ -149,6 +167,7 @@ dependencies = [
     { name = "arbit-api" },
     { name = "arbit-core" },
     { name = "arbit-data" },
+    { name = "arbit-model" },
     { name = "arbit-worker" },
 ]
 
@@ -166,6 +185,7 @@ requires-dist = [
     { name = "arbit-api", editable = "services/api" },
     { name = "arbit-core", editable = "libs/arbit-core" },
     { name = "arbit-data", editable = "libs/arbit-data" },
+    { name = "arbit-model", editable = "libs/arbit-model" },
     { name = "arbit-worker", editable = "services/worker" },
 ]
 

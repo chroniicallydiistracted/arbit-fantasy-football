@@ -18,6 +18,7 @@ SCOREBOARD = "espn.nfl.scoreboard"
 PLAYS = "espn.nfl.plays"
 DIRECTORY = "espn.nfl.teams"
 STATISTICS = "nflverse"
+AVAILABILITY = "nfl.availability"
 
 # Member-facing names, in display order. Every source that changes must appear here.
 SOURCES: tuple[tuple[str, str], ...] = (
@@ -28,6 +29,7 @@ SOURCES: tuple[tuple[str, str], ...] = (
     (PLAYS, "NFL plays"),
     (DIRECTORY, "NFL teams and schedule"),
     (STATISTICS, "NFL statistics"),
+    (AVAILABILITY, "NFL injury reports"),
 )
 SourceState = Literal["current", "behind", "down", "idle", "never"]
 STATISTICS_STALE_SECONDS = 36 * 3600

@@ -1,0 +1,17 @@
+[project]
+name = "arbit-model"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "arbit-core",
+    "arbit-data",
+    "pyarrow>=21,<30",
+]
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+arbit-core = { workspace = true }
+arbit-data = { workspace = true }

@@ -19,6 +19,10 @@ from typing import Any
 from arbit_core.config import load_league_config
 from arbit_data import events, freshness, league_history
 from arbit_data.archives import CaptureArchive
+from arbit_data.availability import schedule as availability_schedule
+from arbit_data.availability.capture import REQUIRED as AVAILABILITY_REQUIRED
+from arbit_data.availability.capture import Capture
+from arbit_data.availability.capture import capture as capture_availability
 from arbit_data.db import UnitOfWork
 from arbit_data.errors import SourceError
 from arbit_data.espn.client import EspnClient
@@ -37,7 +41,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from arbit_worker.sync_commands import local_database_url
 
-LANES = ("league", "live", "nfl", "nfl_probe", "statistics")
+LANES = ("league", "live", "nfl", "nfl_probe", "statistics", "availability")
 Clock = Callable[[], datetime]
 # Between consecutive history reads while catching up, and before re-reading a week that didn't settle.
 HISTORY_SPACING_SECONDS = 20
@@ -424,6 +428,98 @@ class StatisticsLane:
             return "IMPORT_FAILED"
 
 
+def availability_root() -> Path:
+    return Path(os.environ.get("ARBIT_AVAILABILITY_PATH", "data/availability"))
+
+
+class AvailabilityLane:
+    """NFL's injury report twice a day, every day (OWN-063): game status and practice, kept with
+    when it was read. Game-day inactives come from ESPN's fantasy status, which the league lane
+    already reads (OWN-064)."""
+
+    name = "availability"
+
+    def __init__(
+        self,
+        uow: UnitOfWork,
+        season: int,
+        *,
+        read: Callable[[], Capture] | None = None,
+        clock: Clock = lambda: datetime.now(UTC),
+    ):
+        self.uow, self.season, self.clock = uow, season, clock
+        self.read = read or self._read
+        self.retry: datetime | None = None
+
+    def _read(self) -> Capture:
+        from arbit_data.live.nfl_feed import NflApiClient
+
+        return capture_availability(
+            NflApiClient(), availability_root(), season=self.season, clock=self.clock
+        )
+
+    def step(self) -> float:
+        now = self.clock()
+        slot = availability_schedule.latest_slot(now)
+        last = freshness.last_success_of(self.uow, freshness.AVAILABILITY)
+        waiting = last is not None and last >= slot
+        if waiting or (self.retry is not None and now < self.retry):
+            until = (availability_schedule.next_slot(now) - now).total_seconds()
+            return max(1.0, min(300.0, until))
+        result = self.read()
+        finished = self.clock()
+        failed = sorted(set(result.errors) & set(AVAILABILITY_REQUIRED))
+        if not failed:
+            self.retry = None
+            freshness.record_success(
+                self.uow,
+                freshness.AVAILABILITY,
+                now=finished,
+                cadence_seconds=availability_schedule.CADENCE_SECONDS,
+                stale_after_seconds=availability_schedule.STALE_AFTER_SECONDS,
+                changed=True,
+            )
+            log(self.name, event="captured", manifest=result.manifest[:12], **result.counts)
+        else:
+            code = result.errors[failed[0]]
+            freshness.record_failure(
+                self.uow,
+                freshness.AVAILABILITY,
+                code,
+                now=finished,
+                cadence_seconds=availability_schedule.CADENCE_SECONDS,
+                stale_after_seconds=availability_schedule.STALE_AFTER_SECONDS,
+            )
+            self.retry = finished + timedelta(minutes=30)
+            log(self.name, event="capture_failed", code=code, sources=failed)
+        return 300.0
+
+
+def capture_once(parser: argparse.ArgumentParser) -> None:
+    """`availability-capture`: one read now, outside the schedule. Prints counts, never paths."""
+    from arbit_data.live.nfl_feed import NflApiClient
+
+    try:
+        config = load_league_config(Path("config/league.json"))
+    except (ValueError, OSError):
+        parser.exit(2, '{"error":"LEAGUE_CONFIG_REQUIRED"}\n')
+    result = capture_availability(NflApiClient(), availability_root(), season=config.season)
+    print(
+        json.dumps(
+            {
+                "manifest": result.manifest,
+                "observedAt": result.observed_at.isoformat(),
+                "week": result.week,
+                "counts": result.counts,
+                "errors": result.errors,
+            },
+            sort_keys=True,
+        )
+    )
+    if set(result.errors) & set(AVAILABILITY_REQUIRED):
+        sys.exit(1)
+
+
 def run_lane(lane: Any, stop: threading.Event) -> None:
     """Keep a lane alive through anything short of a stop signal."""
     log(lane.name, event="started")
@@ -464,6 +560,7 @@ def execute(arguments: argparse.Namespace, parser: argparse.ArgumentParser) -> N
         "nfl": lambda: NflLane(uow, config.season),
         "nfl_probe": lambda: NflProbeLane(uow, config.season),
         "statistics": lambda: StatisticsLane(uow),
+        "availability": lambda: AvailabilityLane(uow, config.season),
     }
     stop = threading.Event()
     previous = {
@@ -493,5 +590,9 @@ def add_command(subcommands: Any) -> None:
     run.add_argument(
         "--lanes",
         default=",".join(LANES),
-        help="Comma-separated lanes: league,live,nfl,nfl_probe,statistics",
+        help="Comma-separated lanes: league,live,nfl,nfl_probe,statistics,availability",
+    )
+    subcommands.add_parser(
+        "availability-capture",
+        help="Read NFL's injury report once now (game status and practice)",
     )

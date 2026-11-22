@@ -1,0 +1,129 @@
+{
+ "dailyVersions": [
+  {
+   "changes": {},
+   "new": 0,
+   "observedAt": "2026-10-31 09:17:52.727745+00:00",
+   "rows": 0,
+   "week": 9
+  },
+  {
+   "changes": {},
+   "new": 0,
+   "observedAt": "2026-11-01 09:58:53.427947+00:00",
+   "rows": 0,
+   "week": 9
+  },
+  {
+   "changes": {},
+   "new": 0,
+   "observedAt": "2026-11-03 02:12:06.496679+00:00",
+   "rows": 0,
+   "week": 9
+  },
+  {
+   "changes": {},
+   "new": 0,
+   "observedAt": "2026-11-04 02:16:31.425721+00:00",
+   "rows": 0,
+   "week": 9
+  },
+  {
+   "changes": {},
+   "new": 28,
+   "observedAt": "2026-11-05 02:18:51.401172+00:00",
+   "rows": 28,
+   "week": 9
+  },
+  {
+   "changes": {
+    "None -> Out": 3,
+    "None -> Questionable": 4
+   },
+   "new": 238,
+   "observedAt": "2026-11-06 02:22:45.853113+00:00",
+   "rows": 266,
+   "week": 9
+  },
+  {
+   "changes": {},
+   "new": 74,
+   "observedAt": "2026-11-07 03:49:46.464845+00:00",
+   "rows": 340,
+   "week": 9
+  },
+  {
+   "changes": {
+    "None -> Doubtful": 6,
+    "None -> Out": 60,
+    "None -> Questionable": 63
+   },
+   "new": 20,
+   "observedAt": "2026-11-08 03:52:04.756622+00:00",
+   "rows": 360,
+   "week": 9
+  },
+  {
+   "changes": {
+    "None -> Out": 6,
+    "None -> Questionable": 7,
+    "Questionable -> Out": 6
+   },
+   "new": 2,
+   "observedAt": "2026-11-09 03:55:18.517674+00:00",
+   "rows": 362,
+   "week": 9
+  },
+  {
+   "changes": {},
+   "new": 0,
+   "observedAt": "2026-11-10 04:00:01.861259+00:00",
+   "rows": 362,
+   "week": 9
+  }
+ ],
+ "inactivesByReportStatus": {
+  "Doubtful": 10,
+  "None": 22,
+  "Out": 152,
+  "Questionable": 53,
+  "not on report": 292
+ },
+ "inputs": {
+  "injuries/injuries_2026": "0ec981a3218f207d1a3056c4a276bc304c631496780ce61b1ebe5991aea6b87b",
+  "players/players": "265e1dbb72d87346d00b1527665d056424f467ff719365317884516e6c6d2f5c",
+  "snap_counts/snap_counts_2026": "3a96ac9c68064bad8d542de857efa07da6c4ffa1440bca1ddd995258da6a3e28",
+  "weekly_rosters/roster_weekly_2026": "ac0c08bc5a7ec62875c4e402d89b090260a7d09f2d881f499036c2fcba8059cc"
+ },
+ "outcomeByFinalStatus": {
+  "Doubtful": {
+   "RES, no snap": 3,
+   "inactive, no snap": 10
+  },
+  "None": {
+   "CUT, no snap": 3,
+   "DEV, no snap": 1,
+   "RES, no snap": 9,
+   "active, no snap": 23,
+   "active, played": 535,
+   "inactive, no snap": 22
+  },
+  "Out": {
+   "RES, no snap": 41,
+   "active, no snap": 4,
+   "inactive, no snap": 152
+  },
+  "Questionable": {
+   "RES, no snap": 20,
+   "active, no snap": 7,
+   "active, played": 149,
+   "inactive, no snap": 53
+  }
+ },
+ "season": 2026,
+ "weeks": [
+  7,
+  8,
+  9
+ ]
+}

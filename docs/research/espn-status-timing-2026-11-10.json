@@ -1,0 +1,260 @@
+{
+ "inputs": {
+  "injuries/injuries_2026": "0ec981a3218f207d1a3056c4a276bc304c631496780ce61b1ebe5991aea6b87b",
+  "players/players": "265e1dbb72d87346d00b1527665d056424f467ff719365317884516e6c6d2f5c",
+  "schedules/games": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
+  "snap_counts/snap_counts_2026": "3a96ac9c68064bad8d542de857efa07da6c4ffa1440bca1ddd995258da6a3e28",
+  "weekly_rosters/roster_weekly_2026": "ac0c08bc5a7ec62875c4e402d89b090260a7d09f2d881f499036c2fcba8059cc"
+ },
+ "season": 2026,
+ "weeks": {
+  "8": {
+   "documentVersions": 265,
+   "games": 14,
+   "groups": {
+    "Questionable; active, no snap": {
+     "atKickoff": {
+      "INJURY_RESERVE": 2
+     },
+     "becameOutMinutesFromKickoffWithinADay": [],
+     "players": 2,
+     "twoHoursBefore": {
+      "INJURY_RESERVE": 2
+     }
+    },
+    "Questionable; played": {
+     "atKickoff": {
+      "ACTIVE": 3,
+      "None": 1,
+      "QUESTIONABLE": 10
+     },
+     "becameOutMinutesFromKickoffWithinADay": [],
+     "players": 14,
+     "twoHoursBefore": {
+      "ACTIVE": 1,
+      "None": 1,
+      "QUESTIONABLE": 12
+     }
+    },
+    "inactive; report: None": {
+     "atKickoff": {
+      "ACTIVE": 2
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      25,
+      230
+     ],
+     "players": 2,
+     "twoHoursBefore": {
+      "ACTIVE": 2
+     }
+    },
+    "inactive; report: Out": {
+     "atKickoff": {
+      "OUT": 13
+     },
+     "becameOutMinutesFromKickoffWithinADay": [],
+     "players": 13,
+     "twoHoursBefore": {
+      "OUT": 13
+     }
+    },
+    "inactive; report: Questionable": {
+     "atKickoff": {
+      "OUT": 2,
+      "QUESTIONABLE": 5
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      -1206,
+      -1206,
+      45,
+      54,
+      230,
+      230,
+      230
+     ],
+     "players": 7,
+     "twoHoursBefore": {
+      "OUT": 2,
+      "QUESTIONABLE": 5
+     }
+    },
+    "inactive; report: not on report": {
+     "atKickoff": {
+      "ACTIVE": 32,
+      "None": 5,
+      "OUT": 1
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      -85,
+      25,
+      25,
+      25,
+      25,
+      25,
+      25,
+      45,
+      45,
+      54,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230,
+      230
+     ],
+     "players": 38,
+     "twoHoursBefore": {
+      "ACTIVE": 33,
+      "None": 5
+     }
+    }
+   }
+  },
+  "9": {
+   "documentVersions": 814,
+   "games": 15,
+   "groups": {
+    "Questionable; active, no snap": {
+     "atKickoff": {
+      "ACTIVE": 1,
+      "INJURY_RESERVE": 2,
+      "OUT": 1
+     },
+     "becameOutMinutesFromKickoffWithinADay": [],
+     "players": 4,
+     "twoHoursBefore": {
+      "INJURY_RESERVE": 2,
+      "OUT": 1,
+      "QUESTIONABLE": 1
+     }
+    },
+    "Questionable; played": {
+     "atKickoff": {
+      "ACTIVE": 15,
+      "QUESTIONABLE": 1
+     },
+     "becameOutMinutesFromKickoffWithinADay": [],
+     "players": 16,
+     "twoHoursBefore": {
+      "ACTIVE": 1,
+      "QUESTIONABLE": 15
+     }
+    },
+    "inactive; report: Doubtful": {
+     "atKickoff": {
+      "OUT": 2
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      -85,
+      -79
+     ],
+     "players": 2,
+     "twoHoursBefore": {
+      "DOUBTFUL": 2
+     }
+    },
+    "inactive; report: None": {
+     "atKickoff": {
+      "OUT": 3
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      -79,
+      -69,
+      -65
+     ],
+     "players": 3,
+     "twoHoursBefore": {
+      "ACTIVE": 3
+     }
+    },
+    "inactive; report: Out": {
+     "atKickoff": {
+      "OUT": 17
+     },
+     "becameOutMinutesFromKickoffWithinADay": [],
+     "players": 17,
+     "twoHoursBefore": {
+      "OUT": 17
+     }
+    },
+    "inactive; report: Questionable": {
+     "atKickoff": {
+      "OUT": 7
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      -85,
+      -79,
+      -79,
+      -79,
+      -72,
+      -71,
+      -70
+     ],
+     "players": 7,
+     "twoHoursBefore": {
+      "QUESTIONABLE": 7
+     }
+    },
+    "inactive; report: not on report": {
+     "atKickoff": {
+      "ACTIVE": 2,
+      "OUT": 27
+     },
+     "becameOutMinutesFromKickoffWithinADay": [
+      -86,
+      -85,
+      -85,
+      -81,
+      -79,
+      -79,
+      -79,
+      -79,
+      -79,
+      -79,
+      -79,
+      -79,
+      -79,
+      -79,
+      -77,
+      -76,
+      -76,
+      -75,
+      -74,
+      -74,
+      -71,
+      -70,
+      -69,
+      -69,
+      -65,
+      -65,
+      -62,
+      131,
+      131
+     ],
+     "players": 29,
+     "twoHoursBefore": {
+      "ACTIVE": 29
+     }
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,840 @@
+{
+ "adapter": "nflverse-ffa-stat-lines-v1",
+ "decidedThroughPeriod2026": 8,
+ "disagreements": [
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "rushing.yards": {
+     "espn": "-2.0",
+     "nflverse": "3"
+    }
+   },
+   "period": 6,
+   "player": "Caleb Williams",
+   "points": {
+    "espn": "19.88",
+    "nflverse": "20.38"
+   },
+   "position": "QB",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "receiving.two_point_conversions": {
+     "espn": "0",
+     "nflverse": "1"
+    }
+   },
+   "period": 1,
+   "player": "Julian Hill",
+   "points": {
+    "espn": "0.00",
+    "nflverse": "2.00"
+   },
+   "position": "TE",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.yards_allowed": {
+     "espn": "215.0",
+     "nflverse": "220"
+    }
+   },
+   "period": 15,
+   "player": "Seahawks D/ST",
+   "points": {
+    "espn": "6.00",
+    "nflverse": "6.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.sacks": {
+     "espn": "2.0",
+     "nflverse": "3"
+    }
+   },
+   "period": 4,
+   "player": "Chiefs D/ST",
+   "points": {
+    "espn": "5.00",
+    "nflverse": "6.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.sacks": {
+     "espn": "2.0",
+     "nflverse": "3"
+    }
+   },
+   "period": 13,
+   "player": "Bengals D/ST",
+   "points": {
+    "espn": "11.00",
+    "nflverse": "12.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.points_allowed": {
+     "espn": "25.0",
+     "nflverse": "23"
+    }
+   },
+   "period": 4,
+   "player": "Eagles D/ST",
+   "points": {
+    "espn": "13.00",
+    "nflverse": "13.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.yards_allowed": {
+     "espn": "381.0",
+     "nflverse": "386"
+    }
+   },
+   "period": 6,
+   "player": "Commanders D/ST",
+   "points": {
+    "espn": "4.00",
+    "nflverse": "4.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.points_allowed": {
+     "espn": "34.0",
+     "nflverse": "40"
+    }
+   },
+   "period": 15,
+   "player": "Cardinals D/ST",
+   "points": {
+    "espn": "1.00",
+    "nflverse": "-1.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2025
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "passing.yards": {
+     "espn": "274.0",
+     "nflverse": "273"
+    }
+   },
+   "period": 9,
+   "player": "Jayden Daniels",
+   "points": {
+    "espn": "14.56",
+    "nflverse": "14.52"
+   },
+   "position": "QB",
+   "provisional": true,
+   "season": 2026
+  },
+  {
+   "espn": {
+    "passing.interceptions": "4.0",
+    "passing.touchdowns": "2.0",
+    "passing.yards": "279.0",
+    "rushing.yards": "16.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Caleb Williams",
+   "position": "QB",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "passing.interceptions": "2.0",
+    "passing.yards": "243.0",
+    "rushing.two_point_conversions": "1.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Baker Mayfield",
+   "position": "QB",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "4.0",
+    "receiving.yards": "28.0",
+    "rushing.touchdowns": "2.0",
+    "rushing.yards": "97.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Bucky Irving",
+   "position": "RB",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "rushing.yards": "31.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "D'Andre Swift",
+   "position": "RB",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "3.0",
+    "receiving.yards": "60.0",
+    "rushing.yards": "16.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Kenny Gainwell",
+   "position": "RB",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "rushing.yards": "25.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Salvon Ahmed",
+   "position": "RB",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "3.0",
+    "receiving.yards": "38.0",
+    "rushing.yards": "1.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Emeka Egbuka",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "misc.fumbles_lost": "1.0",
+    "receiving.receptions": "7.0",
+    "receiving.touchdowns": "1.0",
+    "receiving.yards": "97.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Luther Burden III",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "4.0",
+    "receiving.touchdowns": "1.0",
+    "receiving.yards": "60.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Rome Odunze",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "2.0",
+    "receiving.yards": "16.0",
+    "rushing.yards": "12.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Chris Godwin Jr.",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "4.0",
+    "receiving.yards": "32.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Kalif Raymond",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "2.0",
+    "receiving.yards": "76.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Tez Johnson",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "1.0",
+    "receiving.yards": "13.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Zavion Thomas",
+   "position": "WR",
+   "season": 2026
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "receiving.two_point_conversions": {
+     "espn": "0",
+     "nflverse": "1"
+    }
+   },
+   "period": 3,
+   "player": "Chris Blair",
+   "points": {
+    "espn": "0.00",
+    "nflverse": "2.00"
+   },
+   "position": "WR",
+   "provisional": false,
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "4.0",
+    "receiving.yards": "54.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Colston Loveland",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "receiving.yards": {
+     "espn": "57.0",
+     "nflverse": "56"
+    }
+   },
+   "period": 9,
+   "player": "Chig Okonkwo",
+   "points": {
+    "espn": "11.70",
+    "nflverse": "11.60"
+   },
+   "position": "TE",
+   "provisional": true,
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "4.0",
+    "receiving.yards": "25.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Cade Otton",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "receiving.receptions": "2.0",
+    "receiving.yards": "23.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Sam Roush",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "kicking.extra_points_made": "1.0",
+    "kicking.field_goals_0_39": "3.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Chase McLaughlin",
+   "position": "K",
+   "season": 2026
+  },
+  {
+   "espn": {
+    "kicking.extra_points_made": "3.0",
+    "kicking.field_goals_0_39": "2.0"
+   },
+   "issue": "NO_NFLVERSE_ROW",
+   "period": 9,
+   "player": "Cairo Santos",
+   "position": "K",
+   "season": 2026
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.yards_allowed": {
+     "espn": "313.0",
+     "nflverse": "312"
+    }
+   },
+   "period": 9,
+   "player": "Rams D/ST",
+   "points": {
+    "espn": "11.00",
+    "nflverse": "11.00"
+   },
+   "position": "D/ST",
+   "provisional": true,
+   "season": 2026
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.sacks": {
+     "espn": "2.0",
+     "nflverse": "3"
+    }
+   },
+   "period": 2,
+   "player": "Panthers D/ST",
+   "points": {
+    "espn": "24.00",
+    "nflverse": "25.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2026
+  },
+  {
+   "issue": "VALUE",
+   "metrics": {
+    "defense.sacks": {
+     "espn": "2.0",
+     "nflverse": "3"
+    }
+   },
+   "period": 6,
+   "player": "Cardinals D/ST",
+   "points": {
+    "espn": "7.00",
+    "nflverse": "8.00"
+   },
+   "position": "D/ST",
+   "provisional": false,
+   "season": 2026
+  }
+ ],
+ "espnPlayers": 1061,
+ "espnReceipts": [
+  "b2647ad2302bfa9df07ce2945003c69df3bc7f217f2e4e7df288922118cfd55a",
+  "ea20676bc9d7ffdc1ef1a74ad884a5149ee4d2b946e3569e4359d7862656bcea",
+  "5d607ec7377bbd6021583b9ad5b8e0e5af39daf23e251d313092ba98ab543e4b",
+  "ce4f43b97ea20f66cdd1fd60a87992711f81aa7effc3217ab206b3c0dce00c23",
+  "7dfbc95e0c0d252921e0f3caa8c9421757291893d151258e8b6b1efc6ff27211",
+  "aa94123dcf2ee12d8165527ade9bf448f517e3457d4957bfc2a505429f194671",
+  "b900ebcea4bdd4fe0133bebe9e76481d094684dd414e93905f19005d025e5e4f"
+ ],
+ "finishedAt": "2026-11-09T15:49:39.953643+00:00",
+ "nflverseManifests": {
+  "pbp/play_by_play_2025": "85f3ec0f40ed33838db9f06e0d2415d01a41c225654f90c4d3e2d19362d75248",
+  "pbp/play_by_play_2026": "42daa3cbe5eb1a1d04c0f6b4c4a1edcf2aef8b9216a6751e3d2321f5de2a5de3",
+  "schedules/games": "b97855a5144d50e7b50b7e21313ce711625904d587ddaab2645c91415488cad7",
+  "stats_player/stats_player_week_2025": "b499873734fd559d50027c7f333d2f9a189e172f3c462d22296fe6a8f89a1d39",
+  "stats_player/stats_player_week_2026": "82f01d85c67c87634c26ce1b885cdc9d827fb01c4d260826d59a7c3438433f7b",
+  "stats_team/stats_team_week_2025": "15afc87e455752f7f11892f9692ac82c003088e9ecb6637280c7a75b588933c0",
+  "stats_team/stats_team_week_2026": "6fab4ad432310a03fdecb2c29855579433e085a282a97080a70b8f716c6be746"
+ },
+ "reportSha256": "f503d6fff6cb22643c5edfbf28583808c290893c953dd4eedb3b18a8a387cdf4",
+ "rules": {
+  "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+  "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+ },
+ "seasons": {
+  "2025": {
+   "byPosition": {
+    "D/ST": {
+     "compared": 544,
+     "disagreement": 6,
+     "exact": 538,
+     "played": 544
+    },
+    "K": {
+     "compared": 543,
+     "exact": 541,
+     "played": 543
+    },
+    "QB": {
+     "compared": 664,
+     "disagreement": 1,
+     "exact": 661,
+     "no_row_espn_zero": 12,
+     "played": 676
+    },
+    "RB": {
+     "compared": 1659,
+     "exact": 1653,
+     "no_row_espn_zero": 199,
+     "played": 1858
+    },
+    "TE": {
+     "compared": 1276,
+     "disagreement": 1,
+     "exact": 1270,
+     "no_row_espn_zero": 414,
+     "played": 1707,
+     "unresolved_identity": 17
+    },
+    "WR": {
+     "compared": 2516,
+     "exact": 2508,
+     "no_row_espn_zero": 293,
+     "played": 2809
+    }
+   },
+   "counts": {
+    "compared": 7202,
+    "disagreement": 8,
+    "exact": 7171,
+    "nflverse_row_without_espn_game": 0,
+    "no_row_espn_zero": 918,
+    "played": 8137,
+    "refused_unknown": 23,
+    "unresolved_identity": 17
+   },
+   "metricDisagreements": {
+    "defense.points_allowed": 2,
+    "defense.sacks": 2,
+    "defense.yards_allowed": 2,
+    "receiving.two_point_conversions": 1,
+    "rushing.yards": 1
+   },
+   "reverseExamples": [],
+   "unknownMetrics": {
+    "returns.two_point_returns:UNATTRIBUTED_TEAM_EVENT": 23
+   }
+  },
+  "2026": {
+   "byPosition": {
+    "D/ST": {
+     "compared": 268,
+     "disagreement": 2,
+     "exact": 265,
+     "played": 270,
+     "provisional_disagreement": 1
+    },
+    "K": {
+     "compared": 270,
+     "exact": 269,
+     "no_row_espn_nonzero": 2,
+     "played": 272
+    },
+    "QB": {
+     "compared": 309,
+     "exact": 306,
+     "no_row_espn_nonzero": 2,
+     "no_row_espn_zero": 42,
+     "played": 353,
+     "provisional_disagreement": 1
+    },
+    "RB": {
+     "compared": 795,
+     "exact": 792,
+     "no_row_espn_nonzero": 4,
+     "no_row_espn_zero": 117,
+     "played": 917,
+     "unresolved_identity": 1
+    },
+    "TE": {
+     "compared": 672,
+     "exact": 668,
+     "no_row_espn_nonzero": 3,
+     "no_row_espn_zero": 250,
+     "played": 933,
+     "provisional_disagreement": 1,
+     "unresolved_identity": 8
+    },
+    "WR": {
+     "compared": 1255,
+     "disagreement": 1,
+     "exact": 1249,
+     "no_row_espn_nonzero": 7,
+     "no_row_espn_zero": 137,
+     "played": 1399
+    }
+   },
+   "counts": {
+    "compared": 3569,
+    "disagreement": 3,
+    "exact": 3549,
+    "nflverse_row_without_espn_game": 0,
+    "no_nflverse_team_row": 2,
+    "no_row_espn_nonzero": 18,
+    "no_row_espn_zero": 546,
+    "played": 4144,
+    "provisional_disagreement": 3,
+    "refused_unknown": 14,
+    "unresolved_identity": 9
+   },
+   "metricDisagreements": {
+    "defense.sacks": 2,
+    "defense.yards_allowed": 1,
+    "passing.yards": 1,
+    "receiving.two_point_conversions": 1,
+    "receiving.yards": 1
+   },
+   "reverseExamples": [],
+   "unknownMetrics": {
+    "returns.two_point_returns:UNATTRIBUTED_TEAM_EVENT": 14
+   }
+  }
+ },
+ "startedAt": "2026-11-09T15:49:37.325509+00:00",
+ "unresolvedIdentities": [
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 18,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 17,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 16,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 15,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 13,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 12,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 11,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 10,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 9,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 8,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 7,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 6,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 5,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 4,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": true,
+   "period": 3,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 2,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 1,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2025
+  },
+  {
+   "espnId": 4691889,
+   "espnNonzero": true,
+   "period": 9,
+   "player": "Greg Desrosiers Jr.",
+   "position": "RB",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 9,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 7,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 6,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 5,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 4,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 3,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 2,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  },
+  {
+   "espnId": 2531358,
+   "espnNonzero": false,
+   "period": 1,
+   "player": "Chris Manhertz",
+   "position": "TE",
+   "season": 2026
+  }
+ ]
+}

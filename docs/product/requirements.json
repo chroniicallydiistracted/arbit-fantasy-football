@@ -372,7 +372,7 @@
     },
     {
       "id": "MD-001",
-      "title": "nflverse-first shared intelligence and reusable evaluations across modules",
+      "title": "nflverse-only shared intelligence and reusable evaluations across modules",
       "sourceSections": [
         "4.7",
         "5.2",
@@ -380,8 +380,13 @@
       ],
       "milestone": "M3",
       "spec": "docs/architecture/model-specification.md",
-      "acceptance": "All advisors consume common evaluation artifacts; external fantasy projections are benchmark-only.",
-      "status": "specified"
+      "acceptance": "All advisors consume common evaluation artifacts; no other provider's fantasy points, rankings or projections enter the Model (OWN-061).",
+      "status": "in_progress",
+      "evidence": [
+        "docs/research/nflverse-ffa-scoring-2026-11-09.md — M3 slice 1: one nflverse-to-FFA stat line boundary scored by the shared engine, matching ESPN per category in 10,720 of 10,771 compared player-weeks; no evaluation artifact yet",
+        "docs/project/handoffs/2026-11-09-m3-ffa-points.md",
+        "docs/research/ffa-projection-methods-2026-11-09.md — OWN-061 input policy, methods review and measured FFA signal; architecture accepted in ADR-006 (OWN-062)"
+      ]
     },
     {
       "id": "MD-002",
@@ -392,7 +397,11 @@
       "milestone": "M3",
       "spec": "docs/architecture/model-specification.md",
       "acceptance": "A point-in-time evaluation set supports weekly/draft/rest-of-season horizons explicitly.",
-      "status": "specified"
+      "status": "specified",
+      "evidence": [
+        "docs/research/ffa-projection-methods-2026-11-09.md — what drives FFA points and how quickly each nflverse statistic carries signal (2016–2025); no model or backtest yet",
+        "docs/project/handoffs/2026-11-09-m3-slice2-catalog-targets.md — M3 slice 2: FFA-scored targets for every player-game and D/ST team-game 2012–2026 with participation labels; no feature, projection or backtest yet"
+      ]
     },
     {
       "id": "MD-003",
@@ -417,7 +426,9 @@
       "acceptance": "Temporal holdout, baseline/subgroup metrics, leakage checks, lineage and rollback artifact recorded.",
       "status": "specified",
       "evidence": [
-        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open"
+        "docs/project/handoffs/2026-10-31-nflverse.md — full published NFLverse acquisition/manifests/source proofs and exact GSIS/ESPN owned-athlete joins verified; feature semantics, historical-vintage/model validation and full product remain open",
+        "docs/research/ffa-projection-methods-2026-11-09.md — what drives FFA points and how quickly each nflverse statistic carries signal (2016–2025); no model or backtest yet",
+        "docs/project/handoffs/2026-11-09-m3-slice2-catalog-targets.md — field catalog for all 1,827 imported nflverse fields with a completeness check; targets reproduce the slice 1 verification exactly from pinned manifests; availability policy proposed in ADR-007; no backtest yet"
       ]
     },
     {
@@ -571,7 +582,8 @@
         "docs/research/espn-public-api-audit-2026-10-30.md — manual public access/capability proof, not production integration",
         "docs/project/handoffs/2026-10-30-endpoint-coverage.md — all audited usable routes wired; downstream canonical integration still open",
         "docs/project/handoffs/2026-10-30-ffa-scoring.md — actual46-rule mapping and completed-week reconciliation; not full source publication/eligibility/model release",
-        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain"
+        "docs/project/handoffs/2026-10-30-durable-ffa-sync.md — verified native identities/rules/full canonical FFA publication, durable sync/replay/corrections and local protected reads; cross-provider/member/model gates remain",
+        "docs/research/nflverse-ffa-scoring-2026-11-09.md — the shared scorer reproduces ESPN's per-category FFA values from nflverse statistics across 2025 and 2026; source-side differences in R-060"
       ]
     },
     {

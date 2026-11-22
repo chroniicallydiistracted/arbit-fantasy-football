@@ -1,6 +1,29 @@
 # Project Status
 
-Updated **2026-11-08**. M2, the accepted design reset, and the real-time platform are integrated into `main` and run on the local app. **Live (M6) is in progress ahead of M3** (OWN-019). After the Jacksonville–Baltimore capture, the local worker now reads active NFL games' full details every two-second round with a fresh cache key (OWN-045). On Sunday, fresh reads saw new plays a median 17.9 s after the whistle, against 39.4 s for ordinary cached reads of the same games (R-042 resolved, [measurement](../research/nfl-fresh-polling-2026-11-08.md)). [Polling handoff](handoffs/2026-11-05-nfl-fresh-polling.md).
+Updated **2026-11-22**. The M3 foundation and NFL availability changes are prepared for GitHub integration. See the [integration handoff](handoffs/2026-11-22-m3-integration.md) for validation and release boundaries.
+
+**M3 Model has begun** by owner direction after the 2026-11-09 audit (OWN-060); Live (M6) work is parked, not dropped. Slice 1 is implemented and awaiting runtime release: Arbit turns nflverse statistics and play-by-play into FFA stat lines scored by the shared engine (ENG-051). Against ESPN's raw statistics, 7,171 of 7,202 compared 2025 player-weeks and 3,549 of 3,569 2026 player-weeks match in every category. The 11 remaining decided differences are source-side (R-060), and 37 lines with an unattributed defensive two-point return stay unknown rather than zero (R-061). No projection exists yet. [Plan](../superpowers/plans/2026-11-09-m3-model.md), [research](../research/nflverse-ffa-scoring-2026-11-09.md), [handoff](handoffs/2026-11-09-m3-ffa-points.md).
+
+**Model inputs and architecture (2026-11-09, OWN-061).** The owner directed that the Model use only nflverse data, considering every field, and never another provider's fantasy or projection data, weighed against FFA's scoring. Research reviewed how others project players from nflverse and measured 2016–2025 FFA stat lines. Opportunity carries half its signal within two games; efficiency and touchdowns need dozens. Touchdowns are 30–45% of skill-position variance, and D/ST and kickers follow team and opponent environment. The owner accepted [ADR-006](../architecture/decisions/006-model-architecture.md) (OWN-062): a team-first model that simulates whole stat lines, scored by the shared engine. The interpretable Baseline A comes first; ML candidates follow through the release gate. Still open: betting lines in nflverse schedules (Q-014). [Research](../research/ffa-projection-methods-2026-11-09.md), [handoff](handoffs/2026-11-09-m3-model-architecture.md).
+
+**M3 slice 2 (2026-11-10), implemented and awaiting runtime release.**
+- **Field catalog:** the new `arbit-model` package records one use for each of the 1,827 imported nflverse fields: pre-game, history, earlier seasons, outcome, identity, or excluded with a reason. A check fails on any field without an entry.
+- **Historical targets:** FFA-scored lines for every player-game and D/ST team-game, 2012–2026, plus participation labels, stored as versioned Parquet with manifests.
+- **Reproduction:** read with the same pinned nflverse versions, the targets reproduce the slice 1 verification exactly.
+- **Two-point returns (R-061):** the snap rule resolves 16 previously unknown lines, and all 16 match ESPN.
+- **Inactives (R-064):** nflverse publishes them only after each game. So [ADR-007](../architecture/decisions/007-model-availability.md) proposes one decision time per game, at kickoff, with publication rules for each family. It awaits the owner before any backtest.
+
+[Handoff](handoffs/2026-11-09-m3-slice2-catalog-targets.md).
+
+**NFL availability twice a day (2026-11-10, OWN-063), implemented and awaiting runtime release.**
+- **Injury report:** the new `availability` worker lane reads NFL's injury report (each player's game status and practice) at 12:00 and 19:15 Eastern every day. Each read is kept with the time it finished.
+- **Inactives (OWN-064):** these come from ESPN's fantasy injury status, which Arbit already reads. A new reader gives the status as of any moment and marks it unknown if Arbit wasn't reading then.
+- **Read gaps (R-066):** caused by the PC being put to sleep most nights. Under OWN-065 a Windows task now wakes the PC before each game window and for the daily reads, then lets it sleep again ([how](../engineering/windows-wake.md)). The first real wake is still to be checked.
+- **Release:** the lane reaches the running worker only on the owner's request.
+
+[Handoff](handoffs/2026-11-10-m3-nfl-availability.md).
+
+On 2026-11-08: M2, the accepted design reset, and the real-time platform are integrated into `main` and run on the local app. **Live (M6) is in progress ahead of M3** (OWN-019). After the Jacksonville–Baltimore capture, the local worker now reads active NFL games' full details every two-second round with a fresh cache key (OWN-045). On Sunday, fresh reads saw new plays a median 17.9 s after the whistle, against 39.4 s for ordinary cached reads of the same games (R-042 resolved, [measurement](../research/nfl-fresh-polling-2026-11-08.md)). [Polling handoff](handoffs/2026-11-05-nfl-fresh-polling.md).
 
 **ESPN league facts and history (2026-11-08, ENG-050), released to the running app at 18:49 (UTC−7) by owner request.** An audit matched 1,437 served facts with ESPN but found the current week reading 0.00–0.00 "Official" all week, stored past lineups hidden and raw ESPN codes on the page (R-054 to R-058). The fixes are done and were verified on a restored copy of the database:
 - live and official totals labeled apart
@@ -61,7 +84,7 @@ M2 member auth/binding, Front Office facts and PWA now exist locally. Google is 
 | M1d statistical foundation | Complete published catalog imported, reviewed, replay/identity/local-read verified |
 | M1e supplemental/live sources and assets | Implemented/reviewed; observed source matrix, offline replay and asset prerequisites verified; empirical Live/asset gaps explicit |
 | M2 application/auth/Front Office/PWA | Implemented/local validation; Google selected; real client/member acceptance pending |
-| M3 Model/Scout | Not started |
+| M3 Model/Scout | In progress on `claude/m3-model`: slice 1 (FFA points from nflverse) verified against ESPN; nflverse-only architecture accepted (ADR-006, OWN-061, OWN-062); slice 2 (field catalog, historical targets, participation labels) and NFL availability reads (OWN-063) implemented; availability policy proposed (ADR-007); no projection yet |
 | M4 Lineup/waivers | Not started |
 | M5 trade/Draft | Not started |
 | M6 Live | In progress: scoreboards running on the local app; Gridiron delivery, play animation and fantasy attribution remain |

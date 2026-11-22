@@ -105,3 +105,54 @@ def test_statistics_rejects_unparseable_catalog_output(monkeypatch):
     health = Health(monkeypatch, NOW - timedelta(days=3))
     StatisticsLane(None, run=lambda a: (0, "not json"), clock=lambda: NOW).step()
     assert health.failures == ["IMPORT_FAILED"]
+
+
+def availability(errors=None):
+    from arbit_data.availability.capture import Capture
+
+    return Capture("a" * 64, NOW, (2026, "REG", 10), {"currentInactive": 9}, errors or {})
+
+
+# 2026-11-12 18:00 UTC is 1:00 PM Eastern, an hour after the noon read.
+AFTER_NOON = datetime(2026, 11, 12, 18, 0, tzinfo=UTC)
+
+
+def test_availability_reads_once_per_scheduled_time(monkeypatch):
+    from arbit_worker.daemon import AvailabilityLane
+
+    reads = []
+    health = Health(monkeypatch, AFTER_NOON - timedelta(hours=2))
+    lane = AvailabilityLane(
+        None, 2026, read=lambda: reads.append(1) or availability(), clock=lambda: AFTER_NOON
+    )
+    assert lane.step() == 300.0
+    assert reads == [1] and health.success and not health.failures
+
+    Health(monkeypatch, AFTER_NOON - timedelta(minutes=30))
+    wait = AvailabilityLane(
+        None, 2026, read=lambda: reads.append(2) or availability(), clock=lambda: AFTER_NOON
+    ).step()
+    assert reads == [1], "the noon read already happened"
+    assert 0 < wait <= 300
+
+
+def test_availability_failure_is_recorded_and_retried_after_thirty_minutes(monkeypatch):
+    from arbit_worker.daemon import AvailabilityLane
+
+    health = Health(monkeypatch, AFTER_NOON - timedelta(days=1))
+    reads = []
+    now = [AFTER_NOON]
+    lane = AvailabilityLane(
+        None,
+        2026,
+        read=lambda: reads.append(1) or availability({"nfl.injuries": "NFL_API_HTTP_503"}),
+        clock=lambda: now[0],
+    )
+    lane.step()
+    assert health.failures == ["NFL_API_HTTP_503"] and not health.success
+    now[0] = AFTER_NOON + timedelta(minutes=10)
+    lane.step()
+    assert len(reads) == 1, "no tight retry loop"
+    now[0] = AFTER_NOON + timedelta(minutes=31)
+    lane.step()
+    assert len(reads) == 2
