@@ -1,5 +1,11 @@
 # Development Changelog
 
+## 2026-11-22 — Runtime validation repaired (TASK-20261122-001)
+
+- `ec5682a` failed Runtime validation because Ruff found 7 errors in the new governance tests: six `a; b` statements and an unsorted import block. Lint stops the job before the database suite runs.
+- Split the statements, sorted the imports and formatted the file. Assertions are unchanged.
+- Repo-wide `ruff check .` and `ruff format --check .` now pass, and so do the governance tests, `doctor` and the foundation validator.
+
 ## 2026-11-22 — Context governance package prepared (not integrated)
 
 - Audited source documentation/Model interfaces and identified hardcoded handoff staleness, missing machine-traceable task/validation gates, proposed model availability and a possible historical source-policy wording conflict.
