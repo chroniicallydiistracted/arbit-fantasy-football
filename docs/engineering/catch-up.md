@@ -67,7 +67,7 @@ uv run --env-file .env.local arbit-worker catchup --with-lanes # also the statis
 
 ## Limits
 
-- **Regular season only.** Postseason catch-up waits until a playoff week's shapes are observed (R-059). The live lanes still follow a current postseason week.
+- **Regular season only, periods 1–18.** ESPN numbers playoff games as later scoring periods, and catch-up skips them until a playoff week's shapes are observed (R-059). The live lanes still follow a current postseason week.
 - **Weeks before capture began.** In 2026 that is weeks 1–7. They are pulled only with `--from-period`.
 - **Stored but never final.** A game ESPN still lists as not final, such as one postponed, is reported as `not_final` and tried again on the next worker start.
 - **Database down.** The lane can't do anything until the database is reachable. The container restarts with Docker (`restart: unless-stopped`, R-029, R-068). After a Windows restart, Docker and WSL must still start.

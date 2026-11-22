@@ -231,6 +231,16 @@ def test_only_finished_games_outside_the_live_week_since_capture_began_are_outst
     assert [g.event_id for g in everything] == ["401900003", MISSED]
 
 
+def test_playoff_periods_are_left_to_the_live_lanes(uow):
+    """ESPN numbers playoff games as scoring periods 19 and later; catch-up reads only the regular
+    season's 18 weeks, even with the live week in January."""
+    seed(uow)
+    with uow.engine.begin() as c:
+        schedule(c, "401900019", 19, MISSED_KICKOFF + timedelta(days=63))
+    later = MISSED_KICKOFF + timedelta(days=70)
+    assert [g.period for g in catchup.outstanding_games(uow, 2026, later)] == [10]
+
+
 def test_a_game_stored_mid_game_before_the_worker_stopped_is_outstanding(uow):
     seed(uow)
     with uow.engine.begin() as c:

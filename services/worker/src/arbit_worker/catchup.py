@@ -44,6 +44,8 @@ GAME_LENGTH = timedelta(hours=5)
 # (R-059); the live lanes still follow a current postseason week.
 REGULAR_SEASON = 2
 NFL_REGULAR_SEASON = "REG"
+# ESPN's pro schedule numbers playoff games as scoring periods after the 18 regular-season weeks.
+REGULAR_SEASON_WEEKS = 18
 RECEIPTS = "receipts.jsonl"
 FORMAT = "arbit-catchup-v1"
 STOP_CODES = frozenset({"RATE_LIMITED", "SOURCE_COOLDOWN"})
@@ -136,6 +138,7 @@ def outstanding_games(
             .where(
                 nfl_schedule_game.c.season == season,
                 nfl_schedule_game.c.scoring_period >= start,
+                nfl_schedule_game.c.scoring_period <= REGULAR_SEASON_WEEKS,
                 nfl_schedule_game.c.kickoff.is_not(None),
                 nfl_schedule_game.c.kickoff <= now - GAME_LENGTH,
             )

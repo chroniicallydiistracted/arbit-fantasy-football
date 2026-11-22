@@ -1,5 +1,11 @@
 # Development Changelog
 
+## 2026-11-22 — Catch-up reads regular-season weeks only (TASK-20261122-005)
+
+- **Change:** catch-up now considers scoring periods 1–18 only. ESPN numbers playoff games as later periods, which in January would have been read as regular-season weeks on every worker start. Postseason games stay with the live lanes (R-059).
+- **Test:** one new test, 12 in `tests/integration/test_catchup.py`.
+- **Correction:** TASK-20261122-004's records say 12 tests, but that commit had 11.
+
 ## 2026-11-22 — Catch-up after downtime (ENG-052, TASK-20261122-004)
 
 - **New `catchup` worker lane, in the default lanes.**
@@ -12,7 +18,7 @@
   - `store.game_timings` follows the season's latest week, so a recovered week can't become the live schedule.
   - R-069: the NFL lane rediscovers every 120 s while current-week games are unlinked.
   - `availability-capture` returns after running.
-- **Tests:** 12 real-PostgreSQL tests in `tests/integration/test_catchup.py`; the scope and relink tests fail with each fix reverted.
+- **Tests:** 11 real-PostgreSQL tests in `tests/integration/test_catchup.py` (corrected from 12 by TASK-20261122-005); the scope and relink tests fail with each fix reverted.
 - **Docs:** [catch-up guide](../engineering/catch-up.md); R-068 records the 12-day outage, and R-069 the relink race.
 
 ## 2026-11-22 — Owner decisions on availability, betting lines and the first advisor (TASK-20261122-003)
