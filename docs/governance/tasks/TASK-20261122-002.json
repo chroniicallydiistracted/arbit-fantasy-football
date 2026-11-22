@@ -3,8 +3,8 @@
   "id": "TASK-20261122-002",
   "title": "Restore and harden local runtime: database restart policy, availability lane activation, branch protection, global guidance",
   "objective": "The database comes back by itself after Docker or Windows restarts, the running worker runs the merged availability lane, week 11 NFL games are linked, main requires CI, and both agents load the shared global guidance",
-  "status": "blocked",
-  "phase": "implement",
+  "status": "completed",
+  "phase": "handoff",
   "change_class": "ops",
   "requirements": [
     "GOVAI-011",
@@ -22,9 +22,9 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-22T23:11:52Z",
-  "updated_at": "2026-11-22T23:12:39Z",
+  "updated_at": "2026-11-22T23:47:16Z",
   "baseline": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
-  "next_action": "After late games are final, systemctl --user restart arbit-worker; verify started lanes include availability, nfl_api_game week 11 links, and a captured availability event; then document and finish",
+  "next_action": "Push branch claude/catch-up-and-decisions and open the PR; when validate, runtime and governance pass, merge, fast-forward the main checkout and restart arbit-worker so the catchup lane and fixes run (confirm a catchup 'started' line).",
   "sections": {
     "review": {
       "summary": "Observed 2026-11-22: arbit-dev-postgres-1 exited (code 0) 2026-11-10T18:06:08Z with restart policy 'no' and stayed down until docker start at 22:44:49Z; the worker logged DATABASE_UNAVAILABLE throughout (first at 2026-11-10 18:06:09Z). The running worker (started 15:25:34 MST) predates local main's fast-forward to the M3 merge (15:26:36 MST), so it lacks the availability lane; daemon.LANES now includes it by default and the unit passes no --lanes. NFL discovery ran 22:44:52Z, 6 s before ESPN created week 11 nfl_game rows (22:44:58Z), so all 13 week 11 nfl_api_game rows have event_id NULL and NFL details are not read until the next discovery 6 h later. GitHub main has no branch protection or rulesets. ~/.claude/CLAUDE.md is absent; ~/.codex/AGENTS.md is 0 bytes.",
@@ -46,24 +46,116 @@
       ]
     },
     "implementation": {
-      "summary": "",
-      "files": []
+      "summary": "Applied: docker update --restart unless-stopped and infra/compose.yaml restart: unless-stopped; global templates installed (Codex empty file backed up); main branch protection (validate, runtime, governance; enforce_admins false; no force push or deletion). Worker restarted 23:43:25 UTC on main ec5682a: lanes league, live, nfl, nfl_probe, statistics, availability started; NFL discovered 13 games, all linked, 11 details read; availability captured 23:43:37 UTC with 0 failures. Catch-up verified on restored copy arbit_catchup_test (14 recovered, 0 failed, 14 NFL finals, 2550 play revisions, receipt mode 600), then run on arbit_local with the worker stopped 23:45:55-23:46:20 UTC (14 recovered, 0 failed, nothing remaining); copy dropped. Docs: R-029, R-068, R-069 outcomes, status, changelog.",
+      "files": [
+        "infra/compose.yaml",
+        "docs/project/known-issues.md",
+        "docs/engineering/member-application.md"
+      ]
     },
     "validation": {
-      "summary": "",
+      "summary": "Observed exit 0: foundation and governance doctor. Runtime evidence: journal lines show all six lanes started and no errors after both restarts; database queries show week 10 with 14 games, 14 summaries, 14 NFL finals and final_checks 3, and week 11 with 13 of 13 linked; the live schedule stays on week 11; data/catchup/receipts.jsonl is mode 600 in a 700 directory.",
       "files": []
     },
     "documentation": {
-      "summary": "",
-      "files": []
+      "summary": "Status 'Running app repaired' block, changelog entry, R-029 restart-policy done, R-068 recovery results, R-069 runtime relink, governance state next action and source.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/project/known-issues.md",
+        "docs/governance/state.json"
+      ]
     },
     "handoff": {
-      "path": null,
-      "next_action": "",
-      "unresolved": ""
+      "path": "docs/project/handoffs/2026-11-22-task-20261122-002-governance-handoff.md",
+      "next_action": "Push branch claude/catch-up-and-decisions and open the PR; when validate, runtime and governance pass, merge, fast-forward the main checkout and restart arbit-worker so the catchup lane and fixes run (confirm a catchup 'started' line).",
+      "unresolved": "No alert when the database or a source stays down for hours (R-068). Q-016 weather forecast awaits the owner. Weeks 1-7 were never captured; recoverable with arbit-worker catchup --from-period 1 if wanted."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:47:04Z",
+      "exit_code": 0,
+      "duration_seconds": 0.218,
+      "stdout_stderr_sha256": "a8055fd5157531ee9e92a6d1dfd56e48c40994280c6d1ea411be89acafee17f6",
+      "git_head": "8543cfdc9412a2f80ffff39a06b2abd378ed6f5b",
+      "scope_sha256": {
+        "infra/compose.yaml": "5b5880169014fc5ce413b71c8c9f7f93a5a82bec2824f1c0439ffff78d3c8af1",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/known-issues.md": "e1fc7b3cf05736cdc153ba5d64784fcda58e72add757746e7d86c4e815ac7ed0",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "6588fba14ca3d3a564a8ee6685896d75dc3568f840493ebcc24b353205e55097",
+        "docs/project/changelog.md": "b2525bdf43af8713393a09703e5f453009ddef2fc3616f57effc28e2552afddf"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-22T23:47:04Z",
+      "exit_code": 0,
+      "duration_seconds": 0.04,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "8543cfdc9412a2f80ffff39a06b2abd378ed6f5b",
+      "scope_sha256": {
+        "infra/compose.yaml": "5b5880169014fc5ce413b71c8c9f7f93a5a82bec2824f1c0439ffff78d3c8af1",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/known-issues.md": "e1fc7b3cf05736cdc153ba5d64784fcda58e72add757746e7d86c4e815ac7ed0",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "6588fba14ca3d3a564a8ee6685896d75dc3568f840493ebcc24b353205e55097",
+        "docs/project/changelog.md": "b2525bdf43af8713393a09703e5f453009ddef2fc3616f57effc28e2552afddf"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:47:16Z",
+      "exit_code": 0,
+      "duration_seconds": 0.228,
+      "stdout_stderr_sha256": "a8055fd5157531ee9e92a6d1dfd56e48c40994280c6d1ea411be89acafee17f6",
+      "git_head": "8543cfdc9412a2f80ffff39a06b2abd378ed6f5b",
+      "scope_sha256": {
+        "infra/compose.yaml": "5b5880169014fc5ce413b71c8c9f7f93a5a82bec2824f1c0439ffff78d3c8af1",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/known-issues.md": "e1fc7b3cf05736cdc153ba5d64784fcda58e72add757746e7d86c4e815ac7ed0",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "6588fba14ca3d3a564a8ee6685896d75dc3568f840493ebcc24b353205e55097",
+        "docs/project/changelog.md": "b2525bdf43af8713393a09703e5f453009ddef2fc3616f57effc28e2552afddf"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-22T23:47:16Z",
+      "exit_code": 0,
+      "duration_seconds": 0.042,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "8543cfdc9412a2f80ffff39a06b2abd378ed6f5b",
+      "scope_sha256": {
+        "infra/compose.yaml": "5b5880169014fc5ce413b71c8c9f7f93a5a82bec2824f1c0439ffff78d3c8af1",
+        "docs/engineering/member-application.md": "682196fd2a11980f8f9e7002472476e374fe92e2f3e5e48ca38c766a832237c6",
+        "docs/project/known-issues.md": "e1fc7b3cf05736cdc153ba5d64784fcda58e72add757746e7d86c4e815ac7ed0",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "6588fba14ca3d3a564a8ee6685896d75dc3568f840493ebcc24b353205e55097",
+        "docs/project/changelog.md": "b2525bdf43af8713393a09703e5f453009ddef2fc3616f57effc28e2552afddf"
+      }
+    }
+  ],
   "journal": [
     {
       "at": "2026-11-22T23:11:59Z",
@@ -82,7 +174,14 @@
       "kind": "risk",
       "note": "Worker restart must wait for the gap between Sunday's late games ending (~17:20 MST) and Sunday night kickoff (18:20 MST); no mid-game restarts",
       "evidence": "blocking condition"
+    },
+    {
+      "at": "2026-11-22T23:43:27Z",
+      "kind": "observation",
+      "note": "Owner, 2026-11-22: no one else uses the app yet; free to stop, restart, rebuild and start the stack as needed, without waiting for live games. The mid-game wait in this task's plan is dropped.",
+      "evidence": "Owner message in the 2026-11-22 Claude session"
     }
   ],
-  "block_reason": "Worker restart must wait for the gap between Sunday's late games ending (~17:20 MST) and Sunday night kickoff (18:20 MST); no mid-game restarts"
+  "block_reason": "Worker restart must wait for the gap between Sunday's late games ending (~17:20 MST) and Sunday night kickoff (18:20 MST); no mid-game restarts",
+  "closed_at": "2026-11-22T23:47:16Z"
 }

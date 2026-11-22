@@ -1,5 +1,14 @@
 # Development Changelog
 
+## 2026-11-22 — Running app restored and hardened (TASK-20261122-002)
+
+- **Database:** found down since 2026-11-10 and started (R-068). Restart policy `unless-stopped` set on the container and in `infra/compose.yaml`.
+- **Worker:** restarted onto `main`. The availability lane now runs (first capture 23:43 UTC), and all 13 week 11 NFL games are linked.
+- **Week 10:** recovered by the catch-up. First on a restored copy (14 games, 2,550 play records), then on the database, all 14 owned by NFL final records.
+- **GitHub:** `main` protected, requiring `validate`, `runtime` and `governance`; admins can still push.
+- **Global guidance:** templates installed. The empty Codex file was backed up.
+- **Owner permission:** restarts at any time while the owner is the only user.
+
 ## 2026-11-22 — Playoff catch-up test corrected (TASK-20261122-006)
 
 - **What was wrong:** TASK-20261122-005 recorded that its test fails without the 18-week cap. A mutation run showed it passed anyway, because the test's live week (regular-season week 11) already excluded period 19.

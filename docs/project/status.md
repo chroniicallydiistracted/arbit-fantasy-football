@@ -3,6 +3,16 @@
 **Governance system (2026-11-22):** the owner pushed the repository-native Context Governance System to `main` as `ec5682a`. It includes Codex/Claude entry instructions, structured task and handoff records, the authority matrix, the football-operations advisor charter (a requirement, not a shipped feature), the governance CLI and PR traceability. See the [audit](../governance/AUDIT_2026-11-22.md) and [start guide](../governance/START_HERE.md).
 - **CI:** that commit failed Runtime validation at `make lint`, with 7 Ruff errors in `tests/governance/test_governance.py`, so its database suite never ran. TASK-20261122-001 fixes the file on branch `claude/catch-up-and-decisions`. Runtime validation on `main` is green again only once that branch merges.
 
+**Running app repaired (2026-11-22, TASK-20261122-002).** The owner allows restarts at any time while they are the only user.
+- **Database:** it was down from 2026-11-10 18:06 to 2026-11-22 22:44 UTC (R-068) and now restarts with Docker (`unless-stopped`).
+- **Worker restart (23:43 UTC):** the worker runs `main` (`ec5682a`).
+  - The **availability lane is active**, and its first injury-report capture succeeded.
+  - All 13 week 11 NFL games are linked (R-069).
+- **Week 10 recovered:** all 14 games, using this branch's catch-up command against the database at 23:46 UTC, with the worker stopped for 25 s.
+- **Branch protection:** `main` requires the `validate`, `runtime` and `governance` checks.
+- **Global guidance:** the Codex and Claude templates are installed.
+- **Pending:** the `catchup` lane itself, and the relink and schedule-scope fixes, reach the running worker only after this branch merges and the worker restarts.
+
 **Catch-up after downtime (2026-11-22, ENG-052, TASK-20261122-004), on branch `claude/catch-up-and-decisions`, not merged or released.** A new `catchup` worker lane recovers finished games the live lanes never read, from weeks that started and ended while the PC or database was down:
 - **What it reads:** ESPN's scoreboard, summary and plays, and the NFL API's full record. It waits while a slate is active and records each game's kickoff and read time in a private receipt for ADR-007 A1.
 - **Command:** `arbit-worker catchup --dry-run` reports what is outstanding.
