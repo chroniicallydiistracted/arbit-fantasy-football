@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-005",
+  "title": "Catch-up considers regular-season weeks only (periods 1-18)",
+  "objective": "In the postseason the catch-up never reads ESPN scoring periods 19+ as regular-season weeks; postseason games stay with the live lanes (R-059)",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "live",
+  "requirements": [
+    "DATA-008",
+    "LV-001"
+  ],
+  "scope_files": [
+    "services/worker/src/arbit_worker/catchup.py",
+    "tests/integration/test_catchup.py",
+    "docs/engineering/catch-up.md",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-22T23:30:53Z",
+  "updated_at": "2026-11-22T23:32:34Z",
+  "baseline": "34d212e6c1c047664306bec3ca434d4c7b17da9a",
+  "next_action": "Finish TASK-20261122-002 (worker restart between games, real catch-up), then push the branch and open the PR.",
+  "sections": {
+    "review": {
+      "summary": "Self-review of ENG-052 after TASK-004 closed: outstanding_games filters nfl_schedule_game by scoring_period >= start only. ESPN's pro schedule continues scoring periods past the 18-week regular season for playoff games, and current_week compares (2, period) with (3, w) in January, so postseason periods would be read as REG weeks 19+ on every worker start: wasted ESPN/NFL requests and not_listed receipts.",
+      "files": [
+        "services/worker/src/arbit_worker/catchup.py",
+        "libs/arbit-data/src/arbit_data/live/store.py"
+      ]
+    },
+    "plan": {
+      "summary": "Add REGULAR_SEASON_WEEKS = 18 and filter scoring_period <= 18 in outstanding_games; one integration test seeding a period 19 game in the past; guide's Limits line. Checks: live class.",
+      "files": [
+        "services/worker/src/arbit_worker/catchup.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "implementation": {
+      "summary": "catchup.REGULAR_SEASON_WEEKS = 18 and outstanding_games filters scoring_period <= 18; test_playoff_periods_are_left_to_the_live_lanes (period 19 game in January stays out of the plan); guide Limits line; status scope line; changelog entry with correction of TASK-004's test count (11, not 12).",
+      "files": [
+        "services/worker/src/arbit_worker/catchup.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0: foundation, live-replay, runtime-check (Ruff, strict mypy, contracts, full pytest including PostgreSQL integration; catch-up file 12 passed) and web-check. The new test fails without the cap: a period 19 game from early January would be planned.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Changelog entry with the TASK-004 test-count correction, status scope line, catch-up guide Limits. Written before validation; unchanged since.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-22-task-20261122-005-governance-handoff.md",
+      "next_action": "Finish TASK-20261122-002 (worker restart between games, real catch-up), then push the branch and open the PR.",
+      "unresolved": "None for this change."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:31:31Z",
+      "exit_code": 0,
+      "duration_seconds": 0.227,
+      "stdout_stderr_sha256": "31f68a45638eda9a025ec01eb08f4000fa0a69b9a0ad27cbc0074118afe5a6fa",
+      "git_head": "34d212e6c1c047664306bec3ca434d4c7b17da9a",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "0367a7778bd03b4419bb63dc847095496d9f365ffa520cc567939cd5bbcbf7e5",
+        "tests/integration/test_catchup.py": "755e741e8b9146bf23810ca1c9f769c65110276c860813eca71a339e748bc0e9",
+        "docs/engineering/catch-up.md": "1ecba96b91db0217b2f1b6ea3cc5cc78331c70158cbbc91ff92d8d8a0cb5054e",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8be643fbd79ee82d57ff133849404c7b854986eaa71efc10bb99ed2cdbd687ed",
+        "docs/project/changelog.md": "4f8600d08c6f0703991093515f7363168d13b84e8ab9a2aa59b22964b51f5281"
+      }
+    },
+    {
+      "name": "live-replay",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_live_actions.py",
+        "libs/arbit-data/tests/test_live_motion.py"
+      ],
+      "at": "2026-11-22T23:31:32Z",
+      "exit_code": 0,
+      "duration_seconds": 0.581,
+      "stdout_stderr_sha256": "13ddb55cca1bca496f87efa45d432907137319fbfc4fdbb33adcaf83871c40f5",
+      "git_head": "34d212e6c1c047664306bec3ca434d4c7b17da9a",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "0367a7778bd03b4419bb63dc847095496d9f365ffa520cc567939cd5bbcbf7e5",
+        "tests/integration/test_catchup.py": "755e741e8b9146bf23810ca1c9f769c65110276c860813eca71a339e748bc0e9",
+        "docs/engineering/catch-up.md": "1ecba96b91db0217b2f1b6ea3cc5cc78331c70158cbbc91ff92d8d8a0cb5054e",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8be643fbd79ee82d57ff133849404c7b854986eaa71efc10bb99ed2cdbd687ed",
+        "docs/project/changelog.md": "4f8600d08c6f0703991093515f7363168d13b84e8ab9a2aa59b22964b51f5281"
+      }
+    },
+    {
+      "name": "runtime-check",
+      "argv": [
+        "make",
+        "runtime-check"
+      ],
+      "at": "2026-11-22T23:32:24Z",
+      "exit_code": 0,
+      "duration_seconds": 52.168,
+      "stdout_stderr_sha256": "67448a29f17cb385304b3422b6a83cf1bfec31b3e25aede60ca54ceaa0fb74d4",
+      "git_head": "34d212e6c1c047664306bec3ca434d4c7b17da9a",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "0367a7778bd03b4419bb63dc847095496d9f365ffa520cc567939cd5bbcbf7e5",
+        "tests/integration/test_catchup.py": "755e741e8b9146bf23810ca1c9f769c65110276c860813eca71a339e748bc0e9",
+        "docs/engineering/catch-up.md": "1ecba96b91db0217b2f1b6ea3cc5cc78331c70158cbbc91ff92d8d8a0cb5054e",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8be643fbd79ee82d57ff133849404c7b854986eaa71efc10bb99ed2cdbd687ed",
+        "docs/project/changelog.md": "4f8600d08c6f0703991093515f7363168d13b84e8ab9a2aa59b22964b51f5281"
+      }
+    },
+    {
+      "name": "web-check",
+      "argv": [
+        "make",
+        "web-check"
+      ],
+      "at": "2026-11-22T23:32:29Z",
+      "exit_code": 0,
+      "duration_seconds": 4.995,
+      "stdout_stderr_sha256": "214cddd43e94a93b830147962e60e74a922096b19e862be6a2731a7e1dbf944e",
+      "git_head": "34d212e6c1c047664306bec3ca434d4c7b17da9a",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "0367a7778bd03b4419bb63dc847095496d9f365ffa520cc567939cd5bbcbf7e5",
+        "tests/integration/test_catchup.py": "755e741e8b9146bf23810ca1c9f769c65110276c860813eca71a339e748bc0e9",
+        "docs/engineering/catch-up.md": "1ecba96b91db0217b2f1b6ea3cc5cc78331c70158cbbc91ff92d8d8a0cb5054e",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8be643fbd79ee82d57ff133849404c7b854986eaa71efc10bb99ed2cdbd687ed",
+        "docs/project/changelog.md": "4f8600d08c6f0703991093515f7363168d13b84e8ab9a2aa59b22964b51f5281"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-22T23:31:31Z",
+      "kind": "correction",
+      "note": "TASK-20261122-004's implementation and validation summaries and changelog said 12 tests in tests/integration/test_catchup.py; that commit (34d212e) had 11. The changelog line is corrected; the closed task's record is left as history.",
+      "evidence": "git show 34d212e:tests/integration/test_catchup.py | grep -c '^def test' -> 11"
+    }
+  ],
+  "closed_at": "2026-11-22T23:32:34Z"
+}

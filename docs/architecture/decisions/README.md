@@ -10,6 +10,6 @@ Records are immutable explanations of consequential choices; supersede with a ne
 | [004](004-access-live-and-pwa.md) | Accepted | Independent member access, provider secrets, SSE and safe PWA caching |
 | [005](005-officiating-character.md) | Accepted | Officiating and broadcast product character; enforced design rules |
 | [006](006-model-architecture.md) | Accepted | The Model is built only from nflverse and projects whole FFA stat lines, team first |
-| [007](007-model-availability.md) | Proposed | What the Model may know before each game: one decision time at kickoff, publication rules by family |
+| [007](007-model-availability.md) | Accepted (2026-11-22, OWN-066, with owner amendments) | What the Model may know before each game: one decision time at kickoff, publication rules by family; late fetches count from source availability, timing rather than exclusion |
 
 Template: context → decision → alternatives → consequences → validation/adoption → related requirements. Small routine implementation choices belong in task records rather than generating an ADR for every edit.

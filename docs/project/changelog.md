@@ -1,5 +1,59 @@
 # Development Changelog
 
+## 2026-11-22 — Running app restored and hardened (TASK-20261122-002)
+
+- **Database:** found down since 2026-11-10 and started (R-068). Restart policy `unless-stopped` set on the container and in `infra/compose.yaml`.
+- **Worker:** restarted onto `main`. The availability lane now runs (first capture 23:43 UTC), and all 13 week 11 NFL games are linked.
+- **Week 10:** recovered by the catch-up. First on a restored copy (14 games, 2,550 play records), then on the database, all 14 owned by NFL final records.
+- **GitHub:** `main` protected, requiring `validate`, `runtime` and `governance`; admins can still push.
+- **Global guidance:** templates installed. The empty Codex file was backed up.
+- **Owner permission:** restarts at any time while the owner is the only user.
+
+## 2026-11-22 — Playoff catch-up test corrected (TASK-20261122-006)
+
+- **What was wrong:** TASK-20261122-005 recorded that its test fails without the 18-week cap. A mutation run showed it passed anyway, because the test's live week (regular-season week 11) already excluded period 19.
+- **Fix:** the test now sets a January state whose live week is postseason week 1. It fails without the cap (periods 10, 11 and 19 planned) and passes with it (10 and 11).
+- **Code:** unchanged; the cap was right, its proof was not.
+
+## 2026-11-22 — Catch-up reads regular-season weeks only (TASK-20261122-005)
+
+- **Change:** catch-up now considers scoring periods 1–18 only. ESPN numbers playoff games as later periods, which in January would have been read as regular-season weeks on every worker start. Postseason games stay with the live lanes (R-059).
+- **Test:** one new test, 12 in `tests/integration/test_catchup.py`.
+- **Correction:** TASK-20261122-004's records say 12 tests, but that commit had 11.
+
+## 2026-11-22 — Catch-up after downtime (ENG-052, TASK-20261122-004)
+
+- **New `catchup` worker lane, in the default lanes.**
+  - Recovers finished regular-season games from weeks that started and ended while nothing ran.
+  - Reads ESPN's scoreboard, the NFL API's full record (from the first NFL-lane week on) and ESPN's summary, plus ESPN's plays where no NFL record exists.
+  - Waits while a slate is active and takes one week per step.
+  - Appends private receipts with each game's kickoff and read time, and the sources behind at start, for ADR-007 A1/A3.
+- **New `arbit-worker catchup [--dry-run] [--from-period N] [--with-lanes]`.**
+- **Fixes:**
+  - `store.game_timings` follows the season's latest week, so a recovered week can't become the live schedule.
+  - R-069: the NFL lane rediscovers every 120 s while current-week games are unlinked.
+  - `availability-capture` returns after running.
+- **Tests:** 11 real-PostgreSQL tests in `tests/integration/test_catchup.py` (corrected from 12 by TASK-20261122-005); the scope and relink tests fail with each fix reverted.
+- **Docs:** [catch-up guide](../engineering/catch-up.md); R-068 records the 12-day outage, and R-069 the relink race.
+
+## 2026-11-22 — Owner decisions on availability, betting lines and the first advisor (TASK-20261122-003)
+
+- **OWN-066:** [ADR-007](../architecture/decisions/007-model-availability.md) is accepted with owner amendments A1–A4.
+  - A late fetch after a capture gap counts from the source's own timestamp or the family rule, never before the gap's start, with its basis labeled.
+  - Timing replaces exclusion.
+  - Gaps come from Arbit's own read records.
+  - Values sources no longer serve stay unknown.
+- **OWN-067:** Q-014 betting lines are approved only if they help. A research note, point-in-time capture and a slice 4 ablation come first.
+- **OWN-068:** Lineup sit/start is the first advisor, after M3 slice 6. Projections carry contribution decompositions.
+- **Added and reconciled:** new Q-016 (weather forecast). R-063 now treats recorded weather as history. Q-012 is reconciled with OWN-040/041, which resolves R-067.
+- **Kept consistent:** START_HERE, the advisor charter, REPO_MAP, GOVAI-013, the Model rule, the arbit-model instructions and the `brief` text. No Model code or field catalog changed.
+
+## 2026-11-22 — Runtime validation repaired (TASK-20261122-001)
+
+- `ec5682a` failed Runtime validation because Ruff found 7 errors in the new governance tests: six `a; b` statements and an unsorted import block. Lint stops the job before the database suite runs.
+- Split the statements, sorted the imports and formatted the file. Assertions are unchanged.
+- Repo-wide `ruff check .` and `ruff format --check .` now pass, and so do the governance tests, `doctor` and the foundation validator.
+
 ## 2026-11-22 — Context governance package prepared (not integrated)
 
 - Audited source documentation/Model interfaces and identified hardcoded handoff staleness, missing machine-traceable task/validation gates, proposed model availability and a possible historical source-policy wording conflict.

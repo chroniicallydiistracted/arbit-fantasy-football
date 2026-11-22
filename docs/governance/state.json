@@ -2,10 +2,10 @@
   "version": 1,
   "project": "arbit-fantasy-football",
   "active_task": null,
-  "latest_handoff": "docs/project/handoffs/2026-11-22-task-20261122-901-governance-handoff.md",
+  "latest_handoff": "docs/project/handoffs/2026-11-22-task-20261122-002-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
-  "notes": "Initial governance packaging; source snapshot, not deployed changes.",
-  "project_next_action": "Verify whether the Nov 22 M3 integration PR database-backed CI passed, independently check runtime activation, and obtain owner acceptance of proposed ADR-007 before any model backtest.",
-  "project_next_source": "docs/project/handoffs/2026-11-22-m3-integration.md",
+  "notes": "2026-11-22: governance in use; tasks 001-006 on claude/catch-up-and-decisions. Runtime state verified separately; see status.",
+  "project_next_action": "Merge the PR for branch claude/catch-up-and-decisions (all task records closed), fast-forward main and restart arbit-worker (no migration) so the catchup lane, R-069 relink and schedule-scope fixes run; then start M3 slice 3 under a model-class task: gap-aware ADR-007 reader with labeled bases, features including defense against the position (OWN-068), catalog re-review (A2), and the Q-014 research note (OWN-067).",
+  "project_next_source": "docs/project/handoffs/2026-11-22-task-20261122-002-governance-handoff.md",
   "as_of": "2026-11-22"
 }

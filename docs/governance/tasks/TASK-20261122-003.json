@@ -1,0 +1,318 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-003",
+  "title": "Record owner decisions OWN-066 to OWN-068: ADR-007 accepted with amendments, Q-014 conditionally approved, Sit/Start first",
+  "objective": "Every authority document, rule and restart digest states the accepted availability policy with the owner's timing amendments, the evidence-gated betting-line decision and Lineup sit/start as the first advisor, with Q-012/R-067 reconciled and weather questions recorded",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "governance",
+  "requirements": [
+    "GOVAI-002",
+    "GOVAI-003",
+    "GOVAI-013",
+    "GOVAI-014",
+    "GOVAI-017",
+    "MD-004",
+    "LN-003"
+  ],
+  "scope_files": [
+    "docs/project/decision-register.md",
+    "docs/architecture/decisions/007-model-availability.md",
+    "docs/architecture/decisions/README.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/project/roadmap.md",
+    "docs/project/known-issues.md",
+    "docs/governance/START_HERE.md",
+    "docs/governance/FANTASY_ADVISOR_CHARTER.md",
+    "docs/governance/REPO_MAP.md",
+    "docs/governance/requirements.json",
+    ".claude/rules/model-integrity.md",
+    "libs/arbit-model/AGENTS.md",
+    "scripts/governance.py",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-22T23:14:02Z",
+  "updated_at": "2026-11-22T23:16:40Z",
+  "baseline": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+  "next_action": "Build the catch-up (TASK-20261122-004); then M3 slice 3 under a model-class task: gap-aware ADR-007 reader with labeled bases, features including defense against the position, catalog re-review, and the Q-014 research note.",
+  "sections": {
+    "review": {
+      "summary": "Owner answers in chat 2026-11-22: (1) ADR-007 approved with caveats: retroactively fetched data that was available at the time still applies; preserve reliable timestamps; define when data applies and how it refreshes rather than barring it. (2) Q-014 approved for integration only if it truly helps, after understanding how lines are set and measuring accuracy. (3) Agreed Lineup sit/start first; projections must explain why (player performance, position vs opposing defense, weather, injuries, depth charts, league scoring). Found ADR-007 called proposed in 9 places (ADR index, START_HERE, charter, REPO_MAP, GOVAI-013, model-integrity rule, arbit-model AGENTS, governance brief text, status), Q-012's 'Nothing fetches from NFL's API' superseded by OWN-040/041 (R-067), and R-063 treating weather as never a pre-game input.",
+      "files": [
+        "docs/architecture/decisions/007-model-availability.md",
+        "docs/project/decision-register.md",
+        "docs/project/known-issues.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/research/live-play-detail-2026-11-03.md",
+        "libs/arbit-model/src/arbit_model/fields.py"
+      ]
+    },
+    "plan": {
+      "summary": "Add OWN-066..068 and Q-016 (weather forecast) to the register; mark Q-005 resolved, Q-012 superseded, Q-014 conditionally approved; set ADR-007 Accepted with an Owner amendments section (A1 late fetch counts from source availability: max(source timestamp or family rule, gap start); A2 timing not exclusion; A3 gaps from Arbit's own read records; A4 what stays unknown); update the ADR index, plan (sequencing, Q-014 study, explanation contributions, catalog re-review), roadmap M4, R-063/R-067, governance docs/rules/brief. No Model code or catalog change in this task.",
+      "files": [
+        "docs/project/decision-register.md",
+        "docs/architecture/decisions/007-model-availability.md",
+        "docs/architecture/decisions/README.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/roadmap.md",
+        "docs/project/known-issues.md",
+        "docs/governance/START_HERE.md",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md",
+        "docs/governance/REPO_MAP.md",
+        "docs/governance/requirements.json",
+        ".claude/rules/model-integrity.md",
+        "libs/arbit-model/AGENTS.md",
+        "scripts/governance.py",
+        "docs/governance/state.json"
+      ]
+    },
+    "implementation": {
+      "summary": "ADR-007 set Accepted with an Owner amendments section (A1 late fetch counts from source timestamp or family rule, never before gap start, with labeled basis; A2 timing not exclusion, catalog re-review; A3 gaps from Arbit read records; A4 what stays unknown). Decision register: OWN-066/067/068 with owner quotes, Q-005 resolved, Q-012 superseded with exact api.nfl.com routes, Q-014 conditionally approved (study, capture, ablation), new Q-016 weather forecast. ADR index, M3 plan (sequencing, contributions, defense vs position, gap-aware reader, catalog re-review, Q-014 note), roadmap M4 order, R-063 amended, R-067 resolved, START_HERE, charter, REPO_MAP, GOVAI-013, model-integrity rule, arbit-model AGENTS and the brief's critical-unresolved line updated. No Model code or field catalog changed.",
+      "files": [
+        "docs/project/decision-register.md",
+        "docs/architecture/decisions/007-model-availability.md",
+        "docs/architecture/decisions/README.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/roadmap.md",
+        "docs/project/known-issues.md",
+        "docs/governance/START_HERE.md",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md",
+        "docs/governance/REPO_MAP.md",
+        "docs/governance/requirements.json",
+        ".claude/rules/model-integrity.md",
+        "libs/arbit-model/AGENTS.md",
+        "scripts/governance.py"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0: foundation validator (links and registry), governance doctor, 14 governance unit tests. brief prints the updated critical-unresolved line. Repo-wide ruff check and format still pass (scripts/governance.py is outside Ruff's configured include). Documentation-only semantics are reviewed, not machine-proven.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Status: owner decisions block, slice 2 ADR-007 line, Q-014 line, M3 and M4 milestone rows. Changelog entry. The governance state next action is refreshed at the end of the catch-up task.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-22-task-20261122-003-governance-handoff.md",
+      "next_action": "Build the catch-up (TASK-20261122-004); then M3 slice 3 under a model-class task: gap-aware ADR-007 reader with labeled bases, features including defense against the position, catalog re-review, and the Q-014 research note.",
+      "unresolved": "Q-016 awaits the owner. The field catalog's betting-lines reason text and timing-only exclusions are re-reviewed in slice 3 (plan)."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:16:06Z",
+      "exit_code": 0,
+      "duration_seconds": 0.13,
+      "stdout_stderr_sha256": "289fe0f41a4600914b5e077d19fc7a3519bd7be7d7d63a3df53dc9807720dc18",
+      "git_head": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+      "scope_sha256": {
+        "docs/project/decision-register.md": "6ccaea7da3c341c290ce465d3c62a64b1aef9d57ae508c54b236781ddef82a44",
+        "docs/architecture/decisions/007-model-availability.md": "1a261647ae8d375aa2b3901d5074bf2afe3198765ebd62788bd4f751b4280c64",
+        "docs/architecture/decisions/README.md": "f98a45b30742387cf0009b638055dcd058a231304bd4d68d60656b2fdf1aa292",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "5b7e913b8961635b80a41264a43fd3f0a2a8acde0522427a43d4fa7836f10194",
+        "docs/project/roadmap.md": "dc3300052b0de75caeef44db92b3fa4b34d0c9f9cdd51a72a2b8596313b92dff",
+        "docs/project/known-issues.md": "a7a641791a2d34491a5ab36c71182380aa1a4ecd9569e937ce3c13f9451e4094",
+        "docs/governance/START_HERE.md": "274458e45305051034b22b6ba382cecf54a454a45f78a2cd62ba98edd42d92d5",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "b4524cf93bba141f311db14ff56ead56d0e551f9f9a5a23526141be1eae83e1d",
+        "docs/governance/REPO_MAP.md": "a7e95d7a3fce3d5379543beca0459e4c51a8551cb7ab8682241c01f67723bff8",
+        "docs/governance/requirements.json": "0a1c2039775cd2f1d9c2537ef984e6d650be0e4a245d0fdc34ae833571b46dbb",
+        ".claude/rules/model-integrity.md": "67b7421ec0b7c01c41cf16b52e837e663fb70a7a6c51a7a00a61b3849dd1d843",
+        "libs/arbit-model/AGENTS.md": "5a6e1334ca494f215042f58edc343812cf3f7f3d3147f060ea2a36feb2612367",
+        "scripts/governance.py": "893ab2c89993523827f18ef5686e9b2818f7215f09b7198c789a11b3286dbba8",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "f9a46bcd4b35b97cd381ca67855afe866b2c588b473bc20d8e19419df1088aea",
+        "docs/project/changelog.md": "4e0297755dd642eda27699bda44a090695516a0c07b914c7071eccd8adc485bd"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-22T23:16:06Z",
+      "exit_code": 0,
+      "duration_seconds": 0.037,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+      "scope_sha256": {
+        "docs/project/decision-register.md": "6ccaea7da3c341c290ce465d3c62a64b1aef9d57ae508c54b236781ddef82a44",
+        "docs/architecture/decisions/007-model-availability.md": "1a261647ae8d375aa2b3901d5074bf2afe3198765ebd62788bd4f751b4280c64",
+        "docs/architecture/decisions/README.md": "f98a45b30742387cf0009b638055dcd058a231304bd4d68d60656b2fdf1aa292",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "5b7e913b8961635b80a41264a43fd3f0a2a8acde0522427a43d4fa7836f10194",
+        "docs/project/roadmap.md": "dc3300052b0de75caeef44db92b3fa4b34d0c9f9cdd51a72a2b8596313b92dff",
+        "docs/project/known-issues.md": "a7a641791a2d34491a5ab36c71182380aa1a4ecd9569e937ce3c13f9451e4094",
+        "docs/governance/START_HERE.md": "274458e45305051034b22b6ba382cecf54a454a45f78a2cd62ba98edd42d92d5",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "b4524cf93bba141f311db14ff56ead56d0e551f9f9a5a23526141be1eae83e1d",
+        "docs/governance/REPO_MAP.md": "a7e95d7a3fce3d5379543beca0459e4c51a8551cb7ab8682241c01f67723bff8",
+        "docs/governance/requirements.json": "0a1c2039775cd2f1d9c2537ef984e6d650be0e4a245d0fdc34ae833571b46dbb",
+        ".claude/rules/model-integrity.md": "67b7421ec0b7c01c41cf16b52e837e663fb70a7a6c51a7a00a61b3849dd1d843",
+        "libs/arbit-model/AGENTS.md": "5a6e1334ca494f215042f58edc343812cf3f7f3d3147f060ea2a36feb2612367",
+        "scripts/governance.py": "893ab2c89993523827f18ef5686e9b2818f7215f09b7198c789a11b3286dbba8",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "f9a46bcd4b35b97cd381ca67855afe866b2c588b473bc20d8e19419df1088aea",
+        "docs/project/changelog.md": "4e0297755dd642eda27699bda44a090695516a0c07b914c7071eccd8adc485bd"
+      }
+    },
+    {
+      "name": "governance-tests",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/governance",
+        "-p",
+        "test_*.py"
+      ],
+      "at": "2026-11-22T23:16:06Z",
+      "exit_code": 0,
+      "duration_seconds": 0.145,
+      "stdout_stderr_sha256": "1407e9ef1b460d1e5c2992a642f0e8b691d103ea81d0f8dcc706eee2de39855f",
+      "git_head": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+      "scope_sha256": {
+        "docs/project/decision-register.md": "6ccaea7da3c341c290ce465d3c62a64b1aef9d57ae508c54b236781ddef82a44",
+        "docs/architecture/decisions/007-model-availability.md": "1a261647ae8d375aa2b3901d5074bf2afe3198765ebd62788bd4f751b4280c64",
+        "docs/architecture/decisions/README.md": "f98a45b30742387cf0009b638055dcd058a231304bd4d68d60656b2fdf1aa292",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "5b7e913b8961635b80a41264a43fd3f0a2a8acde0522427a43d4fa7836f10194",
+        "docs/project/roadmap.md": "dc3300052b0de75caeef44db92b3fa4b34d0c9f9cdd51a72a2b8596313b92dff",
+        "docs/project/known-issues.md": "a7a641791a2d34491a5ab36c71182380aa1a4ecd9569e937ce3c13f9451e4094",
+        "docs/governance/START_HERE.md": "274458e45305051034b22b6ba382cecf54a454a45f78a2cd62ba98edd42d92d5",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "b4524cf93bba141f311db14ff56ead56d0e551f9f9a5a23526141be1eae83e1d",
+        "docs/governance/REPO_MAP.md": "a7e95d7a3fce3d5379543beca0459e4c51a8551cb7ab8682241c01f67723bff8",
+        "docs/governance/requirements.json": "0a1c2039775cd2f1d9c2537ef984e6d650be0e4a245d0fdc34ae833571b46dbb",
+        ".claude/rules/model-integrity.md": "67b7421ec0b7c01c41cf16b52e837e663fb70a7a6c51a7a00a61b3849dd1d843",
+        "libs/arbit-model/AGENTS.md": "5a6e1334ca494f215042f58edc343812cf3f7f3d3147f060ea2a36feb2612367",
+        "scripts/governance.py": "893ab2c89993523827f18ef5686e9b2818f7215f09b7198c789a11b3286dbba8",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "f9a46bcd4b35b97cd381ca67855afe866b2c588b473bc20d8e19419df1088aea",
+        "docs/project/changelog.md": "4e0297755dd642eda27699bda44a090695516a0c07b914c7071eccd8adc485bd"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:16:39Z",
+      "exit_code": 0,
+      "duration_seconds": 0.119,
+      "stdout_stderr_sha256": "289fe0f41a4600914b5e077d19fc7a3519bd7be7d7d63a3df53dc9807720dc18",
+      "git_head": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+      "scope_sha256": {
+        "docs/project/decision-register.md": "6ccaea7da3c341c290ce465d3c62a64b1aef9d57ae508c54b236781ddef82a44",
+        "docs/architecture/decisions/007-model-availability.md": "1a261647ae8d375aa2b3901d5074bf2afe3198765ebd62788bd4f751b4280c64",
+        "docs/architecture/decisions/README.md": "f98a45b30742387cf0009b638055dcd058a231304bd4d68d60656b2fdf1aa292",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "5b7e913b8961635b80a41264a43fd3f0a2a8acde0522427a43d4fa7836f10194",
+        "docs/project/roadmap.md": "dc3300052b0de75caeef44db92b3fa4b34d0c9f9cdd51a72a2b8596313b92dff",
+        "docs/project/known-issues.md": "a7a641791a2d34491a5ab36c71182380aa1a4ecd9569e937ce3c13f9451e4094",
+        "docs/governance/START_HERE.md": "274458e45305051034b22b6ba382cecf54a454a45f78a2cd62ba98edd42d92d5",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "b4524cf93bba141f311db14ff56ead56d0e551f9f9a5a23526141be1eae83e1d",
+        "docs/governance/REPO_MAP.md": "a7e95d7a3fce3d5379543beca0459e4c51a8551cb7ab8682241c01f67723bff8",
+        "docs/governance/requirements.json": "0a1c2039775cd2f1d9c2537ef984e6d650be0e4a245d0fdc34ae833571b46dbb",
+        ".claude/rules/model-integrity.md": "67b7421ec0b7c01c41cf16b52e837e663fb70a7a6c51a7a00a61b3849dd1d843",
+        "libs/arbit-model/AGENTS.md": "5a6e1334ca494f215042f58edc343812cf3f7f3d3147f060ea2a36feb2612367",
+        "scripts/governance.py": "893ab2c89993523827f18ef5686e9b2818f7215f09b7198c789a11b3286dbba8",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "d345b7a0aba2ed091aab3339e7d055b695a10bfd4f94a24ab361ac7e383d6113",
+        "docs/project/changelog.md": "cd8326f2eca75326d837825a0c3a7fa4135cbbb71ae258c19651d7a5ee1be6c0"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-22T23:16:39Z",
+      "exit_code": 0,
+      "duration_seconds": 0.042,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+      "scope_sha256": {
+        "docs/project/decision-register.md": "6ccaea7da3c341c290ce465d3c62a64b1aef9d57ae508c54b236781ddef82a44",
+        "docs/architecture/decisions/007-model-availability.md": "1a261647ae8d375aa2b3901d5074bf2afe3198765ebd62788bd4f751b4280c64",
+        "docs/architecture/decisions/README.md": "f98a45b30742387cf0009b638055dcd058a231304bd4d68d60656b2fdf1aa292",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "5b7e913b8961635b80a41264a43fd3f0a2a8acde0522427a43d4fa7836f10194",
+        "docs/project/roadmap.md": "dc3300052b0de75caeef44db92b3fa4b34d0c9f9cdd51a72a2b8596313b92dff",
+        "docs/project/known-issues.md": "a7a641791a2d34491a5ab36c71182380aa1a4ecd9569e937ce3c13f9451e4094",
+        "docs/governance/START_HERE.md": "274458e45305051034b22b6ba382cecf54a454a45f78a2cd62ba98edd42d92d5",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "b4524cf93bba141f311db14ff56ead56d0e551f9f9a5a23526141be1eae83e1d",
+        "docs/governance/REPO_MAP.md": "a7e95d7a3fce3d5379543beca0459e4c51a8551cb7ab8682241c01f67723bff8",
+        "docs/governance/requirements.json": "0a1c2039775cd2f1d9c2537ef984e6d650be0e4a245d0fdc34ae833571b46dbb",
+        ".claude/rules/model-integrity.md": "67b7421ec0b7c01c41cf16b52e837e663fb70a7a6c51a7a00a61b3849dd1d843",
+        "libs/arbit-model/AGENTS.md": "5a6e1334ca494f215042f58edc343812cf3f7f3d3147f060ea2a36feb2612367",
+        "scripts/governance.py": "893ab2c89993523827f18ef5686e9b2818f7215f09b7198c789a11b3286dbba8",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "d345b7a0aba2ed091aab3339e7d055b695a10bfd4f94a24ab361ac7e383d6113",
+        "docs/project/changelog.md": "cd8326f2eca75326d837825a0c3a7fa4135cbbb71ae258c19651d7a5ee1be6c0"
+      }
+    },
+    {
+      "name": "governance-tests",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/governance",
+        "-p",
+        "test_*.py"
+      ],
+      "at": "2026-11-22T23:16:40Z",
+      "exit_code": 0,
+      "duration_seconds": 0.156,
+      "stdout_stderr_sha256": "ae753e24191322573e35495fbdeec56f9dbbb946813542c9e3a3df758d2be35e",
+      "git_head": "92e3dc4b85851d2de2c9fa9cb28268e2866d327f",
+      "scope_sha256": {
+        "docs/project/decision-register.md": "6ccaea7da3c341c290ce465d3c62a64b1aef9d57ae508c54b236781ddef82a44",
+        "docs/architecture/decisions/007-model-availability.md": "1a261647ae8d375aa2b3901d5074bf2afe3198765ebd62788bd4f751b4280c64",
+        "docs/architecture/decisions/README.md": "f98a45b30742387cf0009b638055dcd058a231304bd4d68d60656b2fdf1aa292",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "5b7e913b8961635b80a41264a43fd3f0a2a8acde0522427a43d4fa7836f10194",
+        "docs/project/roadmap.md": "dc3300052b0de75caeef44db92b3fa4b34d0c9f9cdd51a72a2b8596313b92dff",
+        "docs/project/known-issues.md": "a7a641791a2d34491a5ab36c71182380aa1a4ecd9569e937ce3c13f9451e4094",
+        "docs/governance/START_HERE.md": "274458e45305051034b22b6ba382cecf54a454a45f78a2cd62ba98edd42d92d5",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "b4524cf93bba141f311db14ff56ead56d0e551f9f9a5a23526141be1eae83e1d",
+        "docs/governance/REPO_MAP.md": "a7e95d7a3fce3d5379543beca0459e4c51a8551cb7ab8682241c01f67723bff8",
+        "docs/governance/requirements.json": "0a1c2039775cd2f1d9c2537ef984e6d650be0e4a245d0fdc34ae833571b46dbb",
+        ".claude/rules/model-integrity.md": "67b7421ec0b7c01c41cf16b52e837e663fb70a7a6c51a7a00a61b3849dd1d843",
+        "libs/arbit-model/AGENTS.md": "5a6e1334ca494f215042f58edc343812cf3f7f3d3147f060ea2a36feb2612367",
+        "scripts/governance.py": "893ab2c89993523827f18ef5686e9b2818f7215f09b7198c789a11b3286dbba8",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "d345b7a0aba2ed091aab3339e7d055b695a10bfd4f94a24ab361ac7e383d6113",
+        "docs/project/changelog.md": "cd8326f2eca75326d837825a0c3a7fa4135cbbb71ae258c19651d7a5ee1be6c0"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-22T23:16:39Z",
+      "kind": "observation",
+      "note": "Owner decisions recorded verbatim with chat source (2026-11-22): OWN-066 ADR-007 with amendments, OWN-067 betting lines evidence-gated, OWN-068 Lineup sit/start first with explanation requirement.",
+      "evidence": "Owner message in the 2026-11-22 Claude session; docs/project/decision-register.md"
+    },
+    {
+      "at": "2026-11-22T23:16:39Z",
+      "kind": "question",
+      "note": "Q-016: weather forecast for the upcoming game (Model exception vs advisor-layer context). Recommendation (b) first; measure (a) on recorded 2016-2025 weather.",
+      "evidence": "docs/project/decision-register.md Q-016"
+    }
+  ],
+  "closed_at": "2026-11-22T23:16:40Z"
+}

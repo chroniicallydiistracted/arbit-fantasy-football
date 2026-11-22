@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-001",
+  "title": "Repair Runtime validation on main (Ruff in governance tests)",
+  "objective": "Runtime validation passes on main again: make lint reports no errors, so the full database-backed suite runs for every commit",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "governance",
+  "requirements": [
+    "GOVAI-006",
+    "GOVAI-016",
+    "GOVAI-020"
+  ],
+  "scope_files": [
+    "tests/governance/test_governance.py",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-22T23:10:46Z",
+  "updated_at": "2026-11-22T23:11:34Z",
+  "baseline": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+  "next_action": "Merge branch claude/catch-up-and-decisions through its PR so Runtime validation on main is green; the PR job runs the full PostgreSQL suite.",
+  "sections": {
+    "review": {
+      "summary": "Observed GitHub Actions run 45078851961 (Runtime validation, main, ec5682a) failed in make lint: Ruff reported 7 errors, all in tests/governance/test_governance.py (I001 unsorted imports; six E702 semicolon statements at lines 86, 92, 118). Lint fails before the PostgreSQL suite, so ec5682a's database tests never ran. Foundation and Context governance workflows passed. mypy packages exclude tests, so only Ruff is affected.",
+      "files": [
+        "tests/governance/test_governance.py",
+        "Makefile",
+        ".github/workflows/context-governance.yml"
+      ]
+    },
+    "plan": {
+      "summary": "Split the three 'a; b; c' statements into separate lines by hand, sort imports with ruff --fix, then ruff format only that file. No behavior change to assertions. Acceptance: uv run ruff check . and ruff format --check . pass repo-wide; governance unit tests still pass; foundation validator and doctor pass. Rollback: revert the single test file.",
+      "files": [
+        "tests/governance/test_governance.py"
+      ]
+    },
+    "implementation": {
+      "summary": "Rewrote three test lines that set a task phase as separate statements; ruff sorted the import block (I001) and reformatted the file to the repository style. Test logic and assertions unchanged. Locally: ruff check . -> All checks passed; ruff format --check . -> 216 files already formatted.",
+      "files": [
+        "tests/governance/test_governance.py"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0 for foundation, governance doctor and governance-tests (14 unittest cases), plus extra Ruff checks (ruff check . and ruff format --check .) run through run-check. The full runtime suite is exercised by the PR's Runtime validation job; this change touches only a stdlib unittest file.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Status now records that the governance system is on main (ec5682a), that its Runtime validation failed at Ruff, and that this task fixes it on branch claude/catch-up-and-decisions; it also corrects the M3 integration line to the observed merge and green CI of PR #1. Changelog entry added.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-22-task-20261122-001-governance-handoff.md",
+      "next_action": "Merge branch claude/catch-up-and-decisions through its PR so Runtime validation on main is green; the PR job runs the full PostgreSQL suite.",
+      "unresolved": "None for this task. The change only becomes effective on main at merge."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:11:07Z",
+      "exit_code": 0,
+      "duration_seconds": 0.121,
+      "stdout_stderr_sha256": "dbb261f011890dc2ff36373e6788fac405b01a40c795084ba8439868b011e988",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "189c853b1cd22cec61e1ec1a55fc2c2d653622cd61d7e8a7c5357c875a17a89a",
+        "docs/project/changelog.md": "44c2eb7dcc3c601f22209366d8d61a9659108d3791d0d7dddf8238e12b2dafca"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-22T23:11:07Z",
+      "exit_code": 0,
+      "duration_seconds": 0.034,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "189c853b1cd22cec61e1ec1a55fc2c2d653622cd61d7e8a7c5357c875a17a89a",
+        "docs/project/changelog.md": "44c2eb7dcc3c601f22209366d8d61a9659108d3791d0d7dddf8238e12b2dafca"
+      }
+    },
+    {
+      "name": "governance-tests",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/governance",
+        "-p",
+        "test_*.py"
+      ],
+      "at": "2026-11-22T23:11:08Z",
+      "exit_code": 0,
+      "duration_seconds": 0.167,
+      "stdout_stderr_sha256": "9af2f7b2df6b2380e882ade7ae385a4560a2d5e701e49391af2161e1d7d86d4e",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "189c853b1cd22cec61e1ec1a55fc2c2d653622cd61d7e8a7c5357c875a17a89a",
+        "docs/project/changelog.md": "44c2eb7dcc3c601f22209366d8d61a9659108d3791d0d7dddf8238e12b2dafca"
+      }
+    },
+    {
+      "name": "ruff-lint",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "at": "2026-11-22T23:11:12Z",
+      "exit_code": 0,
+      "duration_seconds": 0.033,
+      "stdout_stderr_sha256": "e83204db783718300b1d1f1af1f60eb1a350f4140d5c653994fb67bc65273b1d",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "189c853b1cd22cec61e1ec1a55fc2c2d653622cd61d7e8a7c5357c875a17a89a",
+        "docs/project/changelog.md": "44c2eb7dcc3c601f22209366d8d61a9659108d3791d0d7dddf8238e12b2dafca"
+      }
+    },
+    {
+      "name": "ruff-format",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "at": "2026-11-22T23:11:12Z",
+      "exit_code": 0,
+      "duration_seconds": 0.034,
+      "stdout_stderr_sha256": "4375615fb040c02cbaac794dcdaedc791a0e7eb2419fa730d2a8ade23f7a29ff",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "189c853b1cd22cec61e1ec1a55fc2c2d653622cd61d7e8a7c5357c875a17a89a",
+        "docs/project/changelog.md": "44c2eb7dcc3c601f22209366d8d61a9659108d3791d0d7dddf8238e12b2dafca"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:11:34Z",
+      "exit_code": 0,
+      "duration_seconds": 0.121,
+      "stdout_stderr_sha256": "dbb261f011890dc2ff36373e6788fac405b01a40c795084ba8439868b011e988",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "f9a46bcd4b35b97cd381ca67855afe866b2c588b473bc20d8e19419df1088aea",
+        "docs/project/changelog.md": "4e0297755dd642eda27699bda44a090695516a0c07b914c7071eccd8adc485bd"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-22T23:11:34Z",
+      "exit_code": 0,
+      "duration_seconds": 0.039,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "f9a46bcd4b35b97cd381ca67855afe866b2c588b473bc20d8e19419df1088aea",
+        "docs/project/changelog.md": "4e0297755dd642eda27699bda44a090695516a0c07b914c7071eccd8adc485bd"
+      }
+    },
+    {
+      "name": "governance-tests",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/governance",
+        "-p",
+        "test_*.py"
+      ],
+      "at": "2026-11-22T23:11:34Z",
+      "exit_code": 0,
+      "duration_seconds": 0.142,
+      "stdout_stderr_sha256": "697ff91b51a3ba6c3a7706ad0b784e8260316c5d8e651dfda708f041799198b5",
+      "git_head": "ec5682ad230ab0370a9ca3d920ec3a5f1dfaffa6",
+      "scope_sha256": {
+        "tests/governance/test_governance.py": "8e36a0b84afed05edace4d2f1253a73c601eb50e6039440930e4868fdb9e4653",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "f9a46bcd4b35b97cd381ca67855afe866b2c588b473bc20d8e19419df1088aea",
+        "docs/project/changelog.md": "4e0297755dd642eda27699bda44a090695516a0c07b914c7071eccd8adc485bd"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-22T23:11:34Z",
+      "kind": "observation",
+      "note": "PR #1 (claude/m3-model) Runtime validation passed on the PR (run 45069581766) and on the merge commit (run 45069940715); ec5682a Runtime validation failed at make lint (run 45078851961).",
+      "evidence": "gh run list 2026-11-22"
+    }
+  ],
+  "closed_at": "2026-11-22T23:11:34Z"
+}

@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-006",
+  "title": "Correct TASK-005's playoff test so it exercises the postseason live week",
+  "objective": "The regular-season cap is proven by a test that fails without it: a January state whose live week is postseason (season type 3)",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "live",
+  "requirements": [
+    "DATA-008",
+    "GOVAI-017"
+  ],
+  "scope_files": [
+    "tests/integration/test_catchup.py",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-22T23:32:58Z",
+  "updated_at": "2026-11-22T23:34:59Z",
+  "baseline": "9cc1de8955a1a5b14f06d5da1d53d32931573e88",
+  "next_action": "Finish TASK-20261122-002 (worker restart between games, real catch-up), then push the branch and open the PR.",
+  "sections": {
+    "review": {
+      "summary": "Mutation check after TASK-005 closed: its test passes with the cap removed. outstanding_games skips (2, period) >= current; with current (2, 11) period 19 is already skipped. In January current is (3, w), so (2, 19) < (3, 1) and only the cap excludes it.",
+      "files": [
+        "tests/integration/test_catchup.py",
+        "services/worker/src/arbit_worker/catchup.py"
+      ]
+    },
+    "plan": {
+      "summary": "Seed a postseason live week (nfl_game season_type 3, week 1, final) in the playoff test; verify RED with the cap removed and GREEN with it; record both runs.",
+      "files": [
+        "tests/integration/test_catchup.py"
+      ]
+    },
+    "implementation": {
+      "summary": "test_playoff_periods_are_left_to_the_live_lanes now seeds a postseason live week (nfl_game season_type 3, week 1) and asserts current_week == (3, 1) and the plan is [10, 11] (week 11 is outstanding once it is no longer live). Changelog and status updated.",
+      "files": [
+        "tests/integration/test_catchup.py"
+      ]
+    },
+    "validation": {
+      "summary": "Recorded check mutation-cap-removed: with the scoring_period <= 18 filter deleted, the playoff test fails (assert [10, 11, 19] == [10, 11]); the file is restored afterwards (git diff empty). With the cap: catch-up tests 12 passed; foundation, live-replay, runtime-check (full suite) and web-check exit 0.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Changelog entry describing the false TASK-005 claim and its correction; status scope line cites this task. Written before validation.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-22-task-20261122-006-governance-handoff.md",
+      "next_action": "Finish TASK-20261122-002 (worker restart between games, real catch-up), then push the branch and open the PR.",
+      "unresolved": "None for this correction."
+    }
+  },
+  "checks": [
+    {
+      "name": "mutation-cap-removed",
+      "argv": [
+        "bash",
+        "-c",
+        "cp services/worker/src/arbit_worker/catchup.py /tmp/claude-1000/-home-andre-arbit-fantasy-football/2ce75ffa-5c13-4be1-b560-0af3d67cef32/scratchpad/c.bak && sed -i '/scoring_period <= REGULAR_SEASON_WEEKS,/d' services/worker/src/arbit_worker/catchup.py && ! uv run pytest tests/integration/test_catchup.py -q -k playoff; s=$?; cp /tmp/claude-1000/-home-andre-arbit-fantasy-football/2ce75ffa-5c13-4be1-b560-0af3d67cef32/scratchpad/c.bak services/worker/src/arbit_worker/catchup.py; exit $s"
+      ],
+      "at": "2026-11-22T23:33:53Z",
+      "exit_code": 0,
+      "duration_seconds": 0.864,
+      "stdout_stderr_sha256": "490ada6e8ddcf89778edea643d571a3d89dbb2e6d3b5ef3d91dbfaa66dc04bd2",
+      "git_head": "9cc1de8955a1a5b14f06d5da1d53d32931573e88",
+      "scope_sha256": {
+        "tests/integration/test_catchup.py": "cf94f510b25326109a9e44f7f761fed015b1bcc4a641bfd7a8835045bc09f967",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8ddcf6fea7915dee5f4fe7e14db8081a3d1dca7832a33ac6b62e8becbc5611ba",
+        "docs/project/changelog.md": "fa1c39920fc5fa8310cabb923c9fbb4b790db0a4c508050c82ed07b1c07b56f9"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-22T23:33:53Z",
+      "exit_code": 0,
+      "duration_seconds": 0.233,
+      "stdout_stderr_sha256": "5b10b74b8f67d46869520584a06550988e05e9988735d0a4c0d46b6f03b52a83",
+      "git_head": "9cc1de8955a1a5b14f06d5da1d53d32931573e88",
+      "scope_sha256": {
+        "tests/integration/test_catchup.py": "cf94f510b25326109a9e44f7f761fed015b1bcc4a641bfd7a8835045bc09f967",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8ddcf6fea7915dee5f4fe7e14db8081a3d1dca7832a33ac6b62e8becbc5611ba",
+        "docs/project/changelog.md": "fa1c39920fc5fa8310cabb923c9fbb4b790db0a4c508050c82ed07b1c07b56f9"
+      }
+    },
+    {
+      "name": "live-replay",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_live_actions.py",
+        "libs/arbit-data/tests/test_live_motion.py"
+      ],
+      "at": "2026-11-22T23:33:54Z",
+      "exit_code": 0,
+      "duration_seconds": 0.628,
+      "stdout_stderr_sha256": "0613449f232d012f5e999b75ef0b077952a166b9fd110c1304cf0ad1b5862827",
+      "git_head": "9cc1de8955a1a5b14f06d5da1d53d32931573e88",
+      "scope_sha256": {
+        "tests/integration/test_catchup.py": "cf94f510b25326109a9e44f7f761fed015b1bcc4a641bfd7a8835045bc09f967",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8ddcf6fea7915dee5f4fe7e14db8081a3d1dca7832a33ac6b62e8becbc5611ba",
+        "docs/project/changelog.md": "fa1c39920fc5fa8310cabb923c9fbb4b790db0a4c508050c82ed07b1c07b56f9"
+      }
+    },
+    {
+      "name": "runtime-check",
+      "argv": [
+        "make",
+        "runtime-check"
+      ],
+      "at": "2026-11-22T23:34:48Z",
+      "exit_code": 0,
+      "duration_seconds": 54.021,
+      "stdout_stderr_sha256": "76f6f789c0a8a5f54c0f0660de5a9ea624271435791cf2d2e1ac1d870e6ca096",
+      "git_head": "9cc1de8955a1a5b14f06d5da1d53d32931573e88",
+      "scope_sha256": {
+        "tests/integration/test_catchup.py": "cf94f510b25326109a9e44f7f761fed015b1bcc4a641bfd7a8835045bc09f967",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8ddcf6fea7915dee5f4fe7e14db8081a3d1dca7832a33ac6b62e8becbc5611ba",
+        "docs/project/changelog.md": "fa1c39920fc5fa8310cabb923c9fbb4b790db0a4c508050c82ed07b1c07b56f9"
+      }
+    },
+    {
+      "name": "web-check",
+      "argv": [
+        "make",
+        "web-check"
+      ],
+      "at": "2026-11-22T23:34:53Z",
+      "exit_code": 0,
+      "duration_seconds": 4.857,
+      "stdout_stderr_sha256": "a0385c3d2a0315a1c4ca48b8e3650f340cd0f562cad2e8dad61d6ea50573e041",
+      "git_head": "9cc1de8955a1a5b14f06d5da1d53d32931573e88",
+      "scope_sha256": {
+        "tests/integration/test_catchup.py": "cf94f510b25326109a9e44f7f761fed015b1bcc4a641bfd7a8835045bc09f967",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "8ddcf6fea7915dee5f4fe7e14db8081a3d1dca7832a33ac6b62e8becbc5611ba",
+        "docs/project/changelog.md": "fa1c39920fc5fa8310cabb923c9fbb4b790db0a4c508050c82ed07b1c07b56f9"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-22T23:32:58Z",
+      "kind": "correction",
+      "note": "TASK-20261122-005's validation said the new test fails without the cap; a mutation run shows it passes without it, because the seeded live week (2, 11) already excludes period 19 through the live-week filter. The real case needs a postseason live week (3, w). TASK-005's code change is correct; its test did not prove it.",
+      "evidence": "Removing the scoring_period <= REGULAR_SEASON_WEEKS filter: test_playoff_periods_are_left_to_the_live_lanes still passed (1 passed)"
+    }
+  ],
+  "closed_at": "2026-11-22T23:34:59Z"
+}

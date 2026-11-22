@@ -123,6 +123,30 @@ class LiveFeed:
             self.uow, event_id, summary["boxscore"], self.clock(), summary["detail"]
         )
 
+    # Catch-up (ENG-052): weeks that started and ended while nothing was reading.
+
+    def read_week_board(self, week: int, season_type: int = 2) -> store.BoardChange:
+        """A past week's scoreboard. Its games join the store; the live schedule keeps following
+        the season's latest week (`store.game_timings`)."""
+        response = self._fetch(
+            build_source_request(
+                "espn.scoreboard", season=self.season, week=week, season_type=season_type
+            )
+        )
+        board = normalize_scoreboard(response.payload, self.season, week, season_type)
+        return store.publish_scoreboard(self.uow, board, self.clock())
+
+    def recover_game(self, event_id: str, season_type: int = 2) -> bool:
+        """A finished game's summary, and its plays unless the NFL record owns them. Its final
+        checks are then complete: a read made long after the whistle is already the final one.
+        Returns whether ESPN's plays were read."""
+        self.read_summary(event_id, season_type)
+        read_plays = not nfl_primary(self.uow, event_id, self.clock())
+        if read_plays:
+            self.read_plays(event_id)
+        store.complete_final_checks(self.uow, event_id, len(cadence.FINAL_CHECK_DELAYS))
+        return read_plays
+
     def _board_step(self, now: datetime) -> None:
         if self.board_due is not None and now < self.board_due:
             return

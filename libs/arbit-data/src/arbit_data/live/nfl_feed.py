@@ -39,7 +39,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, build_opener
 
-from sqlalchemy import and_, or_, select, update
+from sqlalchemy import and_, func, or_, select, update
 from sqlalchemy.dialects.postgresql import insert
 
 from arbit_data import freshness
@@ -58,6 +58,9 @@ SOURCE = "nfl.api.plays"
 ACTIVE_SECONDS, PREGAME_SECONDS, IDLE_SECONDS = 2.0, 30.0, 300.0
 MAX_DETAIL_WORKERS = 8
 DISCOVER_SECONDS = 6 * 3600
+# While the current week has games ESPN hasn't listed yet, such as just after a restart, when
+# discovery can run before the scoreboard does, discovery retries this often (R-069).
+RELINK_SECONDS = 120
 STALE_SECONDS = store.NFL_STALE_SECONDS
 FINAL = store.NFL_FINAL_PHASES
 FINISHED = FINAL | {"CANCELLED", "POSTPONED"}
@@ -372,6 +375,7 @@ class NflFeed:
         self.week: tuple[str, int] | None = None  # (season type, week)
         self.discovered_at: datetime | None = None
         self.summaries_due: datetime | None = None
+        self.unlinked = 0  # current-week games without an ESPN event at the last discovery
         self.ids: dict[str, str] = {}
         self.ids_at: datetime | None = None
         self.failures = 0
@@ -417,10 +421,19 @@ class NflFeed:
         if week.get("season") != self.season:
             raise SourceError("NFL_API_SEASON_MISMATCH")
         season_type, number = str(week.get("seasonType") or "REG"), int(week.get("week"))
+        games, self.unlinked = self._store_schedule(season_type, number, now)
+        self.week = (season_type, number)
+        self.discovered_at = now
+        self.log(event="discovered", week=number, games=games, unlinked=self.unlinked)
+
+    def _store_schedule(self, season_type: str, number: int, now: datetime) -> tuple[int, int]:
+        """Store one week's games, each linked to ESPN's event when ESPN lists it. Returns the
+        number of games and how many are still unlinked."""
         schedule, _ = self._get(
             "schedule",
             f"/football/v2/games/season/{self.season}/seasonType/{season_type}/week/{number}",
         )
+        unlinked = 0
         teams = self._espn_teams()
         with self.uow.engine.begin() as c:
             espn_games = c.execute(
@@ -446,6 +459,7 @@ class NflFeed:
                     str(game.get("date") or ""),
                 }:
                     event = event or by_key.get((home, away, day))
+                unlinked += event is None
                 values = {
                     "season": self.season,
                     "season_type": season_type,
@@ -461,9 +475,64 @@ class NflFeed:
                     .values(game_id=str(game["id"]), **values)
                     .on_conflict_do_update(index_elements=[nfl_api_game.c.game_id], set_=values)
                 )
-        self.week = (season_type, number)
-        self.discovered_at = now
-        self.log(event="discovered", week=number, games=len(schedule.get("games") or []))
+        return len(schedule.get("games") or []), unlinked
+
+    def recover_week(self, season_type: str, number: int, now: datetime) -> dict[str, int]:
+        """Catch-up for a week nothing read while it was played (ENG-052): link its games and read
+        each linked game's full record once. A final that passes the usual checks becomes the
+        game's play record; anything else leaves the game to ESPN. Returns counts only."""
+        games, unlinked = self._store_schedule(season_type, number, now)
+        if self.ids_at is None or now - self.ids_at > timedelta(hours=6):
+            self.ids, self.ids_at = gsis_to_espn(self.uow), now
+        with self.uow.engine.connect() as c:
+            rows = c.execute(
+                select(nfl_api_game).where(
+                    nfl_api_game.c.season == self.season,
+                    nfl_api_game.c.season_type == season_type,
+                    nfl_api_game.c.week == number,
+                    nfl_api_game.c.event_id.is_not(None),
+                    or_(
+                        nfl_api_game.c.details_phase.is_(None),
+                        nfl_api_game.c.details_phase.not_in(FINAL),
+                    ),
+                )
+            ).all()
+        failed = 0
+        for r in rows:
+            game = Watched(
+                r.game_id,
+                r.event_id,
+                r.slug,
+                r.kickoff,
+                r.phase,
+                r.summary_hash,
+                r.details_observed_at,
+                r.details_phase,
+            )
+            try:
+                self.read_game(game, reason="catchup")
+            except SourceError as error:
+                if error.code == "RATE_LIMITED":
+                    raise
+                failed += 1
+            except (ValueError, KeyError, TypeError):
+                failed += 1
+        with self.uow.engine.connect() as c:
+            finals = c.scalar(
+                select(func.count()).where(
+                    nfl_api_game.c.season == self.season,
+                    nfl_api_game.c.season_type == season_type,
+                    nfl_api_game.c.week == number,
+                    nfl_api_game.c.details_phase.in_(FINAL),
+                )
+            )
+        return {
+            "games": games,
+            "unlinked": unlinked,
+            "read": len(rows),
+            "failed": failed,
+            "finals": int(finals or 0),
+        }
 
     def _espn_teams(self) -> dict[str, str]:
         with self.uow.engine.connect() as c:
@@ -719,10 +788,14 @@ class NflFeed:
         if self.summaries_due is not None and now < self.summaries_due:
             return min(1.0, (self.summaries_due - now).total_seconds())
         try:
+            elapsed = (
+                None if self.discovered_at is None else (now - self.discovered_at).total_seconds()
+            )
             if (
                 self.week is None
-                or self.discovered_at is None
-                or (now - self.discovered_at).total_seconds() >= DISCOVER_SECONDS
+                or elapsed is None
+                or elapsed >= DISCOVER_SECONDS
+                or (self.unlinked > 0 and elapsed >= RELINK_SECONDS)
             ):
                 self.discover(now)
             started = self.clock()

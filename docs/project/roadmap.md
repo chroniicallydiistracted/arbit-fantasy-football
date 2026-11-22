@@ -67,6 +67,11 @@ Provider/asset research can proceed before feature implementation. Archive UI co
 
 **Depends on:** M2 team context and M3 player distributions/evidence.
 
+**Order (OWN-068, 2026-11-22):**
+- **Sit/start first.** It starts after M3 slice 6, ahead of M3 slices 7–9, and it is the first advisor.
+- **Explanations:** each sit/start comparison explains its projection difference through the Model's measured contributions: role and efficiency, opponent defense against the position, team environment, availability and FFA scoring. Weather is history-only until Q-016.
+- **Then waivers.**
+
 **Slices:** globally legal slot optimizer with locks/byes; individual start/sit comparisons and matchup objective; opponent/defense context; FFA availability and waiver/FAAB/deadline semantics; legal roster-specific add/drop simulation; gain/uncertainty and stale ownership handling; Front Office priority queue.
 
 **Evidence:** optimizer agrees with exhaustive small fixtures; FLEX and locks cannot double-assign; opponent objective explains assumptions/correlations; waiver gains compare actual before/after rosters; live ownership change invalidates saved advice; hand-reviewed examples show evidence beyond reused platform projections. Full recommendation methodology and failure states documented.

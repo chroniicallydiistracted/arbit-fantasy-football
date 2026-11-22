@@ -2,6 +2,8 @@ name: arbit-dev
 services:
   postgres:
     image: postgres:18-bookworm@sha256:5c4783a8cc3f0074912164f94dfa1be4e043438f0f707cf968d7af9a0d31a2c8
+    # Comes back with Docker after a Windows or Docker restart (R-029, R-068). `docker stop` still holds.
+    restart: unless-stopped
     environment:
       POSTGRES_USER: arbit_local
       POSTGRES_PASSWORD: arbit-local-dev-only

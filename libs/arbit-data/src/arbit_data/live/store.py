@@ -379,6 +379,16 @@ def mark_final_check(uow: UnitOfWork, event_id: str) -> None:
         )
 
 
+def complete_final_checks(uow: UnitOfWork, event_id: str, checks: int) -> None:
+    """A game read long after it ended needs no correction checks: its read is already final."""
+    with uow.engine.begin() as c:
+        c.execute(
+            update(nfl_game)
+            .where(nfl_game.c.event_id == event_id)
+            .values(final_checks=func.greatest(nfl_game.c.final_checks, checks))
+        )
+
+
 @dataclass(frozen=True)
 class GameTiming:
     event_id: str
@@ -392,12 +402,15 @@ class GameTiming:
 
 
 def game_timings(uow: UnitOfWork, season: int) -> list[GameTiming]:
-    """Games of the most recently observed week, which the worker schedules from."""
+    """Games of the season's latest stored week, which the worker schedules from.
+
+    The latest week, not the most recently observed one: a catch-up read of a past week stores
+    its games now, and must never become the live schedule (ENG-052)."""
     with uow.engine.connect() as c:
         scope = c.execute(
             select(nfl_game.c.season_type, nfl_game.c.week)
             .where(nfl_game.c.season == season)
-            .order_by(nfl_game.c.observed_at.desc())
+            .order_by(nfl_game.c.season_type.desc(), nfl_game.c.week.desc())
             .limit(1)
         ).first()
         if scope is None:
