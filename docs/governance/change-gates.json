@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "classes": {
+    "docs": [
+      "foundation"
+    ],
+    "governance": [
+      "foundation",
+      "governance",
+      "governance-tests"
+    ],
+    "web": [
+      "foundation",
+      "web-check"
+    ],
+    "model": [
+      "foundation",
+      "model-tests",
+      "point-in-time"
+    ],
+    "api": [
+      "foundation",
+      "runtime-check"
+    ],
+    "worker": [
+      "foundation",
+      "runtime-check"
+    ],
+    "data": [
+      "foundation",
+      "runtime-check",
+      "provenance"
+    ],
+    "live": [
+      "foundation",
+      "runtime-check",
+      "web-check",
+      "live-replay"
+    ],
+    "ops": [
+      "foundation",
+      "governance"
+    ]
+  }
+}

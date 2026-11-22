@@ -2,9 +2,26 @@
 
 Arbit is the FFA Fantasy Football Companion for ESPN league **1729878439**, season **2026**. M1a–e runtime/source/scoring/NFLverse/game-play foundations are implemented within recorded coverage. M2 member auth/API/Front Office/PWA and administrator controls are implemented; the owner verified the first real Google sign-in. A design reset and real-time sync platform (owner direction, 2026-10-31) run on the local app, and the owner accepted the design. Live (M6) went ahead of M3 by owner direction (OWN-019); on 2026-11-09 the owner started M3, the shared Model (OWN-060), with Live work parked. Semantic features/models, advisors, full Live and deployment remain future work. Hosting platform is undecided and deferred until application development finishes. Since 2026-11-08 the app runs on this PC and is served at its production origin, `https://ffa.westfam.media`, through a Cloudflare Tunnel behind Cloudflare Access (OWN-058); see the [operations guide](docs/engineering/member-application.md#public-address).
 
+## Mandatory restart / accountability protocol
+
+Every Codex/Claude session starts with `python scripts/governance.py brief` and
+`python scripts/governance.py doctor`. Read [governance start](docs/governance/START_HERE.md),
+then the active task record, current status, accepted decisions, and latest handoff.
+Do not treat a proposed ADR, outdated handoff, fixture, or chat statement as accepted
+implementation. For meaningful changes, maintain a task record with a traceable
+Review → Plan → Implement → Validate → Document → Handoff lifecycle; `finish`
+provides an executable closeout gate. Run the change-class-specific checks and
+record real exit codes. Never claim a test ran, a provider is current, a deployment
+occurred, or an owner approved a choice without observed evidence.
+
+**Separate agents:** engineering agents maintain Arbit; the future fantasy advisor
+applies the [football-operations charter](docs/governance/FANTASY_ADVISOR_CHARTER.md)
+only when that feature is actually implemented and validated. The charter is a
+requirement, not proof of a shipped recommendation engine.
+
 ## Read before changing work
 
-1. [README](README.md), [current status](docs/project/status.md), and [latest handoff](docs/project/handoffs/2026-11-10-m3-nfl-availability.md).
+1. [README](README.md), [current status](docs/project/status.md), and [live context index](docs/governance/START_HERE.md).
 2. [Requirement registry](docs/product/requirements.md), affected [feature experience](docs/product/feature-experiences.md), and applicable architecture/design documents.
 3. [Decision register](docs/project/decision-register.md), [ADRs](docs/architecture/decisions/README.md), [research](docs/research/source-register.md), and [development standard](docs/engineering/agentic-development-standard.md).
 4. The active implementation plan and existing affected code, once code exists. Chat history is not authoritative project memory.

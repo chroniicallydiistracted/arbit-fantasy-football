@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "policy": "process-governance-not-product-requirements",
+  "requirements": [
+    {
+      "id": "GOVAI-001",
+      "title": "Boot sequence",
+      "rule": "Each fresh agent reads project/current state and reports active objective, priority, handoff and unresolved blockers.",
+      "enforcement": "structural"
+    },
+    {
+      "id": "GOVAI-002",
+      "title": "Authority ordering",
+      "rule": "Explicit owner authorization and accepted ADRs override proposed agent decisions; conflicts are surfaced.",
+      "enforcement": "review"
+    },
+    {
+      "id": "GOVAI-003",
+      "title": "Owner decision trace",
+      "rule": "Scope-changing decisions must link to a recorded owner decision; no implicit approval.",
+      "enforcement": "human"
+    },
+    {
+      "id": "GOVAI-004",
+      "title": "Task identity",
+      "rule": "Every meaningful change has unique durable ID, objective, classification, required IDs and scoped files.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-005",
+      "title": "Stage ordering",
+      "rule": "Review, Plan, Implement, Validate, Document, Handoff occur in order with recorded evidence.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-006",
+      "title": "Observed validation",
+      "rule": "Commands must actually run; record exit, time, argv, scope fingerprint, never fabricated success.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-007",
+      "title": "Completeness gate",
+      "rule": "No task completes while required sections, checks, status/changelog and handoff are missing.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-008",
+      "title": "Resumption",
+      "rule": "Active and blocked tasks retain next executable action, unknowns and links without chat memory.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-009",
+      "title": "Change traceability",
+      "rule": "PR changed paths are covered by a completed task record included in the PR.",
+      "enforcement": "ci"
+    },
+    {
+      "id": "GOVAI-010",
+      "title": "Secrets and privacy",
+      "rule": "No secret, tokens, private member payload, or unredacted provider logs in governance records.",
+      "enforcement": "human"
+    },
+    {
+      "id": "GOVAI-011",
+      "title": "Deployment separation",
+      "rule": "An implemented/reviewed change is not proof of service deployment; activation requires owner scope.",
+      "enforcement": "human"
+    },
+    {
+      "id": "GOVAI-012",
+      "title": "Product truthfulness",
+      "rule": "Unbuilt lineup, waiver, trade, draft and projection features cannot be called released.",
+      "enforcement": "review"
+    },
+    {
+      "id": "GOVAI-013",
+      "title": "Model lineage",
+      "rule": "Model data sources/target/cutoff are protected by accepted ADR-006, with ADR-007 still proposed.",
+      "enforcement": "model"
+    },
+    {
+      "id": "GOVAI-014",
+      "title": "Model vs adviser",
+      "rule": "Advisory external research is segregated from nflverse-only statistical Model inputs and targets.",
+      "enforcement": "model"
+    },
+    {
+      "id": "GOVAI-015",
+      "title": "League specificity",
+      "rule": "ESPN league context, scoring/slots/locks/availability are read, not assumed.",
+      "enforcement": "product"
+    },
+    {
+      "id": "GOVAI-016",
+      "title": "Testing by change class",
+      "rule": "Validation checklist is selected from declared code area and missing checks block closure.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-017",
+      "title": "Conflicting evidence",
+      "rule": "New findings that contradict prior conclusions require explicit reconciliation record.",
+      "enforcement": "review"
+    },
+    {
+      "id": "GOVAI-018",
+      "title": "Cross-agent portability",
+      "rule": "Codex and Claude share root authority, while tool-specific hooks cannot be treated as universal.",
+      "enforcement": "structural"
+    },
+    {
+      "id": "GOVAI-019",
+      "title": "Handoff precision",
+      "rule": "Record exact next action, location, prerequisites, files and unresolved decisions.",
+      "enforcement": "script"
+    },
+    {
+      "id": "GOVAI-020",
+      "title": "Human review boundary",
+      "rule": "Code CI does not prove product semantics or approvals; protected branches and review remain required.",
+      "enforcement": "human"
+    }
+  ]
+}

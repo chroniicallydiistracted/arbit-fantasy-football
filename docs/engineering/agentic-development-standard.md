@@ -52,3 +52,16 @@ PRs, if requested, lead with the problem/result and include affected requirement
 Statuses are proposed, specified, in progress, implemented, verified, or blocked with a concrete prerequisite. Never equate an implemented adapter with proven full FFA coverage, or a trained model with useful advice. A source gap has an owner, evidence, impact, next experiment and milestone. Proposed performance budgets are separate from measurements.
 
 At session end: update [status](../project/status.md), [changelog](../project/changelog.md), applicable ADR/research/issues and a dated handoff using [handoff template](handoff-template.md). The handoff records exact commands/exit status, not “tested successfully” without evidence. Report any external state changed and any command unavailable in the environment. A fresh agent should be able to choose the next task within ten minutes using repository documents alone.
+
+
+## Deterministic governance extension — 2026-11-22
+
+[START_HERE](../governance/START_HERE.md) is now the restart index. The governance
+CLI creates machine-readable task records, retains journaled findings and
+exceptions, captures command exit codes without copying private output into Git,
+and prevents `finish` unless the six evidence gates are satisfied. Its
+[requirements](../governance/requirements.json) govern the **development process**;
+product and statistical model obligations stay in the original registries and ADRs.
+The PR diff gate checks that changed paths have a completed, modified task record;
+it cannot prove the reasoning was sound. Human review and protected branch checks
+remain required. Do not weaken the existing review/approval scope.

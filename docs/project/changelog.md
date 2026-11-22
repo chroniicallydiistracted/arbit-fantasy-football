@@ -1,5 +1,12 @@
 # Development Changelog
 
+## 2026-11-22 — Context governance package prepared (not integrated)
+
+- Audited source documentation/Model interfaces and identified hardcoded handoff staleness, missing machine-traceable task/validation gates, proposed model availability and a possible historical source-policy wording conflict.
+- Added 20 cross-agent process requirements, a single active task ledger with recovery/handoff tooling, pinned validation commands, field/hash/evidence closeout, Codex/Claude/global guidance, module-scoped rules, Claude session reminders and GitHub PR changed-file coverage checks.
+- Preserved existing Arbit decisions and Model constraints; no production runtime or fantasy advisor code was activated.
+- [Source audit](../governance/AUDIT_2026-11-22.md); [governance instructions](../governance/START_HERE.md).
+
 ## 2026-11-22 — M3 GitHub integration
 
 - Prepared the existing M3 model foundation, NFL injury-report lane, ESPN availability reader and Windows wake planner for integration. [Handoff](handoffs/2026-11-22-m3-integration.md).

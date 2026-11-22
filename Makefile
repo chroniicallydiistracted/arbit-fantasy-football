@@ -81,3 +81,9 @@ services-status:
 	systemctl --user status arbit-worker.service arbit-api.service --no-pager
 services-remove:
 	sh infra/systemd/install.sh --remove
+
+# Cross-agent source-of-truth and traceability checks
+.PHONY: governance-check
+governance-check:
+	python scripts/governance.py doctor
+	python -m unittest discover -s tests/governance -p "test_*.py"
