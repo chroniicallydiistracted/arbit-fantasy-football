@@ -1,6 +1,6 @@
 # ADR-007: What the Model may know before each game
 
-Status: Proposed · 2026-11-09 · Awaiting owner acceptance. Settles the M3 part of Q-005. Under [ADR-006](006-model-architecture.md) (accepted, OWN-062), this is adopted before any feature is used in a backtest.
+Status: Accepted · proposed 2026-11-09 · accepted by the owner on 2026-11-22 with the amendments at the end (OWN-066). Settles the M3 part of Q-005. Under [ADR-006](006-model-architecture.md) (accepted, OWN-062), it governs every feature used in a backtest or a served projection. Where the amendments and the original text differ, the amendments win.
 
 ## Context
 
@@ -84,5 +84,38 @@ Evidence:
 ## Validation and adoption
 
 - **Evidence:** the vintage measurement above, recorded in the [slice 2 handoff](../../project/handoffs/2026-11-09-m3-slice2-catalog-targets.md); slice 3's mutation test; and slice 4's sensitivity reports.
-- **Adoption:** only by the owner.
-- **Related:** Q-005, R-063, R-064, MD-002, MD-004, DATA-002; [ADR-002](002-data-and-identity.md), [ADR-006](006-model-architecture.md).
+- **Adoption:** accepted by the owner on 2026-11-22 (OWN-066), with the amendments below.
+- **Related:** Q-005, Q-016, R-063, R-064, R-068, MD-002, MD-004, DATA-002; [ADR-002](002-data-and-identity.md), [ADR-006](006-model-architecture.md).
+
+## Owner amendments at acceptance (OWN-066, 2026-11-22)
+
+The owner's words: "If the data is fetched retroactively, but that data WAS available at the time; it should still apply to the model. We may not have reliable timestamps outside the import timestamp, but we should still try to preserve consistent timestamps for whatever we reliably can." And: "we do not want to limit the model or tell the model it can't use certain data; we should instead define WHEN the data can be applied, or how the data is refreshed."
+
+**A1. A value fetched late counts from when the source published it.**
+- **Gaps:** when Arbit wasn't reading a source (a capture gap, A3), its first fetch after the gap is not that value's publication time.
+- **Known-from:** the most reliable of these, in order:
+  1. the source's own timestamp for the row, such as a practice date, a depth chart `dt`, an injury `date_modified` or a game's end;
+  2. otherwise, the family's retrospective rule in decision 4.
+- **Bound:** a value never counts from earlier than the gap's start, since Arbit's last read before the gap didn't contain it. So the known-from time is the later of that timestamp or rule time and the gap start.
+- **Outside gaps:** decision 3 still holds. The first import that contains a value is its publication time, because Arbit was watching.
+- **Labels:** every feature, backtest and served projection records which basis applied: `observed`, `source-timestamp` or `retrospective-rule`.
+
+**A2. Timing, not exclusion.** No nflverse field is kept from the Model because it arrives late. Every field states when it can be applied and how it refreshes:
+- Play-by-play, statistics and participation describe a game after it ends. They can't inform that game's projection, but they inform every later decision, including the next week's.
+- Recorded weather is applicable in the same way (R-063, as amended).
+- In slice 3 the field catalog is re-reviewed. Exclusions made only for timing become applicability rules. Exclusions for policy stay, such as other providers' fantasy points under OWN-061.
+
+**A3. Gaps come from Arbit's own record of reads.** A gap is any span in which a family has no successful read within its declared stale window. The evidence:
+- nflverse import history: `dataset_manifest.observed_at`;
+- the injury report capture index (`captures.jsonl`);
+- source health;
+- the catch-up receipts written when missed data is recovered.
+
+The 2026-11-10 to 2026-11-22 outage (R-068) is the first recorded gap.
+
+**A4. What stays unknown.** Some values aren't served again after the fact:
+- ESPN's point-in-time fantasy injury status;
+- live play timing;
+- intra-week vintages of revised files.
+
+For these a gap stays unknown (R-066), never assumed. Retroactive capture recovers what sources still serve. Keeping the PC awake when data is published remains the main protection.

@@ -6,7 +6,7 @@ The authoritative detailed map remains in [repository guide](../engineering/repo
 | --- | --- | --- | --- |
 | FFA scoring, Decimal and identities | `libs/arbit-core/src/arbit_core/` | `libs/arbit-core/tests/` | [ADR-003](../architecture/decisions/003-shared-intelligence.md) |
 | ESPN/league snapshots, NFLverse, NFL live data, normalization | `libs/arbit-data/src/arbit_data/` | `libs/arbit-data/tests/` and `tests/integration/` | [data architecture](../architecture/data-architecture.md), [source register](../research/source-register.md) |
-| Model field catalog, target lines, Parquet artifacts | `libs/arbit-model/src/arbit_model/` | `libs/arbit-model/tests/` | [ADR-006](../architecture/decisions/006-model-architecture.md), [proposed ADR-007](../architecture/decisions/007-model-availability.md) |
+| Model field catalog, target lines, Parquet artifacts | `libs/arbit-model/src/arbit_model/` | `libs/arbit-model/tests/` | [ADR-006](../architecture/decisions/006-model-architecture.md), [accepted ADR-007 with amendments](../architecture/decisions/007-model-availability.md) |
 | API, member access, auth, generated schema | `services/api/src/arbit_api/` | `services/api/tests/`, `tests/integration/` | [API contracts](../architecture/api-contracts.md) |
 | Source sync/background capture | `services/worker/src/arbit_worker/` | `services/worker/tests/`, `tests/integration/` | [sync standard](../engineering/ffa-synchronization.md), [operations](../engineering/security-and-operations.md) |
 | Member/Front Office/Live React app | `apps/web/src/` | `apps/web/src/*.test*`, `apps/web/tests/browser/` | [design system](../design/design-system.md), [member operations](../engineering/member-application.md) |

@@ -77,7 +77,7 @@
     {
       "id": "GOVAI-013",
       "title": "Model lineage",
-      "rule": "Model data sources/target/cutoff are protected by accepted ADR-006, with ADR-007 still proposed.",
+      "rule": "Model data sources/target/cutoff are protected by accepted ADR-006 and ADR-007 as amended by the owner (OWN-066): late fetches count from source availability, timing rather than exclusion.",
       "enforcement": "model"
     },
     {

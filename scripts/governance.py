@@ -141,7 +141,7 @@ def brief_text() -> str:
         lines.append("BLOCKED TASKS: " + " | ".join(blocked[:8]))
     status_lines = (ROOT / "docs/project/status.md").read_text(encoding="utf-8").splitlines()
     lines.append("Status excerpt: " + " ".join(line.strip() for line in status_lines[1:6])[:650])
-    lines.append("Critical unresolved: ADR-007 is proposed; no validated projection/waiver/trade advisor shipped.")
+    lines.append("Critical unresolved: no validated projection, sit/start, waiver or trade advisor shipped (ADR-007 accepted 2026-11-22, OWN-066).")
     lines.append("Run `python scripts/governance.py doctor`; verify repository diff and deployment separately.")
     return "\n".join(lines)
 

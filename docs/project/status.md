@@ -3,18 +3,25 @@
 **Governance system (2026-11-22):** the owner pushed the repository-native Context Governance System to `main` as `ec5682a`. It includes Codex/Claude entry instructions, structured task and handoff records, the authority matrix, the football-operations advisor charter (a requirement, not a shipped feature), the governance CLI and PR traceability. See the [audit](../governance/AUDIT_2026-11-22.md) and [start guide](../governance/START_HERE.md).
 - **CI:** that commit failed Runtime validation at `make lint`, with 7 Ruff errors in `tests/governance/test_governance.py`, so its database suite never ran. TASK-20261122-001 fixes the file on branch `claude/catch-up-and-decisions`. Runtime validation on `main` is green again only once that branch merges.
 
+**Owner decisions (2026-11-22, TASK-20261122-003):**
+- **ADR-007 accepted with amendments (OWN-066).** A value fetched late after a capture gap counts from the source's own timestamp or family rule, never before the gap began. Every field states when it applies instead of being barred. Gaps come from Arbit's own read records.
+- **Betting lines (Q-014) conditionally approved (OWN-067).** They enter only after a research note and a backtest ablation show they improve FFA-point accuracy.
+- **Lineup sit/start is the first advisor (OWN-068).** It starts after M3 slice 6, and its projections must explain their contributions.
+- **Reconciled:** Q-012 is superseded by OWN-040/041, which resolves R-067.
+- **New question:** Q-016, whether to use a weather forecast for the upcoming game.
+
 **M3 integration (2026-11-22):** PR #1 merged `claude/m3-model` into `main` (`21cb24c`). Its Runtime validation, including the PostgreSQL suite and the browser flow, passed on the PR and again on the merge commit. Activating the new availability lane on the running worker is a separate step; see the [integration handoff](handoffs/2026-11-22-m3-integration.md).
 
 **M3 Model has begun** by owner direction after the 2026-11-09 audit (OWN-060); Live (M6) work is parked, not dropped. Slice 1 is implemented and awaiting runtime release: Arbit turns nflverse statistics and play-by-play into FFA stat lines scored by the shared engine (ENG-051). Against ESPN's raw statistics, 7,171 of 7,202 compared 2025 player-weeks and 3,549 of 3,569 2026 player-weeks match in every category. The 11 remaining decided differences are source-side (R-060), and 37 lines with an unattributed defensive two-point return stay unknown rather than zero (R-061). No projection exists yet. [Plan](../superpowers/plans/2026-11-09-m3-model.md), [research](../research/nflverse-ffa-scoring-2026-11-09.md), [handoff](handoffs/2026-11-09-m3-ffa-points.md).
 
-**Model inputs and architecture (2026-11-09, OWN-061).** The owner directed that the Model use only nflverse data, considering every field, and never another provider's fantasy or projection data, weighed against FFA's scoring. Research reviewed how others project players from nflverse and measured 2016–2025 FFA stat lines. Opportunity carries half its signal within two games; efficiency and touchdowns need dozens. Touchdowns are 30–45% of skill-position variance, and D/ST and kickers follow team and opponent environment. The owner accepted [ADR-006](../architecture/decisions/006-model-architecture.md) (OWN-062): a team-first model that simulates whole stat lines, scored by the shared engine. The interpretable Baseline A comes first; ML candidates follow through the release gate. Still open: betting lines in nflverse schedules (Q-014). [Research](../research/ffa-projection-methods-2026-11-09.md), [handoff](handoffs/2026-11-09-m3-model-architecture.md).
+**Model inputs and architecture (2026-11-09, OWN-061).** The owner directed that the Model use only nflverse data, considering every field, and never another provider's fantasy or projection data, weighed against FFA's scoring. Research reviewed how others project players from nflverse and measured 2016–2025 FFA stat lines. Opportunity carries half its signal within two games; efficiency and touchdowns need dozens. Touchdowns are 30–45% of skill-position variance, and D/ST and kickers follow team and opponent environment. The owner accepted [ADR-006](../architecture/decisions/006-model-architecture.md) (OWN-062): a team-first model that simulates whole stat lines, scored by the shared engine. The interpretable Baseline A comes first; ML candidates follow through the release gate. Betting lines in nflverse schedules (Q-014) are approved only if a study and ablation show they help (OWN-067, 2026-11-22). [Research](../research/ffa-projection-methods-2026-11-09.md), [handoff](handoffs/2026-11-09-m3-model-architecture.md).
 
 **M3 slice 2 (2026-11-10), implemented and awaiting runtime release.**
 - **Field catalog:** the new `arbit-model` package records one use for each of the 1,827 imported nflverse fields: pre-game, history, earlier seasons, outcome, identity, or excluded with a reason. A check fails on any field without an entry.
 - **Historical targets:** FFA-scored lines for every player-game and D/ST team-game, 2012–2026, plus participation labels, stored as versioned Parquet with manifests.
 - **Reproduction:** read with the same pinned nflverse versions, the targets reproduce the slice 1 verification exactly.
 - **Two-point returns (R-061):** the snap rule resolves 16 previously unknown lines, and all 16 match ESPN.
-- **Inactives (R-064):** nflverse publishes them only after each game. So [ADR-007](../architecture/decisions/007-model-availability.md) proposes one decision time per game, at kickoff, with publication rules for each family. It awaits the owner before any backtest.
+- **Inactives (R-064):** nflverse publishes them only after each game. So [ADR-007](../architecture/decisions/007-model-availability.md) sets one decision time per game, at kickoff, with publication rules for each family. The owner accepted it on 2026-11-22 with amendments (OWN-066).
 
 [Handoff](handoffs/2026-11-09-m3-slice2-catalog-targets.md).
 
@@ -87,8 +94,8 @@ M2 member auth/binding, Front Office facts and PWA now exist locally. Google is 
 | M1d statistical foundation | Complete published catalog imported, reviewed, replay/identity/local-read verified |
 | M1e supplemental/live sources and assets | Implemented/reviewed; observed source matrix, offline replay and asset prerequisites verified; empirical Live/asset gaps explicit |
 | M2 application/auth/Front Office/PWA | Implemented/local validation; Google selected; real client/member acceptance pending |
-| M3 Model/Scout | In progress on `claude/m3-model`: slice 1 (FFA points from nflverse) verified against ESPN; nflverse-only architecture accepted (ADR-006, OWN-061, OWN-062); slice 2 (field catalog, historical targets, participation labels) and NFL availability reads (OWN-063) implemented; availability policy proposed (ADR-007); no projection yet |
-| M4 Lineup/waivers | Not started |
+| M3 Model/Scout | In progress; slices 1–2 merged to `main` via PR #1: slice 1 (FFA points from nflverse) verified against ESPN; nflverse-only architecture accepted (ADR-006, OWN-061, OWN-062); slice 2 (field catalog, historical targets, participation labels) and NFL availability reads (OWN-063) implemented; availability policy accepted with owner amendments (ADR-007, OWN-066); no projection yet. Next: slice 3 features |
+| M4 Lineup/waivers | Not started. Sit/start is the first advisor, after M3 slice 6 (OWN-068) |
 | M5 trade/Draft | Not started |
 | M6 Live | In progress: scoreboards running on the local app; Gridiron delivery, play animation and fantasy attribution remain |
 | M7 Archive/refinement | Not started |

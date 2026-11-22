@@ -27,15 +27,18 @@ repository and must be verified separately before release claims. See
   catalog / statistical targets, **not a trained or released prediction engine**.
 - [ADR-006](../architecture/decisions/006-model-architecture.md) is accepted:
   nflverse-only statistical model inputs, team-first simulations, exact FFA scoring.
-  [ADR-007](../architecture/decisions/007-model-availability.md) is **proposed**, not accepted.
+  [ADR-007](../architecture/decisions/007-model-availability.md) was **accepted on 2026-11-22 with owner
+  amendments** (OWN-066). Late fetches count from source availability, and every field states
+  *when* it applies rather than being barred. Betting lines enter only through an evidence
+  study (OWN-067); Lineup sit/start is the first advisor (OWN-068).
 - Model training/backtest providers are more restricted than a future advisor's
   external **research**. Research must not silently contaminate model features,
   training targets, benchmarks or the canonical scorer.
 - M4 lineup/waivers, M5 trades/draft, and full advice are not delivered. M6 Live
   has separately running and unreleased slices. Do not call an unfinished module finished.
-- The latest recorded M3 integration handoff states that GitHub integration was
-  requested, but database-backed local proof was unavailable and worker activation
-  required a separate owner operation. Verify repository and deployment state before updating this.
+- PR #1 merged M3 into `main`, and its Runtime validation, including the database suite, passed
+  (2026-11-22). The running worker gains the availability lane only when it is restarted on that
+  code. Always verify repository and deployment state separately.
 
 ## How to use a task record
 

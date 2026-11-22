@@ -1,5 +1,17 @@
 # Development Changelog
 
+## 2026-11-22 — Owner decisions on availability, betting lines and the first advisor (TASK-20261122-003)
+
+- **OWN-066:** [ADR-007](../architecture/decisions/007-model-availability.md) is accepted with owner amendments A1–A4.
+  - A late fetch after a capture gap counts from the source's own timestamp or the family rule, never before the gap's start, with its basis labeled.
+  - Timing replaces exclusion.
+  - Gaps come from Arbit's own read records.
+  - Values sources no longer serve stay unknown.
+- **OWN-067:** Q-014 betting lines are approved only if they help. A research note, point-in-time capture and a slice 4 ablation come first.
+- **OWN-068:** Lineup sit/start is the first advisor, after M3 slice 6. Projections carry contribution decompositions.
+- **Added and reconciled:** new Q-016 (weather forecast). R-063 now treats recorded weather as history. Q-012 is reconciled with OWN-040/041, which resolves R-067.
+- **Kept consistent:** START_HERE, the advisor charter, REPO_MAP, GOVAI-013, the Model rule, the arbit-model instructions and the `brief` text. No Model code or field catalog changed.
+
 ## 2026-11-22 — Runtime validation repaired (TASK-20261122-001)
 
 - `ec5682a` failed Runtime validation because Ruff found 7 errors in the new governance tests: six `a; b` statements and an unsorted import block. Lint stops the job before the database suite runs.

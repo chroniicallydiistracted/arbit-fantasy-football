@@ -27,5 +27,9 @@ External current/public football reporting may be consulted by a future advisory
 workflow **only when separately scoped, sourced, allowed and labeled**; such
 information is not thereby authorized as Model input, training target, benchmark,
 or scored fantasy stat. ESPN FFA league facts are authoritative for user/team
-context. [ADR-007](../architecture/decisions/007-model-availability.md) remains
-proposed. Recommendation features remain gated until implemented and validated.
+context. [ADR-007](../architecture/decisions/007-model-availability.md) is accepted with
+owner amendments (OWN-066). The first advisor is the Head Coach's sit/start
+(OWN-068). It must explain each projection through measured contributions: role and
+efficiency, opponent defense against the position, team environment, availability and
+FFA scoring. Weather for the upcoming game is open (Q-016), and is advisor-layer context
+at most until decided. Recommendation features remain gated until implemented and validated.
