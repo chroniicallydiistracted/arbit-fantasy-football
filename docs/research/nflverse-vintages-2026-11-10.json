@@ -1,0 +1,888 @@
+{
+ "files": {
+  "depth_charts/depth_charts_2026": [
+   {
+    "manifest": "e1f86d43686e995c7effd95e46e74ef54230b2a717256f2a248d982097110a21",
+    "maxDt": "2026-10-31T06:01:42Z",
+    "observedAt": "2026-10-31T09:17:31.622086+00:00",
+    "rows": 724104
+   },
+   {
+    "manifest": "9fc415225ca4fe1417573011cb014ed50f9e412c7edd2b2c6c57a2e1a94c0996",
+    "maxDt": "2026-11-01T07:02:30Z",
+    "observedAt": "2026-11-01T09:58:48.097185+00:00",
+    "rows": 728767
+   },
+   {
+    "manifest": "374a63c0784c99ccafb215c235e1f1ee5894d69e8952b2a92e7700b1a5ffeb3a",
+    "maxDt": "2026-11-02T17:01:29Z",
+    "observedAt": "2026-11-03T02:12:01.074309+00:00",
+    "rows": 735836
+   },
+   {
+    "manifest": "ea274b465ca2a9bd48bc069b0e39b759f2b5230b98182f4c0808503bcc368b39",
+    "maxDt": "2026-11-03T14:59:52Z",
+    "observedAt": "2026-11-04T02:16:26.137753+00:00",
+    "rows": 740485
+   },
+   {
+    "manifest": "5e0e8821c6ef5b0a5d50d4ec6d04923f96ee39732babd2c9534b85370154b3dd",
+    "maxDt": "2026-11-04T15:20:57Z",
+    "observedAt": "2026-11-05T02:18:44.422573+00:00",
+    "rows": 745124
+   },
+   {
+    "manifest": "4a572b4ce1b699b21d0ec62e7d8833ad26b14aa3ee55e1decd32af027ebb80ef",
+    "maxDt": "2026-11-05T15:23:13Z",
+    "observedAt": "2026-11-06T02:22:41.389996+00:00",
+    "rows": 749776
+   },
+   {
+    "manifest": "e5f6d6f5050266cc24c394ec7456c1da2e8267d0cc169d3ec3bde35928ef184a",
+    "maxDt": "2026-11-06T14:56:56Z",
+    "observedAt": "2026-11-07T03:49:41.423164+00:00",
+    "rows": 754434
+   },
+   {
+    "manifest": "6888cd24a1fa75b59df8bf2a67d5989bf1319ade628ab8d70f4a27ad8a341462",
+    "maxDt": "2026-11-07T13:54:10Z",
+    "observedAt": "2026-11-08T03:51:59.430837+00:00",
+    "rows": 759077
+   },
+   {
+    "manifest": "77df054a1acafe397d1c359cc0a50af169db7edd8ed3165a1727ae1f2d3cee5a",
+    "maxDt": "2026-11-08T14:14:26Z",
+    "observedAt": "2026-11-09T03:55:14.386750+00:00",
+    "rows": 763791
+   },
+   {
+    "manifest": "5387b293ab3f9f8e5974a6125d707ff5bfd8eb62ebf97da6fdcf96500d6cd5a1",
+    "maxDt": "2026-11-09T17:24:57Z",
+    "observedAt": "2026-11-10T03:59:56.650806+00:00",
+    "rows": 768506
+   }
+  ],
+  "espn_data/qbr_week_level": [
+   {
+    "games": 108,
+    "manifest": "16d8d05e0b9ee68a48850763ef57250f9e35cc16b8a4cd356a790aec0419d601",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:17:35.723204+00:00",
+    "rows": 216
+   },
+   {
+    "games": 108,
+    "manifest": "f3babde1e72c9c474a9ba9e8035c047390586bb9469cac7671ce25f1ee89267a",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:58:50.167870+00:00",
+    "rows": 216
+   },
+   {
+    "games": 120,
+    "manifest": "d1b7a7c296376229c6f80a484f438be7120b796d76edf2e51b69dfeaa6ed752c",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:03.233401+00:00",
+    "rows": 240
+   },
+   {
+    "games": 121,
+    "manifest": "9c5816c0cb203209ce8eced3020285675ce3d1d2ebcb47f214cded5ac3aab702",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:16:28.296069+00:00",
+    "rows": 242
+   },
+   {
+    "games": 121,
+    "manifest": "186867356731fda6ca82b9133afd0a4a79e2bf42da669fc07782e4bcabd412e0",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:18:48.109574+00:00",
+    "rows": 242
+   },
+   {
+    "games": 121,
+    "manifest": "072310bfe390c2f486e743a79b9bc1d0f9c0917b73986c2cdf99b93316e639a5",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:22:43.621484+00:00",
+    "rows": 242
+   },
+   {
+    "games": 122,
+    "manifest": "dbc2f12a4944da92ee107995fdd29f76eac28b12cab34790ba4d29048b528b77",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:49:44.229569+00:00",
+    "rows": 244
+   },
+   {
+    "games": 122,
+    "manifest": "32c35343471f569954fd432d5f66b44f696610a0cedacb147c8ebc747876cd22",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:01.539305+00:00",
+    "rows": 244
+   },
+   {
+    "games": 122,
+    "manifest": "e24740ff79014c28f20d3de306615faad52e7f0a78cee8e9561ac952fd53ed3f",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:55:16.523556+00:00",
+    "rows": 244
+   },
+   {
+    "games": 135,
+    "manifest": "64b99962cbff0626449a4afb8bd970dc41fbbb23e6050caf389a8ab905e577a1",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T03:59:58.707054+00:00",
+    "rows": 270
+   }
+  ],
+  "ftn_charting/ftn_charting_2026": [
+   {
+    "games": 107,
+    "manifest": "e78af044aff21cceccc665748682d6afed259e6adf06869f003ed5b5a6f09991",
+    "maxWeek": 7,
+    "observedAt": "2026-10-31T09:17:39.801371+00:00",
+    "rows": 18191
+   },
+   {
+    "games": 108,
+    "manifest": "8e49d457232f7f667cda93c61abfa169a7b43a8ae5360bea1710f643742a3cb2",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:58:51.655962+00:00",
+    "rows": 18374
+   },
+   {
+    "games": 108,
+    "manifest": "e128d9047e25fe8abfc58c9a57dabfcf7cb33f3586615bd57eef80d62d8f822d",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:04.695777+00:00",
+    "rows": 18374
+   },
+   {
+    "games": 120,
+    "manifest": "2a6be9981b5d433f5d78d69eacf673b199f8093dd6af5fb757dab7e7d769b1d4",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:16:29.793188+00:00",
+    "rows": 20404
+   },
+   {
+    "games": 121,
+    "manifest": "ef9df85b39e5fe60b104042498aba6300b713f5231a13ed3777cb5ff1011d4d2",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:18:49.663886+00:00",
+    "rows": 20572
+   },
+   {
+    "games": 122,
+    "manifest": "6f8dd4c3fcb22e2c986859eab5ae73c1ea52fac8fa950da2c18aec3c45e555f2",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:03.053562+00:00",
+    "rows": 20723
+   },
+   {
+    "games": 122,
+    "manifest": "edfeba4ad65120cd598b7fc7e60b65874978a892176f28eeb60811f212b45389",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:00.137973+00:00",
+    "rows": 20723
+   }
+  ],
+  "injuries/injuries_2026": [
+   {
+    "manifest": "f6a1b6c411969e84326192aa14bb7e81d64bd2767ac119178c30f0af424dfe2e",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:17:52.727745+00:00",
+    "rows": 2459
+   },
+   {
+    "manifest": "451abedae8a7abe916a2e482a0c163578d5720f72256cf22e8e1b98c533c5294",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:58:53.427947+00:00",
+    "rows": 2459
+   },
+   {
+    "manifest": "1aac11a885ddd54ad27ef2c000826394a7746428e6efdd89288b279a1371c05c",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:06.496679+00:00",
+    "rows": 2459
+   },
+   {
+    "manifest": "93a37ffc10b09944cedeb6b48d5ca99a61886a5be2ceba42a73315ab0a841fb8",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:16:31.425721+00:00",
+    "rows": 2459
+   },
+   {
+    "manifest": "c4ff703eeeacf6c272d951467181a58598dbdfcc72ad6ad9b668ace69230e3cf",
+    "maxWeek": 9,
+    "observedAt": "2026-11-05T02:18:51.401172+00:00",
+    "rows": 2487
+   },
+   {
+    "manifest": "5491236a3d9aca915c09927558da015f04556d8f0381ee57709b6d27716cd84a",
+    "maxWeek": 9,
+    "observedAt": "2026-11-06T02:22:45.853113+00:00",
+    "rows": 2725
+   },
+   {
+    "manifest": "a114896a00cb6877deb19cad3641d9228f053cc637b9c72843c8227f11c12f49",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:49:46.464845+00:00",
+    "rows": 2799
+   },
+   {
+    "manifest": "16393f408222fdbb500ab4d963452c6ba4564b859c985d2f1ae60a3170c80439",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:04.756622+00:00",
+    "rows": 2819
+   },
+   {
+    "manifest": "efa23c949ba1f6ff890f7a15dbedf9f67de718f01709c8661c41377c99475ebb",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:55:18.517674+00:00",
+    "rows": 2821
+   },
+   {
+    "manifest": "0ec981a3218f207d1a3056c4a276bc304c631496780ce61b1ebe5991aea6b87b",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:01.861259+00:00",
+    "rows": 2821
+   }
+  ],
+  "nextgen_stats/ngs_passing": [
+   {
+    "manifest": "012550fba4d184d958e758becb0340298bdd665c407e4e0316c2332237ddd2ca",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:18:19.626055+00:00",
+    "rows": 255
+   },
+   {
+    "manifest": "ab58be05a38f68acf29fdf264e41d3f454ec21d5522a1c7aba0927a3b95a2965",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:58:56.380543+00:00",
+    "rows": 255
+   },
+   {
+    "manifest": "c0922c2b427a4c279699152d7dff40408b5866deb3923d72badb9cdc044ad843",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:09.279144+00:00",
+    "rows": 278
+   },
+   {
+    "manifest": "ac688045b4e9467d3a90e8a1ba04a56d0be7216b991d890ab4c78f26169e4bca",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:16:34.158822+00:00",
+    "rows": 280
+   },
+   {
+    "manifest": "26b4a809cb97668fca5dca7dbef528110ef3aca32eed9d3f95b7e928a297fe81",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:18:53.969718+00:00",
+    "rows": 279
+   },
+   {
+    "manifest": "a7e4f651aa8f70efe021a26dfc8143b060153bee166b00478431517a6449f759",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:22:49.463186+00:00",
+    "rows": 279
+   },
+   {
+    "manifest": "42b9d1a57c31fa836a9e7f9513548dfaa8f8cbea82be8af57b3697253a6614f1",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:49:49.265036+00:00",
+    "rows": 281
+   },
+   {
+    "manifest": "2e20e54bc24580be6b4843bd2ba70d0ce7b37894af4a753b2d514b57a3df0958",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:07.480267+00:00",
+    "rows": 281
+   },
+   {
+    "manifest": "fd64afd3b0c783750423197dac7fa4dd718228057275a638793287829837b303",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:55:22.140770+00:00",
+    "rows": 281
+   },
+   {
+    "manifest": "2a4555fe1692e7eedfad4b78d0fc9d183ce5475f228e5f6c56b3f5f84a104a93",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:04.747133+00:00",
+    "rows": 309
+   }
+  ],
+  "officials/officials": [
+   {
+    "games": 16,
+    "manifest": "9df68d4f26b1ba2e5ac4b74f0c3fa5578e987217bdf25fa5a85d91f0344cb0f9",
+    "maxWeek": 1,
+    "observedAt": "2026-10-31T09:18:22.315774+00:00",
+    "rows": 112
+   }
+  ],
+  "pbp/play_by_play_2026": [
+   {
+    "games": 108,
+    "manifest": "8a4719a3f5d4d0dd4fe8d62d01e5436eaa94f27a8e5da077d5f42968bd639a4b",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:20:12.451701+00:00",
+    "rows": 18926
+   },
+   {
+    "games": 108,
+    "manifest": "cfd9bb3fba9b6f4f3aa65ea37a47ed15ea7a5ce44a31e16af00aa786db52e61f",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:59:07.422750+00:00",
+    "rows": 18926
+   },
+   {
+    "games": 120,
+    "manifest": "3f06886856b25fb320afae8e58838bb4c944bc334b87851b1f1383cf861e09c3",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:18.996926+00:00",
+    "rows": 21018
+   },
+   {
+    "games": 121,
+    "manifest": "16cc607079c25d5546afa115111c49b3fb910e99ca13516d16140dd1ccd98e49",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:16:42.545999+00:00",
+    "rows": 21191
+   },
+   {
+    "games": 121,
+    "manifest": "35e71b7001d6f058cafb321a446ba748c8453730fdf0da73ece2be6219e54612",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:19:01.744079+00:00",
+    "rows": 21191
+   },
+   {
+    "games": 121,
+    "manifest": "1f5efbe66766d37bc557d1cdd68c3bb26a06d2779bb2d6f2d24ed83ddabb56c2",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:23:02.644545+00:00",
+    "rows": 21191
+   },
+   {
+    "games": 122,
+    "manifest": "a505f71b3cdad10d8bbbe77cf7e63a6b1a8fd19d462b29ddb08eaf7311b8199a",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:49:58.731567+00:00",
+    "rows": 21347
+   },
+   {
+    "games": 122,
+    "manifest": "18ac127e254dda93d4a0cee697058155c44125052fd2dc5085d447398e7000dc",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:15.831316+00:00",
+    "rows": 21347
+   },
+   {
+    "games": 134,
+    "manifest": "42daa3cbe5eb1a1d04c0f6b4c4a1edcf2aef8b9216a6751e3d2321f5de2a5de3",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:55:33.012977+00:00",
+    "rows": 23469
+   },
+   {
+    "games": 135,
+    "manifest": "dea47deaa50d18326f1726c47d22ff953e4c4f9e4e691f3ef22b1121fc0b5987",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:13.481132+00:00",
+    "rows": 23647
+   }
+  ],
+  "pfr_advstats/advstats_week_pass_2026": [
+   {
+    "games": 107,
+    "manifest": "6fe020074dab5ff15fff74df49a80c3957517be606e361ff38e28c791cdcf693",
+    "maxWeek": 7,
+    "observedAt": "2026-10-31T09:21:05.136075+00:00",
+    "rows": 243
+   },
+   {
+    "games": 108,
+    "manifest": "e4d464692671db786fd5ed7beb25157641848e2b3270da0a3b7f8433816c5c1c",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:40.030017+00:00",
+    "rows": 245
+   },
+   {
+    "games": 120,
+    "manifest": "4a5bbed30fc01425cadd6ecea376a3048feb906a5392e71de61ff2f65e2756cc",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:19:19.573457+00:00",
+    "rows": 275
+   },
+   {
+    "games": 121,
+    "manifest": "a086f85cbba51eb4cc85d2f5bf322b3e4b83eac5a92835a18b39be8e1039031f",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:23:21.898948+00:00",
+    "rows": 277
+   },
+   {
+    "games": 122,
+    "manifest": "a641a5538fff25ff53df8a80b2836fe1f0bfc49d0011b4d5a8b5f36460c84a91",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:55:55.535507+00:00",
+    "rows": 280
+   }
+  ],
+  "pfr_advstats/advstats_week_rec_2026": [
+   {
+    "games": 107,
+    "manifest": "8cd14b793208865f508164e8bfb5f61abdb24a50d98761f7432e4e52171fe619",
+    "maxWeek": 7,
+    "observedAt": "2026-10-31T09:21:10.922453+00:00",
+    "rows": 1726
+   },
+   {
+    "games": 108,
+    "manifest": "bc459181f616248a29d9b84f04abb4f6dd037fdb5b06394578105e671ecf6c9f",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:40.607601+00:00",
+    "rows": 1741
+   },
+   {
+    "games": 120,
+    "manifest": "62f27605c57d65e5d2eabffcfa705232799dda8fd8e00a4aaeafb737ea74725a",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:19:20.143126+00:00",
+    "rows": 1918
+   },
+   {
+    "games": 121,
+    "manifest": "761f0f91ced2913d85950e63a008f8bad2a31317f1146ff0954eebdbe88e92c5",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:23:22.559756+00:00",
+    "rows": 1932
+   },
+   {
+    "games": 122,
+    "manifest": "6a884495433e70467417cd4908ec6997d7b61378e735094da7472bc700157653",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:55:56.181066+00:00",
+    "rows": 1947
+   }
+  ],
+  "rosters/roster_2026": [
+   {
+    "manifest": "0239ff253e4e5eaf81a63dd5281f2f4fd2053fb587c99079ab98ac9855ba4a19",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:27:08.158667+00:00",
+    "rows": 3063
+   },
+   {
+    "manifest": "f60b085c17e6962ca12de6f03c3babd3944590ed22d2e8e9416af2dd92362fb5",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:59:36.433299+00:00",
+    "rows": 3063
+   },
+   {
+    "manifest": "fee44d0f98c9d0759041807635251c369e9a8b4c84cf36401e462be83b75eeed",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:52.080349+00:00",
+    "rows": 3063
+   },
+   {
+    "manifest": "558f9d9c5c0156e12a4e536235be33c5d972fc081a78312bd113458cedbd4766",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:17:09.752117+00:00",
+    "rows": 3063
+   },
+   {
+    "manifest": "0d82d7395a54291e243c2fea398e2ec68a46352a9295860c654c2a4a5e8fe6a4",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:19:31.337374+00:00",
+    "rows": 3063
+   },
+   {
+    "manifest": "3c4fabfe1fd091bcff120bbca88aaa52d392dd1d82b586378bbce9808ed631ee",
+    "maxWeek": 9,
+    "observedAt": "2026-11-06T02:23:34.887676+00:00",
+    "rows": 3067
+   },
+   {
+    "manifest": "3464486fd6c83afdd6fca8dd1df911426e90acc0817aaf9ae806388a23335915",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:50:28.864777+00:00",
+    "rows": 3069
+   },
+   {
+    "manifest": "1e499293c51ef5ca6dbb7b82fb6c67c738afa299821c02be7cb83007f27a1563",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:45.448676+00:00",
+    "rows": 3069
+   },
+   {
+    "manifest": "518e4f29f05b77390ce061bd9e8f4da18e711176f24fe68377462f4d4b1f04e8",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:56:07.708059+00:00",
+    "rows": 3069
+   },
+   {
+    "manifest": "a9a766a6f752a7ae7445348f1cae8fd5e1e1e71450b5b3e7d34a6d5888dcc92b",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:42.251476+00:00",
+    "rows": 3069
+   }
+  ],
+  "schedules/games": [
+   {
+    "games": 272,
+    "manifest": "1a87b75fb24dc2cb1df5b42568105c10010f9ea035340bcac591317b3e0bc096",
+    "maxWeek": 18,
+    "maxWeekScored": 8,
+    "maxWeekWithExpectedQb": 9,
+    "observedAt": "2026-10-31T09:14:14.172313+00:00",
+    "rows": 272,
+    "scoredGames": 108
+   },
+   {
+    "games": 272,
+    "manifest": "1bad327e084b7690980148f28efba672f285918dc0901fb27f560d16907d845f",
+    "maxWeek": 18,
+    "maxWeekScored": 8,
+    "maxWeekWithExpectedQb": 9,
+    "observedAt": "2026-11-01T09:58:28.688334+00:00",
+    "rows": 272,
+    "scoredGames": 108
+   },
+   {
+    "games": 272,
+    "manifest": "51724d4e9603f9dedb5dac06ae3d6d016e29fcc2f1c119a74029b0e085959416",
+    "maxWeek": 18,
+    "maxWeekScored": 8,
+    "maxWeekWithExpectedQb": 9,
+    "observedAt": "2026-11-03T02:11:37.616769+00:00",
+    "rows": 272,
+    "scoredGames": 120
+   },
+   {
+    "games": 272,
+    "manifest": "08d95944f146631d1f7c459aa960863def7a64206b4284d090b566cdafbf7c80",
+    "maxWeek": 18,
+    "maxWeekScored": 8,
+    "maxWeekWithExpectedQb": 9,
+    "observedAt": "2026-11-04T02:16:04.964873+00:00",
+    "rows": 272,
+    "scoredGames": 121
+   },
+   {
+    "games": 272,
+    "manifest": "ce03f84f504220963d8e46a869669bd925b9d5412668c084cc39c6026af5c41f",
+    "maxWeek": 18,
+    "maxWeekScored": 8,
+    "maxWeekWithExpectedQb": 10,
+    "observedAt": "2026-11-05T02:18:22.287567+00:00",
+    "rows": 272,
+    "scoredGames": 121
+   },
+   {
+    "games": 272,
+    "manifest": "788fe00ac0bcb2a06bb9eecdc3472f5deb8f30c1b8bbb3f281ebdad96b7bebc6",
+    "maxWeek": 18,
+    "maxWeekScored": 8,
+    "maxWeekWithExpectedQb": 10,
+    "observedAt": "2026-11-06T02:22:14.948815+00:00",
+    "rows": 272,
+    "scoredGames": 121
+   },
+   {
+    "games": 272,
+    "manifest": "c5b078c2d372b09f1c8ac6d4bd917426e2cedd091b503fffa8969f209199415e",
+    "maxWeek": 18,
+    "maxWeekScored": 9,
+    "maxWeekWithExpectedQb": 10,
+    "observedAt": "2026-11-07T03:49:15.429209+00:00",
+    "rows": 272,
+    "scoredGames": 122
+   },
+   {
+    "games": 272,
+    "manifest": "5042c9be173ef3f900fcde7c1b3d47f42e4babcf76ace6632b01c94819cbc26e",
+    "maxWeek": 18,
+    "maxWeekScored": 9,
+    "maxWeekWithExpectedQb": 10,
+    "observedAt": "2026-11-08T03:51:41.190908+00:00",
+    "rows": 272,
+    "scoredGames": 122
+   },
+   {
+    "games": 272,
+    "manifest": "b97855a5144d50e7b50b7e21313ce711625904d587ddaab2645c91415488cad7",
+    "maxWeek": 18,
+    "maxWeekScored": 9,
+    "maxWeekWithExpectedQb": 10,
+    "observedAt": "2026-11-09T03:54:49.773766+00:00",
+    "rows": 272,
+    "scoredGames": 134
+   },
+   {
+    "games": 272,
+    "manifest": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
+    "maxWeek": 18,
+    "maxWeekScored": 9,
+    "maxWeekWithExpectedQb": 10,
+    "observedAt": "2026-11-10T03:59:33.089590+00:00",
+    "rows": 272,
+    "scoredGames": 135
+   }
+  ],
+  "snap_counts/snap_counts_2026": [
+   {
+    "games": 108,
+    "manifest": "e981619300398dbbed95506e6175727b72a4b1a6f7719cd010576826914f8916",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:27:20.614235+00:00",
+    "rows": 10073
+   },
+   {
+    "games": 120,
+    "manifest": "a850ce082a3789182572c1f3f32c2cc964c39b89a31b563ab8388e3950b67e58",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:12:53.510806+00:00",
+    "rows": 11199
+   },
+   {
+    "games": 121,
+    "manifest": "8c25284c4eb4ea118069d36dd6653c2dcfb5825fe038a1306181eece415dce9c",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:17:12.229193+00:00",
+    "rows": 11292
+   },
+   {
+    "games": 122,
+    "manifest": "05a7d9fd8acfa10e16cd31eb41f090c6cb241b859ade3adc78eea49ed2146d91",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:50:30.183919+00:00",
+    "rows": 11385
+   },
+   {
+    "games": 135,
+    "manifest": "3a96ac9c68064bad8d542de857efa07da6c4ffa1440bca1ddd995258da6a3e28",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:44.486255+00:00",
+    "rows": 12597
+   }
+  ],
+  "stats_player/stats_player_week_2026": [
+   {
+    "games": 108,
+    "manifest": "433d59c61c45602fa42fde9165497460f7701f6326a792fc04ffc4cf7d525ddb",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:14:16.558612+00:00",
+    "rows": 7521
+   },
+   {
+    "games": 108,
+    "manifest": "7d4ecc0c076d772b06f65123591a1b6436c07514eeb8c919380dba78f2ac2c3f",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:58:30.042097+00:00",
+    "rows": 7521
+   },
+   {
+    "games": 120,
+    "manifest": "b7762ac4f3cc322de237294cb227e33ec82656b1289fb3525873abf003202b11",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:11:39.024037+00:00",
+    "rows": 8363
+   },
+   {
+    "games": 121,
+    "manifest": "b11b68f56acb424d169dace7a763d9788f2b2005510a2fe3d5147f2e29d03476",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:16:07.889779+00:00",
+    "rows": 8428
+   },
+   {
+    "games": 121,
+    "manifest": "f3311e0c4d5c0b9433f7f2a33ac310f1d6a56677f3363bf7a3227783a5ed48f8",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:18:24.741991+00:00",
+    "rows": 8428
+   },
+   {
+    "games": 121,
+    "manifest": "56882e706cead0c253ea2b7e5d9c014244f7b5dc97cb6a525cd421fdefe67a2a",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:22:18.803055+00:00",
+    "rows": 8428
+   },
+   {
+    "games": 122,
+    "manifest": "4867610963777552f6d4a9503800844137490f7b53bffc783367a9ce5cdc81b3",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:49:17.036661+00:00",
+    "rows": 8500
+   },
+   {
+    "games": 122,
+    "manifest": "af02d04d8e988006b349abb3105d41205427f3259ac506091718a9fa3fdc1bc0",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:51:42.586751+00:00",
+    "rows": 8500
+   },
+   {
+    "games": 134,
+    "manifest": "82f01d85c67c87634c26ce1b885cdc9d827fb01c4d260826d59a7c3438433f7b",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:54:51.248582+00:00",
+    "rows": 9319
+   },
+   {
+    "games": 135,
+    "manifest": "b203bfd50d7b484a668fe7206876ecec0d36a2264077245c5cc735f1db4562e5",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T03:59:34.375423+00:00",
+    "rows": 9393
+   }
+  ],
+  "stats_team/stats_team_week_2026": [
+   {
+    "games": 108,
+    "manifest": "b67c4fb6d826d4a219dd0a3aedc2fbeb4b9e1a78ba87103bec0929e8da598848",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:30:06.524876+00:00",
+    "rows": 216
+   },
+   {
+    "games": 108,
+    "manifest": "8c74a76f0757a82c4c94e05ada0730fdec96177219708fdc9f3706e3c46c5dbe",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:59:43.599603+00:00",
+    "rows": 216
+   },
+   {
+    "games": 120,
+    "manifest": "b81b1d3ce4d1686baa73f8ea51b5862c3abe2104925f0c8a1010d5b7609833c0",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:13:00.335243+00:00",
+    "rows": 240
+   },
+   {
+    "games": 121,
+    "manifest": "11779a4cf39761ebcfc8de3ad6799064bb3790838f55fd01bf17a13f4ba9e878",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:17:19.239302+00:00",
+    "rows": 242
+   },
+   {
+    "games": 121,
+    "manifest": "c940464f9ccf37c31a3f01f2f1884d99946616036f909d542455a1c50c4672c4",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:19:38.356856+00:00",
+    "rows": 242
+   },
+   {
+    "games": 121,
+    "manifest": "d998eedb6a3da738cbafae758dfb2e35ff35cdd15979d55742d92a5a93ec430b",
+    "maxWeek": 8,
+    "observedAt": "2026-11-06T02:23:42.439069+00:00",
+    "rows": 242
+   },
+   {
+    "games": 122,
+    "manifest": "93bad35a0ef430e9b5eace543c54de47e3fc8294527f8278c952569db25483cd",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:50:37.712352+00:00",
+    "rows": 244
+   },
+   {
+    "games": 122,
+    "manifest": "8b1a3d93c77ec3e790474fd9afcd89e7db1a9696c5bf149a835cd37ffca6321d",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:52.612735+00:00",
+    "rows": 244
+   },
+   {
+    "games": 134,
+    "manifest": "6fab4ad432310a03fdecb2c29855579433e085a282a97080a70b8f716c6be746",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:56:14.901617+00:00",
+    "rows": 268
+   },
+   {
+    "games": 135,
+    "manifest": "f86d86e6e074b58a4a18cda765ecf010e9a2cf8443c3170718619f713c471ad7",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:51.134892+00:00",
+    "rows": 270
+   }
+  ],
+  "weekly_rosters/roster_weekly_2026": [
+   {
+    "latestWeekInactive": 13,
+    "manifest": "02671b767c80de1526a7d017f9637fa469e81eb037c865247cd62eea6ae568b5",
+    "maxWeek": 8,
+    "observedAt": "2026-10-31T09:30:33.997594+00:00",
+    "rows": 19865
+   },
+   {
+    "latestWeekInactive": 13,
+    "manifest": "455259310501f6a4cb2fc1f2bee87e8c4971997f9ab70c790fe8824531381673",
+    "maxWeek": 8,
+    "observedAt": "2026-11-01T09:59:46.155742+00:00",
+    "rows": 19865
+   },
+   {
+    "latestWeekInactive": 165,
+    "manifest": "bb02c2bd3d2f2f0a3abf3709db49c3add6268488cf4881f7d7dd86848d63975e",
+    "maxWeek": 8,
+    "observedAt": "2026-11-03T02:13:02.791190+00:00",
+    "rows": 19865
+   },
+   {
+    "latestWeekInactive": 178,
+    "manifest": "3ed26aab89686b6d13b4a65e60c1ef86ef711418154f417df1fbf9481244a292",
+    "maxWeek": 8,
+    "observedAt": "2026-11-04T02:17:21.817883+00:00",
+    "rows": 19865
+   },
+   {
+    "latestWeekInactive": 178,
+    "manifest": "88c6025b2e03ad33514e2dc41a870741af726b9af51b34b0abf3fced659406a9",
+    "maxWeek": 8,
+    "observedAt": "2026-11-05T02:19:41.063770+00:00",
+    "rows": 19865
+   },
+   {
+    "latestWeekInactive": 0,
+    "manifest": "668f152be3bac38ef6abe46609adecab36e5bb486464a24ba0d84e2f5b5bb434",
+    "maxWeek": 9,
+    "observedAt": "2026-11-06T02:23:45.145043+00:00",
+    "rows": 22261
+   },
+   {
+    "latestWeekInactive": 10,
+    "manifest": "f8c700a522e2c7ea32a377d2126a03819379e0f2dec894102085bb1e4de308d5",
+    "maxWeek": 9,
+    "observedAt": "2026-11-07T03:50:40.482743+00:00",
+    "rows": 22285
+   },
+   {
+    "latestWeekInactive": 10,
+    "manifest": "f3d485aa3c24250be90782aa86cf0175604f363d672223b53cfb72df86520e31",
+    "maxWeek": 9,
+    "observedAt": "2026-11-08T03:52:55.119429+00:00",
+    "rows": 22285
+   },
+   {
+    "latestWeekInactive": 20,
+    "manifest": "4ba480c4a5757bae23e6239b65bdbb32e83f7b4974e4278f5076a7ddae47d130",
+    "maxWeek": 9,
+    "observedAt": "2026-11-09T03:56:17.491931+00:00",
+    "rows": 22285
+   },
+   {
+    "latestWeekInactive": 171,
+    "manifest": "ac0c08bc5a7ec62875c4e402d89b090260a7d09f2d881f499036c2fcba8059cc",
+    "maxWeek": 9,
+    "observedAt": "2026-11-10T04:00:53.963491+00:00",
+    "rows": 22285
+   }
+  ]
+ },
+ "generatedAt": "2026-11-10T05:33:13.206813+00:00",
+ "note": "Each entry is a manifest version the worker imported; the first version holding a week bounds its publication to within the import cadence (24 hours).",
+ "season": 2026
+}

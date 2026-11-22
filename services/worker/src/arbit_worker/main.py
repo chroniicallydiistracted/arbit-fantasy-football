@@ -134,6 +134,9 @@ def main() -> None:
     if arguments.command == "run":
         daemon.execute(arguments, parser)
         return
+    if arguments.command == "availability-capture":
+        daemon.capture_once(parser)
+        return
     if arguments.command in source_commands.COMMANDS:
         source_commands.execute(arguments, parser)
         return

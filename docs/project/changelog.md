@@ -1,5 +1,67 @@
 # Development Changelog
 
+## 2026-11-22 — M3 GitHub integration
+
+- Prepared the existing M3 model foundation, NFL injury-report lane, ESPN availability reader and Windows wake planner for integration. [Handoff](handoffs/2026-11-22-m3-integration.md).
+
+## 2026-11-10 — The PC wakes for game windows (OWN-065)
+
+- The owner keeps sleeping the PC and keeps Sleep in the Start menu, and chose scheduled wakes.
+- New `infra/windows/arbit-wake.ps1`, installed on the owner's PC:
+  - **Planner:** a daily Task Scheduler task reads ESPN's public NFL scoreboard and sets wake tasks. Game windows run 120 minutes before each kickoff to 30 minutes after; short windows cover the 12:00 and 19:15 Eastern injury report reads.
+  - **Each wake:** the task holds the PC awake through its window, then lets it sleep only if the task woke it and nobody used it.
+  - Commands: `-Preview`, `-Install`, `-Uninstall`.
+- `docs/engineering/windows-wake.md` explains it. Three planner tests run the real script through WSL interop.
+- R-066 updated: fix installed, first timer wake still to be checked.
+
+## 2026-11-10 — ESPN status for game day (OWN-064); the read gaps are the PC sleeping
+
+- The owner chose ESPN's fantasy injury status for game-day availability and asked to fix the read gaps.
+- New `arbit_data.availability.espn_status`: every pool player's status as of a moment, from the stored league documents. It is current only within 15 minutes of an ESPN read; otherwise availability is unknown. The Next Gen Stats reader was removed (Q-015 resolved), so the `availability` lane reads only NFL's injury report.
+- **R-066 cause:** Windows' own records show the PC put to sleep from the Start menu every night from 31 October to 9 November, while idle sleep is set to never. The fix is the owner's choice; nothing on the PC changed.
+- Records: OWN-064, Q-015, R-066, ADR-007 (still proposed), plan slice 2b, status and handoff.
+
+## 2026-11-10 — NFL availability for the Model, twice a day (OWN-063)
+
+- The owner directed that NFL supply inactives, did-not-play and weekly game status, read twice a day every day.
+- New `arbit_data.availability` (sources, capture, schedule) and the worker's `availability` lane, run at 12:00 and 19:15 Eastern. `arbit-worker availability-capture` reads once on demand.
+  - **Weekly game status and practice:** NFL's injury report, paged with `pageToken`. It matches nflverse's 2,821 rows for 2026.
+  - **Storage:** original bytes, parsed tables and a manifest under `ARBIT_AVAILABILITY_PATH`, each with the time its reads finished.
+  - **Freshness:** a new entry, `nfl.availability`.
+- **Inactives:** NFL's API has none. NFL Next Gen Stats' roster service has them, but the owner set NGS apart over permissions (OWN-040), so it stays off until Q-015 is decided.
+- Updated ADR-007 (proposed) and R-064; added SRC-31, Q-015 and `.env.example` entries. 15 new tests.
+- **ESPN fantasy status timing** (SRC-33): in week 9, ESPN's injury status, already stored with every league read, switched 39 of 41 inactives to Out 62–86 minutes before kickoff. Week 8 exposed gaps in the league reads on game days (R-066).
+- **Injury report outcomes** (SRC-32): nflverse's injury file equals NFL's feed row for row. In 2026 weeks 7–9, 53 of 229 Questionable players were inactive, but the report still said Questionable, so only the inactive list settles game-time decisions.
+- Not released to the running worker.
+
+## 2026-11-10 — M3 slice 2: field catalog, historical FFA targets, availability policy
+
+- The owner accepted ADR-006 (OWN-062).
+- New workspace package `libs/arbit-model`:
+  - a field catalog giving each of the 1,827 imported nflverse fields one recorded use, with a reason;
+  - `scripts/model/field_catalog.py`, which fails on any imported field without an entry or on rule drift.
+- `scripts/model/build_targets.py` builds FFA-scored lines for every player-game and D/ST team-game, 2012–2026, with participation labels. They are stored as content-addressed Parquet with manifests (ADR-002):
+  - a played player without a statistics row gets an explicit zero line;
+  - R-061's snap rule resolves 16 previously unknown verification lines, all equal to ESPN.
+- The verification script can pin an earlier receipt's inputs and check stored targets. The replay reproduces the slice 1 report hash `f503d6ff…`, and the targets agree with all 10,771 compared lines.
+- Proposed [ADR-007](../architecture/decisions/007-model-availability.md): one decision time per game at kickoff, and publication rules for each family. Evidence is `scripts/model/nflverse_vintages.py` (SRC-30).
+- Recorded R-064 (inactives reach nflverse only after games) and R-065 (participation label limits); updated R-061 and Q-005. Corrected the research note's statement about inactives.
+- Nothing changed on the running app.
+
+## 2026-11-09 — Model inputs and architecture: nflverse only, team first
+
+- Owner direction OWN-061: the Model uses only nflverse data, considering every field, and never another provider's fantasy or projection data, weighed against FFA's scoring. MD-001 now excludes outside projections instead of allowing them as benchmarks; the model specification is at version 0.2.
+- [Research](../research/ffa-projection-methods-2026-11-09.md): methods review (nflfastR models, expected fantasy points, Open Source Football, stabilization, D/ST practice, a public-data weekly model). `scripts/model/ffa_signal_study.py` measured on 2016–2025 FFA stat lines which categories drive FFA points and how quickly 60 statistic-and-position pairs carry signal ([receipt](../research/ffa-signal-study-2026-11-09.json)).
+- Proposed [ADR-006](../architecture/decisions/006-model-architecture.md): team environment, availability, role and shrunk efficiency, simulated as whole stat lines and scored by the shared engine. The M3 plan is re-sequenced: Baseline A, weekly and rest of season, before ML candidates.
+- Recorded Q-014 (betting lines in nflverse schedules) and R-063 (weather is published only after games). Added SRC-26 to SRC-29. Nothing changed on the running app.
+
+## 2026-11-09 — M3 begins: FFA points from nflverse statistics
+
+- The owner started the next phase after the audit (OWN-060). The [M3 plan](../superpowers/plans/2026-11-09-m3-model.md) orders the Model's slices: weekly evaluations first, then rest-of-season value; the draft horizon comes last.
+- Slice 1 (ENG-051, branch `claude/m3-model`): `arbit_data.nflverse.stat_lines` builds FFA stat lines from nflverse weekly statistics and play-by-play, with per-metric provenance. Unknown categories stay unknown and the shared scorer refuses those lines.
+- Settled ESPN's definitions against its raw statistics for every 2025 and 2026 player-week in ESPN's pool: 7,171 of 7,202 (2025) and 3,549 of 3,569 (2026) compared lines match in every category. Recorded the remaining source-side differences and refusals as R-060 to R-062. [Research](../research/nflverse-ffa-scoring-2026-11-09.md).
+- Added `scripts/model/verify_nflverse_scoring.py` and 14 focused tests. Nothing changed on the running app.
+
 ## 2026-11-08 — ESPN league facts shown as ESPN means them, and league history stored
 
 - Audited what members see against a fresh ESPN read: 1,437 served facts matched, but the current week read 0.00–0.00 "Official" all week, stored past lineups were hidden, and raw ESPN codes reached the page (R-054 to R-058).

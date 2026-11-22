@@ -2,14 +2,15 @@
 name = "arbit-workspace"
 version = "0.1.0"
 requires-python = ">=3.12,<3.13"
-dependencies = ["arbit-core", "arbit-data", "arbit-api", "arbit-worker"]
+dependencies = ["arbit-core", "arbit-data", "arbit-model", "arbit-api", "arbit-worker"]
 
 [tool.uv.workspace]
-members = ["libs/arbit-core", "libs/arbit-data", "services/api", "services/worker"]
+members = ["libs/arbit-core", "libs/arbit-data", "libs/arbit-model", "services/api", "services/worker"]
 
 [tool.uv.sources]
 arbit-core = { workspace = true }
 arbit-data = { workspace = true }
+arbit-model = { workspace = true }
 arbit-api = { workspace = true }
 arbit-worker = { workspace = true }
 
@@ -23,7 +24,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["libs/arbit-core/tests", "libs/arbit-data/tests", "services/api/tests", "services/worker/tests", "tests/integration", "tests/contracts"]
+testpaths = ["libs/arbit-core/tests", "libs/arbit-data/tests", "libs/arbit-model/tests", "services/api/tests", "services/worker/tests", "tests/integration", "tests/contracts"]
 addopts = "-ra --strict-markers"
 markers = ["integration: requires dedicated PostgreSQL test database"]
 
@@ -39,4 +40,4 @@ ignore = ["E501"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-packages = ["arbit_core", "arbit_data", "arbit_api", "arbit_worker"]
+packages = ["arbit_core", "arbit_data", "arbit_model", "arbit_api", "arbit_worker"]

@@ -1,6 +1,6 @@
 # Known Issues and Risks
 
-Updated 2026-11-04. M1a–e data/runtime slices are implemented and locally verified; real-member/full feature/model validation and expanded empirical Live/asset proof remain open.
+Updated 2026-11-09. M1a–e data/runtime slices are implemented and locally verified; real-member/full feature/model validation and expanded empirical Live/asset proof remain open.
 
 | ID | Evidence / risk | Effect and mitigation | Owner / milestone |
 | --- | --- | --- | --- |
@@ -38,7 +38,7 @@ Add discovered bugs with a reproduction, affected requirement, expected behavior
 | R-024 | **Closed 2026-11-01.** The real-time platform was verified only on a restored copy | Applied to the running app by the owner's decision; results are in the [handoff](handoffs/2026-10-31-platform-reset.md) | Done |
 | R-025 | **Closed 2026-11-01.** Active-game behavior was untested against the real source | First real slate measured: 0 read failures, a median play delay of 36 s, and a real game reaching an open page without a reload. [Receipt](../research/live-slate-receipt-2026-11-01.md) | Integration / closed |
 | R-026 | **Closed 2026-11-01.** The statistics lane had only run against fakes | The first real import succeeded at 10:00 UTC. Duration isn't logged. [Receipt](../research/live-slate-receipt-2026-11-01.md) | Data / closed |
-| R-027 | No sync yet for player news or ESPN positional ratings. FFA transactions and waiver results are synced since 2026-11-08 (ENG-050) | Add news and ratings to `arbit_data/freshness.py` when M3/M4 consume them | Data / M3–M4 |
+| R-027 | No sync yet for player news or ESPN positional ratings. FFA transactions and waiver results are synced since 2026-11-08 (ENG-050) | Neither feeds the Model under OWN-061. Add news to `arbit_data/freshness.py` if Scout displays it; ESPN ratings are another provider's fantasy data and stay out of the Model | Data / M3 Scout |
 | R-028 | **Closed 2026-10-31.** New visual character needed owner acceptance | Owner accepted it (OWN-018) | Done |
 | R-029 | The services stop with WSL. After a Windows restart nothing returns until WSL starts, and the Postgres container has restart policy `no` under Docker Desktop. Sleep also pauses live capture. **Happened 2026-11-01:** Windows slept from 05:22 to 14:49 (UTC−7), freezing the worker through all the early games. Sleep reason: Application API; idle sleep on AC is already off. **Again 2026-11-02:** the PC slept from some time after 22:52 on 2026-11-01 until 19:08 (UTC−7), waking 53 minutes into CHI at SEA. The worker resumed without a restart, filled in the first half's 58 plays at once and tracked the rest live; the delayed final checks ran on wake. **Again 2026-11-03:** the PC restarted at 13:42 during a full sprite re-render; the cause isn't confirmed. `arbit-api` and `arbit-worker` came back as services, but the database didn't, so the app ran 2 hours 9 minutes without it and the worker logged `DATABASE_UNAVAILABLE`. `docker start arbit-dev-postgres-1` at 15:51 brought it back; it recovered cleanly and the worker resumed by itself. **Again 2026-11-04:** the database container stopped at 09:05 (UTC−7) while WSL kept running, so the cause wasn't a Windows restart and isn't confirmed. The services ran without it until 13:23, logging `DATABASE_UNAVAILABLE`, when `docker start arbit-dev-postgres-1` brought it back and the worker resumed by itself. There were no games that day | Start Ubuntu and run `make db-up` or `docker start arbit-dev-postgres-1`; the units retry every 5-10 seconds. Recovery worked on 2026-11-03. Giving the container a restart policy would outlive the session, so it needs the owner's approval. Sprite renders now run a few plays at a time. A real host replaces this at release (OWN-014) | Engineering / release |
 | R-030 | **Closed 2026-11-01.** ESPN's live `situation` needed observing and storing | It is stored and shown on the running app. Capture is 79 MB, so keep everything this season; the 5 GiB limit stops capture rather than rotating it. [Receipt](../research/live-slate-receipt-2026-11-01.md) | Integration / closed |
@@ -77,6 +77,35 @@ Add discovered bugs with a reproduction, affected requirement, expected behavior
 ## M6 stadium acceptance follow-up — ENG-048, 2026-11-08
 
 M&T Bank remains the owner-selected proving venue before expansion. The [refinement](handoffs/2026-11-08-mt-bank-refinement.md) passes geometry and field-preservation checks but is not yet an accepted likeness. The fixed Live crop excludes the upper deck/lights; the owner must choose framing before renderer integration. Lighting, some structures and the near-seat foreground remain approximate. This blocks M6 venue-specific stadium acceptance, not the current generic Live field.
+
+## FFA points from nflverse, 2026-11-09 (ENG-051)
+
+The verification ([research](../research/nflverse-ffa-scoring-2026-11-09.md)) compared 10,771 player-weeks with ESPN's raw statistics. These are what remains.
+
+- **R-060: source-side differences that the adapter keeps.** In 11 decided lines the sources record a play differently, with the following causes:
+  - A sack with no credited defender. ESPN counted it in 9 of 13 such D/ST-weeks; nflverse always does.
+  - Two two-point catches ESPN credits to no receiver.
+  - Aborted shotgun snaps, where ESPN charges yards lost from the line of scrimmage.
+  - A fake-punt safety.
+  - Arizona's 2025 week 15 points allowed, unexplained.
+
+  The largest effect is 2 FFA points in one line. ESPN stays the league authority for official points. Model labels use the nflverse line, and the difference is part of the model's measured error. Owner: Data / M3. Revisit if a later season shows a new pattern.
+- **R-061: unattributed defensive two-point returns.** Play-by-play doesn't name who scored them, so that team's players have no value for the category, and the scorer refuses those lines: 23 in 2025 and 14 in 2026. Partly resolved by M3 slice 2 (2026-11-10): the historical targets rule out a player whose snap row shows no defensive or special-teams snap. Of the 37 refused verification lines, 16 are now scored, and all 16 equal ESPN's totals. The other 21 belong to players with such snaps, or with no snap row, and stay unknown. Owner: Model.
+- **R-062: two ESPN players without a GSIS alias.** Chris Manhertz (26 player-weeks, one nonzero) and Greg Desrosiers Jr. (one nonzero week) can't be evaluated until the crosswalk resolves them. The crosswalk's exact-ID policy stands; no name matching. Owner: Data / M3 slice 4, before evaluations are served.
+
+## Model inputs, 2026-11-09 (OWN-061)
+
+- **R-066: every read stops while the PC sleeps.** The ESPN league reads (and every other worker lane) stopped in multi-hour windows: before week 8's Sunday games, before Monday night's game, and before the 8 November London game.
+  - **Cause:** Windows went to sleep. Its records show a sleep each night from 31 October to 9 November, requested by `StartMenuExperienceHost.exe` (Start → Sleep), usually between midnight and 5 AM Phoenix time, with a wake the next morning.
+  - **Not the cause:** Windows' own idle sleep and hibernate are set to never (High performance plan, desktop, no battery).
+  - **Effects:** while the PC sleeps the worker pauses, and so does the public site (OWN-058). Projections then have no current ESPN status, which `espn_status` reports as unknown.
+  - **Fix (OWN-065), installed 2026-11-10:** the owner keeps sleeping the PC. `infra/windows/arbit-wake.ps1` wakes it 120 minutes before each kickoff to 30 minutes after, and around the two daily injury report reads, then lets it sleep again if nobody used it ([details](../engineering/windows-wake.md)). The public site is still offline whenever the PC sleeps outside those windows.
+  - **Still to verify:** the first real timer wake, in Windows' event log and `wake.log`. `powercfg /waketimers` needs administrator rights, so the armed timers weren't listed. Owner: Data / host.
+
+- **R-064: inactives reach nflverse only after the game.** nflverse publishes rosters once a day at 07:00 UTC. Arbit's imports saw week 9's `INA` marks only after each game: 0, then 10 after Thursday's game, then 171 after Sunday's. So no projection can use game-day inactives, and ADR-007 uses one decision time per game, at kickoff, instead of the plan's two. The worker's once-a-day import, recently between 02:00 and 04:00 UTC, also misses the game-day 07:00 UTC roster, injury and depth chart update. The 2026 officials file stops at week 1. Owner: Model / M3 slice 5 adds a game-day import after 07:00 UTC; M4 decides whether Lineup shows ESPN's own game-day status beside a projection. **Update 2026-11-10 (OWN-063):** the `availability` worker lane reads NFL's injury report at 12:00 and 19:15 Eastern every day. Inactive designations would come from NFL Next Gen Stats, which waits for the owner (Q-015). Even with it, two fixed reads miss the inactives for Sunday's late games (posted about 2:35 PM Eastern) and morning international games. The lane runs only once released to the worker.
+- **R-065: participation labels have limits.** 2012 has no snap counts, so players without a statistic are `unknown`. 2013–2018 rosters don't mark inactives, so a player with no snap is `rostered_no_snaps`. A player without a PFR ID can't be joined to snap counts (9 of ESPN's 2025–2026 played-weeks). Practice-squad players elevated for a game keep a non-active status. ESPN's "games played" flag also counts active players who took no snap (59 played-weeks in 2025–2026); the labels follow snap counts. Owner: Model / M3 slice 3, when availability features use the labels.
+
+- **R-063: weather is not a pre-game Model input.** nflverse fills `temp` and `wind` only after games: both are empty for every 2026 game, including completed weeks 8 and 9, while 2023–2025 have them for 499 of 549 outdoor games. Under OWN-061 no other weather source is used, so the Model uses `roof` and `surface` only, and backtests must not use the after-the-fact values. Blocks nothing; weather effects stay unmodeled (M3).
 
 ## ESPN league surfacing audit, 2026-11-08
 
