@@ -9,7 +9,7 @@
 - **Already self-recovering:** league lineups and transactions, nflverse and the whole-season injury report.
 - **Fixes:** the live schedule now follows the season's latest week, and NFL games unlinked by a startup race relink within minutes (R-069).
 - **Why:** the database was down from 2026-11-10 to 2026-11-22 (R-068), leaving week 10 unread. [Guide](../engineering/catch-up.md).
-- **Scope:** regular-season weeks 1–18 only (TASK-20261122-005). Postseason games stay with the live lanes.
+- **Scope:** regular-season weeks 1–18 only (TASK-20261122-005; test corrected in TASK-20261122-006). Postseason games stay with the live lanes.
 
 **Owner decisions (2026-11-22, TASK-20261122-003):**
 - **ADR-007 accepted with amendments (OWN-066).** A value fetched late after a capture gap counts from the source's own timestamp or family rule, never before the gap began. Every field states when it applies instead of being barred. Gaps come from Arbit's own read records.

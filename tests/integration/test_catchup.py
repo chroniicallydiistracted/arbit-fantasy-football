@@ -235,10 +235,30 @@ def test_playoff_periods_are_left_to_the_live_lanes(uow):
     """ESPN numbers playoff games as scoring periods 19 and later; catch-up reads only the regular
     season's 18 weeks, even with the live week in January."""
     seed(uow)
+    wild_card = MISSED_KICKOFF + timedelta(days=63)
     with uow.engine.begin() as c:
-        schedule(c, "401900019", 19, MISSED_KICKOFF + timedelta(days=63))
-    later = MISSED_KICKOFF + timedelta(days=70)
-    assert [g.period for g in catchup.outstanding_games(uow, 2026, later)] == [10]
+        schedule(c, "401900019", 19, wild_card)
+        # In January the live lanes follow ESPN's postseason (season type 3), week 1.
+        c.execute(
+            insert(nfl_game).values(
+                event_id="401900019",
+                season=2026,
+                season_type=3,
+                week=1,
+                phase="final",
+                state_hash="0" * 64,
+                payload={"home_team_id": "26", "away_team_id": "3", "date": wild_card.isoformat()},
+                observed_at=wild_card,
+                changed_at=wild_card,
+                final_checks=0,
+            )
+        )
+    later = wild_card + timedelta(days=7)
+    with uow.engine.connect() as c:
+        assert catchup.current_week(c, 2026) == (3, 1)
+    # Week 11 is no longer the live week, and its seeded game has no summary or plays, so it is
+    # outstanding too. Period 19 is not.
+    assert [g.period for g in catchup.outstanding_games(uow, 2026, later)] == [10, 11]
 
 
 def test_a_game_stored_mid_game_before_the_worker_stopped_is_outstanding(uow):

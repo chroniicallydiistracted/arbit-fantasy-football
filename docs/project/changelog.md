@@ -1,5 +1,11 @@
 # Development Changelog
 
+## 2026-11-22 — Playoff catch-up test corrected (TASK-20261122-006)
+
+- **What was wrong:** TASK-20261122-005 recorded that its test fails without the 18-week cap. A mutation run showed it passed anyway, because the test's live week (regular-season week 11) already excluded period 19.
+- **Fix:** the test now sets a January state whose live week is postseason week 1. It fails without the cap (periods 10, 11 and 19 planned) and passes with it (10 and 11).
+- **Code:** unchanged; the cap was right, its proof was not.
+
 ## 2026-11-22 — Catch-up reads regular-season weeks only (TASK-20261122-005)
 
 - **Change:** catch-up now considers scoring periods 1–18 only. ESPN numbers playoff games as later periods, which in January would have been read as regular-season weeks on every worker start. Postseason games stay with the live lanes (R-059).
