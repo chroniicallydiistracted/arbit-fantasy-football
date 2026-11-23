@@ -1,0 +1,888 @@
+{
+ "format": "arbit-team-features-audit-v1",
+ "generatedAt": "2026-11-23T19:46:58.355773+00:00",
+ "runs": [
+  {
+   "coverage": {
+    "def_epa_per_play": 1.0,
+    "def_epa_per_play_shrunk": 1.0,
+    "def_points_allowed_pg": 1.0,
+    "def_points_allowed_pg_shrunk": 1.0,
+    "def_sack_rate": 1.0,
+    "def_sack_rate_shrunk": 1.0,
+    "def_takeaways_pg": 1.0,
+    "def_takeaways_pg_shrunk": 1.0,
+    "div_game": 1.0,
+    "games_played": 1.0,
+    "is_home": 1.0,
+    "off_dropback_rate": 1.0,
+    "off_dropback_rate_shrunk": 1.0,
+    "off_epa_per_play": 1.0,
+    "off_epa_per_play_shrunk": 1.0,
+    "off_plays_pg": 1.0,
+    "off_plays_pg_shrunk": 1.0,
+    "off_points_pg": 1.0,
+    "off_points_pg_shrunk": 1.0,
+    "opp_def_epa_per_play_shrunk": 1.0,
+    "opp_def_points_allowed_pg_shrunk": 1.0,
+    "opp_def_sack_rate_shrunk": 1.0,
+    "opp_def_takeaways_pg_shrunk": 1.0,
+    "opp_dvp_K_adj": 1.0,
+    "opp_dvp_K_adj_shrunk": 1.0,
+    "opp_dvp_K_opps_pg": 1.0,
+    "opp_dvp_K_pg": 1.0,
+    "opp_dvp_K_pg_shrunk": 1.0,
+    "opp_dvp_QB_adj": 1.0,
+    "opp_dvp_QB_adj_shrunk": 1.0,
+    "opp_dvp_QB_opps_pg": 1.0,
+    "opp_dvp_QB_pg": 1.0,
+    "opp_dvp_QB_pg_shrunk": 1.0,
+    "opp_dvp_RB_adj": 1.0,
+    "opp_dvp_RB_adj_shrunk": 1.0,
+    "opp_dvp_RB_opps_pg": 1.0,
+    "opp_dvp_RB_pg": 1.0,
+    "opp_dvp_RB_pg_shrunk": 1.0,
+    "opp_dvp_TE_adj": 1.0,
+    "opp_dvp_TE_adj_shrunk": 1.0,
+    "opp_dvp_TE_opps_pg": 1.0,
+    "opp_dvp_TE_pg": 1.0,
+    "opp_dvp_TE_pg_shrunk": 1.0,
+    "opp_dvp_WR_adj": 1.0,
+    "opp_dvp_WR_adj_shrunk": 1.0,
+    "opp_dvp_WR_opps_pg": 1.0,
+    "opp_dvp_WR_pg": 1.0,
+    "opp_dvp_WR_pg_shrunk": 1.0,
+    "opp_games_played": 1.0,
+    "opp_off_dst_allowed_adj": 1.0,
+    "opp_off_dst_allowed_adj_shrunk": 1.0,
+    "opp_off_dst_allowed_pg": 1.0,
+    "opp_off_dst_allowed_pg_shrunk": 1.0,
+    "opp_rest_days": 1.0,
+    "prev_def_epa_per_play": 1.0,
+    "prev_def_points_allowed_pg": 1.0,
+    "prev_def_sack_rate": 1.0,
+    "prev_def_takeaways_pg": 1.0,
+    "prev_off_dropback_rate": 1.0,
+    "prev_off_epa_per_play": 1.0,
+    "prev_off_plays_pg": 1.0,
+    "prev_off_points_pg": 1.0,
+    "rest_days": 1.0,
+    "roof": 1.0,
+    "surface": 1.0
+   },
+   "decisions": [
+    {
+     "at": "2025-11-07T01:15:00+00:00",
+     "dstLeagueMean": 5.566666666666666,
+     "gamebook": {
+      "at": "2025-11-07T01:15:00+00:00",
+      "games": 135,
+      "refusedAthleteLines": 36,
+      "scoredNow": 135,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.024361476394628604,
+      "def_points_allowed_pg": 23.37037037037037,
+      "def_sack_rate": 0.06943268416596104,
+      "def_takeaways_pg": 1.1296296296296295,
+      "off_dropback_rate": 0.5722245775543577,
+      "off_epa_per_play": 0.0243614763946286,
+      "off_plays_pg": 61.15185185185185,
+      "off_points_pg": 23.37037037037037
+     },
+     "positionLeagueMeans": {
+      "K": 8.214814814814815,
+      "QB": 17.041999999999998,
+      "RB": 21.707259259259256,
+      "TE": 13.443925925925925,
+      "WR": 31.9337037037037
+     },
+     "previousSeason": {
+      "at": "2025-11-07T01:15:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 285,
+      "season": 2024
+     }
+    },
+    {
+     "at": "2025-11-09T14:30:00+00:00",
+     "dstLeagueMean": 5.625,
+     "gamebook": {
+      "at": "2025-11-09T14:30:00+00:00",
+      "games": 136,
+      "refusedAthleteLines": 36,
+      "scoredNow": 1,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.02178426316304258,
+      "def_points_allowed_pg": 23.261029411764707,
+      "def_sack_rate": 0.0698138996950899,
+      "def_takeaways_pg": 1.1323529411764706,
+      "off_dropback_rate": 0.5720558161915072,
+      "off_epa_per_play": 0.021784263163042578,
+      "off_plays_pg": 61.125,
+      "off_points_pg": 23.261029411764707
+     },
+     "positionLeagueMeans": {
+      "K": 8.165441176470589,
+      "QB": 16.95426470588235,
+      "RB": 21.670073529411763,
+      "TE": 13.393970588235295,
+      "WR": 31.853308823529407
+     },
+     "previousSeason": {
+      "at": "2025-11-09T14:30:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 0,
+      "season": 2024
+     }
+    },
+    {
+     "at": "2025-11-09T18:00:00+00:00",
+     "dstLeagueMean": 5.625,
+     "gamebook": {
+      "at": "2025-11-09T18:00:00+00:00",
+      "games": 136,
+      "refusedAthleteLines": 36,
+      "scoredNow": 0,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.02178426316304258,
+      "def_points_allowed_pg": 23.261029411764707,
+      "def_sack_rate": 0.0698138996950899,
+      "def_takeaways_pg": 1.1323529411764706,
+      "off_dropback_rate": 0.5720558161915072,
+      "off_epa_per_play": 0.021784263163042578,
+      "off_plays_pg": 61.125,
+      "off_points_pg": 23.261029411764707
+     },
+     "positionLeagueMeans": {
+      "K": 8.165441176470589,
+      "QB": 16.954264705882352,
+      "RB": 21.670073529411766,
+      "TE": 13.393970588235293,
+      "WR": 31.853308823529414
+     },
+     "previousSeason": {
+      "at": "2025-11-09T18:00:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 0,
+      "season": 2024
+     }
+    },
+    {
+     "at": "2025-11-09T21:05:00+00:00",
+     "dstLeagueMean": 5.625,
+     "gamebook": {
+      "at": "2025-11-09T21:05:00+00:00",
+      "games": 136,
+      "refusedAthleteLines": 36,
+      "scoredNow": 0,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.02178426316304258,
+      "def_points_allowed_pg": 23.261029411764707,
+      "def_sack_rate": 0.0698138996950899,
+      "def_takeaways_pg": 1.1323529411764706,
+      "off_dropback_rate": 0.5720558161915072,
+      "off_epa_per_play": 0.021784263163042578,
+      "off_plays_pg": 61.125,
+      "off_points_pg": 23.261029411764707
+     },
+     "positionLeagueMeans": {
+      "K": 8.165441176470589,
+      "QB": 16.95426470588235,
+      "RB": 21.670073529411763,
+      "TE": 13.393970588235295,
+      "WR": 31.8533088235294
+     },
+     "previousSeason": {
+      "at": "2025-11-09T21:05:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 0,
+      "season": 2024
+     }
+    },
+    {
+     "at": "2025-11-09T21:25:00+00:00",
+     "dstLeagueMean": 5.625,
+     "gamebook": {
+      "at": "2025-11-09T21:25:00+00:00",
+      "games": 136,
+      "refusedAthleteLines": 36,
+      "scoredNow": 0,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.02178426316304258,
+      "def_points_allowed_pg": 23.261029411764707,
+      "def_sack_rate": 0.0698138996950899,
+      "def_takeaways_pg": 1.1323529411764706,
+      "off_dropback_rate": 0.5720558161915072,
+      "off_epa_per_play": 0.021784263163042578,
+      "off_plays_pg": 61.125,
+      "off_points_pg": 23.261029411764707
+     },
+     "positionLeagueMeans": {
+      "K": 8.165441176470589,
+      "QB": 16.954264705882345,
+      "RB": 21.670073529411763,
+      "TE": 13.393970588235293,
+      "WR": 31.853308823529407
+     },
+     "previousSeason": {
+      "at": "2025-11-09T21:25:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 0,
+      "season": 2024
+     }
+    },
+    {
+     "at": "2025-11-10T01:20:00+00:00",
+     "dstLeagueMean": 5.625,
+     "gamebook": {
+      "at": "2025-11-10T01:20:00+00:00",
+      "games": 136,
+      "refusedAthleteLines": 36,
+      "scoredNow": 0,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.02178426316304258,
+      "def_points_allowed_pg": 23.261029411764707,
+      "def_sack_rate": 0.0698138996950899,
+      "def_takeaways_pg": 1.1323529411764706,
+      "off_dropback_rate": 0.5720558161915072,
+      "off_epa_per_play": 0.021784263163042578,
+      "off_plays_pg": 61.125,
+      "off_points_pg": 23.261029411764707
+     },
+     "positionLeagueMeans": {
+      "K": 8.165441176470589,
+      "QB": 16.954264705882352,
+      "RB": 21.67007352941176,
+      "TE": 13.393970588235293,
+      "WR": 31.8533088235294
+     },
+     "previousSeason": {
+      "at": "2025-11-10T01:20:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 0,
+      "season": 2024
+     }
+    },
+    {
+     "at": "2025-11-11T01:15:00+00:00",
+     "dstLeagueMean": 5.66554054054054,
+     "gamebook": {
+      "at": "2025-11-11T01:15:00+00:00",
+      "games": 148,
+      "refusedAthleteLines": 36,
+      "scoredNow": 12,
+      "season": 2025
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.02090042380531673,
+      "def_points_allowed_pg": 23.43918918918919,
+      "def_sack_rate": 0.07006492877216784,
+      "def_takeaways_pg": 1.1452702702702702,
+      "off_dropback_rate": 0.569512666261935,
+      "off_epa_per_play": 0.02090042380531673,
+      "off_plays_pg": 61.21283783783784,
+      "off_points_pg": 23.43918918918919
+     },
+     "positionLeagueMeans": {
+      "K": 8.067567567567568,
+      "QB": 16.95574324324324,
+      "RB": 21.914729729729732,
+      "TE": 13.46472972972973,
+      "WR": 31.82770270270269
+     },
+     "previousSeason": {
+      "at": "2025-11-11T01:15:00+00:00",
+      "games": 285,
+      "refusedAthleteLines": 73,
+      "scoredNow": 0,
+      "season": 2024
+     }
+    }
+   ],
+   "featureColumns": 65,
+   "games": 14,
+   "label": "2025 week 10 at each kickoff",
+   "rows": 28,
+   "seconds": 5.5
+  },
+  {
+   "coverage": {
+    "def_epa_per_play": 1.0,
+    "def_epa_per_play_shrunk": 1.0,
+    "def_points_allowed_pg": 1.0,
+    "def_points_allowed_pg_shrunk": 1.0,
+    "def_sack_rate": 1.0,
+    "def_sack_rate_shrunk": 1.0,
+    "def_takeaways_pg": 1.0,
+    "def_takeaways_pg_shrunk": 1.0,
+    "div_game": 1.0,
+    "games_played": 1.0,
+    "is_home": 1.0,
+    "off_dropback_rate": 1.0,
+    "off_dropback_rate_shrunk": 1.0,
+    "off_epa_per_play": 1.0,
+    "off_epa_per_play_shrunk": 1.0,
+    "off_plays_pg": 1.0,
+    "off_plays_pg_shrunk": 1.0,
+    "off_points_pg": 1.0,
+    "off_points_pg_shrunk": 1.0,
+    "opp_def_epa_per_play_shrunk": 1.0,
+    "opp_def_points_allowed_pg_shrunk": 1.0,
+    "opp_def_sack_rate_shrunk": 1.0,
+    "opp_def_takeaways_pg_shrunk": 1.0,
+    "opp_dvp_K_adj": 1.0,
+    "opp_dvp_K_adj_shrunk": 1.0,
+    "opp_dvp_K_opps_pg": 1.0,
+    "opp_dvp_K_pg": 1.0,
+    "opp_dvp_K_pg_shrunk": 1.0,
+    "opp_dvp_QB_adj": 1.0,
+    "opp_dvp_QB_adj_shrunk": 1.0,
+    "opp_dvp_QB_opps_pg": 1.0,
+    "opp_dvp_QB_pg": 1.0,
+    "opp_dvp_QB_pg_shrunk": 1.0,
+    "opp_dvp_RB_adj": 1.0,
+    "opp_dvp_RB_adj_shrunk": 1.0,
+    "opp_dvp_RB_opps_pg": 1.0,
+    "opp_dvp_RB_pg": 1.0,
+    "opp_dvp_RB_pg_shrunk": 1.0,
+    "opp_dvp_TE_adj": 1.0,
+    "opp_dvp_TE_adj_shrunk": 1.0,
+    "opp_dvp_TE_opps_pg": 1.0,
+    "opp_dvp_TE_pg": 1.0,
+    "opp_dvp_TE_pg_shrunk": 1.0,
+    "opp_dvp_WR_adj": 1.0,
+    "opp_dvp_WR_adj_shrunk": 1.0,
+    "opp_dvp_WR_opps_pg": 1.0,
+    "opp_dvp_WR_pg": 1.0,
+    "opp_dvp_WR_pg_shrunk": 1.0,
+    "opp_games_played": 1.0,
+    "opp_off_dst_allowed_adj": 1.0,
+    "opp_off_dst_allowed_adj_shrunk": 1.0,
+    "opp_off_dst_allowed_pg": 1.0,
+    "opp_off_dst_allowed_pg_shrunk": 1.0,
+    "opp_rest_days": 1.0,
+    "prev_def_epa_per_play": 1.0,
+    "prev_def_points_allowed_pg": 1.0,
+    "prev_def_sack_rate": 1.0,
+    "prev_def_takeaways_pg": 1.0,
+    "prev_off_dropback_rate": 1.0,
+    "prev_off_epa_per_play": 1.0,
+    "prev_off_plays_pg": 1.0,
+    "prev_off_points_pg": 1.0,
+    "rest_days": 1.0,
+    "roof": 1.0,
+    "surface": 1.0
+   },
+   "decisions": [
+    {
+     "at": "2026-11-23T19:46:58.355773+00:00",
+     "dstLeagueMean": 5.496835443037975,
+     "gamebook": {
+      "at": "2026-11-23T19:46:58.355773+00:00",
+      "games": 158,
+      "refusedAthleteLines": 36,
+      "scoredNow": 158,
+      "season": 2026
+     },
+     "leagueMeans": {
+      "def_epa_per_play": 0.00934101259692798,
+      "def_points_allowed_pg": 23.09493670886076,
+      "def_sack_rate": 0.06804548303339601,
+      "def_takeaways_pg": 1.2848101265822784,
+      "off_dropback_rate": 0.5682523530908166,
+      "off_epa_per_play": 0.009341012596927979,
+      "off_plays_pg": 62.199367088607595,
+      "off_points_pg": 23.09493670886076
+     },
+     "positionLeagueMeans": {
+      "K": 8.45253164556962,
+      "QB": 16.49582278481014,
+      "RB": 21.992025316455706,
+      "TE": 13.487025316455695,
+      "WR": 31.740316455696192
+     },
+     "previousSeason": {
+      "at": "2026-11-23T19:46:58.355773+00:00",
+      "games": 285,
+      "refusedAthleteLines": 70,
+      "scoredNow": 285,
+      "season": 2025
+     }
+    }
+   ],
+   "featureColumns": 65,
+   "games": 16,
+   "label": "2026 week 12 at the run",
+   "matchups": [
+    {
+     "gamesPlayed": 11,
+     "offEpaPerPlayShrunk": -0.036,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.13,
+      "QB": 0.9,
+      "RB": -0.35,
+      "TE": 1.4,
+      "WR": 0.01
+     },
+     "oppOffenseDstAllowedShrunk": 5.31,
+     "opponent": "WAS",
+     "team": "ARI"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.043,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.28,
+      "QB": -2.38,
+      "RB": -1.25,
+      "TE": -0.5,
+      "WR": -1.39
+     },
+     "oppOffenseDstAllowedShrunk": 6.62,
+     "opponent": "MIN",
+     "team": "ATL"
+    },
+    {
+     "gamesPlayed": 11,
+     "offEpaPerPlayShrunk": 0.013,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.1,
+      "QB": 0.08,
+      "RB": -0.09,
+      "TE": -0.61,
+      "WR": 0.4
+     },
+     "oppOffenseDstAllowedShrunk": 3.83,
+     "opponent": "HOU",
+     "team": "BAL"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.083,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.03,
+      "QB": -0.43,
+      "RB": -0.75,
+      "TE": 0.79,
+      "WR": -0.55
+     },
+     "oppOffenseDstAllowedShrunk": 2.74,
+     "opponent": "KC",
+     "team": "BUF"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.017,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.11,
+      "QB": -1.68,
+      "RB": -2.01,
+      "TE": 0.2,
+      "WR": -1.03
+     },
+     "oppOffenseDstAllowedShrunk": 6.85,
+     "opponent": "TB",
+     "team": "CAR"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.018,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.65,
+      "QB": 1.64,
+      "RB": -0.42,
+      "TE": 1.62,
+      "WR": 0.65
+     },
+     "oppOffenseDstAllowedShrunk": 3.0,
+     "opponent": "DET",
+     "team": "CHI"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": 0.095,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.2,
+      "QB": 0.26,
+      "RB": 1.66,
+      "TE": -0.03,
+      "WR": -0.06
+     },
+     "oppOffenseDstAllowedShrunk": 6.85,
+     "opponent": "NO",
+     "team": "CIN"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.022,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.06,
+      "QB": 0.95,
+      "RB": 0.68,
+      "TE": 0.67,
+      "WR": 0.64
+     },
+     "oppOffenseDstAllowedShrunk": 5.19,
+     "opponent": "LV",
+     "team": "CLE"
+    },
+    {
+     "gamesPlayed": 11,
+     "offEpaPerPlayShrunk": 0.092,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.35,
+      "QB": 0.18,
+      "RB": -1.12,
+      "TE": -0.66,
+      "WR": 0.62
+     },
+     "oppOffenseDstAllowedShrunk": 6.75,
+     "opponent": "PHI",
+     "team": "DAL"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": -0.004,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.52,
+      "QB": -0.91,
+      "RB": 0.32,
+      "TE": -0.1,
+      "WR": -0.33
+     },
+     "oppOffenseDstAllowedShrunk": 5.76,
+     "opponent": "PIT",
+     "team": "DEN"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.075,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.36,
+      "QB": 0.86,
+      "RB": -0.05,
+      "TE": -0.29,
+      "WR": -0.3
+     },
+     "oppOffenseDstAllowedShrunk": 5.08,
+     "opponent": "CHI",
+     "team": "DET"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.016,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.22,
+      "QB": -0.86,
+      "RB": -1.38,
+      "TE": -1.11,
+      "WR": -0.23
+     },
+     "oppOffenseDstAllowedShrunk": 4.46,
+     "opponent": "LA",
+     "team": "GB"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.028,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.22,
+      "QB": 0.14,
+      "RB": -0.48,
+      "TE": 0.26,
+      "WR": -0.15
+     },
+     "oppOffenseDstAllowedShrunk": 5.87,
+     "opponent": "BAL",
+     "team": "HOU"
+    },
+    {
+     "gamesPlayed": 11,
+     "offEpaPerPlayShrunk": -0.073,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.27,
+      "QB": 0.53,
+      "RB": -0.24,
+      "TE": 0.09,
+      "WR": -0.92
+     },
+     "oppOffenseDstAllowedShrunk": 5.8,
+     "opponent": "NYG",
+     "team": "IND"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": 0.093,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.31,
+      "QB": 1.36,
+      "RB": 0.68,
+      "TE": -0.14,
+      "WR": 2.21
+     },
+     "oppOffenseDstAllowedShrunk": 6.12,
+     "opponent": "TEN",
+     "team": "JAX"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.084,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.06,
+      "QB": -0.52,
+      "RB": 0.73,
+      "TE": -0.54,
+      "WR": 0.41
+     },
+     "oppOffenseDstAllowedShrunk": 3.68,
+     "opponent": "BUF",
+     "team": "KC"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.046,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.53,
+      "QB": -0.63,
+      "RB": 0.93,
+      "TE": -0.62,
+      "WR": 0.97
+     },
+     "oppOffenseDstAllowedShrunk": 5.55,
+     "opponent": "GB",
+     "team": "LA"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": -0.097,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.08,
+      "QB": 0.15,
+      "RB": -0.01,
+      "TE": -0.76,
+      "WR": 1.32
+     },
+     "oppOffenseDstAllowedShrunk": 6.02,
+     "opponent": "NE",
+     "team": "LAC"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.002,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.05,
+      "QB": -0.32,
+      "RB": -0.43,
+      "TE": 0.15,
+      "WR": -0.06
+     },
+     "oppOffenseDstAllowedShrunk": 6.9,
+     "opponent": "CLE",
+     "team": "LV"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.047,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.21,
+      "QB": 0.06,
+      "RB": 0.68,
+      "TE": 0.11,
+      "WR": -0.77
+     },
+     "oppOffenseDstAllowedShrunk": 6.23,
+     "opponent": "NYJ",
+     "team": "MIA"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": -0.057,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.05,
+      "QB": 0.39,
+      "RB": 0.83,
+      "TE": -0.4,
+      "WR": 0.44
+     },
+     "oppOffenseDstAllowedShrunk": 6.75,
+     "opponent": "ATL",
+     "team": "MIN"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": 0.024,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.18,
+      "QB": -0.57,
+      "RB": -0.01,
+      "TE": -0.94,
+      "WR": 0.9
+     },
+     "oppOffenseDstAllowedShrunk": 8.05,
+     "opponent": "LAC",
+     "team": "NE"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.019,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.09,
+      "QB": 0.82,
+      "RB": -0.25,
+      "TE": 0.78,
+      "WR": -0.01
+     },
+     "oppOffenseDstAllowedShrunk": 3.66,
+     "opponent": "CIN",
+     "team": "NO"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": 0.012,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.16,
+      "QB": 0.21,
+      "RB": 1.62,
+      "TE": 0.19,
+      "WR": -0.83
+     },
+     "oppOffenseDstAllowedShrunk": 8.15,
+     "opponent": "IND",
+     "team": "NYG"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.002,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.07,
+      "QB": -0.73,
+      "RB": 0.73,
+      "TE": 0.01,
+      "WR": -1.02
+     },
+     "oppOffenseDstAllowedShrunk": 7.43,
+     "opponent": "MIA",
+     "team": "NYJ"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.063,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.3,
+      "QB": 1.77,
+      "RB": 2.96,
+      "TE": -0.02,
+      "WR": 1.44
+     },
+     "oppOffenseDstAllowedShrunk": 3.0,
+     "opponent": "DAL",
+     "team": "PHI"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.016,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.07,
+      "QB": -0.16,
+      "RB": -0.57,
+      "TE": 0.65,
+      "WR": -0.69
+     },
+     "oppOffenseDstAllowedShrunk": 4.98,
+     "opponent": "DEN",
+     "team": "PIT"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.009,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.32,
+      "QB": 0.35,
+      "RB": -0.36,
+      "TE": -0.11,
+      "WR": 0.34
+     },
+     "oppOffenseDstAllowedShrunk": 3.16,
+     "opponent": "SF",
+     "team": "SEA"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": 0.129,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.19,
+      "QB": -2.14,
+      "RB": -1.02,
+      "TE": -1.15,
+      "WR": -1.43
+     },
+     "oppOffenseDstAllowedShrunk": 6.33,
+     "opponent": "SEA",
+     "team": "SF"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.039,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.14,
+      "QB": 0.01,
+      "RB": 0.33,
+      "TE": 0.18,
+      "WR": -0.24
+     },
+     "oppOffenseDstAllowedShrunk": 6.12,
+     "opponent": "CAR",
+     "team": "TB"
+    },
+    {
+     "gamesPlayed": 10,
+     "offEpaPerPlayShrunk": -0.019,
+     "oppAdjustedAllowedShrunk": {
+      "K": -0.18,
+      "QB": -0.96,
+      "RB": -0.42,
+      "TE": -0.23,
+      "WR": 0.03
+     },
+     "oppOffenseDstAllowedShrunk": 3.22,
+     "opponent": "JAX",
+     "team": "TEN"
+    },
+    {
+     "gamesPlayed": 9,
+     "offEpaPerPlayShrunk": 0.005,
+     "oppAdjustedAllowedShrunk": {
+      "K": 0.26,
+      "QB": 1.46,
+      "RB": -1.14,
+      "TE": 1.12,
+      "WR": -0.39
+     },
+     "oppOffenseDstAllowedShrunk": 6.22,
+     "opponent": "ARI",
+     "team": "WAS"
+    }
+   ],
+   "rows": 32,
+   "seconds": 4.5
+  }
+ ]
+}

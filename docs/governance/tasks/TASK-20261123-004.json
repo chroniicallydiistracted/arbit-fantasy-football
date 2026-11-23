@@ -1,0 +1,446 @@
+{
+  "version": 1,
+  "id": "TASK-20261123-004",
+  "title": "M3 slice 3b: team environment and defense against the position",
+  "objective": "Point-in-time team features for each game as of its decision time, built only through the point-in-time reader: per-game FFA points from the shared scorer on rows the reader returns, team environment (pace, dropback rate, pass rate over expected, EPA, success, drives, red zone, scoring) for offense and defense with the signal study's measured shrinkage, game context (home, rest, roof, surface, division), and defense against the position (OWN-068): FFA points and opportunities allowed to QB, RB, WR, TE and K and D/ST points allowed by each offense, raw and adjusted for the offenses faced, shrunk with constants measured here. Every feature has definition, unit, window, cutoff, coverage and provenance, and a mutation test proves rows published after the decision never change a feature. No fitted model, projection, service or API change.",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/point_in_time.py",
+    "libs/arbit-model/src/arbit_model/gamebook.py",
+    "libs/arbit-model/src/arbit_model/team_features.py",
+    "libs/arbit-model/src/arbit_model/feature_specs.py",
+    "libs/arbit-model/tests/test_point_in_time.py",
+    "libs/arbit-model/tests/test_gamebook.py",
+    "libs/arbit-model/tests/test_team_features.py",
+    "scripts/model/defense_position_study.py",
+    "scripts/model/team_features_audit.py",
+    "docs/research/defense-position-study-2026-11-23.json",
+    "docs/research/team-features-2026-11-23.md",
+    "docs/research/team-features-audit-2026-11-23.json",
+    "libs/arbit-model/README.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/architecture/model-specification.md",
+    "docs/project/decision-register.md",
+    "docs/project/known-issues.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T19:39:39Z",
+  "updated_at": "2026-11-23T19:51:50Z",
+  "baseline": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+  "next_action": "Merge the PR for claude/m3-slice3b (TASK-20261123-004). Then M3 slice 3c under a model-class task: availability and role features (snap, target, air-yard, carry and red-zone shares; injury and practice status through arbit_model.availability; teammates' absences), with weather W1 beside it. Ask the owner for the NWS User-Agent contact before W3.",
+  "sections": {
+    "review": {
+      "summary": "Read ADR-006's team-first structure and the methods research: team environment and opponent first, D/ST mostly the opponent, constants as games for half signal. Read the signal study's team definitions (stats_team: plays = attempts + sacks + carries, dropbacks = attempts + sacks, EPA = passing + rushing; sacks forced and takeaways from the opponent row) and its split_half method; the targets module (per-game SeasonRows, athlete and defense lines); and the stat-line adapter's play and team columns. The stored slice 2 targets (index 4afbd836) cover 2012-2026 through 2026-11-10. No measured constant existed for FFA points allowed by position.",
+      "files": [
+        "docs/architecture/decisions/006-model-architecture.md",
+        "docs/research/ffa-projection-methods-2026-11-09.md",
+        "docs/research/ffa-signal-study-2026-11-09.json",
+        "scripts/model/ffa_signal_study.py",
+        "libs/arbit-model/src/arbit_model/targets.py",
+        "libs/arbit-data/src/arbit_data/nflverse/stat_lines.py"
+      ]
+    },
+    "plan": {
+      "summary": "Add _manifest to readings; gamebook.py scoring each completed game known at the decision with the shared scorer, cached per version combination; a study measuring split-half constants for FFA points allowed by position and D/ST points allowed (raw and adjusted for offenses faced) with the signal study's method; feature_specs.py with definition, unit, window, cutoff, sources and constants for every column; team_features.py producing team rates (raw, shrunk, last season), opponent defense, defense against the position and context per team per game; tests including a mutation test and constants-versus-receipt; a read-only real-data audit; docs.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/gamebook.py",
+        "libs/arbit-model/src/arbit_model/team_features.py",
+        "libs/arbit-model/src/arbit_model/feature_specs.py",
+        "scripts/model/defense_position_study.py"
+      ]
+    },
+    "implementation": {
+      "summary": "point_in_time: readings carry _manifest. gamebook.py: Gamebooks.at(season, at) reads schedules (scores), pbp, player and team statistics through the reader, keeps games with all four known, scores each with targets() once per version combination, and returns team-games (signal study definitions), FFA points and opportunities by position, and D/ST points. defense_position_study.py: stability of points allowed by position and D/ST points allowed, raw and leave-one-out adjusted, 2016-2025, receipt committed. feature_specs.py: 65 specs and 20 constants with receipt paths. team_features.py: features per team per game, grouped by decision time, with coverage and lineage. team_features_audit.py and receipt. Docs: research note, ENG-056, README, plan, status, changelog.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/point_in_time.py",
+        "libs/arbit-model/src/arbit_model/gamebook.py",
+        "libs/arbit-model/src/arbit_model/feature_specs.py",
+        "libs/arbit-model/src/arbit_model/team_features.py",
+        "libs/arbit-model/tests/test_team_features.py",
+        "scripts/model/defense_position_study.py",
+        "scripts/model/team_features_audit.py",
+        "docs/research/defense-position-study-2026-11-23.json",
+        "docs/research/team-features-audit-2026-11-23.json"
+      ]
+    },
+    "validation": {
+      "summary": "make runtime-check passed (ruff, mypy, contracts, 1,377 tests including 6 new). Governance checks foundation, model-tests and point-in-time exited 0. Two deliberate breaks each fail a test. Real-data audit (read only): 2025 week 10 at each kickoff and 2026 week 12 at the run build with every feature fully covered, about 5 s per week. Not exercised: any fitted model, backtest or service.",
+      "files": [
+        "docs/research/team-features-audit-2026-11-23.json",
+        "docs/research/defense-position-study-2026-11-23.json",
+        "libs/arbit-model/tests/test_team_features.py"
+      ]
+    },
+    "documentation": {
+      "summary": "Research note team-features-2026-11-23.md (study table and what it means for sit/start, feature list, real-data results, tests, limits); ENG-056; Model README; M3 plan slice 3 order; status (PR #5 merged, 3b summary, open work) and changelog.",
+      "files": [
+        "docs/research/team-features-2026-11-23.md",
+        "docs/project/decision-register.md",
+        "libs/arbit-model/README.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261123-004-governance-handoff.md",
+      "next_action": "Merge the PR for claude/m3-slice3b (TASK-20261123-004). Then M3 slice 3c under a model-class task: availability and role features (snap, target, air-yard, carry and red-zone shares; injury and practice status through arbit_model.availability; teammates' absences), with weather W1 beside it. Ask the owner for the NWS User-Agent contact before W3.",
+      "unresolved": "Play-by-play team rates (pass rate over expected, success, drives, red zone) are deferred until their constants are measured. Positions use nflverse's current labels. No fitted model, backtest or service uses the features yet; slice 4 decides their weights."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T19:49:29Z",
+      "exit_code": 0,
+      "duration_seconds": 0.215,
+      "stdout_stderr_sha256": "9077cfbe00f9028571007f575e1ff22b70a43c7885d89e39993eac22b3fcffdb",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "MISSING",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "0c1051bbb8dcea9bbfc7e4fa52cb836e84258b4ba54ece280984da07937909e2",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "f47f0a64f7803fcb725f6e1ee8f79aec7f386d6f4cc4e8bfb02238334cbc34a8",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-23T19:49:36Z",
+      "exit_code": 0,
+      "duration_seconds": 7.006,
+      "stdout_stderr_sha256": "3db82f5e524516abba03f510f8f214740c937bf520a58c260516aafe4c536e3e",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "MISSING",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "0c1051bbb8dcea9bbfc7e4fa52cb836e84258b4ba54ece280984da07937909e2",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "f47f0a64f7803fcb725f6e1ee8f79aec7f386d6f4cc4e8bfb02238334cbc34a8",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-23T19:49:37Z",
+      "exit_code": 0,
+      "duration_seconds": 1.476,
+      "stdout_stderr_sha256": "c43aa8f1633ea79bbb2939dffa347976f905e822c7eed850294278328308979d",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "MISSING",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "0c1051bbb8dcea9bbfc7e4fa52cb836e84258b4ba54ece280984da07937909e2",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "f47f0a64f7803fcb725f6e1ee8f79aec7f386d6f4cc4e8bfb02238334cbc34a8",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-23T19:50:27Z",
+      "exit_code": 0,
+      "duration_seconds": 8.046,
+      "stdout_stderr_sha256": "ae77ed4a50774e091e550929bc325da96062faae4db799f59832405cec2110d1",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "391d84b64e1e1f1972e0a3d8aca8f266a399366e1375feaed17c2d6ab42d07f5",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "0c1051bbb8dcea9bbfc7e4fa52cb836e84258b4ba54ece280984da07937909e2",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "f47f0a64f7803fcb725f6e1ee8f79aec7f386d6f4cc4e8bfb02238334cbc34a8",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T19:50:27Z",
+      "exit_code": 0,
+      "duration_seconds": 0.221,
+      "stdout_stderr_sha256": "7b9b92a838ebb5edf9d4429a5c001d1da68295f305179c3e2af4aa04a26de4ed",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "391d84b64e1e1f1972e0a3d8aca8f266a399366e1375feaed17c2d6ab42d07f5",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "0c1051bbb8dcea9bbfc7e4fa52cb836e84258b4ba54ece280984da07937909e2",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "f47f0a64f7803fcb725f6e1ee8f79aec7f386d6f4cc4e8bfb02238334cbc34a8",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-23T19:50:29Z",
+      "exit_code": 0,
+      "duration_seconds": 1.439,
+      "stdout_stderr_sha256": "6eb8bf56e318997ef4b52f2e3e81046d37e5a371a23e33bb84261081ee7f25ec",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "391d84b64e1e1f1972e0a3d8aca8f266a399366e1375feaed17c2d6ab42d07f5",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "0c1051bbb8dcea9bbfc7e4fa52cb836e84258b4ba54ece280984da07937909e2",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "f47f0a64f7803fcb725f6e1ee8f79aec7f386d6f4cc4e8bfb02238334cbc34a8",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T19:51:40Z",
+      "exit_code": 0,
+      "duration_seconds": 0.225,
+      "stdout_stderr_sha256": "7b9b92a838ebb5edf9d4429a5c001d1da68295f305179c3e2af4aa04a26de4ed",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "391d84b64e1e1f1972e0a3d8aca8f266a399366e1375feaed17c2d6ab42d07f5",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "06d077f26605734ca65c69d2e12bc2637fd2b3844d96214649ed37555fbfd8c3",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "022f4362cc1941edca1f82b406cc4e704c751826a6e2c8cb412eff164f0209c3",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-23T19:51:48Z",
+      "exit_code": 0,
+      "duration_seconds": 8.303,
+      "stdout_stderr_sha256": "1f3adc114722b948adbef2e95f1a60d3d19254b32f31b52285cdc52b42f96b28",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "391d84b64e1e1f1972e0a3d8aca8f266a399366e1375feaed17c2d6ab42d07f5",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "06d077f26605734ca65c69d2e12bc2637fd2b3844d96214649ed37555fbfd8c3",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "022f4362cc1941edca1f82b406cc4e704c751826a6e2c8cb412eff164f0209c3",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-23T19:51:50Z",
+      "exit_code": 0,
+      "duration_seconds": 1.593,
+      "stdout_stderr_sha256": "3e7d7684dfa0f2ace441a54fe87d45497ec9288a3640013c34f8fea70a4c639d",
+      "git_head": "0a825fef0b1fa1c307862d4bc2551ea4be2c07aa",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "e9ba440fbd9eb0895e638249e8549e6f88308c9d0499a9b49ded8de944c7f8b6",
+        "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+        "libs/arbit-model/src/arbit_model/team_features.py": "6975d51d56979b6ec6c08f85db1152f0d50c2424f0047cd562700b45ffc908a4",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "libs/arbit-model/tests/test_gamebook.py": "391d84b64e1e1f1972e0a3d8aca8f266a399366e1375feaed17c2d6ab42d07f5",
+        "libs/arbit-model/tests/test_team_features.py": "407d8198c03d7a17a8f4ecfccf11143123427ab1bcc4df6d554310640ca8e53d",
+        "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+        "scripts/model/team_features_audit.py": "9c60b9b103a3ac57cb3393806c683390832bca3ce4432602109384fc9b50998b",
+        "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+        "docs/research/team-features-2026-11-23.md": "06d077f26605734ca65c69d2e12bc2637fd2b3844d96214649ed37555fbfd8c3",
+        "docs/research/team-features-audit-2026-11-23.json": "1eb91905fcc1175df8a10be9763f119bef527aee15a48ef706857ef9e5654725",
+        "libs/arbit-model/README.md": "83bd1aecc3c93905ac125d41674aea73ccab34abe6f866f05ec838f496c13cd3",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "ccb5dbb75cee232d2d15c10a31c4e7c39e181394a1b5b2fc9b53a34376076c54",
+        "docs/architecture/model-specification.md": "4473f5d22ec921017042ed23c90d1e1fbf261dcc51ddbd23ad8c8f5a2f4e9846",
+        "docs/project/decision-register.md": "f959275cf79f9ab4457aa1834963bfc394fecee0c27de71547505cc5d938e0d3",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "8aa05c15c8b6dafd17eba8e22d3b8040591c88f4629535372ef3f445df8579d7",
+        "docs/project/changelog.md": "022f4362cc1941edca1f82b406cc4e704c751826a6e2c8cb412eff164f0209c3",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T19:48:16Z",
+      "kind": "correction",
+      "note": "The review and plan sections of this task were recorded after implementation had started; their content is what was read and designed before the code was written.",
+      "evidence": "docs/governance/tasks/TASK-20261123-004.json"
+    },
+    {
+      "at": "2026-11-23T19:49:46Z",
+      "kind": "observation",
+      "note": "Defense-against-position stability 2016-2025 (315-320 team-seasons each), games for half signal raw/adjusted: QB 30.6/22.2, RB 18.7/20.0, WR 44.1/42.0, TE 37.6/40.1, K 49.4/55.3, D/ST points allowed by offense 9.2/9.1.",
+      "evidence": "docs/research/defense-position-study-2026-11-23.json"
+    },
+    {
+      "at": "2026-11-23T19:49:46Z",
+      "kind": "observation",
+      "note": "Feature test sensitivity: reading three days past the decision fails the mutation test; dropping the opponent adjustment fails the defense-against-position test; source restored byte-identical.",
+      "evidence": "libs/arbit-model/tests/test_team_features.py"
+    }
+  ],
+  "closed_at": "2026-11-23T19:51:50Z"
+}

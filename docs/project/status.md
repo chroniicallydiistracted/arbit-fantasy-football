@@ -6,7 +6,8 @@
 - **CI on `main`:** green; `main` is protected.
 - **On `main` since PR #3:** TASK-20261122-007 to -010 (weather decision and plan, never-captured NFL rule, housekeeping, the Live playback test flake fix). The merged worktree and branches were removed.
 - **On `main` since PR #4 (`c41a7d7`, merged 2026-11-23 under the owner's GitHub authorization):** M3 slice 3a, the point-in-time reader (TASK-20261123-001). It runs in no service, so the worker was not restarted.
-- **Not yet on `main`:** the columnar reader and timing order (TASK-20261123-002) and game-day availability (TASK-20261123-003), on branch `claude/m3-reader-speed-availability`.
+- **On `main` since PR #5 (`cace69c`):** the columnar reader and timing order (TASK-20261123-002) and game-day availability (TASK-20261123-003).
+- **Not yet on `main`:** M3 slice 3b, team environment and defense against the position (TASK-20261123-004, branch `claude/m3-slice3b`). It runs in no service.
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
@@ -28,8 +29,13 @@
 - **No source:** unknown, never assumed active.
 - **On real data:** week 11's Sunday kickoff, inside the outage, is correctly flagged game-day unknown. Monday night's game day takes ESPN's final status for 1,026 players.
 
+**M3 slice 3b, team environment and defense against the position (2026-11-23, TASK-20261123-004, ENG-056, OWN-068):** the Model's first features, 65 per team per game as of the decision time.
+- **What they cover:** team rates, the opponent's defense, FFA points allowed to each position (raw and adjusted for the offenses faced), D/ST points the opponent's offense gives up, and pre-game context.
+- **Measured for the owner's "why":** a defense's record against WRs, TEs and kickers is mostly noise within a season, about 15% weight after eight games. Against RBs and QBs it carries modest signal, about 27–29%. The D/ST points an offense gives up are the strongest matchup signal, 47% after eight games ([note](../research/team-features-2026-11-23.md)).
+- **Proof:** a mutation test passes. On real data, every 2025 week 10 and 2026 week 12 game builds with full coverage in about 5 s per week.
+
 **Open work, in order** (owner direction 2026-11-22):
-1. M3 slice 3b–3e: team environment and defense against the position, availability and role, efficiency and priors, and the Q-014 note. Weather W1 (venue table and forecast record) runs beside it.
+1. M3 slice 3c–3e: availability and role (on `arbit_model.availability`), efficiency and priors, and the Q-014 note; the 3b follow-up for play-by-play rates. Weather W1 (venue table and forecast record) runs beside it.
 2. M3 slices 4–6.
 3. M4 sit/start (OWN-068), weather W2–W6, the Q-014 study and ablation.
 

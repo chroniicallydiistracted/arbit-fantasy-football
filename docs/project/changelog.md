@@ -1,5 +1,18 @@
 # Development Changelog
 
+## 2026-11-23 — Team environment and defense against the position (M3 slice 3b, TASK-20261123-004)
+
+- **PR #5 merged** (`cace69c`): the columnar reader, the timing order and game-day availability.
+- **`arbit_model.gamebook`:** completed games known at a decision time. FFA points per player-game and D/ST come from the shared scorer, run on the reader's rows and cached per combination of file versions. Positions map to FFA's.
+- **`arbit_model.team_features` (ENG-056):** 65 features per team per game, each defined in `arbit_model.feature_specs`. They cover team rates (raw, shrunk with the signal study's constants, last season), the opponent's defense, FFA points and opportunities allowed to QB, RB, WR, TE and K (raw and adjusted for the offenses faced), D/ST points the opponent's offense gives up, and pre-game context.
+- **`scripts/model/defense_position_study.py`:** split-half stability for 2016–2025, with the signal study's method. Adjusted games for half signal: RB 20.0, QB 22.2, TE 40.1, WR 42.0, K 55.3, and 9.1 for D/ST points allowed.
+- **Reader:** rows now carry `_manifest`, the version they came from.
+- **Tests:**
+  - 6 new feature tests, including a mutation test and a check that every constant equals its receipt.
+  - 3 gamebook tests: a game counts once every table is known; scores are cached per version and rescored after a correction; FB scores as RB.
+  - Two deliberate breaks each fail a test.
+- **Audit (read only):** `scripts/model/team_features_audit.py` builds 2025 week 10 and 2026 week 12 with full coverage.
+
 ## 2026-11-23 — Game-day availability in the owner's order (TASK-20261123-003)
 
 - **OWN-073:** "We should have a better route for more up to date injuries, however game day decisions should be the final say."

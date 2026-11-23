@@ -14,6 +14,11 @@ Implemented (M3 slice 3a, ENG-053; columnar since ENG-054):
 - `arbit_model.vintages`: Arbit's versions and reads of each file, and its capture gaps (A3).
 - `arbit_model.availability`: each player's availability at a decision time in the owner's order (OWN-073, ENG-055). On game day ESPN's current status is final; otherwise the freshest copy of NFL's injury report, Arbit's capture or nflverse's; otherwise unknown.
 
+Implemented (M3 slice 3b, ENG-056):
+- `arbit_model.gamebook`: completed games known at a decision time, with FFA points by position and by D/ST from the shared scorer, cached per game version.
+- `arbit_model.team_features`: one row per team per game. It covers team rates, the opponent's defense, defense against the position (raw and adjusted for the offenses faced), D/ST points allowed by the opponent's offense, and pre-game context.
+- `arbit_model.feature_specs`: each feature's definition, unit, window, cutoff, sources and measured shrinkage constant.
+
 `scripts/model/point_in_time_audit.py` checks the reader against the real history ([audit](../../docs/research/point-in-time-audit-2026-11-23.md)).
 
 `scripts/model/build_targets.py` builds the historical targets. Features, projections, rankings and advisor policies come in later slices ([M3 plan](../../docs/superpowers/plans/2026-11-09-m3-model.md)); no model has been trained.

@@ -50,6 +50,7 @@ from arbit_model.vintages import KeyHistory, StoredVintages, VintageSource
 
 KNOWN_FROM = "_known_from"
 BASIS = "_basis"
+MANIFEST = "_manifest"  # the version a row came from
 CALENDAR_COLUMNS = (
     "game_id",
     "old_game_id",
@@ -82,7 +83,7 @@ class Reading:
     key: str
     at: datetime
     columns: tuple[str, ...]
-    frame: pl.DataFrame  # the requested columns, `_known_from` and `_basis`
+    frame: pl.DataFrame  # the requested columns, `_known_from`, `_basis` and `_manifest`
     lineage: Mapping[str, Any]
 
     @property
@@ -153,7 +154,12 @@ class PointInTime:
             else parts[0]
             if parts
             else pl.DataFrame(
-                schema={**{c: pl.Null for c in columns}, KNOWN_FROM: INSTANT, BASIS: pl.Utf8}
+                schema={
+                    **{c: pl.Null for c in columns},
+                    KNOWN_FROM: INSTANT,
+                    BASIS: pl.Utf8,
+                    MANIFEST: pl.Utf8,
+                }
             )
         )
         units = pl.concat(labels, how="diagonal_relaxed") if labels else None
@@ -406,6 +412,7 @@ class PointInTime:
                 maintain_order="left",
             )
             .drop(UNIT)
+            .with_columns(pl.lit(history.versions[index].manifest).alias(MANIFEST))
         )
 
 
