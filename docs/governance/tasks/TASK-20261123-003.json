@@ -1,0 +1,191 @@
+{
+  "version": 1,
+  "id": "TASK-20261123-003",
+  "title": "Game-day availability in the owner's order",
+  "objective": "Give the Model one reader of each player's availability at a decision time in the owner's order (OWN-073): on the player's game day, ESPN's fantasy status read within 15 minutes is final (OWN-064, it carries inactives); otherwise the freshest copy of NFL's injury report, Arbit's own twice-daily capture (OWN-063) or nflverse's republication through the point-in-time reader; otherwise unknown, never assumed active (R-066). Normalize status and practice wording across sources and label every value's source, known-from time and basis. No feature, service or API change.",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/availability.py",
+    "libs/arbit-model/tests/test_availability.py",
+    "scripts/model/availability_audit.py",
+    "docs/research/availability-audit-2026-11-23.json",
+    "docs/research/point-in-time-audit-2026-11-23.md",
+    "libs/arbit-model/README.md",
+    "docs/architecture/decisions/007-model-availability.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/project/decision-register.md",
+    "docs/project/known-issues.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T19:32:37Z",
+  "updated_at": "2026-11-23T19:36:39Z",
+  "baseline": "59cf0c99dc63c1b16df9a1c51776e8ef01fa1b96",
+  "next_action": "Merge the PR for claude/m3-reader-speed-availability (TASK-20261123-002 and -003). Then M3 slice 3b under a model-class task: team environment and defense against the position (OWN-068) on the columnar reader; weather W1 beside it.",
+  "sections": {
+    "review": {
+      "summary": "Owner direction 2026-11-23: 'Previously weve tested Active List and Injury data from both ESPN and NFL. We should have a better route for more up to date injuries, however game day decisions should be the final say.' Read OWN-063 (NFL injury report twice daily for weekly game status), OWN-064 (ESPN fantasy status is the game-day input; current only within 15 minutes of a read), arbit_data.availability (capture index captures.jsonl with observedAt; the gameStatus table holds the whole season's report per capture; espn_status.status_as_of keyed by Arbit entity IDs). Real data, read-only: three NFL captures since 2026-11-22 23:43 UTC; the NFL capture and nflverse's injuries_2026 carry the same report (identical counts: 712 OUT, 762 QUESTIONABLE, 61 DOUBTFUL) in different wording (DIDNOT vs 'Did Not Participate In Practice'); ESPN's league document lists 1,063 pool players (1,031 athletes) with codes ACTIVE, INJURY_RESERVE, QUESTIONABLE, OUT, DOUBTFUL or none; entity_alias holds 18,875 current GSIS aliases.",
+      "files": [
+        "libs/arbit-data/src/arbit_data/availability/capture.py",
+        "libs/arbit-data/src/arbit_data/availability/espn_status.py",
+        "libs/arbit-data/src/arbit_data/availability/sources.py",
+        "docs/project/decision-register.md"
+      ]
+    },
+    "plan": {
+      "summary": "New arbit_model.availability: availability(source, pit, season, week, at, game_day) returns a frame per GSIS ID with status, practice, source, _known_from, _basis and final, plus lineage. Layers: nflverse injuries through PointInTime; the latest NFL capture finished before the decision without an injuries error; between those two copies of the same report the fresher known-from wins per player (NFL on a tie); on game day, when ESPN is current, ESPN's status replaces them and is final; on game day without a current ESPN read the lineage says game-day status unknown. Vocabulary: status upper-case codes, practice FULL/LIMITED/DNP. is_game_day(game, at) helper. StoredAvailability reads captures.jsonl and the object store under ARBIT_AVAILABILITY_PATH, ESPN status through status_as_of and the GSIS alias map. Unit tests with fakes; a read-only audit on real data before and on game day; docs: OWN-073, ADR-007 implementation note, R-070 update, plan, status, changelog.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/availability.py",
+        "libs/arbit-model/tests/test_availability.py",
+        "scripts/model/availability_audit.py"
+      ]
+    },
+    "implementation": {
+      "summary": "New arbit_model.availability: availability(source, pit, season, week, at, game_day) with nflverse injuries through PointInTime, the latest successful NFL capture before the decision, freshest-copy merge per player (capture on a tie), and on game day a current ESPN status that replaces them and is final; StoredAvailability reads captures.jsonl, capture manifests and ESPN status (status_as_of, GSIS athlete aliases); is_game_day helper; status and practice vocabulary normalized. Tests (5) and a read-only audit script with receipt. Docs: OWN-073, ENG-055, ADR-007 availability note, R-070, research note section, README, plan, status, changelog.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/availability.py",
+        "libs/arbit-model/tests/test_availability.py",
+        "scripts/model/availability_audit.py",
+        "docs/research/availability-audit-2026-11-23.json"
+      ]
+    },
+    "validation": {
+      "summary": "make runtime-check passed (ruff, mypy, contracts, 1,371 tests including 5 new availability tests). Governance checks foundation, model-tests and point-in-time exited 0. Three deliberate breaks each fail availability tests. Real-data audit receipt written read-only. Not exercised: any feature, backtest or service.",
+      "files": [
+        "docs/research/availability-audit-2026-11-23.json",
+        "libs/arbit-model/tests/test_availability.py"
+      ]
+    },
+    "documentation": {
+      "summary": "Decision register OWN-073 and ENG-055; ADR-007 availability note; R-070 update; research note section with the real-data table; Model README; M3 plan; status and changelog.",
+      "files": [
+        "docs/project/decision-register.md",
+        "docs/architecture/decisions/007-model-availability.md",
+        "docs/project/known-issues.md",
+        "docs/research/point-in-time-audit-2026-11-23.md",
+        "libs/arbit-model/README.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261123-003-governance-handoff.md",
+      "next_action": "Merge the PR for claude/m3-reader-speed-availability (TASK-20261123-002 and -003). Then M3 slice 3b under a model-class task: team environment and defense against the position (OWN-068) on the columnar reader; weather W1 beside it.",
+      "unresolved": "No feature, backtest or service uses the readers yet. Backtests of 2025 and earlier see only nflverse's final weekly injury report (R-070). Game-day inactives exist only from ESPN reads since 2026-10-31. The ENG-053 open rules remain labeled and revisable."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T19:36:25Z",
+      "exit_code": 0,
+      "duration_seconds": 0.22,
+      "stdout_stderr_sha256": "7c04aa679ebe5183b964fc626d03edb626e160498833f10bead875f7b49a3a54",
+      "git_head": "59cf0c99dc63c1b16df9a1c51776e8ef01fa1b96",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/availability.py": "9745fd2f4e26c15671bce5b330d1ae2abc690b4d087a8420a9f1a6f3528d58da",
+        "libs/arbit-model/tests/test_availability.py": "9954b73c1d3bec96ea592480b0dfa1abb1d06907f7eb8c63265702c0ceb2e56f",
+        "scripts/model/availability_audit.py": "d7821e4346c83eb54d573374dd80b0462a3caa6b516c0a541ad7d9b34524b755",
+        "docs/research/availability-audit-2026-11-23.json": "de928f1400804928c08bb963de74de1cae002f6de18c75eaca535bbc4243b072",
+        "docs/research/point-in-time-audit-2026-11-23.md": "6c69215c7001144cad596a7383cab4db5c81525b22a1069c0a243385f2efcb8e",
+        "libs/arbit-model/README.md": "3b510b0518b4075aa8edfa7a60d0fcfd1a59c0a8d08db4bc761cf4c8548cb613",
+        "docs/architecture/decisions/007-model-availability.md": "f2396b6c9f8ab9fb4c7ff3d82a317e7d13d7f11d03f08c81fb6f0533ef25283a",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "cfbe7a87a6dd6f783252f1ab5ebff9045e36a99815ed2579b98ea791164ade45",
+        "docs/project/decision-register.md": "c0006bd584ee3abeacd1f81810d9bd3abbf0c2e0998122f6aab5a8022081870b",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "2a2af868e0db23dd38ece4522955807bf3afec2b38ccdb3308ede2154717406f",
+        "docs/project/changelog.md": "3ad1a5a1ffec044492103071ca2326aae18222cf0ca324538fc184ba03daf258",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-23T19:36:28Z",
+      "exit_code": 0,
+      "duration_seconds": 3.569,
+      "stdout_stderr_sha256": "c2f67fe114dc068cf32e893fd53e3ef64c608f802d46acf4427a4556e7c5c289",
+      "git_head": "59cf0c99dc63c1b16df9a1c51776e8ef01fa1b96",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/availability.py": "9745fd2f4e26c15671bce5b330d1ae2abc690b4d087a8420a9f1a6f3528d58da",
+        "libs/arbit-model/tests/test_availability.py": "9954b73c1d3bec96ea592480b0dfa1abb1d06907f7eb8c63265702c0ceb2e56f",
+        "scripts/model/availability_audit.py": "d7821e4346c83eb54d573374dd80b0462a3caa6b516c0a541ad7d9b34524b755",
+        "docs/research/availability-audit-2026-11-23.json": "de928f1400804928c08bb963de74de1cae002f6de18c75eaca535bbc4243b072",
+        "docs/research/point-in-time-audit-2026-11-23.md": "6c69215c7001144cad596a7383cab4db5c81525b22a1069c0a243385f2efcb8e",
+        "libs/arbit-model/README.md": "3b510b0518b4075aa8edfa7a60d0fcfd1a59c0a8d08db4bc761cf4c8548cb613",
+        "docs/architecture/decisions/007-model-availability.md": "f2396b6c9f8ab9fb4c7ff3d82a317e7d13d7f11d03f08c81fb6f0533ef25283a",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "cfbe7a87a6dd6f783252f1ab5ebff9045e36a99815ed2579b98ea791164ade45",
+        "docs/project/decision-register.md": "c0006bd584ee3abeacd1f81810d9bd3abbf0c2e0998122f6aab5a8022081870b",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "2a2af868e0db23dd38ece4522955807bf3afec2b38ccdb3308ede2154717406f",
+        "docs/project/changelog.md": "3ad1a5a1ffec044492103071ca2326aae18222cf0ca324538fc184ba03daf258",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-23T19:36:30Z",
+      "exit_code": 0,
+      "duration_seconds": 1.413,
+      "stdout_stderr_sha256": "d985275b972b60dcae6b8a7d270eaff5ce62ed5f974667e7eccfb7a066b26530",
+      "git_head": "59cf0c99dc63c1b16df9a1c51776e8ef01fa1b96",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/availability.py": "9745fd2f4e26c15671bce5b330d1ae2abc690b4d087a8420a9f1a6f3528d58da",
+        "libs/arbit-model/tests/test_availability.py": "9954b73c1d3bec96ea592480b0dfa1abb1d06907f7eb8c63265702c0ceb2e56f",
+        "scripts/model/availability_audit.py": "d7821e4346c83eb54d573374dd80b0462a3caa6b516c0a541ad7d9b34524b755",
+        "docs/research/availability-audit-2026-11-23.json": "de928f1400804928c08bb963de74de1cae002f6de18c75eaca535bbc4243b072",
+        "docs/research/point-in-time-audit-2026-11-23.md": "6c69215c7001144cad596a7383cab4db5c81525b22a1069c0a243385f2efcb8e",
+        "libs/arbit-model/README.md": "3b510b0518b4075aa8edfa7a60d0fcfd1a59c0a8d08db4bc761cf4c8548cb613",
+        "docs/architecture/decisions/007-model-availability.md": "f2396b6c9f8ab9fb4c7ff3d82a317e7d13d7f11d03f08c81fb6f0533ef25283a",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "cfbe7a87a6dd6f783252f1ab5ebff9045e36a99815ed2579b98ea791164ade45",
+        "docs/project/decision-register.md": "c0006bd584ee3abeacd1f81810d9bd3abbf0c2e0998122f6aab5a8022081870b",
+        "docs/project/known-issues.md": "f9c3f9a2a79da841d4e63854392bb5bd530846612be64b40ded47911ce725f90",
+        "docs/project/status.md": "2a2af868e0db23dd38ece4522955807bf3afec2b38ccdb3308ede2154717406f",
+        "docs/project/changelog.md": "3ad1a5a1ffec044492103071ca2326aae18222cf0ca324538fc184ba03daf258",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T19:36:39Z",
+      "kind": "observation",
+      "note": "Real data (read-only): week 11 Sunday kickoff inside R-068: ESPN last read 2026-11-10, game-day status flagged unknown, 282 players from nflverse by the game-day rule; Monday night game day at 19:34 UTC 2026-11-23: ESPN current (read 14 s earlier), 1,026 final statuses, 37 unmapped pool entries (32 D/ST, 5 athletes), 216 more from NFL's 17:00 UTC capture; same moment before game day: all 313 from NFL's capture, fresher than nflverse.",
+      "evidence": "docs/research/availability-audit-2026-11-23.json"
+    },
+    {
+      "at": "2026-11-23T19:36:39Z",
+      "kind": "observation",
+      "note": "Availability test sensitivity: using captures after the decision fails 2 tests, using a stale ESPN status fails 1, letting the older report copy win fails 2; source restored byte-identical.",
+      "evidence": "libs/arbit-model/tests/test_availability.py"
+    }
+  ],
+  "closed_at": "2026-11-23T19:36:39Z"
+}

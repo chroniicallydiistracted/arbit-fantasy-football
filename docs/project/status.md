@@ -22,6 +22,12 @@
 - **A season of decision times:** every 2025 kickoff across 5 tables reads in 1.5 s.
 - **The owner's timing order is ADR-007 A5:** held data first, then source timestamps and rules only for data refreshed during a gap or not yet fetched.
 
+**Game-day availability (2026-11-23, TASK-20261123-003, ENG-055, OWN-073):** `arbit_model.availability` gives each player's status at a decision time.
+- **On game day:** ESPN's status, read within 15 minutes, is final. It carries inactives.
+- **Otherwise:** the freshest copy of NFL's injury report, Arbit's own twice-daily capture or nflverse's.
+- **No source:** unknown, never assumed active.
+- **On real data:** week 11's Sunday kickoff, inside the outage, is correctly flagged game-day unknown. Monday night's game day takes ESPN's final status for 1,026 players.
+
 **Open work, in order** (owner direction 2026-11-22):
 1. M3 slice 3b–3e: team environment and defense against the position, availability and role, efficiency and priors, and the Q-014 note. Weather W1 (venue table and forecast record) runs beside it.
 2. M3 slices 4–6.

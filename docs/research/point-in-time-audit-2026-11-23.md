@@ -120,3 +120,25 @@ A 2025 play-by-play file (21.6 MB, 372 columns) reads in 0.06 s; building its di
 **The same tests catch the same mistakes:** the three deliberate breaks fail 1, 9 and 6 reader tests, as before. One test now reuses a reader across 103 decision times and checks every tenth result against a fresh reader, so cached frames can't carry one decision's answer into another.
 
 **Timing order (OWN-072, ADR-007 A5):** everything Arbit holds at a decision counts at once. Source timestamps and family rules apply only to values Arbit didn't hold, because they were refreshed during a gap or not yet fetched. The reader already worked this way; the owner made it the rule.
+
+## Game-day availability (TASK-20261123-003, ENG-055, OWN-073)
+
+`arbit_model.availability` gives each player's availability at a decision time:
+- **On the player's game day:** ESPN's fantasy status, read within 15 minutes, is final.
+- **Otherwise:** the freshest copy of NFL's injury report. That is Arbit's own capture or nflverse's republication, whichever Arbit had more recently.
+- **No source:** unknown.
+
+NFL's capture and nflverse's file carry the same report. Their 2026 counts are identical (712 OUT, 762 QUESTIONABLE, 61 DOUBTFUL) in different words, such as `DIDNOT` and "Did Not Participate In Practice", so the reader uses common terms.
+
+Real data (receipt [availability-audit-2026-11-23.json](availability-audit-2026-11-23.json), read only):
+
+| Decision | Result |
+| --- | --- |
+| Week 11 Sunday, 18:00 UTC on 2026-11-22: the earliest kickoff, inside the R-068 outage | ESPN was last read on 10 November, so game-day status is **unknown**, flagged, never assumed active. No NFL capture existed yet. nflverse's copy, fetched after the outage, supplies 282 players by the game-day rule (52 OUT) |
+| Monday night (CIN at WAS), on its game day at 19:34 UTC on 2026-11-23 | ESPN was read 14 seconds earlier. Its status is **final** for 1,026 players, and 37 pool entries have no GSIS ID: 32 D/ST units and 5 athletes. Another 216 listed players ESPN doesn't carry come from NFL's 17:00 UTC capture. 68 are OUT |
+| The same moment, before game day | NFL's 17:00 UTC capture is fresher than nflverse's copy, so it supplies all 313 players (54 OUT) |
+
+**Tests:** 5 in `libs/arbit-model/tests/test_availability.py`. Three deliberate breaks each fail tests:
+- using captures finished after the decision: 2 failures;
+- using a stale ESPN status: 1;
+- letting the older copy win: 2.

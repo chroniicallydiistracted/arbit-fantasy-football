@@ -1,5 +1,17 @@
 # Development Changelog
 
+## 2026-11-23 — Game-day availability in the owner's order (TASK-20261123-003)
+
+- **OWN-073:** "We should have a better route for more up to date injuries, however game day decisions should be the final say."
+- **`arbit_model.availability` (ENG-055)** returns one row per player with status, practice, source, known-from time, basis and whether it is final:
+  - On the player's game day, ESPN's status read within 15 minutes is final.
+  - Otherwise, the freshest copy of NFL's injury report: Arbit's capture at 12:00 and 19:15 Eastern, or nflverse's republication through the point-in-time reader.
+  - Otherwise unknown. Game day without a current ESPN read is flagged.
+- **Common words:** `DIDNOT` and "Did Not Participate In Practice" both become DNP, and status codes are upper case. `is_game_day` uses the US Eastern date, up to kickoff.
+- **Tests:** 5 new, and three deliberate breaks each fail tests.
+- **Real data:** `scripts/model/availability_audit.py` and its receipt cover week 11's Sunday kickoff during the outage, Monday night's game day and the same moment before game day.
+- **Docs:** OWN-073, ENG-055, ADR-007 note, R-070 update, research note, README, plan and status.
+
 ## 2026-11-23 — Columnar point-in-time reader and the owner's timing order (TASK-20261123-002)
 
 - **PR #4 (slice 3a) merged** as `c41a7d7`. The owner authorized GitHub actions, merges included, on 2026-11-23. The merged worktree and local branch were removed.

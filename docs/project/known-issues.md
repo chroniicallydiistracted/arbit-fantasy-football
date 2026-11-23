@@ -149,7 +149,8 @@ At 01:01 UTC on 2026-11-09 (Sunday evening, week 9), a cookie-free ESPN read was
 
 - **R-070: nflverse injury files have no `date_modified` from 2025 on.** ADR-007 times injury rows by `date_modified`, which the 2020–2024 files carry and the 2025 and 2026 files don't. Each newer row holds the week's final report, so the reader counts it from 07:00 UTC on game day, labeled `retrospective-rule`.
   - **Effect:** backtests of 2025 can't see Wednesday-to-Friday report changes, only the final status. That is pessimistic for early-week decisions and right for kickoff decisions.
-  - **2026:** Arbit's daily vintages since 2026-10-31 hold the intra-week reports, and NFL's own report is captured twice a day once the availability lane runs (OWN-063).
+  - **2026:** Arbit's daily vintages since 2026-10-31 hold the intra-week reports.
+  - **Since 2026-11-23 (OWN-073, ENG-055):** current decisions use the freshest copy of NFL's report, Arbit's own capture at 12:00 and 19:15 Eastern. On game day ESPN's status is final. Backtests of 2025 and earlier still see only nflverse's final weekly report.
   - **Owner:** Model.
 - **R-071 — resolved 2026-11-23 (ENG-054): the reader placed rows one at a time in Python.** The audit took 34 s and peaked at 2.2 GB, mostly the 2026 depth chart file (827,000 rows in each of 11 versions).
   - **Not the cause:** the data was already local; reading a version takes milliseconds.

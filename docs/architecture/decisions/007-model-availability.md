@@ -132,3 +132,9 @@ The owner's words: "For timing, the primary rule should allow the model to use w
 - **Fallback:** a value Arbit didn't hold at the decision takes its source timestamp, else its family rule, as in A1. That covers a value refreshed during a capture gap, and one Arbit hadn't fetched yet, which includes every season before Arbit's first import.
 - **Labels:** the label still records how the known-from time was set. A value Arbit held whose first copy arrived after a gap keeps the rule's time and label (A1). It is still used, because Arbit held it.
 - **Implementation:** `arbit_model.point_in_time` already worked this way (ENG-053); this records the precedence as the owner's rule.
+
+**Availability (OWN-073, 2026-11-23).** The owner's words: "We should have a better route for more up to date injuries, however game day decisions should be the final say."
+- **On the player's game day:** ESPN's fantasy status, read within 15 minutes, is final. It carries the inactives (decision 1, OWN-064).
+- **Before game day:** the freshest copy of NFL's injury report. That is Arbit's own capture (OWN-063) or nflverse's republication, whichever Arbit had more recently.
+- **No source:** the player stays unknown.
+- **Implementation:** `arbit_model.availability` (ENG-055).
