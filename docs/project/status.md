@@ -8,7 +8,7 @@
 - **On `main` since PR #4 (`c41a7d7`, merged 2026-11-23 under the owner's GitHub authorization):** M3 slice 3a, the point-in-time reader (TASK-20261123-001). It runs in no service, so the worker was not restarted.
 - **On `main` since PR #5 (`cace69c`):** the columnar reader and timing order (TASK-20261123-002) and game-day availability (TASK-20261123-003).
 - **On `main` since PR #6 (`b3c0a9a`, merged 2026-11-23 as the frozen v0 baseline the owner's DvP specification preserves):** M3 slice 3b, team environment and defense against the position (TASK-20261123-004). It runs in no service.
-- **Not yet on `main`:** the DvP research, phases 0-1 (TASK-20261123-005, branch `claude/m3-dvp-phase0`). Offline research; it runs in no service.
+- **Not yet on `main`:** the DvP research, phases 0-1 (TASK-20261123-005, branch `claude/m3-dvp-phase0`, with TASK-20261123-006 covering the governance state pointer TASK-005's scope missed). Offline research; it runs in no service.
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.

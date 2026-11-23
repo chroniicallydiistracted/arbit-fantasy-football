@@ -19,6 +19,7 @@
   - On validated observations: D/ST k about 9; QB and RB 20-30; WR, TE and K 42-49, with overlapping intervals.
 - **Tests:** 38 new (T01-T13, T21-T22, T29-T40). Five deliberate breaks each fail a test.
 - **R-074:** 3b's last-season features include playoff games, and the 3b note mislabels a column. Fix with the 3b follow-up.
+- **TASK-20261123-006:** scopes `docs/governance/state.json`, which TASK-005 left out, so the PR's diff gate covers the handoff pointer.
 
 ## 2026-11-23 — Team environment and defense against the position (M3 slice 3b, TASK-20261123-004)
 

@@ -3,8 +3,8 @@
   "id": "TASK-20261123-006",
   "title": "Cover the governance state pointer for the DvP phase 0-1 PR",
   "objective": "TASK-20261123-005 omitted docs/governance/state.json from its scope, so the diff gate could not cover the latest-handoff pointer its finish wrote. This task scopes that file, records why, and closes so the PR's governance check covers it. No other change.",
-  "status": "active",
-  "phase": "document",
+  "status": "completed",
+  "phase": "handoff",
   "change_class": "docs",
   "requirements": [
     "GOVAI-013"
@@ -14,9 +14,9 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-23T22:51:17Z",
-  "updated_at": "2026-11-23T22:51:18Z",
+  "updated_at": "2026-11-23T22:51:47Z",
   "baseline": "1d4b4ab5006d9f779a255d2c9782d84776f329a4",
-  "next_action": "Record document evidence",
+  "next_action": "Merge the PR for claude/m3-dvp-phase0 (TASK-20261123-005 and -006). Then DvP Phase 2 under OWN-074: A00, A02-A10, A12 on the validated observations, with plots and a RELIABILITY_REPORT; then Phase 3 starting with the offense-only B00. Ask the owner whether to repair R-072 in the canonical targets.",
   "sections": {
     "review": {
       "summary": "Read scripts/governance.py diff-gate: changed paths must be in a completed task's scope, its task file or its handoff. TASK-20261123-005's scope lacked docs/governance/state.json (TASK-20261123-004 listed it), and its finish changed latest_handoff.",
@@ -44,15 +44,17 @@
       ]
     },
     "documentation": {
-      "summary": "The correction note on this task records the omission; no other documents change.",
+      "summary": "status.md (the unmerged-branch line names this task) and changelog.md (one line under the DvP entry) record why this task exists; the correction note records the omission.",
       "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md",
         "docs/governance/state.json"
       ]
     },
     "handoff": {
-      "path": null,
-      "next_action": "",
-      "unresolved": ""
+      "path": "docs/project/handoffs/2026-11-23-task-20261123-006-governance-handoff.md",
+      "next_action": "Merge the PR for claude/m3-dvp-phase0 (TASK-20261123-005 and -006). Then DvP Phase 2 under OWN-074: A00, A02-A10, A12 on the validated observations, with plots and a RELIABILITY_REPORT; then Phase 3 starting with the offense-only B00. Ask the owner whether to repair R-072 in the canonical targets.",
+      "unresolved": "R-072 canonical repair needs owner approval; full D/ST coverage BLOCKED until then. R-074 for the 3b follow-up. NWS User-Agent contact before weather W3."
     }
   },
   "checks": [
@@ -70,6 +72,21 @@
       "scope_sha256": {
         "docs/governance/state.json": "DYNAMIC-STATE"
       }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T22:51:42Z",
+      "exit_code": 0,
+      "duration_seconds": 0.153,
+      "stdout_stderr_sha256": "c46113fca4f706aeeeb5863c0297219522b325b7c1546ddcadc522fe554e06dd",
+      "git_head": "e492c2d9c03bd0989dc1b5e0e1f6b503f9a477c5",
+      "scope_sha256": {
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
     }
   ],
   "journal": [
@@ -79,5 +96,6 @@
       "note": "TASK-20261123-005 should have listed docs/governance/state.json in its scope, as earlier tasks did; this task covers it.",
       "evidence": "docs/governance/tasks/TASK-20261123-005.json"
     }
-  ]
+  ],
+  "closed_at": "2026-11-23T22:51:47Z"
 }
