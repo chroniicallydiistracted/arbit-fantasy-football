@@ -5,6 +5,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
     "arbit-core",
     "arbit-data",
+    "polars>=1.30,<2",
     "pyarrow>=21,<30",
 ]
 

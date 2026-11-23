@@ -20,8 +20,8 @@ from typing import Any
 
 from arbit_data.db import UnitOfWork
 from arbit_data.nflverse.objects import ObjectStore
-from arbit_model.point_in_time import KNOWN_FROM, PLACEMENT_COLUMNS, PointInTime
-from arbit_model.timing import Calendar, key_season, spec_for
+from arbit_model.point_in_time import KNOWN_FROM, PointInTime
+from arbit_model.timing import KNOWN, Calendar, key_season, spec_for
 from sqlalchemy import create_engine
 
 FORMAT = "arbit-point-in-time-audit-v1"
@@ -59,10 +59,10 @@ def placement(pit: PointInTime, key: str) -> dict[str, Any]:
     if not history.versions:
         return {"versions": 0}
     spec = spec_for(key)
-    rows = pit.source.table(history.versions[-1], PLACEMENT_COLUMNS[spec.family])
-    season = key_season(key)
-    untimed = sum(spec.locate(row, pit.calendar, season).known is None for row in rows)
-    return {"versions": len(history.versions), "rows": len(rows), "untimedRows": untimed}
+    frame = pit.source.table(history.versions[-1], spec.needs)
+    placed = spec.place(frame, pit.calendar, key_season(key))
+    untimed = placed[KNOWN].null_count()
+    return {"versions": len(history.versions), "rows": frame.height, "untimedRows": untimed}
 
 
 def main() -> None:
@@ -92,7 +92,7 @@ def main() -> None:
         "tables": {},
         "decisions": [],
     }
-    for season, names in keys.items():
+    for names in keys.values():
         for key in names:
             history = pit.source.history(key)
             report["staleWindowHours"] = history.stale.total_seconds() / 3600
@@ -110,8 +110,9 @@ def main() -> None:
         for key in keys[season]:
             started = time.monotonic()
             reading = pit.read(key, TABLES[key.replace(str(season), "{s}")], at)
-            latest = max((row[KNOWN_FROM] for row in reading.rows), default=None)
-            violations += sum(row[KNOWN_FROM] >= at for row in reading.rows)
+            known = reading.frame[KNOWN_FROM]
+            latest = known.max() if reading.frame.height else None
+            violations += int((known >= at).sum()) if reading.frame.height else 0
             lineage = dict(reading.lineage)
             lineage.pop("columns", None)
             entry["tables"][key] = {

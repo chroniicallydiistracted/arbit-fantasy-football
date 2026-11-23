@@ -151,8 +151,10 @@ At 01:01 UTC on 2026-11-09 (Sunday evening, week 9), a cookie-free ESPN read was
   - **Effect:** backtests of 2025 can't see Wednesday-to-Friday report changes, only the final status. That is pessimistic for early-week decisions and right for kickoff decisions.
   - **2026:** Arbit's daily vintages since 2026-10-31 hold the intra-week reports, and NFL's own report is captured twice a day once the availability lane runs (OWN-063).
   - **Owner:** Model.
-- **R-071: the reader places rows one at a time in Python.** The audit took 34 s and peaked at 2.2 GB, mostly the 2026 depth chart file (827,000 rows in each of 11 versions). Feature building over many seasons and decision times needs placement done in columns, with cached placements per version.
-  - **Owner:** Model / slice 3b.
+- **R-071 — resolved 2026-11-23 (ENG-054): the reader placed rows one at a time in Python.** The audit took 34 s and peaked at 2.2 GB, mostly the 2026 depth chart file (827,000 rows in each of 11 versions).
+  - **Not the cause:** the data was already local; reading a version takes milliseconds.
+  - **Fix:** placement now works on whole columns, and each version's labeled rows are cached apart from the decision time.
+  - **Result:** the same audit, with identical results, takes 8.8 s and 0.83 GB. A whole 2025 season of decision times across five tables takes 1.5 s.
 - **Officials for four games can't be placed.** The officials file's old GSIS IDs for the three rescheduled 2021 week 15 games and the cancelled 2022 Buffalo–Cincinnati game aren't in the schedule. Their 28 rows count only from a version Arbit held. Officials are only a candidate input, so this blocks nothing.
 
 ## Governance continuity audit, 2026-11-22

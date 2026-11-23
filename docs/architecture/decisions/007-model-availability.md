@@ -122,3 +122,13 @@ The 2026-11-10 to 2026-11-22 outage (R-068) is the first recorded gap.
 - intra-week vintages of revised files.
 
 For these a gap stays unknown (R-066), never assumed. Retroactive capture recovers what sources still serve. Keeping the PC awake when data is published remains the main protection.
+
+## Owner clarification (OWN-072, 2026-11-23)
+
+The owner's words: "For timing, the primary rule should allow the model to use whatever data is immediately available. then we would fallback to specific timeatamps where the data refreshed during a gap or is not yet available."
+
+**A5. Held data first; timestamps and rules only as fallback.**
+- **First:** at a decision, everything Arbit holds counts, as soon as Arbit holds it. Nothing Arbit holds waits for a family rule.
+- **Fallback:** a value Arbit didn't hold at the decision takes its source timestamp, else its family rule, as in A1. That covers a value refreshed during a capture gap, and one Arbit hadn't fetched yet, which includes every season before Arbit's first import.
+- **Labels:** the label still records how the known-from time was set. A value Arbit held whose first copy arrived after a gap keeps the rule's time and label (A1). It is still used, because Arbit held it.
+- **Implementation:** `arbit_model.point_in_time` already worked this way (ENG-053); this records the precedence as the owner's rule.

@@ -120,7 +120,7 @@ def test_versions_and_successful_reads_come_from_the_database(uow, tmp_path):
         (None, utc(2026, 11, 8, 3)),
         (utc(2026, 11, 10, 4), utc(2026, 11, 22, 22, 45)),
     ]
-    first = source.table(history.versions[0], ("player_id", "receptions"))
+    first = source.table(history.versions[0], ("player_id", "receptions")).to_dicts()
     assert first == [{"player_id": "00-A", "receptions": None}]
     assert history.versions[0].manifest == v0
 

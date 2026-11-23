@@ -5,7 +5,8 @@
 - **Database:** up with `restart: unless-stopped`. 2026 regular-season weeks 1–10 are complete, and week 11 was live.
 - **CI on `main`:** green; `main` is protected.
 - **On `main` since PR #3:** TASK-20261122-007 to -010 (weather decision and plan, never-captured NFL rule, housekeeping, the Live playback test flake fix). The merged worktree and branches were removed.
-- **Not yet on `main`:** M3 slice 3a, the point-in-time reader (TASK-20261123-001, branch `claude/m3-slice3-reader`). It runs in no service.
+- **On `main` since PR #4 (`c41a7d7`, merged 2026-11-23 under the owner's GitHub authorization):** M3 slice 3a, the point-in-time reader (TASK-20261123-001). It runs in no service, so the worker was not restarted.
+- **Not yet on `main`:** the columnar reader and timing order (TASK-20261123-002) and game-day availability (TASK-20261123-003), on branch `claude/m3-reader-speed-availability`.
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
@@ -13,7 +14,13 @@
 - **Catalog re-review (A2):** 38 timing-only exclusions become `as_imported`, observed weather becomes history, betting lines wait behind the OWN-067 gate, and the remaining exclusions are pinned as policy.
 - **New risks:**
   - R-070: injury files from 2025 lack `date_modified`, so those rows use a game-day rule.
-  - R-071: per-row placement costs 34 s and 2.2 GB on the full history, to be done in columns in 3b.
+  - R-071: per-row placement cost 34 s and 2.2 GB on the full history. Resolved by TASK-002.
+
+**Columnar reader and timing order (2026-11-23, TASK-20261123-002, ENG-054, OWN-072):**
+- **The data was already local:** a version reads in milliseconds, and per-row Python was the cost.
+- **Columns instead of rows:** the reader works on whole columns and caches each version's labeled rows. The audit takes 8.8 s instead of 34 s and 0.83 GB instead of 2.2 GB, with identical results.
+- **A season of decision times:** every 2025 kickoff across 5 tables reads in 1.5 s.
+- **The owner's timing order is ADR-007 A5:** held data first, then source timestamps and rules only for data refreshed during a gap or not yet fetched.
 
 **Open work, in order** (owner direction 2026-11-22):
 1. M3 slice 3b–3e: team environment and defense against the position, availability and role, efficiency and priors, and the Q-014 note. Weather W1 (venue table and forecast record) runs beside it.

@@ -1,5 +1,22 @@
 # Development Changelog
 
+## 2026-11-23 — Columnar point-in-time reader and the owner's timing order (TASK-20261123-002)
+
+- **PR #4 (slice 3a) merged** as `c41a7d7`. The owner authorized GitHub actions, merges included, on 2026-11-23. The merged worktree and local branch were removed.
+- **Speed question answered with measurements:** Arbit already keeps every nflverse file locally. The 2026 depth chart version (827,000 rows) reads in 0.02 s; per-row Python took 1.75 s.
+- **Reader (ENG-054):**
+  - Placement works on whole columns: polars joins with the schedule calendar.
+  - A version's labeled rows are cached apart from the decision time.
+  - `Reading.frame` is a polars frame, and `rows` remains for convenience.
+  - `arbit-model` declares `polars`, already a dependency of `arbit-data`.
+- **Same answers:** the real-history audit reproduces every figure of the first receipt. It runs in 8.8 s instead of 34 s and peaks at 0.83 GB instead of 2.2 GB. A whole 2025 season, 630 reads, takes 1.5 s. R-071 is resolved.
+- **Tests:**
+  - The 20 reader tests are unchanged apart from frames, and the placement unit tests call the columnar rules.
+  - One test reuses a reader across 103 decision times and checks every tenth against a fresh reader.
+  - The three deliberate breaks fail 1, 9 and 6 tests, as before.
+  - The 2 PostgreSQL tests pass.
+- **OWN-072 / ADR-007 A5:** held data first, then source timestamps and rules for data refreshed during a gap or not yet fetched.
+
 ## 2026-11-23 — Point-in-time reader and catalog re-review (M3 slice 3a, TASK-20261123-001)
 
 - **Reader:** new `arbit_model.point_in_time`, `timing` and `vintages` (ENG-053). A feature reads a table at a decision time and gets:

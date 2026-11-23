@@ -66,7 +66,7 @@ No unit was bounded by a gap's start: nflverse didn't publish any of these rows 
    - The other exclusions are policy: OWN-061, the legacy duplicate of the statistics release, play description text, and release tests. A test pins that set.
    - Regenerating the catalog also picked up upstream type changes since 2026-11-10: seven contract text and history columns are now `large_string`, and QBR's `game_week` is now `int32`.
    - The catalog still lists 1,827 fields: 148 pre-game, 722 history, 18 earlier seasons only, 38 as imported, 411 identity, 490 excluded.
-5. **Cost.** The whole audit took 34 seconds and peaked at 2.2 GB of memory. Most of both went to the 2026 depth chart file: 827,000 rows in each of 11 versions, placed row by row in Python on first use. Features that read many decision times across many seasons will need placement done in columns rather than per row (slice 3 feature work).
+5. **Cost (R-071, resolved the same day; see below).** The whole audit took 34 seconds and peaked at 2.2 GB of memory. Most of both went to the 2026 depth chart file: 827,000 rows in each of 11 versions, placed row by row in Python on first use.
 
 ## Tests
 
@@ -85,3 +85,38 @@ No unit was bounded by a gap's start: nflverse didn't publish any of these rows 
   - failed checks are not reads;
   - a column missing from an older version reads as unknown;
   - a decision inside a gap.
+
+## Columnar reader (TASK-20261123-002, ENG-054)
+
+The owner asked whether keeping the data locally, or fetching straight from nflverse's repository, would be faster. Arbit already keeps every nflverse file locally, as Parquet in its object store. The time went to Python, not to reading.
+
+**Where the time went:**
+
+| Step, one 2026 depth chart version (827,000 rows, 3.7 MB) | Seconds |
+| --- | --- |
+| Checksum the local file | 0.01 |
+| Read the columns | 0.02 |
+| Build Python dictionaries | 0.2 |
+| Place rows one at a time | 1.55 |
+| Parse and group the same rows by column | 0.05 |
+
+A 2025 play-by-play file (21.6 MB, 372 columns) reads in 0.06 s; building its dictionaries took 2.0 s. Fetching from nflverse's repository would add downloads, and it would drop the dated copies that ADR-007's timing depends on.
+
+**The fix:**
+- Placement now works on whole columns: polars joins against the schedule calendar.
+- Each version's labeled rows are cached apart from the decision time, so a read is a cached frame and one time filter.
+- A reading returns a polars frame.
+
+**Results** (receipt: [point-in-time-audit-columnar-2026-11-23.json](point-in-time-audit-columnar-2026-11-23.json)):
+
+| Measure | Row by row | Columnar |
+| --- | --- | --- |
+| The audit above, start to finish | 34 s, 2.2 GB peak | 8.8 s, 0.83 GB peak |
+| Its 56 table reads | 30.5 s | 7.9 s |
+| A whole 2025 season: 126 kickoffs × 5 tables (play-by-play, player statistics, injuries, depth charts, snaps) on one reader | not measured | 630 reads in 1.5 s (2.4 ms each), 34.7 million rows returned, 0.4 GB peak |
+
+**Same answers:** every figure of both receipts is identical. That covers versions, gaps, units, bases, gap bounds, untimed units and latest known-from times, at all four decision times. No row is known at or after its decision.
+
+**The same tests catch the same mistakes:** the three deliberate breaks fail 1, 9 and 6 reader tests, as before. One test now reuses a reader across 103 decision times and checks every tenth result against a fresh reader, so cached frames can't carry one decision's answer into another.
+
+**Timing order (OWN-072, ADR-007 A5):** everything Arbit holds at a decision counts at once. Source timestamps and family rules apply only to values Arbit didn't hold, because they were refreshed during a gap or not yet fetched. The reader already worked this way; the owner made it the rule.

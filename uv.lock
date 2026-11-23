@@ -134,6 +134,7 @@ source = { editable = "libs/arbit-model" }
 dependencies = [
     { name = "arbit-core" },
     { name = "arbit-data" },
+    { name = "polars" },
     { name = "pyarrow" },
 ]
 
@@ -141,6 +142,7 @@ dependencies = [
 requires-dist = [
     { name = "arbit-core", editable = "libs/arbit-core" },
     { name = "arbit-data", editable = "libs/arbit-data" },
+    { name = "polars", specifier = ">=1.30,<2" },
     { name = "pyarrow", specifier = ">=21,<30" },
 ]
 
