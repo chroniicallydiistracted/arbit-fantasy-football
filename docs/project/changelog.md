@@ -1,5 +1,25 @@
 # Development Changelog
 
+## 2026-11-23 — DvP research phases 0-1: v0 reproduced, projection firewall, completed-game observations (TASK-20261123-005)
+
+- **PR #6 merged** (`b3c0a9a`): slice 3b, kept unchanged as the v0 baseline the owner's specification preserves.
+- **OWN-074:** the owner's DvP research specification v1.1 ([plan](../research/Arbit_FFA_M3_DvP_Plan.md)).
+- **`arbit_model.dvp` (ENG-057):**
+  - `provenance` admits sources by lineage and fails closed;
+  - `observations` builds completed-game team-game-position cells with schedule-decided opponents;
+  - `asof` keeps pre-cutoff features apart from labels;
+  - `reliability` holds v0's split-half with intervals;
+  - `results` writes experiment records that a projection dependency invalidates.
+- **`scripts/model/dvp.py`:** `audit`, `reproduce-v0` and `registry`, with `config/dvp/base.json`.
+- **Results** ([runbook](../research/dvp/README.md)):
+  - v0 reproduced exactly.
+  - 5,278 team-games reconciled.
+  - Projection dependencies 0.
+  - R-072 and R-073 dispositioned.
+  - On validated observations: D/ST k about 9; QB and RB 20-30; WR, TE and K 42-49, with overlapping intervals.
+- **Tests:** 38 new (T01-T13, T21-T22, T29-T40). Five deliberate breaks each fail a test.
+- **R-074:** 3b's last-season features include playoff games, and the 3b note mislabels a column. Fix with the 3b follow-up.
+
 ## 2026-11-23 — Team environment and defense against the position (M3 slice 3b, TASK-20261123-004)
 
 - **PR #5 merged** (`cace69c`): the columnar reader, the timing order and game-day availability.

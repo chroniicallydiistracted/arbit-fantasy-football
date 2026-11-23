@@ -1,0 +1,954 @@
+{
+ "auditRun": "phase1-audit-20261123T222517Z",
+ "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+ "format": "arbit-dvp-m3-3-v0-reproduction-v1",
+ "generatedAt": "2026-11-23T22:25:19.523355+00:00",
+ "independent": {
+  "DST_adjusted": {
+   "k": 9.1,
+   "matchesReceipt": true,
+   "pearson": 0.472,
+   "units": 315
+  },
+  "DST_raw": {
+   "k": 9.2,
+   "matchesReceipt": true,
+   "pearson": 0.468,
+   "units": 315
+  },
+  "K_adjusted": {
+   "k": 55.3,
+   "matchesReceipt": true,
+   "pearson": 0.13,
+   "units": 320
+  },
+  "K_raw": {
+   "k": 49.4,
+   "matchesReceipt": true,
+   "pearson": 0.143,
+   "units": 320
+  },
+  "QB_adjusted": {
+   "k": 22.2,
+   "matchesReceipt": true,
+   "pearson": 0.271,
+   "units": 320
+  },
+  "QB_raw": {
+   "k": 30.6,
+   "matchesReceipt": true,
+   "pearson": 0.213,
+   "units": 320
+  },
+  "RB_adjusted": {
+   "k": 20.0,
+   "matchesReceipt": true,
+   "pearson": 0.292,
+   "units": 320
+  },
+  "RB_raw": {
+   "k": 18.7,
+   "matchesReceipt": true,
+   "pearson": 0.306,
+   "units": 320
+  },
+  "TE_adjusted": {
+   "k": 40.1,
+   "matchesReceipt": true,
+   "pearson": 0.171,
+   "units": 320
+  },
+  "TE_raw": {
+   "k": 37.6,
+   "matchesReceipt": true,
+   "pearson": 0.18,
+   "units": 320
+  },
+  "WR_adjusted": {
+   "k": 42.0,
+   "matchesReceipt": true,
+   "pearson": 0.164,
+   "units": 320
+  },
+  "WR_raw": {
+   "k": 44.1,
+   "matchesReceipt": true,
+   "pearson": 0.158,
+   "units": 320
+  }
+ },
+ "kArithmetic": {
+  "DST_adjusted": {
+   "kIfHalvesWere8": 8.94,
+   "kRecomputed": 9.08,
+   "kV0": 9.1,
+   "meanHalfGames": 8.1302,
+   "pearson": 0.47233,
+   "singleGame": 0.0992,
+   "weightAt8": 0.4683
+  },
+  "DST_raw": {
+   "kIfHalvesWere8": 9.09,
+   "kRecomputed": 9.24,
+   "kV0": 9.2,
+   "meanHalfGames": 8.1302,
+   "pearson": 0.46806,
+   "singleGame": 0.0977,
+   "weightAt8": 0.464
+  },
+  "K_adjusted": {
+   "kIfHalvesWere8": 53.61,
+   "kRecomputed": 55.26,
+   "kV0": 55.3,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.12986,
+   "singleGame": 0.0178,
+   "weightAt8": 0.1265
+  },
+  "K_raw": {
+   "kIfHalvesWere8": 47.95,
+   "kRecomputed": 49.43,
+   "kV0": 49.4,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.14298,
+   "singleGame": 0.0198,
+   "weightAt8": 0.1393
+  },
+  "QB_adjusted": {
+   "kIfHalvesWere8": 21.51,
+   "kRecomputed": 22.17,
+   "kV0": 22.2,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.27112,
+   "singleGame": 0.0432,
+   "weightAt8": 0.2652
+  },
+  "QB_raw": {
+   "kIfHalvesWere8": 29.65,
+   "kRecomputed": 30.56,
+   "kV0": 30.6,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.21251,
+   "singleGame": 0.0317,
+   "weightAt8": 0.2075
+  },
+  "RB_adjusted": {
+   "kIfHalvesWere8": 19.38,
+   "kRecomputed": 19.98,
+   "kV0": 20.0,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.29218,
+   "singleGame": 0.0477,
+   "weightAt8": 0.2859
+  },
+  "RB_raw": {
+   "kIfHalvesWere8": 18.17,
+   "kRecomputed": 18.73,
+   "kV0": 18.7,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.30567,
+   "singleGame": 0.0507,
+   "weightAt8": 0.2993
+  },
+  "TE_adjusted": {
+   "kIfHalvesWere8": 38.87,
+   "kRecomputed": 40.07,
+   "kV0": 40.1,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.17067,
+   "singleGame": 0.0243,
+   "weightAt8": 0.1664
+  },
+  "TE_raw": {
+   "kIfHalvesWere8": 36.48,
+   "kRecomputed": 37.6,
+   "kV0": 37.6,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.17988,
+   "singleGame": 0.0259,
+   "weightAt8": 0.1754
+  },
+  "WR_adjusted": {
+   "kIfHalvesWere8": 40.75,
+   "kRecomputed": 42.0,
+   "kV0": 42.0,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.16411,
+   "singleGame": 0.0233,
+   "weightAt8": 0.16
+  },
+  "WR_raw": {
+   "kIfHalvesWere8": 42.74,
+   "kRecomputed": 44.06,
+   "kV0": 44.1,
+   "meanHalfGames": 8.2469,
+   "pearson": 0.15766,
+   "singleGame": 0.0222,
+   "weightAt8": 0.1537
+  }
+ },
+ "rerun": {
+  "command": "scripts/model/defense_position_study.py --targets <targets> <out>",
+  "comparedWith": "docs/research/defense-position-study-2026-11-23.json",
+  "differences": [],
+  "exact": true,
+  "ignored": [
+   "startedAt",
+   "reportSha256 (covers startedAt)"
+  ]
+ },
+ "status": "REPRODUCED",
+ "targetsIndex": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+ "v0Validated": {
+  "DST_adjusted": {
+   "bootstrapSeasons": {
+    "k95": [
+     7.5644,
+     10.4559
+    ],
+    "pearson95": [
+     0.4356,
+     0.5209
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "bootstrapUnits": {
+    "k95": [
+     6.6863,
+     12.7773
+    ],
+    "pearson95": [
+     0.3884,
+     0.5488
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.3817,
+    0.5539
+   ],
+   "halfMeans": {
+    "mean": -0.011,
+    "sd": 3.238
+   },
+   "halfSizes": {
+    "5": 2,
+    "6": 20,
+    "7": 86,
+    "8": 308,
+    "9": 214
+   },
+   "k": 9.08,
+   "meanHalfGames": 8.13,
+   "outlierHalves": 0,
+   "pearson": 0.4723,
+   "seasonReliability": 0.6416,
+   "singleGameReliability": 0.0992,
+   "spearman": 0.4533,
+   "units": 315,
+   "v0": {
+    "k": 9.1,
+    "pearson": 0.472,
+    "units": 315
+   },
+   "weight": {
+    "12": 0.5692,
+    "16": 0.6379,
+    "4": 0.3057,
+    "8": 0.4683
+   }
+  },
+  "DST_raw": {
+   "bootstrapSeasons": {
+    "k95": [
+     7.5577,
+     11.5055
+    ],
+    "pearson95": [
+     0.4113,
+     0.521
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "bootstrapUnits": {
+    "k95": [
+     6.8003,
+     13.1643
+    ],
+    "pearson95": [
+     0.3815,
+     0.5449
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.3771,
+    0.5501
+   ],
+   "halfMeans": {
+    "mean": 5.868,
+    "sd": 3.232
+   },
+   "halfSizes": {
+    "5": 2,
+    "6": 20,
+    "7": 86,
+    "8": 308,
+    "9": 214
+   },
+   "k": 9.24,
+   "meanHalfGames": 8.13,
+   "outlierHalves": 0,
+   "pearson": 0.4681,
+   "seasonReliability": 0.6377,
+   "singleGameReliability": 0.0977,
+   "spearman": 0.4573,
+   "units": 315,
+   "v0": {
+    "k": 9.2,
+    "pearson": 0.468,
+    "units": 315
+   },
+   "weight": {
+    "12": 0.565,
+    "16": 0.6339,
+    "4": 0.3021,
+    "8": 0.464
+   }
+  },
+  "K_adjusted": {
+   "bootstrapSeasons": {
+    "k95": [
+     22.6927,
+     291.4058
+    ],
+    "pearson95": [
+     0.0157,
+     0.2666
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.013
+   },
+   "bootstrapUnits": {
+    "k95": [
+     25.3059,
+     182.2232
+    ],
+    "pearson95": [
+     0.0391,
+     0.2453
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.004
+   },
+   "fisher95": [
+    0.035,
+    0.2498
+   ],
+   "halfMeans": {
+    "mean": 0.006,
+    "sd": 1.709
+   },
+   "halfSizes": {
+    "7": 82,
+    "8": 332,
+    "9": 226
+   },
+   "k": 48.86,
+   "meanHalfGames": 8.225,
+   "outlierHalves": 2,
+   "pearson": 0.1441,
+   "seasonReliability": 0.2519,
+   "singleGameReliability": 0.0201,
+   "spearman": 0.1439,
+   "units": 320,
+   "v0": {
+    "k": 55.3,
+    "pearson": 0.13,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.1972,
+    "16": 0.2467,
+    "4": 0.0757,
+    "8": 0.1407
+   }
+  },
+  "K_raw": {
+   "bootstrapSeasons": {
+    "k95": [
+     20.5889,
+     144.791
+    ],
+    "pearson95": [
+     0.0525,
+     0.2858
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.002
+   },
+   "bootstrapUnits": {
+    "k95": [
+     22.768,
+     121.5627
+    ],
+    "pearson95": [
+     0.0633,
+     0.265
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0005
+   },
+   "fisher95": [
+    0.0558,
+    0.2692
+   ],
+   "halfMeans": {
+    "mean": 7.769,
+    "sd": 1.689
+   },
+   "halfSizes": {
+    "7": 82,
+    "8": 332,
+    "9": 226
+   },
+   "k": 41.8,
+   "meanHalfGames": 8.225,
+   "outlierHalves": 1,
+   "pearson": 0.1644,
+   "seasonReliability": 0.2824,
+   "singleGameReliability": 0.0234,
+   "spearman": 0.1632,
+   "units": 320,
+   "v0": {
+    "k": 49.4,
+    "pearson": 0.143,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.223,
+    "16": 0.2768,
+    "4": 0.0873,
+    "8": 0.1606
+   }
+  },
+  "QB_adjusted": {
+   "bootstrapSeasons": {
+    "k95": [
+     13.3549,
+     45.5647
+    ],
+    "pearson95": [
+     0.1528,
+     0.3814
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "bootstrapUnits": {
+    "k95": [
+     14.6179,
+     38.7556
+    ],
+    "pearson95": [
+     0.1755,
+     0.361
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.1659,
+    0.3693
+   ],
+   "halfMeans": {
+    "mean": 0.003,
+    "sd": 2.946
+   },
+   "halfSizes": {
+    "7": 75,
+    "8": 332,
+    "9": 233
+   },
+   "k": 22.23,
+   "meanHalfGames": 8.247,
+   "outlierHalves": 1,
+   "pearson": 0.2706,
+   "seasonReliability": 0.426,
+   "singleGameReliability": 0.0431,
+   "spearman": 0.2926,
+   "units": 320,
+   "v0": {
+    "k": 22.2,
+    "pearson": 0.271,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.3506,
+    "16": 0.4186,
+    "4": 0.1525,
+    "8": 0.2647
+   }
+  },
+  "QB_raw": {
+   "bootstrapSeasons": {
+    "k95": [
+     18.419,
+     67.5137
+    ],
+    "pearson95": [
+     0.1098,
+     0.307
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "bootstrapUnits": {
+    "k95": [
+     18.3871,
+     59.8973
+    ],
+    "pearson95": [
+     0.1211,
+     0.3096
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.1095,
+    0.3186
+   ],
+   "halfMeans": {
+    "mean": 16.59,
+    "sd": 3.045
+   },
+   "halfSizes": {
+    "7": 75,
+    "8": 332,
+    "9": 233
+   },
+   "k": 29.84,
+   "meanHalfGames": 8.247,
+   "outlierHalves": 2,
+   "pearson": 0.2166,
+   "seasonReliability": 0.356,
+   "singleGameReliability": 0.0324,
+   "spearman": 0.205,
+   "units": 320,
+   "v0": {
+    "k": 30.6,
+    "pearson": 0.213,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.2868,
+    "16": 0.3491,
+    "4": 0.1182,
+    "8": 0.2114
+   }
+  },
+  "RB_adjusted": {
+   "bootstrapSeasons": {
+    "k95": [
+     12.0497,
+     41.3956
+    ],
+    "pearson95": [
+     0.1645,
+     0.4052
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "bootstrapUnits": {
+    "k95": [
+     13.5072,
+     38.3348
+    ],
+    "pearson95": [
+     0.1767,
+     0.3791
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.177,
+    0.3792
+   ],
+   "halfMeans": {
+    "mean": 0.002,
+    "sd": 4.007
+   },
+   "halfSizes": {
+    "7": 81,
+    "8": 333,
+    "9": 226
+   },
+   "k": 21.03,
+   "meanHalfGames": 8.227,
+   "outlierHalves": 2,
+   "pearson": 0.2812,
+   "seasonReliability": 0.439,
+   "singleGameReliability": 0.0454,
+   "spearman": 0.2886,
+   "units": 320,
+   "v0": {
+    "k": 20.0,
+    "pearson": 0.292,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.3633,
+    "16": 0.4321,
+    "4": 0.1598,
+    "8": 0.2756
+   }
+  },
+  "RB_raw": {
+   "bootstrapSeasons": {
+    "k95": [
+     10.5143,
+     47.5501
+    ],
+    "pearson95": [
+     0.1464,
+     0.4375
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "bootstrapUnits": {
+    "k95": [
+     12.3712,
+     36.265
+    ],
+    "pearson95": [
+     0.1846,
+     0.3992
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.1934,
+    0.3936
+   ],
+   "halfMeans": {
+    "mean": 23.093,
+    "sd": 4.144
+   },
+   "halfSizes": {
+    "7": 81,
+    "8": 333,
+    "9": 226
+   },
+   "k": 19.5,
+   "meanHalfGames": 8.227,
+   "outlierHalves": 1,
+   "pearson": 0.2967,
+   "seasonReliability": 0.4577,
+   "singleGameReliability": 0.0488,
+   "spearman": 0.2875,
+   "units": 320,
+   "v0": {
+    "k": 18.7,
+    "pearson": 0.306,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.381,
+    "16": 0.4508,
+    "4": 0.1702,
+    "8": 0.291
+   }
+  },
+  "TE_adjusted": {
+   "bootstrapSeasons": {
+    "k95": [
+     23.0265,
+     159.6843
+    ],
+    "pearson95": [
+     0.0427,
+     0.2629
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0055
+   },
+   "bootstrapUnits": {
+    "k95": [
+     22.2817,
+     136.9101
+    ],
+    "pearson95": [
+     0.0527,
+     0.27
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.004
+   },
+   "fisher95": [
+    0.0549,
+    0.2684
+   ],
+   "halfMeans": {
+    "mean": 0.005,
+    "sd": 2.964
+   },
+   "halfSizes": {
+    "7": 82,
+    "8": 332,
+    "9": 226
+   },
+   "k": 42.07,
+   "meanHalfGames": 8.225,
+   "outlierHalves": 1,
+   "pearson": 0.1635,
+   "seasonReliability": 0.2811,
+   "singleGameReliability": 0.0232,
+   "spearman": 0.1351,
+   "units": 320,
+   "v0": {
+    "k": 40.1,
+    "pearson": 0.171,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.2219,
+    "16": 0.2755,
+    "4": 0.0868,
+    "8": 0.1598
+   }
+  },
+  "TE_raw": {
+   "bootstrapSeasons": {
+    "k95": [
+     25.2062,
+     142.629
+    ],
+    "pearson95": [
+     0.0522,
+     0.245
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.0015
+   },
+   "bootstrapUnits": {
+    "k95": [
+     22.8434,
+     144.6478
+    ],
+    "pearson95": [
+     0.0505,
+     0.2646
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0035
+   },
+   "fisher95": [
+    0.0516,
+    0.2653
+   ],
+   "halfMeans": {
+    "mean": 12.405,
+    "sd": 3.19
+   },
+   "halfSizes": {
+    "7": 82,
+    "8": 332,
+    "9": 226
+   },
+   "k": 43.09,
+   "meanHalfGames": 8.225,
+   "outlierHalves": 1,
+   "pearson": 0.1603,
+   "seasonReliability": 0.2763,
+   "singleGameReliability": 0.0227,
+   "spearman": 0.1606,
+   "units": 320,
+   "v0": {
+    "k": 37.6,
+    "pearson": 0.18,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.2178,
+    "16": 0.2708,
+    "4": 0.0849,
+    "8": 0.1566
+   }
+  },
+  "WR_adjusted": {
+   "bootstrapSeasons": {
+    "k95": [
+     19.5995,
+     231.4585
+    ],
+    "pearson95": [
+     0.023,
+     0.2924
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.012
+   },
+   "bootstrapUnits": {
+    "k95": [
+     21.817,
+     142.107
+    ],
+    "pearson95": [
+     0.0532,
+     0.2738
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0015
+   },
+   "fisher95": [
+    0.0538,
+    0.2674
+   ],
+   "halfMeans": {
+    "mean": -0.003,
+    "sd": 5.21
+   },
+   "halfSizes": {
+    "6": 1,
+    "7": 82,
+    "8": 332,
+    "9": 225
+   },
+   "k": 42.36,
+   "meanHalfGames": 8.22,
+   "outlierHalves": 4,
+   "pearson": 0.1625,
+   "seasonReliability": 0.2796,
+   "singleGameReliability": 0.0231,
+   "spearman": 0.1409,
+   "units": 320,
+   "v0": {
+    "k": 42.0,
+    "pearson": 0.164,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.2208,
+    "16": 0.2742,
+    "4": 0.0863,
+    "8": 0.1589
+   }
+  },
+  "WR_raw": {
+   "bootstrapSeasons": {
+    "k95": [
+     21.2795,
+     299.4769
+    ],
+    "pearson95": [
+     0.0067,
+     0.2776
+    ],
+    "reps": 2000,
+    "resampled": "season",
+    "seed": 1729,
+    "unidentifiedShare": 0.016
+   },
+   "bootstrapUnits": {
+    "k95": [
+     23.1663,
+     112.8385
+    ],
+    "pearson95": [
+     0.0679,
+     0.2619
+    ],
+    "reps": 2000,
+    "resampled": "unit",
+    "seed": 1729,
+    "unidentifiedShare": 0.0
+   },
+   "fisher95": [
+    0.0545,
+    0.268
+   ],
+   "halfMeans": {
+    "mean": 33.694,
+    "sd": 5.632
+   },
+   "halfSizes": {
+    "6": 1,
+    "7": 82,
+    "8": 332,
+    "9": 225
+   },
+   "k": 42.16,
+   "meanHalfGames": 8.22,
+   "outlierHalves": 2,
+   "pearson": 0.1632,
+   "seasonReliability": 0.2806,
+   "singleGameReliability": 0.0232,
+   "spearman": 0.1516,
+   "units": 320,
+   "v0": {
+    "k": 44.1,
+    "pearson": 0.158,
+    "units": 320
+   },
+   "weight": {
+    "12": 0.2216,
+    "16": 0.2751,
+    "4": 0.0867,
+    "8": 0.1595
+   }
+  }
+ }
+}

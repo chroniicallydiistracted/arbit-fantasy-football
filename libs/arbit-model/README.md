@@ -19,6 +19,13 @@ Implemented (M3 slice 3b, ENG-056):
 - `arbit_model.team_features`: one row per team per game. It covers team rates, the opponent's defense, defense against the position (raw and adjusted for the offenses faced), D/ST points allowed by the opponent's offense, and pre-game context.
 - `arbit_model.feature_specs`: each feature's definition, unit, window, cutoff, sources and measured shrinkage constant.
 
+Research (M3-3 defense against the position, ENG-057; [runbook](../../docs/research/dvp/README.md)):
+- `arbit_model.dvp.provenance`: the lineage allowlist every DvP input passes; it fails closed and forbids provider projections by lineage, not name.
+- `arbit_model.dvp.observations`: completed-game team-game-position cells from the canonical FFA actuals, with schedule-decided opponents and missing kept missing.
+- `arbit_model.dvp.asof`: preweek and per-game cutoffs, feature views apart from labels, a frozen-forecast evaluation join.
+- `arbit_model.dvp.reliability` and `results`: v0's split-half arithmetic with intervals, and experiment records a projection dependency invalidates.
+- `scripts/model/dvp.py`: `audit`, `reproduce-v0`, `registry`.
+
 `scripts/model/point_in_time_audit.py` checks the reader against the real history ([audit](../../docs/research/point-in-time-audit-2026-11-23.md)).
 
 `scripts/model/build_targets.py` builds the historical targets. Features, projections, rankings and advisor policies come in later slices ([M3 plan](../../docs/superpowers/plans/2026-11-09-m3-model.md)); no model has been trained.

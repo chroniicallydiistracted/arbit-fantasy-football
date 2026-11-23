@@ -1,0 +1,1694 @@
+{
+ "experiments": [
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
+   "baseline_metric": null,
+   "code_commit": "c8c0396537eb6c1ac66cefc6550f2387ccf123d3",
+   "coverage_pct": null,
+   "data_hash": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+   "decision": null,
+   "estimator": "odd/even split-half Pearson; k = m(1-r)/r with m the mean half size",
+   "evidence_paths": [
+    "docs/research/defense-position-study-2026-11-23.json",
+    "docs/research/dvp/v0-reproduction.json",
+    "docs/research/dvp/V0_REPRODUCTION.md"
+   ],
+   "experiment_id": "M3-3-v0",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "RQ1: defenses have a repeatable position-specific tendency to allow FFA points (odd vs even NFL weeks, 2016-2025)",
+   "interval": null,
+   "limitations": [
+    "Raiders home games 2016-2019 and Chargers home games 2016: 1,327 player lines name the team itself as the opponent, so those points were credited to the team's own defense and the visiting defenses lost a game (schedule OAK/SD vs statistics LV/LAC)",
+    "156 regular-season team-games have no D/ST line (the same code mismatch in the D/ST scorer): the Raiders 2016-2019, the Chargers 2016 and every D/ST that played them",
+    "58 team-game-position cells hold a refused line (null points) that v0 summed as zero",
+    "Halves differ in size (7-9 games); k uses their mean (8.25), an approximation"
+   ],
+   "next_steps": "Superseded for inference by M3-3-A01 (validated observations); kept as the baseline",
+   "parameters": {
+    "gamesForHalfSignal": {
+     "DST_adjusted": 9.1,
+     "DST_raw": 9.2,
+     "K_adjusted": 55.3,
+     "K_raw": 49.4,
+     "QB_adjusted": 22.2,
+     "QB_raw": 30.6,
+     "RB_adjusted": 20.0,
+     "RB_raw": 18.7,
+     "TE_adjusted": 40.1,
+     "TE_raw": 37.6,
+     "WR_adjusted": 42.0,
+     "WR_raw": 44.1
+    }
+   },
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": "Frozen v0 rerun equals its receipt; an independent recompute matches all 12 measures",
+   "relative_delta": null,
+   "sample_count": {
+    "DST_adjusted": 315,
+    "DST_raw": 315,
+    "K_adjusted": 320,
+    "K_raw": 320,
+    "QB_adjusted": 320,
+    "QB_raw": 320,
+    "RB_adjusted": 320,
+    "RB_raw": 320,
+    "TE_adjusted": 320,
+    "TE_raw": 320,
+    "WR_adjusted": 320,
+    "WR_raw": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "50ca6e4958b8a467954a731056f3c0e4448d11646d5a52e5fcf01958f509834d",
+   "status": "REPRODUCED",
+   "subgroups": null,
+   "tests_passed": [
+    "T29"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
+   "baseline_metric": null,
+   "code_commit": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+   "coverage_pct": {
+    "DST_adjusted": 98.4,
+    "DST_raw": 98.4,
+    "K_adjusted": 100.0,
+    "K_raw": 100.0,
+    "QB_adjusted": 100.0,
+    "QB_raw": 100.0,
+    "RB_adjusted": 100.0,
+    "RB_raw": 100.0,
+    "TE_adjusted": 100.0,
+    "TE_raw": 100.0,
+    "WR_adjusted": 100.0,
+    "WR_raw": 100.0
+   },
+   "data_hash": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+   "decision": null,
+   "estimator": "v0 split-half on schedule-attributed cells; invalid and missing cells excluded; intervals: Fisher, bootstrap by unit and by season (2,000, seed 1729)",
+   "evidence_paths": [
+    "docs/research/dvp/v0-reproduction.json"
+   ],
+   "experiment_id": "M3-3-A01",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "v0's method on validated observations gives the same repeatability",
+   "interval": {
+    "DST_adjusted": [
+     0.3817,
+     0.5539
+    ],
+    "DST_raw": [
+     0.3771,
+     0.5501
+    ],
+    "K_adjusted": [
+     0.035,
+     0.2498
+    ],
+    "K_raw": [
+     0.0558,
+     0.2692
+    ],
+    "QB_adjusted": [
+     0.1659,
+     0.3693
+    ],
+    "QB_raw": [
+     0.1095,
+     0.3186
+    ],
+    "RB_adjusted": [
+     0.177,
+     0.3792
+    ],
+    "RB_raw": [
+     0.1934,
+     0.3936
+    ],
+    "TE_adjusted": [
+     0.0549,
+     0.2684
+    ],
+    "TE_raw": [
+     0.0516,
+     0.2653
+    ],
+    "WR_adjusted": [
+     0.0538,
+     0.2674
+    ],
+    "WR_raw": [
+     0.0545,
+     0.268
+    ]
+   },
+   "limitations": [
+    "156 regular-season team-games have no D/ST line (the same code mismatch in the D/ST scorer): the Raiders 2016-2019, the Chargers 2016 and every D/ST that played them",
+    "D/ST still lacks the 156 missing lines (canonical gap, not repaired here)"
+   ],
+   "next_steps": "A00, A02-A08 on the validated observations; B00 comparator",
+   "parameters": {
+    "DST_adjusted": {
+     "k": 9.08,
+     "k95Seasons": [
+      7.5644,
+      10.4559
+     ],
+     "k95Units": [
+      6.6863,
+      12.7773
+     ],
+     "pearson": 0.4723
+    },
+    "DST_raw": {
+     "k": 9.24,
+     "k95Seasons": [
+      7.5577,
+      11.5055
+     ],
+     "k95Units": [
+      6.8003,
+      13.1643
+     ],
+     "pearson": 0.4681
+    },
+    "K_adjusted": {
+     "k": 48.86,
+     "k95Seasons": [
+      22.6927,
+      291.4058
+     ],
+     "k95Units": [
+      25.3059,
+      182.2232
+     ],
+     "pearson": 0.1441
+    },
+    "K_raw": {
+     "k": 41.8,
+     "k95Seasons": [
+      20.5889,
+      144.791
+     ],
+     "k95Units": [
+      22.768,
+      121.5627
+     ],
+     "pearson": 0.1644
+    },
+    "QB_adjusted": {
+     "k": 22.23,
+     "k95Seasons": [
+      13.3549,
+      45.5647
+     ],
+     "k95Units": [
+      14.6179,
+      38.7556
+     ],
+     "pearson": 0.2706
+    },
+    "QB_raw": {
+     "k": 29.84,
+     "k95Seasons": [
+      18.419,
+      67.5137
+     ],
+     "k95Units": [
+      18.3871,
+      59.8973
+     ],
+     "pearson": 0.2166
+    },
+    "RB_adjusted": {
+     "k": 21.03,
+     "k95Seasons": [
+      12.0497,
+      41.3956
+     ],
+     "k95Units": [
+      13.5072,
+      38.3348
+     ],
+     "pearson": 0.2812
+    },
+    "RB_raw": {
+     "k": 19.5,
+     "k95Seasons": [
+      10.5143,
+      47.5501
+     ],
+     "k95Units": [
+      12.3712,
+      36.265
+     ],
+     "pearson": 0.2967
+    },
+    "TE_adjusted": {
+     "k": 42.07,
+     "k95Seasons": [
+      23.0265,
+      159.6843
+     ],
+     "k95Units": [
+      22.2817,
+      136.9101
+     ],
+     "pearson": 0.1635
+    },
+    "TE_raw": {
+     "k": 43.09,
+     "k95Seasons": [
+      25.2062,
+      142.629
+     ],
+     "k95Units": [
+      22.8434,
+      144.6478
+     ],
+     "pearson": 0.1603
+    },
+    "WR_adjusted": {
+     "k": 42.36,
+     "k95Seasons": [
+      19.5995,
+      231.4585
+     ],
+     "k95Units": [
+      21.817,
+      142.107
+     ],
+     "pearson": 0.1625
+    },
+    "WR_raw": {
+     "k": 42.16,
+     "k95Seasons": [
+      21.2795,
+      299.4769
+     ],
+     "k95Units": [
+      23.1663,
+      112.8385
+     ],
+     "pearson": 0.1632
+    }
+   },
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": "Repeatability is real but weak for every position group except D/ST, and the WR, TE and K intervals overlap: their order is not established",
+   "relative_delta": null,
+   "sample_count": {
+    "DST_adjusted": 315,
+    "DST_raw": 315,
+    "K_adjusted": 320,
+    "K_raw": 320,
+    "QB_adjusted": 320,
+    "QB_raw": 320,
+    "RB_adjusted": 320,
+    "RB_raw": 320,
+    "TE_adjusted": 320,
+    "TE_raw": 320,
+    "WR_adjusted": 320,
+    "WR_raw": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "50ca6e4958b8a467954a731056f3c0e4448d11646d5a52e5fcf01958f509834d",
+   "status": "EXECUTED",
+   "subgroups": null,
+   "tests_passed": [
+    "T01-T07",
+    "T08-T13",
+    "T29"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
+   "baseline_metric": null,
+   "code_commit": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+   "coverage_pct": null,
+   "data_hash": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+   "decision": null,
+   "estimator": "lineage allowlist admission, scoring-hash and contribution checks, code scan, schedule reconciliation",
+   "evidence_paths": [
+    "docs/research/dvp/audit-receipt.json",
+    "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json",
+    "docs/research/dvp/SCORE_FINALITY_AUDIT.json"
+   ],
+   "experiment_id": "M3-3-A11",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "v0 and the extension read only canonical FFA actuals under the league's current scoring, with no provider projection",
+   "interval": null,
+   "limitations": [
+    "docs/research/ffa-targets-check-2026-11-10.json: 10,734 of 10,771 2026 lines equal ESPN's actual applied totals (actual blocks only; an audit, not an input)"
+   ],
+   "next_steps": "Repair of the canonical OAK/SD mapping is an owner decision (slice 2)",
+   "parameters": {
+    "checks": {
+     "T05 every target line belongs to a completed team-game": "PASSED",
+     "T05 no player has two lines in one game": "PASSED",
+     "T06 32 teams each season, 16 or 17 games each": "PASSED",
+     "T06 completed team-games reconcile to 5,278": "PASSED",
+     "T06 every completed game has exactly two mirrored team-games": "PASSED",
+     "T30 configured rules are the league's current FFA rules": "PASSED",
+     "T30 each scored line's points equal the sum of its rule contributions": "PASSED",
+     "T31 no provider projection in the scoring path or DvP code": "PASSED",
+     "T34 the canceled 2022 BUF-CIN game has no team-games and no zeros": "PASSED",
+     "T37 targets index scored with the configured rules": "PASSED"
+    }
+   },
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": "Every audit check passed; data defects are recorded in DATA_QUALITY.md",
+   "relative_delta": null,
+   "sample_count": 5278,
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "50ca6e4958b8a467954a731056f3c0e4448d11646d5a52e5fcf01958f509834d",
+   "status": "PASSED",
+   "subgroups": null,
+   "tests_passed": [
+    "T05",
+    "T06",
+    "T30",
+    "T31",
+    "T34",
+    "T37"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A00",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Raw DvP landscape: distributions, team means, within-team spread, raw vs adjusted ranks",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A02",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Split-method sensitivity: alternating games, halves, 6+6, seeded random balanced splits",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A03",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Opponent-adjustment sensitivity: none, leave-one-out, robust median, strength-adjusted",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A04",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Position-specific sample stability by game count and era, with intervals",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A05",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Variance components (tau2, sigma2, season effects) with unequal game counts vs v0 k",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A06",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Temporal stability: first vs second half, decay with weeks apart, rolling windows",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A07",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Between-season carryover of a defense's tendency, with relocations",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A08",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Noise, placebo and null distributions; clustered and iid bootstrap",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A09",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Volume vs efficiency vs touchdowns: which part of DvP repeats",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A10",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Era robustness: 16 vs 17 games, leave-one-season-out, trimming, home/away, rest",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": null,
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-A12",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Completion and correction sensitivity of r, k and coverage",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": null,
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B00",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Offense-only next-game forecast from prior FFA actuals: the comparator",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B01",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Raw prior-games DvP added to B00",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B02",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Prior-only offense-adjusted DvP added to B00, unshrunk",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B03",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "v0-k-shrunk adjusted DvP with k estimated on training years only",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B04",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Prediction-tuned k on a predeclared grid (development and 2024 only)",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B05",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Recency-weighted DvP with effective sample size",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B06",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Hierarchical or dynamic DvP learned from past years only",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B07",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Opportunity and efficiency allowed, alone and jointly",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B08",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Context-stratified diagnostics (week, sample size, matchup type)",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B09",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Adversarial negative controls: shuffled defenses, noise, shifted labels",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B10",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Preweek vs per-game cutoff: accuracy and coverage",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B11",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Projection-contamination resistance of B00-B10 (integrity test)",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-B12",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Availability of finalized actuals by cutoff: coverage lost under conservative rules",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-C00",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Arbit-computed player baseline from eligible actuals, no DvP",
+   "interval": null,
+   "limitations": null,
+   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-C01",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Group DvP allocated to players by past-known usage share",
+   "interval": null,
+   "limitations": null,
+   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-C02",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Additive vs proportional vs opportunity x efficiency allocation",
+   "interval": null,
+   "limitations": null,
+   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-C03",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Role interactions (slot/outside, target share) where coverage allows",
+   "interval": null,
+   "limitations": null,
+   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-C04",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Historical same-position and lineup-slot Sit/Start comparisons",
+   "interval": null,
+   "limitations": null,
+   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": null,
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": null,
+   "coverage_pct": null,
+   "data_hash": null,
+   "decision": null,
+   "estimator": null,
+   "evidence_paths": null,
+   "experiment_id": "M3-3-C05",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "hypothesis": "Decision accuracy, points gained or lost, and regret vs the baseline",
+   "interval": null,
+   "limitations": null,
+   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": null,
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": null,
+   "source_ancestry_hash": null,
+   "status": "PLANNED",
+   "subgroups": null,
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": [
+     2025
+    ],
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  }
+ ],
+ "format": "arbit-dvp-m3-3-registry-v1",
+ "workstream": "M3-3"
+}

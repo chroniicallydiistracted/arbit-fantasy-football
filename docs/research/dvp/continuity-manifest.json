@@ -1,0 +1,45 @@
+{
+ "format": "arbit-dvp-m3-3-continuity-v1",
+ "rule": "v0 files stay byte-identical; extensions write new receipts and runs",
+ "v0": {
+  "commit": "c8c0396537eb6c1ac66cefc6550f2387ccf123d3",
+  "committedAt": "2026-11-23T12:52:02-07:00",
+  "consumers": {
+   "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37"
+  },
+  "decisionRecords": [
+   "ENG-056",
+   "OWN-068"
+  ],
+  "experimentId": "M3-3-v0",
+  "files": {
+   "docs/research/defense-position-study-2026-11-23.json": "94bd359ab8a0586711893fe8b3203a8a5c624da8a25f9ed911914439a23551b2",
+   "docs/research/ffa-signal-study-2026-11-09.json": "fa739cb8cea350caba15af3f65c677fb28bbc01321f5d6630fe4c264331c7bc3",
+   "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+   "scripts/model/ffa_signal_study.py": "3f23dc7a764ed491b242b6ba85540d0dafae5f541f0de019a3e7726747eb04d4"
+  },
+  "gamesForHalfSignal": {
+   "DST_adjusted": 9.1,
+   "DST_raw": 9.2,
+   "K_adjusted": 55.3,
+   "K_raw": 49.4,
+   "QB_adjusted": 22.2,
+   "QB_raw": 30.6,
+   "RB_adjusted": 20.0,
+   "RB_raw": 18.7,
+   "TE_adjusted": 40.1,
+   "TE_raw": 37.6,
+   "WR_adjusted": 42.0,
+   "WR_raw": 44.1
+  },
+  "method": "ffa_signal_study.split_half: odd vs even weeks per defense-season, Spearman-Brown to games for half signal",
+  "seasons": [
+   2016,
+   2025
+  ],
+  "status": "EXISTING",
+  "targetsIndex": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+  "task": "TASK-20261123-004"
+ },
+ "workstream": "M3-3"
+}
