@@ -85,6 +85,9 @@ Evidence:
 
 - **Evidence:** the vintage measurement above, recorded in the [slice 2 handoff](../../project/handoffs/2026-11-09-m3-slice2-catalog-targets.md); slice 3's mutation test; and slice 4's sensitivity reports.
 - **Adoption:** accepted by the owner on 2026-11-22 (OWN-066), with the amendments below.
+- **Implementation (M3 slice 3a, ENG-053, 2026-11-23):** `arbit_model.point_in_time` applies this ADR and amendments A1–A4 ([audit](../../research/point-in-time-audit-2026-11-23.md)).
+  - **Injury reports:** nflverse's files have no `date_modified` from 2025 on. Those rows count from 07:00 UTC on game day, after the week's final report, labeled as a retrospective rule. Rows with `date_modified` (2024 and earlier) keep the source-timestamp rule in decision 4.
+  - **Basis label:** `observed` marks a known-from time that is Arbit's own read. It is exact while reads were continuous, and an upper bound after a gap.
 - **Related:** Q-005, Q-016, R-063, R-064, R-068, MD-002, MD-004, DATA-002; [ADR-002](002-data-and-identity.md), [ADR-006](006-model-architecture.md).
 
 ## Owner amendments at acceptance (OWN-066, 2026-11-22)

@@ -1,5 +1,37 @@
 # Development Changelog
 
+## 2026-11-23 — Point-in-time reader and catalog re-review (M3 slice 3a, TASK-20261123-001)
+
+- **Reader:** new `arbit_model.point_in_time`, `timing` and `vintages` (ENG-053). A feature reads a table at a decision time and gets:
+  - the rows of the version Arbit held;
+  - inside a capture gap, or before the first read, the units of the next version whose known-from time is earlier (ADR-007 A1);
+  - each row labeled with `_known_from` and `_basis`, and a lineage record per reading.
+- **What it covers:**
+  - 23 table patterns are registered, each with its unit and rule. Others are refused.
+  - Policy-excluded fields are refused unless their gate is named.
+  - Next Gen Stats' current franchise codes are matched to the schedule's codes for the season.
+- **Catalog (A2):**
+  - `current-snapshot` and `draft-career-totals` are now `as_imported` (38 fields).
+  - `weather-after-game` is now `history`.
+  - Betting lines are gated by OWN-067.
+  - Regenerating the catalog picked up 8 upstream type changes (contracts, QBR).
+- **Tests:**
+  - 20 reader tests, including a mutation test at five decision times. Three deliberate breaks of the reader each fail tests.
+  - 2 PostgreSQL integration tests.
+  - The catalog tests now pin the policy exclusions.
+- **Audit:** `scripts/model/point_in_time_audit.py` on the real history: 56 table reads at four decision times, 0 rows known at or after their decision ([note](../research/point-in-time-audit-2026-11-23.md), receipt JSON).
+- **Docs:**
+  - ADR-007 implementation note.
+  - Model specification status line (ADR-007 accepted).
+  - M3 plan: slice 3 order 3a–3e.
+  - R-070 and R-071.
+  - Model package README and agent rules.
+
+## 2026-11-23 — PR #3 merged and worker restarted
+
+- The owner merged PR #3 at 18:41 UTC (`e005aa6`). The main checkout was fast-forwarded, and `arbit-worker` was restarted on it, with all seven lanes started.
+- The merged worktree `/home/andre/arbit-catchup` and the local branches `claude/catch-up-and-decisions` and `claude/weather-plan-and-backfill` were removed after checking they were clean and merged. Their remote branches remain.
+
 ## 2026-11-23 — Flaky Live playback browser test fixed (TASK-20261122-010)
 
 - **What failed:** the push run of PR #3's commit failed the fictional member browser journey. `live-playback.spec.ts`'s partial-replay test threw `route.fetch: Test ended`, while the pull-request run of the same commit passed.

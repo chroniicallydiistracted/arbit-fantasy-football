@@ -145,6 +145,16 @@ At 01:01 UTC on 2026-11-09 (Sunday evening, week 9), a cookie-free ESPN read was
   - **Impact:** all 13 NFL games stayed unlinked (`event_id` NULL), so no NFL detail was read. Every week 11 game ran on ESPN's fallback plays until the next discovery, six hours later.
   - **Fix (ENG-052):** discovery retries every 120 s while current-week games are unlinked, at the lane's next poll. The worker restart at 23:43 UTC (TASK-20261122-002) relinked all 13 week 11 games. Within seconds 11 NFL game records were read and ESPN's fallback copies were retired, as designed.
 
+## Point-in-time reader, 2026-11-23 (ENG-053)
+
+- **R-070: nflverse injury files have no `date_modified` from 2025 on.** ADR-007 times injury rows by `date_modified`, which the 2020–2024 files carry and the 2025 and 2026 files don't. Each newer row holds the week's final report, so the reader counts it from 07:00 UTC on game day, labeled `retrospective-rule`.
+  - **Effect:** backtests of 2025 can't see Wednesday-to-Friday report changes, only the final status. That is pessimistic for early-week decisions and right for kickoff decisions.
+  - **2026:** Arbit's daily vintages since 2026-10-31 hold the intra-week reports, and NFL's own report is captured twice a day once the availability lane runs (OWN-063).
+  - **Owner:** Model.
+- **R-071: the reader places rows one at a time in Python.** The audit took 34 s and peaked at 2.2 GB, mostly the 2026 depth chart file (827,000 rows in each of 11 versions). Feature building over many seasons and decision times needs placement done in columns, with cached placements per version.
+  - **Owner:** Model / slice 3b.
+- **Officials for four games can't be placed.** The officials file's old GSIS IDs for the three rescheduled 2021 week 15 games and the cancelled 2022 Buffalo–Cincinnati game aren't in the schedule. Their 28 rows count only from a version Arbit held. Officials are only a candidate input, so this blocks nothing.
+
 ## Governance continuity audit, 2026-11-22
 
 - **R-067 — Source-policy wording requires reconciliation.** Historical [decision-register Q-012](decision-register.md) says that nothing fetches from a particular proposed private NFL API route; current [project status](status.md) describes a running NFL API live lane. The proposed private `nflapi` path and the subsequently authorized `api.nfl.com` lane may be different, so no contradiction in executable behavior is yet proven. Before changing policy text or a live adapter, identify exact endpoints and relevant owner decision records (OWN-041 and subsequent releases), then write a dated correction preserving prior context. **Owner:** Integration / M6. No release is blocked on this documentation-only ambiguity, but new live-source changes must not silently pick one interpretation. **Resolved 2026-11-22.**

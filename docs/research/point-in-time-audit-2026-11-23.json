@@ -1,0 +1,1530 @@
+{
+ "decisions": [
+  {
+   "at": "2025-11-16T14:30:00+00:00",
+   "label": "2025 week 11, Sunday (before Arbit's first read)",
+   "tables": {
+    "depth_charts/depth_charts_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "2f1a670c2b8a06611a5c3921dd519fc663de74bb600d2f3fa3b76b3c5cae2c6f",
+     "held": null,
+     "inGap": true,
+     "key": "depth_charts/depth_charts_2025",
+     "latestKnownFrom": "2025-11-16T07:00:00+00:00",
+     "readAfter": "2026-10-31T09:17:32.520966+00:00",
+     "readBefore": null,
+     "rows": 253616,
+     "seconds": 1.7,
+     "units": 3328,
+     "unitsByBasis": {
+      "source-timestamp": 3328
+     },
+     "untimedNotAdmitted": 0
+    },
+    "ftn_charting/ftn_charting_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "25bd4615f9941930bb1f6568d6edd71233b4419710be98317bf3522edb6448c7",
+     "held": null,
+     "inGap": true,
+     "key": "ftn_charting/ftn_charting_2025",
+     "latestKnownFrom": "2025-11-14T00:00:00+00:00",
+     "readAfter": "2026-10-31T09:17:39.141734+00:00",
+     "readBefore": null,
+     "rows": 24795,
+     "seconds": 0.1,
+     "units": 149,
+     "unitsByBasis": {
+      "retrospective-rule": 149
+     },
+     "untimedNotAdmitted": 0
+    },
+    "injuries/injuries_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "ab807d0add18eee7df0e1fb81799313339446e008a7a7ee99269580ea55b15b2",
+     "held": null,
+     "inGap": true,
+     "key": "injuries/injuries_2025",
+     "latestKnownFrom": "2025-11-16T07:00:00+00:00",
+     "readAfter": "2026-10-31T09:17:52.116111+00:00",
+     "readBefore": null,
+     "rows": 3246,
+     "seconds": 0.0,
+     "units": 3246,
+     "unitsByBasis": {
+      "retrospective-rule": 3246
+     },
+     "untimedNotAdmitted": 0
+    },
+    "nextgen_stats/ngs_receiving": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "26a033eaac7d71572bf0f8fec010159ecd7d71a6ceb9626de4c0d2c20c69ff20",
+     "held": null,
+     "inGap": true,
+     "key": "nextgen_stats/ngs_receiving",
+     "latestKnownFrom": "2025-11-15T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:18:20.349388+00:00",
+     "readBefore": null,
+     "rows": 14016,
+     "seconds": 0.1,
+     "units": 2533,
+     "unitsByBasis": {
+      "retrospective-rule": 2533
+     },
+     "untimedNotAdmitted": 0
+    },
+    "officials/officials": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "9df68d4f26b1ba2e5ac4b74f0c3fa5578e987217bdf25fa5a85d91f0344cb0f9",
+     "held": null,
+     "inGap": true,
+     "key": "officials/officials",
+     "latestKnownFrom": "2025-11-14T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:18:22.315774+00:00",
+     "readBefore": null,
+     "rows": 20856,
+     "seconds": 0.1,
+     "units": 2890,
+     "unitsByBasis": {
+      "retrospective-rule": 2890
+     },
+     "untimedNotAdmitted": 4
+    },
+    "pbp/play_by_play_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "85f3ec0f40ed33838db9f06e0d2415d01a41c225654f90c4d3e2d19362d75248",
+     "held": null,
+     "inGap": true,
+     "key": "pbp/play_by_play_2025",
+     "latestKnownFrom": "2025-11-14T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:20:11.116016+00:00",
+     "readBefore": null,
+     "rows": 25714,
+     "seconds": 0.2,
+     "units": 150,
+     "unitsByBasis": {
+      "retrospective-rule": 150
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pfr_advstats/advstats_week_rec_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "57aaf10c74609f2f4cee1a30f2a3637fe559c974318f8c32c5ca4fd45b979e7c",
+     "held": null,
+     "inGap": true,
+     "key": "pfr_advstats/advstats_week_rec_2025",
+     "latestKnownFrom": "2025-11-14T00:00:00+00:00",
+     "readAfter": "2026-10-31T09:21:10.368929+00:00",
+     "readBefore": null,
+     "rows": 2358,
+     "seconds": 0.0,
+     "units": 149,
+     "unitsByBasis": {
+      "retrospective-rule": 149
+     },
+     "untimedNotAdmitted": 0
+    },
+    "rosters/roster_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": null,
+     "inGap": true,
+     "key": "rosters/roster_2025",
+     "latestKnownFrom": null,
+     "readAfter": "2026-10-31T09:27:07.321373+00:00",
+     "readBefore": null,
+     "rows": 0,
+     "seconds": 0.0,
+     "units": 0,
+     "unitsByBasis": {},
+     "untimedNotAdmitted": 0
+    },
+    "schedules/games": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "1a87b75fb24dc2cb1df5b42568105c10010f9ea035340bcac591317b3e0bc096",
+     "held": null,
+     "inGap": true,
+     "key": "schedules/games",
+     "latestKnownFrom": "2025-06-01T00:00:00+00:00",
+     "readAfter": "2026-10-31T09:14:14.172313+00:00",
+     "readBefore": null,
+     "rows": 7263,
+     "seconds": 0.1,
+     "units": 7263,
+     "unitsByBasis": {
+      "retrospective-rule": 7263
+     },
+     "untimedNotAdmitted": 0
+    },
+    "snap_counts/snap_counts_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "a1215aebb055ed8e7b43e2881c3b7c6e569060139c6202afc14bf9aba6274df4",
+     "held": null,
+     "inGap": true,
+     "key": "snap_counts/snap_counts_2025",
+     "latestKnownFrom": "2025-11-15T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:27:19.906631+00:00",
+     "readBefore": null,
+     "rows": 14011,
+     "seconds": 0.1,
+     "units": 150,
+     "unitsByBasis": {
+      "retrospective-rule": 150
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_player/stats_player_week_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "b499873734fd559d50027c7f333d2f9a189e172f3c462d22296fe6a8f89a1d39",
+     "held": null,
+     "inGap": true,
+     "key": "stats_player/stats_player_week_2025",
+     "latestKnownFrom": "2025-11-14T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:28:45.794837+00:00",
+     "readBefore": null,
+     "rows": 10269,
+     "seconds": 0.0,
+     "units": 150,
+     "unitsByBasis": {
+      "retrospective-rule": 150
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_team/stats_team_week_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "15afc87e455752f7f11892f9692ac82c003088e9ecb6637280c7a75b588933c0",
+     "held": null,
+     "inGap": true,
+     "key": "stats_team/stats_team_week_2025",
+     "latestKnownFrom": "2025-11-14T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:30:05.841231+00:00",
+     "readBefore": null,
+     "rows": 300,
+     "seconds": 0.0,
+     "units": 150,
+     "unitsByBasis": {
+      "retrospective-rule": 150
+     },
+     "untimedNotAdmitted": 0
+    },
+    "trades/trades": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "9fe56dd1f27c2aecd6a2687495166cd7467fc356e991b786f91c8c9a6b20822d",
+     "held": null,
+     "inGap": true,
+     "key": "trades/trades",
+     "latestKnownFrom": "2025-11-05T00:00:00+00:00",
+     "readAfter": "2026-10-31T09:30:13.359977+00:00",
+     "readBefore": null,
+     "rows": 4912,
+     "seconds": 0.0,
+     "units": 1653,
+     "unitsByBasis": {
+      "source-timestamp": 1653
+     },
+     "untimedNotAdmitted": 0
+    },
+    "weekly_rosters/roster_weekly_2025": {
+     "at": "2025-11-16T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "ebe0674909343617c04f41c6b19503913d5ba97df0c4fa5abbbc26cbcdf6a059",
+     "held": null,
+     "inGap": true,
+     "key": "weekly_rosters/roster_weekly_2025",
+     "latestKnownFrom": "2025-11-11T12:00:00+00:00",
+     "readAfter": "2026-10-31T09:30:31.726841+00:00",
+     "readBefore": null,
+     "rows": 24410,
+     "seconds": 0.2,
+     "units": 298,
+     "unitsByBasis": {
+      "retrospective-rule": 298
+     },
+     "untimedNotAdmitted": 0
+    }
+   }
+  },
+  {
+   "at": "2026-11-08T14:30:00+00:00",
+   "label": "2026 week 9, Sunday (observed stretch)",
+   "tables": {
+    "depth_charts/depth_charts_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "6888cd24a1fa75b59df8bf2a67d5989bf1319ade628ab8d70f4a27ad8a341462",
+     "inGap": false,
+     "key": "depth_charts/depth_charts_2026",
+     "latestKnownFrom": "2026-11-08T03:51:59.430837+00:00",
+     "readAfter": "2026-11-09T03:55:14.386750+00:00",
+     "readBefore": "2026-11-08T03:51:59.447157+00:00",
+     "rows": 759077,
+     "seconds": 18.3,
+     "units": 9056,
+     "unitsByBasis": {
+      "observed": 448,
+      "source-timestamp": 8608
+     },
+     "untimedNotAdmitted": 0
+    },
+    "ftn_charting/ftn_charting_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "6f8dd4c3fcb22e2c986859eab5ae73c1ea52fac8fa950da2c18aec3c45e555f2",
+     "inGap": false,
+     "key": "ftn_charting/ftn_charting_2026",
+     "latestKnownFrom": "2026-11-08T03:52:03.053562+00:00",
+     "readAfter": "2026-11-09T03:55:17.386154+00:00",
+     "readBefore": "2026-11-08T03:52:03.070180+00:00",
+     "rows": 20723,
+     "seconds": 0.3,
+     "units": 122,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 107
+     },
+     "untimedNotAdmitted": 0
+    },
+    "injuries/injuries_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "16393f408222fdbb500ab4d963452c6ba4564b859c985d2f1ae60a3170c80439",
+     "inGap": false,
+     "key": "injuries/injuries_2026",
+     "latestKnownFrom": "2026-11-08T03:52:04.756622+00:00",
+     "readAfter": "2026-11-09T03:55:18.517674+00:00",
+     "readBefore": "2026-11-08T03:52:04.774032+00:00",
+     "rows": 2819,
+     "seconds": 0.1,
+     "units": 2819,
+     "unitsByBasis": {
+      "observed": 663,
+      "retrospective-rule": 2156
+     },
+     "untimedNotAdmitted": 0
+    },
+    "nextgen_stats/ngs_receiving": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "f333df6e8cdcc53fb7cace21e22a3266f44f9f68884cd375b2337eb98cdc27a4",
+     "inGap": false,
+     "key": "nextgen_stats/ngs_receiving",
+     "latestKnownFrom": "2026-11-07T03:49:50.266423+00:00",
+     "readAfter": "2026-11-09T03:55:23.116394+00:00",
+     "readBefore": "2026-11-08T03:52:08.277377+00:00",
+     "rows": 15415,
+     "seconds": 0.5,
+     "units": 2780,
+     "unitsByBasis": {
+      "observed": 16,
+      "retrospective-rule": 2764
+     },
+     "untimedNotAdmitted": 0
+    },
+    "officials/officials": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "9df68d4f26b1ba2e5ac4b74f0c3fa5578e987217bdf25fa5a85d91f0344cb0f9",
+     "inGap": false,
+     "key": "officials/officials",
+     "latestKnownFrom": "2026-10-31T09:18:22.315774+00:00",
+     "readAfter": "2026-11-09T03:55:24.416122+00:00",
+     "readBefore": "2026-11-08T03:52:09.667352+00:00",
+     "rows": 22012,
+     "seconds": 0.0,
+     "units": 3045,
+     "unitsByBasis": {
+      "observed": 4,
+      "retrospective-rule": 3041
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pbp/play_by_play_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "18ac127e254dda93d4a0cee697058155c44125052fd2dc5085d447398e7000dc",
+     "inGap": false,
+     "key": "pbp/play_by_play_2026",
+     "latestKnownFrom": "2026-11-07T03:49:58.731567+00:00",
+     "readAfter": "2026-11-09T03:55:33.012977+00:00",
+     "readBefore": "2026-11-08T03:52:15.852310+00:00",
+     "rows": 21347,
+     "seconds": 0.5,
+     "units": 122,
+     "unitsByBasis": {
+      "observed": 2,
+      "retrospective-rule": 120
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pfr_advstats/advstats_week_rec_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "761f0f91ced2913d85950e63a008f8bad2a31317f1146ff0954eebdbe88e92c5",
+     "inGap": false,
+     "key": "pfr_advstats/advstats_week_rec_2026",
+     "latestKnownFrom": "2026-11-06T02:23:22.559756+00:00",
+     "readAfter": "2026-11-09T03:55:56.181066+00:00",
+     "readBefore": "2026-11-08T03:52:34.687480+00:00",
+     "rows": 1932,
+     "seconds": 0.0,
+     "units": 121,
+     "unitsByBasis": {
+      "observed": 13,
+      "retrospective-rule": 108
+     },
+     "untimedNotAdmitted": 0
+    },
+    "rosters/roster_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "1e499293c51ef5ca6dbb7b82fb6c67c738afa299821c02be7cb83007f27a1563",
+     "inGap": false,
+     "key": "rosters/roster_2026",
+     "latestKnownFrom": "2026-10-31T09:27:08.158667+00:00",
+     "readAfter": "2026-11-09T03:56:07.708059+00:00",
+     "readBefore": "2026-11-08T03:52:45.465545+00:00",
+     "rows": 3069,
+     "seconds": 0.2,
+     "units": 1,
+     "unitsByBasis": {
+      "observed": 1
+     },
+     "untimedNotAdmitted": 0
+    },
+    "schedules/games": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "5042c9be173ef3f900fcde7c1b3d47f42e4babcf76ace6632b01c94819cbc26e",
+     "inGap": false,
+     "key": "schedules/games",
+     "latestKnownFrom": "2026-06-01T00:00:00+00:00",
+     "readAfter": "2026-11-09T03:54:49.773766+00:00",
+     "readBefore": "2026-11-08T03:51:41.208725+00:00",
+     "rows": 7548,
+     "seconds": 0.3,
+     "units": 7548,
+     "unitsByBasis": {
+      "retrospective-rule": 7548
+     },
+     "untimedNotAdmitted": 0
+    },
+    "snap_counts/snap_counts_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "05a7d9fd8acfa10e16cd31eb41f090c6cb241b859ade3adc78eea49ed2146d91",
+     "inGap": false,
+     "key": "snap_counts/snap_counts_2026",
+     "latestKnownFrom": "2026-11-07T03:50:30.183919+00:00",
+     "readAfter": "2026-11-09T03:56:08.324422+00:00",
+     "readBefore": "2026-11-08T03:52:45.979065+00:00",
+     "rows": 11385,
+     "seconds": 0.1,
+     "units": 122,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 107
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_player/stats_player_week_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "af02d04d8e988006b349abb3105d41205427f3259ac506091718a9fa3fdc1bc0",
+     "inGap": false,
+     "key": "stats_player/stats_player_week_2026",
+     "latestKnownFrom": "2026-11-07T03:49:17.036661+00:00",
+     "readAfter": "2026-11-09T03:54:51.248582+00:00",
+     "readBefore": "2026-11-08T03:51:42.609978+00:00",
+     "rows": 8500,
+     "seconds": 0.2,
+     "units": 122,
+     "unitsByBasis": {
+      "observed": 2,
+      "retrospective-rule": 120
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_team/stats_team_week_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "8b1a3d93c77ec3e790474fd9afcd89e7db1a9696c5bf149a835cd37ffca6321d",
+     "inGap": false,
+     "key": "stats_team/stats_team_week_2026",
+     "latestKnownFrom": "2026-11-07T03:50:37.712352+00:00",
+     "readAfter": "2026-11-09T03:56:14.901617+00:00",
+     "readBefore": "2026-11-08T03:52:52.629922+00:00",
+     "rows": 244,
+     "seconds": 0.0,
+     "units": 122,
+     "unitsByBasis": {
+      "observed": 2,
+      "retrospective-rule": 120
+     },
+     "untimedNotAdmitted": 0
+    },
+    "trades/trades": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "9fe56dd1f27c2aecd6a2687495166cd7467fc356e991b786f91c8c9a6b20822d",
+     "inGap": false,
+     "key": "trades/trades",
+     "latestKnownFrom": "2026-04-18T00:00:00+00:00",
+     "readAfter": "2026-11-09T03:56:16.019785+00:00",
+     "readBefore": "2026-11-08T03:52:53.729733+00:00",
+     "rows": 4975,
+     "seconds": 0.0,
+     "units": 1675,
+     "unitsByBasis": {
+      "source-timestamp": 1675
+     },
+     "untimedNotAdmitted": 0
+    },
+    "weekly_rosters/roster_weekly_2026": {
+     "at": "2026-11-08T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "f3d485aa3c24250be90782aa86cf0175604f363d672223b53cfb72df86520e31",
+     "inGap": false,
+     "key": "weekly_rosters/roster_weekly_2026",
+     "latestKnownFrom": "2026-11-06T02:23:45.145043+00:00",
+     "readAfter": "2026-11-09T03:56:17.491931+00:00",
+     "readBefore": "2026-11-08T03:52:55.141261+00:00",
+     "rows": 22285,
+     "seconds": 0.7,
+     "units": 272,
+     "unitsByBasis": {
+      "observed": 58,
+      "retrospective-rule": 214
+     },
+     "untimedNotAdmitted": 0
+    }
+   }
+  },
+  {
+   "at": "2026-11-15T14:30:00+00:00",
+   "label": "2026 week 10, Sunday (inside the R-068 outage)",
+   "tables": {
+    "depth_charts/depth_charts_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "be502077ff252b6e4730ecd074b50188f5dbac73590859be468c8d33d668891b",
+     "held": "5387b293ab3f9f8e5974a6125d707ff5bfd8eb62ebf97da6fdcf96500d6cd5a1",
+     "inGap": true,
+     "key": "depth_charts/depth_charts_2026",
+     "latestKnownFrom": "2026-11-15T07:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:41.509217+00:00",
+     "readBefore": "2026-11-10T03:59:56.667343+00:00",
+     "rows": 789449,
+     "seconds": 4.9,
+     "units": 9472,
+     "unitsByBasis": {
+      "observed": 576,
+      "source-timestamp": 8896
+     },
+     "untimedNotAdmitted": 0
+    },
+    "ftn_charting/ftn_charting_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "d97603adb7f07fcef3b61a5f69586a3403e9f2ce9ad7b7d8595eb42608ee43b3",
+     "held": "edfeba4ad65120cd598b7fc7e60b65874978a892176f28eeb60811f212b45389",
+     "inGap": true,
+     "key": "ftn_charting/ftn_charting_2026",
+     "latestKnownFrom": "2026-11-13T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:46.244869+00:00",
+     "readBefore": "2026-11-10T04:00:00.156645+00:00",
+     "rows": 23126,
+     "seconds": 0.1,
+     "units": 136,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 121
+     },
+     "untimedNotAdmitted": 0
+    },
+    "injuries/injuries_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "1d4a768a4fbfb82ae67841b02bfc87b6e29739276da984bd083bc940e8813bc0",
+     "held": "0ec981a3218f207d1a3056c4a276bc304c631496780ce61b1ebe5991aea6b87b",
+     "inGap": true,
+     "key": "injuries/injuries_2026",
+     "latestKnownFrom": "2026-11-15T07:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:47.928719+00:00",
+     "readBefore": "2026-11-10T04:00:01.880961+00:00",
+     "rows": 3139,
+     "seconds": 0.1,
+     "units": 3139,
+     "unitsByBasis": {
+      "observed": 665,
+      "retrospective-rule": 2474
+     },
+     "untimedNotAdmitted": 0
+    },
+    "nextgen_stats/ngs_receiving": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "ee9691bb7ba8e2176dc0f2cd4f463c0cb8d981e7f1bcd55bcf0054b047b6a256",
+     "held": "dff723384296b0ba65d7456df54705dfebd2a45ef9de0ea583d8ae580627db55",
+     "inGap": true,
+     "key": "nextgen_stats/ngs_receiving",
+     "latestKnownFrom": "2026-11-14T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:51.515649+00:00",
+     "readBefore": "2026-11-10T04:00:05.584174+00:00",
+     "rows": 15499,
+     "seconds": 0.1,
+     "units": 2795,
+     "unitsByBasis": {
+      "observed": 29,
+      "retrospective-rule": 2766
+     },
+     "untimedNotAdmitted": 0
+    },
+    "officials/officials": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "9df68d4f26b1ba2e5ac4b74f0c3fa5578e987217bdf25fa5a85d91f0344cb0f9",
+     "inGap": true,
+     "key": "officials/officials",
+     "latestKnownFrom": "2026-10-31T09:18:22.315774+00:00",
+     "readAfter": "2026-11-22T22:45:52.810241+00:00",
+     "readBefore": "2026-11-10T04:00:06.905391+00:00",
+     "rows": 22012,
+     "seconds": 0.0,
+     "units": 3045,
+     "unitsByBasis": {
+      "observed": 4,
+      "retrospective-rule": 3041
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pbp/play_by_play_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "8ee4443f285dadf7069944f5894fdfd909839fefe369c54d160925c0c78fae89",
+     "held": "dea47deaa50d18326f1726c47d22ff953e4c4f9e4e691f3ef22b1121fc0b5987",
+     "inGap": true,
+     "key": "pbp/play_by_play_2026",
+     "latestKnownFrom": "2026-11-13T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:11.246760+00:00",
+     "readBefore": "2026-11-10T04:00:13.503259+00:00",
+     "rows": 24002,
+     "seconds": 0.2,
+     "units": 137,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 122
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pfr_advstats/advstats_week_rec_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "bcd56e1007b17a1044d597b1a02d366bf70f2553048cf108cd5dc78e4fd35d05",
+     "held": "6a884495433e70467417cd4908ec6997d7b61378e735094da7472bc700157653",
+     "inGap": true,
+     "key": "pfr_advstats/advstats_week_rec_2026",
+     "latestKnownFrom": "2026-11-13T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:24.826910+00:00",
+     "readBefore": "2026-11-10T04:00:31.997340+00:00",
+     "rows": 2167,
+     "seconds": 0.0,
+     "units": 136,
+     "unitsByBasis": {
+      "observed": 14,
+      "retrospective-rule": 122
+     },
+     "untimedNotAdmitted": 0
+    },
+    "rosters/roster_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "a9a766a6f752a7ae7445348f1cae8fd5e1e1e71450b5b3e7d34a6d5888dcc92b",
+     "inGap": true,
+     "key": "rosters/roster_2026",
+     "latestKnownFrom": "2026-10-31T09:27:08.158667+00:00",
+     "readAfter": "2026-11-22T22:47:36.454682+00:00",
+     "readBefore": "2026-11-10T04:00:42.267753+00:00",
+     "rows": 3069,
+     "seconds": 0.1,
+     "units": 1,
+     "unitsByBasis": {
+      "observed": 1
+     },
+     "untimedNotAdmitted": 0
+    },
+    "schedules/games": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
+     "inGap": true,
+     "key": "schedules/games",
+     "latestKnownFrom": "2026-06-01T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:11.730093+00:00",
+     "readBefore": "2026-11-10T03:59:33.108213+00:00",
+     "rows": 7548,
+     "seconds": 0.1,
+     "units": 7548,
+     "unitsByBasis": {
+      "retrospective-rule": 7548
+     },
+     "untimedNotAdmitted": 0
+    },
+    "snap_counts/snap_counts_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "18a34bf0d88c27a55e1ab5d483b9631c1fcd3caa5abbdadb52d49f5f27fa3d1d",
+     "held": "3a96ac9c68064bad8d542de857efa07da6c4ffa1440bca1ddd995258da6a3e28",
+     "inGap": true,
+     "key": "snap_counts/snap_counts_2026",
+     "latestKnownFrom": "2026-11-14T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:37.766403+00:00",
+     "readBefore": "2026-11-10T04:00:44.502253+00:00",
+     "rows": 12785,
+     "seconds": 0.1,
+     "units": 137,
+     "unitsByBasis": {
+      "observed": 28,
+      "retrospective-rule": 109
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_player/stats_player_week_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "f7e2259d7758466ed5e332e9ab5b57c00bde13bba60d686bcdc2d365e306564b",
+     "held": "b203bfd50d7b484a668fe7206876ecec0d36a2264077245c5cc735f1db4562e5",
+     "inGap": true,
+     "key": "stats_player/stats_player_week_2026",
+     "latestKnownFrom": "2026-11-13T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:15.067795+00:00",
+     "readBefore": "2026-11-10T03:59:34.394359+00:00",
+     "rows": 9534,
+     "seconds": 0.1,
+     "units": 137,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 122
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_team/stats_team_week_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "acebb8c5dadd58c24a2945239e485e33d1e2eed2cb75b6d0f2b11bb6ff3f70db",
+     "held": "f86d86e6e074b58a4a18cda765ecf010e9a2cf8443c3170718619f713c471ad7",
+     "inGap": true,
+     "key": "stats_team/stats_team_week_2026",
+     "latestKnownFrom": "2026-11-13T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:44.683496+00:00",
+     "readBefore": "2026-11-10T04:00:51.152451+00:00",
+     "rows": 274,
+     "seconds": 0.0,
+     "units": 137,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 122
+     },
+     "untimedNotAdmitted": 0
+    },
+    "trades/trades": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "9fe56dd1f27c2aecd6a2687495166cd7467fc356e991b786f91c8c9a6b20822d",
+     "inGap": true,
+     "key": "trades/trades",
+     "latestKnownFrom": "2026-04-18T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:45.953480+00:00",
+     "readBefore": "2026-11-10T04:00:52.150730+00:00",
+     "rows": 4975,
+     "seconds": 0.0,
+     "units": 1675,
+     "unitsByBasis": {
+      "source-timestamp": 1675
+     },
+     "untimedNotAdmitted": 0
+    },
+    "weekly_rosters/roster_weekly_2026": {
+     "at": "2026-11-15T14:30:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "ac0c08bc5a7ec62875c4e402d89b090260a7d09f2d881f499036c2fcba8059cc",
+     "inGap": true,
+     "key": "weekly_rosters/roster_weekly_2026",
+     "latestKnownFrom": "2026-11-06T02:23:45.145043+00:00",
+     "readAfter": "2026-11-22T22:47:47.398589+00:00",
+     "readBefore": "2026-11-10T04:00:53.979545+00:00",
+     "rows": 22285,
+     "seconds": 0.2,
+     "units": 272,
+     "unitsByBasis": {
+      "observed": 58,
+      "retrospective-rule": 214
+     },
+     "untimedNotAdmitted": 0
+    }
+   }
+  },
+  {
+   "at": "2026-11-22T18:00:00+00:00",
+   "label": "2026 week 11, Sunday (outage; caught up 22:45 UTC)",
+   "tables": {
+    "depth_charts/depth_charts_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "be502077ff252b6e4730ecd074b50188f5dbac73590859be468c8d33d668891b",
+     "held": "5387b293ab3f9f8e5974a6125d707ff5bfd8eb62ebf97da6fdcf96500d6cd5a1",
+     "inGap": true,
+     "key": "depth_charts/depth_charts_2026",
+     "latestKnownFrom": "2026-11-22T07:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:41.509217+00:00",
+     "readBefore": "2026-11-10T03:59:56.667343+00:00",
+     "rows": 822208,
+     "seconds": 0.7,
+     "units": 9920,
+     "unitsByBasis": {
+      "observed": 576,
+      "source-timestamp": 9344
+     },
+     "untimedNotAdmitted": 0
+    },
+    "ftn_charting/ftn_charting_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "d97603adb7f07fcef3b61a5f69586a3403e9f2ce9ad7b7d8595eb42608ee43b3",
+     "held": "edfeba4ad65120cd598b7fc7e60b65874978a892176f28eeb60811f212b45389",
+     "inGap": true,
+     "key": "ftn_charting/ftn_charting_2026",
+     "latestKnownFrom": "2026-11-20T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:46.244869+00:00",
+     "readBefore": "2026-11-10T04:00:00.156645+00:00",
+     "rows": 25480,
+     "seconds": 0.0,
+     "units": 150,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 135
+     },
+     "untimedNotAdmitted": 0
+    },
+    "injuries/injuries_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "1d4a768a4fbfb82ae67841b02bfc87b6e29739276da984bd083bc940e8813bc0",
+     "held": "0ec981a3218f207d1a3056c4a276bc304c631496780ce61b1ebe5991aea6b87b",
+     "inGap": true,
+     "key": "injuries/injuries_2026",
+     "latestKnownFrom": "2026-11-22T07:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:47.928719+00:00",
+     "readBefore": "2026-11-10T04:00:01.880961+00:00",
+     "rows": 3450,
+     "seconds": 0.0,
+     "units": 3450,
+     "unitsByBasis": {
+      "observed": 665,
+      "retrospective-rule": 2785
+     },
+     "untimedNotAdmitted": 0
+    },
+    "nextgen_stats/ngs_receiving": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "ee9691bb7ba8e2176dc0f2cd4f463c0cb8d981e7f1bcd55bcf0054b047b6a256",
+     "held": "dff723384296b0ba65d7456df54705dfebd2a45ef9de0ea583d8ae580627db55",
+     "inGap": true,
+     "key": "nextgen_stats/ngs_receiving",
+     "latestKnownFrom": "2026-11-21T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:51.515649+00:00",
+     "readBefore": "2026-11-10T04:00:05.584174+00:00",
+     "rows": 15547,
+     "seconds": 0.0,
+     "units": 2809,
+     "unitsByBasis": {
+      "observed": 29,
+      "retrospective-rule": 2780
+     },
+     "untimedNotAdmitted": 0
+    },
+    "officials/officials": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "9df68d4f26b1ba2e5ac4b74f0c3fa5578e987217bdf25fa5a85d91f0344cb0f9",
+     "inGap": true,
+     "key": "officials/officials",
+     "latestKnownFrom": "2026-10-31T09:18:22.315774+00:00",
+     "readAfter": "2026-11-22T22:45:52.810241+00:00",
+     "readBefore": "2026-11-10T04:00:06.905391+00:00",
+     "rows": 22012,
+     "seconds": 0.0,
+     "units": 3045,
+     "unitsByBasis": {
+      "observed": 4,
+      "retrospective-rule": 3041
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pbp/play_by_play_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "8ee4443f285dadf7069944f5894fdfd909839fefe369c54d160925c0c78fae89",
+     "held": "dea47deaa50d18326f1726c47d22ff953e4c4f9e4e691f3ef22b1121fc0b5987",
+     "inGap": true,
+     "key": "pbp/play_by_play_2026",
+     "latestKnownFrom": "2026-11-20T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:11.246760+00:00",
+     "readBefore": "2026-11-10T04:00:13.503259+00:00",
+     "rows": 26394,
+     "seconds": 0.0,
+     "units": 151,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 136
+     },
+     "untimedNotAdmitted": 0
+    },
+    "pfr_advstats/advstats_week_rec_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "bcd56e1007b17a1044d597b1a02d366bf70f2553048cf108cd5dc78e4fd35d05",
+     "held": "6a884495433e70467417cd4908ec6997d7b61378e735094da7472bc700157653",
+     "inGap": true,
+     "key": "pfr_advstats/advstats_week_rec_2026",
+     "latestKnownFrom": "2026-11-20T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:24.826910+00:00",
+     "readBefore": "2026-11-10T04:00:31.997340+00:00",
+     "rows": 2397,
+     "seconds": 0.0,
+     "units": 150,
+     "unitsByBasis": {
+      "observed": 14,
+      "retrospective-rule": 136
+     },
+     "untimedNotAdmitted": 0
+    },
+    "rosters/roster_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "a9a766a6f752a7ae7445348f1cae8fd5e1e1e71450b5b3e7d34a6d5888dcc92b",
+     "inGap": true,
+     "key": "rosters/roster_2026",
+     "latestKnownFrom": "2026-10-31T09:27:08.158667+00:00",
+     "readAfter": "2026-11-22T22:47:36.454682+00:00",
+     "readBefore": "2026-11-10T04:00:42.267753+00:00",
+     "rows": 3069,
+     "seconds": 0.0,
+     "units": 1,
+     "unitsByBasis": {
+      "observed": 1
+     },
+     "untimedNotAdmitted": 0
+    },
+    "schedules/games": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
+     "inGap": true,
+     "key": "schedules/games",
+     "latestKnownFrom": "2026-06-01T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:11.730093+00:00",
+     "readBefore": "2026-11-10T03:59:33.108213+00:00",
+     "rows": 7548,
+     "seconds": 0.0,
+     "units": 7548,
+     "unitsByBasis": {
+      "retrospective-rule": 7548
+     },
+     "untimedNotAdmitted": 0
+    },
+    "snap_counts/snap_counts_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "18a34bf0d88c27a55e1ab5d483b9631c1fcd3caa5abbdadb52d49f5f27fa3d1d",
+     "held": "3a96ac9c68064bad8d542de857efa07da6c4ffa1440bca1ddd995258da6a3e28",
+     "inGap": true,
+     "key": "snap_counts/snap_counts_2026",
+     "latestKnownFrom": "2026-11-21T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:37.766403+00:00",
+     "readBefore": "2026-11-10T04:00:44.502253+00:00",
+     "rows": 14097,
+     "seconds": 0.0,
+     "units": 151,
+     "unitsByBasis": {
+      "observed": 28,
+      "retrospective-rule": 123
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_player/stats_player_week_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "f7e2259d7758466ed5e332e9ab5b57c00bde13bba60d686bcdc2d365e306564b",
+     "held": "b203bfd50d7b484a668fe7206876ecec0d36a2264077245c5cc735f1db4562e5",
+     "inGap": true,
+     "key": "stats_player/stats_player_week_2026",
+     "latestKnownFrom": "2026-11-20T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:45:15.067795+00:00",
+     "readBefore": "2026-11-10T03:59:34.394359+00:00",
+     "rows": 10513,
+     "seconds": 0.0,
+     "units": 151,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 136
+     },
+     "untimedNotAdmitted": 0
+    },
+    "stats_team/stats_team_week_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "acebb8c5dadd58c24a2945239e485e33d1e2eed2cb75b6d0f2b11bb6ff3f70db",
+     "held": "f86d86e6e074b58a4a18cda765ecf010e9a2cf8443c3170718619f713c471ad7",
+     "inGap": true,
+     "key": "stats_team/stats_team_week_2026",
+     "latestKnownFrom": "2026-11-20T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:44.683496+00:00",
+     "readBefore": "2026-11-10T04:00:51.152451+00:00",
+     "rows": 302,
+     "seconds": 0.0,
+     "units": 151,
+     "unitsByBasis": {
+      "observed": 15,
+      "retrospective-rule": 136
+     },
+     "untimedNotAdmitted": 0
+    },
+    "trades/trades": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": null,
+     "held": "9fe56dd1f27c2aecd6a2687495166cd7467fc356e991b786f91c8c9a6b20822d",
+     "inGap": true,
+     "key": "trades/trades",
+     "latestKnownFrom": "2026-04-18T00:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:45.953480+00:00",
+     "readBefore": "2026-11-10T04:00:52.150730+00:00",
+     "rows": 4975,
+     "seconds": 0.0,
+     "units": 1675,
+     "unitsByBasis": {
+      "source-timestamp": 1675
+     },
+     "untimedNotAdmitted": 0
+    },
+    "weekly_rosters/roster_weekly_2026": {
+     "at": "2026-11-22T18:00:00+00:00",
+     "boundedByGapStart": 0,
+     "fetchedAfter": "63c1745dcd5d995a5580c5daf565114291b65e615526988a9d3258bfb2e7c1a8",
+     "held": "ac0c08bc5a7ec62875c4e402d89b090260a7d09f2d881f499036c2fcba8059cc",
+     "inGap": true,
+     "key": "weekly_rosters/roster_weekly_2026",
+     "latestKnownFrom": "2026-11-17T12:00:00+00:00",
+     "readAfter": "2026-11-22T22:47:47.398589+00:00",
+     "readBefore": "2026-11-10T04:00:53.979545+00:00",
+     "rows": 24565,
+     "seconds": 0.0,
+     "units": 300,
+     "unitsByBasis": {
+      "observed": 58,
+      "retrospective-rule": 242
+     },
+     "untimedNotAdmitted": 0
+    }
+   }
+  }
+ ],
+ "format": "arbit-point-in-time-audit-v1",
+ "generatedAt": "2026-11-23T19:05:13.453601+00:00",
+ "rowsKnownAtOrAfterDecision": 0,
+ "source": "arbit_local and the nflverse object store, read only",
+ "staleWindowHours": 36.0,
+ "tables": {
+  "depth_charts/depth_charts_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:17:32.520966+00:00"
+    ],
+    [
+     "2026-11-01T09:58:46.705558+00:00",
+     "2026-11-03T02:12:00.028634+00:00"
+    ],
+    [
+     "2026-11-10T03:59:55.322362+00:00",
+     "2026-11-22T22:45:40.304926+00:00"
+    ]
+   ],
+   "rows": 554215,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "depth_charts/depth_charts_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:17:31.622086+00:00"
+    ],
+    [
+     "2026-11-01T09:58:48.114662+00:00",
+     "2026-11-03T02:12:01.074309+00:00"
+    ],
+    [
+     "2026-11-10T03:59:56.667343+00:00",
+     "2026-11-22T22:45:41.509217+00:00"
+    ]
+   ],
+   "rows": 826942,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "ftn_charting/ftn_charting_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:17:39.141734+00:00"
+    ],
+    [
+     "2026-11-01T09:58:50.975090+00:00",
+     "2026-11-03T02:12:04.047017+00:00"
+    ],
+    [
+     "2026-11-10T03:59:59.520048+00:00",
+     "2026-11-22T22:45:45.651058+00:00"
+    ]
+   ],
+   "rows": 47316,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "ftn_charting/ftn_charting_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:17:39.801371+00:00"
+    ],
+    [
+     "2026-11-01T09:58:51.672704+00:00",
+     "2026-11-03T02:12:04.695777+00:00"
+    ],
+    [
+     "2026-11-10T04:00:00.156645+00:00",
+     "2026-11-22T22:45:46.244869+00:00"
+    ]
+   ],
+   "rows": 25623,
+   "untimedRows": 0,
+   "versions": 8
+  },
+  "injuries/injuries_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:17:52.116111+00:00"
+    ],
+    [
+     "2026-11-01T09:58:52.805630+00:00",
+     "2026-11-03T02:12:05.869290+00:00"
+    ],
+    [
+     "2026-11-10T04:00:01.280023+00:00",
+     "2026-11-22T22:45:47.278641+00:00"
+    ]
+   ],
+   "rows": 6068,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "injuries/injuries_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:17:52.727745+00:00"
+    ],
+    [
+     "2026-11-01T09:58:53.443713+00:00",
+     "2026-11-03T02:12:06.496679+00:00"
+    ],
+    [
+     "2026-11-10T04:00:01.880961+00:00",
+     "2026-11-22T22:45:47.928719+00:00"
+    ]
+   ],
+   "rows": 3481,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "nextgen_stats/ngs_receiving": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:18:20.349388+00:00"
+    ],
+    [
+     "2026-11-01T09:58:57.159356+00:00",
+     "2026-11-03T02:12:10.049102+00:00"
+    ],
+    [
+     "2026-11-10T04:00:05.584174+00:00",
+     "2026-11-22T22:45:51.515649+00:00"
+    ]
+   ],
+   "rows": 15532,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "officials/officials": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:18:22.315774+00:00"
+    ],
+    [
+     "2026-11-01T09:58:58.552919+00:00",
+     "2026-11-03T02:12:12.500932+00:00"
+    ],
+    [
+     "2026-11-10T04:00:06.905391+00:00",
+     "2026-11-22T22:45:52.810241+00:00"
+    ]
+   ],
+   "rows": 22012,
+   "untimedRows": 28,
+   "versions": 1
+  },
+  "pbp/play_by_play_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:20:11.116016+00:00"
+    ],
+    [
+     "2026-11-01T09:59:04.758482+00:00",
+     "2026-11-03T02:12:17.065811+00:00"
+    ],
+    [
+     "2026-11-10T04:00:11.585484+00:00",
+     "2026-11-22T22:47:09.324955+00:00"
+    ]
+   ],
+   "rows": 48771,
+   "untimedRows": 0,
+   "versions": 2
+  },
+  "pbp/play_by_play_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:20:12.451701+00:00"
+    ],
+    [
+     "2026-11-01T09:59:07.444297+00:00",
+     "2026-11-03T02:12:18.996926+00:00"
+    ],
+    [
+     "2026-11-10T04:00:13.503259+00:00",
+     "2026-11-22T22:47:11.246760+00:00"
+    ]
+   ],
+   "rows": 27602,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "pfr_advstats/advstats_week_rec_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:21:10.368929+00:00"
+    ],
+    [
+     "2026-11-01T09:59:25.946488+00:00",
+     "2026-11-03T02:12:39.633981+00:00"
+    ],
+    [
+     "2026-11-10T04:00:31.971687+00:00",
+     "2026-11-22T22:47:23.903969+00:00"
+    ]
+   ],
+   "rows": 4533,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "pfr_advstats/advstats_week_rec_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:21:10.922453+00:00"
+    ],
+    [
+     "2026-11-01T09:59:25.971973+00:00",
+     "2026-11-03T02:12:40.607601+00:00"
+    ],
+    [
+     "2026-11-10T04:00:31.997340+00:00",
+     "2026-11-22T22:47:24.826910+00:00"
+    ]
+   ],
+   "rows": 2415,
+   "untimedRows": 0,
+   "versions": 6
+  },
+  "rosters/roster_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:27:07.321373+00:00"
+    ],
+    [
+     "2026-11-01T09:59:35.756279+00:00",
+     "2026-11-03T02:12:51.312502+00:00"
+    ],
+    [
+     "2026-11-10T04:00:41.666989+00:00",
+     "2026-11-22T22:47:35.714971+00:00"
+    ]
+   ],
+   "rows": 3137,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "rosters/roster_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:27:08.158667+00:00"
+    ],
+    [
+     "2026-11-01T09:59:36.455972+00:00",
+     "2026-11-03T02:12:52.080349+00:00"
+    ],
+    [
+     "2026-11-10T04:00:42.267753+00:00",
+     "2026-11-22T22:47:36.454682+00:00"
+    ]
+   ],
+   "rows": 3078,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "schedules/games": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:14:14.172313+00:00"
+    ],
+    [
+     "2026-11-01T09:58:28.704744+00:00",
+     "2026-11-03T02:11:37.616769+00:00"
+    ],
+    [
+     "2026-11-10T03:59:33.108213+00:00",
+     "2026-11-22T22:45:11.730093+00:00"
+    ]
+   ],
+   "rows": 7548,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "snap_counts/snap_counts_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:27:19.906631+00:00"
+    ],
+    [
+     "2026-11-01T09:59:36.932717+00:00",
+     "2026-11-03T02:12:52.586746+00:00"
+    ],
+    [
+     "2026-11-10T04:00:42.725207+00:00",
+     "2026-11-22T22:47:37.012658+00:00"
+    ]
+   ],
+   "rows": 26613,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "snap_counts/snap_counts_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:27:20.614235+00:00"
+    ],
+    [
+     "2026-11-01T09:59:36.962281+00:00",
+     "2026-11-03T02:12:53.510806+00:00"
+    ],
+    [
+     "2026-11-10T04:00:44.502253+00:00",
+     "2026-11-22T22:47:37.766403+00:00"
+    ]
+   ],
+   "rows": 14097,
+   "untimedRows": 0,
+   "versions": 6
+  },
+  "stats_player/stats_player_week_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:28:45.794837+00:00"
+    ],
+    [
+     "2026-11-01T09:59:40.155597+00:00",
+     "2026-11-03T02:12:56.935444+00:00"
+    ],
+    [
+     "2026-11-10T04:00:47.785716+00:00",
+     "2026-11-22T22:47:41.258595+00:00"
+    ]
+   ],
+   "rows": 19422,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "stats_player/stats_player_week_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:14:16.558612+00:00"
+    ],
+    [
+     "2026-11-01T09:58:30.059600+00:00",
+     "2026-11-03T02:11:39.024037+00:00"
+    ],
+    [
+     "2026-11-10T03:59:34.394359+00:00",
+     "2026-11-22T22:45:15.067795+00:00"
+    ]
+   ],
+   "rows": 10992,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "stats_team/stats_team_week_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:30:05.841231+00:00"
+    ],
+    [
+     "2026-11-01T09:59:42.979036+00:00",
+     "2026-11-03T02:12:59.703240+00:00"
+    ],
+    [
+     "2026-11-10T04:00:50.485473+00:00",
+     "2026-11-22T22:47:44.112278+00:00"
+    ]
+   ],
+   "rows": 570,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "stats_team/stats_team_week_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:30:06.524876+00:00"
+    ],
+    [
+     "2026-11-01T09:59:43.617908+00:00",
+     "2026-11-03T02:13:00.335243+00:00"
+    ],
+    [
+     "2026-11-10T04:00:51.152451+00:00",
+     "2026-11-22T22:47:44.683496+00:00"
+    ]
+   ],
+   "rows": 316,
+   "untimedRows": 0,
+   "versions": 11
+  },
+  "trades/trades": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:30:13.359977+00:00"
+    ],
+    [
+     "2026-11-01T09:59:44.711384+00:00",
+     "2026-11-03T02:13:01.353120+00:00"
+    ],
+    [
+     "2026-11-10T04:00:52.150730+00:00",
+     "2026-11-22T22:47:45.953480+00:00"
+    ]
+   ],
+   "rows": 4975,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "weekly_rosters/roster_weekly_2025": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:30:31.726841+00:00"
+    ],
+    [
+     "2026-11-01T09:59:45.392877+00:00",
+     "2026-11-03T02:13:02.070482+00:00"
+    ],
+    [
+     "2026-11-10T04:00:52.800915+00:00",
+     "2026-11-22T22:47:46.672907+00:00"
+    ]
+   ],
+   "rows": 46849,
+   "untimedRows": 0,
+   "versions": 1
+  },
+  "weekly_rosters/roster_weekly_2026": {
+   "gaps": [
+    [
+     null,
+     "2026-10-31T09:30:33.997594+00:00"
+    ],
+    [
+     "2026-11-01T09:59:46.171231+00:00",
+     "2026-11-03T02:13:02.791190+00:00"
+    ],
+    [
+     "2026-11-10T04:00:53.979545+00:00",
+     "2026-11-22T22:47:47.398589+00:00"
+    ]
+   ],
+   "rows": 26676,
+   "untimedRows": 0,
+   "versions": 11
+  }
+ }
+}

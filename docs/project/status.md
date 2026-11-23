@@ -1,14 +1,22 @@
 # Project Status
 
-**Running now (verified 2026-11-23):**
-- **Worker:** runs `main` at `d9f95ec` (PR #2) since 2026-11-22 23:52 UTC with seven lanes: league, live, nfl, nfl_probe, statistics, availability and catchup.
-- **Database:** up with `restart: unless-stopped`. 2026 regular-season weeks 1–10 are complete, and week 11 is live.
+**Running now (verified 2026-11-23 18:45 UTC):**
+- **Worker:** runs `main` at `e005aa6` (PR #3, merged by the owner at 18:41 UTC) since its restart at about 18:42 UTC. It runs seven lanes: league, live, nfl, nfl_probe, statistics, availability and catchup. Its first NFL discovery linked all 13 week 11 games.
+- **Database:** up with `restart: unless-stopped`. 2026 regular-season weeks 1–10 are complete, and week 11 was live.
 - **CI on `main`:** green; `main` is protected.
-- **CI flake fixed (TASK-20261122-010):** a Live playback browser test could fail at random with `route.fetch: Test ended`. It now unroutes before teardown.
-- **Not yet on `main`:** this branch's TASK-20261122-007 to -009 (weather decision and plan, never-captured NFL rule, this housekeeping). That rule has already been used to capture weeks 1–7.
+- **On `main` since PR #3:** TASK-20261122-007 to -010 (weather decision and plan, never-captured NFL rule, housekeeping, the Live playback test flake fix). The merged worktree and branches were removed.
+- **Not yet on `main`:** M3 slice 3a, the point-in-time reader (TASK-20261123-001, branch `claude/m3-slice3-reader`). It runs in no service.
+
+**M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
+- **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
+- **Proof:** a mutation test passes at five decision times. On the real history, 56 table reads at four decision times, two inside the R-068 outage, returned no row known at or after its decision ([audit](../research/point-in-time-audit-2026-11-23.md)).
+- **Catalog re-review (A2):** 38 timing-only exclusions become `as_imported`, observed weather becomes history, betting lines wait behind the OWN-067 gate, and the remaining exclusions are pinned as policy.
+- **New risks:**
+  - R-070: injury files from 2025 lack `date_modified`, so those rows use a game-day rule.
+  - R-071: per-row placement costs 34 s and 2.2 GB on the full history, to be done in columns in 3b.
 
 **Open work, in order** (owner direction 2026-11-22):
-1. M3 slice 3, point-in-time features, with weather W1 (venue table and forecast record) beside it.
+1. M3 slice 3b–3e: team environment and defense against the position, availability and role, efficiency and priors, and the Q-014 note. Weather W1 (venue table and forecast record) runs beside it.
 2. M3 slices 4–6.
 3. M4 sit/start (OWN-068), weather W2–W6, the Q-014 study and ablation.
 

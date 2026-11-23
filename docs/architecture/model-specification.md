@@ -1,6 +1,6 @@
 # Arbit Model and Analytical Validation
 
-Version 0.2 · 2026-11-09 · Proposed methodology, no trained model or measured performance yet. Version 0.2 applies the owner's input direction (OWN-061); the architecture is accepted in [ADR-006](decisions/006-model-architecture.md) from [measured research](../research/ffa-projection-methods-2026-11-09.md). What the Model may know before each game is proposed in [ADR-007](decisions/007-model-availability.md): one decision time per game, at kickoff, because nflverse publishes inactives only after games (R-064).
+Version 0.2 · 2026-11-09 · Proposed methodology, no trained model or measured performance yet. Version 0.2 applies the owner's input direction (OWN-061); the architecture is accepted in [ADR-006](decisions/006-model-architecture.md) from [measured research](../research/ffa-projection-methods-2026-11-09.md). What the Model may know before each game is set by [ADR-007](decisions/007-model-availability.md), accepted on 2026-11-22 with the owner's amendments (OWN-066): one decision time per game, at kickoff, because nflverse publishes inactives only after games (R-064). Every field states when it applies, and a value fetched late after a capture gap counts from when its source published it. Features read nflverse only through the point-in-time reader (`arbit_model.point_in_time`, ENG-053), which labels each value's basis.
 
 ## Shared analytical contract
 
