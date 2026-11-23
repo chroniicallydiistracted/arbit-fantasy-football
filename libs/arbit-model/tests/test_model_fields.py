@@ -69,22 +69,44 @@ def test_no_other_providers_fantasy_or_projection_data_is_usable():
     assert directory["age"]["use"] == "excluded"
 
 
-def test_betting_lines_wait_for_the_owner_and_weather_is_never_an_input():
+def test_betting_lines_wait_for_the_ablation_and_observed_weather_is_history():
     lines = [e for f, n, e in ENTRIES if e["rule"] == "betting-lines"]
     assert {e["use"] for e in lines} == {"excluded"}
-    assert CATALOG["rules"]["betting-lines"]["decision"] == "Q-014"
+    assert CATALOG["rules"]["betting-lines"]["decision"] == "OWN-067"
     assert CATALOG["fields"]["schedules"]["spread_line"]["use"] == "excluded"
     assert CATALOG["fields"]["pbp"]["vegas_wp"]["use"] == "excluded"
+    # R-063 as amended (OWN-066 A2): observed weather informs later games only.
     for family in ("schedules", "pbp"):
-        assert CATALOG["fields"][family]["temp"]["use"] == "outcome"
-        assert CATALOG["fields"][family]["wind"]["use"] == "outcome"
+        assert CATALOG["fields"][family]["temp"]["use"] == "history"
+        assert CATALOG["fields"][family]["wind"]["use"] == "history"
 
 
-def test_participation_informs_only_later_seasons_and_snapshots_are_excluded():
+def test_participation_informs_only_later_seasons_and_snapshots_apply_as_imported():
     assert CATALOG["fields"]["pbp_participation"]["route"]["use"] == "earlier_seasons"
-    assert CATALOG["fields"]["players"]["status"]["use"] == "excluded"
-    assert CATALOG["fields"]["draft_picks"]["w_av"]["use"] == "excluded"
+    assert CATALOG["fields"]["players"]["status"]["use"] == "as_imported"
+    assert CATALOG["fields"]["draft_picks"]["w_av"]["use"] == "as_imported"
     assert CATALOG["fields"]["weekly_rosters"]["status"]["use"] == "pre_game"
+
+
+# ADR-007 A2: no field is kept from the Model because it arrives late. Every remaining exclusion
+# is a policy, and adding one is a reviewed decision, not a side effect of a rule edit.
+POLICY_EXCLUSIONS = {
+    "betting-lines": "OWN-067",
+    "dynastyprocess-values": "OWN-061",
+    "espn-draft-projections": "OWN-061",
+    "ffopportunity": "OWN-061",
+    "generic-fantasy-points": "OWN-061",
+    "id-directory-facts": "OWN-061",
+    "legacy-player-stats": None,  # a duplicate release of stats_player and stats_team
+    "pbp-free-text": None,  # an unverified second source of structured facts
+    "release-tests": None,  # nflverse's pipeline test assets, not football data
+}
+
+
+def test_every_exclusion_is_a_policy_and_none_is_for_timing():
+    excluded = {rule.id: rule.decision for rule in RULES if rule.use == "excluded"}
+    assert excluded == POLICY_EXCLUSIONS
+    assert CATALOG["summary"]["byUse"]["outcome"] == 0
 
 
 def test_a_new_upstream_field_is_reported_and_cannot_be_catalogued_silently():

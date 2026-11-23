@@ -14,7 +14,9 @@ from dataclasses import dataclass
 from importlib import resources
 from typing import Any, Literal
 
-Use = Literal["pre_game", "history", "earlier_seasons", "outcome", "identity", "excluded"]
+Use = Literal[
+    "pre_game", "history", "earlier_seasons", "as_imported", "outcome", "identity", "excluded"
+]
 
 FORMAT = "arbit-nflverse-field-catalog-v1"
 
@@ -24,11 +26,14 @@ USES: dict[Use, str] = {
     "history": "Describes a completed game, play or dated event. An input only for later games, "
     "once published",
     "earlier_seasons": "Published after the season it describes. An input only for later seasons",
+    "as_imported": "A current value without its own date. It applies from the Arbit import that "
+    "held it (an observed vintage) and never to a game before that import (ADR-007 A2)",
     "outcome": "Recorded only after the game and never an input. Kept for labels, reconciliation "
     "or explanation",
     "identity": "Keys, names, identifiers, display and provenance attributes. Used for joins and "
     "labels, never as a statistical input",
-    "excluded": "Never used by the Model; the rule gives the reason",
+    "excluded": "Kept from the Model by policy, never for timing (ADR-007 A2); the rule gives the "
+    "decision. A gated rule is readable only for the study its decision names",
 }
 
 # `misc` holds unrelated tables whose columns share names, so each table is its own family.
@@ -245,20 +250,23 @@ RULES: tuple[Rule, ...] = (
     Rule(
         "betting-lines",
         "excluded",
-        "A betting market's forecast of the game: unused until the owner decides Q-014",
+        "A betting market's forecast of the game. It enters only if the Q-014 study and the "
+        "slice 4 ablation show better FFA-point accuracy and calibration; readable only for that "
+        "study",
         families=_families("schedules pbp"),
         fields=_names(
             "spread_line total_line away_moneyline home_moneyline away_spread_odds "
             "home_spread_odds under_odds over_odds vegas_wp vegas_home_wp vegas_wpa "
             "vegas_home_wpa"
         ),
-        decision="Q-014",
+        decision="OWN-067",
     ),
     Rule(
         "weather-after-game",
-        "outcome",
-        "Weather is filled in only after the game (empty for every 2026 game), so it is never "
-        "known before kickoff",
+        "history",
+        "Observed weather, filled in only after the game (empty for every 2026 game): history for "
+        "later games and the weather effect study, never a pre-game input for the game it "
+        "describes. Forecasts come from the weather system (ADR-008)",
         families=_families("schedules pbp"),
         fields=_names("temp wind weather"),
         decision="R-063",
@@ -608,9 +616,9 @@ RULES: tuple[Rule, ...] = (
     ),
     Rule(
         "current-snapshot",
-        "excluded",
-        "Current values without dates: they would leak later seasons into backtests. Weekly "
-        "rosters and injury reports carry the dated equivalents",
+        "as_imported",
+        "Current values without dates. They apply from the import that held them, never to "
+        "earlier games; weekly rosters and injury reports carry the dated equivalents",
         families=_families("players players_components contracts"),
         fields=PLAYER_DIRECTORY_SNAPSHOT | _names("is_active"),
     ),
@@ -647,9 +655,9 @@ RULES: tuple[Rule, ...] = (
     ),
     Rule(
         "draft-career-totals",
-        "excluded",
-        "Career totals and honours as of the file date: they leak later seasons into backtests "
-        "and duplicate weekly statistics",
+        "as_imported",
+        "Career totals and honours as of the file date. They apply from the import that held "
+        "them, never to earlier games; weekly statistics carry the same totals by game",
         families=_families("draft_picks"),
         fields=DRAFT_CAREER,
     ),
