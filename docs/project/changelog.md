@@ -1,5 +1,10 @@
 # Development Changelog
 
+## 2026-11-23 — Housekeeping (TASK-20261122-009)
+
+- **Status:** now opens with what is running (`d9f95ec`, seven lanes, weeks 1–10 complete) and the ordered open work. ENG-052 is recorded as released on 2026-11-22 at 23:52 UTC, and the CI line is updated.
+- **Restart pointer:** now names M3 slice 3 with weather W1.
+
 ## 2026-11-22 — Never-captured weeks take the NFL record (TASK-20261122-008)
 
 - Catch-up now reads the NFL API's full record for any regular-season week Arbit never stored a game for, as well as from the first NFL-lane week. Week 8 still keeps its reviewed ESPN record.

@@ -1,7 +1,26 @@
 # Project Status
 
+**Running now (verified 2026-11-23):**
+- **Worker:** runs `main` at `d9f95ec` (PR #2) since 2026-11-22 23:52 UTC with seven lanes: league, live, nfl, nfl_probe, statistics, availability and catchup.
+- **Database:** up with `restart: unless-stopped`. 2026 regular-season weeks 1–10 are complete, and week 11 is live.
+- **CI on `main`:** green; `main` is protected.
+- **Not yet on `main`:** this branch's TASK-20261122-007 to -009 (weather decision and plan, never-captured NFL rule, this housekeeping). That rule has already been used to capture weeks 1–7.
+
+**Open work, in order** (owner direction 2026-11-22):
+1. M3 slice 3, point-in-time features, with weather W1 (venue table and forecast record) beside it.
+2. M3 slices 4–6.
+3. M4 sit/start (OWN-068), weather W2–W6, the Q-014 study and ablation.
+
+**Waiting on the owner:**
+- the NWS User-Agent contact (weather W3);
+- a remote 24/7 server for data refresh and outage alerting (OWN-070, R-068).
+
+**Known gaps:**
+- live play timing for weeks 1–7 and 10 never existed (ADR-007 A4);
+- ESPN point-in-time injury status for 2026-11-10 to 11-22 is unknown.
+
 **Governance system (2026-11-22):** the owner pushed the repository-native Context Governance System to `main` as `ec5682a`. It includes Codex/Claude entry instructions, structured task and handoff records, the authority matrix, the football-operations advisor charter (a requirement, not a shipped feature), the governance CLI and PR traceability. See the [audit](../governance/AUDIT_2026-11-22.md) and [start guide](../governance/START_HERE.md).
-- **CI:** that commit failed Runtime validation at `make lint`, with 7 Ruff errors in `tests/governance/test_governance.py`, so its database suite never ran. TASK-20261122-001 fixes the file on branch `claude/catch-up-and-decisions`. Runtime validation on `main` is green again only once that branch merges.
+- **CI:** that commit failed Runtime validation at `make lint`, with 7 Ruff errors in `tests/governance/test_governance.py`. TASK-20261122-001 fixed it, and Runtime validation has been green on `main` since PR #2 (`d9f95ec`).
 
 **Weather, alerting and history decisions (2026-11-22, TASK-20261122-007):**
 - **Weather (OWN-069):** a forecast is a factor for games outside a closed roof. [ADR-008](../architecture/decisions/008-weather-intelligence.md) sets a multi-source system: Open-Meteo, NOAA RRFS, NWS/NBM, ECMWF/AIFS, and GHCNh/Meteostat for what happened. Forecasts are point-in-time records refreshed toward kickoff, and observed weather is used for effects only.
@@ -20,9 +39,9 @@
 - **Week 10 recovered:** all 14 games, using this branch's catch-up command against the database at 23:46 UTC, with the worker stopped for 25 s.
 - **Branch protection:** `main` requires the `validate`, `runtime` and `governance` checks.
 - **Global guidance:** the Codex and Claude templates are installed.
-- **Pending:** the `catchup` lane itself, and the relink and schedule-scope fixes, reach the running worker only after this branch merges and the worker restarts.
+- **Released 2026-11-22 23:52 UTC:** PR #2 merged (`d9f95ec`), and the worker restarted with the `catchup` lane and the relink and schedule-scope fixes.
 
-**Catch-up after downtime (2026-11-22, ENG-052, TASK-20261122-004), on branch `claude/catch-up-and-decisions`, not merged or released.** A new `catchup` worker lane recovers finished games the live lanes never read, from weeks that started and ended while the PC or database was down:
+**Catch-up after downtime (2026-11-22, ENG-052, TASK-20261122-004), released 2026-11-22 23:52 UTC on `d9f95ec`.** A new `catchup` worker lane recovers finished games the live lanes never read, from weeks that started and ended while the PC or database was down:
 - **What it reads:** ESPN's scoreboard, summary and plays, and the NFL API's full record. It waits while a slate is active and records each game's kickoff and read time in a private receipt for ADR-007 A1.
 - **Command:** `arbit-worker catchup --dry-run` reports what is outstanding.
 - **Already self-recovering:** league lineups and transactions, nflverse and the whole-season injury report.

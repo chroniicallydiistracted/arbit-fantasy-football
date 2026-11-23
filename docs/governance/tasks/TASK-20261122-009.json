@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-009",
+  "title": "Housekeeping: record the catch-up release, refresh the restart pointer, list open work",
+  "objective": "Status says what is actually running (ENG-052 released 2026-11-22 23:52 UTC on d9f95ec), the restart pointer names the next authorized work, and the open-work list is complete",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "docs",
+  "requirements": [
+    "GOVAI-008",
+    "GOVAI-011",
+    "GOVAI-019"
+  ],
+  "scope_files": [
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T00:36:27Z",
+  "updated_at": "2026-11-23T00:36:51Z",
+  "baseline": "9b33e380ba8d8d0832b61adac2da540ef0694849",
+  "next_action": "Start M3 slice 3 under a model-class task with weather W1 beside it (see status Open work); ask the owner for the NWS User-Agent contact before W3.",
+  "sections": {
+    "review": {
+      "summary": "Status still described ENG-052 as unmerged and unreleased and Runtime validation as red; the restart pointer named PR #2 merge. Observed: PR #2 merged as d9f95ec; worker ActiveEnterTimestamp 2026-11-22 16:52:15 MST (23:52:15 UTC) with the catchup lane's first started line at 23:52:15Z; main CI green (Foundation, Context governance, Runtime validation on d9f95ec).",
+      "files": [
+        "docs/project/status.md",
+        "docs/governance/state.json",
+        "docs/project/changelog.md"
+      ]
+    },
+    "plan": {
+      "summary": "Add a 'Running now' and 'Open work' head to status, mark ENG-052 released, fix the CI line, refresh state.json's next action and source, changelog entry. Remove the merged worktree only after this branch merges (outside the repository).",
+      "files": [
+        "docs/project/status.md",
+        "docs/governance/state.json",
+        "docs/project/changelog.md"
+      ]
+    },
+    "implementation": {
+      "summary": "Status head 'Running now' (d9f95ec, seven lanes, weeks 1-10, CI green, protection) and ordered 'Open work' with owner inputs and known gaps; ENG-052 and the ops block marked released; CI line updated. state.json next action: merge this branch, then M3 slice 3 with weather W1; source the M3 plan. Changelog entry.",
+      "files": [
+        "docs/project/status.md",
+        "docs/governance/state.json",
+        "docs/project/changelog.md"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0: foundation validator. brief shows the new next action.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Status, changelog and state pointer are this task's documentation.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/governance/state.json"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261122-009-governance-handoff.md",
+      "next_action": "Start M3 slice 3 under a model-class task with weather W1 beside it (see status Open work); ask the owner for the NWS User-Agent contact before W3.",
+      "unresolved": "Remote 24/7 server for data refresh and alerting (OWN-070, R-068). NWS User-Agent contact. Live timing for weeks 1-7 and 10 and ESPN point-in-time status for 2026-11-10 to 11-22 remain unknown."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T00:36:51Z",
+      "exit_code": 0,
+      "duration_seconds": 0.228,
+      "stdout_stderr_sha256": "487081e56117429e330b69b60ea1a1e884a0aea04f96c3133c5a200c44517ddf",
+      "git_head": "9b33e380ba8d8d0832b61adac2da540ef0694849",
+      "scope_sha256": {
+        "docs/project/status.md": "bfa701c424805a41594624bc41f2dfd33b907edd4c74856045bd731e74701af2",
+        "docs/project/changelog.md": "22a85cfd8af5765dc783d38dff4576a564bd4077a5798871630fd44da9e05f7d",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T00:36:51Z",
+      "kind": "next_step",
+      "note": "After this branch merges, remove the merged worktree /home/andre/arbit-catchup (git worktree remove) and delete the merged local branches claude/catch-up-and-decisions and claude/weather-plan-and-backfill.",
+      "evidence": "git worktree list; git branch --merged main"
+    }
+  ],
+  "closed_at": "2026-11-23T00:36:51Z"
+}
