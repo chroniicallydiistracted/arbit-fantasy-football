@@ -183,16 +183,30 @@ def seed(uow, *, live_week_phase: str = "final") -> None:
         )
 
 
-def test_weeks_before_the_nfl_lane_began_keep_their_espn_record(uow, tmp_path):
+def test_a_stored_week_before_the_nfl_lane_began_keeps_its_espn_record(uow, tmp_path):
     """Week 8 was reviewed with ESPN's plays; catch-up must not hand it to a new source."""
     seed(uow)
     with uow.engine.begin() as c:
-        c.execute(nfl_api_game.delete())
+        c.execute(nfl_api_game.delete())  # no NFL-lane week yet
+        stored_game(c, MISSED, 10, "final", complete=False, at=MISSED_KICKOFF)
     espn = missed_week_espn()
     live, nfl = feeds(uow, espn)
     outcome = catchup.run(uow, 2026, live=live, nfl=nfl, trigger="test", root=tmp_path)
     assert outcome.recovered == 1 and nfl.client.calls == []  # type: ignore[attr-defined]
     assert espn.requests.count("espn.plays") == 1
+
+
+def test_a_week_never_captured_gets_the_nfl_record_before_the_nfl_lane_began(uow, tmp_path):
+    """OWN-071: weeks 1-7 were never stored, so the primary source's record owns their plays."""
+    seed(uow)
+    with uow.engine.begin() as c:
+        c.execute(nfl_api_game.delete())  # no NFL-lane week yet
+    espn = missed_week_espn()
+    live, nfl = feeds(uow, espn)
+    outcome = catchup.run(uow, 2026, live=live, nfl=nfl, trigger="test", root=tmp_path)
+    assert outcome.recovered == 1 and "espn.plays" not in espn.requests
+    week = json.loads((tmp_path / catchup.RECEIPTS).read_text())["weeks"][0]
+    assert week["nfl"]["finals"] == 1 and week["games"][0]["plays"] == "nfl"
 
 
 def feeds(uow, espn: FakeEspn, clock=lambda: NOW) -> tuple[LiveFeed, NflFeed]:

@@ -193,10 +193,14 @@ def recover_week(
     nfl: NflFeed | None,
     nfl_from: int | None,
     clock: Callable[[], datetime],
+    never_captured: bool = False,
 ) -> dict[str, Any]:
     """Read one past week's missing games. The NFL record goes first so it owns the plays where
     it can; ESPN's summary always, and ESPN's plays where the NFL record doesn't exist. Raises
-    only when a source asks Arbit to stop."""
+    only when a source asks Arbit to stop.
+
+    NFL records are read from the first week the NFL lane covered, and for any week Arbit never
+    stored a game for (OWN-071): such a week has no reviewed ESPN record to keep."""
     result: dict[str, Any] = {"period": period, "games": []}
     if any(not g.stored or not g.final for g in games):
         try:
@@ -208,7 +212,7 @@ def recover_week(
             result["board"] = {"error": error.code}
         except ValueError:
             result["board"] = {"error": "VALIDATION_FAILED"}
-    if nfl is not None and nfl_from is not None and period >= nfl_from:
+    if nfl is not None and (never_captured or (nfl_from is not None and period >= nfl_from)):
         try:
             result["nfl"] = nfl.recover_week(NFL_REGULAR_SEASON, period, clock())
         except SourceError as error:
@@ -236,6 +240,21 @@ def recover_week(
         entry["readAt"] = clock().astimezone(UTC).isoformat()
         result["games"].append(entry)
     return result
+
+
+def stored_games(uow: UnitOfWork, season: int, period: int) -> int:
+    """How many of a regular-season week's games Arbit has stored at all."""
+    with uow.engine.connect() as c:
+        return int(
+            c.scalar(
+                select(func.count()).where(
+                    nfl_game.c.season == season,
+                    nfl_game.c.season_type == REGULAR_SEASON,
+                    nfl_game.c.week == period,
+                )
+            )
+            or 0
+        )
 
 
 def append_receipt(root: Path, receipt: dict[str, Any]) -> None:
@@ -293,6 +312,7 @@ def run(
                     nfl=nfl,
                     nfl_from=nfl_from,
                     clock=clock,
+                    never_captured=stored_games(uow, season, period) == 0,
                 )
             )
         except SourceError as error:

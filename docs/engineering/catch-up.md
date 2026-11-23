@@ -34,7 +34,7 @@ The `catchup` lane is in the worker's default lanes.
   1. ESPN's scoreboard for that week;
   2. the NFL API's full record for each game, which owns the plays when it passes the usual final checks;
   3. ESPN's summary for each game, and ESPN's plays where no NFL record exists.
-- **NFL records:** they are added only from the first week the NFL lane read (week 9 of 2026). Earlier weeks keep the ESPN record they were reviewed with.
+- **NFL records:** added from the first week the NFL lane read (week 9 of 2026), and for any week Arbit never stored a game for (weeks 1–7 of 2026, OWN-071). Week 8 keeps the ESPN record it was reviewed with.
 - **Waits while a slate is active,** checking again every 10 minutes, so it never competes with live reads. Otherwise it checks every 30 minutes, and 30 seconds after a week when more remain.
 - **Stops early** when a source asks Arbit to wait (`RATE_LIMITED`, `SOURCE_COOLDOWN`), and retries later.
 - **Schedule safety:** a recovered week never becomes the live schedule. `store.game_timings` follows the season's latest week, not the most recently stored one.

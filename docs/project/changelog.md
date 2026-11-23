@@ -1,5 +1,32 @@
 # Development Changelog
 
+## 2026-11-23 — Flaky Live playback browser test fixed (TASK-20261122-010)
+
+- **What failed:** the push run of PR #3's commit failed the fictional member browser journey. `live-playback.spec.ts`'s partial-replay test threw `route.fetch: Test ended`, while the pull-request run of the same commit passed.
+- **Cause:** the plays route reads from the server through `route.fetch()`, and the stubbed event stream reconnects every 50 ms, re-reading plays each time. A read could still be in flight when the test's last assertion passed. The bug dates from `8074c8f`.
+- **Fix:** `test.afterEach` now awaits `page.unrouteAll({ behavior: "ignoreErrors" })`.
+- **Proof:** with a temporary random delay widening the race, 21 of 60 runs failed with CI's exact error before the fix, and all 60 passed after it. Without the delay, the full browser suite passes (16 tests) on an isolated stack (port 8011, scratch fixture database).
+
+## 2026-11-23 — Housekeeping (TASK-20261122-009)
+
+- **Status:** now opens with what is running (`d9f95ec`, seven lanes, weeks 1–10 complete) and the ordered open work. ENG-052 is recorded as released on 2026-11-22 at 23:52 UTC, and the CI line is updated.
+- **Restart pointer:** now names M3 slice 3 with weather W1.
+
+## 2026-11-22 — Never-captured weeks take the NFL record (TASK-20261122-008)
+
+- Catch-up now reads the NFL API's full record for any regular-season week Arbit never stored a game for, as well as from the first NFL-lane week. Week 8 still keeps its reviewed ESPN record.
+- Two tests cover both cases. With the new rule removed, the never-captured test fails.
+- Run for 2026 weeks 1–7 with `arbit-worker catchup --from-period 1` (OWN-071); see the handoff for the result.
+
+## 2026-11-22 — Weather intelligence decided and planned (TASK-20261122-007)
+
+- **OWN-069 resolves Q-016:** a weather forecast is a factor for games outside a closed roof, through a multi-source system.
+  - Recorded as [ADR-008](../architecture/decisions/008-weather-intelligence.md), with the [research](../research/weather-sources-2026-11-22.md) (SRC-34 to SRC-38) and the [plan](../superpowers/plans/2026-11-22-weather-intelligence.md), slices W1–W6.
+  - Point-in-time forecast archives exist from January 2024 (Open-Meteo Previous Runs) and in the NBM archive; earlier seasons have observations only.
+- **OWN-070:** outage alerting waits for a remote 24/7 server.
+- **OWN-071:** weeks 1–7 are to be captured by the worker.
+- **Kept consistent:** the AGENTS.md invariant now names availability and weather as the two exceptions to nflverse-only Model data. The charter, the Model rule, R-063, R-068, the M3 plan and the roadmap are updated.
+
 ## 2026-11-22 — Running app restored and hardened (TASK-20261122-002)
 
 - **Database:** found down since 2026-11-10 and started (R-068). Restart policy `unless-stopped` set on the container and in `infra/compose.yaml`.

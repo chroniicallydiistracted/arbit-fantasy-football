@@ -1,0 +1,179 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-007",
+  "title": "Record OWN-069 to OWN-071: weather intelligence (ADR-008), remote-server alerting, weeks 1-7 capture",
+  "objective": "The owner's weather decision is an accepted ADR with a verified multi-source plan that keeps forecasts point-in-time, the alerting decision and weeks 1-7 capture are recorded, and all policy surfaces name weather as the second exception to nflverse-only inputs",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "docs",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "LN-002",
+    "LN-003",
+    "GOVAI-003",
+    "GOVAI-013",
+    "GOVAI-014"
+  ],
+  "scope_files": [
+    "AGENTS.md",
+    "docs/project/decision-register.md",
+    "docs/architecture/decisions/008-weather-intelligence.md",
+    "docs/architecture/decisions/README.md",
+    "docs/research/weather-sources-2026-11-22.md",
+    "docs/research/source-register.md",
+    "docs/superpowers/plans/2026-11-22-weather-intelligence.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/project/roadmap.md",
+    "docs/project/known-issues.md",
+    "docs/governance/FANTASY_ADVISOR_CHARTER.md",
+    ".claude/rules/model-integrity.md",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T00:20:55Z",
+  "updated_at": "2026-11-23T00:23:09Z",
+  "baseline": "d9f95ec0cb0cb8177368d452dcaa295de5c42279",
+  "next_action": "Capture weeks 1-7 (TASK-20261122-008), then weather W1 (venue table and forecast record) beside M3 slice 3.",
+  "sections": {
+    "review": {
+      "summary": "Owner reply 2026-11-22: Q-016 yes for non-closed stadiums, via a multi-source weather intelligence system (Open-Meteo, NOAA RRFS, NWS/NBM, ECMWF/AIFS, NOAA historical/Meteostat), refreshed as kickoff nears, little weight indoors; owner findings: RRFS operational 2026-11-03 and observed vs forecast weather must not be mixed. Alerting deferred to a remote 24/7 server; weeks 1-7 captured by the worker; housekeeping last. Verified (web, 2026-11-22/23): SCN 26-48 updated and SCN 26-89 set RRFS/REFS live 2026-11-03 12 UTC replacing NAM, HREF, SREF, HiresW; HRRR stays (correction to the owner's note); NOMADS prod paths observed 2026-11-23: nam 404, rrfs 200, hrrr 200. Open-Meteo free tier non-commercial, <10k/day, 5k/h, 600/min, CC BY 4.0; Previous Runs API from Jan 2024; Single Runs ECMWF IFS from Mar 2024, others from 2026-04-02. ECMWF open data CC-BY-4.0, AIFS free, AWS replica. NWS API no key, User-Agent with contact required. NBM on AWS noaa-nbm-grib2-pds, text bulletins. GHCNh replaces ISD. Meteostat licence statements conflict (CC BY vs CC BY-NC). nflverse play_by_play: roof and surface pre-game, stadium_id identity, temp and wind after the game; no venue coordinates in the repo.",
+      "files": [
+        "docs/project/decision-register.md",
+        "docs/architecture/decisions/006-model-architecture.md",
+        "docs/architecture/decisions/007-model-availability.md",
+        "libs/arbit-model/src/arbit_model/nflverse_fields.json",
+        "AGENTS.md",
+        "docs/research/source-register.md"
+      ]
+    },
+    "plan": {
+      "summary": "Decision rows OWN-069 (weather intelligence, quoted), OWN-070 (alerting waits for a remote 24/7 server; owner keeps the PC awake), OWN-071 (weeks 1-7 captured by the worker); Q-016 resolved; ADR-008 accepted by OWN-069 with point-in-time forecast rules, roof handling and source roles; research note with verified facts and sources; SRC-34 to SRC-38; implementation plan W1-W6; AGENTS.md invariant names OWN-063 and OWN-069 as exceptions; plan, roadmap, R-063, R-068, charter and model rule updated. No code in this task.",
+      "files": [
+        "AGENTS.md",
+        "docs/project/decision-register.md",
+        "docs/architecture/decisions/008-weather-intelligence.md",
+        "docs/architecture/decisions/README.md",
+        "docs/research/weather-sources-2026-11-22.md",
+        "docs/research/source-register.md",
+        "docs/superpowers/plans/2026-11-22-weather-intelligence.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/roadmap.md",
+        "docs/project/known-issues.md",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md",
+        ".claude/rules/model-integrity.md"
+      ]
+    },
+    "implementation": {
+      "summary": "New: ADR-008 (accepted by OWN-069) with source roles, point-in-time record, lead-time captures, roof weighting, effects-then-apply, venue provenance, supervision; research note with verified facts, evidence grades and sources (RRFS live, NAM gone, HRRR stays; Open-Meteo terms and archives; NWS UA; NBM, ECMWF, GHCNh, Meteostat); weather plan W1-W6. Register: OWN-069, OWN-070, OWN-071, Q-016 resolved; SRC-34 to SRC-38. AGENTS.md invariant names OWN-063/064 and OWN-069 exceptions; ADR index, charter, model rule, R-063, R-068, M3 plan, roadmap, status and changelog updated.",
+      "files": [
+        "AGENTS.md",
+        "docs/project/decision-register.md",
+        "docs/architecture/decisions/008-weather-intelligence.md",
+        "docs/architecture/decisions/README.md",
+        "docs/research/weather-sources-2026-11-22.md",
+        "docs/research/source-register.md",
+        "docs/superpowers/plans/2026-11-22-weather-intelligence.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/roadmap.md",
+        "docs/project/known-issues.md",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md",
+        ".claude/rules/model-integrity.md"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0: foundation validator (links resolve, including the new ADR, research note and plan) and governance doctor. External facts carry their evidence grade in the research note; the NOMADS status codes were observed 2026-11-23 about 00:00 UTC with empty bodies, so directory contents were not read.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Status block and changelog entry for the decisions and the weather plan. Written before validation; unchanged since.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261122-007-governance-handoff.md",
+      "next_action": "Capture weeks 1-7 (TASK-20261122-008), then weather W1 (venue table and forecast record) beside M3 slice 3.",
+      "unresolved": "NWS User-Agent contact awaits the owner. Weather sources are documented, not yet read by Arbit except NOMADS status codes."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T00:23:01Z",
+      "exit_code": 0,
+      "duration_seconds": 0.286,
+      "stdout_stderr_sha256": "5bd8626be0d21e3fa4293ec39f8509c57aa6150d5601d07b4115448673d744b2",
+      "git_head": "d9f95ec0cb0cb8177368d452dcaa295de5c42279",
+      "scope_sha256": {
+        "AGENTS.md": "a35fccd7f7c220180a67a45f1901d63791b33e3e11e1572ab78df60795a8d805",
+        "docs/project/decision-register.md": "65f981e06544a245d0cdc77291be7765130ab8771158643cfa11d50ef0fb2d4b",
+        "docs/architecture/decisions/008-weather-intelligence.md": "762b5600ffe23d2296572b2ad95d87d62245947465c7202d55789b8b1e290df8",
+        "docs/architecture/decisions/README.md": "74f5fc80c1c33e92e05fd6d97eaa4464a1185aea6432a5fc5b53f80203bf6d50",
+        "docs/research/weather-sources-2026-11-22.md": "663dda05d3a6e403ac2f8a6e472485cbd15f2eade48d8126f63d97f40e6027db",
+        "docs/research/source-register.md": "be0ee4618b8578f6e309b868aeb940ce0d4ff18acc5ed6f46144f8cc3399244c",
+        "docs/superpowers/plans/2026-11-22-weather-intelligence.md": "59a9502469004567c1f5606fdc8c0be5dfb79f0227cccc9300df9afeee5716bd",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "60e4edf487aeae8387e1b185ed5b169477993243010831b055741f83fdfc052e",
+        "docs/project/roadmap.md": "96265b765af1766ee56be8f72e37e7f43c53bf2e0fd9b0c9040c04f102641892",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "4322baff94cfcab1ca16427fe8825eea8d890de219b8f250535958fa90abb204",
+        ".claude/rules/model-integrity.md": "fb61c48dcfa6f0019b85122d40843154c947f684841498a3a2e68ee57dd179d5",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "76871335ca2c64c10366dc098d6140d2a30fb1bca5dcf5f8d12bb43ec5684c22",
+        "docs/project/changelog.md": "471d63c8d855d3a13e18a240b8884fbebc11194a913a3c656d07a74f1e0d699e"
+      }
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python",
+        "scripts/governance.py",
+        "doctor"
+      ],
+      "at": "2026-11-23T00:23:01Z",
+      "exit_code": 0,
+      "duration_seconds": 0.047,
+      "stdout_stderr_sha256": "828a81d5d73f64c19b1857df41ebf03677d9c68bf0b30966137359239adc446a",
+      "git_head": "d9f95ec0cb0cb8177368d452dcaa295de5c42279",
+      "scope_sha256": {
+        "AGENTS.md": "a35fccd7f7c220180a67a45f1901d63791b33e3e11e1572ab78df60795a8d805",
+        "docs/project/decision-register.md": "65f981e06544a245d0cdc77291be7765130ab8771158643cfa11d50ef0fb2d4b",
+        "docs/architecture/decisions/008-weather-intelligence.md": "762b5600ffe23d2296572b2ad95d87d62245947465c7202d55789b8b1e290df8",
+        "docs/architecture/decisions/README.md": "74f5fc80c1c33e92e05fd6d97eaa4464a1185aea6432a5fc5b53f80203bf6d50",
+        "docs/research/weather-sources-2026-11-22.md": "663dda05d3a6e403ac2f8a6e472485cbd15f2eade48d8126f63d97f40e6027db",
+        "docs/research/source-register.md": "be0ee4618b8578f6e309b868aeb940ce0d4ff18acc5ed6f46144f8cc3399244c",
+        "docs/superpowers/plans/2026-11-22-weather-intelligence.md": "59a9502469004567c1f5606fdc8c0be5dfb79f0227cccc9300df9afeee5716bd",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "60e4edf487aeae8387e1b185ed5b169477993243010831b055741f83fdfc052e",
+        "docs/project/roadmap.md": "96265b765af1766ee56be8f72e37e7f43c53bf2e0fd9b0c9040c04f102641892",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/FANTASY_ADVISOR_CHARTER.md": "4322baff94cfcab1ca16427fe8825eea8d890de219b8f250535958fa90abb204",
+        ".claude/rules/model-integrity.md": "fb61c48dcfa6f0019b85122d40843154c947f684841498a3a2e68ee57dd179d5",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "76871335ca2c64c10366dc098d6140d2a30fb1bca5dcf5f8d12bb43ec5684c22",
+        "docs/project/changelog.md": "471d63c8d855d3a13e18a240b8884fbebc11194a913a3c656d07a74f1e0d699e"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T00:23:09Z",
+      "kind": "correction",
+      "note": "The owner's note said older pipelines built on HRRR or NAM need to account for their retirement. NAM retired with RRFS on 2026-11-03, but HRRR stays in operations until a later RRFS upgrade.",
+      "evidence": "NOAA GSL RRFS page; NWS RRFS webinar Q&A 2026-06-25; NOMADS hrrr/prod 200 on 2026-11-23"
+    },
+    {
+      "at": "2026-11-23T00:23:09Z",
+      "kind": "question",
+      "note": "NWS API requires a User-Agent with contact information; the owner chooses the contact, kept in .env.local (weather plan W3).",
+      "evidence": "NWS API documentation (SRC-36)"
+    }
+  ],
+  "closed_at": "2026-11-23T00:23:09Z"
+}
