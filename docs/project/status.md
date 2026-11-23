@@ -3,6 +3,13 @@
 **Governance system (2026-11-22):** the owner pushed the repository-native Context Governance System to `main` as `ec5682a`. It includes Codex/Claude entry instructions, structured task and handoff records, the authority matrix, the football-operations advisor charter (a requirement, not a shipped feature), the governance CLI and PR traceability. See the [audit](../governance/AUDIT_2026-11-22.md) and [start guide](../governance/START_HERE.md).
 - **CI:** that commit failed Runtime validation at `make lint`, with 7 Ruff errors in `tests/governance/test_governance.py`, so its database suite never ran. TASK-20261122-001 fixes the file on branch `claude/catch-up-and-decisions`. Runtime validation on `main` is green again only once that branch merges.
 
+**Weather, alerting and history decisions (2026-11-22, TASK-20261122-007):**
+- **Weather (OWN-069):** a forecast is a factor for games outside a closed roof. [ADR-008](../architecture/decisions/008-weather-intelligence.md) sets a multi-source system: Open-Meteo, NOAA RRFS, NWS/NBM, ECMWF/AIFS, and GHCNh/Meteostat for what happened. Forecasts are point-in-time records refreshed toward kickoff, and observed weather is used for effects only.
+- **Verified:** RRFS went live on 2026-11-03 and NAM is gone; HRRR still runs, contrary to the owner's note.
+- **Plan:** [weather intelligence](../superpowers/plans/2026-11-22-weather-intelligence.md), slices W1–W6. Nothing is built yet. The owner still needs to choose the NWS User-Agent contact.
+- **Alerting (OWN-070):** waits for a remote 24/7 server; the owner keeps the PC awake meanwhile.
+- **History (OWN-071):** weeks 1–7 are to be captured by the worker.
+
 **Running app repaired (2026-11-22, TASK-20261122-002).** The owner allows restarts at any time while they are the only user.
 - **Database:** it was down from 2026-11-10 18:06 to 2026-11-22 22:44 UTC (R-068) and now restarts with Docker (`unless-stopped`).
 - **Worker restart (23:43 UTC):** the worker runs `main` (`ec5682a`).

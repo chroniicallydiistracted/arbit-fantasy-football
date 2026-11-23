@@ -108,6 +108,7 @@ The verification ([research](../research/nflverse-ffa-scoring-2026-11-09.md)) co
 - **R-063: weather is not a pre-game Model input.** nflverse fills `temp` and `wind` only after games: both are empty for every 2026 game, including completed weeks 8 and 9, while 2023–2025 have them for 499 of 549 outdoor games. Under OWN-061 no other weather source is used, so the Model uses `roof` and `surface` only, and backtests must not use the after-the-fact values. Blocks nothing; weather effects stay unmodeled (M3). **Amended 2026-11-22 (ADR-007 A2, OWN-066):**
 - **History:** recorded weather is applicable once a game ends, for example how a team's passing or a kicker performed in wind and cold. So it informs later decisions, never the game it describes.
 - **Upcoming game:** nflverse has no forecast, and the owner wants weather in sit/start reasoning (OWN-068). Q-016 asks whether a forecast may be used, and at which layer.
+- **Q-016 resolved 2026-11-22 (OWN-069):** a forecast is used through the multi-source weather intelligence system ([ADR-008](../architecture/decisions/008-weather-intelligence.md)). Its backtests use point-in-time forecasts from 2024 onward, and observed weather stays an outcome.
 
 ## ESPN league surfacing audit, 2026-11-08
 
@@ -138,6 +139,7 @@ At 01:01 UTC on 2026-11-09 (Sunday evening, week 9), a cookie-free ESPN read was
     - the catch-up lane;
     - ADR-007 A1/A3, which treat this span as a capture gap.
   - **Still open:** no alert when a source stays behind for hours. The data-status view shows it, but only to someone looking. **Owner:** Operations / release (OWN-014).
+  - **Deferred 2026-11-22 (OWN-070):** the owner prefers moving data refresh to a remote 24/7 server over local alerting, and keeps the PC awake meanwhile.
 - **R-069 — fixed in code: NFL games left unlinked for six hours after a restart.**
   - **What happened:** on 2026-11-22 the NFL lane discovered week 11 at 22:44:52 UTC, six seconds before ESPN's scoreboard stored the week's games.
   - **Impact:** all 13 NFL games stayed unlinked (`event_id` NULL), so no NFL detail was read. Every week 11 game ran on ESPN's fallback plays until the next discovery, six hours later.

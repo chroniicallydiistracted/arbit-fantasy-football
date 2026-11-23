@@ -10,5 +10,8 @@ ADR-007 is accepted with owner amendments (OWN-066): a value fetched late after 
 capture gap counts from the source's own timestamp or family rule, never before
 the gap start; every field states when it applies rather than being barred. Never
 use a value before its known-from time. Betting lines need the OWN-067 study.
+Weather (ADR-008, OWN-069): forecasts are point-in-time records by fetch or run
+publication time; observed weather is for effects and outcomes only, never a
+pregame feature for the game it describes; little weight under closed roofs.
 Require baseline comparisons, holdout protocol and traceable manifests before
 claiming projection readiness. Do not fabricate a trained model or probability.

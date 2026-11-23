@@ -31,5 +31,5 @@ context. [ADR-007](../architecture/decisions/007-model-availability.md) is accep
 owner amendments (OWN-066). The first advisor is the Head Coach's sit/start
 (OWN-068). It must explain each projection through measured contributions: role and
 efficiency, opponent defense against the position, team environment, availability and
-FFA scoring. Weather for the upcoming game is open (Q-016), and is advisor-layer context
-at most until decided. Recommendation features remain gated until implemented and validated.
+FFA scoring. Weather for the upcoming game is a Model input and an explained contribution for
+games outside a closed roof ([ADR-008](../architecture/decisions/008-weather-intelligence.md), OWN-069). Recommendation features remain gated until implemented and validated.

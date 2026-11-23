@@ -1,5 +1,14 @@
 # Development Changelog
 
+## 2026-11-22 — Weather intelligence decided and planned (TASK-20261122-007)
+
+- **OWN-069 resolves Q-016:** a weather forecast is a factor for games outside a closed roof, through a multi-source system.
+  - Recorded as [ADR-008](../architecture/decisions/008-weather-intelligence.md), with the [research](../research/weather-sources-2026-11-22.md) (SRC-34 to SRC-38) and the [plan](../superpowers/plans/2026-11-22-weather-intelligence.md), slices W1–W6.
+  - Point-in-time forecast archives exist from January 2024 (Open-Meteo Previous Runs) and in the NBM archive; earlier seasons have observations only.
+- **OWN-070:** outage alerting waits for a remote 24/7 server.
+- **OWN-071:** weeks 1–7 are to be captured by the worker.
+- **Kept consistent:** the AGENTS.md invariant now names availability and weather as the two exceptions to nflverse-only Model data. The charter, the Model rule, R-063, R-068, the M3 plan and the roadmap are updated.
+
 ## 2026-11-22 — Running app restored and hardened (TASK-20261122-002)
 
 - **Database:** found down since 2026-11-10 and started (R-068). Restart policy `unless-stopped` set on the container and in `infra/compose.yaml`.
