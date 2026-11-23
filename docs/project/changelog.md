@@ -1,5 +1,34 @@
 # Development Changelog
 
+## 2026-11-23 — Game-day availability in the owner's order (TASK-20261123-003)
+
+- **OWN-073:** "We should have a better route for more up to date injuries, however game day decisions should be the final say."
+- **`arbit_model.availability` (ENG-055)** returns one row per player with status, practice, source, known-from time, basis and whether it is final:
+  - On the player's game day, ESPN's status read within 15 minutes is final.
+  - Otherwise, the freshest copy of NFL's injury report: Arbit's capture at 12:00 and 19:15 Eastern, or nflverse's republication through the point-in-time reader.
+  - Otherwise unknown. Game day without a current ESPN read is flagged.
+- **Common words:** `DIDNOT` and "Did Not Participate In Practice" both become DNP, and status codes are upper case. `is_game_day` uses the US Eastern date, up to kickoff.
+- **Tests:** 5 new, and three deliberate breaks each fail tests.
+- **Real data:** `scripts/model/availability_audit.py` and its receipt cover week 11's Sunday kickoff during the outage, Monday night's game day and the same moment before game day.
+- **Docs:** OWN-073, ENG-055, ADR-007 note, R-070 update, research note, README, plan and status.
+
+## 2026-11-23 — Columnar point-in-time reader and the owner's timing order (TASK-20261123-002)
+
+- **PR #4 (slice 3a) merged** as `c41a7d7`. The owner authorized GitHub actions, merges included, on 2026-11-23. The merged worktree and local branch were removed.
+- **Speed question answered with measurements:** Arbit already keeps every nflverse file locally. The 2026 depth chart version (827,000 rows) reads in 0.02 s; per-row Python took 1.75 s.
+- **Reader (ENG-054):**
+  - Placement works on whole columns: polars joins with the schedule calendar.
+  - A version's labeled rows are cached apart from the decision time.
+  - `Reading.frame` is a polars frame, and `rows` remains for convenience.
+  - `arbit-model` declares `polars`, already a dependency of `arbit-data`.
+- **Same answers:** the real-history audit reproduces every figure of the first receipt. It runs in 8.8 s instead of 34 s and peaks at 0.83 GB instead of 2.2 GB. A whole 2025 season, 630 reads, takes 1.5 s. R-071 is resolved.
+- **Tests:**
+  - The 20 reader tests are unchanged apart from frames, and the placement unit tests call the columnar rules.
+  - One test reuses a reader across 103 decision times and checks every tenth against a fresh reader.
+  - The three deliberate breaks fail 1, 9 and 6 tests, as before.
+  - The 2 PostgreSQL tests pass.
+- **OWN-072 / ADR-007 A5:** held data first, then source timestamps and rules for data refreshed during a gap or not yet fetched.
+
 ## 2026-11-23 — Point-in-time reader and catalog re-review (M3 slice 3a, TASK-20261123-001)
 
 - **Reader:** new `arbit_model.point_in_time`, `timing` and `vintages` (ENG-053). A feature reads a table at a decision time and gets:

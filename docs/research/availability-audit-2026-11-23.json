@@ -1,0 +1,101 @@
+{
+ "decisions": [
+  {
+   "at": "2026-11-22T18:00:00+00:00",
+   "bySource": {
+    "nflverse-report": 282
+   },
+   "espn": {
+    "current": false,
+    "documentPublishedAt": "2026-11-10T17:21:49.553062+00:00",
+    "lastReadAt": "2026-11-10T18:04:07.186188+00:00"
+   },
+   "final": 0,
+   "gameDay": true,
+   "gameDayUnknown": true,
+   "label": "Week 11 earliest Sunday kickoff (R-068 outage, game day)",
+   "latestKnownFrom": "2026-11-22T07:00:00+00:00",
+   "nflCapture": null,
+   "nflverse": {
+    "held": "0ec981a3218f207d1a3056c4a276bc304c631496780ce61b1ebe5991aea6b87b",
+    "inGap": true,
+    "unitsByBasis": {
+     "observed": 665,
+     "retrospective-rule": 2785
+    }
+   },
+   "out": 52,
+   "players": 282,
+   "season": 2026,
+   "week": 11
+  },
+  {
+   "at": "2026-11-23T19:34:35.925773+00:00",
+   "bySource": {
+    "espn-game-day": 1026,
+    "nfl-report": 216
+   },
+   "espn": {
+    "current": true,
+    "documentPublishedAt": "2026-11-23T19:13:13.110147+00:00",
+    "lastReadAt": "2026-11-23T19:34:21.267420+00:00",
+    "players": 1063,
+    "unmapped": 37
+   },
+   "final": 1026,
+   "gameDay": true,
+   "gameDayUnknown": false,
+   "label": "Monday night 2026_11_CIN_WAS, at the run (game day)",
+   "latestKnownFrom": "2026-11-23T19:13:13.110147+00:00",
+   "nflCapture": {
+    "manifest": "a4c3b5ca01fe094389bbe1a80e174d3fa5a98b9e406da3e9bbacfeedd41efc57",
+    "observedAt": "2026-11-23T17:00:03.179711+00:00",
+    "rows": 313
+   },
+   "nflverse": {
+    "held": "1d4a768a4fbfb82ae67841b02bfc87b6e29739276da984bd083bc940e8813bc0",
+    "inGap": false,
+    "unitsByBasis": {
+     "observed": 696,
+     "retrospective-rule": 2785
+    }
+   },
+   "out": 68,
+   "players": 1242,
+   "season": 2026,
+   "week": 11
+  },
+  {
+   "at": "2026-11-23T19:34:35.925773+00:00",
+   "bySource": {
+    "nfl-report": 313
+   },
+   "espn": null,
+   "final": 0,
+   "gameDay": false,
+   "gameDayUnknown": false,
+   "label": "The same moment, before game day",
+   "latestKnownFrom": "2026-11-23T17:00:03.179711+00:00",
+   "nflCapture": {
+    "manifest": "a4c3b5ca01fe094389bbe1a80e174d3fa5a98b9e406da3e9bbacfeedd41efc57",
+    "observedAt": "2026-11-23T17:00:03.179711+00:00",
+    "rows": 313
+   },
+   "nflverse": {
+    "held": "1d4a768a4fbfb82ae67841b02bfc87b6e29739276da984bd083bc940e8813bc0",
+    "inGap": false,
+    "unitsByBasis": {
+     "observed": 696,
+     "retrospective-rule": 2785
+    }
+   },
+   "out": 54,
+   "players": 313,
+   "season": 2026,
+   "week": 11
+  }
+ ],
+ "format": "arbit-availability-audit-v1",
+ "generatedAt": "2026-11-23T19:34:35.925773+00:00",
+ "source": "arbit_local, the nflverse store and the availability store, read only"
+}

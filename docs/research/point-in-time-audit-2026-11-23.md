@@ -66,7 +66,7 @@ No unit was bounded by a gap's start: nflverse didn't publish any of these rows 
    - The other exclusions are policy: OWN-061, the legacy duplicate of the statistics release, play description text, and release tests. A test pins that set.
    - Regenerating the catalog also picked up upstream type changes since 2026-11-10: seven contract text and history columns are now `large_string`, and QBR's `game_week` is now `int32`.
    - The catalog still lists 1,827 fields: 148 pre-game, 722 history, 18 earlier seasons only, 38 as imported, 411 identity, 490 excluded.
-5. **Cost.** The whole audit took 34 seconds and peaked at 2.2 GB of memory. Most of both went to the 2026 depth chart file: 827,000 rows in each of 11 versions, placed row by row in Python on first use. Features that read many decision times across many seasons will need placement done in columns rather than per row (slice 3 feature work).
+5. **Cost (R-071, resolved the same day; see below).** The whole audit took 34 seconds and peaked at 2.2 GB of memory. Most of both went to the 2026 depth chart file: 827,000 rows in each of 11 versions, placed row by row in Python on first use.
 
 ## Tests
 
@@ -85,3 +85,60 @@ No unit was bounded by a gap's start: nflverse didn't publish any of these rows 
   - failed checks are not reads;
   - a column missing from an older version reads as unknown;
   - a decision inside a gap.
+
+## Columnar reader (TASK-20261123-002, ENG-054)
+
+The owner asked whether keeping the data locally, or fetching straight from nflverse's repository, would be faster. Arbit already keeps every nflverse file locally, as Parquet in its object store. The time went to Python, not to reading.
+
+**Where the time went:**
+
+| Step, one 2026 depth chart version (827,000 rows, 3.7 MB) | Seconds |
+| --- | --- |
+| Checksum the local file | 0.01 |
+| Read the columns | 0.02 |
+| Build Python dictionaries | 0.2 |
+| Place rows one at a time | 1.55 |
+| Parse and group the same rows by column | 0.05 |
+
+A 2025 play-by-play file (21.6 MB, 372 columns) reads in 0.06 s; building its dictionaries took 2.0 s. Fetching from nflverse's repository would add downloads, and it would drop the dated copies that ADR-007's timing depends on.
+
+**The fix:**
+- Placement now works on whole columns: polars joins against the schedule calendar.
+- Each version's labeled rows are cached apart from the decision time, so a read is a cached frame and one time filter.
+- A reading returns a polars frame.
+
+**Results** (receipt: [point-in-time-audit-columnar-2026-11-23.json](point-in-time-audit-columnar-2026-11-23.json)):
+
+| Measure | Row by row | Columnar |
+| --- | --- | --- |
+| The audit above, start to finish | 34 s, 2.2 GB peak | 8.8 s, 0.83 GB peak |
+| Its 56 table reads | 30.5 s | 7.9 s |
+| A whole 2025 season: 126 kickoffs × 5 tables (play-by-play, player statistics, injuries, depth charts, snaps) on one reader | not measured | 630 reads in 1.5 s (2.4 ms each), 34.7 million rows returned, 0.4 GB peak |
+
+**Same answers:** every figure of both receipts is identical. That covers versions, gaps, units, bases, gap bounds, untimed units and latest known-from times, at all four decision times. No row is known at or after its decision.
+
+**The same tests catch the same mistakes:** the three deliberate breaks fail 1, 9 and 6 reader tests, as before. One test now reuses a reader across 103 decision times and checks every tenth result against a fresh reader, so cached frames can't carry one decision's answer into another.
+
+**Timing order (OWN-072, ADR-007 A5):** everything Arbit holds at a decision counts at once. Source timestamps and family rules apply only to values Arbit didn't hold, because they were refreshed during a gap or not yet fetched. The reader already worked this way; the owner made it the rule.
+
+## Game-day availability (TASK-20261123-003, ENG-055, OWN-073)
+
+`arbit_model.availability` gives each player's availability at a decision time:
+- **On the player's game day:** ESPN's fantasy status, read within 15 minutes, is final.
+- **Otherwise:** the freshest copy of NFL's injury report. That is Arbit's own capture or nflverse's republication, whichever Arbit had more recently.
+- **No source:** unknown.
+
+NFL's capture and nflverse's file carry the same report. Their 2026 counts are identical (712 OUT, 762 QUESTIONABLE, 61 DOUBTFUL) in different words, such as `DIDNOT` and "Did Not Participate In Practice", so the reader uses common terms.
+
+Real data (receipt [availability-audit-2026-11-23.json](availability-audit-2026-11-23.json), read only):
+
+| Decision | Result |
+| --- | --- |
+| Week 11 Sunday, 18:00 UTC on 2026-11-22: the earliest kickoff, inside the R-068 outage | ESPN was last read on 10 November, so game-day status is **unknown**, flagged, never assumed active. No NFL capture existed yet. nflverse's copy, fetched after the outage, supplies 282 players by the game-day rule (52 OUT) |
+| Monday night (CIN at WAS), on its game day at 19:34 UTC on 2026-11-23 | ESPN was read 14 seconds earlier. Its status is **final** for 1,026 players, and 37 pool entries have no GSIS ID: 32 D/ST units and 5 athletes. Another 216 listed players ESPN doesn't carry come from NFL's 17:00 UTC capture. 68 are OUT |
+| The same moment, before game day | NFL's 17:00 UTC capture is fresher than nflverse's copy, so it supplies all 313 players (54 OUT) |
+
+**Tests:** 5 in `libs/arbit-model/tests/test_availability.py`. Three deliberate breaks each fail tests:
+- using captures finished after the decision: 2 failures;
+- using a stale ESPN status: 1;
+- letting the older copy win: 2.

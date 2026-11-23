@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "id": "TASK-20261123-002",
+  "title": "Columnar point-in-time reader and owner timing order",
+  "objective": "Make the point-in-time reader fast enough for whole-season feature building (R-071) by placing rows in columns with polars and returning frames instead of per-row dictionaries, with identical results; answer the owner's local-data question with measurements; and record the owner's timing order (use whatever data Arbit holds at the decision; fall back to source timestamps or family rules only for data that arrived during a gap or was not yet held) as an ADR-007 clarification. No features, service or API change.",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/pyproject.toml",
+    "uv.lock",
+    "libs/arbit-model/src/arbit_model/timing.py",
+    "libs/arbit-model/src/arbit_model/vintages.py",
+    "libs/arbit-model/src/arbit_model/point_in_time.py",
+    "libs/arbit-model/tests/test_point_in_time.py",
+    "tests/integration/test_model_point_in_time.py",
+    "scripts/model/point_in_time_audit.py",
+    "docs/research/point-in-time-audit-2026-11-23.md",
+    "docs/research/point-in-time-audit-2026-11-23.json",
+    "docs/research/point-in-time-audit-columnar-2026-11-23.json",
+    "libs/arbit-model/README.md",
+    "docs/architecture/decisions/007-model-availability.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/project/decision-register.md",
+    "docs/project/known-issues.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T19:19:37Z",
+  "updated_at": "2026-11-23T19:30:17Z",
+  "baseline": "c41a7d79c165eb018c3508d3c630c679040dea18",
+  "next_action": "TASK-20261123-003 on the same branch: game-day availability with the owner's precedence (OWN-073): ESPN fantasy status read within 15 minutes of kickoff is final; otherwise Arbit's latest NFL injury report capture; otherwise nflverse injuries through the point-in-time reader; otherwise unknown. Then PR, merge, and M3 slice 3b.",
+  "sections": {
+    "review": {
+      "summary": "Owner direction 2026-11-23: (1) speed: consider housing data locally, or fetch directly from the nflverse repository; (2) timing: 'the primary rule should allow the model to use whatever data is immediately available, then fall back to specific timestamps where the data refreshed during a gap or is not yet available'; (3) injuries: a more current route, with game-day decisions as the final say (TASK-20261123-003). Measured on one 2026 depth chart version (827k rows, 3.7 MB local Parquet): checksum 0.01 s, Parquet read 0.02 s, conversion to Python dicts 0.2 s, per-row placement 1.55 s; columnar parse and grouping 0.05 s. A 2025 play-by-play file (21.6 MB): read 0.06 s, to_pylist 2.0 s. The data is already local; the cost is per-row Python. Reviewed point_in_time.py, timing.py and vintages.py; polars 1.44 is already a dependency of arbit-data. The current reader already uses held data first (observed) and rules only for units first held after a gap or never held.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/point_in_time.py",
+        "libs/arbit-model/src/arbit_model/timing.py",
+        "libs/arbit-model/src/arbit_model/vintages.py",
+        "libs/arbit-data/pyproject.toml",
+        "docs/research/point-in-time-audit-2026-11-23.md"
+      ]
+    },
+    "plan": {
+      "summary": "Rewrite placement as polars expressions: Calendar gains frames for game IDs (with old GSIS aliases and schedule known-from), team-weeks (with franchise-code aliases) and week first/last days; each TableSpec gets place(frame, calendar, season) returning _unit, _known, _basis in input order, and declares the columns it needs. VintageSource.table returns a polars DataFrame (missing columns null). PointInTime keeps unit-level frames per version and a first-holding frame per key (unit, first index, rule, basis, after-game time), computes known-from and basis with expressions, and returns Reading.frame (rows stays as a convenience). Semantics unchanged: the 20 reader tests and 2 integration tests must pass as they are, apart from placement unit tests moved to the columnar functions, and the real-history audit must reproduce every unit count, basis count and latest known-from of the 2026-11-23 receipt. Record the owner's timing order as ADR-007 clarification A5 and OWN-072, and the local-data answer with measurements.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/timing.py",
+        "libs/arbit-model/src/arbit_model/point_in_time.py",
+        "libs/arbit-model/src/arbit_model/vintages.py"
+      ]
+    },
+    "implementation": {
+      "summary": "timing.py: placement rewritten as polars expressions (Calendar gains id, team-week and week frames; every TableSpec has place() and needs); vintages.py returns polars frames with missing columns as null; point_in_time.py computes unit frames per version, a first-holding frame per key and known-from with expressions, caches each version's labeled part apart from the decision time, and returns Reading.frame. arbit-model declares polars (already an arbit-data dependency; uv.lock +2 lines). Audit script uses columnar placement. Docs: ADR-007 A5 (OWN-072), ENG-054, R-071 resolved, research note section with measurements, README, plan, status, changelog.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/timing.py",
+        "libs/arbit-model/src/arbit_model/vintages.py",
+        "libs/arbit-model/src/arbit_model/point_in_time.py",
+        "libs/arbit-model/tests/test_point_in_time.py",
+        "tests/integration/test_model_point_in_time.py",
+        "scripts/model/point_in_time_audit.py",
+        "libs/arbit-model/pyproject.toml",
+        "uv.lock",
+        "docs/research/point-in-time-audit-columnar-2026-11-23.json"
+      ]
+    },
+    "validation": {
+      "summary": "make runtime-check passed (ruff, mypy, contracts, 1,366 tests). Governance checks foundation, model-tests and point-in-time exited 0. Three deliberate breaks fail 1, 9 and 6 reader tests as before. The real-history audit (read-only) reproduces every figure of the first receipt with 0 rows known at or after a decision. Season benchmark 630 reads in 1.5 s. Not exercised: any feature, backtest or service.",
+      "files": [
+        "docs/research/point-in-time-audit-columnar-2026-11-23.json",
+        "libs/arbit-model/tests/test_point_in_time.py"
+      ]
+    },
+    "documentation": {
+      "summary": "ADR-007 owner clarification A5 (OWN-072); decision register OWN-072 and ENG-054; R-071 resolved; research note section 'Columnar reader' with the local-data measurements and before/after table; Model README; M3 plan slice 3 follow-ups; status and changelog (PR #4 merged under the owner's GitHub authorization).",
+      "files": [
+        "docs/architecture/decisions/007-model-availability.md",
+        "docs/project/decision-register.md",
+        "docs/project/known-issues.md",
+        "docs/research/point-in-time-audit-2026-11-23.md",
+        "libs/arbit-model/README.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261123-002-governance-handoff.md",
+      "next_action": "TASK-20261123-003 on the same branch: game-day availability with the owner's precedence (OWN-073): ESPN fantasy status read within 15 minutes of kickoff is final; otherwise Arbit's latest NFL injury report capture; otherwise nflverse injuries through the point-in-time reader; otherwise unknown. Then PR, merge, and M3 slice 3b.",
+      "unresolved": "No feature, backtest or service uses the reader yet. R-070 (injury files from 2025 lack date_modified) is addressed by TASK-003's precedence for 2026, not for earlier seasons. The ENG-053 rules the ADR left open remain labeled and revisable by the owner."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T19:30:02Z",
+      "exit_code": 0,
+      "duration_seconds": 0.227,
+      "stdout_stderr_sha256": "6659121ee9879564a34bff4e7b2b6a6270f97e9b7e9f1fb22fbe2b265354dd73",
+      "git_head": "c41a7d79c165eb018c3508d3c630c679040dea18",
+      "scope_sha256": {
+        "libs/arbit-model/pyproject.toml": "c6b4593d2dd391ff60feb8496bdc002fb559355caea84f69398c6bf0e2cea7a1",
+        "uv.lock": "5833469bca7191961d281e08a4e835fdfbebaeb3f3c894ac903d90bf3cfc1e38",
+        "libs/arbit-model/src/arbit_model/timing.py": "fb24841a580512c1a2e8dfe17fb0e00ad44b1e8fa03ef2011f0acf6cc035d182",
+        "libs/arbit-model/src/arbit_model/vintages.py": "82d39d8e11967d47928d6a1f70d629dd6bf5d3fbd56bd5d2c95fc282d6ff1878",
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "0ffa90ef42e482777caf38c7d67e4a4a3a85b03e4a7ec9652e634838abc792cb",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "tests/integration/test_model_point_in_time.py": "6872e5facb92aa22e4bd3897bfe35eac56cbe869dca735ff05e13723dca77090",
+        "scripts/model/point_in_time_audit.py": "8ee695890cf3f2b1c0c34480449f729eef4312cd13e60e667a932416b808f97a",
+        "docs/research/point-in-time-audit-2026-11-23.md": "5c26dd5f46be3d30b366bd4995931a1c88eedaafc8e2458fd9986672ae3d25f8",
+        "docs/research/point-in-time-audit-2026-11-23.json": "36477613aa363b534907735484a818fcd1905dd07adc1d69fdc27acaef15d446",
+        "docs/research/point-in-time-audit-columnar-2026-11-23.json": "ba22ab03cc4de52ea71241234bf50be79af7ab0b8dae2285fda16590d4428612",
+        "libs/arbit-model/README.md": "9a482ade70850a94301923ad35991a9b4d70775a2017a96a1445c983e2a05245",
+        "docs/architecture/decisions/007-model-availability.md": "4c35f20b4f41bece0f536152598e8a548f6fb731d90a3f66740e01b3fd7ebc8d",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "f3dd3d810887d35622fc7e0c43980c1bc38ed604cc5ccda4964ad88d9e4272b9",
+        "docs/project/decision-register.md": "d3e20425ec76091f693fde40fff750f49d2c59b5b0917c55fae12c2161c69719",
+        "docs/project/known-issues.md": "b2cadab1acfcb6f6bf88108fc295dc4b523ca73bcbed73797c5ac6b59f9641f0",
+        "docs/project/status.md": "f463a261e7f3c23b4dcd4a23ba0c7c147e0de6c22e43948e2cdbcf09920a6764",
+        "docs/project/changelog.md": "d9d883841a00cab522088e8730d71e6cac7d9221d698e6c4673d58f801c3f967",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-23T19:30:05Z",
+      "exit_code": 0,
+      "duration_seconds": 3.329,
+      "stdout_stderr_sha256": "188b130731680fe061b3d7084e904710dbed26d269657d2191a3841c4d56147b",
+      "git_head": "c41a7d79c165eb018c3508d3c630c679040dea18",
+      "scope_sha256": {
+        "libs/arbit-model/pyproject.toml": "c6b4593d2dd391ff60feb8496bdc002fb559355caea84f69398c6bf0e2cea7a1",
+        "uv.lock": "5833469bca7191961d281e08a4e835fdfbebaeb3f3c894ac903d90bf3cfc1e38",
+        "libs/arbit-model/src/arbit_model/timing.py": "fb24841a580512c1a2e8dfe17fb0e00ad44b1e8fa03ef2011f0acf6cc035d182",
+        "libs/arbit-model/src/arbit_model/vintages.py": "82d39d8e11967d47928d6a1f70d629dd6bf5d3fbd56bd5d2c95fc282d6ff1878",
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "0ffa90ef42e482777caf38c7d67e4a4a3a85b03e4a7ec9652e634838abc792cb",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "tests/integration/test_model_point_in_time.py": "6872e5facb92aa22e4bd3897bfe35eac56cbe869dca735ff05e13723dca77090",
+        "scripts/model/point_in_time_audit.py": "8ee695890cf3f2b1c0c34480449f729eef4312cd13e60e667a932416b808f97a",
+        "docs/research/point-in-time-audit-2026-11-23.md": "5c26dd5f46be3d30b366bd4995931a1c88eedaafc8e2458fd9986672ae3d25f8",
+        "docs/research/point-in-time-audit-2026-11-23.json": "36477613aa363b534907735484a818fcd1905dd07adc1d69fdc27acaef15d446",
+        "docs/research/point-in-time-audit-columnar-2026-11-23.json": "ba22ab03cc4de52ea71241234bf50be79af7ab0b8dae2285fda16590d4428612",
+        "libs/arbit-model/README.md": "9a482ade70850a94301923ad35991a9b4d70775a2017a96a1445c983e2a05245",
+        "docs/architecture/decisions/007-model-availability.md": "4c35f20b4f41bece0f536152598e8a548f6fb731d90a3f66740e01b3fd7ebc8d",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "f3dd3d810887d35622fc7e0c43980c1bc38ed604cc5ccda4964ad88d9e4272b9",
+        "docs/project/decision-register.md": "d3e20425ec76091f693fde40fff750f49d2c59b5b0917c55fae12c2161c69719",
+        "docs/project/known-issues.md": "b2cadab1acfcb6f6bf88108fc295dc4b523ca73bcbed73797c5ac6b59f9641f0",
+        "docs/project/status.md": "f463a261e7f3c23b4dcd4a23ba0c7c147e0de6c22e43948e2cdbcf09920a6764",
+        "docs/project/changelog.md": "d9d883841a00cab522088e8730d71e6cac7d9221d698e6c4673d58f801c3f967",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-23T19:30:07Z",
+      "exit_code": 0,
+      "duration_seconds": 1.424,
+      "stdout_stderr_sha256": "b974209b29e2efbf8d77efbe4acf09c19d0c89f4945c3960a0458bc28246e3d0",
+      "git_head": "c41a7d79c165eb018c3508d3c630c679040dea18",
+      "scope_sha256": {
+        "libs/arbit-model/pyproject.toml": "c6b4593d2dd391ff60feb8496bdc002fb559355caea84f69398c6bf0e2cea7a1",
+        "uv.lock": "5833469bca7191961d281e08a4e835fdfbebaeb3f3c894ac903d90bf3cfc1e38",
+        "libs/arbit-model/src/arbit_model/timing.py": "fb24841a580512c1a2e8dfe17fb0e00ad44b1e8fa03ef2011f0acf6cc035d182",
+        "libs/arbit-model/src/arbit_model/vintages.py": "82d39d8e11967d47928d6a1f70d629dd6bf5d3fbd56bd5d2c95fc282d6ff1878",
+        "libs/arbit-model/src/arbit_model/point_in_time.py": "0ffa90ef42e482777caf38c7d67e4a4a3a85b03e4a7ec9652e634838abc792cb",
+        "libs/arbit-model/tests/test_point_in_time.py": "c1ca530a7511e290d03785f99950d02c1df2e3d370dfcaa680122a9f9af4f727",
+        "tests/integration/test_model_point_in_time.py": "6872e5facb92aa22e4bd3897bfe35eac56cbe869dca735ff05e13723dca77090",
+        "scripts/model/point_in_time_audit.py": "8ee695890cf3f2b1c0c34480449f729eef4312cd13e60e667a932416b808f97a",
+        "docs/research/point-in-time-audit-2026-11-23.md": "5c26dd5f46be3d30b366bd4995931a1c88eedaafc8e2458fd9986672ae3d25f8",
+        "docs/research/point-in-time-audit-2026-11-23.json": "36477613aa363b534907735484a818fcd1905dd07adc1d69fdc27acaef15d446",
+        "docs/research/point-in-time-audit-columnar-2026-11-23.json": "ba22ab03cc4de52ea71241234bf50be79af7ab0b8dae2285fda16590d4428612",
+        "libs/arbit-model/README.md": "9a482ade70850a94301923ad35991a9b4d70775a2017a96a1445c983e2a05245",
+        "docs/architecture/decisions/007-model-availability.md": "4c35f20b4f41bece0f536152598e8a548f6fb731d90a3f66740e01b3fd7ebc8d",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "f3dd3d810887d35622fc7e0c43980c1bc38ed604cc5ccda4964ad88d9e4272b9",
+        "docs/project/decision-register.md": "d3e20425ec76091f693fde40fff750f49d2c59b5b0917c55fae12c2161c69719",
+        "docs/project/known-issues.md": "b2cadab1acfcb6f6bf88108fc295dc4b523ca73bcbed73797c5ac6b59f9641f0",
+        "docs/project/status.md": "f463a261e7f3c23b4dcd4a23ba0c7c147e0de6c22e43948e2cdbcf09920a6764",
+        "docs/project/changelog.md": "d9d883841a00cab522088e8730d71e6cac7d9221d698e6c4673d58f801c3f967",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T19:30:17Z",
+      "kind": "observation",
+      "note": "Columnar reader reproduces every figure of the 2026-11-23 audit receipt (0 differences across versions, gaps, units, bases, bounds, untimed units and latest known-from at all four decision times); audit 8.8 s / 0.83 GB vs 34 s / 2.2 GB; a 2025 season of 126 kickoffs x 5 tables = 630 reads in 1.5 s (2.4 ms/read), 0.4 GB.",
+      "evidence": "docs/research/point-in-time-audit-columnar-2026-11-23.json; docs/research/point-in-time-audit-2026-11-23.md"
+    },
+    {
+      "at": "2026-11-23T19:30:17Z",
+      "kind": "observation",
+      "note": "Test sensitivity unchanged on the columnar code: no gap bound fails 1, admitting every fetched unit fails 9, ignoring gaps fails 6; source restored byte-identical.",
+      "evidence": "libs/arbit-model/tests/test_point_in_time.py"
+    }
+  ],
+  "closed_at": "2026-11-23T19:30:17Z"
+}

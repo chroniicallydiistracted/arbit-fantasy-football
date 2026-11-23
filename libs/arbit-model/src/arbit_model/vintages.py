@@ -12,8 +12,9 @@ from collections import OrderedDict
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any, Protocol
+from typing import Protocol
 
+import polars as pl
 import pyarrow.parquet as pq  # type: ignore[import-untyped]
 from arbit_data.db import UnitOfWork
 from arbit_data.freshness import STATISTICS_STALE_SECONDS
@@ -81,8 +82,8 @@ class KeyHistory:
 class VintageSource(Protocol):
     def history(self, key: str) -> KeyHistory: ...
 
-    def table(self, version: Version, columns: Sequence[str]) -> list[dict[str, Any]]:
-        """Rows of one version with these columns; a column the version lacks is None."""
+    def table(self, version: Version, columns: Sequence[str]) -> pl.DataFrame:
+        """One version's rows with these columns, in file order; a missing column is null."""
         ...
 
 
@@ -93,7 +94,7 @@ class StoredVintages:
     def __init__(self, uow: UnitOfWork, store: ObjectStore, *, cached_tables: int = 4) -> None:
         self.uow, self.store, self.cached_tables = uow, store, cached_tables
         self._histories: dict[str, KeyHistory] = {}
-        self._tables: OrderedDict[tuple[str, tuple[str, ...]], list[dict[str, Any]]] = OrderedDict()
+        self._tables: OrderedDict[tuple[str, tuple[str, ...]], pl.DataFrame] = OrderedDict()
 
     def history(self, key: str) -> KeyHistory:
         short = short_key(key)
@@ -130,7 +131,7 @@ class StoredVintages:
         self._histories[short] = history
         return history
 
-    def table(self, version: Version, columns: Sequence[str]) -> list[dict[str, Any]]:
+    def table(self, version: Version, columns: Sequence[str]) -> pl.DataFrame:
         wanted = tuple(dict.fromkeys(columns))
         cached = self._tables.get((version.parquet, wanted))
         if cached is not None:
@@ -139,12 +140,14 @@ class StoredVintages:
         path = self.store.verify(version.parquet).path
         present = set(pq.read_schema(path).names)
         readable = [c for c in wanted if c in present]
-        rows: list[dict[str, Any]] = pq.read_table(path, columns=readable).to_pylist()
-        missing = [c for c in wanted if c not in present]
-        for row in rows:
-            for column in missing:
-                row[column] = None
-        self._tables[(version.parquet, wanted)] = rows
+        if readable:
+            frame = pl.read_parquet(path, columns=readable)
+            frame = frame.with_columns(pl.lit(None).alias(c) for c in wanted if c not in present)
+        else:
+            height = pq.read_metadata(path).num_rows
+            frame = pl.DataFrame({c: [None] * height for c in wanted})
+        frame = frame.select(wanted)
+        self._tables[(version.parquet, wanted)] = frame
         while len(self._tables) > self.cached_tables:
             self._tables.popitem(last=False)
-        return rows
+        return frame

@@ -8,10 +8,11 @@ Implemented (M3 slice 2):
 - `arbit_model.inputs`: read-only access to nflverse tables, current or pinned to exact manifests.
 - `arbit_model.storage`: Parquet tables and manifests in a content-addressed store.
 
-Implemented (M3 slice 3a, ENG-053):
-- `arbit_model.point_in_time`: the only way feature code reads nflverse. `PointInTime.read(key, columns, at)` returns the rows known before decision time `at` under [ADR-007](../../docs/architecture/decisions/007-model-availability.md) as amended (OWN-066). Each row carries `_known_from` and `_basis` (`observed`, `source-timestamp` or `retrospective-rule`), and each reading carries a lineage record. Fields excluded by policy are refused unless their gate is named.
+Implemented (M3 slice 3a, ENG-053; columnar since ENG-054):
+- `arbit_model.point_in_time`: the only way feature code reads nflverse. `PointInTime.read(key, columns, at)` returns a polars frame (`Reading.frame`) of the rows known before decision time `at`, with held data first (A5, OWN-072), under [ADR-007](../../docs/architecture/decisions/007-model-availability.md) as amended (OWN-066). Each row carries `_known_from` and `_basis` (`observed`, `source-timestamp` or `retrospective-rule`), and each reading carries a lineage record. Fields excluded by policy are refused unless their gate is named.
 - `arbit_model.timing`: the kickoff calendar, known-from rules by family, and the registry of readable tables with their units. A table without an entry is refused.
 - `arbit_model.vintages`: Arbit's versions and reads of each file, and its capture gaps (A3).
+- `arbit_model.availability`: each player's availability at a decision time in the owner's order (OWN-073, ENG-055). On game day ESPN's current status is final; otherwise the freshest copy of NFL's injury report, Arbit's capture or nflverse's; otherwise unknown.
 
 `scripts/model/point_in_time_audit.py` checks the reader against the real history ([audit](../../docs/research/point-in-time-audit-2026-11-23.md)).
 

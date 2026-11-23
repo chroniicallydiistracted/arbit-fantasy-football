@@ -16,10 +16,14 @@ earlier weeks are retrospective), read it daily through 10 November, and then no
 from copy import deepcopy
 from datetime import UTC, date, datetime, timedelta
 
+import polars as pl
 import pytest
 from arbit_model.point_in_time import BASIS, KNOWN_FROM, PointInTime, PolicyRefused
 from arbit_model.timing import (
     BASES,
+    KNOWN,
+    RULE_BASIS,
+    UNIT,
     Calendar,
     depth_rows,
     injury_rows,
@@ -106,7 +110,7 @@ class MemorySource:
     def table(self, version, columns):
         key, index = version.parquet.rsplit("#", 1)
         rows = self.files[key][0][int(index)][1]
-        return [{c: row.get(c) for c in columns} for row in rows]
+        return pl.DataFrame({c: [row.get(c) for row in rows] for c in columns})
 
 
 def reader(files, **kwargs):
@@ -170,11 +174,15 @@ def test_after_the_gap_rows_keep_the_basis_of_their_first_holding():
 
 def test_every_row_is_labeled_and_known_before_the_decision():
     source = {STATS: STATS_FILE}
-    for hours in range(0, 24 * 30, 7):
+    shared = reader(source)  # one reader across decisions, as feature building uses it
+    for step, hours in enumerate(range(0, 24 * 30, 7)):
         at = utc(2026, 10, 25) + timedelta(hours=hours)
-        for row in reader(source).read(STATS, COLUMNS, at).rows:
+        reading = shared.read(STATS, COLUMNS, at)
+        for row in reading.rows:
             assert row[BASIS] in BASES
             assert row[KNOWN_FROM] < at
+        if step % 10 == 0:  # cached parts never carry one decision's result into another
+            assert reading.rows == reader(source).read(STATS, COLUMNS, at).rows
 
 
 def mutate_after(files, key, at, admitted):
@@ -289,6 +297,12 @@ def test_unregistered_tables_and_uncatalogued_fields_are_refused():
         pit.read(STATS, COLUMNS, datetime(2026, 11, 22))
 
 
+def place_one(place, row, season):
+    """Place a single row with a columnar rule: (unit, known, basis)."""
+    out = place(pl.DataFrame([row]), CALENDAR, season).row(0, named=True)
+    return out[UNIT], out[KNOWN], out[RULE_BASIS]
+
+
 def test_injury_reports_count_from_their_own_timestamp_or_from_game_day():
     dated = {
         "season": 2024,
@@ -297,20 +311,22 @@ def test_injury_reports_count_from_their_own_timestamp_or_from_game_day():
         "gsis_id": "00-X",
         "date_modified": utc(2024, 10, 4, 19, 5),
     }
-    placed = injury_rows(dated, CALENDAR, 2024)
-    assert (placed.known, placed.basis) == (utc(2024, 10, 5, 7), "source-timestamp")
+    _, known, basis = place_one(injury_rows, dated, 2024)
+    assert (known, basis) == (utc(2024, 10, 5, 7), "source-timestamp")
     # 2025 on: no date_modified; the final report counts from 07:00 UTC on game day.
-    undated = {**dated, "season": 2026, "week": 9, "team": "SEA", "date_modified": None}
-    placed = injury_rows(undated, CALENDAR, 2026)
-    assert (placed.known, placed.basis) == (utc(2026, 11, 8, 7), "retrospective-rule")
+    undated = {"season": 2026, "week": 9, "team": "SEA", "gsis_id": "00-X"}
+    _, known, basis = place_one(injury_rows, undated, 2026)
+    assert (known, basis) == (utc(2026, 11, 8, 7), "retrospective-rule")
 
 
 def test_depth_charts_count_from_the_next_publication_after_their_snapshot():
-    placed = depth_rows({"team": "SEA", "dt": "2026-11-21T15:12:52Z"}, CALENDAR, 2026)
-    assert placed.unit == ("SEA", "2026-11-21T15:12:52Z")
-    assert (placed.known, placed.basis) == (utc(2026, 11, 22, 7), "source-timestamp")
-    weekly = depth_rows({"season": 2024, "week": 6, "club_code": "NE"}, CALENDAR, 2024)
-    assert weekly.known == utc(2024, 10, 12, 12)  # the day before the week's first game
+    snapshot = {"team": "SEA", "dt": "2026-11-21T15:12:52Z"}
+    unit, known, basis = place_one(depth_rows, snapshot, 2026)
+    assert unit == "SEA|2026-11-21T15:12:52Z"
+    assert (known, basis) == (utc(2026, 11, 22, 7), "source-timestamp")
+    weekly = {"season": 2024, "week": 6, "club_code": "NE"}
+    _, known, basis = place_one(depth_rows, weekly, 2024)
+    assert (known, basis) == (utc(2024, 10, 12, 12), "retrospective-rule")  # day before week 6
 
 
 def test_current_franchise_codes_find_the_season_s_schedule_code():
