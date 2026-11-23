@@ -3,7 +3,7 @@
   "id": "TASK-20261123-005",
   "title": "M3-3 DvP research, phases 0-1: continuity, v0 reproduction, completed-game pipeline and projection firewall",
   "objective": "Continue slice M3-3 under the owner's DvP research specification (docs/research/Arbit_FFA_M3_DvP_Plan.md v1.1, OWN-074). Phase 0: inventory and freeze the v0 odd/even study (scripts/model/defense_position_study.py and its 2026-11-23 receipt) without changing it, map every source it read, audit its lineage for provider fantasy projections, reproduce its r, k and weights exactly from the pinned FFA targets, and disposition every discrepancy. Phase 1: a projection-free, completed-game DvP observation pipeline over the canonical FFA actuals (team-game-position sums, defense inversion, D/ST offense orientation, true zero versus missing, schedule reconciliation to 5,278 team-games, relocation and refusal audits), a lineage allowlist that fails closed, a completed-game as-of index with preweek and per-game cutoffs, and tests T01-T07 and T29-T40 executed. Offline and read-only: no canonical scoring table, feature weight, service or deployment changes.",
-  "status": "active",
+  "status": "completed",
   "phase": "handoff",
   "change_class": "model",
   "requirements": [
@@ -289,5 +289,6 @@
       "note": "Merged PR #6 (slice 3b, CI green) before starting so v0 sits on main unchanged as the specification's frozen baseline; the problems found in it are dispositioned here rather than edited into v0.",
       "evidence": "docs/research/dvp/M3-3_CONTINUITY.md"
     }
-  ]
+  ],
+  "closed_at": "2026-11-23T22:31:34Z"
 }
