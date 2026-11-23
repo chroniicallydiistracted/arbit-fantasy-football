@@ -1,5 +1,12 @@
 # Development Changelog
 
+## 2026-11-23 — Flaky Live playback browser test fixed (TASK-20261122-010)
+
+- **What failed:** the push run of PR #3's commit failed the fictional member browser journey. `live-playback.spec.ts`'s partial-replay test threw `route.fetch: Test ended`, while the pull-request run of the same commit passed.
+- **Cause:** the plays route reads from the server through `route.fetch()`, and the stubbed event stream reconnects every 50 ms, re-reading plays each time. A read could still be in flight when the test's last assertion passed. The bug dates from `8074c8f`.
+- **Fix:** `test.afterEach` now awaits `page.unrouteAll({ behavior: "ignoreErrors" })`.
+- **Proof:** with a temporary random delay widening the race, 21 of 60 runs failed with CI's exact error before the fix, and all 60 passed after it. Without the delay, the full browser suite passes (16 tests) on an isolated stack (port 8011, scratch fixture database).
+
 ## 2026-11-23 — Housekeeping (TASK-20261122-009)
 
 - **Status:** now opens with what is running (`d9f95ec`, seven lanes, weeks 1–10 complete) and the ordered open work. ENG-052 is recorded as released on 2026-11-22 at 23:52 UTC, and the CI line is updated.

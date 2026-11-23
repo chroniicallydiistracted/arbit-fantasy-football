@@ -4,6 +4,7 @@
 - **Worker:** runs `main` at `d9f95ec` (PR #2) since 2026-11-22 23:52 UTC with seven lanes: league, live, nfl, nfl_probe, statistics, availability and catchup.
 - **Database:** up with `restart: unless-stopped`. 2026 regular-season weeks 1–10 are complete, and week 11 is live.
 - **CI on `main`:** green; `main` is protected.
+- **CI flake fixed (TASK-20261122-010):** a Live playback browser test could fail at random with `route.fetch: Test ended`. It now unroutes before teardown.
 - **Not yet on `main`:** this branch's TASK-20261122-007 to -009 (weather decision and plan, never-captured NFL rule, this housekeeping). That rule has already been used to capture weeks 1–7.
 
 **Open work, in order** (owner direction 2026-11-22):

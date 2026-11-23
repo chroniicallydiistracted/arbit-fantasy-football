@@ -208,6 +208,13 @@ async function boardPixels(canvas: Locator) {
 
 test.use({ serviceWorkers: "block" });
 
+// A route callback can still be fetching plays from the server when a test's last assertion
+// passes: the stubbed event stream reconnects every 50 ms and each reconnect re-reads plays.
+// Unroute before teardown so a late callback can't fail a finished test.
+test.afterEach(async ({ page }) => {
+  await page.unrouteAll({ behavior: "ignoreErrors" });
+});
+
 test("reduced motion follows successive plays to their ending ball positions", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   const first = entry("11", "4:12", "First fictional play.", 50);
