@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "id": "TASK-20261122-008",
+  "title": "Capture 2026 weeks 1-7 with the worker, including NFL records for weeks never captured (OWN-071)",
+  "objective": "Every 2026 regular-season game from weeks 1-7 has a complete stored record with the NFL API's full record where it passes the final checks, while week 8 keeps its reviewed ESPN record",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "live",
+  "requirements": [
+    "DATA-008",
+    "LV-001",
+    "GOVAI-011"
+  ],
+  "scope_files": [
+    "services/worker/src/arbit_worker/catchup.py",
+    "tests/integration/test_catchup.py",
+    "docs/engineering/catch-up.md",
+    "docs/project/known-issues.md",
+    "docs/governance/state.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T00:23:28Z",
+  "updated_at": "2026-11-23T00:36:05Z",
+  "baseline": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+  "next_action": "Merge the PR; the running worker already runs d9f95ec, and only the never-captured NFL rule changes, so a restart is optional. Then weather W1 beside M3 slice 3.",
+  "sections": {
+    "review": {
+      "summary": "OWN-071: capture weeks 1-7 with the worker. Read-only check 2026-11-22: weeks 1-7 (107 scheduled games) have no nfl_game rows; week 8 has ESPN records only; NFL records from week 9. catchup.recover_week reads NFL records only from first_nfl_period (9), a rule meant to protect week 8's reviewed ESPN record; weeks 1-7 have no record to protect, and OWN-041 makes the NFL API primary. data/live-captures is 431 MB of its 5 GiB limit.",
+      "files": [
+        "services/worker/src/arbit_worker/catchup.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "plan": {
+      "summary": "Add stored_games(uow, season, period); run() passes never_captured when a week has no stored game; recover_week reads NFL records when never_captured or period >= nfl_from. Split the week-8 test into a stored-week case (no NFL) and a never-captured case (NFL owns plays). Verify with a recorded mutation check, full live-class checks, a restored copy, then arbit-worker catchup --from-period 1 on arbit_local (worker may keep running; it already has the scope fix).",
+      "files": [
+        "services/worker/src/arbit_worker/catchup.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "implementation": {
+      "summary": "catchup.stored_games; recover_week never_captured parameter; run passes it per week. Tests: test_a_stored_week_before_the_nfl_lane_began_keeps_its_espn_record and test_a_week_never_captured_gets_the_nfl_record_before_the_nfl_lane_began (13 catch-up tests). Guide NFL-records line, status line, changelog entry.",
+      "files": [
+        "services/worker/src/arbit_worker/catchup.py",
+        "tests/integration/test_catchup.py",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "validation": {
+      "summary": "Observed exit 0: mutation-never-captured (with the never_captured clause removed, the never-captured test fails; restored), foundation, live-replay, runtime-check (1343 backend tests with PostgreSQL), web-check; re-run after the status result line. Real data: dry run on a restored copy planned exactly 107 unstored games in weeks 1-7; the copy run recovered 107, 0 failed, 19,780 play revisions, all 107 NFL finals, week 8 untouched; the same run on arbit_local recovered 107, 0 failed, nothing remaining. Database now: weeks 1-10 complete (week 8 ESPN-only by design), week 11 live, schedule scope (2, 11); worker logged no error codes in the following 20 minutes. Copy dropped.",
+      "files": []
+    },
+    "documentation": {
+      "summary": "Status: decisions block line with the capture result; changelog entry; catch-up guide NFL-records rule.",
+      "files": [
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/engineering/catch-up.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261122-008-governance-handoff.md",
+      "next_action": "Merge the PR; the running worker already runs d9f95ec, and only the never-captured NFL rule changes, so a restart is optional. Then weather W1 beside M3 slice 3.",
+      "unresolved": "None for weeks 1-7. Live timing for those weeks never existed and stays unknown (A4)."
+    }
+  },
+  "checks": [
+    {
+      "name": "mutation-never-captured",
+      "argv": [
+        "bash",
+        "-c",
+        "cp services/worker/src/arbit_worker/catchup.py /tmp/claude-1000/-home-andre-arbit-fantasy-football/2ce75ffa-5c13-4be1-b560-0af3d67cef32/scratchpad/c2.bak && sed -i 's/if nfl is not None and (never_captured or (nfl_from is not None and period >= nfl_from)):/if nfl is not None and (nfl_from is not None and period >= nfl_from):/' services/worker/src/arbit_worker/catchup.py && ! uv run pytest tests/integration/test_catchup.py -q -k never_captured; s=$?; cp /tmp/claude-1000/-home-andre-arbit-fantasy-football/2ce75ffa-5c13-4be1-b560-0af3d67cef32/scratchpad/c2.bak services/worker/src/arbit_worker/catchup.py; exit $s"
+      ],
+      "at": "2026-11-23T00:24:12Z",
+      "exit_code": 0,
+      "duration_seconds": 0.939,
+      "stdout_stderr_sha256": "58f6e6a5deef001cf3260c4dfbef2982781c249ca1b91e73b792e161fe151231",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "62d4ffc9d8556e4babd79ff8c9ea16e81752435fcb533c37894b97d6de946c9a",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T00:24:15Z",
+      "exit_code": 0,
+      "duration_seconds": 0.237,
+      "stdout_stderr_sha256": "be76cb965a9323e8a99a97e4a863158943aa077be8d8d7d5a4bd17989b77b209",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "62d4ffc9d8556e4babd79ff8c9ea16e81752435fcb533c37894b97d6de946c9a",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "live-replay",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_live_actions.py",
+        "libs/arbit-data/tests/test_live_motion.py"
+      ],
+      "at": "2026-11-23T00:24:16Z",
+      "exit_code": 0,
+      "duration_seconds": 0.662,
+      "stdout_stderr_sha256": "a49476819274a38e8c264aa73209daec6ac959c89e7d945042983aef1b892df2",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "62d4ffc9d8556e4babd79ff8c9ea16e81752435fcb533c37894b97d6de946c9a",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "runtime-check",
+      "argv": [
+        "make",
+        "runtime-check"
+      ],
+      "at": "2026-11-23T00:25:14Z",
+      "exit_code": 0,
+      "duration_seconds": 57.583,
+      "stdout_stderr_sha256": "394c88c0e58c9efeda64b3c40eb7a5580ed9d8b3474a2cc4822499437cfacc4e",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "62d4ffc9d8556e4babd79ff8c9ea16e81752435fcb533c37894b97d6de946c9a",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "web-check",
+      "argv": [
+        "make",
+        "web-check"
+      ],
+      "at": "2026-11-23T00:25:19Z",
+      "exit_code": 0,
+      "duration_seconds": 4.849,
+      "stdout_stderr_sha256": "913604c8573445ac04396a84efeab4b41c5290f0c11a55ef98ce0d90f7083020",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "62d4ffc9d8556e4babd79ff8c9ea16e81752435fcb533c37894b97d6de946c9a",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T00:35:03Z",
+      "exit_code": 0,
+      "duration_seconds": 0.224,
+      "stdout_stderr_sha256": "be76cb965a9323e8a99a97e4a863158943aa077be8d8d7d5a4bd17989b77b209",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "09ee7f00a2c7c017f127976f993c1e90f63e2f44c30cad00bccc8d3f773549a2",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "live-replay",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_live_actions.py",
+        "libs/arbit-data/tests/test_live_motion.py"
+      ],
+      "at": "2026-11-23T00:35:04Z",
+      "exit_code": 0,
+      "duration_seconds": 0.652,
+      "stdout_stderr_sha256": "7a7d8b3b079fe518b43c879d89ca1a7b184ce0b076a7a0cf78e25d2e2ce00c67",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "09ee7f00a2c7c017f127976f993c1e90f63e2f44c30cad00bccc8d3f773549a2",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "runtime-check",
+      "argv": [
+        "make",
+        "runtime-check"
+      ],
+      "at": "2026-11-23T00:36:00Z",
+      "exit_code": 0,
+      "duration_seconds": 56.541,
+      "stdout_stderr_sha256": "d5b3be2eab25f34a96ecf6165eb17971cb00f42417df8d5e486d540ef901ebf7",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "09ee7f00a2c7c017f127976f993c1e90f63e2f44c30cad00bccc8d3f773549a2",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    },
+    {
+      "name": "web-check",
+      "argv": [
+        "make",
+        "web-check"
+      ],
+      "at": "2026-11-23T00:36:05Z",
+      "exit_code": 0,
+      "duration_seconds": 4.818,
+      "stdout_stderr_sha256": "8da217325b2f608f43eb34c42a3758a47c938f00d2252ed640c04f186262bc86",
+      "git_head": "64e0faa7187c707806a1415ff56d6335159a2d0d",
+      "scope_sha256": {
+        "services/worker/src/arbit_worker/catchup.py": "e3b9a1ede892a144075519ef18cf248f3a397f6a1395523ec1302d2735572e38",
+        "tests/integration/test_catchup.py": "7f4c650f6191dbd69d0126d6f52cfb4c3c7c2a908204b9250b0ea8d629525bbc",
+        "docs/engineering/catch-up.md": "7a307a9606f7835a50de8f38ce1e97d8c2ccc62012689db3b210d0f54c6c978e",
+        "docs/project/known-issues.md": "580627472c711feaaaa2eb108d5f6c76226a234d2d95720ce3ecd7ff6823d3ac",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/status.md": "09ee7f00a2c7c017f127976f993c1e90f63e2f44c30cad00bccc8d3f773549a2",
+        "docs/project/changelog.md": "be65e07783e9fa562c4b7621d72229b3bae60eb5b0d7b5ad7f075131dbc5c80d"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T00:36:05Z",
+      "kind": "observation",
+      "note": "Weeks 1-7 of 2026 captured into arbit_local: 107 games, 0 failed, receipt appended to data/catchup/receipts.jsonl (second line).",
+      "evidence": "arbit-worker catchup --from-period 1 output; database counts per week"
+    }
+  ],
+  "closed_at": "2026-11-23T00:36:05Z"
+}

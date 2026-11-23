@@ -1,5 +1,11 @@
 # Development Changelog
 
+## 2026-11-22 — Never-captured weeks take the NFL record (TASK-20261122-008)
+
+- Catch-up now reads the NFL API's full record for any regular-season week Arbit never stored a game for, as well as from the first NFL-lane week. Week 8 still keeps its reviewed ESPN record.
+- Two tests cover both cases. With the new rule removed, the never-captured test fails.
+- Run for 2026 weeks 1–7 with `arbit-worker catchup --from-period 1` (OWN-071); see the handoff for the result.
+
 ## 2026-11-22 — Weather intelligence decided and planned (TASK-20261122-007)
 
 - **OWN-069 resolves Q-016:** a weather forecast is a factor for games outside a closed roof, through a multi-source system.

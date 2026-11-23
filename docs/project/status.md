@@ -8,7 +8,9 @@
 - **Verified:** RRFS went live on 2026-11-03 and NAM is gone; HRRR still runs, contrary to the owner's note.
 - **Plan:** [weather intelligence](../superpowers/plans/2026-11-22-weather-intelligence.md), slices W1–W6. Nothing is built yet. The owner still needs to choose the NWS User-Agent contact.
 - **Alerting (OWN-070):** waits for a remote 24/7 server; the owner keeps the PC awake meanwhile.
-- **History (OWN-071):** weeks 1–7 are to be captured by the worker.
+- **History (OWN-071), captured 2026-11-23 (TASK-20261122-008).** `arbit-worker catchup --from-period 1` recovered all 107 games of weeks 1–7 with 0 failures, first on a restored copy (19,780 play records), then on the database.
+  - Each game now has a summary, plays owned by the NFL final record and completed correction checks.
+  - 2026 weeks 1–10 are complete. Week 8 keeps its ESPN record, and week 11 is the live week.
 
 **Running app repaired (2026-11-22, TASK-20261122-002).** The owner allows restarts at any time while they are the only user.
 - **Database:** it was down from 2026-11-10 18:06 to 2026-11-22 22:44 UTC (R-068) and now restarts with Docker (`unless-stopped`).
