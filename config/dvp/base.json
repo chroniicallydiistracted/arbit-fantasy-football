@@ -1,0 +1,71 @@
+{
+  "project": "arbit-ffa",
+  "workstream_id": "M3-3",
+  "workstream_mode": "continue_existing_experiment",
+  "slice": "defense_vs_position",
+  "specification": "docs/research/Arbit_FFA_M3_DvP_Plan.md (v1.1, OWN-074)",
+  "original_study_script": "scripts/model/defense_position_study.py",
+  "original_study_receipt": "docs/research/defense-position-study-2026-11-23.json",
+  "shared_split_half": "scripts/model/ffa_signal_study.py",
+  "scoring_source": "existing_canonical_ffa_layer",
+  "scoring_basis": "actual_ffa_points_from_completed_games_only",
+  "targets_index": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+  "expected_scoring": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+  },
+  "external_predetermined_fantasy_projections_allowed": false,
+  "source_policy": {
+    "enforce_lineage_allowlist": true,
+    "fail_on_unknown_source": true,
+    "allowed": [
+      "canonical_final_ffa_actuals",
+      "completed_game_realized_nfl_stats",
+      "historical_schedule_metadata",
+      "internal_model_outputs_as_outputs_only"
+    ],
+    "forbidden": [
+      "espn_projected_fantasy_points",
+      "other_vendor_projected_fantasy_points",
+      "imported_fantasy_point_forecasts",
+      "vendor_projection_based_priors"
+    ],
+    "allow_vendor_actual_stats_after_completion": true,
+    "scoring_config_hash_required": true
+  },
+  "as_of_policy": {
+    "required_game_status": "completed_and_finalized",
+    "finalized_actual_available_by_forecast_cutoff": true,
+    "availability_rule": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+    "default_cutoff": "pre_first_game_of_nfl_week",
+    "per_game_update_is_separate_experiment": true,
+    "target_labels_join_only_after_forecasts_frozen": true
+  },
+  "seasons": [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+  "season_type": "REG",
+  "split": {
+    "development": [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+    "validation": [2024],
+    "holdout": [2025]
+  },
+  "forecast_cutoff": "pre_first_game_of_nfl_week",
+  "holdout_integrity": {
+    "prior_m3_3_v0_uses_2025": true,
+    "status_2025": "conditional_holdout_only_if_no_predictive_contamination",
+    "use_prospective_future_2026_games_if_2025_contaminated": true
+  },
+  "positions": "discover_from_ffa_config",
+  "position_groups": ["QB", "RB", "WR", "TE", "K", "DST"],
+  "min_split_half_games": 4,
+  "original_half_method": "nfl_week_odd_even",
+  "experiment_methods": [
+    "A00", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12",
+    "B00", "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B09", "B10", "B11", "B12"
+  ],
+  "primary_metric": "RMSE",
+  "secondary_metrics": ["MAE", "mean_error", "season_rmse", "position_rmse"],
+  "bootstrap_replicates": 2000,
+  "random_seed": 1729,
+  "holdout_requires_frozen_manifest": true,
+  "write_to_production": false
+}
