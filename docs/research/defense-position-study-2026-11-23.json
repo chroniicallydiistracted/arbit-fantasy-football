@@ -1,0 +1,124 @@
+{
+ "format": "arbit-defense-position-study-v1",
+ "method": "ffa_signal_study.split_half: odd vs even weeks per defense-season, Spearman-Brown to games for half signal",
+ "pointsAllowedPerTeamGame": {
+  "K": {
+   "mean": 7.75,
+   "sd": 4.59,
+   "teamGames": 5278
+  },
+  "QB": {
+   "mean": 16.58,
+   "sd": 7.84,
+   "teamGames": 5278
+  },
+  "RB": {
+   "mean": 23.05,
+   "sd": 10.17,
+   "teamGames": 5278
+  },
+  "TE": {
+   "mean": 12.39,
+   "sd": 8.31,
+   "teamGames": 5278
+  },
+  "WR": {
+   "mean": 33.63,
+   "sd": 14.05,
+   "teamGames": 5278
+  }
+ },
+ "reportSha256": "618f066b483cb5e4fb4223e89b6eb9f20e45ac30efe5bcd3c9bd94d642433712",
+ "seasons": [
+  2016,
+  2025
+ ],
+ "stability": {
+  "DST_adjusted": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 9.1,
+   "seasonReliability": 0.642,
+   "splitHalfR": 0.472,
+   "unitSeasons": 315
+  },
+  "DST_raw": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 9.2,
+   "seasonReliability": 0.638,
+   "splitHalfR": 0.468,
+   "unitSeasons": 315
+  },
+  "K_adjusted": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 55.3,
+   "seasonReliability": 0.23,
+   "splitHalfR": 0.13,
+   "unitSeasons": 320
+  },
+  "K_raw": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 49.4,
+   "seasonReliability": 0.25,
+   "splitHalfR": 0.143,
+   "unitSeasons": 320
+  },
+  "QB_adjusted": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 22.2,
+   "seasonReliability": 0.427,
+   "splitHalfR": 0.271,
+   "unitSeasons": 320
+  },
+  "QB_raw": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 30.6,
+   "seasonReliability": 0.351,
+   "splitHalfR": 0.213,
+   "unitSeasons": 320
+  },
+  "RB_adjusted": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 20.0,
+   "seasonReliability": 0.452,
+   "splitHalfR": 0.292,
+   "unitSeasons": 320
+  },
+  "RB_raw": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 18.7,
+   "seasonReliability": 0.468,
+   "splitHalfR": 0.306,
+   "unitSeasons": 320
+  },
+  "TE_adjusted": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 40.1,
+   "seasonReliability": 0.292,
+   "splitHalfR": 0.171,
+   "unitSeasons": 320
+  },
+  "TE_raw": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 37.6,
+   "seasonReliability": 0.305,
+   "splitHalfR": 0.18,
+   "unitSeasons": 320
+  },
+  "WR_adjusted": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 42.0,
+   "seasonReliability": 0.282,
+   "splitHalfR": 0.164,
+   "unitSeasons": 320
+  },
+  "WR_raw": {
+   "denominatorForHalfSignal": null,
+   "gamesForHalfSignal": 44.1,
+   "seasonReliability": 0.272,
+   "splitHalfR": 0.158,
+   "unitSeasons": 320
+  }
+ },
+ "startedAt": "2026-11-23T19:42:23.297159+00:00",
+ "targetsIndex": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18"
+}
