@@ -1,0 +1,892 @@
+{
+ "anomalies": {
+  "athlete": {
+   "duplicatePlayerGameLines": 0,
+   "misattributedByTeamSeason": {
+    "2016/LAC/LAC": 257,
+    "2016/LV/LV": 269,
+    "2017/LV/LV": 261,
+    "2018/LV/LV": 273,
+    "2019/LV/LV": 267
+   },
+   "pointsOnPositionsOutsideFfaGroups": {
+    "lines": 1030,
+    "points": 4312.52
+   },
+   "rowsOutsideCompletedTeamGames": 0,
+   "rowsOutsideCompletedTeamGamesBySeason": {},
+   "rowsWhoseRecordedOpponentDisagreesWithSchedule": 1327
+  },
+  "dst": {
+   "dstLinesOutsideCompletedTeamGames": 0,
+   "missingDstLineByOpposingTeamSeason": {
+    "2016/ATL": 2,
+    "2016/BAL": 1,
+    "2016/BUF": 1,
+    "2016/CAR": 2,
+    "2016/CLE": 1,
+    "2016/DEN": 4,
+    "2016/HOU": 2,
+    "2016/IND": 2,
+    "2016/JAX": 2,
+    "2016/KC": 4,
+    "2016/LAC": 16,
+    "2016/LV": 16,
+    "2016/MIA": 1,
+    "2016/NO": 2,
+    "2016/TB": 2,
+    "2016/TEN": 2,
+    "2017/BAL": 1,
+    "2017/BUF": 1,
+    "2017/DAL": 1,
+    "2017/DEN": 2,
+    "2017/KC": 2,
+    "2017/LAC": 2,
+    "2017/LV": 16,
+    "2017/MIA": 1,
+    "2017/NE": 1,
+    "2017/NYG": 1,
+    "2017/NYJ": 1,
+    "2017/PHI": 1,
+    "2017/TEN": 1,
+    "2017/WAS": 1,
+    "2018/ARI": 1,
+    "2018/BAL": 1,
+    "2018/CIN": 1,
+    "2018/CLE": 1,
+    "2018/DEN": 2,
+    "2018/IND": 1,
+    "2018/KC": 2,
+    "2018/LA": 1,
+    "2018/LAC": 2,
+    "2018/LV": 16,
+    "2018/MIA": 1,
+    "2018/PIT": 1,
+    "2018/SEA": 1,
+    "2018/SF": 1,
+    "2019/CHI": 1,
+    "2019/CIN": 1,
+    "2019/DEN": 2,
+    "2019/DET": 1,
+    "2019/GB": 1,
+    "2019/HOU": 1,
+    "2019/IND": 1,
+    "2019/JAX": 1,
+    "2019/KC": 2,
+    "2019/LAC": 2,
+    "2019/LV": 16,
+    "2019/MIN": 1,
+    "2019/NYJ": 1,
+    "2019/TEN": 1
+   },
+   "teamGamesWithoutOpposingDstLine": 156
+  },
+  "playersWithTwoFranchisesInASeason": 645,
+  "rawTeamCodes": {
+   "athlete": {
+    "2016": [
+     "LA",
+     "LAC",
+     "LV",
+     "OAK",
+     "SD"
+    ],
+    "2017": [
+     "LA",
+     "LAC",
+     "LV",
+     "OAK"
+    ],
+    "2018": [
+     "LA",
+     "LAC",
+     "LV",
+     "OAK"
+    ],
+    "2019": [
+     "LA",
+     "LAC",
+     "LV",
+     "OAK"
+    ],
+    "2020": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2021": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2022": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2023": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2024": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2025": [
+     "LA",
+     "LAC",
+     "LV"
+    ]
+   },
+   "defense": {
+    "2016": [
+     "LA"
+    ],
+    "2017": [
+     "LA",
+     "LAC"
+    ],
+    "2018": [
+     "LA",
+     "LAC"
+    ],
+    "2019": [
+     "LA",
+     "LAC"
+    ],
+    "2020": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2021": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2022": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2023": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2024": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2025": [
+     "LA",
+     "LAC",
+     "LV"
+    ]
+   },
+   "schedule": {
+    "2016": [
+     "LA",
+     "OAK",
+     "SD"
+    ],
+    "2017": [
+     "LA",
+     "LAC",
+     "OAK"
+    ],
+    "2018": [
+     "LA",
+     "LAC",
+     "OAK"
+    ],
+    "2019": [
+     "LA",
+     "LAC",
+     "OAK"
+    ],
+    "2020": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2021": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2022": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2023": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2024": [
+     "LA",
+     "LAC",
+     "LV"
+    ],
+    "2025": [
+     "LA",
+     "LAC",
+     "LV"
+    ]
+   }
+  }
+ },
+ "cellsByStatus": {
+  "DST/missing_dst_line": 156,
+  "DST/valid": 5122,
+  "K/invalid_refused_line": 14,
+  "K/valid": 5264,
+  "QB/valid": 5278,
+  "RB/invalid_refused_line": 13,
+  "RB/valid": 5265,
+  "TE/invalid_refused_line": 14,
+  "TE/valid": 5264,
+  "WR/invalid_refused_line": 17,
+  "WR/valid": 5261
+ },
+ "checks": {
+  "T05 every target line belongs to a completed team-game": {
+   "detail": {
+    "athleteRowsOutside": 0,
+    "dstLinesOutside": 0
+   },
+   "status": "PASSED"
+  },
+  "T05 no player has two lines in one game": {
+   "detail": 0,
+   "status": "PASSED"
+  },
+  "T06 32 teams each season, 16 or 17 games each": {
+   "detail": {
+    "2016": [
+     32,
+     16,
+     16
+    ],
+    "2017": [
+     32,
+     16,
+     16
+    ],
+    "2018": [
+     32,
+     16,
+     16
+    ],
+    "2019": [
+     32,
+     16,
+     16
+    ],
+    "2020": [
+     32,
+     16,
+     16
+    ],
+    "2021": [
+     32,
+     17,
+     17
+    ],
+    "2022": [
+     32,
+     16,
+     17
+    ],
+    "2023": [
+     32,
+     17,
+     17
+    ],
+    "2024": [
+     32,
+     17,
+     17
+    ],
+    "2025": [
+     32,
+     17,
+     17
+    ]
+   },
+   "status": "PASSED"
+  },
+  "T06 completed team-games reconcile to 5,278": {
+   "detail": {
+    "expected": 5278,
+    "teamGames": 5278
+   },
+   "status": "PASSED"
+  },
+  "T06 every completed game has exactly two mirrored team-games": {
+   "detail": {
+    "gamesWithoutExactlyTwoTeamGames": 0,
+    "teamGamesWithoutMirror": 0
+   },
+   "status": "PASSED"
+  },
+  "T30 configured rules are the league's current FFA rules": {
+   "detail": {
+    "league": {
+     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+    }
+   },
+   "status": "PASSED"
+  },
+  "T30 each scored line's points equal the sum of its rule contributions": {
+   "detail": {
+    "checked": 257756,
+    "mismatched": 0
+   },
+   "status": "PASSED"
+  },
+  "T31 no provider projection in the scoring path or DvP code": {
+   "detail": {
+    "codeFindings": [],
+    "inputFamiliesOutsideAllowlist": []
+   },
+   "status": "PASSED"
+  },
+  "T34 the canceled 2022 BUF-CIN game has no team-games and no zeros": {
+   "detail": {
+    "completedGames2022": 271,
+    "gamesPlayed2022": {
+     "BUF": 16,
+     "CIN": 16
+    },
+    "inSchedule": []
+   },
+   "status": "PASSED"
+  },
+  "T37 targets index scored with the configured rules": {
+   "detail": {
+    "configured": {
+     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+    },
+    "index": {
+     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+    }
+   },
+   "status": "PASSED"
+  }
+ },
+ "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+ "examples": {
+  "dstTurnover": {
+   "dst": "JAX",
+   "game_id": "2025_01_CAR_JAX",
+   "observationRow": {
+    "defense": "JAX",
+    "offense": "CAR",
+    "points": 12.0,
+    "unit": "CAR"
+   },
+   "offense": "CAR",
+   "points": 12.0,
+   "ruleContributions": {
+    "defense.fumbles_recovered#96": 2.0,
+    "defense.interceptions#95": 4.0,
+    "defense.points_allowed#91": 3.0,
+    "defense.sacks#99": 1.0,
+    "defense.yards_allowed#130": 2.0
+   },
+   "statistics": {
+    "defense.fumbles_recovered": 1.0,
+    "defense.interceptions": 2.0,
+    "defense.points_allowed": 10.0,
+    "defense.sacks": 1.0,
+    "defense.yards_allowed": 255.0
+   }
+  },
+  "multiWrOffense": {
+   "cell": {
+    "defense": "ARI",
+    "game_id": "2025_01_ARI_NO",
+    "lines": 5,
+    "offense": "NO",
+    "points": 29.6
+   },
+   "lines": [
+    {
+     "basis": "statistics",
+     "player_id": "00-0031236",
+     "points": 5.6
+    },
+    {
+     "basis": "statistics",
+     "player_id": "00-0037239",
+     "points": 12.4
+    },
+    {
+     "basis": "statistics",
+     "player_id": "00-0037545",
+     "points": 9.3
+    },
+    {
+     "basis": "statistics",
+     "player_id": "00-0037745",
+     "points": 0.0
+    },
+    {
+     "basis": "statistics",
+     "player_id": "00-0039424",
+     "points": 2.3
+    }
+   ],
+   "sumOfLines": 29.6
+  },
+  "tradedPlayer": {
+   "games": [
+    {
+     "game_id": "2025_01_CIN_CLE",
+     "opponent": "CIN",
+     "points": 12.2,
+     "team": "CLE",
+     "week": 1
+    },
+    {
+     "game_id": "2025_02_CLE_BAL",
+     "opponent": "BAL",
+     "points": 8.76,
+     "team": "CLE",
+     "week": 2
+    },
+    {
+     "game_id": "2025_03_GB_CLE",
+     "opponent": "GB",
+     "points": 3.68,
+     "team": "CLE",
+     "week": 3
+    },
+    {
+     "game_id": "2025_04_CLE_DET",
+     "opponent": "DET",
+     "points": 1.26,
+     "team": "CLE",
+     "week": 4
+    },
+    {
+     "game_id": "2025_06_CIN_GB",
+     "opponent": "GB",
+     "points": 18.76,
+     "team": "CIN",
+     "week": 6
+    },
+    {
+     "game_id": "2025_07_PIT_CIN",
+     "opponent": "PIT",
+     "points": 25.98,
+     "team": "CIN",
+     "week": 7
+    },
+    {
+     "game_id": "2025_08_NYJ_CIN",
+     "opponent": "NYJ",
+     "points": 24.32,
+     "team": "CIN",
+     "week": 8
+    },
+    {
+     "game_id": "2025_09_CHI_CIN",
+     "opponent": "CHI",
+     "points": 30.7,
+     "team": "CIN",
+     "week": 9
+    },
+    {
+     "game_id": "2025_11_CIN_PIT",
+     "opponent": "PIT",
+     "points": 9.86,
+     "team": "CIN",
+     "week": 11
+    },
+    {
+     "game_id": "2025_12_NE_CIN",
+     "opponent": "NE",
+     "points": 9.62,
+     "team": "CIN",
+     "week": 12
+    },
+    {
+     "game_id": "2025_16_CIN_MIA",
+     "opponent": "MIA",
+     "points": 0.16,
+     "team": "CIN",
+     "week": 16
+    },
+    {
+     "game_id": "2025_17_ARI_CIN",
+     "opponent": "ARI",
+     "points": 1.16,
+     "team": "CIN",
+     "week": 17
+    },
+    {
+     "game_id": "2025_18_CLE_CIN",
+     "opponent": "CLE",
+     "points": 0.2,
+     "team": "CIN",
+     "week": 18
+    }
+   ],
+   "player_id": "00-0026158"
+  },
+  "zeroProductionTe": {
+   "defense": "ATL",
+   "game_id": "2025_01_TB_ATL",
+   "lines": 3,
+   "offense": "TB",
+   "points": 0.0,
+   "status": "valid",
+   "validZeroTeCells2025": 7
+  }
+ },
+ "format": "arbit-dvp-m3-3-audit-v1",
+ "generatedAt": "2026-11-23T22:25:17.587356+00:00",
+ "positions": {
+  "leagueLineupSlots": [
+   "QB",
+   "RB",
+   "WR",
+   "TE",
+   "FLEX",
+   "DST",
+   "K",
+   "BENCH",
+   "IR"
+  ],
+  "mapping": {
+   "FB": "RB",
+   "HB": "RB",
+   "K": "K",
+   "PK": "K",
+   "QB": "QB",
+   "RB": "RB",
+   "TE": "TE",
+   "WR": "WR"
+  },
+  "modeledGroups": [
+   "DST",
+   "K",
+   "QB",
+   "RB",
+   "TE",
+   "WR"
+  ],
+  "note": "FLEX and other multi-position slots draw on the same groups; K and D/ST are lineup slots, so both are in scope; FB counts as RB"
+ },
+ "reconciliation": {
+  "completedGames": 2639,
+  "duplicateGameIds": 0,
+  "gamesWithoutExactlyTwoTeamGames": 0,
+  "seasons": {
+   "2016": {
+    "cellsByStatus": {
+     "DST/missing_dst_line": 60,
+     "DST/valid": 452,
+     "K/invalid_refused_line": 4,
+     "K/valid": 508,
+     "QB/valid": 512,
+     "RB/invalid_refused_line": 3,
+     "RB/valid": 509,
+     "TE/invalid_refused_line": 4,
+     "TE/valid": 508,
+     "WR/invalid_refused_line": 4,
+     "WR/valid": 508
+    },
+    "completedGames": 256,
+    "gamesPerTeamValues": [
+     16
+    ],
+    "notCompleted": [],
+    "scheduledGames": 256,
+    "teamGames": 512,
+    "teams": 32
+   },
+   "2017": {
+    "cellsByStatus": {
+     "DST/missing_dst_line": 32,
+     "DST/valid": 480,
+     "K/invalid_refused_line": 1,
+     "K/valid": 511,
+     "QB/valid": 512,
+     "RB/invalid_refused_line": 1,
+     "RB/valid": 511,
+     "TE/invalid_refused_line": 1,
+     "TE/valid": 511,
+     "WR/invalid_refused_line": 1,
+     "WR/valid": 511
+    },
+    "completedGames": 256,
+    "gamesPerTeamValues": [
+     16
+    ],
+    "notCompleted": [],
+    "scheduledGames": 256,
+    "teamGames": 512,
+    "teams": 32
+   },
+   "2018": {
+    "cellsByStatus": {
+     "DST/missing_dst_line": 32,
+     "DST/valid": 480,
+     "K/invalid_refused_line": 2,
+     "K/valid": 510,
+     "QB/valid": 512,
+     "RB/invalid_refused_line": 2,
+     "RB/valid": 510,
+     "TE/invalid_refused_line": 2,
+     "TE/valid": 510,
+     "WR/invalid_refused_line": 2,
+     "WR/valid": 510
+    },
+    "completedGames": 256,
+    "gamesPerTeamValues": [
+     16
+    ],
+    "notCompleted": [],
+    "scheduledGames": 256,
+    "teamGames": 512,
+    "teams": 32
+   },
+   "2019": {
+    "cellsByStatus": {
+     "DST/missing_dst_line": 32,
+     "DST/valid": 480,
+     "K/invalid_refused_line": 2,
+     "K/valid": 510,
+     "QB/valid": 512,
+     "RB/invalid_refused_line": 2,
+     "RB/valid": 510,
+     "TE/invalid_refused_line": 2,
+     "TE/valid": 510,
+     "WR/invalid_refused_line": 2,
+     "WR/valid": 510
+    },
+    "completedGames": 256,
+    "gamesPerTeamValues": [
+     16
+    ],
+    "notCompleted": [],
+    "scheduledGames": 256,
+    "teamGames": 512,
+    "teams": 32
+   },
+   "2020": {
+    "cellsByStatus": {
+     "DST/valid": 512,
+     "K/valid": 512,
+     "QB/valid": 512,
+     "RB/valid": 512,
+     "TE/valid": 512,
+     "WR/invalid_refused_line": 1,
+     "WR/valid": 511
+    },
+    "completedGames": 256,
+    "gamesPerTeamValues": [
+     16
+    ],
+    "notCompleted": [],
+    "scheduledGames": 256,
+    "teamGames": 512,
+    "teams": 32
+   },
+   "2021": {
+    "cellsByStatus": {
+     "DST/valid": 544,
+     "K/invalid_refused_line": 1,
+     "K/valid": 543,
+     "QB/valid": 544,
+     "RB/invalid_refused_line": 1,
+     "RB/valid": 543,
+     "TE/invalid_refused_line": 1,
+     "TE/valid": 543,
+     "WR/invalid_refused_line": 2,
+     "WR/valid": 542
+    },
+    "completedGames": 272,
+    "gamesPerTeamValues": [
+     17
+    ],
+    "notCompleted": [],
+    "scheduledGames": 272,
+    "teamGames": 544,
+    "teams": 32
+   },
+   "2022": {
+    "cellsByStatus": {
+     "DST/valid": 542,
+     "K/valid": 542,
+     "QB/valid": 542,
+     "RB/valid": 542,
+     "TE/valid": 542,
+     "WR/valid": 542
+    },
+    "completedGames": 271,
+    "gamesPerTeamValues": [
+     16,
+     17
+    ],
+    "notCompleted": [],
+    "scheduledGames": 271,
+    "teamGames": 542,
+    "teams": 32
+   },
+   "2023": {
+    "cellsByStatus": {
+     "DST/valid": 544,
+     "K/invalid_refused_line": 1,
+     "K/valid": 543,
+     "QB/valid": 544,
+     "RB/invalid_refused_line": 1,
+     "RB/valid": 543,
+     "TE/invalid_refused_line": 1,
+     "TE/valid": 543,
+     "WR/invalid_refused_line": 1,
+     "WR/valid": 543
+    },
+    "completedGames": 272,
+    "gamesPerTeamValues": [
+     17
+    ],
+    "notCompleted": [],
+    "scheduledGames": 272,
+    "teamGames": 544,
+    "teams": 32
+   },
+   "2024": {
+    "cellsByStatus": {
+     "DST/valid": 544,
+     "K/invalid_refused_line": 1,
+     "K/valid": 543,
+     "QB/valid": 544,
+     "RB/invalid_refused_line": 1,
+     "RB/valid": 543,
+     "TE/invalid_refused_line": 1,
+     "TE/valid": 543,
+     "WR/invalid_refused_line": 2,
+     "WR/valid": 542
+    },
+    "completedGames": 272,
+    "gamesPerTeamValues": [
+     17
+    ],
+    "notCompleted": [],
+    "scheduledGames": 272,
+    "teamGames": 544,
+    "teams": 32
+   },
+   "2025": {
+    "cellsByStatus": {
+     "DST/valid": 544,
+     "K/invalid_refused_line": 2,
+     "K/valid": 542,
+     "QB/valid": 544,
+     "RB/invalid_refused_line": 2,
+     "RB/valid": 542,
+     "TE/invalid_refused_line": 2,
+     "TE/valid": 542,
+     "WR/invalid_refused_line": 2,
+     "WR/valid": 542
+    },
+    "completedGames": 272,
+    "gamesPerTeamValues": [
+     17
+    ],
+    "notCompleted": [],
+    "scheduledGames": 272,
+    "teamGames": 544,
+    "teams": 32
+   }
+  },
+  "teamGames": 5278,
+  "teamGamesWithoutMirror": 0
+ },
+ "runId": "phase1-audit-20261123T222517Z",
+ "runManifest": {
+  "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+  "command": "audit",
+  "config": {
+   "path": "config/dvp/base.json",
+   "sha256": "e4abfd1a0a6d5767c3583099b5781ce7fcbee728df441b8c4b2b3daf229b8654"
+  },
+  "format": "arbit-dvp-m3-3-run-v1",
+  "outputs": {
+   "observations.parquet": "aa074544d2df2acda538f0221bd4f81eed3ae5e983917b8dc4445fb02f594bd1",
+   "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
+  },
+  "runId": "phase1-audit-20261123T222517Z",
+  "scheduleManifest": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
+  "startedAt": "2026-11-23T22:25:17.587356+00:00",
+  "targetsIndex": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18"
+ },
+ "validCellsByPosition": {
+  "DST": {
+   "max": 35.0,
+   "mean": 5.877,
+   "min": -12.0,
+   "negative": 787,
+   "position": "DST",
+   "trueZeros": 260,
+   "validCells": 5122
+  },
+  "K": {
+   "max": 27.0,
+   "mean": 7.768,
+   "min": -3.0,
+   "negative": 50,
+   "position": "K",
+   "trueZeros": 162,
+   "validCells": 5264
+  },
+  "QB": {
+   "max": 51.88,
+   "mean": 16.579,
+   "min": -6.66,
+   "negative": 27,
+   "position": "QB",
+   "trueZeros": 9,
+   "validCells": 5278
+  },
+  "RB": {
+   "max": 103.1,
+   "mean": 23.068,
+   "min": 0.6,
+   "negative": 0,
+   "position": "RB",
+   "trueZeros": 0,
+   "validCells": 5265
+  },
+  "TE": {
+   "max": 61.52,
+   "mean": 12.4,
+   "min": -2.0,
+   "negative": 4,
+   "position": "TE",
+   "trueZeros": 109,
+   "validCells": 5264
+  },
+  "WR": {
+   "max": 96.89999999999999,
+   "mean": 33.673,
+   "min": -3.58,
+   "negative": 1,
+   "position": "WR",
+   "trueZeros": 1,
+   "validCells": 5261
+  }
+ }
+}

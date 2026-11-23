@@ -1,0 +1,294 @@
+{
+  "version": 1,
+  "id": "TASK-20261123-005",
+  "title": "M3-3 DvP research, phases 0-1: continuity, v0 reproduction, completed-game pipeline and projection firewall",
+  "objective": "Continue slice M3-3 under the owner's DvP research specification (docs/research/Arbit_FFA_M3_DvP_Plan.md v1.1, OWN-074). Phase 0: inventory and freeze the v0 odd/even study (scripts/model/defense_position_study.py and its 2026-11-23 receipt) without changing it, map every source it read, audit its lineage for provider fantasy projections, reproduce its r, k and weights exactly from the pinned FFA targets, and disposition every discrepancy. Phase 1: a projection-free, completed-game DvP observation pipeline over the canonical FFA actuals (team-game-position sums, defense inversion, D/ST offense orientation, true zero versus missing, schedule reconciliation to 5,278 team-games, relocation and refusal audits), a lineage allowlist that fails closed, a completed-game as-of index with preweek and per-game cutoffs, and tests T01-T07 and T29-T40 executed. Offline and read-only: no canonical scoring table, feature weight, service or deployment changes.",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "docs/research/Arbit_FFA_M3_DvP_Plan.md",
+    "libs/arbit-model/src/arbit_model/dvp/__init__.py",
+    "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+    "libs/arbit-model/src/arbit_model/dvp/observations.py",
+    "libs/arbit-model/src/arbit_model/dvp/asof.py",
+    "libs/arbit-model/src/arbit_model/dvp/reliability.py",
+    "libs/arbit-model/src/arbit_model/dvp/results.py",
+    "libs/arbit-model/tests/test_dvp_observations.py",
+    "libs/arbit-model/tests/test_dvp_firewall.py",
+    "libs/arbit-model/tests/test_dvp_asof.py",
+    "libs/arbit-model/tests/test_dvp_reliability.py",
+    "libs/arbit-model/tests/test_dvp_continuity.py",
+    "scripts/model/dvp.py",
+    "config/dvp/base.json",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/M3-3_CONTINUITY.md",
+    "docs/research/dvp/continuity-manifest.json",
+    "docs/research/dvp/V0_REPRODUCTION.md",
+    "docs/research/dvp/SOURCE_PROVENANCE.md",
+    "docs/research/dvp/DATA_DICTIONARY.md",
+    "docs/research/dvp/DATA_QUALITY.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/experiment-registry.json",
+    "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json",
+    "docs/research/dvp/SCORE_FINALITY_AUDIT.json",
+    "docs/research/dvp/audit-receipt.json",
+    "docs/research/dvp/v0-reproduction.json",
+    "libs/arbit-model/README.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/project/decision-register.md",
+    "docs/project/known-issues.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-23T22:06:18Z",
+  "updated_at": "2026-11-23T22:31:34Z",
+  "baseline": "b3c0a9a94277e9133afa43550713d91f77345bd3",
+  "next_action": "Merge the PR for claude/m3-dvp-phase0 (TASK-20261123-005). Then DvP Phase 2 under OWN-074: A00, A02-A10, A12 on the validated observations (scripts/model/dvp.py; run audit first), with scatter plots and a RELIABILITY_REPORT; then Phase 3 walk-forward starting with the offense-only B00. Ask the owner whether to repair R-072 in the canonical targets.",
+  "sections": {
+    "review": {
+      "summary": "Read before design: the owner's DvP specification v1.1 in full (sections 0-14); v0 study scripts/model/defense_position_study.py (method: REG, basis statistics athlete lines summed per team-game-position with zero fill, defense inversion, same-season leave-one-out offense adjustment, D/ST keyed by the offense, odd/even NFL weeks with >=4 games per half via ffa_signal_study.split_half, k = m(1-r)/r with m the mean half size) and its receipt (320 defense-seasons per position, 315 for D/ST, 5,278 team-games); ffa_signal_study.split_half and pearson; the canonical targets store data/model (index 4afbd836..., built 2026-11-10 from code de72924+uncommitted, rules athlete 10e938eb / defense 16885a80, per-season manifests with pinned nflverse manifest inputs, refusal counts) and its slice 2 check receipt ffa-targets-check-2026-11-10.json (10,734 of 10,771 lines equal ESPN actual applied totals; index 994b3018 differs from the current pointer); build_targets.py, targets.py (D/ST loop skips a game when either team's stats_team row is missing), arbit_model.inputs.NflverseTables (pinned manifests come from the database), gamebook POSITIONS/FFA_POSITIONS, league_policy lineup slots, timing.STATISTICS (day after the game, 12:00 UTC, retrospective rule), fields.py policy exclusions (generic fantasy_points, ffopportunity, DynastyProcess/FantasyPros, ESPN draft projections; OWN-061), ESPN stat-source handling (actual blocks statSourceId 0 only). Found while reviewing: D/ST targets lack the Raiders 2016-2019 and Chargers 2016 and every D/ST facing them (schedule codes OAK/SD vs team stats LV/LAC; 156 REG team-games); refused athlete lines have null points that v0 summed as zero; Gamebooks (3b) include postseason games in last-season features.",
+      "files": [
+        "scripts/model/defense_position_study.py",
+        "docs/research/defense-position-study-2026-11-23.json",
+        "libs/arbit-model/src/arbit_model/targets.py",
+        "docs/research/Arbit_FFA_M3_DvP_Plan.md"
+      ]
+    },
+    "plan": {
+      "summary": "Phase 0-1 of the owner's DvP spec, offline and read-only. (1) arbit_model.dvp.provenance: source allowlist keyed by source id with full known schema per source; admit() fails closed on unknown source, forbidden source type, missing ancestry, scoring-hash mismatch or any unknown column (so a renamed projection like opponent_expected cannot pass); exclusion audit records. (2) arbit_model.dvp.observations: completed REG games from the pinned schedule with franchise codes (OAK->LV, SD->LAC), two team-games per completed game, opponent taken from the schedule rather than the targets row, team-game-position sums of canonical FFA actuals (FB->RB; true zero only for a covered team-game; a refused line makes the cell invalid, never zero), defense inversion, D/ST as points conceded by the offense with missing lines kept missing, availability time by the statistics rule (day after the game, 12:00 UTC, retrospective), and a reconciliation report. (3) arbit_model.dvp.asof: preweek and per-game cutoffs, eligible-features view versus labels-after view, frozen-forecast evaluation join, league prior from eligible actuals only. (4) arbit_model.dvp.reliability: v0 split-half (odd/even NFL weeks, >=4 per half), k = m(1-r)/r with unidentified r<=0, w(n), unequal-half expected r, Pearson/Spearman, Fisher and seeded bootstrap intervals. (5) arbit_model.dvp.results: experiment record with forbidden_vendor_projection_dependencies that invalidates any nonzero result. (6) scripts/model/dvp.py audit and reproduce-v0 with config/dvp/base.json: rerun v0's own script on the pinned index and diff with its receipt, independent recompute, k-formula check, a v0-validated variant on the validated observations, receipts under docs/research/dvp and bulky outputs under artifacts/dvp/<run_id>. (7) Tests T01-T07 and T29-T40 on fixtures. v0 files stay byte-identical; the canonical D/ST gap is reported, not repaired here.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/__init__.py",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+        "libs/arbit-model/src/arbit_model/dvp/observations.py",
+        "libs/arbit-model/src/arbit_model/dvp/asof.py",
+        "libs/arbit-model/src/arbit_model/dvp/reliability.py",
+        "libs/arbit-model/src/arbit_model/dvp/results.py",
+        "scripts/model/dvp.py",
+        "config/dvp/base.json",
+        "docs/research/dvp/README.md"
+      ]
+    },
+    "implementation": {
+      "summary": "arbit_model.dvp (provenance, observations, asof, reliability, results), scripts/model/dvp.py (audit, reproduce-v0, registry) and config/dvp/base.json. Provenance admits sources by allowlist with full known schemas (targets by adapter schema, nflverse by the field catalog), scoring-hash and row-value checks, and fails closed on anything unknown; a code scan looks for provider projection tokens and ESPN/Sleeper reader imports. Observations take the opponent from the schedule with franchise codes, keep refused, duplicate and uncovered cells missing, put D/ST on the offense, and stamp row lineage and availability. Asof separates feature views from labels with a frozen-forecast join and an actuals-only prior. Reliability ports v0's split-half and adds unequal-half, Fisher and seeded bootstrap tools. Results enforce forbidden_vendor_projection_dependencies. Tests T01-T13, T21-T22, T29-T40 (38) in five test_dvp files. Bug found and fixed during implementation: the first audit compared the target row's raw opponent column because it survived the schedule join; dropping it before the join leaves exactly the 1,327 self-attributed Raiders/Chargers home rows.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+        "libs/arbit-model/src/arbit_model/dvp/observations.py",
+        "libs/arbit-model/src/arbit_model/dvp/asof.py",
+        "libs/arbit-model/src/arbit_model/dvp/reliability.py",
+        "libs/arbit-model/src/arbit_model/dvp/results.py",
+        "scripts/model/dvp.py",
+        "config/dvp/base.json"
+      ]
+    },
+    "validation": {
+      "summary": "Gates: foundation, model-tests and point-in-time passed; full suite 1,418 passed (1,380 before plus 38 DvP tests); ruff, ruff format and mypy strict clean. Real data (run phase1-audit-20261123T222517Z on committed code 556e1cb): every audit check PASSED (5,278 team-games; 32 teams; 2 mirrored team-games per game; canceled 2022 BUF-CIN absent; targets scored with the league's current rules; 257,756 lines equal their rule contributions; code scan 0 findings; projection dependencies 0). v0 rerun exact; independent recompute matches all 12 measures. Sensitivity: five deliberate breaks each fail tests (target-row opponent 1, refused-as-zero 1, kickoff instead of availability 2, unknown columns allowed 5, projection dependency ignored 1); sources restored and the suite passes again. Examples checked by hand: NO WR cell 29.6 = five lines; JAX D/ST 12 = 4+2+1+3+2 credited to CAR's offense; a traded player's lines follow each game's team.",
+      "files": [
+        "docs/research/dvp/audit-receipt.json",
+        "docs/research/dvp/v0-reproduction.json",
+        "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json"
+      ]
+    },
+    "documentation": {
+      "summary": "Research documents in docs/research/dvp: README (runbook and status), M3-3_CONTINUITY (v0 origin, inventory, what changed), V0_REPRODUCTION (exact rerun, k arithmetic, five discrepancies with dispositions, validated results with intervals, 2025 exposure), DATA_QUALITY (checks, cell status, anomalies, hand-checked examples, finality), SOURCE_PROVENANCE (allowlist, scoring authority, code scan, rejected projections), DATA_DICTIONARY, EXPERIMENT_REGISTRY, plus the JSON receipts. Project records: OWN-074 and ENG-057 in the decision register; R-072 to R-074 in known issues; status, changelog, the M3 plan and the model README. The owner's specification file is committed unchanged at docs/research/Arbit_FFA_M3_DvP_Plan.md.",
+      "files": [
+        "docs/research/dvp/README.md",
+        "docs/research/dvp/V0_REPRODUCTION.md",
+        "docs/research/dvp/DATA_QUALITY.md",
+        "docs/research/dvp/SOURCE_PROVENANCE.md",
+        "docs/research/dvp/M3-3_CONTINUITY.md",
+        "docs/project/decision-register.md",
+        "docs/project/known-issues.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-23-task-20261123-005-governance-handoff.md",
+      "next_action": "Merge the PR for claude/m3-dvp-phase0 (TASK-20261123-005). Then DvP Phase 2 under OWN-074: A00, A02-A10, A12 on the validated observations (scripts/model/dvp.py; run audit first), with scatter plots and a RELIABILITY_REPORT; then Phase 3 walk-forward starting with the offense-only B00. Ask the owner whether to repair R-072 in the canonical targets.",
+      "unresolved": "R-072 canonical repair needs owner approval (replaces canonical scoring tables); full D/ST coverage BLOCKED until then. R-074 3b playoff games and mislabeled column, for the 3b follow-up. feature_specs.SHRINKAGE still holds v0 constants until Phase B decides. NWS User-Agent contact still needed before weather W3."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-23T22:29:46Z",
+      "exit_code": 0,
+      "duration_seconds": 0.141,
+      "stdout_stderr_sha256": "7090ce7f31d23ef15b65344ae379f25862fd89b330df3ed7ed8d9d34d475c017",
+      "git_head": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+      "scope_sha256": {
+        "docs/research/Arbit_FFA_M3_DvP_Plan.md": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d",
+        "libs/arbit-model/src/arbit_model/dvp/__init__.py": "bdfaa16ece99dd9b59522678812f3e55e3c394f34a7773a5e1fbebd141b5ad4e",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py": "3320502563c16fb2637a5b4c95a364ca1e7e26979d55bf5c37f37feea95aa1c6",
+        "libs/arbit-model/src/arbit_model/dvp/observations.py": "baad86e2533cdc905809d4cd8e64005385f6db1a8215e4a94194f0a5a65e9ff8",
+        "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
+        "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
+        "libs/arbit-model/src/arbit_model/dvp/results.py": "5d10b972f43e0e4e40c386b6f3165db4737834b6a21ac793ba0e0c2ad5de8852",
+        "libs/arbit-model/tests/test_dvp_observations.py": "598d50052949a49b389e4632b7c261e6ee6eba5877dbf3cf5a2dd42ebbe90aa2",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "2f6784ed435db22e8480a3fcd85951a0cf4ceb37ad2dcbfa19c6260a19b45dfd",
+        "libs/arbit-model/tests/test_dvp_asof.py": "42d11007f5c9eab960625b66c7a374537d3c02f15bd0dda9d9224ec012cce5e2",
+        "libs/arbit-model/tests/test_dvp_reliability.py": "8e2bb10afaeb8257a4e740ecbc5a52848659fd3fd5bd134c0f9af02cdba590ee",
+        "libs/arbit-model/tests/test_dvp_continuity.py": "267269377002301e7c4dfa9aca5f733f4770ccbca11205a77b6db3e591589e52",
+        "scripts/model/dvp.py": "f5f75d876bfc099dca6cc338cd12b8fa328c20e4c2f113d4135ece6502710638",
+        "config/dvp/base.json": "e4abfd1a0a6d5767c3583099b5781ce7fcbee728df441b8c4b2b3daf229b8654",
+        "docs/research/dvp/README.md": "49940a9ec62340ec67679278cb1dde87d678ec8d56dac5332e915d8098382461",
+        "docs/research/dvp/M3-3_CONTINUITY.md": "9895e483788cbbfe4d533d08efe7ffa70388d148a631318a8b29154a72399327",
+        "docs/research/dvp/continuity-manifest.json": "ec0d17468440d6265b703bfaa5306ec46f3555e488bff9942358413f7877e783",
+        "docs/research/dvp/V0_REPRODUCTION.md": "2a6a1e5991f32b190554aabecdb2072ea55ae244dc034e9e571fc998f2d9cac5",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "416bea5637629d9e03fb50214c73687a4e15e8cde1733508128367f4f1c20c18",
+        "docs/research/dvp/DATA_DICTIONARY.md": "3b8fcd64df0c303670b439405e7d612b4a98192767a00b79340d27ded60779b2",
+        "docs/research/dvp/DATA_QUALITY.md": "c816e09d168f205489122aabc7d9abd45505084c76412a2493245c0333ff674d",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "fcb7bbd1d4ae46323f4d4fb7475bb0ee983b3a0d56fd3be1f656c3ad7f2b723c",
+        "docs/research/dvp/experiment-registry.json": "bd74b2a114ed207c1e02bda2e3592c4ddc7cbe262a83ddac543b94e50c228449",
+        "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json": "7e1b7d90df35665a621e22ec41d0bd3d9789780f3f92747a01d06259dff3f824",
+        "docs/research/dvp/SCORE_FINALITY_AUDIT.json": "aaac1a838525d56ce51f847a2be69a110f5e45fd13ae33e94e098b02c838ba47",
+        "docs/research/dvp/audit-receipt.json": "9e2fc86304ea8450f36a714551500c8e4ec3a5564ea5731952f15e2c5b16cda9",
+        "docs/research/dvp/v0-reproduction.json": "824ee614efa9b77689048d64b577f616c02a82cca1d87bd40525df366495bfa8",
+        "libs/arbit-model/README.md": "8682f542c5daed0ed2de10a6d2cf65e39231adf91666207be9f817552fd9ba2c",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "a3228c8d8c762d7d650438bba337b3af3c58fece7c737ecef2d0f2a79b207037",
+        "docs/project/decision-register.md": "1edcd73fc64f13ce7b8f10f5dfac37bdfd2c3f44e6629871dfe98d4a7d340c04",
+        "docs/project/known-issues.md": "fea44a8339b7b345fd9e43118471ea3853c99821566b564d1ac6d793b41752b1",
+        "docs/project/status.md": "53ca0a19e007f9242fbeb79e9f17b19cf158f77f8022a8a10557138cfb671d7d",
+        "docs/project/changelog.md": "58db7b8ca0aa83b25c79bb0f03e6f15f7d5c3dad5a8edbc0d20f0b53de32e539"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-23T22:29:55Z",
+      "exit_code": 0,
+      "duration_seconds": 9.001,
+      "stdout_stderr_sha256": "a9236aeea642624cd4ae2bcdc1ae12322251db9d04a940bc5bb0c18723ed1c92",
+      "git_head": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+      "scope_sha256": {
+        "docs/research/Arbit_FFA_M3_DvP_Plan.md": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d",
+        "libs/arbit-model/src/arbit_model/dvp/__init__.py": "bdfaa16ece99dd9b59522678812f3e55e3c394f34a7773a5e1fbebd141b5ad4e",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py": "3320502563c16fb2637a5b4c95a364ca1e7e26979d55bf5c37f37feea95aa1c6",
+        "libs/arbit-model/src/arbit_model/dvp/observations.py": "baad86e2533cdc905809d4cd8e64005385f6db1a8215e4a94194f0a5a65e9ff8",
+        "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
+        "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
+        "libs/arbit-model/src/arbit_model/dvp/results.py": "5d10b972f43e0e4e40c386b6f3165db4737834b6a21ac793ba0e0c2ad5de8852",
+        "libs/arbit-model/tests/test_dvp_observations.py": "598d50052949a49b389e4632b7c261e6ee6eba5877dbf3cf5a2dd42ebbe90aa2",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "2f6784ed435db22e8480a3fcd85951a0cf4ceb37ad2dcbfa19c6260a19b45dfd",
+        "libs/arbit-model/tests/test_dvp_asof.py": "42d11007f5c9eab960625b66c7a374537d3c02f15bd0dda9d9224ec012cce5e2",
+        "libs/arbit-model/tests/test_dvp_reliability.py": "8e2bb10afaeb8257a4e740ecbc5a52848659fd3fd5bd134c0f9af02cdba590ee",
+        "libs/arbit-model/tests/test_dvp_continuity.py": "267269377002301e7c4dfa9aca5f733f4770ccbca11205a77b6db3e591589e52",
+        "scripts/model/dvp.py": "f5f75d876bfc099dca6cc338cd12b8fa328c20e4c2f113d4135ece6502710638",
+        "config/dvp/base.json": "e4abfd1a0a6d5767c3583099b5781ce7fcbee728df441b8c4b2b3daf229b8654",
+        "docs/research/dvp/README.md": "49940a9ec62340ec67679278cb1dde87d678ec8d56dac5332e915d8098382461",
+        "docs/research/dvp/M3-3_CONTINUITY.md": "9895e483788cbbfe4d533d08efe7ffa70388d148a631318a8b29154a72399327",
+        "docs/research/dvp/continuity-manifest.json": "ec0d17468440d6265b703bfaa5306ec46f3555e488bff9942358413f7877e783",
+        "docs/research/dvp/V0_REPRODUCTION.md": "2a6a1e5991f32b190554aabecdb2072ea55ae244dc034e9e571fc998f2d9cac5",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "416bea5637629d9e03fb50214c73687a4e15e8cde1733508128367f4f1c20c18",
+        "docs/research/dvp/DATA_DICTIONARY.md": "3b8fcd64df0c303670b439405e7d612b4a98192767a00b79340d27ded60779b2",
+        "docs/research/dvp/DATA_QUALITY.md": "c816e09d168f205489122aabc7d9abd45505084c76412a2493245c0333ff674d",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "fcb7bbd1d4ae46323f4d4fb7475bb0ee983b3a0d56fd3be1f656c3ad7f2b723c",
+        "docs/research/dvp/experiment-registry.json": "bd74b2a114ed207c1e02bda2e3592c4ddc7cbe262a83ddac543b94e50c228449",
+        "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json": "7e1b7d90df35665a621e22ec41d0bd3d9789780f3f92747a01d06259dff3f824",
+        "docs/research/dvp/SCORE_FINALITY_AUDIT.json": "aaac1a838525d56ce51f847a2be69a110f5e45fd13ae33e94e098b02c838ba47",
+        "docs/research/dvp/audit-receipt.json": "9e2fc86304ea8450f36a714551500c8e4ec3a5564ea5731952f15e2c5b16cda9",
+        "docs/research/dvp/v0-reproduction.json": "824ee614efa9b77689048d64b577f616c02a82cca1d87bd40525df366495bfa8",
+        "libs/arbit-model/README.md": "8682f542c5daed0ed2de10a6d2cf65e39231adf91666207be9f817552fd9ba2c",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "a3228c8d8c762d7d650438bba337b3af3c58fece7c737ecef2d0f2a79b207037",
+        "docs/project/decision-register.md": "1edcd73fc64f13ce7b8f10f5dfac37bdfd2c3f44e6629871dfe98d4a7d340c04",
+        "docs/project/known-issues.md": "fea44a8339b7b345fd9e43118471ea3853c99821566b564d1ac6d793b41752b1",
+        "docs/project/status.md": "53ca0a19e007f9242fbeb79e9f17b19cf158f77f8022a8a10557138cfb671d7d",
+        "docs/project/changelog.md": "58db7b8ca0aa83b25c79bb0f03e6f15f7d5c3dad5a8edbc0d20f0b53de32e539"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-23T22:29:56Z",
+      "exit_code": 0,
+      "duration_seconds": 1.686,
+      "stdout_stderr_sha256": "0d1861a6aa44921bd16bfd00feff4c602c08ec707e506c018bab5c74d29f7da5",
+      "git_head": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+      "scope_sha256": {
+        "docs/research/Arbit_FFA_M3_DvP_Plan.md": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d",
+        "libs/arbit-model/src/arbit_model/dvp/__init__.py": "bdfaa16ece99dd9b59522678812f3e55e3c394f34a7773a5e1fbebd141b5ad4e",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py": "3320502563c16fb2637a5b4c95a364ca1e7e26979d55bf5c37f37feea95aa1c6",
+        "libs/arbit-model/src/arbit_model/dvp/observations.py": "baad86e2533cdc905809d4cd8e64005385f6db1a8215e4a94194f0a5a65e9ff8",
+        "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
+        "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
+        "libs/arbit-model/src/arbit_model/dvp/results.py": "5d10b972f43e0e4e40c386b6f3165db4737834b6a21ac793ba0e0c2ad5de8852",
+        "libs/arbit-model/tests/test_dvp_observations.py": "598d50052949a49b389e4632b7c261e6ee6eba5877dbf3cf5a2dd42ebbe90aa2",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "2f6784ed435db22e8480a3fcd85951a0cf4ceb37ad2dcbfa19c6260a19b45dfd",
+        "libs/arbit-model/tests/test_dvp_asof.py": "42d11007f5c9eab960625b66c7a374537d3c02f15bd0dda9d9224ec012cce5e2",
+        "libs/arbit-model/tests/test_dvp_reliability.py": "8e2bb10afaeb8257a4e740ecbc5a52848659fd3fd5bd134c0f9af02cdba590ee",
+        "libs/arbit-model/tests/test_dvp_continuity.py": "267269377002301e7c4dfa9aca5f733f4770ccbca11205a77b6db3e591589e52",
+        "scripts/model/dvp.py": "f5f75d876bfc099dca6cc338cd12b8fa328c20e4c2f113d4135ece6502710638",
+        "config/dvp/base.json": "e4abfd1a0a6d5767c3583099b5781ce7fcbee728df441b8c4b2b3daf229b8654",
+        "docs/research/dvp/README.md": "49940a9ec62340ec67679278cb1dde87d678ec8d56dac5332e915d8098382461",
+        "docs/research/dvp/M3-3_CONTINUITY.md": "9895e483788cbbfe4d533d08efe7ffa70388d148a631318a8b29154a72399327",
+        "docs/research/dvp/continuity-manifest.json": "ec0d17468440d6265b703bfaa5306ec46f3555e488bff9942358413f7877e783",
+        "docs/research/dvp/V0_REPRODUCTION.md": "2a6a1e5991f32b190554aabecdb2072ea55ae244dc034e9e571fc998f2d9cac5",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "416bea5637629d9e03fb50214c73687a4e15e8cde1733508128367f4f1c20c18",
+        "docs/research/dvp/DATA_DICTIONARY.md": "3b8fcd64df0c303670b439405e7d612b4a98192767a00b79340d27ded60779b2",
+        "docs/research/dvp/DATA_QUALITY.md": "c816e09d168f205489122aabc7d9abd45505084c76412a2493245c0333ff674d",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "fcb7bbd1d4ae46323f4d4fb7475bb0ee983b3a0d56fd3be1f656c3ad7f2b723c",
+        "docs/research/dvp/experiment-registry.json": "bd74b2a114ed207c1e02bda2e3592c4ddc7cbe262a83ddac543b94e50c228449",
+        "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json": "7e1b7d90df35665a621e22ec41d0bd3d9789780f3f92747a01d06259dff3f824",
+        "docs/research/dvp/SCORE_FINALITY_AUDIT.json": "aaac1a838525d56ce51f847a2be69a110f5e45fd13ae33e94e098b02c838ba47",
+        "docs/research/dvp/audit-receipt.json": "9e2fc86304ea8450f36a714551500c8e4ec3a5564ea5731952f15e2c5b16cda9",
+        "docs/research/dvp/v0-reproduction.json": "824ee614efa9b77689048d64b577f616c02a82cca1d87bd40525df366495bfa8",
+        "libs/arbit-model/README.md": "8682f542c5daed0ed2de10a6d2cf65e39231adf91666207be9f817552fd9ba2c",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "a3228c8d8c762d7d650438bba337b3af3c58fece7c737ecef2d0f2a79b207037",
+        "docs/project/decision-register.md": "1edcd73fc64f13ce7b8f10f5dfac37bdfd2c3f44e6629871dfe98d4a7d340c04",
+        "docs/project/known-issues.md": "fea44a8339b7b345fd9e43118471ea3853c99821566b564d1ac6d793b41752b1",
+        "docs/project/status.md": "53ca0a19e007f9242fbeb79e9f17b19cf158f77f8022a8a10557138cfb671d7d",
+        "docs/project/changelog.md": "58db7b8ca0aa83b25c79bb0f03e6f15f7d5c3dad5a8edbc0d20f0b53de32e539"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-23T22:31:17Z",
+      "kind": "observation",
+      "note": "v0 reproduced exactly; on validated observations k: D/ST 9.1-9.2, QB 22.2 adj/29.8 raw, RB 19.5-21.0, WR 42.2-42.4, TE 42.1-43.1, K 41.8-48.9; WR/TE/K season-bootstrap intervals about 20 to over 140 games.",
+      "evidence": "docs/research/dvp/v0-reproduction.json"
+    },
+    {
+      "at": "2026-11-23T22:31:17Z",
+      "kind": "correction",
+      "note": "Earlier today I told the owner v0's defense-against-position measures were complete because player statistics use new codes everywhere. That was wrong: the targets record the opponent by comparing schedule codes, so Raiders 2016-2019 and Chargers 2016 home-game points (1,327 lines, 40 games) were credited to their own defense. Recorded as R-072 and dispositioned in V0_REPRODUCTION.md.",
+      "evidence": "docs/research/dvp/V0_REPRODUCTION.md"
+    },
+    {
+      "at": "2026-11-23T22:31:17Z",
+      "kind": "decision_proposed",
+      "note": "Repair R-072 in the canonical targets (franchise-code mapping in arbit_model.targets and the signal study), rebuild the targets as a new index, and rerun the studies; this replaces canonical scoring tables, so it needs the owner's approval under OWN-074 rule 7.",
+      "evidence": "docs/project/known-issues.md"
+    },
+    {
+      "at": "2026-11-23T22:31:17Z",
+      "kind": "assumption",
+      "note": "Merged PR #6 (slice 3b, CI green) before starting so v0 sits on main unchanged as the specification's frozen baseline; the problems found in it are dispositioned here rather than edited into v0.",
+      "evidence": "docs/research/dvp/M3-3_CONTINUITY.md"
+    }
+  ],
+  "closed_at": "2026-11-23T22:31:34Z"
+}

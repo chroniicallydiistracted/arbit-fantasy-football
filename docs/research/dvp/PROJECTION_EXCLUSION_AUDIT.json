@@ -1,0 +1,568 @@
+{
+ "admittedSources": [
+  {
+   "ancestry": "nflverse manifest f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d (the schedule the targets were built from)",
+   "columnsDropped": {
+    "away_moneyline": "betting-lines",
+    "away_spread_odds": "betting-lines",
+    "home_moneyline": "betting-lines",
+    "home_spread_odds": "betting-lines",
+    "over_odds": "betting-lines",
+    "spread_line": "betting-lines",
+    "total_line": "betting-lines",
+    "under_odds": "betting-lines"
+   },
+   "columnsUsed": [
+    "game_id",
+    "season",
+    "week",
+    "game_type",
+    "gameday",
+    "gametime",
+    "home_team",
+    "away_team",
+    "home_score",
+    "away_score"
+   ],
+   "provider": "nflverse",
+   "rows": 7548,
+   "scoringHash": null,
+   "sourceId": "nflverse.schedules",
+   "sourceType": "SCHEDULE"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2016 manifest 5f611e68fc7a90d050bc13e955a2a2fa6d46f9c208d8117787568ca7bc3ecdcc, parquet f399f15d7c9e0094cb2ea76f751d34da6bdc07361191fbf7a33313dbce0c1646",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 23888,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2017 manifest 73fb015c3cc3175b3b7445401e6311db6ba320eeab321e83b523b187bd274f0d, parquet 4edf3f17607d0f64da217401de126f6096c4cfe485713447d52979b4fdfb0bc3",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 23863,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2018 manifest 7f3fb6831ffe4690263dfd2deb3afb56a7f5e7c4897fda84e17c5b62fddee521, parquet a935164503ff2d53552b409cdad9174d3720ca8a4238c8c6114122a2da781633",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 23877,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2019 manifest e6185f6b1cf75a048c483695c796c457b805a2069432d74656c1764a942bbad9, parquet b40540faba826e5b54a30bd8bafa83bf957a5d218839d95481c104216b06c9bb",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 23848,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2020 manifest df1f2b3845ca7b0c91d71b5876f2779026ba4194c08174ccb8f3af56f7782b7c, parquet 1a983bc5a7a5b7dfcfd1ed98f17a4c57133666663a8145750aaf834dccfa0666",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 24987,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2021 manifest 02f4640c80ee3c50fa1b048af33e7dfacb03cbde42a00a7ec3b92f8553b8eb10, parquet 3b9d6e09e2c757f4ba1dab9f19ef65129e5a0ccb4e29d608a66ff741761a1cea",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 26441,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2022 manifest 1e08000146cb2aaa1b4be803e2d6bc162bcb0ec70a5fc8a0be4ac9adf3ba455d, parquet bd6a75fe093cc049df115fff4a330f4c6731f8842fa065cb0aa4818edc861dae",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 26375,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2023 manifest cd4f9a1b0c4549728c63b1cde7a4f1c7c8fa9223924060a9cd401d63d95cf6fd, parquet 849bcdaa0caff5685cdf284bae4fe75ce9b7cf10768372f6822b2f1b9caab841",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 26530,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2024 manifest b461186259c34fb84eedaaa32c278bb0b83d96105292ee8db785f59631a1464c, parquet d227a797df3c62c857140348a26d4034df209e8d0796d0bc5fe945d6f4338578",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 26586,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2025 manifest 151b69005265807f261d8480250befb626f0e22e0b24d62783c9b9d391f85444, parquet 8631f4d5b35289fb11ed7d94dfcbdb73d9da85ded5637ebe8a5ba691475c4037",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "player_id",
+    "position",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 26588,
+   "scoringHash": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "sourceId": "ffa_targets.athlete",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2016 manifest 5f611e68fc7a90d050bc13e955a2a2fa6d46f9c208d8117787568ca7bc3ecdcc, parquet 3056d01cf5abcb6e40640dea9f92c63ee6b8a01b4e851a3fc124fb43ed3b8306",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 472,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2017 manifest 73fb015c3cc3175b3b7445401e6311db6ba320eeab321e83b523b187bd274f0d, parquet f3730a2d1ab467bc46959ec5b433777d52a64b4ef5923eafcaa28b17e3c9113b",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 502,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2018 manifest 7f3fb6831ffe4690263dfd2deb3afb56a7f5e7c4897fda84e17c5b62fddee521, parquet 94b7f523ee78b79b7cd3cb80064dd798b40abe7aed26bcd4adfa291e211b3149",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 502,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2019 manifest e6185f6b1cf75a048c483695c796c457b805a2069432d74656c1764a942bbad9, parquet b89a35b14c943e8719aa6f8a6e5e3f789a698377bfc196a98c324d0e36121cc6",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 502,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2020 manifest df1f2b3845ca7b0c91d71b5876f2779026ba4194c08174ccb8f3af56f7782b7c, parquet ed6e2f2d3dfa668678363fb711038cd2fa875675be6faa14b9e450655bac3109",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 538,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2021 manifest 02f4640c80ee3c50fa1b048af33e7dfacb03cbde42a00a7ec3b92f8553b8eb10, parquet b0c79436b0ec81225367c0b83afda437a1960a4e070ff23f14983ba26073a999",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 570,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2022 manifest 1e08000146cb2aaa1b4be803e2d6bc162bcb0ec70a5fc8a0be4ac9adf3ba455d, parquet 5b760ba888071cbde1f6178cfeba742f9119379432c943f9fa8cfe2c1971910b",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 568,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2023 manifest cd4f9a1b0c4549728c63b1cde7a4f1c7c8fa9223924060a9cd401d63d95cf6fd, parquet 8eebd5ffb5c2bd38a1d8c116e3f0ba8fcfb60caf631121f77f4a5204f81232dc",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 570,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2024 manifest b461186259c34fb84eedaaa32c278bb0b83d96105292ee8db785f59631a1464c, parquet fc615220ab5e2522edfef0f84739ba4a45ab7b4df14282a711f9cb71bb4dacc6",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 570,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  },
+  {
+   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2025 manifest 151b69005265807f261d8480250befb626f0e22e0b24d62783c9b9d391f85444, parquet 252e13c0cc3f3a51b546136f4312140c9f0a82a4b61b1316c83321d5975c85d3",
+   "columnsDropped": {},
+   "columnsUsed": [
+    "season",
+    "week",
+    "season_type",
+    "game_id",
+    "team",
+    "opponent",
+    "basis",
+    "points",
+    "refusal"
+   ],
+   "provider": "arbit",
+   "rows": 570,
+   "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
+   "sourceId": "ffa_targets.defense",
+   "sourceType": "FFA_ACTUAL_FINAL"
+  }
+ ],
+ "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+ "codeScan": {
+  "files": {
+   "libs/arbit-core/src/arbit_core/rules.py": "5dd1753d9485a6761cc6a513852b6ee525e3c90d88d250b811a29c6532af03af",
+   "libs/arbit-core/src/arbit_core/scoring.py": "50d64eae40c14011938fbf99f3a3b6c367a700342eeeeb4f888478da4aac9474",
+   "libs/arbit-data/src/arbit_data/nflverse/stat_lines.py": "dd97eaf4dc70ddebc160bae538ed92f1d153c7954034a81f401e25ac7de5998a",
+   "libs/arbit-model/src/arbit_model/dvp/__init__.py": "bdfaa16ece99dd9b59522678812f3e55e3c394f34a7773a5e1fbebd141b5ad4e",
+   "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
+   "libs/arbit-model/src/arbit_model/dvp/observations.py": "baad86e2533cdc905809d4cd8e64005385f6db1a8215e4a94194f0a5a65e9ff8",
+   "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
+   "libs/arbit-model/src/arbit_model/dvp/results.py": "5d10b972f43e0e4e40c386b6f3165db4737834b6a21ac793ba0e0c2ad5de8852",
+   "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+   "libs/arbit-model/src/arbit_model/inputs.py": "729ae321b32cf4e5659fc5b00077fab8a966dce4f6c3992fc4dd21354d803729",
+   "libs/arbit-model/src/arbit_model/storage.py": "05d4f7a99664a546f2eec102362644d4401d969af9835517ca95d3dd21c30a62",
+   "libs/arbit-model/src/arbit_model/targets.py": "91655bd0f290ddca99b4c48c0155094c29856631cf17b4b04e0e6aff1a64468f",
+   "scripts/model/build_targets.py": "f7e3b5862c308ac266c2ac0fa750d7460da16863393b3d2bfd266fd15d00b406",
+   "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
+   "scripts/model/dvp.py": "f5f75d876bfc099dca6cc338cd12b8fa328c20e4c2f113d4135ece6502710638",
+   "scripts/model/ffa_signal_study.py": "3f23dc7a764ed491b242b6ba85540d0dafae5f541f0de019a3e7726747eb04d4"
+  },
+  "findings": [],
+  "policyFileNotScanned": "libs/arbit-model/src/arbit_model/dvp/provenance.py (it names the forbidden tokens to forbid them)"
+ },
+ "forbiddenInventory": [
+  {
+   "action": "REJECT",
+   "decision": "OWN-061",
+   "guard": "ESPN readers keep statSourceId 0 (actuals) only; no DvP source reads ESPN",
+   "reachableFromDvp": false,
+   "reason": "ESPN's pregame fantasy projection",
+   "source": "ESPN projected stat blocks (statSourceId 1)",
+   "where": "raw ESPN league and player responses Arbit stores"
+  },
+  {
+   "action": "REJECT",
+   "decision": "OWN-061",
+   "guard": "field catalog rule espn-draft-projections (excluded); not a DvP source",
+   "reachableFromDvp": false,
+   "reason": "another provider's projections",
+   "source": "ESPN draft probabilities and analyst ranks",
+   "where": "nflverse misc/espn_draft_player_probs, misc/espn_draft_position_probs"
+  },
+  {
+   "action": "REJECT",
+   "decision": "OWN-061",
+   "guard": "field catalog rule ffopportunity (excluded); not a DvP source",
+   "reachableFromDvp": false,
+   "reason": "another provider's fantasy model and points",
+   "source": "ffopportunity expected fantasy points",
+   "where": "nflverse ff_opportunity"
+  },
+  {
+   "action": "REJECT",
+   "decision": "OWN-061",
+   "guard": "field catalog rule dynastyprocess-values (excluded); not a DvP source",
+   "reachableFromDvp": false,
+   "reason": "provider rankings and projections",
+   "source": "DynastyProcess and FantasyPros values, rankings and projections",
+   "where": "nflverse dynastyprocess"
+  },
+  {
+   "action": "REJECT",
+   "decision": "OWN-061",
+   "guard": "field catalog rule generic-fantasy-points (excluded); dropped on admission",
+   "reachableFromDvp": false,
+   "reason": "actual points under upstream scoring, not FFA's rules: never a substitute for FFA scoring",
+   "source": "Generic fantasy points (fantasy_points, fantasy_points_ppr)",
+   "where": "nflverse stats_player and other weekly statistics"
+  },
+  {
+   "action": "REJECT",
+   "decision": "OWN-061",
+   "guard": "not a DvP source; arbit_model.dvp imports nothing from arbit_data.sleeper",
+   "reachableFromDvp": false,
+   "reason": "another provider's projections",
+   "source": "Sleeper projections and rankings",
+   "where": "arbit_data.sleeper (supplemental directory reads)"
+  },
+  {
+   "action": "REJECT",
+   "decision": "OWN-067",
+   "guard": "field catalog rule betting-lines (excluded); dropped on admission",
+   "reachableFromDvp": false,
+   "reason": "a market forecast, gated to the Q-014 study",
+   "source": "Betting lines (spread, total, moneyline, vegas win probability)",
+   "where": "nflverse schedules and play-by-play"
+  }
+ ],
+ "forbidden_vendor_projection_dependencies": 0,
+ "format": "arbit-dvp-m3-3-projection-exclusion-v1",
+ "generatedAt": "2026-11-23T22:25:17.587356+00:00",
+ "runId": "phase1-audit-20261123T222517Z",
+ "slice2Agreement": "docs/research/ffa-targets-check-2026-11-10.json: 10,734 of 10,771 2026 lines equal ESPN's actual applied totals (actual blocks only; an audit, not an input)",
+ "status": "PASSED",
+ "targetInputFamilies": {
+  "allowed": [
+   "pbp",
+   "players",
+   "schedules",
+   "snap_counts",
+   "stats_player",
+   "stats_team",
+   "weekly_rosters"
+  ],
+  "seen": [
+   "pbp",
+   "players",
+   "schedules",
+   "snap_counts",
+   "stats_player",
+   "stats_team",
+   "weekly_rosters"
+  ]
+ }
+}

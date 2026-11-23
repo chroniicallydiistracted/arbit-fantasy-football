@@ -1,0 +1,131 @@
+{
+ "eligibility": "A game's FFA actuals count from 12:00 UTC the day after its game day. Arbit first read these seasons' files in 2026, so every value is the final revision; when a stat correction first appeared is unknown and cannot be replayed (backtest limitation).",
+ "format": "arbit-dvp-m3-3-score-finality-v1",
+ "generatedAt": "2026-11-23T22:25:17.587356+00:00",
+ "policy": {
+  "availability_rule": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+  "default_cutoff": "pre_first_game_of_nfl_week",
+  "finalized_actual_available_by_forecast_cutoff": true,
+  "per_game_update_is_separate_experiment": true,
+  "required_game_status": "completed_and_finalized",
+  "target_labels_join_only_after_forecasts_frozen": true
+ },
+ "runId": "phase1-audit-20261123T222517Z",
+ "seasons": {
+  "2016": {
+   "completedGames": 256,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2016": "2026-10-31T09:19:38.892775+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2016": "2026-10-31T09:28:38.172604+00:00",
+    "stats_team/stats_team_week_2016": "2026-10-31T09:29:59.533964+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 256
+  },
+  "2017": {
+   "completedGames": 256,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2017": "2026-10-31T09:19:42.421274+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2017": "2026-10-31T09:28:40.426766+00:00",
+    "stats_team/stats_team_week_2017": "2026-10-31T09:30:00.228408+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 256
+  },
+  "2018": {
+   "completedGames": 256,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2018": "2026-10-31T09:19:51.159317+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2018": "2026-10-31T09:28:39.712282+00:00",
+    "stats_team/stats_team_week_2018": "2026-10-31T09:30:00.916371+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 256
+  },
+  "2019": {
+   "completedGames": 256,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2019": "2026-10-31T09:19:49.251393+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2019": "2026-10-31T09:28:41.413216+00:00",
+    "stats_team/stats_team_week_2019": "2026-10-31T09:30:01.620859+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 256
+  },
+  "2020": {
+   "completedGames": 256,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2020": "2026-10-31T09:19:58.151631+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2020": "2026-10-31T09:28:46.594555+00:00",
+    "stats_team/stats_team_week_2020": "2026-10-31T09:30:02.321210+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 256
+  },
+  "2021": {
+   "completedGames": 272,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2021": "2026-10-31T09:20:00.429803+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2021": "2026-10-31T09:28:42.308224+00:00",
+    "stats_team/stats_team_week_2021": "2026-10-31T09:30:03.023832+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 272
+  },
+  "2022": {
+   "completedGames": 271,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2022": "2026-10-31T09:20:04.390277+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2022": "2026-10-31T09:28:43.107418+00:00",
+    "stats_team/stats_team_week_2022": "2026-10-31T09:30:08.707966+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 271
+  },
+  "2023": {
+   "completedGames": 272,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2023": "2026-10-31T09:20:06.331416+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2023": "2026-10-31T09:28:43.854002+00:00",
+    "stats_team/stats_team_week_2023": "2026-10-31T09:30:04.434217+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 272
+  },
+  "2024": {
+   "completedGames": 272,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2024": "2026-10-31T09:20:08.372121+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2024": "2026-10-31T09:28:44.933327+00:00",
+    "stats_team/stats_team_week_2024": "2026-10-31T09:30:05.111324+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 272
+  },
+  "2025": {
+   "completedGames": 272,
+   "inputsFirstObservedByArbit": {
+    "pbp/play_by_play_2025": "2026-10-31T09:20:11.116016+00:00",
+    "schedules/games": "2026-11-10T03:59:33.089590+00:00",
+    "stats_player/stats_player_week_2025": "2026-10-31T09:28:45.794837+00:00",
+    "stats_team/stats_team_week_2025": "2026-10-31T09:30:05.841231+00:00"
+   },
+   "notCompleted": [],
+   "scheduledGames": 272
+  }
+ },
+ "status": "PASSED_WITH_LIMITATION",
+ "targetsBuilt": {
+  "finishedAt": "2026-11-10T05:33:20.382948+00:00",
+  "startedAt": "2026-11-10T05:32:20.750329+00:00"
+ }
+}
