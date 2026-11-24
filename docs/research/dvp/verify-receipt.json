@@ -4,7 +4,7 @@
   "schedule_games.parquet": true
  },
  "auditRun": "phase1-audit-20261124T024442Z",
- "code": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
+ "code": "f3ceabf1935421dfaf60ad6aecbec7f2e218966c",
  "format": "arbit-dvp-m3-3-verify-v1",
  "frozen": {
   "changedInWorkingTreeSinceFreeze": [
@@ -30,7 +30,7 @@
   },
   "rule": "Frozen stages (holdout, prospective) run from the frozen commit's tree, which matches every frozen hash; the working tree may differ only outside the method"
  },
- "generatedAt": "2026-11-24T06:56:53.960355+00:00",
+ "generatedAt": "2026-11-24T07:06:37.035524+00:00",
  "polarsMaxThreads": "2",
  "receiptsVerified": {
   "backtest-development.json": "18e7bceb116401d39a4e0114607c2d1dfdbe82b707f31de0074654ff50564530",
