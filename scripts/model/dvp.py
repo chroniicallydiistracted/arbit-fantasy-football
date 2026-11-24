@@ -87,8 +87,9 @@ def code_version() -> str:
     head = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
     ).stdout.strip()
+    # Code, not receipts: the runs themselves rewrite docs/research/dvp between steps.
     dirty = subprocess.run(
-        ["git", "status", "--porcelain", "--untracked-files=no"],
+        ["git", "status", "--porcelain", "--untracked-files=no", "--", ".", ":(exclude)docs"],
         cwd=ROOT,
         capture_output=True,
         text=True,

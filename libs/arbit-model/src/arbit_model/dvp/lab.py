@@ -784,11 +784,16 @@ def rank_agreement(raw: pl.DataFrame, adjusted: pl.DataFrame) -> dict[str, Any]:
             .agg(pl.col("value").mean().alias(name))
         )
 
-    joined = season_means(raw, "raw").join(season_means(adjusted, "adj"), on=["entity", "season"])
+    joined = (
+        season_means(raw, "raw")
+        .join(season_means(adjusted, "adj"), on=["entity", "season"])
+        .sort("season", "entity")
+    )
     rhos, moved, units = [], 0, 0
     for (_,), part in joined.group_by(["season"], maintain_order=True):
-        raw_rank = part.get_column("raw").rank("ordinal").to_numpy()
-        adj_rank = part.get_column("adj").rank("ordinal").to_numpy()
+        # Average ranks for ties, so the result never depends on row order (T13).
+        raw_rank = part.get_column("raw").rank("average").to_numpy()
+        adj_rank = part.get_column("adj").rank("average").to_numpy()
         r = corr(raw_rank.astype(np.float64), adj_rank.astype(np.float64), minimum=3)
         if r is not None:
             rhos.append(r)

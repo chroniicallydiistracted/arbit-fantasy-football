@@ -277,3 +277,15 @@ def test_svg_plots_are_deterministic_and_titled():
     assert math.isfinite(
         len(svg.histograms("n", [("QB", "QB", [0.0, 0.1, -0.1], 0.3)], xlabel="r", note=""))
     )
+
+
+def test_t13_rank_agreement_does_not_depend_on_row_order():
+    frame = synthetic(units=64, seasons=2, tau=1.0, sigma=3.0)
+    # Round to create ties among unit-season means.
+    frame = frame.with_columns(pl.col("points").round(0))
+    raw, adjusted = lab.adjust(frame, "none"), lab.adjust(frame, "season")
+    forward = lab.rank_agreement(raw, adjusted)
+    backward = lab.rank_agreement(
+        raw.reverse(), adjusted.sample(fraction=1.0, shuffle=True, seed=3)
+    )
+    assert forward == backward
