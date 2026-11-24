@@ -59,6 +59,7 @@ SCANNED = (
     "libs/arbit-model/src/arbit_model/dvp/results.py",
     "libs/arbit-model/src/arbit_model/dvp/lab.py",
     "libs/arbit-model/src/arbit_model/dvp/svg.py",
+    "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
     "libs/arbit-model/src/arbit_model/teams.py",
     "scripts/model/dvp.py",
     "scripts/model/defense_position_study.py",
@@ -1918,6 +1919,287 @@ def _phase_a_records(
     return out
 
 
+# --- Phase 3: the walk-forward backtest (B00-B12) ---------------------------------------------
+
+TOUCHDOWN_COMPONENTS = ("pass_td", "rush_td", "rec_td", "return_td")
+
+
+def backtest(args: argparse.Namespace) -> None:
+    """Development folds (2017-2023, with tuning) or the 2024 validation from frozen candidates.
+    The holdout (2025) is refused here."""
+    from arbit_model.dvp import asof
+    from arbit_model.dvp import walkforward as wf
+
+    config = json.loads(args.config.read_text())
+    base = json.loads((ROOT / config["base"]).read_text())
+    stage = args.stage
+    seasons: list[int] = config["stages"][stage]
+    wf.check_stage(stage, seasons, base["split"])
+    started = datetime.now(UTC)
+    run = args.run
+    run_manifest = json.loads((run / "run-manifest.json").read_text())
+    if run_manifest["targetsIndex"] != base["targets_index"]:
+        raise SystemExit("the audit run read a different targets index from the configured one")
+    for name, digest in run_manifest["outputs"].items():
+        if sha256(run / name) != digest:
+            raise SystemExit(f"{name} changed since the audit run wrote it")
+    observations = pl.read_parquet(run / "observations.parquet")
+    schedule = pl.read_parquet(run / "schedule_games.parquet")
+    observations = _with_nontd(observations, _contribution_cells(args.targets, base, observations))
+    rows = wf.prepare(observations)
+    positions: list[str] = base["position_groups"]
+    seed, reps = base["random_seed"], base["bootstrap_replicates"]
+    candidates_path = ROOT / config["candidates"]
+    candidates = None
+    if stage == "validation":
+        if not candidates_path.exists():
+            raise SystemExit("validation needs the candidates frozen after development")
+        candidates = json.loads(candidates_path.read_text())
+
+    def run_stage(settings: Any) -> tuple[pl.DataFrame, dict[str, Any]]:
+        joined, folds = [], {}
+        for season in seasons:
+            params = wf.fit_fold(rows, season, positions)
+            frozen = wf.walk(rows, schedule, params, positions, settings)
+            joined.append(wf.evaluate(frozen, rows, season))
+            folds[str(season)] = params.summary()
+        return pl.concat(joined), folds
+
+    settings = wf.Settings(
+        mode=asof.Cutoff(config["cutoff"]),
+        k_grid=tuple(config["k_grid"]),
+        half_lives=tuple(config["half_lives"]),
+        seed=seed,
+    )
+    joined, folds = run_stage(settings)
+    out = run / f"backtest-{stage}"
+    out.mkdir(exist_ok=True)
+    joined.write_parquet(out / "forecasts.parquet")
+    block = "season" if len(seasons) > 1 else "week"
+    variants = sorted(c for c in joined.columns if c.startswith("b0") and c not in ("b00_nontd",))
+    week_bin = _bin_expr("week", config["week_bins"])
+    history_bin = _bin_expr("n_d", config["history_bins"])
+    by_position: dict[str, Any] = {}
+    for pos in positions:
+        part = joined.filter(pl.col("position") == pos).with_columns(
+            week_bin.alias("weekBin"), history_bin.alias("historyBin")
+        )
+        entry = wf.metrics(part, variants, block=block, reps=reps, seed=seed)
+        entry["calibrationB00"] = wf.calibration(part, "b00")
+        by_position[pos] = entry
+    selection = _select(by_position, positions, config) if stage == "development" else None
+    chosen = selection if selection is not None else candidates
+    assert chosen is not None
+    for pos in positions:
+        part = joined.filter(pl.col("position") == pos).with_columns(
+            week_bin.alias("weekBin"), history_bin.alias("historyBin")
+        )
+        focus = chosen["positions"][pos]["bestDvp"]
+        by_position[pos]["focus"] = {
+            "variant": focus,
+            "bySeason": wf.breakdown(part, focus, "season"),
+            "byWeek": wf.breakdown(part, focus, "weekBin"),
+            "byOpponentGames": wf.breakdown(part, focus, "historyBin"),
+            "calibration": wf.calibration(part, focus),
+        }
+
+    # B10: per-game cutoffs; B12: a slower availability rule. B00 and B03 only.
+    sensitivity: dict[str, Any] = {}
+    for label, variant_settings in (
+        (
+            "B10_perGame",
+            wf.Settings(mode=asof.Cutoff.PER_GAME, k_grid=(), half_lives=(), seed=seed),
+        ),
+        (
+            "B12_delay48h",
+            wf.Settings(
+                mode=asof.Cutoff(config["cutoff"]),
+                k_grid=(),
+                half_lives=(),
+                availability_delay=timedelta(hours=config["availability_delay_hours_b12"]),
+                seed=seed,
+            ),
+        ),
+    ):
+        alt, _ = run_stage(variant_settings)
+        compare = joined.select(
+            "game_id",
+            "offense",
+            "position",
+            "season",
+            "week",
+            "points",
+            pl.col("b00").alias("b00_default"),
+            pl.col("b03").alias("b03_default"),
+            pl.col("n_d").alias("n_d_default"),
+        ).join(
+            alt.select("game_id", "offense", "position", "b00", "b03", "n_d"),
+            on=["game_id", "offense", "position"],
+            how="inner",
+        )
+        sensitivity[label] = {
+            pos: _sensitivity(compare.filter(pl.col("position") == pos), block, reps, seed)
+            for pos in positions
+        }
+
+    report = {
+        "format": FORMAT + f"-backtest-{stage}-v1",
+        "generatedAt": started.isoformat(),
+        "code": code_version(),
+        "auditRun": run.name,
+        "targetsIndex": base["targets_index"],
+        "config": {"path": str(args.config), "sha256": sha256(args.config)},
+        "polarsMaxThreads": os.environ.get("POLARS_MAX_THREADS"),
+        "stage": stage,
+        "seasons": seasons,
+        "cutoff": config["cutoff"],
+        "seed": seed,
+        "bootstrapReplicates": reps,
+        "bootstrapBlock": block,
+        "practicalMinimumRelativeRmse": config["practical_minimum_relative_rmse"],
+        "folds": folds,
+        "results": by_position,
+        "sensitivity": sensitivity,
+        "forecastsSha256": sha256(out / "forecasts.parquet"),
+        "forbidden_vendor_projection_dependencies": 0,
+        "holdout": "not run: 2025 needs a frozen manifest (Phase 4)",
+    }
+    if stage == "development":
+        assert selection is not None
+        report["selection"] = selection
+        write_json(args.receipts / "backtest-development.json", report)
+        frozen = {
+            "format": FORMAT + "-frozen-candidates-v1",
+            "frozenAt": started.isoformat(),
+            "fromDevelopment": {
+                "receipt": "docs/research/dvp/backtest-development.json",
+                "code": report["code"],
+                "auditRun": run.name,
+                "forecastsSha256": report["forecastsSha256"],
+            },
+            "practicalMinimumRelativeRmse": config["practical_minimum_relative_rmse"],
+        } | selection
+        write_json(candidates_path, frozen)
+    else:
+        assert candidates is not None
+        report["candidates"] = {
+            "path": config["candidates"],
+            "sha256": sha256(candidates_path),
+            "frozenAt": candidates["frozenAt"],
+        }
+        report["validationOfCandidates"] = {
+            pos: _validate_candidate(by_position[pos], candidates["positions"][pos], config)
+            for pos in positions
+        }
+        write_json(args.receipts / "backtest-validation.json", report)
+    print(f"backtest {stage}: {joined.height} forecasts over {seasons}")
+
+
+def _with_nontd(observations: pl.DataFrame, parts: dict[str, pl.DataFrame]) -> pl.DataFrame:
+    """Each valid cell's points without touchdown components (for B07)."""
+    frames = []
+    for pos, table in parts.items():
+        touchdowns = [c for c in TOUCHDOWN_COMPONENTS if c in table.columns]
+        frames.append(
+            table.select(
+                "game_id",
+                "offense",
+                "defense",
+                pl.lit(pos).alias("position"),
+                pl.sum_horizontal([pl.col(c) for c in touchdowns] or [pl.lit(0.0)]).alias("_td"),
+            )
+        )
+    tds = pl.concat(frames)
+    joined = observations.join(tds, on=["game_id", "offense", "defense", "position"], how="left")
+    return joined.with_columns(
+        pl.when(pl.col("status") == obs.VALID)
+        .then(pl.col("points") - pl.col("_td").fill_null(0.0))
+        .otherwise(None)
+        .alias("nontd")
+    ).drop("_td")
+
+
+def _bin_expr(column: str, bins: list[list[int]]) -> pl.Expr:
+    expr = pl.lit(None, dtype=pl.String)
+    for low, high in reversed(bins):
+        expr = (
+            pl.when(pl.col(column).fill_null(0).is_between(low, high))
+            .then(pl.lit(f"{low}-{high}"))
+            .otherwise(expr)
+        )
+    return expr
+
+
+def _select(
+    by_position: dict[str, Any], positions: list[str], config: dict[str, Any]
+) -> dict[str, Any]:
+    """Tuned settings and each position's candidate, from development folds only."""
+    minimum = config["practical_minimum_relative_rmse"]
+    out: dict[str, Any] = {"positions": {}}
+    for pos in positions:
+        result = by_position[pos]
+        k_best = min(
+            (name for name in result if name.startswith("b04_k")), key=lambda n: result[n]["rmse"]
+        )
+        h_best = min(
+            (name for name in result if name.startswith("b05_h")), key=lambda n: result[n]["rmse"]
+        )
+        pool = [v for v in ("b01", "b02", "b02r", "b03", "b03r", "b06", "b07") if v in result]
+        pool += [k_best, h_best]
+        best = min(pool, key=lambda n: result[n]["rmse"])
+        relative = result[best]["relativeDelta"]
+        out["positions"][pos] = {
+            "b04Selected": k_best,
+            "b05Selected": h_best,
+            "bestDvp": best,
+            "bestRelativeDelta": relative,
+            "bestDelta95": result[best]["delta95"],
+            "candidate": best if relative is not None and relative <= -minimum else "b00",
+            "rule": f"best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by "
+            f"at least {minimum:.0%}",
+        }
+    return out
+
+
+def _validate_candidate(
+    result: dict[str, Any], frozen: dict[str, Any], config: dict[str, Any]
+) -> dict[str, Any]:
+    best = frozen["bestDvp"]
+    entry = result[best]
+    return {
+        "candidate": frozen["candidate"],
+        "bestDvp": best,
+        "developmentRelativeDelta": frozen["bestRelativeDelta"],
+        "validationRelativeDelta": entry["relativeDelta"],
+        "validationDelta95": entry["delta95"],
+        "sameDirection": (entry["relativeDelta"] or 0) < 0,
+        "meetsPracticalMinimum": (entry["relativeDelta"] or 0)
+        <= -config["practical_minimum_relative_rmse"],
+    }
+
+
+def _sensitivity(compare: pl.DataFrame, block: str, reps: int, seed: int) -> dict[str, Any]:
+    from arbit_model.dvp import walkforward as wf
+
+    y = compare.get_column("points").to_numpy()
+    out: dict[str, Any] = {"rows": compare.height}
+    for name in ("b00", "b03"):
+        default = compare.get_column(f"{name}_default").to_numpy()
+        alt = compare.get_column(name).to_numpy()
+        out[name] = {
+            "rmseDefault": round(wf._rmse(default, y), 4),
+            "rmseAlternative": round(wf._rmse(alt, y), 4),
+            "rowsChanged": int((abs(alt - default) > 1e-9).sum()),
+        }
+    for key, column in (
+        ("meanOpponentGamesDefault", "n_d_default"),
+        ("meanOpponentGamesAlternative", "n_d"),
+    ):
+        values = compare.get_column(column).fill_null(0).cast(pl.Float64).to_numpy()
+        out[key] = round(float(values.mean()), 3) if values.size else None
+    return out
+
+
 def _pair(value: tuple[float, float] | None) -> list[float] | None:
     return None if value is None else [round(value[0], 4), round(value[1], 4)]
 
@@ -1940,6 +2222,12 @@ def main() -> None:
     q.add_argument("--targets", type=Path, required=True)
     q.add_argument("--run", type=Path, required=True)
     q.add_argument("--receipts", type=Path, required=True)
+    b = commands.add_parser("backtest")
+    b.add_argument("--config", type=Path, required=True)
+    b.add_argument("--stage", choices=("development", "validation"), required=True)
+    b.add_argument("--targets", type=Path, required=True)
+    b.add_argument("--run", type=Path, required=True)
+    b.add_argument("--receipts", type=Path, required=True)
     g = commands.add_parser("registry")
     g.add_argument("--config", type=Path, required=True)
     g.add_argument("--receipts", type=Path, required=True)
@@ -1948,6 +2236,7 @@ def main() -> None:
         "audit": audit,
         "reproduce-v0": reproduce,
         "reliability": reliability,
+        "backtest": backtest,
         "registry": registry,
     }[args.command](args)
 
