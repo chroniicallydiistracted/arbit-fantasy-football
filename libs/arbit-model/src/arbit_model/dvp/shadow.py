@@ -22,14 +22,14 @@ frozen files are never edited (config/dvp/frozen.json pins their hashes).
 
 import hashlib
 import json
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Any
 
 import numpy as np
 import polars as pl
 
-from arbit_model.dvp import asof
+from arbit_model.dvp import asof, contract
 from arbit_model.dvp import observations as obs
 from arbit_model.dvp import walkforward as wf
 from arbit_model.dvp.provenance import LineageError
@@ -96,6 +96,16 @@ def scheduled_targets(
     return pl.concat(frames).select(TARGET_COLUMNS).sort("position", "game_id", "offense")
 
 
+# Exploratory estimators add columns per cutoff from the same feature view and baselines:
+# extra(forecast, hist, pit, params) -> forecast with more columns (arbit_model.dvp.explore).
+Extra = Callable[[pl.DataFrame, pl.DataFrame, pl.DataFrame, wf.FoldParams], pl.DataFrame]
+
+
+def prepare_checked(observations: pl.DataFrame, scoring: Mapping[str, str]) -> pl.DataFrame:
+    """`walkforward.prepare` after every row's lineage passes the contract (owner audit AUD-04)."""
+    return wf.prepare(contract.enforce(observations, scoring))
+
+
 def walk_targets(
     rows: pl.DataFrame,
     targets: pl.DataFrame,
@@ -103,6 +113,7 @@ def walk_targets(
     params: wf.FoldParams,
     positions: Sequence[str],
     settings: wf.Settings,
+    extra: Extra | None = None,
 ) -> asof.FrozenForecasts:
     """The frozen walk-forward forecasts for explicitly given targets of `params.season`.
 
@@ -110,7 +121,8 @@ def walk_targets(
     from the schedule, then per cutoff the feature view, B00, the non-touchdown B00, the opposing
     units' terms and the variants, accumulating each cutoff's B00 as the point-in-time baseline of
     later residuals. Targets of earlier cutoffs must be included, because later residuals need
-    their B00. Returns frozen forecasts with no label column."""
+    their B00. `extra` may add exploratory columns; it sees the same view and baselines and never
+    changes a frozen column. Returns frozen forecasts with no label column."""
     s = params.season
     if settings.availability_delay:
         rows = rows.with_columns(pl.col("available_at") + settings.availability_delay)
@@ -144,6 +156,12 @@ def walk_targets(
         forecast = wf._b00(forecast, hist, previous, params, "nontd", "b00_nontd")
         terms = wf._opponent_terms(hist, pit, params, settings)
         forecast = wf._variants(forecast, terms, previous, params, settings, rng, hist)
+        if extra is not None:
+            frozen_columns = forecast.columns
+            added = extra(forecast, hist, pit, params)
+            if added.select(frozen_columns).equals(forecast) is False:
+                raise LineageError("EXTRA_CHANGED_FROZEN", "an exploratory hook altered a column")
+            forecast = added
         out.append(forecast.with_columns(pl.lit(cutoff).alias("feature_as_of")))
         pit = pl.concat(
             [

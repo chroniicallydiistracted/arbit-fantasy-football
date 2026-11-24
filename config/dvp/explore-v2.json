@@ -1,0 +1,29 @@
+{
+  "format": "arbit-dvp-m3-3-explore-config-v2",
+  "workstream_id": "M3-3",
+  "version": "explore-v2",
+  "classification": "EXPLORATORY",
+  "declaredAt": "2026-11-24, before any explore-v2 result was computed (TASK-20261124-007)",
+  "why": "Owner audit AUD-05 (remediation 5) and AUD-03 (remediation 3). Every estimator here came after the 2025 holdout was inspected, so no result here is confirmatory, and none changes the frozen candidates or the 2026 confirmation (config/dvp/frozen.json, frozen-phase-c.json, prospective.json).",
+  "stages": {
+    "1 targets": "Scheduled targets: every scheduled regular-season team-game and position group from the schedule, whatever its eventual label (arbit_model.dvp.shadow.scheduled_targets).",
+    "2 features": "Point-in-time features: the frozen audit run's observations, each row checked against the row contract (arbit_model.dvp.contract), as of each preweek cutoff.",
+    "3 forecasts": "Forecast-only outputs: the frozen walk's steps (shadow.walk_targets) plus the exploratory estimators below; no label, score or status column.",
+    "4 persistence": "Each stage's forecasts written once to artifacts/dvp/explore-v2/<run>/ with SHA-256 in a manifest, before any label is read.",
+    "5 labels": "Actual outcomes read in a separate command from the observations, after the forecasts' hashes are checked.",
+    "6 join": "Labels joined to forecasts by (game_id, offense, position) without dropping a target (shadow.attach_labels).",
+    "7 coverage": "Targets and label status (valid, invalid_*, missing) per stage and position; only valid labels enter metrics."
+  },
+  "seasons": "Development 2017-2023 (rolling origin), validation 2024, holdout 2025 (already inspected: exploratory here), as config/dvp/backtest.json.",
+  "estimators": {
+    "b05w3": "Rolling 3-game window: mean of the opposing unit's last 3 point-in-time residuals this season, shrunk n3 / (n3 + k_dvp), n3 = min(3, games); zero with no game.",
+    "b05w5": "Rolling 5-game window, likewise.",
+    "b05w8": "Rolling 8-game window, likewise.",
+    "b03sh": "B03 with the original v0 split-half k fit on the training seasons only: odd/even NFL-week halves of leave-one-out-adjusted unit-season points, at least 4 games per half, k = m(1 - r)/r with m the mean half size; no weight when r <= 0."
+  },
+  "comparisons": "On common rows with valid labels: every estimator's RMSE, MAE, mean error and Spearman against B00 with the frozen block bootstrap (seasons in development, weeks otherwise; 2,000 replicates, seed 1729); and against the existing B03 (REML k), B04 (grid-tuned k), B05 (exponential recency) and B06 (last-season prior). The split-half k is reported beside the REML k per fold.",
+  "reproduction": "The frozen variants' metrics from these decoupled stages must equal the committed v1 receipts (backtest-*.json) on the same valid rows; any difference is reported.",
+  "decision": "None. Results are descriptive; an estimator that looks better can only be proposed for a new, separately frozen test on future games.",
+  "write_to_production": false,
+  "forbidden_vendor_projection_dependencies": 0
+}

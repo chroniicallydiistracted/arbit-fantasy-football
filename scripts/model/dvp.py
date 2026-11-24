@@ -35,6 +35,7 @@ from arbit_core.rules import RuleSet
 from arbit_data.db import UnitOfWork
 from arbit_data.league_policy import read_policy
 from arbit_data.nflverse.objects import ObjectStore
+from arbit_model.dvp import contract
 from arbit_model.dvp import observations as obs
 from arbit_model.dvp import reliability as rel
 from arbit_model.dvp.provenance import FORBIDDEN, SOURCES, Admission, admit, scan_code
@@ -63,9 +64,12 @@ SCANNED = (
     "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
     "libs/arbit-model/src/arbit_model/dvp/decisions.py",
     "libs/arbit-model/src/arbit_model/dvp/shadow.py",
+    "libs/arbit-model/src/arbit_model/dvp/contract.py",
+    "libs/arbit-model/src/arbit_model/dvp/explore.py",
     "libs/arbit-model/src/arbit_model/teams.py",
     "scripts/model/dvp.py",
     "scripts/model/dvp_prospective.py",
+    "scripts/model/dvp_explore.py",
     "scripts/model/defense_position_study.py",
     "scripts/model/ffa_signal_study.py",
     "scripts/model/build_targets.py",
@@ -176,9 +180,18 @@ def load_index(targets: Path, digest: str) -> dict[str, Any]:
     return index
 
 
+def verified_object(targets: Path, digest: str) -> Path:
+    """A content-addressed store object whose bytes still match its digest (owner audit AUD-04):
+    a file named by a digest is not trusted until its content is hashed."""
+    path = targets / "objects" / digest
+    if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+        raise SystemExit(f"store object {digest[:12]} does not match its digest")
+    return path
+
+
 def season_manifest(targets: Path, index: dict[str, Any], season: int) -> dict[str, Any]:
     manifest: dict[str, Any] = json.loads(
-        (targets / "objects" / index["seasons"][str(season)]).read_bytes()
+        verified_object(targets, index["seasons"][str(season)]).read_bytes()
     )
     return manifest
 
@@ -191,7 +204,7 @@ def read_targets(
     for season in config["seasons"]:
         manifest = season_manifest(targets, index, season)
         digest = manifest["tables"][role]["parquet"]
-        path = targets / "objects" / digest
+        path = verified_object(targets, digest)
         admitted = admit(
             pl.read_parquet(path, columns=list(SOURCES[source_id].used)),
             source_id,
@@ -1020,7 +1033,10 @@ def reliability(args: argparse.Namespace) -> None:
     for name, digest in run_manifest["outputs"].items():
         if sha256(run / name) != digest:
             raise SystemExit(f"{name} changed since the audit run wrote it")
-    observations = pl.read_parquet(run / "observations.parquet")
+    observations = contract.enforce(
+        pl.read_parquet(run / "observations.parquet"),
+        json.loads((ROOT / "config/dvp/base.json").read_text())["expected_scoring"],
+    )
     schedule = pl.read_parquet(run / "schedule_games.parquet")
     seed, reps = base["random_seed"], base["bootstrap_replicates"]
     min_games = base["min_split_half_games"]
@@ -1465,7 +1481,7 @@ def _contribution_cells(
         manifest = season_manifest(targets, index, season)
         for role in ("athlete", "defense"):
             digest = manifest["tables"][role]["parquet"]
-            path = targets / "objects" / digest
+            path = verified_object(targets, digest)
             spec = SOURCES[f"ffa_targets.{role}_contributions"]
             admitted = admit(
                 pl.read_parquet(path, columns=list(spec.used)),
@@ -2011,7 +2027,10 @@ def backtest(args: argparse.Namespace) -> None:
     for name, digest in run_manifest["outputs"].items():
         if sha256(run / name) != digest:
             raise SystemExit(f"{name} changed since the audit run wrote it")
-    observations = pl.read_parquet(run / "observations.parquet")
+    observations = contract.enforce(
+        pl.read_parquet(run / "observations.parquet"),
+        json.loads((ROOT / "config/dvp/base.json").read_text())["expected_scoring"],
+    )
     schedule = pl.read_parquet(run / "schedule_games.parquet")
     observations = _with_nontd(observations, _contribution_cells(args.targets, base, observations))
     rows = wf.prepare(observations)
@@ -2926,7 +2945,10 @@ def sitstart(args: argparse.Namespace) -> None:
     model = candidates["positions"][position]["candidate"]
     if not config["candidate"].startswith(model + ","):
         problems.append(f"declared candidate is not the frozen {model}")
-    observations = pl.read_parquet(run / "observations.parquet")
+    observations = contract.enforce(
+        pl.read_parquet(run / "observations.parquet"),
+        json.loads((ROOT / "config/dvp/base.json").read_text())["expected_scoring"],
+    )
     models = ("b00", model)
     periods: dict[str, Any] = {}
     checks: dict[str, Any] = {}
@@ -3162,7 +3184,10 @@ def verify(args: argparse.Namespace) -> None:
     }
     manifest = json.loads((run / "run-manifest.json").read_text())
     out["auditOutputs"] = {n: sha256(run / n) == d for n, d in manifest["outputs"].items()}
-    observations = pl.read_parquet(run / "observations.parquet")
+    observations = contract.enforce(
+        pl.read_parquet(run / "observations.parquet"),
+        json.loads((ROOT / "config/dvp/base.json").read_text())["expected_scoring"],
+    )
     labels = observations.select("game_id", "offense", "position", pl.col("points").alias("_obs"))
 
     stages: dict[str, Any] = {}

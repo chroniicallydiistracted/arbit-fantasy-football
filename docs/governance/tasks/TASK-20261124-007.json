@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-007",
+  "title": "M3-3 DvP audit remediations 3, 4 and 5: row contract and byte verification; decoupled historical stages; rolling-window and split-half-k exploratory estimators",
+  "objective": "Owner audit AUD-04, AUD-05 and AUD-03. (4) Enforce the observation row contract (actual-only source types, observed rows, table-specific source id and scoring hash, finality rule, status-consistent points, availability after kickoff, orientation, unique keys) at fitting and forecasting, verify the bytes of every content-addressed store object the main pipeline reads, and add contamination fixtures with forbidden or unknown values inside permitted columns. (5) Run the historical seasons through separate stages: schedule targets, point-in-time features, forecast-only outputs persisted with hashes before any label is read, label retrieval, evaluation joins and invalid-label coverage reporting; extend the leakage tests. (3) Add rolling 3-, 5- and 8-game residual estimators with shrinkage and a training-only split-half-k estimator, compared with REML, grid-tuned, recency-weighted and prior estimators on common samples, as a versioned EXPLORATORY run that never changes the frozen candidates. No change to frozen files, production or weights.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/dvp/contract.py",
+    "libs/arbit-model/src/arbit_model/dvp/explore.py",
+    "libs/arbit-model/src/arbit_model/dvp/shadow.py",
+    "scripts/model/dvp_explore.py",
+    "scripts/model/dvp.py",
+    "scripts/model/dvp_prospective.py",
+    "config/dvp/explore-v2.json",
+    "libs/arbit-model/tests/test_dvp_contract.py",
+    "libs/arbit-model/tests/test_dvp_explore.py",
+    "libs/arbit-model/tests/test_dvp_shadow.py",
+    "libs/arbit-model/tests/test_dvp_firewall.py",
+    "docs/research/dvp/EXPLORATORY_V2.md",
+    "docs/research/dvp/explore-v2.json",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/SOURCE_PROVENANCE.md",
+    "docs/research/dvp/METHODOLOGY.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/project/decision-register.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-24-task-20261124-007-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T23:24:23Z",
+  "updated_at": "2026-11-24T23:29:13Z",
+  "baseline": "4708bdecc72b9890ed3d9ea50c5a67980efcd389",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "AUD-04: walkforward.prepare rejects unknown columns but trusts accepted rows' lineage values; dvp.py season_manifest/read_targets/_contribution_cells open content-addressed objects by digest name without hashing their bytes (load_index alone verified). AUD-05: walk's target universe is the valid observation rows (58 refused-label cells never forecast); persisted historical forecasts are written after the label join. AUD-03: B05 had exponential weights only; rolling windows existed only as lab diagnostics; B03 used REML k with no split-half-k comparison. The new contract passes on all 31,668 frozen observations and the 1,956 archived 2026 rows and catches planted values.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+        "scripts/model/dvp.py",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+        "libs/arbit-model/src/arbit_model/dvp/reliability.py"
+      ]
+    },
+    "plan": {
+      "summary": "1) arbit_model.dvp.contract: row-level lineage contract, enforced by shadow.prepare_checked, the prospective harness and every observation read in dvp.py (reliability, backtest, sitstart, verify). 2) dvp.verified_object: hash every content-addressed manifest and Parquet before reading. 3) Contamination fixtures inside permitted columns (test_dvp_contract.py). 4) shadow.walk_targets gains an  hook that may add columns but never alter frozen ones. 5) arbit_model.dvp.explore: rolling 3/5/8-game residuals and training-only split-half k, with a built-in check that its residual history reproduces the frozen B03. 6) scripts/model/dvp_explore.py: decoupled stages (schedule targets, contract-checked features, forecast-only outputs persisted with hashes before labels, separate label read, keep-every-target join, coverage) for development, validation and holdout; compares frozen variants with v1 receipts. 7) config/dvp/explore-v2.json declared before results. 8) Run, report EXPLORATORY_V2.md, records.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/contract.py",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py",
+        "scripts/model/dvp_explore.py",
+        "config/dvp/explore-v2.json"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}
