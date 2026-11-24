@@ -5,7 +5,7 @@ A row is matched across the two builds by its game and player (athletes, partici
 game and franchise (D/ST). Each difference is one of:
 
 - `team_codes`: only the team or opponent changed, to the same franchise under `arbit_model.teams`;
-- `opponent_corrected`: the old row named its own team as the opponent;
+- `opponent_corrected`: the old row named its own franchise as the opponent;
 - `added` or `removed`: the row exists in one build only;
 - `values`: points, a statistic, a label or another field changed.
 
@@ -72,7 +72,9 @@ def compare(old: pl.DataFrame, new: pl.DataFrame, role: str) -> pl.DataFrame:
         [franchise_expr(pl.col(c)).eq_missing(pl.col(c + "_new")) for c in teams]
     )
     self_opponent = (
-        pl.col("team").eq_missing(pl.col("opponent")) if "opponent" in teams else pl.lit(False)
+        franchise_expr(pl.col("team")).eq_missing(franchise_expr(pl.col("opponent")))
+        if "opponent" in teams
+        else pl.lit(False)
     )
     return (
         joined.with_columns(
@@ -190,7 +192,12 @@ def main() -> None:
                     "old": float(moved["points_old"].fill_null(0).sum()),
                     "new": float(moved["points_new"].fill_null(0).sum()),
                 }
-            changed = touched.explode("changed").drop_nulls("changed").group_by("changed").len()
+            changed = (
+                touched.explode("changed", empty_as_null=True)
+                .drop_nulls("changed")
+                .group_by("changed")
+                .len()
+            )
             entry[role]["changedColumns"] = dict(
                 zip(changed["changed"], changed["len"], strict=True)
             )
