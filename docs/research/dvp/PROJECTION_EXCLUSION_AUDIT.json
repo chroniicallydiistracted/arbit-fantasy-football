@@ -451,7 +451,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   }
  ],
- "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
+ "code": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
  "codeScan": {
   "files": {
    "libs/arbit-core/src/arbit_core/rules.py": "5dd1753d9485a6761cc6a513852b6ee525e3c90d88d250b811a29c6532af03af",
@@ -459,16 +459,19 @@
    "libs/arbit-data/src/arbit_data/nflverse/stat_lines.py": "dd97eaf4dc70ddebc160bae538ed92f1d153c7954034a81f401e25ac7de5998a",
    "libs/arbit-model/src/arbit_model/dvp/__init__.py": "bdfaa16ece99dd9b59522678812f3e55e3c394f34a7773a5e1fbebd141b5ad4e",
    "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
+   "libs/arbit-model/src/arbit_model/dvp/lab.py": "3cfe315d1c80c847e31a2cc5b4614eb01975d122dc4c082c37b93e20149265c3",
    "libs/arbit-model/src/arbit_model/dvp/observations.py": "6540b51a0cf12dada43edce9907349e588d0a0b26084065a047b53ea304ab1be",
    "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
    "libs/arbit-model/src/arbit_model/dvp/results.py": "5d10b972f43e0e4e40c386b6f3165db4737834b6a21ac793ba0e0c2ad5de8852",
+   "libs/arbit-model/src/arbit_model/dvp/svg.py": "dbff25726b5f8d3e3c2bd737c4e51c1aee3344ad84e956027ecaa7de3e2f47e8",
    "libs/arbit-model/src/arbit_model/gamebook.py": "34c8eb36cc95a1a77201f0eaabf0cd367e7128b052134f845e18be93dd568b9d",
    "libs/arbit-model/src/arbit_model/inputs.py": "729ae321b32cf4e5659fc5b00077fab8a966dce4f6c3992fc4dd21354d803729",
    "libs/arbit-model/src/arbit_model/storage.py": "05d4f7a99664a546f2eec102362644d4401d969af9835517ca95d3dd21c30a62",
    "libs/arbit-model/src/arbit_model/targets.py": "c3ee0959187e694732b427848817aca8b192d4ed556ee49219338564b6f7ec13",
+   "libs/arbit-model/src/arbit_model/teams.py": "454c0ff7834504b3b736dfdf9e450ddf0fdadf08d540f7cb821805f7807ae6aa",
    "scripts/model/build_targets.py": "8f62c75ef59c4a31c6ecf8e9e6c7177255b907a7f5e6c472ffc1b0e4f2ae18d5",
    "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
-   "scripts/model/dvp.py": "85d530036d7ea9902cd1beba53524a74598a9066b65d7d733bafb1d7f35f94ac",
+   "scripts/model/dvp.py": "bac0f8df5d004e08fdd84207f149074d05448fb8aa85ddae2a3902c09051a6fa",
    "scripts/model/ffa_signal_study.py": "3f23dc7a764ed491b242b6ba85540d0dafae5f541f0de019a3e7726747eb04d4"
   },
   "findings": [],
@@ -541,8 +544,8 @@
  ],
  "forbidden_vendor_projection_dependencies": 0,
  "format": "arbit-dvp-m3-3-projection-exclusion-v1",
- "generatedAt": "2026-11-24T02:19:10.066310+00:00",
- "runId": "phase1-audit-20261124T021910Z",
+ "generatedAt": "2026-11-24T02:44:42.219387+00:00",
+ "runId": "phase1-audit-20261124T024442Z",
  "slice2Agreement": "docs/research/ffa-targets-check-2026-11-10.json: 10,734 of 10,771 2026 lines equal ESPN's actual applied totals (actual blocks only; an audit, not an input)",
  "status": "PASSED",
  "targetInputFamilies": {

@@ -1,0 +1,8614 @@
+{
+ "adjusted": "loo_mean",
+ "auditRun": "phase1-audit-20261124T024442Z",
+ "bootstrapReplicates": 2000,
+ "code": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
+ "config": {
+  "path": "config/dvp/reliability.json",
+  "sha256": "a12aa624ae07c162b070b100e7b10fd88ff62d12f46342a05f11ac33f39534dc"
+ },
+ "forbidden_vendor_projection_dependencies": 0,
+ "format": "arbit-dvp-m3-3-reliability-v1",
+ "generatedAt": "2026-11-24T02:44:52.372338+00:00",
+ "minSplitHalfGames": 4,
+ "results": {
+  "A00": {
+   "DST": {
+    "beyond3Sd": 36,
+    "cells": 5278,
+    "cv": 1.134,
+    "max": 35.0,
+    "mean": 5.853,
+    "min": -12.0,
+    "negative": 820,
+    "percentiles": {
+     "p25": 1.0,
+     "p5": -4.0,
+     "p50": 5.0,
+     "p75": 10.0,
+     "p95": 18.0
+    },
+    "rankAgreement": {
+     "movedEightOrMore": 0,
+     "seasons": 10,
+     "spearmanMean": 0.9793,
+     "spearmanMin": 0.9585,
+     "units": 320
+    },
+    "sd": 6.635,
+    "seasonMeans": {
+     "2016": 5.689,
+     "2017": 6.715,
+     "2018": 5.732,
+     "2019": 6.156,
+     "2020": 4.736,
+     "2021": 5.526,
+     "2022": 6.033,
+     "2023": 6.568,
+     "2024": 5.572,
+     "2025": 5.789
+    },
+    "skew": 0.521,
+    "unitSeasonMeanSd": 2.766,
+    "withinUnitSeasonSd": 6.103,
+    "zeros": 266
+   },
+   "K": {
+    "beyond3Sd": 32,
+    "cells": 5264,
+    "cv": 0.59,
+    "max": 27.0,
+    "mean": 7.768,
+    "min": -3.0,
+    "negative": 50,
+    "percentiles": {
+     "p25": 4.0,
+     "p5": 1.0,
+     "p50": 7.0,
+     "p75": 11.0,
+     "p95": 16.0
+    },
+    "rankAgreement": {
+     "movedEightOrMore": 5,
+     "seasons": 10,
+     "spearmanMean": 0.9574,
+     "spearmanMin": 0.9271,
+     "units": 320
+    },
+    "sd": 4.581,
+    "seasonMeans": {
+     "2016": 7.639,
+     "2017": 7.758,
+     "2018": 7.542,
+     "2019": 7.288,
+     "2020": 7.793,
+     "2021": 7.593,
+     "2022": 7.806,
+     "2023": 7.788,
+     "2024": 8.18,
+     "2025": 8.241
+    },
+    "skew": 0.522,
+    "unitSeasonMeanSd": 1.295,
+    "withinUnitSeasonSd": 4.455,
+    "zeros": 162
+   },
+   "QB": {
+    "beyond3Sd": 22,
+    "cells": 5278,
+    "cv": 0.473,
+    "max": 51.88,
+    "mean": 16.579,
+    "min": -6.66,
+    "negative": 27,
+    "percentiles": {
+     "p25": 10.94,
+     "p5": 4.76,
+     "p50": 16.1,
+     "p75": 21.64,
+     "p95": 29.98
+    },
+    "rankAgreement": {
+     "movedEightOrMore": 9,
+     "seasons": 10,
+     "spearmanMean": 0.939,
+     "spearmanMin": 0.8919,
+     "units": 320
+    },
+    "sd": 7.837,
+    "seasonMeans": {
+     "2016": 16.393,
+     "2017": 15.518,
+     "2018": 17.167,
+     "2019": 16.723,
+     "2020": 18.212,
+     "2021": 16.708,
+     "2022": 16.045,
+     "2023": 15.981,
+     "2024": 16.811,
+     "2025": 16.295
+    },
+    "skew": 0.392,
+    "unitSeasonMeanSd": 2.38,
+    "withinUnitSeasonSd": 7.561,
+    "zeros": 9
+   },
+   "RB": {
+    "beyond3Sd": 40,
+    "cells": 5265,
+    "cv": 0.441,
+    "max": 103.1,
+    "mean": 23.068,
+    "min": 0.6,
+    "negative": 0,
+    "percentiles": {
+     "p25": 15.8,
+     "p5": 8.9,
+     "p50": 21.5,
+     "p75": 28.9,
+     "p95": 41.9
+    },
+    "rankAgreement": {
+     "movedEightOrMore": 17,
+     "seasons": 10,
+     "spearmanMean": 0.9317,
+     "spearmanMin": 0.8548,
+     "units": 320
+    },
+    "sd": 10.167,
+    "seasonMeans": {
+     "2016": 23.366,
+     "2017": 23.614,
+     "2018": 24.367,
+     "2019": 23.855,
+     "2020": 23.757,
+     "2021": 23.357,
+     "2022": 22.65,
+     "2023": 21.564,
+     "2024": 22.137,
+     "2025": 22.225
+    },
+    "skew": 0.844,
+    "unitSeasonMeanSd": 3.321,
+    "withinUnitSeasonSd": 9.674,
+    "zeros": 0
+   },
+   "TE": {
+    "beyond3Sd": 56,
+    "cells": 5264,
+    "cv": 0.67,
+    "max": 61.52,
+    "mean": 12.4,
+    "min": -2.0,
+    "negative": 4,
+    "percentiles": {
+     "p25": 6.0,
+     "p5": 1.7,
+     "p50": 10.9,
+     "p75": 17.2,
+     "p95": 28.07
+    },
+    "rankAgreement": {
+     "movedEightOrMore": 25,
+     "seasons": 10,
+     "spearmanMean": 0.9044,
+     "spearmanMin": 0.8486,
+     "units": 320
+    },
+    "sd": 8.303,
+    "seasonMeans": {
+     "2016": 12.736,
+     "2017": 11.853,
+     "2018": 12.083,
+     "2019": 12.485,
+     "2020": 13.062,
+     "2021": 12.43,
+     "2022": 11.969,
+     "2023": 11.918,
+     "2024": 12.232,
+     "2025": 13.248
+    },
+    "skew": 1.022,
+    "unitSeasonMeanSd": 2.424,
+    "withinUnitSeasonSd": 7.979,
+    "zeros": 109
+   },
+   "WR": {
+    "beyond3Sd": 30,
+    "cells": 5261,
+    "cv": 0.417,
+    "max": 96.9,
+    "mean": 33.673,
+    "min": -3.58,
+    "negative": 1,
+    "percentiles": {
+     "p25": 23.5,
+     "p5": 13.0,
+     "p50": 32.4,
+     "p75": 42.3,
+     "p95": 58.5
+    },
+    "rankAgreement": {
+     "movedEightOrMore": 26,
+     "seasons": 10,
+     "spearmanMean": 0.8976,
+     "spearmanMin": 0.7797,
+     "units": 320
+    },
+    "sd": 14.027,
+    "seasonMeans": {
+     "2016": 35.017,
+     "2017": 31.263,
+     "2018": 35.189,
+     "2019": 34.029,
+     "2020": 36.659,
+     "2021": 34.44,
+     "2022": 32.763,
+     "2023": 33.477,
+     "2024": 33.43,
+     "2025": 30.689
+    },
+    "skew": 0.527,
+    "unitSeasonMeanSd": 4.296,
+    "withinUnitSeasonSd": 13.556,
+    "zeros": 1
+   }
+  },
+  "A02": {
+   "DST": {
+    "adjusted": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        5.7211,
+        9.1451
+       ],
+       "pearson95": [
+        0.4759,
+        0.5904
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 7.36,
+      "meanHalfGames": 8.247,
+      "pearson": 0.5283,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        7.3466,
+        10.065
+       ],
+       "pearson95": [
+        0.4506,
+        0.5297
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 8.74,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4853,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        6.0534,
+        12.0125
+       ],
+       "pearson95": [
+        0.4058,
+        0.5783
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 8.48,
+      "meanHalfGames": 8.247,
+      "pearson": 0.493,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        4.6177,
+        8.6004
+       ],
+       "pearson95": [
+        0.4109,
+        0.5651
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 6.36,
+      "meanHalfGames": 6.0,
+      "pearson": 0.4853,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        4.6874,
+        7.8028
+       ],
+       "pearson95": [
+        0.5111,
+        0.6402
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 6.2,
+      "meanHalfGames": 8.247,
+      "pearson": 0.571,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 8.74,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4853,
+       "units": 320
+      },
+      "3": {
+       "k": 8.74,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4853,
+       "units": 320
+      },
+      "4": {
+       "k": 8.74,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4853,
+       "units": 320
+      },
+      "5": {
+       "k": 8.74,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4853,
+       "units": 320
+      },
+      "6": {
+       "k": 8.74,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4853,
+       "units": 320
+      },
+      "7": {
+       "k": 8.74,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4853,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 7.3221,
+       "median": 7.2506,
+       "p2_5": 6.0084,
+       "p97_5": 8.9941
+      },
+      "pearson": {
+       "mean": 0.531,
+       "median": 0.5321,
+       "p2_5": 0.4783,
+       "p97_5": 0.5785
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    },
+    "raw": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        5.6538,
+        8.601
+       ],
+       "pearson95": [
+        0.4903,
+        0.5914
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 7.05,
+      "meanHalfGames": 8.247,
+      "pearson": 0.539,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        7.3988,
+        10.4416
+       ],
+       "pearson95": [
+        0.4389,
+        0.5282
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 8.88,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4814,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        6.4221,
+        12.139
+       ],
+       "pearson95": [
+        0.4041,
+        0.5618
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 8.58,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4901,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        4.5245,
+        8.9709
+       ],
+       "pearson95": [
+        0.4008,
+        0.5701
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 6.31,
+      "meanHalfGames": 6.0,
+      "pearson": 0.4874,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        4.4271,
+        6.2129
+       ],
+       "pearson95": [
+        0.5687,
+        0.6521
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 5.26,
+      "meanHalfGames": 8.247,
+      "pearson": 0.6105,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 8.88,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4814,
+       "units": 320
+      },
+      "3": {
+       "k": 8.88,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4814,
+       "units": 320
+      },
+      "4": {
+       "k": 8.88,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4814,
+       "units": 320
+      },
+      "5": {
+       "k": 8.88,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4814,
+       "units": 320
+      },
+      "6": {
+       "k": 8.88,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4814,
+       "units": 320
+      },
+      "7": {
+       "k": 8.88,
+       "meanHalfGames": 8.247,
+       "pearson": 0.4814,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 7.4229,
+       "median": 7.3659,
+       "p2_5": 5.9951,
+       "p97_5": 9.1613
+      },
+      "pearson": {
+       "mean": 0.5276,
+       "median": 0.5282,
+       "p2_5": 0.4737,
+       "p97_5": 0.5791
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    }
+   },
+   "K": {
+    "adjusted": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        24.8449,
+        63.0229
+       ],
+       "pearson95": [
+        0.1146,
+        0.2491
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 35.95,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1862,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        21.8999,
+        287.7772
+       ],
+       "pearson95": [
+        0.0105,
+        0.2732
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0185
+      },
+      "k": 48.86,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1441,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        33.1309,
+        471.0104
+       ],
+       "pearson95": [
+        -0.0014,
+        0.1971
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.026
+      },
+      "k": 71.4,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1033,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        30.3524,
+        185.9726
+       ],
+       "pearson95": [
+        0.0303,
+        0.165
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.004
+      },
+      "k": 54.41,
+      "meanHalfGames": 6.0,
+      "pearson": 0.0993,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        26.4883,
+        147.6703
+       ],
+       "pearson95": [
+        0.0498,
+        0.2364
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.002
+      },
+      "k": 49.36,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1428,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 48.86,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1441,
+       "units": 320
+      },
+      "3": {
+       "k": 48.86,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1441,
+       "units": 320
+      },
+      "4": {
+       "k": 48.86,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1441,
+       "units": 320
+      },
+      "5": {
+       "k": 48.86,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1441,
+       "units": 320
+      },
+      "6": {
+       "k": 48.86,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1441,
+       "units": 320
+      },
+      "7": {
+       "k": 48.86,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1441,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 54.5943,
+       "median": 49.5508,
+       "p2_5": 30.828,
+       "p97_5": 104.0843
+      },
+      "pearson": {
+       "mean": 0.1424,
+       "median": 0.1424,
+       "p2_5": 0.0732,
+       "p97_5": 0.2106
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    },
+    "raw": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        26.0483,
+        147.5336
+       ],
+       "pearson95": [
+        0.0503,
+        0.2395
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.002
+      },
+      "k": 44.18,
+      "meanHalfGames": 8.225,
+      "pearson": 0.157,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        20.4932,
+        162.8381
+       ],
+       "pearson95": [
+        0.0452,
+        0.2876
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.004
+      },
+      "k": 41.8,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1644,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        39.8195,
+        792.9777
+       ],
+       "pearson95": [
+        -0.0183,
+        0.1703
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0485
+      },
+      "k": 84.34,
+      "meanHalfGames": 8.225,
+      "pearson": 0.0889,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        25.6631,
+        299.3823
+       ],
+       "pearson95": [
+        0.0138,
+        0.1893
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0105
+      },
+      "k": 51.99,
+      "meanHalfGames": 6.0,
+      "pearson": 0.1035,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        23.5738,
+        107.5076
+       ],
+       "pearson95": [
+        0.0711,
+        0.2561
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 41.52,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1654,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 41.8,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1644,
+       "units": 320
+      },
+      "3": {
+       "k": 41.8,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1644,
+       "units": 320
+      },
+      "4": {
+       "k": 41.8,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1644,
+       "units": 320
+      },
+      "5": {
+       "k": 41.8,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1644,
+       "units": 320
+      },
+      "6": {
+       "k": 41.8,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1644,
+       "units": 320
+      },
+      "7": {
+       "k": 41.8,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1644,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 51.2101,
+       "median": 46.2837,
+       "p2_5": 28.7568,
+       "p97_5": 96.3957
+      },
+      "pearson": {
+       "mean": 0.1493,
+       "median": 0.1509,
+       "p2_5": 0.0786,
+       "p97_5": 0.2224
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    }
+   },
+   "QB": {
+    "adjusted": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        12.5154,
+        33.7204
+       ],
+       "pearson95": [
+        0.197,
+        0.3969
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 19.31,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2992,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        13.1974,
+        42.9222
+       ],
+       "pearson95": [
+        0.1607,
+        0.3843
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 22.23,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2706,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        25.5991,
+        106.3446
+       ],
+       "pearson95": [
+        0.072,
+        0.2447
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 45.21,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1543,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        17.0142,
+        568.8419
+       ],
+       "pearson95": [
+        -0.0334,
+        0.2595
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.076
+      },
+      "k": 51.18,
+      "meanHalfGames": 6.0,
+      "pearson": 0.1049,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        21.3558,
+        67.5977
+       ],
+       "pearson95": [
+        0.1092,
+        0.277
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0005
+      },
+      "k": 33.46,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1977,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 22.23,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2706,
+       "units": 320
+      },
+      "3": {
+       "k": 22.23,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2706,
+       "units": 320
+      },
+      "4": {
+       "k": 22.23,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2706,
+       "units": 320
+      },
+      "5": {
+       "k": 22.23,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2706,
+       "units": 320
+      },
+      "6": {
+       "k": 22.23,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2706,
+       "units": 320
+      },
+      "7": {
+       "k": 22.23,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2706,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 24.9115,
+       "median": 24.2485,
+       "p2_5": 16.8677,
+       "p97_5": 37.7355
+      },
+      "pearson": {
+       "mean": 0.2544,
+       "median": 0.2538,
+       "p2_5": 0.1793,
+       "p97_5": 0.3284
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    },
+    "raw": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        16.8116,
+        49.6958
+       ],
+       "pearson95": [
+        0.1429,
+        0.3289
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 24.66,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2506,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        18.3402,
+        68.4363
+       ],
+       "pearson95": [
+        0.1081,
+        0.3107
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 29.84,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2166,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        27.8315,
+        134.1604
+       ],
+       "pearson95": [
+        0.0572,
+        0.2289
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0005
+      },
+      "k": 50.52,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1403,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        18.0011,
+        835.2924
+       ],
+       "pearson95": [
+        -0.0598,
+        0.2478
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.124
+      },
+      "k": 60.46,
+      "meanHalfGames": 6.0,
+      "pearson": 0.0903,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        29.7792,
+        114.3276
+       ],
+       "pearson95": [
+        0.067,
+        0.2153
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.001
+      },
+      "k": 47.03,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1492,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 29.84,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2166,
+       "units": 320
+      },
+      "3": {
+       "k": 29.84,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2166,
+       "units": 320
+      },
+      "4": {
+       "k": 29.84,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2166,
+       "units": 320
+      },
+      "5": {
+       "k": 29.84,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2166,
+       "units": 320
+      },
+      "6": {
+       "k": 29.84,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2166,
+       "units": 320
+      },
+      "7": {
+       "k": 29.84,
+       "meanHalfGames": 8.247,
+       "pearson": 0.2166,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 30.1254,
+       "median": 28.9247,
+       "p2_5": 19.6216,
+       "p97_5": 48.2758
+      },
+      "pearson": {
+       "mean": 0.2219,
+       "median": 0.2219,
+       "p2_5": 0.1459,
+       "p97_5": 0.2959
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    }
+   },
+   "RB": {
+    "adjusted": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        13.0528,
+        35.7976
+       ],
+       "pearson95": [
+        0.187,
+        0.3846
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 20.3,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2884,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        11.9404,
+        44.3885
+       ],
+       "pearson95": [
+        0.1568,
+        0.4049
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 21.03,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2812,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        16.0465,
+        54.2274
+       ],
+       "pearson95": [
+        0.1317,
+        0.339
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0005
+      },
+      "k": 26.28,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2384,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        16.2931,
+        38.9642
+       ],
+       "pearson95": [
+        0.1334,
+        0.2691
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 24.17,
+      "meanHalfGames": 6.0,
+      "pearson": 0.1988,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        9.7077,
+        26.5715
+       ],
+       "pearson95": [
+        0.2363,
+        0.4581
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 15.39,
+      "meanHalfGames": 8.227,
+      "pearson": 0.3484,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 21.03,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2812,
+       "units": 320
+      },
+      "3": {
+       "k": 21.03,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2812,
+       "units": 320
+      },
+      "4": {
+       "k": 21.03,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2812,
+       "units": 320
+      },
+      "5": {
+       "k": 21.03,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2812,
+       "units": 320
+      },
+      "6": {
+       "k": 21.03,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2812,
+       "units": 320
+      },
+      "7": {
+       "k": 21.03,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2812,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 19.7566,
+       "median": 19.2533,
+       "p2_5": 14.0059,
+       "p97_5": 27.3982
+      },
+      "pearson": {
+       "mean": 0.2984,
+       "median": 0.2994,
+       "p2_5": 0.2309,
+       "p97_5": 0.37
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    },
+    "raw": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        15.8889,
+        49.898
+       ],
+       "pearson95": [
+        0.1423,
+        0.3412
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 23.79,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2569,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        10.4312,
+        49.8476
+       ],
+       "pearson95": [
+        0.1422,
+        0.4389
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 19.5,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2967,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        16.3527,
+        44.1803
+       ],
+       "pearson95": [
+        0.1586,
+        0.3331
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 23.57,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2587,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        20.0969,
+        81.2423
+       ],
+       "pearson95": [
+        0.0688,
+        0.2299
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 31.16,
+      "meanHalfGames": 6.0,
+      "pearson": 0.1615,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        9.2678,
+        28.3771
+       ],
+       "pearson95": [
+        0.2251,
+        0.469
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 14.84,
+      "meanHalfGames": 8.227,
+      "pearson": 0.3566,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 19.5,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2967,
+       "units": 320
+      },
+      "3": {
+       "k": 19.5,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2967,
+       "units": 320
+      },
+      "4": {
+       "k": 19.5,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2967,
+       "units": 320
+      },
+      "5": {
+       "k": 19.5,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2967,
+       "units": 320
+      },
+      "6": {
+       "k": 19.5,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2967,
+       "units": 320
+      },
+      "7": {
+       "k": 19.5,
+       "meanHalfGames": 8.227,
+       "pearson": 0.2967,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 20.0169,
+       "median": 19.5219,
+       "p2_5": 14.2942,
+       "p97_5": 27.7647
+      },
+      "pearson": {
+       "mean": 0.2959,
+       "median": 0.2965,
+       "p2_5": 0.2286,
+       "p97_5": 0.3653
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    }
+   },
+   "TE": {
+    "adjusted": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        21.8691,
+        128.8787
+       ],
+       "pearson95": [
+        0.0591,
+        0.2732
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.001
+      },
+      "k": 39.92,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1709,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        21.7461,
+        167.1303
+       ],
+       "pearson95": [
+        0.044,
+        0.2748
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0035
+      },
+      "k": 42.07,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1635,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        27.6388,
+        720.28
+       ],
+       "pearson95": [
+        -0.0389,
+        0.227
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0775
+      },
+      "k": 69.55,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1058,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        16.9398,
+        104.0178
+       ],
+       "pearson95": [
+        0.0529,
+        0.2615
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.002
+      },
+      "k": 31.74,
+      "meanHalfGames": 6.0,
+      "pearson": 0.159,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        15.6585,
+        62.2836
+       ],
+       "pearson95": [
+        0.1167,
+        0.3444
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 25.9,
+      "meanHalfGames": 8.225,
+      "pearson": 0.241,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 42.07,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1635,
+       "units": 320
+      },
+      "3": {
+       "k": 42.07,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1635,
+       "units": 320
+      },
+      "4": {
+       "k": 42.07,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1635,
+       "units": 320
+      },
+      "5": {
+       "k": 42.07,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1635,
+       "units": 320
+      },
+      "6": {
+       "k": 42.07,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1635,
+       "units": 320
+      },
+      "7": {
+       "k": 42.07,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1635,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 38.8126,
+       "median": 36.9091,
+       "p2_5": 23.9685,
+       "p97_5": 63.324
+      },
+      "pearson": {
+       "mean": 0.1822,
+       "median": 0.1822,
+       "p2_5": 0.115,
+       "p97_5": 0.2555
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    },
+    "raw": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        24.7353,
+        316.7194
+       ],
+       "pearson95": [
+        0.0133,
+        0.2506
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0125
+      },
+      "k": 51.79,
+      "meanHalfGames": 8.225,
+      "pearson": 0.137,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        24.6655,
+        140.9118
+       ],
+       "pearson95": [
+        0.0528,
+        0.2507
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0025
+      },
+      "k": 43.09,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1603,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        26.9114,
+        312.2129
+       ],
+       "pearson95": [
+        0.0227,
+        0.2338
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.007
+      },
+      "k": 53.17,
+      "meanHalfGames": 8.225,
+      "pearson": 0.134,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        18.9018,
+        140.1489
+       ],
+       "pearson95": [
+        0.0387,
+        0.2408
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0045
+      },
+      "k": 37.03,
+      "meanHalfGames": 6.0,
+      "pearson": 0.1394,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        12.541,
+        47.5934
+       ],
+       "pearson95": [
+        0.1479,
+        0.3962
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 22.35,
+      "meanHalfGames": 8.225,
+      "pearson": 0.2691,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 43.09,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1603,
+       "units": 320
+      },
+      "3": {
+       "k": 43.09,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1603,
+       "units": 320
+      },
+      "4": {
+       "k": 43.09,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1603,
+       "units": 320
+      },
+      "5": {
+       "k": 43.09,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1603,
+       "units": 320
+      },
+      "6": {
+       "k": 43.09,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1603,
+       "units": 320
+      },
+      "7": {
+       "k": 43.09,
+       "meanHalfGames": 8.225,
+       "pearson": 0.1603,
+       "units": 320
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 39.4085,
+       "median": 37.4135,
+       "p2_5": 24.5157,
+       "p97_5": 66.3086
+      },
+      "pearson": {
+       "mean": 0.1805,
+       "median": 0.1802,
+       "p2_5": 0.1104,
+       "p97_5": 0.2512
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    }
+   },
+   "WR": {
+    "adjusted": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        14.4311,
+        54.2942
+       ],
+       "pearson95": [
+        0.1315,
+        0.3628
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 22.78,
+      "meanHalfGames": 8.22,
+      "pearson": 0.2651,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        19.727,
+        208.3493
+       ],
+       "pearson95": [
+        0.0207,
+        0.2928
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.012
+      },
+      "k": 42.36,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1625,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        19.1103,
+        108.0616
+       ],
+       "pearson95": [
+        0.0713,
+        0.3014
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 38.26,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1769,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        16.9294,
+        57.728
+       ],
+       "pearson95": [
+        0.0942,
+        0.2617
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 27.98,
+      "meanHalfGames": 6.0,
+      "pearson": 0.1766,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        20.9706,
+        71.0366
+       ],
+       "pearson95": [
+        0.1037,
+        0.2815
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 33.49,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1971,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 42.36,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1625,
+       "units": 320
+      },
+      "3": {
+       "k": 42.36,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1625,
+       "units": 320
+      },
+      "4": {
+       "k": 42.36,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1625,
+       "units": 320
+      },
+      "5": {
+       "k": 42.36,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1625,
+       "units": 320
+      },
+      "6": {
+       "k": 42.36,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1625,
+       "units": 320
+      },
+      "7": {
+       "k": 41.8,
+       "meanHalfGames": 8.223,
+       "pearson": 0.1644,
+       "units": 319
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 27.7778,
+       "median": 26.7654,
+       "p2_5": 18.6925,
+       "p97_5": 42.1594
+      },
+      "pearson": {
+       "mean": 0.2342,
+       "median": 0.235,
+       "p2_5": 0.1632,
+       "p97_5": 0.3054
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    },
+    "raw": {
+     "alternating": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        12.8518,
+        54.4399
+       ],
+       "pearson95": [
+        0.1328,
+        0.389
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 20.46,
+      "meanHalfGames": 8.22,
+      "pearson": 0.2866,
+      "units": 320
+     },
+     "calendar": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        21.4096,
+        244.0165
+       ],
+       "pearson95": [
+        0.0098,
+        0.2762
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.021
+      },
+      "k": 42.16,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1632,
+      "units": 320
+     },
+     "chronological": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        17.3859,
+        132.221
+       ],
+       "pearson95": [
+        0.0541,
+        0.3209
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0045
+      },
+      "k": 32.76,
+      "meanHalfGames": 8.22,
+      "pearson": 0.2006,
+      "units": 320
+     },
+     "first6_next6": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        13.6911,
+        47.5529
+       ],
+       "pearson95": [
+        0.112,
+        0.3047
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 22.13,
+      "meanHalfGames": 6.0,
+      "pearson": 0.2133,
+      "units": 320
+     },
+     "home_away": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        22.157,
+        110.3716
+       ],
+       "pearson95": [
+        0.0673,
+        0.2684
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.002
+      },
+      "k": 36.52,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1837,
+      "units": 320
+     },
+     "minGames": {
+      "2": {
+       "k": 42.16,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1632,
+       "units": 320
+      },
+      "3": {
+       "k": 42.16,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1632,
+       "units": 320
+      },
+      "4": {
+       "k": 42.16,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1632,
+       "units": 320
+      },
+      "5": {
+       "k": 42.16,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1632,
+       "units": 320
+      },
+      "6": {
+       "k": 42.16,
+       "meanHalfGames": 8.22,
+       "pearson": 0.1632,
+       "units": 320
+      },
+      "7": {
+       "k": 41.82,
+       "meanHalfGames": 8.223,
+       "pearson": 0.1643,
+       "units": 319
+      }
+     },
+     "random": {
+      "k": {
+       "mean": 28.453,
+       "median": 27.6278,
+       "p2_5": 18.8617,
+       "p97_5": 42.2625
+      },
+      "pearson": {
+       "mean": 0.23,
+       "median": 0.2293,
+       "p2_5": 0.1628,
+       "p97_5": 0.3035
+      },
+      "reps": 1000,
+      "seed": 1729,
+      "unidentified": 0
+     }
+    }
+   }
+  },
+  "A03": {
+   "DST": {
+    "kFaced": 17.35,
+    "loo_mean": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       7.3466,
+       10.065
+      ],
+      "pearson95": [
+       0.4506,
+       0.5297
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 8.74,
+     "meanHalfGames": 8.247,
+     "pearson": 0.4853,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.23,
+      "loglik": -9840.1287,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 38.7067,
+      "singleGameReliability": 0.1215,
+      "tau2": 5.35197
+     },
+     "units": 320
+    },
+    "loo_median": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       7.4618,
+       10.3111
+      ],
+      "pearson95": [
+       0.444,
+       0.5273
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 8.81,
+     "meanHalfGames": 8.247,
+     "pearson": 0.4836,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.46,
+      "loglik": -9885.5503,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 39.4308,
+      "singleGameReliability": 0.1181,
+      "tau2": 5.28267
+     },
+     "units": 320
+    },
+    "loo_shrunk": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       7.33,
+       10.0377
+      ],
+      "pearson95": [
+       0.4511,
+       0.5297
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 8.75,
+     "meanHalfGames": 8.247,
+     "pearson": 0.4853,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.22,
+      "loglik": -9753.6794,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 37.4559,
+      "singleGameReliability": 0.1217,
+      "tau2": 5.18926
+     },
+     "units": 320
+    },
+    "none": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       7.3988,
+       10.4416
+      ],
+      "pearson95": [
+       0.4389,
+       0.5282
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 8.88,
+     "meanHalfGames": 8.247,
+     "pearson": 0.4814,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.32,
+      "loglik": -9841.303,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 38.7431,
+      "singleGameReliability": 0.1202,
+      "tau2": 5.29416
+     },
+     "units": 320
+    },
+    "season": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       7.693,
+       11.0673
+      ],
+      "pearson95": [
+       0.4247,
+       0.5192
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 9.44,
+     "meanHalfGames": 8.247,
+     "pearson": 0.4664,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.73,
+      "loglik": -9835.2411,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 38.7427,
+      "singleGameReliability": 0.1145,
+      "tau2": 5.01018
+     },
+     "units": 320
+    }
+   },
+   "K": {
+    "kFaced": 21.98,
+    "loo_mean": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       21.8999,
+       287.7772
+      ],
+      "pearson95": [
+       0.0105,
+       0.2732
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0185
+     },
+     "k": 48.86,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1441,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 50.51,
+      "loglik": -8046.009,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.8815,
+      "singleGameReliability": 0.0194,
+      "tau2": 0.4134
+     },
+     "units": 320
+    },
+    "loo_median": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       19.9108,
+       216.8478
+      ],
+      "pearson95": [
+       0.027,
+       0.2944
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0095
+     },
+     "k": 42.26,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1629,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 48.43,
+      "loglik": -8102.8044,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 21.3235,
+      "singleGameReliability": 0.0202,
+      "tau2": 0.44031
+     },
+     "units": 320
+    },
+    "loo_shrunk": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       21.571,
+       232.0574
+      ],
+      "pearson95": [
+       0.0276,
+       0.2756
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0075
+     },
+     "k": 46.45,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1504,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 52.31,
+      "loglik": -7951.4318,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.1546,
+      "singleGameReliability": 0.0188,
+      "tau2": 0.38532
+     },
+     "units": 320
+    },
+    "none": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       20.4932,
+       162.8381
+      ],
+      "pearson95": [
+       0.0452,
+       0.2876
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.004
+     },
+     "k": 41.8,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1644,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 47.98,
+      "loglik": -8006.6331,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.5553,
+      "singleGameReliability": 0.0204,
+      "tau2": 0.4284
+     },
+     "units": 320
+    },
+    "season": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       22.7493,
+       243.7181
+      ],
+      "pearson95": [
+       0.0262,
+       0.2654
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0075
+     },
+     "k": 49.24,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1431,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 57.81,
+      "loglik": -7999.5303,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.5551,
+      "singleGameReliability": 0.017,
+      "tau2": 0.35556
+     },
+     "units": 320
+    }
+   },
+   "QB": {
+    "kFaced": 6.53,
+    "loo_mean": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       13.1974,
+       42.9222
+      ],
+      "pearson95": [
+       0.1607,
+       0.3843
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 22.23,
+     "meanHalfGames": 8.247,
+     "pearson": 0.2706,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 24.22,
+      "loglik": -10614.5435,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 54.0508,
+      "singleGameReliability": 0.0397,
+      "tau2": 2.23206
+     },
+     "units": 320
+    },
+    "loo_median": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       12.8596,
+       44.1248
+      ],
+      "pearson95": [
+       0.1569,
+       0.3903
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 22.24,
+     "meanHalfGames": 8.247,
+     "pearson": 0.2705,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 24.82,
+      "loglik": -10663.9638,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 55.1059,
+      "singleGameReliability": 0.0387,
+      "tau2": 2.22001
+     },
+     "units": 320
+    },
+    "loo_shrunk": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       13.8909,
+       49.0506
+      ],
+      "pearson95": [
+       0.1441,
+       0.3706
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 24.12,
+     "meanHalfGames": 8.247,
+     "pearson": 0.2548,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 25.58,
+      "loglik": -10568.5343,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 53.1867,
+      "singleGameReliability": 0.0376,
+      "tau2": 2.07907
+     },
+     "units": 320
+    },
+    "none": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       18.3402,
+       68.4363
+      ],
+      "pearson95": [
+       0.1081,
+       0.3107
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 29.84,
+     "meanHalfGames": 8.247,
+     "pearson": 0.2166,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 29.13,
+      "loglik": -10851.412,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 59.3811,
+      "singleGameReliability": 0.0332,
+      "tau2": 2.03857
+     },
+     "units": 320
+    },
+    "season": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       21.4368,
+       107.5271
+      ],
+      "pearson95": [
+       0.0712,
+       0.2765
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 39.41,
+     "meanHalfGames": 8.247,
+     "pearson": 0.1731,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 38.28,
+      "loglik": -10836.8066,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 59.3767,
+      "singleGameReliability": 0.0255,
+      "tau2": 1.55127
+     },
+     "units": 320
+    }
+   },
+   "RB": {
+    "kFaced": 6.61,
+    "loo_mean": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       11.9404,
+       44.3885
+      ],
+      "pearson95": [
+       0.1568,
+       0.4049
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 21.03,
+     "meanHalfGames": 8.227,
+     "pearson": 0.2812,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 19.48,
+      "loglik": -11956.9255,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 90.3937,
+      "singleGameReliability": 0.0488,
+      "tau2": 4.6413
+     },
+     "units": 320
+    },
+    "loo_median": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       11.9264,
+       46.7066
+      ],
+      "pearson95": [
+       0.1513,
+       0.4048
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 21.34,
+     "meanHalfGames": 8.227,
+     "pearson": 0.2783,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 19.77,
+      "loglik": -12036.5667,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 93.2088,
+      "singleGameReliability": 0.0482,
+      "tau2": 4.71563
+     },
+     "units": 320
+    },
+    "loo_shrunk": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       10.9979,
+       44.0047
+      ],
+      "pearson95": [
+       0.1583,
+       0.425
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 20.14,
+     "meanHalfGames": 8.227,
+     "pearson": 0.29,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 19.27,
+      "loglik": -11907.9298,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 88.7006,
+      "singleGameReliability": 0.0493,
+      "tau2": 4.60251
+     },
+     "units": 320
+    },
+    "none": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       10.4312,
+       49.8476
+      ],
+      "pearson95": [
+       0.1422,
+       0.4389
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0
+     },
+     "k": 19.5,
+     "meanHalfGames": 8.227,
+     "pearson": 0.2967,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 19.53,
+      "loglik": -12178.7428,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 98.349,
+      "singleGameReliability": 0.0487,
+      "tau2": 5.03698
+     },
+     "units": 320
+    },
+    "season": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       11.3335,
+       65.1122
+      ],
+      "pearson95": [
+       0.1116,
+       0.4191
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0005
+     },
+     "k": 22.64,
+     "meanHalfGames": 8.227,
+     "pearson": 0.2665,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 22.85,
+      "loglik": -12167.7977,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 98.3505,
+      "singleGameReliability": 0.0419,
+      "tau2": 4.30377
+     },
+     "units": 320
+    }
+   },
+   "TE": {
+    "kFaced": 4.42,
+    "loo_mean": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       21.7461,
+       167.1303
+      ],
+      "pearson95": [
+       0.044,
+       0.2748
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0035
+     },
+     "k": 42.07,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1635,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 37.43,
+      "loglik": -10757.0048,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 58.2112,
+      "singleGameReliability": 0.026,
+      "tau2": 1.5554
+     },
+     "units": 320
+    },
+    "loo_median": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       20.8868,
+       120.1715
+      ],
+      "pearson95": [
+       0.0628,
+       0.2818
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0015
+     },
+     "k": 37.73,
+     "meanHalfGames": 8.225,
+     "pearson": 0.179,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 34.51,
+      "loglik": -10833.2757,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 59.8306,
+      "singleGameReliability": 0.0282,
+      "tau2": 1.7338
+     },
+     "units": 320
+    },
+    "loo_shrunk": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       21.3387,
+       147.2115
+      ],
+      "pearson95": [
+       0.0511,
+       0.2762
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0025
+     },
+     "k": 40.46,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1689,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 36.34,
+      "loglik": -10720.6381,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 57.3807,
+      "singleGameReliability": 0.0268,
+      "tau2": 1.57898
+     },
+     "units": 320
+    },
+    "none": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       24.6655,
+       140.9118
+      ],
+      "pearson95": [
+       0.0528,
+       0.2507
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0025
+     },
+     "k": 43.09,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1603,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 37.69,
+      "loglik": -11133.3273,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 67.1692,
+      "singleGameReliability": 0.0258,
+      "tau2": 1.78212
+     },
+     "units": 320
+    },
+    "season": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       26.445,
+       191.9574
+      ],
+      "pearson95": [
+       0.0395,
+       0.2368
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0035
+     },
+     "k": 49.6,
+     "meanHalfGames": 8.225,
+     "pearson": 0.1422,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 42.85,
+      "loglik": -11127.4105,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 67.1697,
+      "singleGameReliability": 0.0228,
+      "tau2": 1.5677
+     },
+     "units": 320
+    }
+   },
+   "WR": {
+    "kFaced": 4.23,
+    "loo_mean": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       19.727,
+       208.3493
+      ],
+      "pearson95": [
+       0.0207,
+       0.2928
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.012
+     },
+     "k": 42.36,
+     "meanHalfGames": 8.22,
+     "pearson": 0.1625,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 26.69,
+      "loglik": -13446.3232,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 161.0863,
+      "singleGameReliability": 0.0361,
+      "tau2": 6.0353
+     },
+     "units": 320
+    },
+    "loo_median": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       19.5167,
+       200.9632
+      ],
+      "pearson95": [
+       0.0239,
+       0.2956
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.012
+     },
+     "k": 41.58,
+     "meanHalfGames": 8.22,
+     "pearson": 0.1651,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 27.29,
+      "loglik": -13517.7671,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 165.6063,
+      "singleGameReliability": 0.0354,
+      "tau2": 6.06878
+     },
+     "units": 320
+    },
+    "loo_shrunk": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       20.7013,
+       279.3684
+      ],
+      "pearson95": [
+       0.0122,
+       0.2835
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.0155
+     },
+     "k": 45.29,
+     "meanHalfGames": 8.22,
+     "pearson": 0.1536,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 28.06,
+      "loglik": -13413.1121,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 159.2466,
+      "singleGameReliability": 0.0344,
+      "tau2": 5.67451
+     },
+     "units": 320
+    },
+    "none": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       21.4096,
+       244.0165
+      ],
+      "pearson95": [
+       0.0098,
+       0.2762
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.021
+     },
+     "k": 42.16,
+     "meanHalfGames": 8.22,
+     "pearson": 0.1632,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 27.83,
+      "loglik": -13877.3942,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 189.9575,
+      "singleGameReliability": 0.0347,
+      "tau2": 6.82537
+     },
+     "units": 320
+    },
+    "season": {
+     "bootstrapSeasons": {
+      "clusters": 10,
+      "k95": [
+       32.3099,
+       1189.7332
+      ],
+      "pearson95": [
+       -0.058,
+       0.1983
+      ],
+      "reps": 2000,
+      "seed": 1729,
+      "unidentifiedShare": 0.1295
+     },
+     "k": 99.13,
+     "meanHalfGames": 8.22,
+     "pearson": 0.0766,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 48.61,
+      "loglik": -13849.6884,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 189.9471,
+      "singleGameReliability": 0.0202,
+      "tau2": 3.90771
+     },
+     "units": 320
+    }
+   }
+  },
+  "A04": {
+   "DST": {
+    "eras": {
+     "2016-2020": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         7.7795,
+         9.7168
+        ],
+        "pearson95": [
+         0.4515,
+         0.507
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 9.15,
+       "meanHalfGames": 8.0,
+       "pearson": 0.4664,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         7.1885,
+         12.0868
+        ],
+        "pearson95": [
+         0.3983,
+         0.5267
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 9.47,
+       "meanHalfGames": 8.0,
+       "pearson": 0.4579,
+       "units": 160
+      }
+     },
+     "2021-2025": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         6.147,
+         11.1497
+        ],
+        "pearson95": [
+         0.4326,
+         0.58
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 8.32,
+       "meanHalfGames": 8.494,
+       "pearson": 0.505,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         6.5605,
+         10.0469
+        ],
+        "pearson95": [
+         0.4583,
+         0.564
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 8.19,
+       "meanHalfGames": 8.494,
+       "pearson": 0.509,
+       "units": 160
+      }
+     }
+    },
+    "halfSize": {
+     "aHalfUnder8": {
+      "pearson": 0.4352,
+      "units": 75
+     },
+     "bothHalves8Plus": {
+      "pearson": 0.4937,
+      "units": 245
+     }
+    },
+    "weights": {
+     "0": {
+      "high": 0.0,
+      "low": 0.0,
+      "w": 0.0
+     },
+     "1": {
+      "high": 0.1422,
+      "low": 0.1044,
+      "w": 0.1215
+     },
+     "10": {
+      "high": 0.6237,
+      "low": 0.5384,
+      "w": 0.5804
+     },
+     "11": {
+      "high": 0.6458,
+      "low": 0.5619,
+      "w": 0.6034
+     },
+     "12": {
+      "high": 0.6655,
+      "low": 0.5832,
+      "w": 0.624
+     },
+     "13": {
+      "high": 0.683,
+      "low": 0.6026,
+      "w": 0.6426
+     },
+     "14": {
+      "high": 0.6989,
+      "low": 0.6202,
+      "w": 0.6594
+     },
+     "15": {
+      "high": 0.7132,
+      "low": 0.6363,
+      "w": 0.6748
+     },
+     "16": {
+      "high": 0.7262,
+      "low": 0.6511,
+      "w": 0.6888
+     },
+     "17": {
+      "high": 0.7381,
+      "low": 0.6647,
+      "w": 0.7016
+     },
+     "2": {
+      "high": 0.249,
+      "low": 0.1891,
+      "w": 0.2167
+     },
+     "3": {
+      "high": 0.3321,
+      "low": 0.2592,
+      "w": 0.2933
+     },
+     "4": {
+      "high": 0.3987,
+      "low": 0.3181,
+      "w": 0.3562
+     },
+     "5": {
+      "high": 0.4532,
+      "low": 0.3683,
+      "w": 0.4088
+     },
+     "6": {
+      "high": 0.4986,
+      "low": 0.4117,
+      "w": 0.4535
+     },
+     "7": {
+      "high": 0.5371,
+      "low": 0.4494,
+      "w": 0.4919
+     },
+     "8": {
+      "high": 0.5701,
+      "low": 0.4827,
+      "w": 0.5253
+     },
+     "9": {
+      "high": 0.5987,
+      "low": 0.5121,
+      "w": 0.5545
+     }
+    }
+   },
+   "K": {
+    "eras": {
+     "2016-2020": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         19.8003,
+         1398.1173
+        ],
+        "pearson95": [
+         -0.1204,
+         0.287
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.1835
+       },
+       "k": 78.46,
+       "meanHalfGames": 7.972,
+       "pearson": 0.0922,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         22.8514,
+         685.7217
+        ],
+        "pearson95": [
+         -0.0548,
+         0.2586
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.1005
+       },
+       "k": 65.73,
+       "meanHalfGames": 7.972,
+       "pearson": 0.1082,
+       "units": 160
+      }
+     },
+     "2021-2025": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         14.8008,
+         127.4721
+        ],
+        "pearson95": [
+         0.0624,
+         0.364
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 35.12,
+       "meanHalfGames": 8.478,
+       "pearson": 0.1945,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         12.3216,
+         141.7852
+        ],
+        "pearson95": [
+         0.0564,
+         0.4074
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 32.63,
+       "meanHalfGames": 8.478,
+       "pearson": 0.2063,
+       "units": 160
+      }
+     }
+    },
+    "halfSize": {
+     "aHalfUnder8": {
+      "pearson": 0.0584,
+      "units": 82
+     },
+     "bothHalves8Plus": {
+      "pearson": 0.1755,
+      "units": 238
+     }
+    },
+    "weights": {
+     "0": {
+      "high": 0.0,
+      "low": 0.0,
+      "w": 0.0
+     },
+     "1": {
+      "high": 0.0292,
+      "low": 0.0098,
+      "w": 0.0194
+     },
+     "10": {
+      "high": 0.2315,
+      "low": 0.0897,
+      "w": 0.1653
+     },
+     "11": {
+      "high": 0.2489,
+      "low": 0.0978,
+      "w": 0.1788
+     },
+     "12": {
+      "high": 0.2655,
+      "low": 0.1058,
+      "w": 0.192
+     },
+     "13": {
+      "high": 0.2814,
+      "low": 0.1136,
+      "w": 0.2047
+     },
+     "14": {
+      "high": 0.2966,
+      "low": 0.1212,
+      "w": 0.217
+     },
+     "15": {
+      "high": 0.3112,
+      "low": 0.1288,
+      "w": 0.229
+     },
+     "16": {
+      "high": 0.3252,
+      "low": 0.1362,
+      "w": 0.2406
+     },
+     "17": {
+      "high": 0.3387,
+      "low": 0.1435,
+      "w": 0.2518
+     },
+     "2": {
+      "high": 0.0568,
+      "low": 0.0193,
+      "w": 0.0381
+     },
+     "3": {
+      "high": 0.0829,
+      "low": 0.0287,
+      "w": 0.0561
+     },
+     "4": {
+      "high": 0.1075,
+      "low": 0.0379,
+      "w": 0.0734
+     },
+     "5": {
+      "high": 0.1309,
+      "low": 0.047,
+      "w": 0.0901
+     },
+     "6": {
+      "high": 0.1531,
+      "low": 0.0558,
+      "w": 0.1062
+     },
+     "7": {
+      "high": 0.1741,
+      "low": 0.0645,
+      "w": 0.1217
+     },
+     "8": {
+      "high": 0.1942,
+      "low": 0.0731,
+      "w": 0.1367
+     },
+     "9": {
+      "high": 0.2133,
+      "low": 0.0815,
+      "w": 0.1512
+     }
+    }
+   },
+   "QB": {
+    "eras": {
+     "2016-2020": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         10.6449,
+         66.1634
+        ],
+        "pearson95": [
+         0.1079,
+         0.4291
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 23.61,
+       "meanHalfGames": 8.0,
+       "pearson": 0.2531,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         13.4277,
+         53.7454
+        ],
+        "pearson95": [
+         0.1296,
+         0.3733
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 23.35,
+       "meanHalfGames": 8.0,
+       "pearson": 0.2552,
+       "units": 160
+      }
+     },
+     "2021-2025": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         12.3245,
+         50.5462
+        ],
+        "pearson95": [
+         0.1439,
+         0.408
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 20.48,
+       "meanHalfGames": 8.494,
+       "pearson": 0.2931,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         21.1815,
+         348.8277
+        ],
+        "pearson95": [
+         0.0152,
+         0.2862
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0105
+       },
+       "k": 42.48,
+       "meanHalfGames": 8.494,
+       "pearson": 0.1666,
+       "units": 160
+      }
+     }
+    },
+    "halfSize": {
+     "aHalfUnder8": {
+      "pearson": 0.2945,
+      "units": 75
+     },
+     "bothHalves8Plus": {
+      "pearson": 0.2635,
+      "units": 245
+     }
+    },
+    "weights": {
+     "0": {
+      "high": 0.0,
+      "low": 0.0,
+      "w": 0.0
+     },
+     "1": {
+      "high": 0.058,
+      "low": 0.0231,
+      "w": 0.0397
+     },
+     "10": {
+      "high": 0.3813,
+      "low": 0.191,
+      "w": 0.2922
+     },
+     "11": {
+      "high": 0.404,
+      "low": 0.2062,
+      "w": 0.3123
+     },
+     "12": {
+      "high": 0.4251,
+      "low": 0.2208,
+      "w": 0.3313
+     },
+     "13": {
+      "high": 0.4448,
+      "low": 0.2349,
+      "w": 0.3493
+     },
+     "14": {
+      "high": 0.4632,
+      "low": 0.2485,
+      "w": 0.3663
+     },
+     "15": {
+      "high": 0.4804,
+      "low": 0.2616,
+      "w": 0.3825
+     },
+     "16": {
+      "high": 0.4965,
+      "low": 0.2742,
+      "w": 0.3978
+     },
+     "17": {
+      "high": 0.5116,
+      "low": 0.2865,
+      "w": 0.4124
+     },
+     "2": {
+      "high": 0.1097,
+      "low": 0.0451,
+      "w": 0.0763
+     },
+     "3": {
+      "high": 0.156,
+      "low": 0.0662,
+      "w": 0.1102
+     },
+     "4": {
+      "high": 0.1978,
+      "low": 0.0863,
+      "w": 0.1417
+     },
+     "5": {
+      "high": 0.2356,
+      "low": 0.1056,
+      "w": 0.1711
+     },
+     "6": {
+      "high": 0.2699,
+      "low": 0.1241,
+      "w": 0.1985
+     },
+     "7": {
+      "high": 0.3014,
+      "low": 0.1419,
+      "w": 0.2242
+     },
+     "8": {
+      "high": 0.3302,
+      "low": 0.1589,
+      "w": 0.2483
+     },
+     "9": {
+      "high": 0.3568,
+      "low": 0.1753,
+      "w": 0.2709
+     }
+    }
+   },
+   "RB": {
+    "eras": {
+     "2016-2020": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         7.1246,
+         71.7353
+        ],
+        "pearson95": [
+         0.0575,
+         0.5237
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0105
+       },
+       "k": 16.52,
+       "meanHalfGames": 7.975,
+       "pearson": 0.3256,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         6.1117,
+         189.762
+        ],
+        "pearson95": [
+         0.0041,
+         0.5663
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.022
+       },
+       "k": 18.3,
+       "meanHalfGames": 7.975,
+       "pearson": 0.3035,
+       "units": 160
+      }
+     },
+     "2021-2025": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         21.8529,
+         30.7418
+        ],
+        "pearson95": [
+         0.2162,
+         0.2796
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 26.97,
+       "meanHalfGames": 8.478,
+       "pearson": 0.2392,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         20.6879,
+         34.6972
+        ],
+        "pearson95": [
+         0.1962,
+         0.2908
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 25.53,
+       "meanHalfGames": 8.478,
+       "pearson": 0.2493,
+       "units": 160
+      }
+     }
+    },
+    "halfSize": {
+     "aHalfUnder8": {
+      "pearson": 0.3788,
+      "units": 81
+     },
+     "bothHalves8Plus": {
+      "pearson": 0.2472,
+      "units": 239
+     }
+    },
+    "weights": {
+     "0": {
+      "high": 0.0,
+      "low": 0.0,
+      "w": 0.0
+     },
+     "1": {
+      "high": 0.0594,
+      "low": 0.0359,
+      "w": 0.0488
+     },
+     "10": {
+      "high": 0.387,
+      "low": 0.2711,
+      "w": 0.3392
+     },
+     "11": {
+      "high": 0.4098,
+      "low": 0.2903,
+      "w": 0.3609
+     },
+     "12": {
+      "high": 0.431,
+      "low": 0.3086,
+      "w": 0.3812
+     },
+     "13": {
+      "high": 0.4508,
+      "low": 0.3259,
+      "w": 0.4002
+     },
+     "14": {
+      "high": 0.4692,
+      "low": 0.3424,
+      "w": 0.4182
+     },
+     "15": {
+      "high": 0.4864,
+      "low": 0.3581,
+      "w": 0.435
+     },
+     "16": {
+      "high": 0.5025,
+      "low": 0.3731,
+      "w": 0.451
+     },
+     "17": {
+      "high": 0.5177,
+      "low": 0.3873,
+      "w": 0.466
+     },
+     "2": {
+      "high": 0.1121,
+      "low": 0.0692,
+      "w": 0.0931
+     },
+     "3": {
+      "high": 0.1592,
+      "low": 0.1004,
+      "w": 0.1335
+     },
+     "4": {
+      "high": 0.2016,
+      "low": 0.1295,
+      "w": 0.1704
+     },
+     "5": {
+      "high": 0.2399,
+      "low": 0.1568,
+      "w": 0.2042
+     },
+     "6": {
+      "high": 0.2747,
+      "low": 0.1824,
+      "w": 0.2355
+     },
+     "7": {
+      "high": 0.3065,
+      "low": 0.2066,
+      "w": 0.2644
+     },
+     "8": {
+      "high": 0.3356,
+      "low": 0.2293,
+      "w": 0.2911
+     },
+     "9": {
+      "high": 0.3623,
+      "low": 0.2508,
+      "w": 0.316
+     }
+    }
+   },
+   "TE": {
+    "eras": {
+     "2016-2020": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         18.8691,
+         88.253
+        ],
+        "pearson95": [
+         0.0829,
+         0.2972
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 32.62,
+       "meanHalfGames": 7.972,
+       "pearson": 0.1964,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         20.7686,
+         70.6388
+        ],
+        "pearson95": [
+         0.1015,
+         0.2774
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 31.9,
+       "meanHalfGames": 7.972,
+       "pearson": 0.1999,
+       "units": 160
+      }
+     },
+     "2021-2025": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         16.3959,
+         1064.6694
+        ],
+        "pearson95": [
+         -0.0887,
+         0.3306
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0995
+       },
+       "k": 49.31,
+       "meanHalfGames": 8.478,
+       "pearson": 0.1467,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         20.752,
+         2317.2438
+        ],
+        "pearson95": [
+         -0.0882,
+         0.2856
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0775
+       },
+       "k": 55.32,
+       "meanHalfGames": 8.478,
+       "pearson": 0.1329,
+       "units": 160
+      }
+     }
+    },
+    "halfSize": {
+     "aHalfUnder8": {
+      "pearson": 0.3012,
+      "units": 82
+     },
+     "bothHalves8Plus": {
+      "pearson": 0.1221,
+      "units": 238
+     }
+    },
+    "weights": {
+     "0": {
+      "high": 0.0,
+      "low": 0.0,
+      "w": 0.0
+     },
+     "1": {
+      "high": 0.0417,
+      "low": 0.0102,
+      "w": 0.026
+     },
+     "10": {
+      "high": 0.303,
+      "low": 0.0937,
+      "w": 0.2108
+     },
+     "11": {
+      "high": 0.3235,
+      "low": 0.1021,
+      "w": 0.2271
+     },
+     "12": {
+      "high": 0.3428,
+      "low": 0.1104,
+      "w": 0.2428
+     },
+     "13": {
+      "high": 0.361,
+      "low": 0.1185,
+      "w": 0.2578
+     },
+     "14": {
+      "high": 0.3783,
+      "low": 0.1264,
+      "w": 0.2722
+     },
+     "15": {
+      "high": 0.3947,
+      "low": 0.1343,
+      "w": 0.2861
+     },
+     "16": {
+      "high": 0.4102,
+      "low": 0.1419,
+      "w": 0.2995
+     },
+     "17": {
+      "high": 0.4249,
+      "low": 0.1495,
+      "w": 0.3123
+     },
+     "2": {
+      "high": 0.08,
+      "low": 0.0203,
+      "w": 0.0507
+     },
+     "3": {
+      "high": 0.1154,
+      "low": 0.0301,
+      "w": 0.0742
+     },
+     "4": {
+      "high": 0.1481,
+      "low": 0.0397,
+      "w": 0.0965
+     },
+     "5": {
+      "high": 0.1785,
+      "low": 0.0492,
+      "w": 0.1178
+     },
+     "6": {
+      "high": 0.2068,
+      "low": 0.0584,
+      "w": 0.1382
+     },
+     "7": {
+      "high": 0.2333,
+      "low": 0.0675,
+      "w": 0.1576
+     },
+     "8": {
+      "high": 0.258,
+      "low": 0.0764,
+      "w": 0.1761
+     },
+     "9": {
+      "high": 0.2812,
+      "low": 0.0851,
+      "w": 0.1938
+     }
+    }
+   },
+   "WR": {
+    "eras": {
+     "2016-2020": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         16.9858,
+         67.6043
+        ],
+        "pearson95": [
+         0.1055,
+         0.3189
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 33.04,
+       "meanHalfGames": 7.969,
+       "pearson": 0.1943,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         20.7939,
+         61.0578
+        ],
+        "pearson95": [
+         0.1152,
+         0.2773
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.0
+       },
+       "k": 27.31,
+       "meanHalfGames": 7.969,
+       "pearson": 0.2259,
+       "units": 160
+      }
+     },
+     "2021-2025": {
+      "adjusted": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         15.1736,
+         268.0843
+        ],
+        "pearson95": [
+         -0.1303,
+         0.3555
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.1855
+       },
+       "k": 54.15,
+       "meanHalfGames": 8.472,
+       "pearson": 0.1353,
+       "units": 160
+      },
+      "raw": {
+       "bootstrapSeasons": {
+        "clusters": 5,
+        "k95": [
+         20.4647,
+         324.8224
+        ],
+        "pearson95": [
+         -0.2012,
+         0.289
+        ],
+        "reps": 2000,
+        "seed": 1729,
+        "unidentifiedShare": 0.3625
+       },
+       "k": 113.67,
+       "meanHalfGames": 8.472,
+       "pearson": 0.0694,
+       "units": 160
+      }
+     }
+    },
+    "halfSize": {
+     "aHalfUnder8": {
+      "pearson": 0.2068,
+      "units": 83
+     },
+     "bothHalves8Plus": {
+      "pearson": 0.1552,
+      "units": 237
+     }
+    },
+    "weights": {
+     "0": {
+      "high": 0.0,
+      "low": 0.0,
+      "w": 0.0
+     },
+     "1": {
+      "high": 0.0531,
+      "low": 0.0169,
+      "w": 0.0361
+     },
+     "10": {
+      "high": 0.3592,
+      "low": 0.1463,
+      "w": 0.2726
+     },
+     "11": {
+      "high": 0.3814,
+      "low": 0.1586,
+      "w": 0.2919
+     },
+     "12": {
+      "high": 0.4021,
+      "low": 0.1706,
+      "w": 0.3102
+     },
+     "13": {
+      "high": 0.4215,
+      "low": 0.1822,
+      "w": 0.3275
+     },
+     "14": {
+      "high": 0.4397,
+      "low": 0.1935,
+      "w": 0.3441
+     },
+     "15": {
+      "high": 0.4567,
+      "low": 0.2045,
+      "w": 0.3598
+     },
+     "16": {
+      "high": 0.4728,
+      "low": 0.2152,
+      "w": 0.3748
+     },
+     "17": {
+      "high": 0.4879,
+      "low": 0.2256,
+      "w": 0.3891
+     },
+     "2": {
+      "high": 0.1008,
+      "low": 0.0331,
+      "w": 0.0697
+     },
+     "3": {
+      "high": 0.1439,
+      "low": 0.0489,
+      "w": 0.101
+     },
+     "4": {
+      "high": 0.1831,
+      "low": 0.0642,
+      "w": 0.1303
+     },
+     "5": {
+      "high": 0.2189,
+      "low": 0.0789,
+      "w": 0.1578
+     },
+     "6": {
+      "high": 0.2517,
+      "low": 0.0933,
+      "w": 0.1835
+     },
+     "7": {
+      "high": 0.2818,
+      "low": 0.1071,
+      "w": 0.2078
+     },
+     "8": {
+      "high": 0.3096,
+      "low": 0.1206,
+      "w": 0.2306
+     },
+     "9": {
+      "high": 0.3353,
+      "low": 0.1337,
+      "w": 0.2522
+     }
+    }
+   },
+   "orderings": {
+    "pKLower": {
+     "DST<K": 1.0,
+     "DST<QB": 1.0,
+     "DST<RB": 0.998,
+     "DST<TE": 1.0,
+     "DST<WR": 1.0,
+     "K<QB": 0.0341,
+     "K<RB": 0.0402,
+     "K<TE": 0.373,
+     "K<WR": 0.4158,
+     "QB<RB": 0.461,
+     "QB<TE": 0.8946,
+     "QB<WR": 0.9211,
+     "RB<TE": 0.9187,
+     "RB<WR": 0.8902,
+     "TE<WR": 0.4977
+    },
+    "reps": 2000,
+    "seed": 1729
+   }
+  },
+  "A05": {
+   "DST": {
+    "adjusted": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "k": 7.23,
+      "meanSize": 16.494,
+      "method": "method_of_moments",
+      "msb": 127.0019,
+      "msw": 38.707,
+      "n0": 16.494,
+      "sigma2": 38.707,
+      "singleGameReliability": 0.1215,
+      "tau2": 5.35325
+     },
+     "oddEvenImpliedByReml": 0.5316,
+     "oddEvenObserved": 0.4853,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.23,
+      "loglik": -9840.1287,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 38.7067,
+      "singleGameReliability": 0.1215,
+      "tau2": 5.35197
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       6.0326,
+       8.5747
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "k": 7.32,
+      "meanSize": 16.494,
+      "method": "method_of_moments",
+      "msb": 126.0267,
+      "msw": 38.7425,
+      "n0": 16.494,
+      "sigma2": 38.7425,
+      "singleGameReliability": 0.1202,
+      "tau2": 5.29197
+     },
+     "oddEvenImpliedByReml": 0.5287,
+     "oddEvenObserved": 0.4814,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.32,
+      "loglik": -9841.303,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 38.7431,
+      "singleGameReliability": 0.1202,
+      "tau2": 5.29416
+     }
+    },
+    "seasonCentered": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "k": 7.73,
+      "meanSize": 16.494,
+      "method": "method_of_moments",
+      "msb": 121.3676,
+      "msw": 38.7425,
+      "n0": 16.494,
+      "sigma2": 38.7425,
+      "singleGameReliability": 0.1145,
+      "tau2": 5.0095
+     },
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 7.73,
+      "loglik": -9835.2411,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 38.7427,
+      "singleGameReliability": 0.1145,
+      "tau2": 5.01018
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       6.7219,
+       8.8499
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "seasonEffect": {
+     "boundary": false,
+     "seasonMeanSd": 0.5634,
+     "seasonVariance": 0.23398,
+     "seasons": 10
+    }
+   },
+   "K": {
+    "adjusted": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "k": 50.8,
+      "meanSize": 16.45,
+      "method": "method_of_moments",
+      "msb": 27.6469,
+      "msw": 20.884,
+      "n0": 16.45,
+      "sigma2": 20.884,
+      "singleGameReliability": 0.0193,
+      "tau2": 0.41112
+     },
+     "oddEvenImpliedByReml": 0.1396,
+     "oddEvenObserved": 0.1441,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 50.51,
+      "loglik": -8046.009,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.8815,
+      "singleGameReliability": 0.0194,
+      "tau2": 0.4134
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       33.1966,
+       101.4751
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "k": 48.12,
+      "meanSize": 16.45,
+      "method": "method_of_moments",
+      "msb": 27.5843,
+      "msw": 20.5566,
+      "n0": 16.45,
+      "sigma2": 20.5566,
+      "singleGameReliability": 0.0204,
+      "tau2": 0.42722
+     },
+     "oddEvenImpliedByReml": 0.1459,
+     "oddEvenObserved": 0.1644,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 47.98,
+      "loglik": -8006.6331,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.5553,
+      "singleGameReliability": 0.0204,
+      "tau2": 0.4284
+     }
+    },
+    "seasonCentered": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "k": 58.05,
+      "meanSize": 16.45,
+      "method": "method_of_moments",
+      "msb": 26.3823,
+      "msw": 20.5566,
+      "n0": 16.45,
+      "sigma2": 20.5566,
+      "singleGameReliability": 0.0169,
+      "tau2": 0.35414
+     },
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 57.81,
+      "loglik": -7999.5303,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 20.5551,
+      "singleGameReliability": 0.017,
+      "tau2": 0.35556
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       37.1264,
+       123.5813
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "seasonEffect": {
+     "boundary": false,
+     "seasonMeanSd": 0.2837,
+     "seasonVariance": 0.0406,
+     "seasons": 10
+    }
+   },
+   "QB": {
+    "adjusted": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "k": 24.2,
+      "meanSize": 16.494,
+      "method": "method_of_moments",
+      "msb": 90.8894,
+      "msw": 54.048,
+      "n0": 16.494,
+      "sigma2": 54.048,
+      "singleGameReliability": 0.0397,
+      "tau2": 2.23367
+     },
+     "oddEvenImpliedByReml": 0.2534,
+     "oddEvenObserved": 0.2706,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 24.22,
+      "loglik": -10614.5435,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 54.0508,
+      "singleGameReliability": 0.0397,
+      "tau2": 2.23206
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       16.2266,
+       42.3465
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "k": 29.05,
+      "meanSize": 16.494,
+      "method": "method_of_moments",
+      "msb": 93.0811,
+      "msw": 59.3739,
+      "n0": 16.494,
+      "sigma2": 59.3739,
+      "singleGameReliability": 0.0333,
+      "tau2": 2.04364
+     },
+     "oddEvenImpliedByReml": 0.2201,
+     "oddEvenObserved": 0.2166,
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 29.13,
+      "loglik": -10851.412,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 59.3811,
+      "singleGameReliability": 0.0332,
+      "tau2": 2.03857
+     }
+    },
+    "seasonCentered": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "k": 38.22,
+      "meanSize": 16.494,
+      "method": "method_of_moments",
+      "msb": 84.9988,
+      "msw": 59.3739,
+      "n0": 16.494,
+      "sigma2": 59.3739,
+      "singleGameReliability": 0.0255,
+      "tau2": 1.55362
+     },
+     "reml": {
+      "boundary": false,
+      "cells": 5278,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 38.28,
+      "loglik": -10836.8066,
+      "meanSize": 16.494,
+      "method": "reml",
+      "sigma2": 59.3767,
+      "singleGameReliability": 0.0255,
+      "tau2": 1.55127
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       23.4743,
+       83.6341
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "seasonEffect": {
+     "boundary": false,
+     "seasonMeanSd": 0.7444,
+     "seasonVariance": 0.43762,
+     "seasons": 10
+    }
+   },
+   "RB": {
+    "adjusted": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "k": 19.47,
+      "meanSize": 16.453,
+      "method": "method_of_moments",
+      "msb": 166.774,
+      "msw": 90.3908,
+      "n0": 16.453,
+      "sigma2": 90.3908,
+      "singleGameReliability": 0.0489,
+      "tau2": 4.64249
+     },
+     "oddEvenImpliedByReml": 0.2962,
+     "oddEvenObserved": 0.2812,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 19.48,
+      "loglik": -11956.9255,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 90.3937,
+      "singleGameReliability": 0.0488,
+      "tau2": 4.6413
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       15.8406,
+       26.8884
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "k": 19.52,
+      "meanSize": 16.453,
+      "method": "method_of_moments",
+      "msb": 181.2349,
+      "msw": 98.3466,
+      "n0": 16.453,
+      "sigma2": 98.3466,
+      "singleGameReliability": 0.0487,
+      "tau2": 5.03786
+     },
+     "oddEvenImpliedByReml": 0.2956,
+     "oddEvenObserved": 0.2967,
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 19.53,
+      "loglik": -12178.7428,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 98.349,
+      "singleGameReliability": 0.0487,
+      "tau2": 5.03698
+     }
+    },
+    "seasonCentered": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "k": 22.84,
+      "meanSize": 16.453,
+      "method": "method_of_moments",
+      "msb": 169.1921,
+      "msw": 98.3466,
+      "n0": 16.453,
+      "sigma2": 98.3466,
+      "singleGameReliability": 0.0419,
+      "tau2": 4.30592
+     },
+     "reml": {
+      "boundary": false,
+      "cells": 5265,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 22.85,
+      "loglik": -12167.7977,
+      "meanSize": 16.453,
+      "method": "reml",
+      "sigma2": 98.3505,
+      "singleGameReliability": 0.0419,
+      "tau2": 4.30377
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       17.0581,
+       36.8714
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "seasonEffect": {
+     "boundary": false,
+     "seasonMeanSd": 0.8983,
+     "seasonVariance": 0.61042,
+     "seasons": 10
+    }
+   },
+   "TE": {
+    "adjusted": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "k": 37.39,
+      "meanSize": 16.45,
+      "method": "method_of_moments",
+      "msb": 83.821,
+      "msw": 58.2094,
+      "n0": 16.45,
+      "sigma2": 58.2094,
+      "singleGameReliability": 0.0261,
+      "tau2": 1.55694
+     },
+     "oddEvenImpliedByReml": 0.1797,
+     "oddEvenObserved": 0.1635,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 37.43,
+      "loglik": -10757.0048,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 58.2112,
+      "singleGameReliability": 0.026,
+      "tau2": 1.5554
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       23.0074,
+       96.7246
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "k": 37.65,
+      "meanSize": 16.45,
+      "method": "method_of_moments",
+      "msb": 96.5127,
+      "msw": 67.1671,
+      "n0": 16.45,
+      "sigma2": 67.1671,
+      "singleGameReliability": 0.0259,
+      "tau2": 1.78393
+     },
+     "oddEvenImpliedByReml": 0.1786,
+     "oddEvenObserved": 0.1603,
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 37.69,
+      "loglik": -11133.3273,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 67.1692,
+      "singleGameReliability": 0.0258,
+      "tau2": 1.78212
+     }
+    },
+    "seasonCentered": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "k": 42.78,
+      "meanSize": 16.45,
+      "method": "method_of_moments",
+      "msb": 92.9947,
+      "msw": 67.1671,
+      "n0": 16.45,
+      "sigma2": 67.1671,
+      "singleGameReliability": 0.0228,
+      "tau2": 1.57007
+     },
+     "reml": {
+      "boundary": false,
+      "cells": 5264,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 42.85,
+      "loglik": -11127.4105,
+      "meanSize": 16.45,
+      "method": "reml",
+      "sigma2": 67.1697,
+      "singleGameReliability": 0.0228,
+      "tau2": 1.5677
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       25.9493,
+       107.1804
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "seasonEffect": {
+     "boundary": false,
+     "seasonMeanSd": 0.4859,
+     "seasonVariance": 0.105,
+     "seasons": 10
+    }
+   },
+   "WR": {
+    "adjusted": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "k": 26.72,
+      "meanSize": 16.441,
+      "method": "method_of_moments",
+      "msb": 260.2055,
+      "msw": 161.097,
+      "n0": 16.441,
+      "sigma2": 161.097,
+      "singleGameReliability": 0.0361,
+      "tau2": 6.02829
+     },
+     "oddEvenImpliedByReml": 0.2348,
+     "oddEvenObserved": 0.1625,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 26.69,
+      "loglik": -13446.3232,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 161.0863,
+      "singleGameReliability": 0.0361,
+      "tau2": 6.0353
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0,
+      "k95": [
+       17.8411,
+       58.3388
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "k": 27.77,
+      "meanSize": 16.441,
+      "method": "method_of_moments",
+      "msb": 302.378,
+      "msw": 189.9368,
+      "n0": 16.441,
+      "sigma2": 189.9368,
+      "singleGameReliability": 0.0348,
+      "tau2": 6.83926
+     },
+     "oddEvenImpliedByReml": 0.2274,
+     "oddEvenObserved": 0.1632,
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 27.83,
+      "loglik": -13877.3942,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 189.9575,
+      "singleGameReliability": 0.0347,
+      "tau2": 6.82537
+     }
+    },
+    "seasonCentered": {
+     "momentMethod": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "k": 48.49,
+      "meanSize": 16.441,
+      "method": "method_of_moments",
+      "msb": 254.3337,
+      "msw": 189.9368,
+      "n0": 16.441,
+      "sigma2": 189.9368,
+      "singleGameReliability": 0.0202,
+      "tau2": 3.91695
+     },
+     "reml": {
+      "boundary": false,
+      "cells": 5261,
+      "converged": true,
+      "groups": 320,
+      "iterations": 33,
+      "k": 48.61,
+      "loglik": -13849.6884,
+      "meanSize": 16.441,
+      "method": "reml",
+      "sigma2": 189.9471,
+      "singleGameReliability": 0.0202,
+      "tau2": 3.90771
+     },
+     "remlBootstrapSeasons": {
+      "boundaryShare": 0.0045,
+      "k95": [
+       29.2709,
+       158.3549
+      ],
+      "reps": 2000,
+      "seed": 1729
+     }
+    },
+    "seasonEffect": {
+     "boundary": false,
+     "seasonMeanSd": 1.8065,
+     "seasonVariance": 2.88906,
+     "seasons": 10
+    }
+   }
+  },
+  "A06": {
+   "DST": {
+    "adjusted": {
+     "firstVsSecondHalf": {
+      "k": 8.48,
+      "meanHalfGames": 8.247,
+      "pearson": 0.493,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8958,
+       "reliability": 0.1232
+      },
+      "11-12": {
+       "pairs": 3598,
+       "reliability": 0.1114
+      },
+      "13-17": {
+       "pairs": 3942,
+       "reliability": 0.1042
+      },
+      "3-4": {
+       "pairs": 7688,
+       "reliability": 0.1182
+      },
+      "5-6": {
+       "pairs": 6574,
+       "reliability": 0.1393
+      },
+      "7-8": {
+       "pairs": 5555,
+       "reliability": 0.1342
+      },
+      "9-10": {
+       "pairs": 4613,
+       "reliability": 0.1021
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.1058,
+       0.1413
+      ],
+      "11-12": [
+       0.0699,
+       0.1547
+      ],
+      "13-17": [
+       0.0796,
+       0.1342
+      ],
+      "3-4": [
+       0.0941,
+       0.1439
+      ],
+      "5-6": [
+       0.1045,
+       0.1744
+      ],
+      "7-8": [
+       0.0994,
+       0.1668
+      ],
+      "9-10": [
+       0.0623,
+       0.1343
+      ]
+     },
+     "oddEven": {
+      "k": 8.74,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4853,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": -0.0076,
+      "interval95": [
+       -0.0892,
+       0.0818
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.1888,
+       "pairs": 4318,
+       "pearson": 0.1931,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.2229,
+       "pairs": 3678,
+       "pearson": 0.2386,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.2526,
+       "pairs": 2718,
+       "pearson": 0.2737,
+       "window": 8
+      }
+     ]
+    },
+    "seasonCentered": {
+     "firstVsSecondHalf": {
+      "k": 9.09,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4757,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8958,
+       "reliability": 0.1136
+      },
+      "11-12": {
+       "pairs": 3598,
+       "reliability": 0.1054
+      },
+      "13-17": {
+       "pairs": 3942,
+       "reliability": 0.1072
+      },
+      "3-4": {
+       "pairs": 7688,
+       "reliability": 0.1079
+      },
+      "5-6": {
+       "pairs": 6574,
+       "reliability": 0.1305
+      },
+      "7-8": {
+       "pairs": 5555,
+       "reliability": 0.1266
+      },
+      "9-10": {
+       "pairs": 4613,
+       "reliability": 0.0988
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0998,
+       0.1285
+      ],
+      "11-12": [
+       0.0669,
+       0.142
+      ],
+      "13-17": [
+       0.0869,
+       0.1304
+      ],
+      "3-4": [
+       0.0891,
+       0.1262
+      ],
+      "5-6": [
+       0.0953,
+       0.1701
+      ],
+      "7-8": [
+       0.0972,
+       0.1548
+      ],
+      "9-10": [
+       0.063,
+       0.1287
+      ]
+     },
+     "oddEven": {
+      "k": 9.44,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4664,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": -0.0094,
+      "interval95": [
+       -0.0966,
+       0.0729
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.179,
+       "pairs": 4318,
+       "pearson": 0.1769,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.2121,
+       "pairs": 3678,
+       "pearson": 0.2235,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.2414,
+       "pairs": 2718,
+       "pearson": 0.2519,
+       "window": 8
+      }
+     ]
+    }
+   },
+   "K": {
+    "adjusted": {
+     "firstVsSecondHalf": {
+      "k": 71.4,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1033,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8911,
+       "reliability": 0.0239
+      },
+      "11-12": {
+       "pairs": 3576,
+       "reliability": 0.0146
+      },
+      "13-17": {
+       "pairs": 3925,
+       "reliability": -0.0052
+      },
+      "3-4": {
+       "pairs": 7644,
+       "reliability": 0.0316
+      },
+      "5-6": {
+       "pairs": 6541,
+       "reliability": 0.0334
+      },
+      "7-8": {
+       "pairs": 5529,
+       "reliability": 0.0125
+      },
+      "9-10": {
+       "pairs": 4587,
+       "reliability": 0.0024
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0009,
+       0.047
+      ],
+      "11-12": [
+       -0.0274,
+       0.0614
+      ],
+      "13-17": [
+       -0.0348,
+       0.0246
+      ],
+      "3-4": [
+       0.0133,
+       0.0496
+      ],
+      "5-6": [
+       0.0202,
+       0.0461
+      ],
+      "7-8": [
+       -0.0024,
+       0.0279
+      ],
+      "9-10": [
+       -0.0273,
+       0.0293
+      ]
+     },
+     "oddEven": {
+      "k": 48.86,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1441,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0408,
+      "interval95": [
+       -0.0656,
+       0.1285
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.033,
+       "pairs": 4304,
+       "pearson": 0.0463,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0418,
+       "pairs": 3664,
+       "pearson": 0.0569,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0515,
+       "pairs": 2704,
+       "pearson": 0.0602,
+       "window": 8
+      }
+     ]
+    },
+    "seasonCentered": {
+     "firstVsSecondHalf": {
+      "k": 114.47,
+      "meanHalfGames": 8.225,
+      "pearson": 0.067,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8911,
+       "reliability": 0.0282
+      },
+      "11-12": {
+       "pairs": 3576,
+       "reliability": 0.0198
+      },
+      "13-17": {
+       "pairs": 3925,
+       "reliability": -0.0125
+      },
+      "3-4": {
+       "pairs": 7644,
+       "reliability": 0.021
+      },
+      "5-6": {
+       "pairs": 6541,
+       "reliability": 0.0344
+      },
+      "7-8": {
+       "pairs": 5529,
+       "reliability": -0.0023
+      },
+      "9-10": {
+       "pairs": 4587,
+       "reliability": 0.0085
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0031,
+       0.0535
+      ],
+      "11-12": [
+       -0.0164,
+       0.0613
+      ],
+      "13-17": [
+       -0.0395,
+       0.0138
+      ],
+      "3-4": [
+       0.0024,
+       0.0417
+      ],
+      "5-6": [
+       0.0225,
+       0.0451
+      ],
+      "7-8": [
+       -0.0228,
+       0.022
+      ],
+      "9-10": [
+       -0.0196,
+       0.0335
+      ]
+     },
+     "oddEven": {
+      "k": 49.24,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1431,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0761,
+      "interval95": [
+       -0.0486,
+       0.1897
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.029,
+       "pairs": 4304,
+       "pearson": 0.0419,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0368,
+       "pairs": 3664,
+       "pearson": 0.053,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0455,
+       "pairs": 2704,
+       "pearson": 0.0488,
+       "window": 8
+      }
+     ]
+    }
+   },
+   "QB": {
+    "adjusted": {
+     "firstVsSecondHalf": {
+      "k": 45.21,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1543,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8958,
+       "reliability": 0.0594
+      },
+      "11-12": {
+       "pairs": 3598,
+       "reliability": 0.0459
+      },
+      "13-17": {
+       "pairs": 3942,
+       "reliability": 0.0145
+      },
+      "3-4": {
+       "pairs": 7688,
+       "reliability": 0.0607
+      },
+      "5-6": {
+       "pairs": 6574,
+       "reliability": 0.0322
+      },
+      "7-8": {
+       "pairs": 5555,
+       "reliability": 0.0274
+      },
+      "9-10": {
+       "pairs": 4613,
+       "reliability": 0.0045
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0337,
+       0.0869
+      ],
+      "11-12": [
+       0.0147,
+       0.0816
+      ],
+      "13-17": [
+       -0.0352,
+       0.0607
+      ],
+      "3-4": [
+       0.0379,
+       0.0891
+      ],
+      "5-6": [
+       0.0123,
+       0.0556
+      ],
+      "7-8": [
+       0.0002,
+       0.0511
+      ],
+      "9-10": [
+       -0.0234,
+       0.0306
+      ]
+     },
+     "oddEven": {
+      "k": 22.23,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2706,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.1164,
+      "interval95": [
+       0.0192,
+       0.2013
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0661,
+       "pairs": 4318,
+       "pearson": 0.103,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0824,
+       "pairs": 3678,
+       "pearson": 0.1211,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0992,
+       "pairs": 2718,
+       "pearson": 0.1074,
+       "window": 8
+      }
+     ]
+    },
+    "seasonCentered": {
+     "firstVsSecondHalf": {
+      "k": 79.57,
+      "meanHalfGames": 8.247,
+      "pearson": 0.0939,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8958,
+       "reliability": 0.0442
+      },
+      "11-12": {
+       "pairs": 3598,
+       "reliability": 0.0232
+      },
+      "13-17": {
+       "pairs": 3942,
+       "reliability": 0.0217
+      },
+      "3-4": {
+       "pairs": 7688,
+       "reliability": 0.046
+      },
+      "5-6": {
+       "pairs": 6574,
+       "reliability": 0.0155
+      },
+      "7-8": {
+       "pairs": 5555,
+       "reliability": 0.0143
+      },
+      "9-10": {
+       "pairs": 4613,
+       "reliability": -0.0153
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0176,
+       0.0738
+      ],
+      "11-12": [
+       -0.0086,
+       0.0538
+      ],
+      "13-17": [
+       -0.0259,
+       0.0663
+      ],
+      "3-4": [
+       0.0236,
+       0.0708
+      ],
+      "5-6": [
+       -0.0102,
+       0.042
+      ],
+      "7-8": [
+       -0.0071,
+       0.0345
+      ],
+      "9-10": [
+       -0.047,
+       0.0132
+      ]
+     },
+     "oddEven": {
+      "k": 39.41,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1731,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0791,
+      "interval95": [
+       -0.0268,
+       0.1894
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.043,
+       "pairs": 4318,
+       "pearson": 0.0692,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0542,
+       "pairs": 3678,
+       "pearson": 0.0774,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0663,
+       "pairs": 2718,
+       "pearson": 0.055,
+       "window": 8
+      }
+     ]
+    }
+   },
+   "RB": {
+    "adjusted": {
+     "firstVsSecondHalf": {
+      "k": 26.28,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2384,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8914,
+       "reliability": 0.0533
+      },
+      "11-12": {
+       "pairs": 3578,
+       "reliability": 0.0444
+      },
+      "13-17": {
+       "pairs": 3925,
+       "reliability": 0.044
+      },
+      "3-4": {
+       "pairs": 7648,
+       "reliability": 0.0662
+      },
+      "5-6": {
+       "pairs": 6543,
+       "reliability": 0.0574
+      },
+      "7-8": {
+       "pairs": 5531,
+       "reliability": 0.0351
+      },
+      "9-10": {
+       "pairs": 4589,
+       "reliability": 0.0197
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0399,
+       0.0656
+      ],
+      "11-12": [
+       0.008,
+       0.0813
+      ],
+      "13-17": [
+       0.0053,
+       0.0901
+      ],
+      "3-4": [
+       0.046,
+       0.0851
+      ],
+      "5-6": [
+       0.0318,
+       0.0808
+      ],
+      "7-8": [
+       0.0006,
+       0.0647
+      ],
+      "9-10": [
+       -0.0092,
+       0.0528
+      ]
+     },
+     "oddEven": {
+      "k": 21.03,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2812,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0428,
+      "interval95": [
+       -0.0674,
+       0.153
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0807,
+       "pairs": 4305,
+       "pearson": 0.0946,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0999,
+       "pairs": 3665,
+       "pearson": 0.1187,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.1192,
+       "pairs": 2705,
+       "pearson": 0.1013,
+       "window": 8
+      }
+     ]
+    },
+    "seasonCentered": {
+     "firstVsSecondHalf": {
+      "k": 28.04,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2268,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8914,
+       "reliability": 0.0409
+      },
+      "11-12": {
+       "pairs": 3578,
+       "reliability": 0.0431
+      },
+      "13-17": {
+       "pairs": 3925,
+       "reliability": 0.0446
+      },
+      "3-4": {
+       "pairs": 7648,
+       "reliability": 0.0606
+      },
+      "5-6": {
+       "pairs": 6543,
+       "reliability": 0.0445
+      },
+      "7-8": {
+       "pairs": 5531,
+       "reliability": 0.0193
+      },
+      "9-10": {
+       "pairs": 4589,
+       "reliability": 0.0298
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0217,
+       0.0599
+      ],
+      "11-12": [
+       0.0156,
+       0.0668
+      ],
+      "13-17": [
+       0.0034,
+       0.0911
+      ],
+      "3-4": [
+       0.0408,
+       0.0788
+      ],
+      "5-6": [
+       0.0137,
+       0.0708
+      ],
+      "7-8": [
+       -0.0202,
+       0.0545
+      ],
+      "9-10": [
+       -0.0012,
+       0.0669
+      ]
+     },
+     "oddEven": {
+      "k": 22.64,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2665,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0397,
+      "interval95": [
+       -0.073,
+       0.1471
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0698,
+       "pairs": 4305,
+       "pearson": 0.0762,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0868,
+       "pairs": 3665,
+       "pearson": 0.1021,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.1043,
+       "pairs": 2705,
+       "pearson": 0.0872,
+       "window": 8
+      }
+     ]
+    }
+   },
+   "TE": {
+    "adjusted": {
+     "firstVsSecondHalf": {
+      "k": 69.55,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1058,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8911,
+       "reliability": 0.031
+      },
+      "11-12": {
+       "pairs": 3576,
+       "reliability": 0.0416
+      },
+      "13-17": {
+       "pairs": 3925,
+       "reliability": 0.0075
+      },
+      "3-4": {
+       "pairs": 7644,
+       "reliability": 0.0321
+      },
+      "5-6": {
+       "pairs": 6541,
+       "reliability": 0.0413
+      },
+      "7-8": {
+       "pairs": 5529,
+       "reliability": -0.0008
+      },
+      "9-10": {
+       "pairs": 4587,
+       "reliability": 0.0179
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0032,
+       0.0569
+      ],
+      "11-12": [
+       0.0064,
+       0.0783
+      ],
+      "13-17": [
+       -0.0263,
+       0.0411
+      ],
+      "3-4": [
+       0.0145,
+       0.0505
+      ],
+      "5-6": [
+       0.0126,
+       0.0699
+      ],
+      "7-8": [
+       -0.0252,
+       0.0236
+      ],
+      "9-10": [
+       -0.0208,
+       0.0608
+      ]
+     },
+     "oddEven": {
+      "k": 42.07,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1635,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0578,
+      "interval95": [
+       -0.0466,
+       0.1645
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0439,
+       "pairs": 4304,
+       "pearson": 0.0453,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0554,
+       "pairs": 3664,
+       "pearson": 0.0563,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0677,
+       "pairs": 2704,
+       "pearson": 0.0418,
+       "window": 8
+      }
+     ]
+    },
+    "seasonCentered": {
+     "firstVsSecondHalf": {
+      "k": 62.65,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1161,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8911,
+       "reliability": 0.0136
+      },
+      "11-12": {
+       "pairs": 3576,
+       "reliability": 0.0317
+      },
+      "13-17": {
+       "pairs": 3925,
+       "reliability": 0.0269
+      },
+      "3-4": {
+       "pairs": 7644,
+       "reliability": 0.0331
+      },
+      "5-6": {
+       "pairs": 6541,
+       "reliability": 0.0402
+      },
+      "7-8": {
+       "pairs": 5529,
+       "reliability": -0.0024
+      },
+      "9-10": {
+       "pairs": 4587,
+       "reliability": 0.0162
+      }
+     },
+     "lag95": {
+      "1-2": [
+       -0.01,
+       0.0366
+      ],
+      "11-12": [
+       0.011,
+       0.0527
+      ],
+      "13-17": [
+       0.0029,
+       0.0538
+      ],
+      "3-4": [
+       0.0154,
+       0.0532
+      ],
+      "5-6": [
+       0.0179,
+       0.0637
+      ],
+      "7-8": [
+       -0.0268,
+       0.025
+      ],
+      "9-10": [
+       -0.025,
+       0.0668
+      ]
+     },
+     "oddEven": {
+      "k": 49.6,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1422,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": 0.0262,
+      "interval95": [
+       -0.0484,
+       0.1047
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0386,
+       "pairs": 4304,
+       "pearson": 0.0214,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0488,
+       "pairs": 3664,
+       "pearson": 0.0469,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0599,
+       "pairs": 2704,
+       "pearson": 0.0382,
+       "window": 8
+      }
+     ]
+    }
+   },
+   "WR": {
+    "adjusted": {
+     "firstVsSecondHalf": {
+      "k": 38.26,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1769,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8900,
+       "reliability": 0.0478
+      },
+      "11-12": {
+       "pairs": 3570,
+       "reliability": 0.0173
+      },
+      "13-17": {
+       "pairs": 3917,
+       "reliability": 0.0166
+      },
+      "3-4": {
+       "pairs": 7637,
+       "reliability": 0.0357
+      },
+      "5-6": {
+       "pairs": 6535,
+       "reliability": 0.0538
+      },
+      "7-8": {
+       "pairs": 5525,
+       "reliability": 0.0288
+      },
+      "9-10": {
+       "pairs": 4582,
+       "reliability": 0.0276
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0195,
+       0.0711
+      ],
+      "11-12": [
+       -0.0063,
+       0.0398
+      ],
+      "13-17": [
+       -0.0347,
+       0.0624
+      ],
+      "3-4": [
+       0.0146,
+       0.0528
+      ],
+      "5-6": [
+       0.0215,
+       0.0874
+      ],
+      "7-8": [
+       -0.0007,
+       0.0546
+      ],
+      "9-10": [
+       -0.0034,
+       0.0534
+      ]
+     },
+     "oddEven": {
+      "k": 42.36,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1625,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": -0.0143,
+      "interval95": [
+       -0.0878,
+       0.0588
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0604,
+       "pairs": 4301,
+       "pearson": 0.069,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0755,
+       "pairs": 3661,
+       "pearson": 0.0973,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0913,
+       "pairs": 2701,
+       "pearson": 0.1018,
+       "window": 8
+      }
+     ]
+    },
+    "seasonCentered": {
+     "firstVsSecondHalf": {
+      "k": 63.43,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1147,
+      "units": 320
+     },
+     "lag": {
+      "1-2": {
+       "pairs": 8900,
+       "reliability": 0.0252
+      },
+      "11-12": {
+       "pairs": 3570,
+       "reliability": 0.0098
+      },
+      "13-17": {
+       "pairs": 3917,
+       "reliability": 0.0101
+      },
+      "3-4": {
+       "pairs": 7637,
+       "reliability": 0.0144
+      },
+      "5-6": {
+       "pairs": 6535,
+       "reliability": 0.0333
+      },
+      "7-8": {
+       "pairs": 5525,
+       "reliability": 0.0238
+      },
+      "9-10": {
+       "pairs": 4582,
+       "reliability": 0.011
+      }
+     },
+     "lag95": {
+      "1-2": [
+       0.0031,
+       0.0427
+      ],
+      "11-12": [
+       -0.0183,
+       0.0402
+      ],
+      "13-17": [
+       -0.0407,
+       0.0579
+      ],
+      "3-4": [
+       -0.0066,
+       0.034
+      ],
+      "5-6": [
+       0.0058,
+       0.0636
+      ],
+      "7-8": [
+       0.0059,
+       0.0429
+      ],
+      "9-10": [
+       -0.0059,
+       0.0289
+      ]
+     },
+     "oddEven": {
+      "k": 99.13,
+      "meanHalfGames": 8.22,
+      "pearson": 0.0766,
+      "units": 320
+     },
+     "oddEvenMinusHalves": {
+      "difference": -0.0382,
+      "interval95": [
+       -0.1093,
+       0.0279
+      ]
+     },
+     "rolling": [
+      {
+       "impliedByReml": 0.0342,
+       "pairs": 4301,
+       "pearson": 0.0304,
+       "window": 3
+      },
+      {
+       "impliedByReml": 0.0434,
+       "pairs": 3661,
+       "pearson": 0.0544,
+       "window": 5
+      },
+      {
+       "impliedByReml": 0.0534,
+       "pairs": 2701,
+       "pearson": 0.0463,
+       "window": 8
+      }
+     ]
+    }
+   }
+  },
+  "A07": {
+   "DST": {
+    "adjusted": {
+     "cvMseDecay": 6.3788,
+     "cvMseReset": 7.5512,
+     "pairs": 288,
+     "pearson": 0.399,
+     "pearson95": [
+      0.33,
+      0.4669
+     ],
+     "persistence": 0.574,
+     "slope": 0.3966,
+     "slope95": [
+      0.3234,
+      0.4729
+     ]
+    },
+    "seasonCentered": {
+     "cvMseDecay": 6.287,
+     "cvMseReset": 7.3298,
+     "pairs": 288,
+     "pearson": 0.3802,
+     "pearson95": [
+      0.3249,
+      0.4367
+     ],
+     "persistence": 0.5585,
+     "slope": 0.3803,
+     "slope95": [
+      0.3254,
+      0.4394
+     ]
+    }
+   },
+   "K": {
+    "adjusted": {
+     "cvMseDecay": 1.6441,
+     "cvMseReset": 1.6739,
+     "pairs": 288,
+     "pearson": 0.1429,
+     "pearson95": [
+      0.0783,
+      0.2032
+     ],
+     "persistence": 0.5817,
+     "slope": 0.1458,
+     "slope95": [
+      0.0781,
+      0.2119
+     ]
+    },
+    "seasonCentered": {
+     "cvMseDecay": 1.5512,
+     "cvMseReset": 1.5894,
+     "pairs": 288,
+     "pearson": 0.1623,
+     "pearson95": [
+      0.1042,
+      0.2206
+     ],
+     "persistence": 0.7326,
+     "slope": 0.1641,
+     "slope95": [
+      0.1041,
+      0.2255
+     ]
+    }
+   },
+   "QB": {
+    "adjusted": {
+     "cvMseDecay": 5.2146,
+     "cvMseReset": 5.6389,
+     "pairs": 288,
+     "pearson": 0.2876,
+     "pearson95": [
+      0.176,
+      0.4
+     ],
+     "persistence": 0.7101,
+     "slope": 0.298,
+     "slope95": [
+      0.1839,
+      0.4173
+     ]
+    },
+    "seasonCentered": {
+     "cvMseDecay": 5.0594,
+     "cvMseReset": 5.3692,
+     "pairs": 288,
+     "pearson": 0.2607,
+     "pearson95": [
+      0.1369,
+      0.3703
+     ],
+     "persistence": 0.8659,
+     "slope": 0.2719,
+     "slope95": [
+      0.1395,
+      0.4035
+     ]
+    }
+   },
+   "RB": {
+    "adjusted": {
+     "cvMseDecay": 9.407,
+     "cvMseReset": 10.16,
+     "pairs": 288,
+     "pearson": 0.2791,
+     "pearson95": [
+      0.1852,
+      0.3611
+     ],
+     "persistence": 0.6096,
+     "slope": 0.2777,
+     "slope95": [
+      0.1937,
+      0.3485
+     ]
+    },
+    "seasonCentered": {
+     "cvMseDecay": 9.5603,
+     "cvMseReset": 10.4087,
+     "pairs": 288,
+     "pearson": 0.2921,
+     "pearson95": [
+      0.2025,
+      0.3772
+     ],
+     "persistence": 0.6979,
+     "slope": 0.2916,
+     "slope95": [
+      0.2124,
+      0.3609
+     ]
+    }
+   },
+   "TE": {
+    "adjusted": {
+     "cvMseDecay": 4.6733,
+     "cvMseReset": 4.7747,
+     "pairs": 288,
+     "pearson": 0.1583,
+     "pearson95": [
+      0.0822,
+      0.2293
+     ],
+     "persistence": 0.5185,
+     "slope": 0.1566,
+     "slope95": [
+      0.0789,
+      0.237
+     ]
+    },
+    "seasonCentered": {
+     "cvMseDecay": 5.1713,
+     "cvMseReset": 5.2865,
+     "pairs": 288,
+     "pearson": 0.1626,
+     "pearson95": [
+      0.0748,
+      0.2412
+     ],
+     "persistence": 0.5862,
+     "slope": 0.1599,
+     "slope95": [
+      0.073,
+      0.243
+     ]
+    }
+   },
+   "WR": {
+    "adjusted": {
+     "cvMseDecay": 15.0721,
+     "cvMseReset": 15.703,
+     "pairs": 288,
+     "pearson": 0.2275,
+     "pearson95": [
+      0.1095,
+      0.3411
+     ],
+     "persistence": 0.5969,
+     "slope": 0.229,
+     "slope95": [
+      0.1053,
+      0.3784
+     ]
+    },
+    "seasonCentered": {
+     "cvMseDecay": 14.8439,
+     "cvMseReset": 15.6249,
+     "pairs": 288,
+     "pearson": 0.2411,
+     "pearson95": [
+      0.1384,
+      0.3364
+     ],
+     "persistence": 0.954,
+     "slope": 0.2429,
+     "slope95": [
+      0.1304,
+      0.3571
+     ]
+    }
+   }
+  },
+  "A08": {
+   "DST": {
+    "adjusted": {
+     "bootstrap": {
+      "franchise": {
+       "clusters": 32,
+       "k95": [
+        6.7521,
+        11.9405
+       ],
+       "pearson95": [
+        0.4086,
+        0.5499
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "season": {
+       "clusters": 10,
+       "k95": [
+        7.3466,
+        10.065
+       ],
+       "pearson95": [
+        0.4506,
+        0.5297
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "unit": {
+       "clusters": 320,
+       "k95": [
+        6.4846,
+        12.245
+       ],
+       "pearson95": [
+        0.4024,
+        0.5597
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      }
+     },
+     "permutation": {
+      "null": {
+       "mean": -0.0241,
+       "median": -0.0233,
+       "p2_5": -0.1292,
+       "p97_5": 0.0843,
+       "p99": 0.1012
+      },
+      "observed": 0.4853,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "permutation": {
+      "null": {
+       "mean": 0.0307,
+       "median": 0.0316,
+       "p2_5": -0.0668,
+       "p97_5": 0.1366,
+       "p99": 0.1492
+      },
+      "observed": 0.4814,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    }
+   },
+   "K": {
+    "adjusted": {
+     "bootstrap": {
+      "franchise": {
+       "clusters": 32,
+       "k95": [
+        26.5229,
+        140.4295
+       ],
+       "pearson95": [
+        0.0547,
+        0.2367
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0005
+      },
+      "season": {
+       "clusters": 10,
+       "k95": [
+        21.8999,
+        287.7772
+       ],
+       "pearson95": [
+        0.0105,
+        0.2732
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0185
+      },
+      "unit": {
+       "clusters": 320,
+       "k95": [
+        25.1052,
+        179.0381
+       ],
+       "pearson95": [
+        0.0403,
+        0.247
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0035
+      }
+     },
+     "permutation": {
+      "null": {
+       "mean": -0.0067,
+       "median": -0.0055,
+       "p2_5": -0.1246,
+       "p97_5": 0.1111,
+       "p99": 0.1349
+      },
+      "observed": 0.1441,
+      "pValue": 0.00599,
+      "reps": 1000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "permutation": {
+      "null": {
+       "mean": 0.023,
+       "median": 0.0224,
+       "p2_5": -0.0927,
+       "p97_5": 0.1364,
+       "p99": 0.1553
+      },
+      "observed": 0.1644,
+      "pValue": 0.00899,
+      "reps": 1000,
+      "seed": 1729
+     }
+    }
+   },
+   "QB": {
+    "adjusted": {
+     "bootstrap": {
+      "franchise": {
+       "clusters": 32,
+       "k95": [
+        14.8007,
+        40.218
+       ],
+       "pearson95": [
+        0.1701,
+        0.3578
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "season": {
+       "clusters": 10,
+       "k95": [
+        13.1974,
+        42.9222
+       ],
+       "pearson95": [
+        0.1607,
+        0.3843
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "unit": {
+       "clusters": 320,
+       "k95": [
+        14.0675,
+        38.8891
+       ],
+       "pearson95": [
+        0.1751,
+        0.3697
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      }
+     },
+     "permutation": {
+      "null": {
+       "mean": -0.0398,
+       "median": -0.0404,
+       "p2_5": -0.1401,
+       "p97_5": 0.0642,
+       "p99": 0.0896
+      },
+      "observed": 0.2706,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "permutation": {
+      "null": {
+       "mean": 0.0349,
+       "median": 0.0328,
+       "p2_5": -0.0558,
+       "p97_5": 0.1277,
+       "p99": 0.1529
+      },
+      "observed": 0.2166,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    }
+   },
+   "RB": {
+    "adjusted": {
+     "bootstrap": {
+      "franchise": {
+       "clusters": 32,
+       "k95": [
+        14.3798,
+        33.4605
+       ],
+       "pearson95": [
+        0.1974,
+        0.3639
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "season": {
+       "clusters": 10,
+       "k95": [
+        11.9404,
+        44.3885
+       ],
+       "pearson95": [
+        0.1568,
+        0.4049
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "unit": {
+       "clusters": 320,
+       "k95": [
+        13.5416,
+        37.9276
+       ],
+       "pearson95": [
+        0.1785,
+        0.3781
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      }
+     },
+     "permutation": {
+      "null": {
+       "mean": -0.0116,
+       "median": -0.0116,
+       "p2_5": -0.1226,
+       "p97_5": 0.0944,
+       "p99": 0.109
+      },
+      "observed": 0.2812,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "permutation": {
+      "null": {
+       "mean": 0.0454,
+       "median": 0.0435,
+       "p2_5": -0.0518,
+       "p97_5": 0.1547,
+       "p99": 0.1656
+      },
+      "observed": 0.2967,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    }
+   },
+   "TE": {
+    "adjusted": {
+     "bootstrap": {
+      "franchise": {
+       "clusters": 32,
+       "k95": [
+        19.843,
+        213.1256
+       ],
+       "pearson95": [
+        0.0276,
+        0.2929
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0095
+      },
+      "season": {
+       "clusters": 10,
+       "k95": [
+        21.7461,
+        167.1303
+       ],
+       "pearson95": [
+        0.044,
+        0.2748
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0035
+      },
+      "unit": {
+       "clusters": 320,
+       "k95": [
+        22.7956,
+        146.644
+       ],
+       "pearson95": [
+        0.0519,
+        0.2647
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.002
+      }
+     },
+     "permutation": {
+      "null": {
+       "mean": -0.0214,
+       "median": -0.0229,
+       "p2_5": -0.1259,
+       "p97_5": 0.0894,
+       "p99": 0.116
+      },
+      "observed": 0.1635,
+      "pValue": 0.002,
+      "reps": 1000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "permutation": {
+      "null": {
+       "mean": 0.0073,
+       "median": 0.0082,
+       "p2_5": -0.0919,
+       "p97_5": 0.1072,
+       "p99": 0.1338
+      },
+      "observed": 0.1603,
+      "pValue": 0.003,
+      "reps": 1000,
+      "seed": 1729
+     }
+    }
+   },
+   "WR": {
+    "adjusted": {
+     "bootstrap": {
+      "franchise": {
+       "clusters": 32,
+       "k95": [
+        21.615,
+        193.0219
+       ],
+       "pearson95": [
+        0.0393,
+        0.2755
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0045
+      },
+      "season": {
+       "clusters": 10,
+       "k95": [
+        19.727,
+        208.3493
+       ],
+       "pearson95": [
+        0.0207,
+        0.2928
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.012
+      },
+      "unit": {
+       "clusters": 320,
+       "k95": [
+        21.7955,
+        130.3032
+       ],
+       "pearson95": [
+        0.059,
+        0.2734
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0005
+      }
+     },
+     "permutation": {
+      "null": {
+       "mean": -0.0273,
+       "median": -0.0257,
+       "p2_5": -0.1381,
+       "p97_5": 0.0816,
+       "p99": 0.0965
+      },
+      "observed": 0.1625,
+      "pValue": 0.001,
+      "reps": 1000,
+      "seed": 1729
+     }
+    },
+    "raw": {
+     "permutation": {
+      "null": {
+       "mean": 0.0932,
+       "median": 0.0946,
+       "p2_5": -0.0037,
+       "p97_5": 0.1895,
+       "p99": 0.2081
+      },
+      "observed": 0.1632,
+      "pValue": 0.07692,
+      "reps": 1000,
+      "seed": 1729
+     }
+    }
+   },
+   "holm": {
+    "adjusted": {
+     "DST_adjusted": 0.012,
+     "DST_raw": 0.012,
+     "K_adjusted": 0.01797,
+     "K_raw": 0.01798,
+     "QB_adjusted": 0.012,
+     "QB_raw": 0.012,
+     "RB_adjusted": 0.012,
+     "RB_raw": 0.012,
+     "TE_adjusted": 0.012,
+     "TE_raw": 0.012,
+     "WR_adjusted": 0.012,
+     "WR_raw": 0.07692
+    },
+    "family": 12
+   }
+  },
+  "A09": {
+   "DST": {
+    "_check": {
+     "maxAbsDifferenceFromCellPoints": 0.0
+    },
+    "other": {
+     "meanPoints": 0.005,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.038,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "points_allowed_tier": {
+     "meanPoints": 0.304,
+     "oddEvenK": 9.02,
+     "oddEvenPearson": 0.4776,
+     "remlBoundary": false,
+     "remlK": 7.8,
+     "varianceShare": 0.203
+    },
+    "return_td": {
+     "meanPoints": 0.884,
+     "oddEvenK": 58.92,
+     "oddEvenPearson": 0.1228,
+     "remlBoundary": false,
+     "remlK": 106.77,
+     "varianceShare": 0.184
+    },
+    "sacks": {
+     "meanPoints": 2.379,
+     "oddEvenK": 11.91,
+     "oddEvenPearson": 0.4091,
+     "remlBoundary": false,
+     "remlK": 10.08,
+     "varianceShare": 0.149
+    },
+    "safeties_blocks": {
+     "meanPoints": 0.208,
+     "oddEvenK": 75.0,
+     "oddEvenPearson": 0.0991,
+     "remlBoundary": false,
+     "remlK": 115.84,
+     "varianceShare": 0.014
+    },
+    "takeaways": {
+     "meanPoints": 2.603,
+     "oddEvenK": 39.9,
+     "oddEvenPearson": 0.1713,
+     "remlBoundary": false,
+     "remlK": 43.23,
+     "varianceShare": 0.221
+    },
+    "yards_allowed_tier": {
+     "meanPoints": -0.531,
+     "oddEvenK": 9.33,
+     "oddEvenPearson": 0.4693,
+     "remlBoundary": false,
+     "remlK": 8.03,
+     "varianceShare": 0.229
+    }
+   },
+   "K": {
+    "_check": {
+     "maxAbsDifferenceFromCellPoints": 0.0
+    },
+    "extra_points": {
+     "meanPoints": 2.183,
+     "oddEvenK": 34.16,
+     "oddEvenPearson": 0.1941,
+     "remlBoundary": false,
+     "remlK": 29.92,
+     "varianceShare": 0.054
+    },
+    "fg_missed": {
+     "meanPoints": -0.301,
+     "oddEvenK": 2449.77,
+     "oddEvenPearson": 0.0033,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.026
+    },
+    "field_goals": {
+     "meanPoints": 5.882,
+     "oddEvenK": 90.29,
+     "oddEvenPearson": 0.0835,
+     "remlBoundary": false,
+     "remlK": 163.73,
+     "varianceShare": 0.919
+    },
+    "pass_td": {
+     "meanPoints": 0.002,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0323,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "pass_yards": {
+     "meanPoints": 0.0,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0442,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "rec_td": {
+     "meanPoints": 0.001,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.074,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "rec_yards": {
+     "meanPoints": 0.0,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.074,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "receptions": {
+     "meanPoints": 0.0,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.074,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "rush_yards": {
+     "meanPoints": 0.0,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0157,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "turnovers": {
+     "meanPoints": -0.0,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0951,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": -0.0
+    }
+   },
+   "QB": {
+    "_check": {
+     "maxAbsDifferenceFromCellPoints": 0.0
+    },
+    "pass_td": {
+     "meanPoints": 6.013,
+     "oddEvenK": 200.4,
+     "oddEvenPearson": 0.0395,
+     "remlBoundary": false,
+     "remlK": 74.21,
+     "varianceShare": 0.456
+    },
+    "pass_yards": {
+     "meanPoints": 9.663,
+     "oddEvenK": 42.22,
+     "oddEvenPearson": 0.1634,
+     "remlBoundary": false,
+     "remlK": 28.05,
+     "varianceShare": 0.241
+    },
+    "rec_td": {
+     "meanPoints": 0.018,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0395,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.002
+    },
+    "rec_yards": {
+     "meanPoints": 0.005,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0328,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.001
+    },
+    "receptions": {
+     "meanPoints": 0.014,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0919,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.001
+    },
+    "rush_td": {
+     "meanPoints": 1.038,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0065,
+     "remlBoundary": false,
+     "remlK": 83149.04,
+     "varianceShare": 0.12
+    },
+    "rush_yards": {
+     "meanPoints": 1.648,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0227,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.077
+    },
+    "turnovers": {
+     "meanPoints": -1.994,
+     "oddEvenK": 64.91,
+     "oddEvenPearson": 0.1127,
+     "remlBoundary": false,
+     "remlK": 57.73,
+     "varianceShare": 0.089
+    },
+    "two_point": {
+     "meanPoints": 0.174,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.014,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.013
+    }
+   },
+   "RB": {
+    "_check": {
+     "maxAbsDifferenceFromCellPoints": 0.0
+    },
+    "field_goals": {
+     "meanPoints": 0.001,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0897,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": -0.0
+    },
+    "pass_td": {
+     "meanPoints": 0.011,
+     "oddEvenK": 70.46,
+     "oddEvenPearson": 0.1046,
+     "remlBoundary": false,
+     "remlK": 215.46,
+     "varianceShare": 0.001
+    },
+    "pass_yards": {
+     "meanPoints": 0.002,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0378,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.0
+    },
+    "rec_td": {
+     "meanPoints": 1.162,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0246,
+     "remlBoundary": false,
+     "remlK": 850.21,
+     "varianceShare": 0.115
+    },
+    "rec_yards": {
+     "meanPoints": 3.753,
+     "oddEvenK": 34.75,
+     "oddEvenPearson": 0.1914,
+     "remlBoundary": false,
+     "remlK": 42.68,
+     "varianceShare": 0.145
+    },
+    "receptions": {
+     "meanPoints": 4.89,
+     "oddEvenK": 21.19,
+     "oddEvenPearson": 0.2797,
+     "remlBoundary": false,
+     "remlK": 32.45,
+     "varianceShare": 0.117
+    },
+    "return_td": {
+     "meanPoints": 0.039,
+     "oddEvenK": 70.55,
+     "oddEvenPearson": 0.1044,
+     "remlBoundary": false,
+     "remlK": 95.34,
+     "varianceShare": 0.003
+    },
+    "rush_td": {
+     "meanPoints": 4.081,
+     "oddEvenK": 50.04,
+     "oddEvenPearson": 0.1412,
+     "remlBoundary": false,
+     "remlK": 40.77,
+     "varianceShare": 0.327
+    },
+    "rush_yards": {
+     "meanPoints": 9.342,
+     "oddEvenK": 15.13,
+     "oddEvenPearson": 0.3522,
+     "remlBoundary": false,
+     "remlK": 13.5,
+     "varianceShare": 0.286
+    },
+    "turnovers": {
+     "meanPoints": -0.274,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.1042,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.004
+    },
+    "two_point": {
+     "meanPoints": 0.062,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0515,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.003
+    }
+   },
+   "TE": {
+    "_check": {
+     "maxAbsDifferenceFromCellPoints": 0.0
+    },
+    "pass_td": {
+     "meanPoints": 0.009,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0345,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.003
+    },
+    "pass_yards": {
+     "meanPoints": 0.019,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0537,
+     "remlBoundary": false,
+     "remlK": 97.13,
+     "varianceShare": 0.004
+    },
+    "rec_td": {
+     "meanPoints": 2.269,
+     "oddEvenK": 130.4,
+     "oddEvenPearson": 0.0593,
+     "remlBoundary": false,
+     "remlK": 179.8,
+     "varianceShare": 0.318
+    },
+    "rec_yards": {
+     "meanPoints": 5.152,
+     "oddEvenK": 72.57,
+     "oddEvenPearson": 0.1018,
+     "remlBoundary": false,
+     "remlK": 48.32,
+     "varianceShare": 0.368
+    },
+    "receptions": {
+     "meanPoints": 4.844,
+     "oddEvenK": 50.05,
+     "oddEvenPearson": 0.1411,
+     "remlBoundary": false,
+     "remlK": 44.39,
+     "varianceShare": 0.284
+    },
+    "return_td": {
+     "meanPoints": 0.008,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0206,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.001
+    },
+    "rush_td": {
+     "meanPoints": 0.067,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.098,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.013
+    },
+    "rush_yards": {
+     "meanPoints": 0.065,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0618,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.011
+    },
+    "turnovers": {
+     "meanPoints": -0.073,
+     "oddEvenK": 121.12,
+     "oddEvenPearson": 0.0636,
+     "remlBoundary": false,
+     "remlK": 169.13,
+     "varianceShare": -0.003
+    },
+    "two_point": {
+     "meanPoints": 0.04,
+     "oddEvenK": 409.38,
+     "oddEvenPearson": 0.0197,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.003
+    }
+   },
+   "WR": {
+    "_check": {
+     "maxAbsDifferenceFromCellPoints": 0.0
+    },
+    "pass_td": {
+     "meanPoints": 0.03,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.089,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.002
+    },
+    "pass_yards": {
+     "meanPoints": 0.016,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.054,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.001
+    },
+    "rec_td": {
+     "meanPoints": 5.604,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0095,
+     "remlBoundary": false,
+     "remlK": 182.26,
+     "varianceShare": 0.301
+    },
+    "rec_yards": {
+     "meanPoints": 15.339,
+     "oddEvenK": 71.0,
+     "oddEvenPearson": 0.1038,
+     "remlBoundary": false,
+     "remlK": 40.17,
+     "varianceShare": 0.413
+    },
+    "receptions": {
+     "meanPoints": 12.073,
+     "oddEvenK": 62.53,
+     "oddEvenPearson": 0.1162,
+     "remlBoundary": false,
+     "remlK": 37.81,
+     "varianceShare": 0.261
+    },
+    "return_td": {
+     "meanPoints": 0.127,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0492,
+     "remlBoundary": true,
+     "remlK": null,
+     "varianceShare": 0.002
+    },
+    "rush_td": {
+     "meanPoints": 0.178,
+     "oddEvenK": 398.89,
+     "oddEvenPearson": 0.0202,
+     "remlBoundary": false,
+     "remlK": 355.79,
+     "varianceShare": 0.008
+    },
+    "rush_yards": {
+     "meanPoints": 0.447,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0413,
+     "remlBoundary": false,
+     "remlK": 91.0,
+     "varianceShare": 0.008
+    },
+    "turnovers": {
+     "meanPoints": -0.236,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0017,
+     "remlBoundary": false,
+     "remlK": 431.09,
+     "varianceShare": 0.001
+    },
+    "two_point": {
+     "meanPoints": 0.095,
+     "oddEvenK": null,
+     "oddEvenPearson": -0.0243,
+     "remlBoundary": false,
+     "remlK": 3881.31,
+     "varianceShare": 0.003
+    }
+   }
+  },
+  "A10": {
+   "DST": {
+    "adjusted": {
+     "afterBye": {
+      "afterByeCells": 320,
+      "approxSe": 0.368,
+      "meanDifference": -0.016,
+      "otherCells": 4638
+     },
+     "all": {
+      "k": 8.74,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4853,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 8.61,
+      "meanHalfGames": 8.274,
+      "pearson": 0.49,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 9.13,
+      "meanHalfGames": 8.222,
+      "pearson": 0.4738,
+      "units": 288
+     },
+     "homeAway": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        4.6874,
+        7.8028
+       ],
+       "pearson95": [
+        0.5111,
+        0.6402
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 6.2,
+      "meanHalfGames": 8.247,
+      "pearson": 0.571,
+      "units": 320
+     },
+     "influence": {
+      "jackknifeSe": 0.0409,
+      "maxAbsChange": 0.0098,
+      "worstUnit": 28,
+      "worstUnitKey": [
+       "BAL",
+       2024
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 9.19,
+      "kMin": 8.41,
+      "pearsonMax": 0.4942,
+      "pearsonMin": 0.472
+     },
+     "trimmed": {
+      "k": 9.06,
+      "meanHalfGames": 8.202,
+      "pearson": 0.4752,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 8.74,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4856,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "NYJ",
+       "game_id": "2019_05_NYJ_PHI",
+       "value": 30.2
+      },
+      "k": 8.71,
+      "meanHalfGames": 8.245,
+      "pearson": 0.4862,
+      "units": 320
+     }
+    },
+    "raw": {
+     "all": {
+      "k": 8.88,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4814,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 8.88,
+      "meanHalfGames": 8.274,
+      "pearson": 0.4824,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 9.22,
+      "meanHalfGames": 8.222,
+      "pearson": 0.4715,
+      "units": 288
+     },
+     "influence": {
+      "jackknifeSe": 0.0411,
+      "maxAbsChange": 0.01,
+      "worstUnit": 82,
+      "worstUnitKey": [
+       "DAL",
+       2018
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 9.22,
+      "kMin": 8.49,
+      "pearsonMax": 0.4935,
+      "pearsonMin": 0.4715
+     },
+     "trimmed": {
+      "k": 9.61,
+      "meanHalfGames": 8.191,
+      "pearson": 0.46,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 8.91,
+      "meanHalfGames": 8.247,
+      "pearson": 0.4807,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "NYJ",
+       "game_id": "2019_05_NYJ_PHI",
+       "value": 35.0
+      },
+      "k": 8.81,
+      "meanHalfGames": 8.245,
+      "pearson": 0.4834,
+      "units": 320
+     }
+    }
+   },
+   "K": {
+    "adjusted": {
+     "afterBye": {
+      "afterByeCells": 331,
+      "approxSe": 0.25,
+      "meanDifference": 0.066,
+      "otherCells": 4613
+     },
+     "all": {
+      "k": 48.86,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1441,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 58.74,
+      "meanHalfGames": 8.25,
+      "pearson": 0.1231,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 46.0,
+      "meanHalfGames": 8.198,
+      "pearson": 0.1513,
+      "units": 288
+     },
+     "homeAway": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        26.4883,
+        147.6703
+       ],
+       "pearson95": [
+        0.0498,
+        0.2364
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.002
+      },
+      "k": 49.36,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1428,
+      "units": 320
+     },
+     "influence": {
+      "jackknifeSe": 0.0525,
+      "maxAbsChange": 0.0143,
+      "worstUnit": 129,
+      "worstUnitKey": [
+       "HOU",
+       2025
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 69.91,
+      "kMin": 35.24,
+      "pearsonMax": 0.1897,
+      "pearsonMin": 0.105
+     },
+     "trimmed": {
+      "k": 38.25,
+      "meanHalfGames": 8.183,
+      "pearson": 0.1762,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 45.77,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1523,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "IND",
+       "game_id": "2018_06_IND_NYJ",
+       "value": 18.93
+      },
+      "k": 47.19,
+      "meanHalfGames": 8.223,
+      "pearson": 0.1484,
+      "units": 320
+     }
+    },
+    "raw": {
+     "all": {
+      "k": 41.8,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1644,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 49.24,
+      "meanHalfGames": 8.25,
+      "pearson": 0.1435,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 38.76,
+      "meanHalfGames": 8.198,
+      "pearson": 0.1746,
+      "units": 288
+     },
+     "influence": {
+      "jackknifeSe": 0.0508,
+      "maxAbsChange": 0.0181,
+      "worstUnit": 141,
+      "worstUnitKey": [
+       "JAX",
+       2017
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 61.49,
+      "kMin": 33.95,
+      "pearsonMax": 0.1955,
+      "pearsonMin": 0.1176
+     },
+     "trimmed": {
+      "k": 38.63,
+      "meanHalfGames": 8.175,
+      "pearson": 0.1747,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 40.13,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1701,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "IND",
+       "game_id": "2018_06_IND_NYJ",
+       "value": 27.0
+      },
+      "k": 39.99,
+      "meanHalfGames": 8.223,
+      "pearson": 0.1706,
+      "units": 320
+     }
+    }
+   },
+   "QB": {
+    "adjusted": {
+     "afterBye": {
+      "afterByeCells": 320,
+      "approxSe": 0.397,
+      "meanDifference": -0.27,
+      "otherCells": 4638
+     },
+     "all": {
+      "k": 22.23,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2706,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 20.42,
+      "meanHalfGames": 8.274,
+      "pearson": 0.2883,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 23.41,
+      "meanHalfGames": 8.222,
+      "pearson": 0.2599,
+      "units": 288
+     },
+     "homeAway": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        21.3558,
+        67.5977
+       ],
+       "pearson95": [
+        0.1092,
+        0.277
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0005
+      },
+      "k": 33.46,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1977,
+      "units": 320
+     },
+     "influence": {
+      "jackknifeSe": 0.0483,
+      "maxAbsChange": 0.0151,
+      "worstUnit": 132,
+      "worstUnitKey": [
+       "IND",
+       2018
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 27.65,
+      "kMin": 18.69,
+      "pearsonMax": 0.3069,
+      "pearsonMin": 0.2303
+     },
+     "trimmed": {
+      "k": 24.23,
+      "meanHalfGames": 8.214,
+      "pearson": 0.2532,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 22.78,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2658,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "LA",
+       "game_id": "2024_14_BUF_LA",
+       "value": 30.41
+      },
+      "k": 21.85,
+      "meanHalfGames": 8.245,
+      "pearson": 0.274,
+      "units": 320
+     }
+    },
+    "raw": {
+     "all": {
+      "k": 29.84,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2166,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 32.08,
+      "meanHalfGames": 8.274,
+      "pearson": 0.205,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 30.45,
+      "meanHalfGames": 8.222,
+      "pearson": 0.2126,
+      "units": 288
+     },
+     "influence": {
+      "jackknifeSe": 0.0492,
+      "maxAbsChange": 0.0128,
+      "worstUnit": 104,
+      "worstUnitKey": [
+       "DET",
+       2020
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 36.36,
+      "kMin": 25.19,
+      "pearsonMax": 0.246,
+      "pearsonMin": 0.1854
+     },
+     "trimmed": {
+      "k": 35.5,
+      "meanHalfGames": 8.213,
+      "pearson": 0.1879,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 30.7,
+      "meanHalfGames": 8.247,
+      "pearson": 0.2117,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "LA",
+       "game_id": "2024_14_BUF_LA",
+       "value": 51.88
+      },
+      "k": 29.1,
+      "meanHalfGames": 8.245,
+      "pearson": 0.2208,
+      "units": 320
+     }
+    }
+   },
+   "RB": {
+    "adjusted": {
+     "afterBye": {
+      "afterByeCells": 330,
+      "approxSe": 0.563,
+      "meanDifference": -1.018,
+      "otherCells": 4615
+     },
+     "all": {
+      "k": 21.03,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2812,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 23.12,
+      "meanHalfGames": 8.252,
+      "pearson": 0.263,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 20.44,
+      "meanHalfGames": 8.2,
+      "pearson": 0.2863,
+      "units": 288
+     },
+     "homeAway": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        9.7077,
+        26.5715
+       ],
+       "pearson95": [
+        0.2363,
+        0.4581
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 15.39,
+      "meanHalfGames": 8.227,
+      "pearson": 0.3484,
+      "units": 320
+     },
+     "influence": {
+      "jackknifeSe": 0.0519,
+      "maxAbsChange": 0.0144,
+      "worstUnit": 71,
+      "worstUnitKey": [
+       "CLE",
+       2017
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 26.18,
+      "kMin": 17.35,
+      "pearsonMax": 0.3224,
+      "pearsonMin": 0.2397
+     },
+     "trimmed": {
+      "k": 19.62,
+      "meanHalfGames": 8.172,
+      "pearson": 0.294,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 20.75,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2839,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "DEN",
+       "game_id": "2023_03_DEN_MIA",
+       "value": 73.31
+      },
+      "k": 20.82,
+      "meanHalfGames": 8.225,
+      "pearson": 0.2832,
+      "units": 320
+     }
+    },
+    "raw": {
+     "all": {
+      "k": 19.5,
+      "meanHalfGames": 8.227,
+      "pearson": 0.2967,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 22.49,
+      "meanHalfGames": 8.252,
+      "pearson": 0.2685,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 19.34,
+      "meanHalfGames": 8.2,
+      "pearson": 0.2977,
+      "units": 288
+     },
+     "influence": {
+      "jackknifeSe": 0.0536,
+      "maxAbsChange": 0.0145,
+      "worstUnit": 104,
+      "worstUnitKey": [
+       "DET",
+       2020
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 25.02,
+      "kMin": 15.78,
+      "pearsonMax": 0.3434,
+      "pearsonMin": 0.2481
+     },
+     "trimmed": {
+      "k": 19.43,
+      "meanHalfGames": 8.164,
+      "pearson": 0.2959,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 19.19,
+      "meanHalfGames": 8.227,
+      "pearson": 0.3,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "DEN",
+       "game_id": "2023_03_DEN_MIA",
+       "value": 103.1
+      },
+      "k": 19.03,
+      "meanHalfGames": 8.225,
+      "pearson": 0.3018,
+      "units": 320
+     }
+    }
+   },
+   "TE": {
+    "adjusted": {
+     "afterBye": {
+      "afterByeCells": 331,
+      "approxSe": 0.474,
+      "meanDifference": 0.555,
+      "otherCells": 4613
+     },
+     "all": {
+      "k": 42.07,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1635,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 48.44,
+      "meanHalfGames": 8.25,
+      "pearson": 0.1455,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 38.09,
+      "meanHalfGames": 8.198,
+      "pearson": 0.1771,
+      "units": 288
+     },
+     "homeAway": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        15.6585,
+        62.2836
+       ],
+       "pearson95": [
+        0.1167,
+        0.3444
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 25.9,
+      "meanHalfGames": 8.225,
+      "pearson": 0.241,
+      "units": 320
+     },
+     "influence": {
+      "jackknifeSe": 0.056,
+      "maxAbsChange": 0.0141,
+      "worstUnit": 3,
+      "worstUnitKey": [
+       "ARI",
+       2019
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 55.63,
+      "kMin": 33.73,
+      "pearsonMax": 0.1955,
+      "pearsonMin": 0.1284
+     },
+     "trimmed": {
+      "k": 47.93,
+      "meanHalfGames": 8.155,
+      "pearson": 0.1454,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 40.42,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1691,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "CLE",
+       "game_id": "2024_11_CLE_NO",
+       "value": 44.52
+      },
+      "k": 41.64,
+      "meanHalfGames": 8.223,
+      "pearson": 0.1649,
+      "units": 320
+     }
+    },
+    "raw": {
+     "all": {
+      "k": 43.09,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1603,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 47.18,
+      "meanHalfGames": 8.25,
+      "pearson": 0.1488,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 39.32,
+      "meanHalfGames": 8.198,
+      "pearson": 0.1725,
+      "units": 288
+     },
+     "influence": {
+      "jackknifeSe": 0.055,
+      "maxAbsChange": 0.0164,
+      "worstUnit": 3,
+      "worstUnitKey": [
+       "ARI",
+       2019
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 52.29,
+      "kMin": 35.68,
+      "pearsonMax": 0.1868,
+      "pearsonMin": 0.1364
+     },
+     "trimmed": {
+      "k": 53.55,
+      "meanHalfGames": 8.137,
+      "pearson": 0.1319,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 44.75,
+      "meanHalfGames": 8.225,
+      "pearson": 0.1553,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "CLE",
+       "game_id": "2024_11_CLE_NO",
+       "value": 61.52
+      },
+      "k": 44.48,
+      "meanHalfGames": 8.223,
+      "pearson": 0.156,
+      "units": 320
+     }
+    }
+   },
+   "WR": {
+    "adjusted": {
+     "afterBye": {
+      "afterByeCells": 334,
+      "approxSe": 0.744,
+      "meanDifference": -0.068,
+      "otherCells": 4607
+     },
+     "all": {
+      "k": 42.36,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1625,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 44.5,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1563,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 40.18,
+      "meanHalfGames": 8.193,
+      "pearson": 0.1694,
+      "units": 288
+     },
+     "homeAway": {
+      "bootstrapSeasons": {
+       "clusters": 10,
+       "k95": [
+        20.9706,
+        71.0366
+       ],
+       "pearson95": [
+        0.1037,
+        0.2815
+       ],
+       "reps": 2000,
+       "seed": 1729,
+       "unidentifiedShare": 0.0
+      },
+      "k": 33.49,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1971,
+      "units": 320
+     },
+     "influence": {
+      "jackknifeSe": 0.0559,
+      "maxAbsChange": 0.0164,
+      "worstUnit": 247,
+      "worstUnitKey": [
+       "NYJ",
+       2023
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 62.36,
+      "kMin": 33.01,
+      "pearsonMax": 0.1988,
+      "pearsonMin": 0.1161
+     },
+     "trimmed": {
+      "k": 33.92,
+      "meanHalfGames": 8.184,
+      "pearson": 0.1944,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 41.48,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1654,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "TB",
+       "game_id": "2024_05_TB_ATL",
+       "value": 57.45
+      },
+      "k": 42.19,
+      "meanHalfGames": 8.219,
+      "pearson": 0.163,
+      "units": 320
+     }
+    },
+    "raw": {
+     "all": {
+      "k": 42.16,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1632,
+      "units": 320
+     },
+     "exclude2020": {
+      "k": 47.22,
+      "meanHalfGames": 8.247,
+      "pearson": 0.1487,
+      "units": 288
+     },
+     "exclude2022": {
+      "k": 34.99,
+      "meanHalfGames": 8.193,
+      "pearson": 0.1897,
+      "units": 288
+     },
+     "influence": {
+      "jackknifeSe": 0.0524,
+      "maxAbsChange": 0.0126,
+      "worstUnit": 247,
+      "worstUnitKey": [
+       "NYJ",
+       2023
+      ]
+     },
+     "leaveOneSeasonOut": {
+      "kMax": 55.85,
+      "kMin": 32.93,
+      "pearsonMax": 0.1992,
+      "pearsonMin": 0.1279
+     },
+     "trimmed": {
+      "k": 41.94,
+      "meanHalfGames": 8.173,
+      "pearson": 0.1631,
+      "units": 320
+     },
+     "winsorized": {
+      "k": 40.45,
+      "meanHalfGames": 8.22,
+      "pearson": 0.1689,
+      "units": 320
+     },
+     "withoutLargestCell": {
+      "cell": {
+       "entity": "NYG",
+       "game_id": "2023_10_NYG_DAL",
+       "value": 96.9
+      },
+      "k": 42.9,
+      "meanHalfGames": 8.219,
+      "pearson": 0.1608,
+      "units": 320
+     }
+    }
+   }
+  },
+  "A12": {
+   "DST": {
+    "excluded": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 8.74,
+      "pearson": 0.4853,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 8.88,
+      "pearson": 0.4814,
+      "units": 320
+     }
+    },
+    "partialSums": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 8.74,
+      "pearson": 0.4853,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 8.88,
+      "pearson": 0.4814,
+      "units": 320
+     }
+    },
+    "refusedCells": 0
+   },
+   "K": {
+    "excluded": {
+     "adjusted": {
+      "cells": 5264,
+      "k": 48.86,
+      "pearson": 0.1441,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5264,
+      "k": 41.8,
+      "pearson": 0.1644,
+      "units": 320
+     }
+    },
+    "partialSums": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 49.95,
+      "pearson": 0.1417,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 43.27,
+      "pearson": 0.1601,
+      "units": 320
+     }
+    },
+    "refusedCells": 14
+   },
+   "QB": {
+    "excluded": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 22.23,
+      "pearson": 0.2706,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 29.84,
+      "pearson": 0.2166,
+      "units": 320
+     }
+    },
+    "partialSums": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 22.23,
+      "pearson": 0.2706,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 29.84,
+      "pearson": 0.2166,
+      "units": 320
+     }
+    },
+    "refusedCells": 0
+   },
+   "RB": {
+    "excluded": {
+     "adjusted": {
+      "cells": 5265,
+      "k": 21.03,
+      "pearson": 0.2812,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5265,
+      "k": 19.5,
+      "pearson": 0.2967,
+      "units": 320
+     }
+    },
+    "partialSums": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 20.84,
+      "pearson": 0.2835,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 19.89,
+      "pearson": 0.2931,
+      "units": 320
+     }
+    },
+    "refusedCells": 13
+   },
+   "TE": {
+    "excluded": {
+     "adjusted": {
+      "cells": 5264,
+      "k": 42.07,
+      "pearson": 0.1635,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5264,
+      "k": 43.09,
+      "pearson": 0.1603,
+      "units": 320
+     }
+    },
+    "partialSums": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 41.33,
+      "pearson": 0.1664,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 41.18,
+      "pearson": 0.1669,
+      "units": 320
+     }
+    },
+    "refusedCells": 14
+   },
+   "WR": {
+    "excluded": {
+     "adjusted": {
+      "cells": 5261,
+      "k": 42.36,
+      "pearson": 0.1625,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5261,
+      "k": 42.16,
+      "pearson": 0.1632,
+      "units": 320
+     }
+    },
+    "partialSums": {
+     "adjusted": {
+      "cells": 5278,
+      "k": 44.4,
+      "pearson": 0.1567,
+      "units": 320
+     },
+     "raw": {
+      "cells": 5278,
+      "k": 45.33,
+      "pearson": 0.1539,
+      "units": 320
+     }
+    },
+    "refusedCells": 17
+   },
+   "vintages": {
+    "byPosition": {
+     "DST": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     },
+     "K": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     },
+     "QB": {
+      "cells": 316,
+      "changeVariance": 1e-05,
+      "changed": 1,
+      "maxAbsChange": 0.04,
+      "meanAbsChange": 0.0001
+     },
+     "RB": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     },
+     "TE": {
+      "cells": 316,
+      "changeVariance": 3e-05,
+      "changed": 1,
+      "maxAbsChange": 0.1,
+      "meanAbsChange": 0.0003
+     },
+     "WR": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     }
+    },
+    "firstKnownByWeek": {
+     "1": "2026-10-31T09:15:16.558612+00:00",
+     "10": "2026-11-22T22:46:15.067795+00:00",
+     "11": "2026-11-22T22:46:15.067795+00:00",
+     "2": "2026-10-31T09:15:16.558612+00:00",
+     "3": "2026-10-31T09:15:16.558612+00:00",
+     "4": "2026-10-31T09:15:16.558612+00:00",
+     "5": "2026-10-31T09:15:16.558612+00:00",
+     "6": "2026-10-31T09:15:16.558612+00:00",
+     "7": "2026-10-31T09:15:16.558612+00:00",
+     "8": "2026-10-31T09:15:16.558612+00:00",
+     "9": "2026-11-08T03:52:42.586751+00:00"
+    },
+    "firstVersionHeld": "2026-10-31T09:14:16.558612+00:00",
+    "games": 158,
+    "limitation": "Arbit's nflverse vintages start 2026-10-31 and miss 2026-11-10 to 11-22, so games of weeks 1-7 and 10 were first held long after their corrections; their change is a lower bound. Seasons 2016-2025 have only final revisions.",
+    "season": 2026,
+    "versionsHeld": 12
+   }
+  }
+ },
+ "seed": 1729,
+ "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
+}

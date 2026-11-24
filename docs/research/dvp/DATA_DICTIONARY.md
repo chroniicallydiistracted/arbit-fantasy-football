@@ -55,6 +55,21 @@ Every scheduled 2016–2025 regular-season game:
 | `continuity-manifest.json` | v0's files and hashes, commit, constants and consumers |
 | `v0-reproduction.json` | Exact rerun diff, independent recompute, k arithmetic, the `v0-validated` results with intervals |
 | `experiment-registry.json` | Every M3-3 experiment in the §10 record format |
+| `reliability-results.json` | Phase 2 results by experiment (A00, A02–A10, A12) and position group, with seeds, replicate counts, the audit run and the code commit |
+| `plots/*.svg` | The reliability plots, written by the lab (deterministic: the same results give the same bytes) |
+
+## Phase 2 run artifacts (`artifacts/dvp/<audit run>/reliability/`, ignored by git)
+
+| File | Contents |
+| --- | --- |
+| `null-<group>-<raw or adjusted>.parquet` | The 1,000 permutation-null correlations behind A08 |
+
+## Sources added in Phase 2 ([provenance](SOURCE_PROVENANCE.md))
+
+| Source | Type | Use |
+| --- | --- | --- |
+| `ffa_targets.athlete_contributions`, `ffa_targets.defense_contributions` | FFA_ACTUAL_FINAL | The same target lines with each rule's contribution, for A09 |
+| `gamebook.position_points`, `gamebook.dst_points` | FFA_ACTUAL_AS_OF | FFA points by team-game as Arbit held them at a decision time, for A12's correction check |
 
 ## Configuration
 
@@ -64,3 +79,12 @@ Every scheduled 2016–2025 regular-season game:
 - `position_groups`.
 
 Seeds and replicate counts live there: 2,000 replicates, seed 1729.
+
+`config/dvp/reliability.json` holds Phase 2's settings:
+- the adjusted measure (`loo_mean`);
+- 1,000 random splits and 1,000 permutations;
+- the minimum-game, rolling-window and carryover settings;
+- the eras and the excluded seasons;
+- the vintage season for A12.
+
+It points to `base.json` for the seed, the bootstrap replicates and the targets.

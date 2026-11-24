@@ -1,5 +1,21 @@
 # Development Changelog
 
+## 2026-11-24 — DvP Phase 2: the reliability lab (TASK-20261124-001)
+
+- **PR #8 merged** (`efff624`): the R-072 repair and rebuilt FFA targets.
+- **`arbit_model.dvp.lab` and `dvp.py reliability` (ENG-059):** A00, A02-A10 and A12 on the repaired, validated observations.
+  - **Estimators:** adjustment variants, six split methods with 1,000 seeded random splits, method-of-moments and REML variance components, lag profiles, rolling windows, between-season carryover, within-week permutation nulls with Holm, and season, unit and franchise bootstraps.
+  - **A09:** FFA-component decomposition from the scorer's rule contributions.
+  - **A12:** a 2026 stat-correction check through the point-in-time gamebooks.
+- **`arbit_model.dvp.svg`:** deterministic plots in `docs/research/dvp/plots/`.
+- **Firewall:** rule-contribution and `FFA_ACTUAL_AS_OF` gamebook sources added to the allowlist.
+- **Reports:** [RELIABILITY_REPORT.md](../research/dvp/RELIABILITY_REPORT.md) and [METHODOLOGY.md](../research/dvp/METHODOLOGY.md), with Phase B's B00 and metrics declared before it runs. Registry: 11 Phase A experiments EXECUTED.
+- **Headline (REML k on adjusted points):**
+  - D/ST 7.2, the one strong and stable signal.
+  - RB 19.5, QB 24.2 (drifts within a season), WR 26.7 (v0's 44 was an unlucky split), TE 37.4, K 50.5.
+  - An offense's own production settles in 4-7 games.
+- **Tests:** 15 new (T12-T14, T23, T24, T28, determinism, Phase 2 firewall).
+
 ## 2026-11-24 — R-072 repaired: one code per franchise, FFA targets rebuilt (TASK-20261123-007)
 
 - **PR #7 merged** (`9a7c0b1`): DvP research phases 0-1.

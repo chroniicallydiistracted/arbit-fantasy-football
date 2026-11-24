@@ -1,7 +1,7 @@
 {
  "eligibility": "A game's FFA actuals count from 12:00 UTC the day after its game day. Arbit first read these seasons' files in 2026, so every value is the final revision; when a stat correction first appeared is unknown and cannot be replayed (backtest limitation).",
  "format": "arbit-dvp-m3-3-score-finality-v1",
- "generatedAt": "2026-11-24T02:19:10.066310+00:00",
+ "generatedAt": "2026-11-24T02:44:42.219387+00:00",
  "policy": {
   "availability_rule": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
   "default_cutoff": "pre_first_game_of_nfl_week",
@@ -10,7 +10,7 @@
   "required_game_status": "completed_and_finalized",
   "target_labels_join_only_after_forecasts_frozen": true
  },
- "runId": "phase1-audit-20261124T021910Z",
+ "runId": "phase1-audit-20261124T024442Z",
  "seasons": {
   "2016": {
    "completedGames": 256,
