@@ -10,7 +10,8 @@
 - **On `main` since PR #6 (`b3c0a9a`, merged 2026-11-23 as the frozen v0 baseline the owner's DvP specification preserves):** M3 slice 3b, team environment and defense against the position (TASK-20261123-004). It runs in no service.
 - **On `main` since PR #7 (`9a7c0b1`):** the DvP research, phases 0-1 (TASK-20261123-005 and -006). Offline research; it runs in no service.
 - **On `main` since PR #8 (`efff624`):** the R-072 repair and rebuilt FFA targets (TASK-20261123-007). The research store's current pointer names the rebuilt index `6ffb62fb…`; no service reads it.
-- **Not yet on `main`:** DvP Phase 2, the reliability lab (TASK-20261124-001, branch `claude/m3-dvp-phase2`). Offline research.
+- **On `main` since PR #9 (`ceba441`):** DvP Phase 2, the reliability lab (TASK-20261124-001).
+- **Not yet on `main`:** DvP Phase 3, the walk-forward (TASK-20261124-002, branch `claude/m3-dvp-phase3`). Offline research.
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
@@ -68,10 +69,16 @@
   - The order among WR, TE and K isn't established.
 - **The offense dominates:** its own production at a position settles in 4-7 games, so a result says three to seven times more about the offense than about the defense.
 - **What repeats:** yards and receptions allowed; touchdowns allowed to WRs and TEs don't.
-- **Next:** Phase 3, the walk-forward. B00 and the metrics are declared in the [methodology](../research/dvp/METHODOLOGY.md).
+- **Next:** Phase 3, the walk-forward (done below).
+
+**DvP Phase 3, the walk-forward (2026-11-24, TASK-20261124-002, ENG-060; [report](../research/dvp/BACKTEST_REPORT.md)):** next-game RMSE against the offense-only B00. The minimum was fixed before any forecast, and candidates were frozen before validation.
+- **D/ST:** the opponent term (B06) cuts error by 3.0% in development (every season) and 6.4% in 2024. It is the one candidate.
+- **QB, RB, WR:** under 1% in development, not replicated in 2024 (WR got worse). **TE, K:** nothing.
+- **Unshrunk DvP rankings** make forecasts worse at every position.
+- **Next:** Phase 4 tests the frozen candidates on 2025 (a conditional holdout), then on prospectively frozen 2026 games. No weight changes without the owner.
 
 **Open work, in order** (owner direction 2026-11-22):
-1. DvP Phase 3 (walk-forward against the offense-only B00), per OWN-074; M3 slice 3c–3e: availability and role (on `arbit_model.availability`), efficiency and priors, and the Q-014 note; the 3b follow-up for play-by-play rates. Weather W1 (venue table and forecast record) runs beside it.
+1. DvP Phase 4 (the 2025 conditional holdout and a prospective 2026 freeze for the frozen candidates), per OWN-074; M3 slice 3c–3e: availability and role (on `arbit_model.availability`), efficiency and priors, and the Q-014 note; the 3b follow-up for play-by-play rates. Weather W1 (venue table and forecast record) runs beside it.
 2. M3 slices 4–6.
 3. M4 sit/start (OWN-068), weather W2–W6, the Q-014 study and ablation.
 

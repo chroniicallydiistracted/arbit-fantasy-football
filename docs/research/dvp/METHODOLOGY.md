@@ -7,7 +7,7 @@ Specification §1, §5–§7, §11.3. This document fixes the hypotheses, estima
 | | Question | Phase | Status |
 | --- | --- | --- | --- |
 | RQ1 | Does a defense (for D/ST, an offense) have a repeatable, position-specific tendency to allow FFA points beyond what its opponents usually score? | A | Answered descriptively ([reliability report](RELIABILITY_REPORT.md)) |
-| RQ2 | Does adding that tendency to an offense-only forecast improve next-game forecasts of actual FFA position totals? | B | Next |
+| RQ2 | Does adding that tendency to an offense-only forecast improve next-game forecasts of actual FFA position totals? | B | Development and 2024 validation done ([backtest report](BACKTEST_REPORT.md)): yes for D/ST, no credible gain elsewhere; 2025 holdout pending |
 | RQ3 | If so, does it improve actual Sit/Start choices between players? | C | Only if RQ2 is credibly positive |
 
 Zero production influence is an acceptable answer to every question.
@@ -112,7 +112,8 @@ The variants (B01–B08 in the registry) differ in how R̂ and k are formed: raw
 - **Primary:** RMSE per position on the common eligible rows: games where every variant and B00 have a forecast. Coverage is reported separately.
 - **Paired comparison:** ΔRMSE against B00 on matching rows, with a season-block bootstrap interval (2,000, seed 1729).
 - **Secondary:** MAE, mean signed error, calibration by forecast decile, Spearman rank correlation, and ΔRMSE by season, by early or late weeks and by sample-size bin.
-- **Practical minimum:** fixed from development folds only, after inspecting B00's error, and recorded before validation runs.
+- **Practical minimum:** 1% of B00's RMSE per position. It was fixed in `config/dvp/backtest.json` before any forecast ran, the conservative reading of §7: a smaller group-level gain would not change a Sit/Start choice.
+- **Candidates:** chosen on development folds only, then frozen in `config/dvp/frozen-candidates.json` before validation ran. The holdout (2025) may evaluate only those.
 
 **Decision labels** per position and overall (§7): `PROMISING`, `INCONCLUSIVE`, `NOT_USEFUL`, `BLOCKED`. An inconclusive result is never turned into a weight. No production weight changes without the owner.
 

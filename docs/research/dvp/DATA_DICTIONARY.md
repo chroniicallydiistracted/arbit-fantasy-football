@@ -64,6 +64,15 @@ Every scheduled 2016–2025 regular-season game:
 | --- | --- |
 | `null-<group>-<raw or adjusted>.parquet` | The 1,000 permutation-null correlations behind A08 |
 
+## Phase 3 outputs
+
+| File | Contents |
+| --- | --- |
+| `backtest-development.json`, `backtest-validation.json` | Per position: every variant's RMSE, MAE, mean error, Spearman, and change against B00 with a block-bootstrap interval; calibration deciles; the focus variant by season, week bin and opponent games; per-game and slower-availability sensitivity; each fold's parameters; the forecasts' hash |
+| `config/dvp/frozen-candidates.json` | The development selection (tuned k and half-life, best DvP variant, candidate per position), frozen before validation |
+| `artifacts/dvp/<audit run>/backtest-<stage>/forecasts.parquet` (ignored by git) | Every frozen forecast beside its label: keys, `feature_as_of`, `n_d` (the opponent's games before the cutoff), `b00` … `b09_*`, `points` |
+| `plots/backtest-delta.svg` | The best DvP variant against B00 by position and stage |
+
 ## Sources added in Phase 2 ([provenance](SOURCE_PROVENANCE.md))
 
 | Source | Type | Use |
