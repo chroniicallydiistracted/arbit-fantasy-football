@@ -8,7 +8,8 @@
 - **On `main` since PR #4 (`c41a7d7`, merged 2026-11-23 under the owner's GitHub authorization):** M3 slice 3a, the point-in-time reader (TASK-20261123-001). It runs in no service, so the worker was not restarted.
 - **On `main` since PR #5 (`cace69c`):** the columnar reader and timing order (TASK-20261123-002) and game-day availability (TASK-20261123-003).
 - **On `main` since PR #6 (`b3c0a9a`, merged 2026-11-23 as the frozen v0 baseline the owner's DvP specification preserves):** M3 slice 3b, team environment and defense against the position (TASK-20261123-004). It runs in no service.
-- **Not yet on `main`:** the DvP research, phases 0-1 (TASK-20261123-005, branch `claude/m3-dvp-phase0`, with TASK-20261123-006 covering the governance state pointer TASK-005's scope missed). Offline research; it runs in no service.
+- **On `main` since PR #7 (`9a7c0b1`):** the DvP research, phases 0-1 (TASK-20261123-005 and -006). Offline research; it runs in no service.
+- **Not yet on `main`:** the R-072 repair and rebuilt FFA targets (TASK-20261123-007, branch `claude/r072-franchise-codes`). The research store's current pointer already names the rebuilt index `6ffb62fb…`; no service reads it.
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
@@ -39,11 +40,25 @@
 - **v0 reproduced exactly:** the frozen script's rerun equals its receipt, and an independent recompute matches all 12 measures. v0's files are pinned by hash.
 - **No provider projection anywhere in the path:** sources enter through a lineage allowlist that fails closed; dependency count 0.
 - **Data defects found and dispositioned:**
-  - R-072: relocated teams' old codes. 1,327 player lines credited to the team's own defense, and 156 team-games without a D/ST line. The canonical fix waits for the owner.
+  - R-072: relocated teams' old codes. 1,327 player lines credited to the team's own defense, and 156 team-games without a D/ST line. Repaired by TASK-20261123-007 (below).
   - R-073: refused lines summed as zero.
 - **On validated observations:** D/ST conceded by an offense repeats strongly (k about 9). QB and RB repeat modestly (20-30). WR, TE and K are weak, and their intervals (about 20 to over 140 games) overlap, so v0's order among them isn't established.
 - **Tests:** T01-T07 and T29-T40 pass (38), and five deliberate breaks each fail a test.
 - **Next:** Phase 2 (A00, A02-A10, A12), then the walk-forward against an offense-only baseline.
+
+**R-072 repair and rebuilt FFA targets (2026-11-24, TASK-20261123-007, ENG-058, OWN-075; [receipt](../research/targets-repair-r072.md)):** the owner ruled that fundamental defects are repairs, not decisions.
+- **Fix:** every nflverse team code becomes its franchise code (`arbit_model.teams`) in targets, gamebooks and team features. The survey found more than the DvP audit had: STL 2012-2015 and five roster-only codes. The build now refuses a row whose team didn't play in its game.
+- **Rebuild:** index `6ffb62fb…`, built on the exact inputs of `4afbd836…`, twice, with identical results. Every difference is classified, none unexplained:
+  - 2020-2026 byte-identical;
+  - 4,496 player lines given their real opponent;
+  - 526 D/ST lines added;
+  - 3,710 participation labels added;
+  - no line's points changed.
+- **Reruns:**
+  - the signal study's team rates now cover 320 team-seasons, and the team shrinkage constants follow (takeaways 54.0 to 62.6);
+  - DvP phase 1 has all 5,278 D/ST cells valid, D/ST k 8.9;
+  - v0 still reproduces exactly on its own index.
+- **R-074 fixed:** gamebooks read regular-season games only.
 
 **Open work, in order** (owner direction 2026-11-22):
 1. DvP Phase 2 (reliability lab) and Phase 3 (walk-forward), per OWN-074; M3 slice 3c–3e: availability and role (on `arbit_model.availability`), efficiency and priors, and the Q-014 note; the 3b follow-up for play-by-play rates. Weather W1 (venue table and forecast record) runs beside it.

@@ -24,7 +24,8 @@
     "Raiders home games 2016-2019 and Chargers home games 2016: 1,327 player lines name the team itself as the opponent, so those points were credited to the team's own defense and the visiting defenses lost a game (schedule OAK/SD vs statistics LV/LAC)",
     "156 regular-season team-games have no D/ST line (the same code mismatch in the D/ST scorer): the Raiders 2016-2019, the Chargers 2016 and every D/ST that played them",
     "58 team-game-position cells hold a refused line (null points) that v0 summed as zero",
-    "Halves differ in size (7-9 games); k uses their mean (8.25), an approximation"
+    "Halves differ in size (7-9 games); k uses their mean (8.25), an approximation",
+    "Read targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, built before the R-072 repair"
    ],
    "next_steps": "Superseded for inference by M3-3-A01 (validated observations); kept as the baseline",
    "parameters": {
@@ -65,7 +66,7 @@
     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
    },
-   "source_ancestry_hash": "50ca6e4958b8a467954a731056f3c0e4448d11646d5a52e5fcf01958f509834d",
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
    "status": "REPRODUCED",
    "subgroups": null,
    "tests_passed": [
@@ -81,10 +82,10 @@
    "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+   "code_commit": "bc414a01e05f28ef937751c74c474c8cdf526ef8+uncommitted",
    "coverage_pct": {
-    "DST_adjusted": 98.4,
-    "DST_raw": 98.4,
+    "DST_adjusted": 100.0,
+    "DST_raw": 100.0,
     "K_adjusted": 100.0,
     "K_raw": 100.0,
     "QB_adjusted": 100.0,
@@ -96,7 +97,7 @@
     "WR_adjusted": 100.0,
     "WR_raw": 100.0
    },
-   "data_hash": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
    "estimator": "v0 split-half on schedule-attributed cells; invalid and missing cells excluded; intervals: Fisher, bootstrap by unit and by season (2,000, seed 1729)",
    "evidence_paths": [
@@ -108,12 +109,12 @@
    "hypothesis": "v0's method on validated observations gives the same repeatability",
    "interval": {
     "DST_adjusted": [
-     0.3817,
-     0.5539
+     0.3968,
+     0.5649
     ],
     "DST_raw": [
-     0.3771,
-     0.5501
+     0.3925,
+     0.5614
     ],
     "K_adjusted": [
      0.035,
@@ -157,34 +158,34 @@
     ]
    },
    "limitations": [
-    "156 regular-season team-games have no D/ST line (the same code mismatch in the D/ST scorer): the Raiders 2016-2019, the Chargers 2016 and every D/ST that played them",
-    "D/ST still lacks the 156 missing lines (canonical gap, not repaired here)"
+    "Halves differ in size (7-9 games); k uses their mean (8.25), an approximation",
+    "Measured on the repaired targets (R-072): every completed team-game has its D/ST line and its schedule opponent"
    ],
    "next_steps": "A00, A02-A08 on the validated observations; B00 comparator",
    "parameters": {
     "DST_adjusted": {
-     "k": 9.08,
+     "k": 8.74,
      "k95Seasons": [
-      7.5644,
-      10.4559
+      7.3681,
+      10.0191
      ],
      "k95Units": [
-      6.6863,
-      12.7773
+      6.5189,
+      12.3041
      ],
-     "pearson": 0.4723
+     "pearson": 0.4853
     },
     "DST_raw": {
-     "k": 9.24,
+     "k": 8.88,
      "k95Seasons": [
-      7.5577,
-      11.5055
+      7.4873,
+      10.415
      ],
      "k95Units": [
-      6.8003,
-      13.1643
+      6.5083,
+      12.5236
      ],
-     "pearson": 0.4681
+     "pearson": 0.4814
     },
     "K_adjusted": {
      "k": 48.86,
@@ -312,8 +313,8 @@
    "reason": "Repeatability is real but weak for every position group except D/ST, and the WR, TE and K intervals overlap: their order is not established",
    "relative_delta": null,
    "sample_count": {
-    "DST_adjusted": 315,
-    "DST_raw": 315,
+    "DST_adjusted": 320,
+    "DST_raw": 320,
     "K_adjusted": 320,
     "K_raw": 320,
     "QB_adjusted": 320,
@@ -329,7 +330,7 @@
     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
    },
-   "source_ancestry_hash": "50ca6e4958b8a467954a731056f3c0e4448d11646d5a52e5fcf01958f509834d",
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
    "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": [
@@ -347,9 +348,9 @@
    "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+   "code_commit": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
    "coverage_pct": null,
-   "data_hash": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
    "estimator": "lineage allowlist admission, scoring-hash and contribution checks, code scan, schedule reconciliation",
    "evidence_paths": [
@@ -365,7 +366,7 @@
    "limitations": [
     "docs/research/ffa-targets-check-2026-11-10.json: 10,734 of 10,771 2026 lines equal ESPN's actual applied totals (actual blocks only; an audit, not an input)"
    ],
-   "next_steps": "Repair of the canonical OAK/SD mapping is an owner decision (slice 2)",
+   "next_steps": "R-072 repaired in the canonical targets (TASK-20261123-007); v0 keeps reading the index it ran on",
    "parameters": {
     "checks": {
      "T05 every target line belongs to a completed team-game": "PASSED",
@@ -389,7 +390,7 @@
     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
    },
-   "source_ancestry_hash": "50ca6e4958b8a467954a731056f3c0e4448d11646d5a52e5fcf01958f509834d",
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
    "status": "PASSED",
    "subgroups": null,
    "tests_passed": [

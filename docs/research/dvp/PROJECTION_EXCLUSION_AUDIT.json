@@ -31,7 +31,7 @@
    "sourceType": "SCHEDULE"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2016 manifest 5f611e68fc7a90d050bc13e955a2a2fa6d46f9c208d8117787568ca7bc3ecdcc, parquet f399f15d7c9e0094cb2ea76f751d34da6bdc07361191fbf7a33313dbce0c1646",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2016 manifest 0460dc2bb22585ce904dee0a821cbd8be45fed822718c0e4e42d1df62a67c22a, parquet b1b2d36759008ef70397c860526ddc2f95260be4be9053cfcba9a438ec17372e",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -53,7 +53,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2017 manifest 73fb015c3cc3175b3b7445401e6311db6ba320eeab321e83b523b187bd274f0d, parquet 4edf3f17607d0f64da217401de126f6096c4cfe485713447d52979b4fdfb0bc3",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2017 manifest 4354f192bc7f97b2edc985388869d652da34591ecf2976306ad0136ef0587f18, parquet 8a169e7cc0cd30990520c11d8bad3acbb4a71b58cacbcd4072a09fd4657e53c3",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -75,7 +75,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2018 manifest 7f3fb6831ffe4690263dfd2deb3afb56a7f5e7c4897fda84e17c5b62fddee521, parquet a935164503ff2d53552b409cdad9174d3720ca8a4238c8c6114122a2da781633",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2018 manifest cd852eace6fcb1d7343fb30a1b71ec4d01921d42669e4882c95dc7ca946a505e, parquet 4e254b9871888e155b08b5786a12fddb7c191ce24511aed6d8a318f3ad0ce83f",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -97,7 +97,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2019 manifest e6185f6b1cf75a048c483695c796c457b805a2069432d74656c1764a942bbad9, parquet b40540faba826e5b54a30bd8bafa83bf957a5d218839d95481c104216b06c9bb",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2019 manifest 1da4ed83570d794ca4e0cfbb14ca627c93dfbaebff9d35d6383f196e48ab51f3, parquet 273e582a3f1cd818047622d59674d7eebec32879d5fb9b40bfa7d0355218ed78",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -119,7 +119,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2020 manifest df1f2b3845ca7b0c91d71b5876f2779026ba4194c08174ccb8f3af56f7782b7c, parquet 1a983bc5a7a5b7dfcfd1ed98f17a4c57133666663a8145750aaf834dccfa0666",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2020 manifest e95e2a0be945e1a2850083e9a7a715e8d5cd037b043c598a7bb6b9746ec0aec3, parquet 1a983bc5a7a5b7dfcfd1ed98f17a4c57133666663a8145750aaf834dccfa0666",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -141,7 +141,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2021 manifest 02f4640c80ee3c50fa1b048af33e7dfacb03cbde42a00a7ec3b92f8553b8eb10, parquet 3b9d6e09e2c757f4ba1dab9f19ef65129e5a0ccb4e29d608a66ff741761a1cea",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2021 manifest 0cb55fafd2ebf3993e20797517fb1ad2a1c5d11710689ef48138098e4983b396, parquet 3b9d6e09e2c757f4ba1dab9f19ef65129e5a0ccb4e29d608a66ff741761a1cea",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -163,7 +163,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2022 manifest 1e08000146cb2aaa1b4be803e2d6bc162bcb0ec70a5fc8a0be4ac9adf3ba455d, parquet bd6a75fe093cc049df115fff4a330f4c6731f8842fa065cb0aa4818edc861dae",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2022 manifest 8c5cb5098dae3f7ebffc847605b48eaf516eff639fcaba8f8fcfba1fef7d3fd7, parquet bd6a75fe093cc049df115fff4a330f4c6731f8842fa065cb0aa4818edc861dae",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -185,7 +185,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2023 manifest cd4f9a1b0c4549728c63b1cde7a4f1c7c8fa9223924060a9cd401d63d95cf6fd, parquet 849bcdaa0caff5685cdf284bae4fe75ce9b7cf10768372f6822b2f1b9caab841",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2023 manifest 9238dbcec5ae428b748d5163f4df5bcdbde6c2d7ecdf5976e9e9623dd758dcaa, parquet 849bcdaa0caff5685cdf284bae4fe75ce9b7cf10768372f6822b2f1b9caab841",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -207,7 +207,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2024 manifest b461186259c34fb84eedaaa32c278bb0b83d96105292ee8db785f59631a1464c, parquet d227a797df3c62c857140348a26d4034df209e8d0796d0bc5fe945d6f4338578",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2024 manifest f9306028d8eba89ecd587807902ce62314587ed08a0861d6b63dbc65e2f3711b, parquet d227a797df3c62c857140348a26d4034df209e8d0796d0bc5fe945d6f4338578",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -229,7 +229,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2025 manifest 151b69005265807f261d8480250befb626f0e22e0b24d62783c9b9d391f85444, parquet 8631f4d5b35289fb11ed7d94dfcbdb73d9da85ded5637ebe8a5ba691475c4037",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2025 manifest c4090ad22c6bf722b24d9de006a71586013876f344d0c3ea469bf9e25081d181, parquet 8631f4d5b35289fb11ed7d94dfcbdb73d9da85ded5637ebe8a5ba691475c4037",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -251,7 +251,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2016 manifest 5f611e68fc7a90d050bc13e955a2a2fa6d46f9c208d8117787568ca7bc3ecdcc, parquet 3056d01cf5abcb6e40640dea9f92c63ee6b8a01b4e851a3fc124fb43ed3b8306",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2016 manifest 0460dc2bb22585ce904dee0a821cbd8be45fed822718c0e4e42d1df62a67c22a, parquet f1c2620c4a9fa20874d7682a194175517e95afded0e8d4e895504d43b00dafe2",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -265,13 +265,13 @@
     "refusal"
    ],
    "provider": "arbit",
-   "rows": 472,
+   "rows": 534,
    "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
    "sourceId": "ffa_targets.defense",
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2017 manifest 73fb015c3cc3175b3b7445401e6311db6ba320eeab321e83b523b187bd274f0d, parquet f3730a2d1ab467bc46959ec5b433777d52a64b4ef5923eafcaa28b17e3c9113b",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2017 manifest 4354f192bc7f97b2edc985388869d652da34591ecf2976306ad0136ef0587f18, parquet 02e8380343d64498cbeb9ab17c0c7860ea04df941850143a58438366cf94a069",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -285,13 +285,13 @@
     "refusal"
    ],
    "provider": "arbit",
-   "rows": 502,
+   "rows": 534,
    "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
    "sourceId": "ffa_targets.defense",
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2018 manifest 7f3fb6831ffe4690263dfd2deb3afb56a7f5e7c4897fda84e17c5b62fddee521, parquet 94b7f523ee78b79b7cd3cb80064dd798b40abe7aed26bcd4adfa291e211b3149",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2018 manifest cd852eace6fcb1d7343fb30a1b71ec4d01921d42669e4882c95dc7ca946a505e, parquet 98d7364484a3213353ed1a398680a9e8a6cf794a66502b11b9e539d367876797",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -305,13 +305,13 @@
     "refusal"
    ],
    "provider": "arbit",
-   "rows": 502,
+   "rows": 534,
    "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
    "sourceId": "ffa_targets.defense",
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2019 manifest e6185f6b1cf75a048c483695c796c457b805a2069432d74656c1764a942bbad9, parquet b89a35b14c943e8719aa6f8a6e5e3f789a698377bfc196a98c324d0e36121cc6",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2019 manifest 1da4ed83570d794ca4e0cfbb14ca627c93dfbaebff9d35d6383f196e48ab51f3, parquet 503f149d49105daed13dad389f6d672bbebc71da1448716a34fc27921410190a",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -325,13 +325,13 @@
     "refusal"
    ],
    "provider": "arbit",
-   "rows": 502,
+   "rows": 534,
    "scoringHash": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee",
    "sourceId": "ffa_targets.defense",
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2020 manifest df1f2b3845ca7b0c91d71b5876f2779026ba4194c08174ccb8f3af56f7782b7c, parquet ed6e2f2d3dfa668678363fb711038cd2fa875675be6faa14b9e450655bac3109",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2020 manifest e95e2a0be945e1a2850083e9a7a715e8d5cd037b043c598a7bb6b9746ec0aec3, parquet ed6e2f2d3dfa668678363fb711038cd2fa875675be6faa14b9e450655bac3109",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -351,7 +351,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2021 manifest 02f4640c80ee3c50fa1b048af33e7dfacb03cbde42a00a7ec3b92f8553b8eb10, parquet b0c79436b0ec81225367c0b83afda437a1960a4e070ff23f14983ba26073a999",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2021 manifest 0cb55fafd2ebf3993e20797517fb1ad2a1c5d11710689ef48138098e4983b396, parquet b0c79436b0ec81225367c0b83afda437a1960a4e070ff23f14983ba26073a999",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -371,7 +371,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2022 manifest 1e08000146cb2aaa1b4be803e2d6bc162bcb0ec70a5fc8a0be4ac9adf3ba455d, parquet 5b760ba888071cbde1f6178cfeba742f9119379432c943f9fa8cfe2c1971910b",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2022 manifest 8c5cb5098dae3f7ebffc847605b48eaf516eff639fcaba8f8fcfba1fef7d3fd7, parquet 5b760ba888071cbde1f6178cfeba742f9119379432c943f9fa8cfe2c1971910b",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -391,7 +391,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2023 manifest cd4f9a1b0c4549728c63b1cde7a4f1c7c8fa9223924060a9cd401d63d95cf6fd, parquet 8eebd5ffb5c2bd38a1d8c116e3f0ba8fcfb60caf631121f77f4a5204f81232dc",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2023 manifest 9238dbcec5ae428b748d5163f4df5bcdbde6c2d7ecdf5976e9e9623dd758dcaa, parquet 8eebd5ffb5c2bd38a1d8c116e3f0ba8fcfb60caf631121f77f4a5204f81232dc",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -411,7 +411,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2024 manifest b461186259c34fb84eedaaa32c278bb0b83d96105292ee8db785f59631a1464c, parquet fc615220ab5e2522edfef0f84739ba4a45ab7b4df14282a711f9cb71bb4dacc6",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2024 manifest f9306028d8eba89ecd587807902ce62314587ed08a0861d6b63dbc65e2f3711b, parquet fc615220ab5e2522edfef0f84739ba4a45ab7b4df14282a711f9cb71bb4dacc6",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -431,7 +431,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   },
   {
-   "ancestry": "targets index 4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18, season 2025 manifest 151b69005265807f261d8480250befb626f0e22e0b24d62783c9b9d391f85444, parquet 252e13c0cc3f3a51b546136f4312140c9f0a82a4b61b1316c83321d5975c85d3",
+   "ancestry": "targets index 6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d, season 2025 manifest c4090ad22c6bf722b24d9de006a71586013876f344d0c3ea469bf9e25081d181, parquet 252e13c0cc3f3a51b546136f4312140c9f0a82a4b61b1316c83321d5975c85d3",
    "columnsDropped": {},
    "columnsUsed": [
     "season",
@@ -451,7 +451,7 @@
    "sourceType": "FFA_ACTUAL_FINAL"
   }
  ],
- "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+ "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
  "codeScan": {
   "files": {
    "libs/arbit-core/src/arbit_core/rules.py": "5dd1753d9485a6761cc6a513852b6ee525e3c90d88d250b811a29c6532af03af",
@@ -459,16 +459,16 @@
    "libs/arbit-data/src/arbit_data/nflverse/stat_lines.py": "dd97eaf4dc70ddebc160bae538ed92f1d153c7954034a81f401e25ac7de5998a",
    "libs/arbit-model/src/arbit_model/dvp/__init__.py": "bdfaa16ece99dd9b59522678812f3e55e3c394f34a7773a5e1fbebd141b5ad4e",
    "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
-   "libs/arbit-model/src/arbit_model/dvp/observations.py": "baad86e2533cdc905809d4cd8e64005385f6db1a8215e4a94194f0a5a65e9ff8",
+   "libs/arbit-model/src/arbit_model/dvp/observations.py": "6540b51a0cf12dada43edce9907349e588d0a0b26084065a047b53ea304ab1be",
    "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
    "libs/arbit-model/src/arbit_model/dvp/results.py": "5d10b972f43e0e4e40c386b6f3165db4737834b6a21ac793ba0e0c2ad5de8852",
-   "libs/arbit-model/src/arbit_model/gamebook.py": "1397a55e0d461a689f65bc33c40e8f9c8cd82a69053af61ecd3d194852ec433c",
+   "libs/arbit-model/src/arbit_model/gamebook.py": "34c8eb36cc95a1a77201f0eaabf0cd367e7128b052134f845e18be93dd568b9d",
    "libs/arbit-model/src/arbit_model/inputs.py": "729ae321b32cf4e5659fc5b00077fab8a966dce4f6c3992fc4dd21354d803729",
    "libs/arbit-model/src/arbit_model/storage.py": "05d4f7a99664a546f2eec102362644d4401d969af9835517ca95d3dd21c30a62",
-   "libs/arbit-model/src/arbit_model/targets.py": "91655bd0f290ddca99b4c48c0155094c29856631cf17b4b04e0e6aff1a64468f",
-   "scripts/model/build_targets.py": "f7e3b5862c308ac266c2ac0fa750d7460da16863393b3d2bfd266fd15d00b406",
+   "libs/arbit-model/src/arbit_model/targets.py": "c3ee0959187e694732b427848817aca8b192d4ed556ee49219338564b6f7ec13",
+   "scripts/model/build_targets.py": "8f62c75ef59c4a31c6ecf8e9e6c7177255b907a7f5e6c472ffc1b0e4f2ae18d5",
    "scripts/model/defense_position_study.py": "26b24f6f82b0df15ea937b1e23bf1453619cd1c065046ddc30a403b93a4460c6",
-   "scripts/model/dvp.py": "f5f75d876bfc099dca6cc338cd12b8fa328c20e4c2f113d4135ece6502710638",
+   "scripts/model/dvp.py": "85d530036d7ea9902cd1beba53524a74598a9066b65d7d733bafb1d7f35f94ac",
    "scripts/model/ffa_signal_study.py": "3f23dc7a764ed491b242b6ba85540d0dafae5f541f0de019a3e7726747eb04d4"
   },
   "findings": [],
@@ -541,8 +541,8 @@
  ],
  "forbidden_vendor_projection_dependencies": 0,
  "format": "arbit-dvp-m3-3-projection-exclusion-v1",
- "generatedAt": "2026-11-23T22:25:17.587356+00:00",
- "runId": "phase1-audit-20261123T222517Z",
+ "generatedAt": "2026-11-24T02:19:10.066310+00:00",
+ "runId": "phase1-audit-20261124T021910Z",
  "slice2Agreement": "docs/research/ffa-targets-check-2026-11-10.json: 10,734 of 10,771 2026 lines equal ESPN's actual applied totals (actual blocks only; an audit, not an input)",
  "status": "PASSED",
  "targetInputFamilies": {

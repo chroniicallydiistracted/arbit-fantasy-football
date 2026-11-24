@@ -5,7 +5,7 @@
   "commit": "c8c0396537eb6c1ac66cefc6550f2387ccf123d3",
   "committedAt": "2026-11-23T12:52:02-07:00",
   "consumers": {
-   "libs/arbit-model/src/arbit_model/feature_specs.py": "0166933f968a6f35b9fa27e33dc52e520910661bb46049483313dddadfa00b37"
+   "libs/arbit-model/src/arbit_model/feature_specs.py": "b63998ed09e96987e1f77e61adbbdacd6a3346fc74418530ff6cdfcb47f09e82"
   },
   "decisionRecords": [
    "ENG-056",

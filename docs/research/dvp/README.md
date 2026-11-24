@@ -8,7 +8,7 @@
 
 **Isolation:** offline and read-only. Nothing here writes canonical scoring tables, feature weights, services or deployments.
 
-## Status (2026-11-23)
+## Status (2026-11-24)
 
 | Item | Status |
 | --- | --- |
@@ -18,13 +18,13 @@
 | Tests T01–T07 and T29–T40 (with T08–T13, T21–T22) | PASSED, 38 tests |
 | A01 on validated observations, with intervals | EXECUTED |
 | A00, A02–A10, A12; B00–B12; C00–C05 | PLANNED ([registry](EXPERIMENT_REGISTRY.md)) |
-| Full D/ST coverage | BLOCKED on R-072 (owner decision) |
+| Canonical targets repaired (R-072): all 5,278 D/ST team-games, every opponent from the schedule | DONE ([targets repair](../targets-repair-r072.md), TASK-20261123-007) |
 
 **Headline so far (repeatability only, not forecasting):**
 
 | Group | Games for half signal (k) | 95% interval, season resamples | What it means |
 | --- | --- | --- | --- |
-| D/ST conceded by the offense | ≈ 9 | 8–12 | The clearest matchup signal |
+| D/ST conceded by the offense | ≈ 9 | 7–10 | The clearest matchup signal (all 320 offense-seasons) |
 | QB (adjusted) | ≈ 22 | 13–46 | Modest |
 | RB | ≈ 20 | 11–48 | Modest |
 | WR, TE, K | 42–49 | ~20 to over 140 | Weak; v0's order among these three isn't established |
@@ -56,13 +56,13 @@ uv run pytest libs/arbit-model/tests/test_dvp_*.py -q
 **What it reads:**
 - the database, read-only, for the league's rules and the pinned nflverse manifests;
 - the nflverse object store;
-- the FFA targets store pinned by `targets_index`.
+- the FFA targets store pinned by `targets_index` (the R-072-repaired index), and, for v0's rerun only, `v0_targets_index` (the index v0 ran on).
 
 **What it writes:**
 - `artifacts/dvp/<run>/`: observations, schedule, half pairs and the run manifest, ignored by git;
 - the receipts here.
 
-Runs are timestamped and never overwrite earlier ones. Receipts name the code commit. The reproduction refuses to run if the targets' current pointer has moved from the pinned index, because v0 reads the current pointer.
+Runs are timestamped and never overwrite earlier ones. Receipts name the code commit. v0 reads whatever `targets-current.json` names, so the reproduction gives it a pointer of its own to `v0_targets_index` inside the run directory. The reproduction refuses an audit run that read a different index from `targets_index`.
 
 ## Documents
 
@@ -76,9 +76,9 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [EXPERIMENT_REGISTRY.md](EXPERIMENT_REGISTRY.md) | Every M3-3 experiment and its status |
 
 Decisions, risks, history and handoffs live in the repository's own records:
-- the [decision register](../../project/decision-register.md): OWN-074, ENG-057;
+- the [decision register](../../project/decision-register.md): OWN-074, ENG-057, OWN-075, ENG-058;
 - [known issues](../../project/known-issues.md): R-072 to R-074;
 - the [changelog](../../project/changelog.md);
-- governance task TASK-20261123-005.
+- governance tasks TASK-20261123-005 and TASK-20261123-007.
 
 **Still to write:** methodology, the reliability report, the backtest report and the model card, with phases 2–4.

@@ -2,84 +2,19 @@
  "anomalies": {
   "athlete": {
    "duplicatePlayerGameLines": 0,
-   "misattributedByTeamSeason": {
-    "2016/LAC/LAC": 257,
-    "2016/LV/LV": 269,
-    "2017/LV/LV": 261,
-    "2018/LV/LV": 273,
-    "2019/LV/LV": 267
-   },
+   "misattributedByTeamSeason": {},
    "pointsOnPositionsOutsideFfaGroups": {
     "lines": 1030,
     "points": 4312.52
    },
    "rowsOutsideCompletedTeamGames": 0,
    "rowsOutsideCompletedTeamGamesBySeason": {},
-   "rowsWhoseRecordedOpponentDisagreesWithSchedule": 1327
+   "rowsWhoseRecordedOpponentDisagreesWithSchedule": 0
   },
   "dst": {
    "dstLinesOutsideCompletedTeamGames": 0,
-   "missingDstLineByOpposingTeamSeason": {
-    "2016/ATL": 2,
-    "2016/BAL": 1,
-    "2016/BUF": 1,
-    "2016/CAR": 2,
-    "2016/CLE": 1,
-    "2016/DEN": 4,
-    "2016/HOU": 2,
-    "2016/IND": 2,
-    "2016/JAX": 2,
-    "2016/KC": 4,
-    "2016/LAC": 16,
-    "2016/LV": 16,
-    "2016/MIA": 1,
-    "2016/NO": 2,
-    "2016/TB": 2,
-    "2016/TEN": 2,
-    "2017/BAL": 1,
-    "2017/BUF": 1,
-    "2017/DAL": 1,
-    "2017/DEN": 2,
-    "2017/KC": 2,
-    "2017/LAC": 2,
-    "2017/LV": 16,
-    "2017/MIA": 1,
-    "2017/NE": 1,
-    "2017/NYG": 1,
-    "2017/NYJ": 1,
-    "2017/PHI": 1,
-    "2017/TEN": 1,
-    "2017/WAS": 1,
-    "2018/ARI": 1,
-    "2018/BAL": 1,
-    "2018/CIN": 1,
-    "2018/CLE": 1,
-    "2018/DEN": 2,
-    "2018/IND": 1,
-    "2018/KC": 2,
-    "2018/LA": 1,
-    "2018/LAC": 2,
-    "2018/LV": 16,
-    "2018/MIA": 1,
-    "2018/PIT": 1,
-    "2018/SEA": 1,
-    "2018/SF": 1,
-    "2019/CHI": 1,
-    "2019/CIN": 1,
-    "2019/DEN": 2,
-    "2019/DET": 1,
-    "2019/GB": 1,
-    "2019/HOU": 1,
-    "2019/IND": 1,
-    "2019/JAX": 1,
-    "2019/KC": 2,
-    "2019/LAC": 2,
-    "2019/LV": 16,
-    "2019/MIN": 1,
-    "2019/NYJ": 1,
-    "2019/TEN": 1
-   },
-   "teamGamesWithoutOpposingDstLine": 156
+   "missingDstLineByOpposingTeamSeason": {},
+   "teamGamesWithoutOpposingDstLine": 0
   },
   "playersWithTwoFranchisesInASeason": 645,
   "rawTeamCodes": {
@@ -87,27 +22,22 @@
     "2016": [
      "LA",
      "LAC",
-     "LV",
-     "OAK",
-     "SD"
+     "LV"
     ],
     "2017": [
      "LA",
      "LAC",
-     "LV",
-     "OAK"
+     "LV"
     ],
     "2018": [
      "LA",
      "LAC",
-     "LV",
-     "OAK"
+     "LV"
     ],
     "2019": [
      "LA",
      "LAC",
-     "LV",
-     "OAK"
+     "LV"
     ],
     "2020": [
      "LA",
@@ -142,19 +72,24 @@
    },
    "defense": {
     "2016": [
-     "LA"
+     "LA",
+     "LAC",
+     "LV"
     ],
     "2017": [
      "LA",
-     "LAC"
+     "LAC",
+     "LV"
     ],
     "2018": [
      "LA",
-     "LAC"
+     "LAC",
+     "LV"
     ],
     "2019": [
      "LA",
-     "LAC"
+     "LAC",
+     "LV"
     ],
     "2020": [
      "LA",
@@ -242,8 +177,7 @@
   }
  },
  "cellsByStatus": {
-  "DST/missing_dst_line": 156,
-  "DST/valid": 5122,
+  "DST/valid": 5278,
   "K/invalid_refused_line": 14,
   "K/valid": 5264,
   "QB/valid": 5278,
@@ -346,7 +280,7 @@
   },
   "T30 each scored line's points equal the sum of its rule contributions": {
    "detail": {
-    "checked": 257756,
+    "checked": 257914,
     "mismatched": 0
    },
    "status": "PASSED"
@@ -383,7 +317,7 @@
    "status": "PASSED"
   }
  },
- "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+ "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
  "examples": {
   "dstTurnover": {
    "dst": "JAX",
@@ -555,7 +489,7 @@
   }
  },
  "format": "arbit-dvp-m3-3-audit-v1",
- "generatedAt": "2026-11-23T22:25:17.587356+00:00",
+ "generatedAt": "2026-11-24T02:19:10.066310+00:00",
  "positions": {
   "leagueLineupSlots": [
    "QB",
@@ -595,8 +529,7 @@
   "seasons": {
    "2016": {
     "cellsByStatus": {
-     "DST/missing_dst_line": 60,
-     "DST/valid": 452,
+     "DST/valid": 512,
      "K/invalid_refused_line": 4,
      "K/valid": 508,
      "QB/valid": 512,
@@ -618,8 +551,7 @@
    },
    "2017": {
     "cellsByStatus": {
-     "DST/missing_dst_line": 32,
-     "DST/valid": 480,
+     "DST/valid": 512,
      "K/invalid_refused_line": 1,
      "K/valid": 511,
      "QB/valid": 512,
@@ -641,8 +573,7 @@
    },
    "2018": {
     "cellsByStatus": {
-     "DST/missing_dst_line": 32,
-     "DST/valid": 480,
+     "DST/valid": 512,
      "K/invalid_refused_line": 2,
      "K/valid": 510,
      "QB/valid": 512,
@@ -664,8 +595,7 @@
    },
    "2019": {
     "cellsByStatus": {
-     "DST/missing_dst_line": 32,
-     "DST/valid": 480,
+     "DST/valid": 512,
      "K/invalid_refused_line": 2,
      "K/valid": 510,
      "QB/valid": 512,
@@ -815,33 +745,33 @@
   "teamGames": 5278,
   "teamGamesWithoutMirror": 0
  },
- "runId": "phase1-audit-20261123T222517Z",
+ "runId": "phase1-audit-20261124T021910Z",
  "runManifest": {
-  "code": "556e1cbd00b0e11624872fe3cbebd56e199d2c84",
+  "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
   "command": "audit",
   "config": {
    "path": "config/dvp/base.json",
-   "sha256": "e4abfd1a0a6d5767c3583099b5781ce7fcbee728df441b8c4b2b3daf229b8654"
+   "sha256": "26333daf50b09c4f85cfd35ab3a9680deb07a7663470c419c063a6df22dda2df"
   },
   "format": "arbit-dvp-m3-3-run-v1",
   "outputs": {
-   "observations.parquet": "aa074544d2df2acda538f0221bd4f81eed3ae5e983917b8dc4445fb02f594bd1",
+   "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
    "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
   },
-  "runId": "phase1-audit-20261123T222517Z",
+  "runId": "phase1-audit-20261124T021910Z",
   "scheduleManifest": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
-  "startedAt": "2026-11-23T22:25:17.587356+00:00",
-  "targetsIndex": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18"
+  "startedAt": "2026-11-24T02:19:10.066310+00:00",
+  "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
  },
  "validCellsByPosition": {
   "DST": {
    "max": 35.0,
-   "mean": 5.877,
+   "mean": 5.853,
    "min": -12.0,
-   "negative": 787,
+   "negative": 820,
    "position": "DST",
-   "trueZeros": 260,
-   "validCells": 5122
+   "trueZeros": 266,
+   "validCells": 5278
   },
   "K": {
    "max": 27.0,

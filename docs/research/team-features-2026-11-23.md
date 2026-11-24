@@ -10,7 +10,7 @@ The owner wants every sit/start call to explain why, including the opponent's de
 
 "Games for half signal" is the number of games after which the defense's own record and the league average deserve equal weight. After n games the feature weighs the defense's record by n / (n + k).
 
-| FFA points allowed per game | Games for half signal: raw | Adjusted for offenses faced | Weight after 8 games, adjusted | League mean per team-game |
+| FFA points allowed per game | Games for half signal: raw | Adjusted for offenses faced | Weight after 8 games, adjusted | League mean per team-game in the 2025 and 2026 audit runs |
 | --- | --- | --- | --- | --- |
 | to RBs | 18.7 | 20.0 | 29% | 22.0 |
 | to QBs | 30.6 | 22.2 | 26% | 16.5–17.0 |
@@ -24,6 +24,11 @@ What this means for sit/start:
 - **WR, TE and K matchups are mostly noise within a season.** After eight games a defense's record against WRs earns 16% weight, so "this defense is bad against WRs" should rarely decide a lineup.
 - **D/ST is the opponent.** The points D/STs score against an offense settle within about nine games, much faster than a D/ST's own points (24.0 games, signal study). It is the strongest matchup signal measured here. The offense's giveaway tendency is real, matching the design's "D/ST is mostly the opponent".
 - These are measured constants, not a verdict on the projections. Slice 4's backtest decides how much each contributes.
+
+**Corrections, 2026-11-24 (TASK-20261123-007):**
+- **Team codes (R-072).** This study ran on FFA targets where the Raiders' 2016–2019 and the Chargers' 2016 home games named the team as its own opponent, and their games had no D/ST line. The constants above are v0's, kept unchanged as the DvP research's baseline (OWN-074). The DvP research's validated measures were already free of the misattribution, so its position measures are unchanged by the repair. Its D/ST measure is now k 8.9 on all 320 offense-seasons ([v0 reproduction](dvp/V0_REPRODUCTION.md)). The team-rate constants now come from the signal study rerun on the repaired codes ([repair](targets-repair-r072.md)).
+- **Playoffs (R-074).** Gamebooks now read regular-season games only, so last season's rates no longer include playoff games.
+- **The last column** holds the averages of the two real-data runs below, not the 2016–2025 study means. For example, WR is 31.7–31.8 here and 33.6 across the study.
 
 ## Features
 

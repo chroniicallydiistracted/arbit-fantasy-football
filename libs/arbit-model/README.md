@@ -5,6 +5,7 @@ The shared Model ([ADR-003](../../docs/architecture/decisions/003-shared-intelli
 Implemented (M3 slice 2):
 - `arbit_model.fields`: one recorded use for every imported nflverse field, and the committed catalog `nflverse_fields.json`. `scripts/model/field_catalog.py` checks it against the imported manifests or regenerates it.
 - `arbit_model.targets`: FFA lines and points for every player-game and D/ST team-game, plus participation labels. These are pure functions over nflverse rows.
+- `arbit_model.teams`: one code per franchise across nflverse tables (R-072). The schedule, snap counts and rosters keep old codes (OAK, SD, STL, and roster-only codes for 2012–2015), while statistics use franchise codes. Every join maps through it, and the targets refuse a row whose team didn't play in its game.
 - `arbit_model.inputs`: read-only access to nflverse tables, current or pinned to exact manifests.
 - `arbit_model.storage`: Parquet tables and manifests in a content-addressed store.
 
