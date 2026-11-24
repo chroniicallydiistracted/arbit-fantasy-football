@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-005",
+  "title": "M3-3 DvP plan completion audit and scope document",
+  "objective": "Audit every action item of the owner's DvP specification v1.1 (docs/research/Arbit_FFA_M3_DvP_Plan.md, OWN-074) against the repository by rerunning its evidence, not by citing old receipts: the test suite with per-test results, v0 reproduction, the Phase 0-1 audit, the reliability lab, all three backtest stages (holdout from the frozen commit), Phase C and verify. Encode the item-to-evidence map as an executable audit that writes a machine-readable receipt, and write a scope document into the repository that lists each completed action item, the code and model logic behind it, and its passing proof. Open items (prospective 2026 scoring, owner weight decision, BLOCKED C03 and league lineups) are stated as open. No production, weight or canonical-table change.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "scripts/model/dvp_plan_audit.py",
+    "libs/arbit-model/tests/test_dvp_plan_audit.py",
+    "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+    "docs/research/dvp/plan-audit-receipt.json",
+    "docs/research/dvp/README.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json",
+    "libs/arbit-model/tests/test_dvp_firewall.py",
+    "scripts/model/dvp.py",
+    "docs/research/dvp/DATA_QUALITY.md",
+    "docs/research/dvp/V0_REPRODUCTION.md",
+    "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T21:16:56Z",
+  "updated_at": "2026-11-24T21:31:05Z",
+  "baseline": "249297caeecbf0f96b09c4cb162accbd7b3031d7",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Read the owner's DvP specification v1.1 in full (sections 0-14) and the repository's DvP code, tests, configs, receipts and documents. Mapped every action item to evidence: 14 operating rules, RQ1-RQ7, definitions, the data boundary and eligibility table, datasets and reconciliation checks, v0 items, A00-A12, B00-B12, C00-C05, statistics, metrics and decision rules, T01-T40, phases 0-5, CLI contracts and modes, config and record fields, section 11 deliverables and before-completion checks, the section 12 decision chain and the section 13 caveats. Reran every stage on scratch copies (audit, reproduce-v0, reliability, development, validation from main; 2025 holdout from the frozen tree 165d140; holdout refused from main; sitstart; verify; report; registry): every receipt equals its committed version apart from code, time, run ID, byte hashes of Parquet files and fields added after a receipt was made; holdout forecasts equal within 7.1e-15 (18 values). Found: DATA_QUALITY.md and V0_REPRODUCTION.md cite an earlier audit run (021910Z, bc414a0) than their receipts (024442Z, 3a1fe11); dry-run and resume modes were never built; the project next action still says to merge PR #12, which is merged.",
+      "files": [
+        "docs/research/dvp/DATA_QUALITY.md",
+        "docs/research/dvp/V0_REPRODUCTION.md"
+      ]
+    },
+    "plan": {
+      "summary": "1) Encode the item-to-evidence map as an executable audit, scripts/model/dvp_plan_audit.py: 'rerun' copies the frozen audit run and receipts to scratch and reruns every stage (holdout from a worktree at 165d140; the holdout's refusal from this tree) plus the model tests with JUnit results; 'check' evaluates every item's checks and writes docs/research/dvp/plan-audit-receipt.json (DONE / OPEN / FAILED per item; exit 1 on any failure). Open items (prospective 2026 scoring, owner weight, C03, league lineups, dry-run/resume) are kind 'open': their checks prove the open state is recorded, never count as done. 2) Tests (test_dvp_plan_audit.py): catalog covers every specified ID; every check defined and used; every T tag names real tests; open items never count as done; receipt comparison and forecast-difference logic; committed receipt passes, matches the catalog and the specification hash; the scope document has a row for every item. 3) Commit code first, then run the audit so the receipt names a clean commit. 4) Write PLAN_COMPLETION_SCOPE.md (every item: status, code/model logic, proof) from the receipt. 5) Fix the stale run IDs; update README, status, changelog, state.json next action; handoff.",
+      "files": [
+        "scripts/model/dvp_plan_audit.py",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": [
+    {
+      "at": "2026-11-24T21:30:16Z",
+      "kind": "correction",
+      "note": "Scope extended by hand (governance has no scope command) with docs/research/dvp/DATA_QUALITY.md and V0_REPRODUCTION.md, which cite audit run phase1-audit-20261124T021910Z (code bc414a0) while their receipts come from phase1-audit-20261124T024442Z (code 3a1fe11), and with this task's handoff file.",
+      "evidence": "docs/research/dvp/DATA_QUALITY.md"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 Specification §3.3, tests T01–T07, T30, T34. Receipts:
 - [audit-receipt.json](audit-receipt.json) (checks, reconciliation, anomalies, examples) and [SCORE_FINALITY_AUDIT.json](SCORE_FINALITY_AUDIT.json);
-- run `phase1-audit-20261124T021910Z`, code `bc414a0`, on targets index `6ffb62fb…` (R-072 repaired; [targets-repair-r072.md](../targets-repair-r072.md)). The first run, `phase1-audit-20261123T222517Z` on index `4afbd836…`, found the defect;
+- run `phase1-audit-20261124T024442Z`, code `3a1fe11`, on targets index `6ffb62fb…` (R-072 repaired; [targets-repair-r072.md](../targets-repair-r072.md)). Every later stage reads this run, and `config/dvp/frozen.json` pins its outputs. The first run, `phase1-audit-20261123T222517Z` on index `4afbd836…`, found the defect; `phase1-audit-20261124T021910Z` (code `bc414a0`) built an identical observation table. A fresh rerun on 2026-11-24 rebuilt an identical observation table ([PLAN_COMPLETION_SCOPE.md](PLAN_COMPLETION_SCOPE.md));
 - the observation table is `artifacts/dvp/<run>/observations.parquet`, ignored by git, with its hash in the run manifest.
 
 ## Checks (all PASSED)

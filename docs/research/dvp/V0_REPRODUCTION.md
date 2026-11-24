@@ -1,6 +1,6 @@
 # M3-3 v0 reproduction and discrepancies
 
-Specification §4 (A01, T29). Receipt: [v0-reproduction.json](v0-reproduction.json), from audit run `phase1-audit-20261124T021910Z` on code `bc414a0` (first run `phase1-audit-20261123T222517Z`, code `556e1cb`, before the R-072 repair). v0 is the odd/even study in [defense-position-study-2026-11-23.json](../defense-position-study-2026-11-23.json), created in TASK-20261123-004 ([continuity](M3-3_CONTINUITY.md)).
+Specification §4 (A01, T29). Receipt: [v0-reproduction.json](v0-reproduction.json), from audit run `phase1-audit-20261124T024442Z` on code `3a1fe11`, the run every later stage reads (earlier runs: `phase1-audit-20261123T222517Z`, code `556e1cb`, before the R-072 repair; `phase1-audit-20261124T021910Z`, code `bc414a0`, which built an identical observation table). A fresh rerun on 2026-11-24 reproduced this receipt in every field but code and time ([PLAN_COMPLETION_SCOPE.md](PLAN_COMPLETION_SCOPE.md)). v0 is the odd/even study in [defense-position-study-2026-11-23.json](../defense-position-study-2026-11-23.json), created in TASK-20261123-004 ([continuity](M3-3_CONTINUITY.md)).
 
 ## Result: REPRODUCED
 
