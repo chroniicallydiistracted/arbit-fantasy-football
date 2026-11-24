@@ -1,0 +1,813 @@
+{
+ "adapter": "nflverse-ffa-stat-lines-v1",
+ "drivers": {
+  "D/ST": {
+   "categories": {
+    "defense.blocked_kicks": {
+     "meanPoints": 0.15,
+     "varianceShare": 0.009
+    },
+    "defense.fumbles_recovered": {
+     "meanPoints": 1.04,
+     "varianceShare": 0.083
+    },
+    "defense.interceptions": {
+     "meanPoints": 1.563,
+     "varianceShare": 0.137
+    },
+    "defense.points_allowed": {
+     "meanPoints": 0.304,
+     "varianceShare": 0.203
+    },
+    "defense.sacks": {
+     "meanPoints": 2.379,
+     "varianceShare": 0.149
+    },
+    "defense.safeties": {
+     "meanPoints": 0.057,
+     "varianceShare": 0.006
+    },
+    "defense.yards_allowed": {
+     "meanPoints": -0.531,
+     "varianceShare": 0.229
+    },
+    "returns.blocked_kick_touchdowns": {
+     "meanPoints": 0.05,
+     "varianceShare": 0.01
+    },
+    "returns.fumble_touchdowns": {
+     "meanPoints": 0.249,
+     "varianceShare": 0.056
+    },
+    "returns.interception_touchdowns": {
+     "meanPoints": 0.417,
+     "varianceShare": 0.093
+    },
+    "returns.kickoff_touchdowns": {
+     "meanPoints": 0.074,
+     "varianceShare": 0.009
+    },
+    "returns.punt_touchdowns": {
+     "meanPoints": 0.094,
+     "varianceShare": 0.016
+    },
+    "returns.two_point_returns": {
+     "meanPoints": 0.005,
+     "varianceShare": 0.0
+    }
+   },
+   "meanFFA": 5.85,
+   "rows": 5278,
+   "sdFFA": 6.63
+  },
+  "K": {
+   "categories": {
+    "kicking.extra_points_made": {
+     "meanPoints": 2.211,
+     "varianceShare": 0.048
+    },
+    "kicking.field_goals_0_39": {
+     "meanPoints": 2.88,
+     "varianceShare": 0.323
+    },
+    "kicking.field_goals_40_49": {
+     "meanPoints": 1.839,
+     "varianceShare": 0.303
+    },
+    "kicking.field_goals_50_59": {
+     "meanPoints": 1.236,
+     "varianceShare": 0.284
+    },
+    "kicking.field_goals_60_plus": {
+     "meanPoints": 0.045,
+     "varianceShare": 0.015
+    },
+    "kicking.field_goals_missed": {
+     "meanPoints": -0.292,
+     "varianceShare": 0.025
+    }
+   },
+   "meanFFA": 7.92,
+   "rows": 4812,
+   "sdFFA": 4.57
+  },
+  "QB": {
+   "categories": {
+    "misc.fumbles_lost": {
+     "meanPoints": -0.402,
+     "varianceShare": 0.012
+    },
+    "passing.interceptions": {
+     "meanPoints": -1.398,
+     "varianceShare": 0.053
+    },
+    "passing.touchdowns": {
+     "meanPoints": 6.133,
+     "varianceShare": 0.451
+    },
+    "passing.two_point_conversions": {
+     "meanPoints": 0.149,
+     "varianceShare": 0.01
+    },
+    "passing.yards": {
+     "meanPoints": 9.51,
+     "varianceShare": 0.274
+    },
+    "receiving.receptions": {
+     "meanPoints": 0.012,
+     "varianceShare": 0.0
+    },
+    "receiving.touchdowns": {
+     "meanPoints": 0.015,
+     "varianceShare": 0.002
+    },
+    "receiving.yards": {
+     "meanPoints": 0.004,
+     "varianceShare": 0.001
+    },
+    "rushing.touchdowns": {
+     "meanPoints": 1.038,
+     "varianceShare": 0.114
+    },
+    "rushing.two_point_conversions": {
+     "meanPoints": 0.023,
+     "varianceShare": 0.002
+    },
+    "rushing.yards": {
+     "meanPoints": 1.588,
+     "varianceShare": 0.08
+    }
+   },
+   "meanFFA": 16.67,
+   "rows": 4522,
+   "sdFFA": 8.15
+  },
+  "RB": {
+   "categories": {
+    "misc.fumbles_lost": {
+     "meanPoints": -0.122,
+     "varianceShare": -0.0
+    },
+    "passing.touchdowns": {
+     "meanPoints": 0.006,
+     "varianceShare": 0.001
+    },
+    "receiving.receptions": {
+     "meanPoints": 2.284,
+     "varianceShare": 0.135
+    },
+    "receiving.touchdowns": {
+     "meanPoints": 0.573,
+     "varianceShare": 0.093
+    },
+    "receiving.two_point_conversions": {
+     "meanPoints": 0.007,
+     "varianceShare": 0.001
+    },
+    "receiving.yards": {
+     "meanPoints": 1.769,
+     "varianceShare": 0.141
+    },
+    "returns.kickoff_touchdowns": {
+     "meanPoints": 0.006,
+     "varianceShare": 0.0
+    },
+    "rushing.touchdowns": {
+     "meanPoints": 2.114,
+     "varianceShare": 0.302
+    },
+    "rushing.two_point_conversions": {
+     "meanPoints": 0.025,
+     "varianceShare": 0.002
+    },
+    "rushing.yards": {
+     "meanPoints": 4.674,
+     "varianceShare": 0.325
+    }
+   },
+   "meanFFA": 11.34,
+   "rows": 8985,
+   "sdFFA": 8.39
+  },
+  "TE": {
+   "categories": {
+    "misc.fumbles_lost": {
+     "meanPoints": -0.043,
+     "varianceShare": -0.002
+    },
+    "passing.interceptions": {
+     "meanPoints": -0.003,
+     "varianceShare": -0.001
+    },
+    "passing.touchdowns": {
+     "meanPoints": 0.007,
+     "varianceShare": 0.002
+    },
+    "passing.yards": {
+     "meanPoints": 0.014,
+     "varianceShare": 0.003
+    },
+    "receiving.receptions": {
+     "meanPoints": 3.101,
+     "varianceShare": 0.283
+    },
+    "receiving.touchdowns": {
+     "meanPoints": 1.502,
+     "varianceShare": 0.318
+    },
+    "receiving.two_point_conversions": {
+     "meanPoints": 0.026,
+     "varianceShare": 0.003
+    },
+    "receiving.yards": {
+     "meanPoints": 3.375,
+     "varianceShare": 0.375
+    },
+    "rushing.touchdowns": {
+     "meanPoints": 0.046,
+     "varianceShare": 0.011
+    },
+    "rushing.yards": {
+     "meanPoints": 0.044,
+     "varianceShare": 0.007
+    }
+   },
+   "meanFFA": 8.07,
+   "rows": 6536,
+   "sdFFA": 6.56
+  },
+  "WR": {
+   "categories": {
+    "misc.fumble_recovery_touchdowns": {
+     "meanPoints": 0.003,
+     "varianceShare": 0.001
+    },
+    "misc.fumbles_lost": {
+     "meanPoints": -0.054,
+     "varianceShare": -0.0
+    },
+    "passing.touchdowns": {
+     "meanPoints": 0.01,
+     "varianceShare": 0.001
+    },
+    "passing.yards": {
+     "meanPoints": 0.005,
+     "varianceShare": 0.001
+    },
+    "receiving.receptions": {
+     "meanPoints": 3.888,
+     "varianceShare": 0.26
+    },
+    "receiving.touchdowns": {
+     "meanPoints": 1.89,
+     "varianceShare": 0.298
+    },
+    "receiving.two_point_conversions": {
+     "meanPoints": 0.031,
+     "varianceShare": 0.002
+    },
+    "receiving.yards": {
+     "meanPoints": 5.016,
+     "varianceShare": 0.422
+    },
+    "returns.kickoff_touchdowns": {
+     "meanPoints": 0.006,
+     "varianceShare": 0.0
+    },
+    "returns.punt_touchdowns": {
+     "meanPoints": 0.014,
+     "varianceShare": 0.001
+    },
+    "rushing.touchdowns": {
+     "meanPoints": 0.057,
+     "varianceShare": 0.008
+    },
+    "rushing.yards": {
+     "meanPoints": 0.122,
+     "varianceShare": 0.006
+    }
+   },
+   "meanFFA": 10.99,
+   "rows": 13562,
+   "sdFFA": 8.06
+  }
+ },
+ "nflverseManifests": {
+  "pbp/play_by_play_2016": "78e6229b85981a89670a99b848ff85d2c4474bd6ac9041f6c6b3562b9f121cb9",
+  "pbp/play_by_play_2017": "a1d43097fd94f43597082f90405a52da729872facc1bb9a1142b20e4284f25c8",
+  "pbp/play_by_play_2018": "ee7af8affb6dd83aa04316e9e00e2bee5c633ab4a55b53eb0cf9ed2209e96b45",
+  "pbp/play_by_play_2019": "1fa56e94017e61ef9eff59631a70534a26d1c63887ae66f0d556209d9e559e16",
+  "pbp/play_by_play_2020": "e979a36cefd6c6b0c089bebf521a17ded96c08bbc610f2b775a43d245d30e486",
+  "pbp/play_by_play_2021": "8e3b23e15de38d7af7bb99d6bea2e980e3e06adb210fc302d7756de2c0eda336",
+  "pbp/play_by_play_2022": "402a51b76cbdb483199bdb95e04f20aa8f7468e6b91208d9b0c0cbf7c5d18821",
+  "pbp/play_by_play_2023": "f929dc16bc4bb54505bd82ada811fa27360b31dd8ce1d73537f4e16f3234a7c6",
+  "pbp/play_by_play_2024": "d10c51d90e992dc03a6a6ec1f7fea123665d3f6791780d84ae747331630b25cf",
+  "pbp/play_by_play_2025": "85f3ec0f40ed33838db9f06e0d2415d01a41c225654f90c4d3e2d19362d75248",
+  "players/players": "196b78147ee37104424cceca6e401ee8cfb529e8b551f560ab6177462b346e05",
+  "schedules/games": "b97855a5144d50e7b50b7e21313ce711625904d587ddaab2645c91415488cad7",
+  "snap_counts/snap_counts_2016": "32f88e4bf4871bbc932eed6d8d96bb40743ac8d98adf2c297df6925485565107",
+  "snap_counts/snap_counts_2017": "6aa30a3c87b39cf80abed50b6631fa50d6d4c4162fd5e598457d1a36c28eed5c",
+  "snap_counts/snap_counts_2018": "cc87c6c8f874ebc48697478c016aa7de4a44f01ac8cf17d8ad33ee94485a2d94",
+  "snap_counts/snap_counts_2019": "a6d0fa9b2a6ee5357c8ba03a702d6d6a87553acbad949590023f7315ac3edd94",
+  "snap_counts/snap_counts_2020": "0e4a041661c2411e2c3af3421979cf66a19ba4a4d9c912dc9f7dbfaea14cffed",
+  "snap_counts/snap_counts_2021": "c950ffdddc0c5b119c24ce2b8c272159d5f325a08745713b378a07ccbd4f0c0a",
+  "snap_counts/snap_counts_2022": "eeaf0f54272d349f78afdbe65f14f2ae4cb051b0f8fb890301a91fefdffec73d",
+  "snap_counts/snap_counts_2023": "2976a52503ecc36d5e8adc728d2d84664bd34b82257ec44b19491fdceb71cbe6",
+  "snap_counts/snap_counts_2024": "5ab69be03568ac58c9898bd24c183532422aa7802787d72e18a91b6843e78dc7",
+  "snap_counts/snap_counts_2025": "a1215aebb055ed8e7b43e2881c3b7c6e569060139c6202afc14bf9aba6274df4",
+  "stats_player/stats_player_week_2016": "8d0fbb63779b62f1f3bae3de63983eddf0e566edead9960fbd82f9cac102700c",
+  "stats_player/stats_player_week_2017": "863e56dfc410f3b0ce32563f0865aa7dbf85f5143ea204312db0340690e6f65e",
+  "stats_player/stats_player_week_2018": "fc32d9be78e7a6858d74729f6e3ea247c942425485a4f1ed8b46c7adbb4acfd4",
+  "stats_player/stats_player_week_2019": "b14132315f1838ba07e87b73f2373ade64128f0ea9f12bf432f48e9adcb35b32",
+  "stats_player/stats_player_week_2020": "efd2c0e49d7b518011a6203ce8cf9e88c420d8db29964b7d4639520f02f47dbe",
+  "stats_player/stats_player_week_2021": "3f05ec2ccce7cdeca8d69df99645e30968392eb44fae5d29e253afecc0bb7106",
+  "stats_player/stats_player_week_2022": "439424813e5ea96be310eaad99b36a3e681e4d566be09a4691f37b0b6f5c1384",
+  "stats_player/stats_player_week_2023": "81a3ca6c3d2f60ded79ba219d063f74537223476eae9f32ec678ee4ba3a88424",
+  "stats_player/stats_player_week_2024": "edff82c52a05cc1fec39a04161641a2cf2b7246fbf72afa9e4a56c56c25ab4cf",
+  "stats_player/stats_player_week_2025": "b499873734fd559d50027c7f333d2f9a189e172f3c462d22296fe6a8f89a1d39",
+  "stats_team/stats_team_week_2016": "f13caf11b56d61497c4a331900551f1acfb826ca3f48bfde6f6a36ad2b0d3fb2",
+  "stats_team/stats_team_week_2017": "71f6d73b07bab8b9707a766578add7504a188fe22d62bf903c69a3bd3edb6bca",
+  "stats_team/stats_team_week_2018": "962babc626de3b4c7beb79a8257d19d933d6daf26ff31a53a630b6c45a81e95d",
+  "stats_team/stats_team_week_2019": "76a8c9f6d67d8c4adfb0f948feda0cb78bbcc5b6449bf8134259f955364a9f43",
+  "stats_team/stats_team_week_2020": "2e29e8f26f54e9abcf865dd4ab247ad2dd9a317917d04f3813a8eb555f611b62",
+  "stats_team/stats_team_week_2021": "2b3dd33495b07ca49cf65850ada29b8033f2f28f94c703f901c2a634f38b00a4",
+  "stats_team/stats_team_week_2022": "62fa23768fa26179baddc19f4debb988d7674359fb24b38812c1a91e5c10ebc2",
+  "stats_team/stats_team_week_2023": "2e93c13758d310ca5d9b380c3e87da658494d3272691bf27942733bd585e782c",
+  "stats_team/stats_team_week_2024": "3f064b2b3f1d9ffd18879f2a974bbbb977821a08617730baf87daa61fa4d9def",
+  "stats_team/stats_team_week_2025": "15afc87e455752f7f11892f9692ac82c003088e9ecb6637280c7a75b588933c0"
+ },
+ "population": {
+  "D/ST": "every team-game",
+  "K": "top 32 by FFA points per game, 8+ regular-season games",
+  "QB": "top 32 by FFA points per game, 8+ regular-season games",
+  "RB": "top 64 by FFA points per game, 8+ regular-season games",
+  "TE": "top 48 by FFA points per game, 8+ regular-season games",
+  "WR": "top 96 by FFA points per game, 8+ regular-season games"
+ },
+ "refusedLines": {
+  "athlete": 490
+ },
+ "repair": {
+  "change": "every nflverse team code mapped to its franchise as read; nothing else",
+  "code": "0439bc07bbfe0cab0c36b9d2336cbefa661fbe67",
+  "franchiseMap": {
+   "ARZ": "ARI",
+   "BLT": "BAL",
+   "CLV": "CLE",
+   "HST": "HOU",
+   "OAK": "LV",
+   "SD": "LAC",
+   "SL": "LA",
+   "STL": "LA"
+  },
+  "inputs": "the original receipt's nflverseManifests, pinned",
+  "issue": "R-072",
+  "rerunOf": "docs/research/ffa-signal-study-2026-11-09.json",
+  "studyFileSha256": "3f23dc7a764ed491b242b6ba85540d0dafae5f541f0de019a3e7726747eb04d4",
+  "task": "TASK-20261123-007"
+ },
+ "reportSha256": "374e1ffa93b681c01aed2db7f518eb27e4f29e96ce1d6067106759acb43bc593",
+ "rules": {
+  "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+  "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+ },
+ "seasons": [
+  2016,
+  2025
+ ],
+ "stability": {
+  "K": {
+   "extra_point_attempts_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 8.4,
+    "seasonReliability": 0.646,
+    "splitHalfR": 0.477,
+    "unitSeasons": 313
+   },
+   "ffa_points_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 22.5,
+    "seasonReliability": 0.404,
+    "splitHalfR": 0.253,
+    "unitSeasons": 313
+   },
+   "field_goal_accuracy": {
+    "denominatorForHalfSignal": 324,
+    "gamesForHalfSignal": 163.6,
+    "seasonReliability": 0.086,
+    "splitHalfR": 0.045,
+    "unitSeasons": 304
+   },
+   "field_goal_attempts_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 37.9,
+    "seasonReliability": 0.287,
+    "splitHalfR": 0.168,
+    "unitSeasons": 313
+   }
+  },
+  "QB": {
+   "carries_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 1.2,
+    "seasonReliability": 0.922,
+    "splitHalfR": 0.856,
+    "unitSeasons": 317
+   },
+   "ffa_points_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 5.7,
+    "seasonReliability": 0.712,
+    "splitHalfR": 0.553,
+    "unitSeasons": 317
+   },
+   "interceptions_per_attempt": {
+    "denominatorForHalfSignal": 1740,
+    "gamesForHalfSignal": 52.9,
+    "seasonReliability": 0.212,
+    "splitHalfR": 0.119,
+    "unitSeasons": 314
+   },
+   "pass_attempts_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 3.9,
+    "seasonReliability": 0.785,
+    "splitHalfR": 0.647,
+    "unitSeasons": 317
+   },
+   "passing_epa_per_dropback": {
+    "denominatorForHalfSignal": 338,
+    "gamesForHalfSignal": 9.6,
+    "seasonReliability": 0.597,
+    "splitHalfR": 0.425,
+    "unitSeasons": 313
+   },
+   "passing_td_per_attempt": {
+    "denominatorForHalfSignal": 448,
+    "gamesForHalfSignal": 13.6,
+    "seasonReliability": 0.511,
+    "splitHalfR": 0.343,
+    "unitSeasons": 314
+   },
+   "passing_yards_per_attempt": {
+    "denominatorForHalfSignal": 342,
+    "gamesForHalfSignal": 10.4,
+    "seasonReliability": 0.578,
+    "splitHalfR": 0.406,
+    "unitSeasons": 314
+   },
+   "rushing_epa_per_carry": {
+    "denominatorForHalfSignal": 94,
+    "gamesForHalfSignal": 19.9,
+    "seasonReliability": 0.415,
+    "splitHalfR": 0.262,
+    "unitSeasons": 189
+   },
+   "rushing_td_per_carry": {
+    "denominatorForHalfSignal": 120,
+    "gamesForHalfSignal": 26.6,
+    "seasonReliability": 0.357,
+    "splitHalfR": 0.218,
+    "unitSeasons": 190
+   },
+   "rushing_yards_per_carry": {
+    "denominatorForHalfSignal": 29,
+    "gamesForHalfSignal": 6.3,
+    "seasonReliability": 0.7,
+    "splitHalfR": 0.539,
+    "unitSeasons": 190
+   },
+   "rushing_yards_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 1.4,
+    "seasonReliability": 0.909,
+    "splitHalfR": 0.832,
+    "unitSeasons": 317
+   },
+   "sack_rate": {
+    "denominatorForHalfSignal": 364,
+    "gamesForHalfSignal": 10.4,
+    "seasonReliability": 0.578,
+    "splitHalfR": 0.406,
+    "unitSeasons": 315
+   }
+  },
+  "RB": {
+   "air_yards_per_target": {
+    "denominatorForHalfSignal": 25,
+    "gamesForHalfSignal": 7.3,
+    "seasonReliability": 0.667,
+    "splitHalfR": 0.5,
+    "unitSeasons": 472
+   },
+   "air_yards_share": {
+    "denominatorForHalfSignal": 1946,
+    "gamesForHalfSignal": 7.2,
+    "seasonReliability": 0.662,
+    "splitHalfR": 0.495,
+    "unitSeasons": 624
+   },
+   "carries_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 1.0,
+    "seasonReliability": 0.932,
+    "splitHalfR": 0.874,
+    "unitSeasons": 624
+   },
+   "carry_share": {
+    "denominatorForHalfSignal": 18,
+    "gamesForHalfSignal": 0.7,
+    "seasonReliability": 0.955,
+    "splitHalfR": 0.914,
+    "unitSeasons": 624
+   },
+   "catch_rate": {
+    "denominatorForHalfSignal": 476,
+    "gamesForHalfSignal": 138.1,
+    "seasonReliability": 0.096,
+    "splitHalfR": 0.05,
+    "unitSeasons": 472
+   },
+   "ffa_points_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 2.6,
+    "seasonReliability": 0.843,
+    "splitHalfR": 0.729,
+    "unitSeasons": 624
+   },
+   "offense_snap_share": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 0.7,
+    "seasonReliability": 0.952,
+    "splitHalfR": 0.908,
+    "unitSeasons": 624
+   },
+   "receiving_td_per_target": {
+    "denominatorForHalfSignal": 272,
+    "gamesForHalfSignal": 78.8,
+    "seasonReliability": 0.156,
+    "splitHalfR": 0.085,
+    "unitSeasons": 472
+   },
+   "rushing_epa_per_carry": {
+    "denominatorForHalfSignal": 400,
+    "gamesForHalfSignal": 34.9,
+    "seasonReliability": 0.286,
+    "splitHalfR": 0.167,
+    "unitSeasons": 589
+   },
+   "rushing_td_per_carry": {
+    "denominatorForHalfSignal": 571,
+    "gamesForHalfSignal": 51.2,
+    "seasonReliability": 0.218,
+    "splitHalfR": 0.122,
+    "unitSeasons": 596
+   },
+   "rushing_yards_per_carry": {
+    "denominatorForHalfSignal": 382,
+    "gamesForHalfSignal": 34.2,
+    "seasonReliability": 0.294,
+    "splitHalfR": 0.172,
+    "unitSeasons": 596
+   },
+   "target_share": {
+    "denominatorForHalfSignal": 60,
+    "gamesForHalfSignal": 1.8,
+    "seasonReliability": 0.886,
+    "splitHalfR": 0.795,
+    "unitSeasons": 624
+   },
+   "targets_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 2.0,
+    "seasonReliability": 0.876,
+    "splitHalfR": 0.78,
+    "unitSeasons": 624
+   },
+   "yac_per_reception": {
+    "denominatorForHalfSignal": 79,
+    "gamesForHalfSignal": 29.0,
+    "seasonReliability": 0.334,
+    "splitHalfR": 0.201,
+    "unitSeasons": 455
+   },
+   "yards_per_target": {
+    "denominatorForHalfSignal": 199,
+    "gamesForHalfSignal": 57.8,
+    "seasonReliability": 0.202,
+    "splitHalfR": 0.112,
+    "unitSeasons": 472
+   }
+  },
+  "TE": {
+   "air_yards_per_target": {
+    "denominatorForHalfSignal": 26,
+    "gamesForHalfSignal": 5.5,
+    "seasonReliability": 0.72,
+    "splitHalfR": 0.562,
+    "unitSeasons": 428
+   },
+   "air_yards_share": {
+    "denominatorForHalfSignal": 639,
+    "gamesForHalfSignal": 2.3,
+    "seasonReliability": 0.854,
+    "splitHalfR": 0.746,
+    "unitSeasons": 467
+   },
+   "catch_rate": {
+    "denominatorForHalfSignal": 99,
+    "gamesForHalfSignal": 21.1,
+    "seasonReliability": 0.4,
+    "splitHalfR": 0.25,
+    "unitSeasons": 428
+   },
+   "ffa_points_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 3.9,
+    "seasonReliability": 0.779,
+    "splitHalfR": 0.638,
+    "unitSeasons": 467
+   },
+   "offense_snap_share": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 0.7,
+    "seasonReliability": 0.951,
+    "splitHalfR": 0.907,
+    "unitSeasons": 467
+   },
+   "receiving_td_per_target": {
+    "denominatorForHalfSignal": 398,
+    "gamesForHalfSignal": 85.1,
+    "seasonReliability": 0.142,
+    "splitHalfR": 0.076,
+    "unitSeasons": 428
+   },
+   "target_share": {
+    "denominatorForHalfSignal": 47,
+    "gamesForHalfSignal": 1.4,
+    "seasonReliability": 0.906,
+    "splitHalfR": 0.828,
+    "unitSeasons": 467
+   },
+   "targets_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 1.6,
+    "seasonReliability": 0.896,
+    "splitHalfR": 0.811,
+    "unitSeasons": 467
+   },
+   "yac_per_reception": {
+    "denominatorForHalfSignal": 51,
+    "gamesForHalfSignal": 15.6,
+    "seasonReliability": 0.475,
+    "splitHalfR": 0.312,
+    "unitSeasons": 411
+   },
+   "yards_per_target": {
+    "denominatorForHalfSignal": 194,
+    "gamesForHalfSignal": 41.5,
+    "seasonReliability": 0.253,
+    "splitHalfR": 0.145,
+    "unitSeasons": 428
+   }
+  },
+  "TEAM": {
+   "defensive_epa_per_play_allowed": {
+    "denominatorForHalfSignal": 1242,
+    "gamesForHalfSignal": 19.7,
+    "seasonReliability": 0.456,
+    "splitHalfR": 0.295,
+    "unitSeasons": 320
+   },
+   "dropback_rate": {
+    "denominatorForHalfSignal": 401,
+    "gamesForHalfSignal": 6.4,
+    "seasonReliability": 0.722,
+    "splitHalfR": 0.565,
+    "unitSeasons": 320
+   },
+   "dst_ffa_points_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 24.0,
+    "seasonReliability": 0.408,
+    "splitHalfR": 0.256,
+    "unitSeasons": 320
+   },
+   "offensive_epa_per_play": {
+    "denominatorForHalfSignal": 362,
+    "gamesForHalfSignal": 5.7,
+    "seasonReliability": 0.742,
+    "splitHalfR": 0.59,
+    "unitSeasons": 320
+   },
+   "offensive_plays_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 13.3,
+    "seasonReliability": 0.554,
+    "splitHalfR": 0.383,
+    "unitSeasons": 320
+   },
+   "points_allowed_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 22.0,
+    "seasonReliability": 0.428,
+    "splitHalfR": 0.272,
+    "unitSeasons": 320
+   },
+   "points_scored_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 7.5,
+    "seasonReliability": 0.688,
+    "splitHalfR": 0.524,
+    "unitSeasons": 320
+   },
+   "sack_rate_forced": {
+    "denominatorForHalfSignal": 781,
+    "gamesForHalfSignal": 21.4,
+    "seasonReliability": 0.435,
+    "splitHalfR": 0.278,
+    "unitSeasons": 320
+   },
+   "takeaways_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 62.6,
+    "seasonReliability": 0.209,
+    "splitHalfR": 0.116,
+    "unitSeasons": 320
+   }
+  },
+  "WR": {
+   "air_yards_per_target": {
+    "denominatorForHalfSignal": 20,
+    "gamesForHalfSignal": 3.3,
+    "seasonReliability": 0.813,
+    "splitHalfR": 0.685,
+    "unitSeasons": 935
+   },
+   "air_yards_share": {
+    "denominatorForHalfSignal": 601,
+    "gamesForHalfSignal": 2.2,
+    "seasonReliability": 0.867,
+    "splitHalfR": 0.765,
+    "unitSeasons": 942
+   },
+   "catch_rate": {
+    "denominatorForHalfSignal": 82,
+    "gamesForHalfSignal": 13.3,
+    "seasonReliability": 0.517,
+    "splitHalfR": 0.349,
+    "unitSeasons": 935
+   },
+   "ffa_points_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 4.0,
+    "seasonReliability": 0.781,
+    "splitHalfR": 0.641,
+    "unitSeasons": 942
+   },
+   "offense_snap_share": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 1.0,
+    "seasonReliability": 0.935,
+    "splitHalfR": 0.879,
+    "unitSeasons": 942
+   },
+   "receiving_td_per_target": {
+    "denominatorForHalfSignal": 347,
+    "gamesForHalfSignal": 56.3,
+    "seasonReliability": 0.202,
+    "splitHalfR": 0.112,
+    "unitSeasons": 935
+   },
+   "target_share": {
+    "denominatorForHalfSignal": 55,
+    "gamesForHalfSignal": 1.7,
+    "seasonReliability": 0.896,
+    "splitHalfR": 0.812,
+    "unitSeasons": 942
+   },
+   "targets_per_game": {
+    "denominatorForHalfSignal": null,
+    "gamesForHalfSignal": 2.0,
+    "seasonReliability": 0.878,
+    "splitHalfR": 0.783,
+    "unitSeasons": 942
+   },
+   "yac_per_reception": {
+    "denominatorForHalfSignal": 42,
+    "gamesForHalfSignal": 10.8,
+    "seasonReliability": 0.571,
+    "splitHalfR": 0.4,
+    "unitSeasons": 920
+   },
+   "yards_per_target": {
+    "denominatorForHalfSignal": 282,
+    "gamesForHalfSignal": 45.7,
+    "seasonReliability": 0.238,
+    "splitHalfR": 0.135,
+    "unitSeasons": 935
+   }
+  }
+ },
+ "startedAt": "2026-11-24T02:17:06.491228+00:00"
+}

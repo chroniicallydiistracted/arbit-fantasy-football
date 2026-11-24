@@ -160,13 +160,16 @@ At 01:01 UTC on 2026-11-09 (Sunday evening, week 9), a cookie-free ESPN read was
 
 ## DvP research, 2026-11-23 (ENG-057)
 
-- **R-072: relocated teams' old codes break two joins in the canonical FFA targets.** nflverse's schedule codes the Raiders as OAK (2016-2019) and the Chargers as SD (2016); its statistics use LV and LAC.
-  - **Player lines:** the opponent is taken from the schedule by comparing codes. For those teams' home games the comparison fails, so 1,327 lines in 40 games name the team itself as the opponent (3,994 FFA points). The DvP pipeline takes opponents from the schedule; `arbit_model.gamebook` (3b) still groups by the target's opponent, so a 2016-2019 backtest of the 3b features would inherit the error.
-  - **D/ST lines:** the D/ST scorer skips any game whose team row it can't find, so 156 regular-season team-games have no D/ST line: the Raiders 2016-2019, the Chargers 2016 and every D/ST that played them.
-  - **Also:** `ffa_signal_study.py` (2026-11-09) uses the same comparison. 3 team-seasons fell out of its team rates (317 of 320), and those teams' home games and every game against them were dropped.
-  - **Fix:** map franchise codes in `arbit_model.targets` and the signal study, rebuild the targets (a new content-addressed index; v0's stays readable), then rerun the studies. This replaces canonical scoring tables, so it waits for the owner's decision; the DvP research keeps v0 unchanged either way. **Owner:** Model.
+- **R-072 — resolved 2026-11-24 (ENG-058, OWN-075): relocated teams' old codes broke joins in the canonical FFA targets.** nflverse's schedule and snap counts code the Raiders as OAK (2012-2019), the Chargers as SD (2012-2016) and the Rams as STL (2012-2015); its play-by-play and statistics use LV, LAC and LA. The 2012-2015 weekly rosters also use ARZ, BLT, CLV, HST and SL.
+  - **Effect before the repair:**
+    - 4,496 player lines (2012-2019) named the team itself as the opponent; 1,327 of them were in the 2016-2019 regular seasons the DvP audit covered.
+    - 526 team-games had no D/ST line (156 in 2016-2019 regular seasons).
+    - 2012-2015 lost 3,710 roster-based participation labels.
+    - The 2026-11-09 signal study dropped 3 of 320 team-seasons the same way.
+  - **Fix:** `arbit_model.teams` maps every team field to its franchise in targets, gamebooks and team features, and the build refuses a row whose team didn't play in its game. Rebuilt index `6ffb62fb…` on the same inputs as `4afbd836…`, with every difference classified and none unexplained ([receipt](../research/targets-repair-r072.md)). The signal study and DvP phase 1 were rerun; the team shrinkage constants come from the rerun.
+  - **Kept:** `4afbd836…` stays readable, and M3-3 v0 still reproduces on it. **Owner:** Model.
 - **R-073: v0 summed refused lines as zero.** 58 team-game-position cells (2016-2025) hold a line the scorer refused (an unattributed defensive two-point return, punt-return or fumble-recovery touchdown). v0 counted the cell's other lines only. The DvP observations mark those cells `invalid_refused_line`. **Owner:** Model.
-- **R-074: 3b "last season" features include playoff games.** `Gamebooks` reads every completed game of a season, so the 2024 season counted 285 games (272 regular plus 13 playoff), while every shrinkage constant was measured on regular seasons. Also, the 3b note's "League mean per team-game" column shows the 2025 and 2026 in-season averages, not the 2016-2025 study means (WR 33.6 there vs 31.7-31.8 shown). Fix with the 3b follow-up: regular season only, and relabel the column. **Owner:** Model.
+- **R-074 — resolved 2026-11-24 (ENG-058): 3b "last season" features included playoff games.** `Gamebooks` read every completed game of a season, so the 2024 season counted 285 games (272 regular plus 13 playoff), while every shrinkage constant was measured on regular seasons. Also, the 3b note's "League mean per team-game" column showed the 2025 and 2026 in-season averages, not the 2016-2025 study means (WR 33.6 there vs 31.7-31.8 shown). **Fix:** gamebooks read regular-season games only (tested), and the note's column is relabeled. **Owner:** Model.
 
 ## Governance continuity audit, 2026-11-22
 

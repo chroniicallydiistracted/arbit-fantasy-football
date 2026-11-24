@@ -12,7 +12,7 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | ID | Status | Question | Evidence |
 | --- | --- | --- | --- |
 | M3-3-v0 | REPRODUCED | Do defenses repeat a position-specific tendency? (odd/even weeks, 2016–2025) | [V0_REPRODUCTION.md](V0_REPRODUCTION.md). Baseline only: the misattribution affects 5 defense-seasons |
-| M3-3-A01 | EXECUTED | v0's method on validated observations, with intervals | [V0_REPRODUCTION.md](V0_REPRODUCTION.md) |
+| M3-3-A01 | EXECUTED | v0's method on validated observations, with intervals (rerun on the R-072-repaired targets: D/ST on all 320 offense-seasons) | [V0_REPRODUCTION.md](V0_REPRODUCTION.md) |
 | M3-3-A11 | PASSED | v0 and the extension read only FFA actuals under the league's rules, with no projection | [SOURCE_PROVENANCE.md](SOURCE_PROVENANCE.md), [DATA_QUALITY.md](DATA_QUALITY.md) |
 | M3-3-A00 | PLANNED | Raw DvP landscape and raw vs adjusted ranks | |
 | M3-3-A02 | PLANNED | Split-method sensitivity (alternating games, halves, 6+6, seeded random splits) | |
@@ -28,4 +28,4 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | M3-3-B00–B12 | PLANNED | Walk-forward: offense-only comparator B00, DvP variants B01–B08, controls and integrity B09–B12 | Preweek cutoff; development 2016–2023, validation 2024 |
 | M3-3-C00–C05 | PLANNED (conditional) | Player-level Sit/Start impact | Runs only if Phase B finds a credible group-level signal |
 
-**Blocked:** full D/ST coverage (156 team-games) waits on a canonical scorer repair, an owner decision (R-072). D/ST experiments run on the 5,122 valid team-games and report the gap.
+**No longer blocked:** the canonical targets were repaired and rebuilt (R-072, TASK-20261123-007; owner instruction OWN-075). Every experiment runs on index `6ffb62fb…`, where all 5,278 team-games have a D/ST line. v0 alone keeps reading `4afbd836…`, the index it ran on.

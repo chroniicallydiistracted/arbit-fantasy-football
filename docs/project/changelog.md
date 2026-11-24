@@ -1,5 +1,25 @@
 # Development Changelog
 
+## 2026-11-24 — R-072 repaired: one code per franchise, FFA targets rebuilt (TASK-20261123-007)
+
+- **PR #7 merged** (`9a7c0b1`): DvP research phases 0-1.
+- **OWN-075:** the owner ruled that fundamental defects are repairs, not decisions: fix, rebuild the scoring data, and continue.
+- **`arbit_model.teams` (ENG-058):** maps every nflverse team code to its franchise. It covers the relocations (OAK, SD, STL) and the 2012-2015 roster codes (ARZ, BLT, CLV, HST, SL).
+  - `targets`, `gamebook` and `team_features` use it.
+  - The targets refuse a row whose team didn't play in its game (`TeamCodeError`).
+  - Targets format v2.
+- **Tooling:**
+  - `build_targets.py --inputs-of INDEX --set-current` rebuilds on an earlier index's exact inputs.
+  - `targets_diff.py` classifies every changed row and fails on an unexplained one.
+  - `ffa_signal_study_r072.py` reruns the locked signal study on its pinned inputs with franchise codes.
+- **Rebuilt index `6ffb62fb…`:** 0 unexplained differences ([receipt](../research/targets-repair-r072.md)). The old index stays readable.
+- **Reruns:**
+  - Signal study team rates: 320 team-seasons, up from 317. The eight team shrinkage constants now come from the rerun.
+  - DvP phase 1: D/ST 5,278 of 5,278 valid; v0-validated D/ST k 8.9 on 320 offense-seasons.
+  - v0 reproduces on its own index through a staged pointer.
+- **R-074:** gamebooks read regular-season games only.
+- **Tests:** 6 new, each failing when its fix is removed.
+
 ## 2026-11-23 — DvP research phases 0-1: v0 reproduced, projection firewall, completed-game observations (TASK-20261123-005)
 
 - **PR #6 merged** (`b3c0a9a`): slice 3b, kept unchanged as the v0 baseline the owner's specification preserves.

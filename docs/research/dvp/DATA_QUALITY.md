@@ -2,7 +2,7 @@
 
 Specification §3.3, tests T01–T07, T30, T34. Receipts:
 - [audit-receipt.json](audit-receipt.json) (checks, reconciliation, anomalies, examples) and [SCORE_FINALITY_AUDIT.json](SCORE_FINALITY_AUDIT.json);
-- run `phase1-audit-20261123T222517Z`, code `556e1cb`;
+- run `phase1-audit-20261124T021910Z`, code `bc414a0`, on targets index `6ffb62fb…` (R-072 repaired; [targets-repair-r072.md](../targets-repair-r072.md)). The first run, `phase1-audit-20261123T222517Z` on index `4afbd836…`, found the defect;
 - the observation table is `artifacts/dvp/<run>/observations.parquet`, ignored by git, with its hash in the run manifest.
 
 ## Checks (all PASSED)
@@ -15,7 +15,7 @@ Specification §3.3, tests T01–T07, T30, T34. Receipts:
 | T34: the canceled 2022 BUF–CIN game | Absent from nflverse's schedule; 271 completed 2022 games; no team-game and no zero for it |
 | T05: every target line belongs to a completed team-game; no player has two lines in a game | 0 and 0 |
 | T30: the targets were scored with the league's current FFA rules | athlete `10e938eb…`, D/ST `16885a80…` equal the rules in the current league document |
-| T30: each line's points equal the sum of its rule contributions | 257,756 lines checked, 0 mismatched |
+| T30: each line's points equal the sum of its rule contributions | 257,914 lines checked, 0 mismatched |
 | T37: targets index rules equal the configured rules | yes |
 | T31: no provider projection in the scoring path or the DvP code | 0 findings ([provenance](SOURCE_PROVENANCE.md)) |
 
@@ -30,7 +30,7 @@ Positions come from the league's lineup slots: QB, RB, WR, TE, FLEX, DST, K, BEN
 | WR | 5,261 | 17 refused line |
 | TE | 5,264 | 14 refused line |
 | K | 5,264 | 14 refused line |
-| D/ST conceded by the offense | 5,122 | 156 missing D/ST line |
+| D/ST conceded by the offense | 5,278 | — |
 
 **Refused lines (58 cells, 2016–2025).** A line is refused when the scorer can't verify a statistic it needs. Three statistics were refused:
 - a defensive two-point return the play-by-play doesn't attribute to a player;
@@ -39,7 +39,7 @@ Positions come from the league's lineup slots: QB, RB, WR, TE, FLEX, DST, K, BEN
 
 Refusals cluster by team-game: one unattributed event leaves every player who might have been involved unscored. Those cells carry no points. v0 summed them as zero.
 
-**Missing D/ST lines (156 team-games):** 60 in 2016, 32 in each of 2017, 2018 and 2019. The causes are R-072 and [V0_REPRODUCTION.md](V0_REPRODUCTION.md) #2. Five offense-seasons have no usable D/ST cell: the Raiders 2016–2019 and the Chargers 2016.
+**Missing D/ST lines: none since the R-072 repair.** On the original index, 156 team-games had no D/ST line (60 in 2016, 32 in each of 2017–2019): the Raiders 2016–2019, the Chargers 2016 and every D/ST that played them ([V0_REPRODUCTION.md](V0_REPRODUCTION.md) #2). The repaired index scores all of them.
 
 **True zeros (valid cells with 0.0 points):**
 
@@ -49,7 +49,7 @@ Refusals cluster by team-game: one unattributed event leaves every player who mi
 | WR | 1 |
 | TE | 109 |
 | K | 162 |
-| D/ST | 260 |
+| D/ST | 266 |
 | RB | 0 |
 
 A cell is zero only when the team-game has target rows. A team-game without rows would be `missing_coverage`; there are none.
@@ -58,7 +58,7 @@ A cell is zero only when the team-game has target rows. A team-game without rows
 
 | Group | Negative cells | Lowest |
 | --- | --- | --- |
-| D/ST | 787 | −12.0 |
+| D/ST | 820 | −12.0 |
 | K | 50 | −3.0 |
 | QB | 27 | −6.66 |
 | TE | 4 | — |
@@ -66,15 +66,13 @@ A cell is zero only when the team-game has target rows. A team-game without rows
 
 ## Anomalies
 
-- **Opponent misattribution (R-072):** 40 home games, 1,327 player lines and 3,994 FFA points.
-  - **Which games:** Raiders 2016–2019 and Chargers 2016.
-  - **What the rows say:** the team itself is recorded as the opponent.
-  - **In the DvP view:** the observation takes the opponent from the schedule; the receipt counts the rows by team-season.
+- **Opponent misattribution (R-072), repaired:** 0 rows whose recorded opponent disagrees with the schedule.
+  - **Before the repair:** on index `4afbd836…`, 40 home games (Raiders 2016–2019, Chargers 2016) had 1,327 player lines and 3,994 FFA points naming the team itself as the opponent. The observations always took the opponent from the schedule, so the position cells were right then too.
+  - **The repair:** every team code in every table becomes a franchise code (`arbit_model.teams`), and the build refuses a row whose team didn't play in its game. The targets were rebuilt on the same inputs. Every difference was classified and none was unexplained ([targets-repair-r072.md](../targets-repair-r072.md)).
 - **Team codes:**
-  - **Schedule:** OAK through 2019 and SD in 2016.
-  - **Player statistics:** LV and LAC throughout, but zero lines built from snap counts and rosters use OAK and SD.
-  - **D/ST targets:** neither code for those seasons.
-  - **In the DvP view:** `FRANCHISE` maps OAK to LV, SD to LAC and STL to LA.
+  - **Schedule:** OAK through 2019 and SD in 2016 (the raw codes are kept in the receipt).
+  - **Targets:** LV, LAC and LA everywhere since the repair. Before it, player statistics used LV and LAC, but zero lines built from snap counts used OAK and SD.
+  - **In the DvP view:** `FRANCHISE` (now `arbit_model.teams`) maps OAK to LV, SD to LAC and STL to LA, plus the 2012–2015 roster codes.
 - **Traded players:** 645 player-seasons have lines for two franchises. Every line belongs to a completed team-game of the team named on it, so each game's points go to that game's team.
 - **Points on positions outside FFA's groups:** 1,030 lines, 4,312.52 points. These are defensive and line players' return and recovery touchdowns, and the occasional trick-play pass. They are not a rosterable FFA position's production and aren't summed.
 

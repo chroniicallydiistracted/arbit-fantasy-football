@@ -1,0 +1,1055 @@
+{
+ "expect": {
+  "2012": [
+   "ARI",
+   "BAL",
+   "CLE",
+   "HOU",
+   "LA",
+   "LAC",
+   "LV"
+  ],
+  "2013": [
+   "ARI",
+   "BAL",
+   "CLE",
+   "HOU",
+   "LA",
+   "LAC",
+   "LV"
+  ],
+  "2014": [
+   "ARI",
+   "BAL",
+   "CLE",
+   "HOU",
+   "LA",
+   "LAC",
+   "LV"
+  ],
+  "2015": [
+   "ARI",
+   "BAL",
+   "CLE",
+   "HOU",
+   "LA",
+   "LAC",
+   "LV"
+  ],
+  "2016": [
+   "LAC",
+   "LV"
+  ],
+  "2017": [
+   "LV"
+  ],
+  "2018": [
+   "LV"
+  ],
+  "2019": [
+   "LV"
+  ]
+ },
+ "format": "arbit-ffa-targets-diff-v1",
+ "franchiseMap": {
+  "ARZ": "ARI",
+  "BLT": "BAL",
+  "CLV": "CLE",
+  "HST": "HOU",
+  "OAK": "LV",
+  "SD": "LAC",
+  "SL": "LA",
+  "STL": "LA"
+ },
+ "generatedAt": "2026-11-24T02:16:36.208473+00:00",
+ "new": {
+  "code": "9504631e542adddceb4571e7041a4a67a6a033fd",
+  "format": "arbit-ffa-targets-v2-index",
+  "index": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+  "pinnedFrom": "index:4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+  "reason": "R-072 repair: franchise codes across nflverse tables, rebuilt on 4afbd836's inputs (TASK-20261123-007)",
+  "rules": {
+   "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+  }
+ },
+ "old": {
+  "code": "de729245e844fc5459348081733deeeddf9a4837+uncommitted",
+  "format": "arbit-ffa-targets-v1-index",
+  "index": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+  "pinnedFrom": null,
+  "rules": {
+   "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+   "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+  }
+ },
+ "receiptSha256": "7177345d9dc87932badea01175d8b271be38e234620b614b0f0e1ce838b8bdf7",
+ "seasons": {
+  "2012": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 803,
+     "team_codes": 1489
+    },
+    "changedColumns": {},
+    "differences": 2292,
+    "games": 46,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 17398,
+    "rowsOld": 17398,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 92
+    },
+    "changedColumns": {
+     "basis": 92,
+     "contributions": 92,
+     "defense.blocked_kicks": 92,
+     "defense.fumbles_recovered": 92,
+     "defense.interceptions": 92,
+     "defense.points_allowed": 92,
+     "defense.sacks": 92,
+     "defense.safeties": 92,
+     "defense.yards_allowed": 92,
+     "kicking.extra_points_made": 92,
+     "kicking.field_goals_0_39": 92,
+     "kicking.field_goals_40_49": 92,
+     "kicking.field_goals_50_59": 92,
+     "kicking.field_goals_60_plus": 92,
+     "kicking.field_goals_missed": 92,
+     "misc.fumble_recovery_touchdowns": 92,
+     "misc.fumbles_lost": 92,
+     "misc.one_point_safeties": 92,
+     "passing.interceptions": 92,
+     "passing.touchdowns": 92,
+     "passing.two_point_conversions": 92,
+     "passing.yards": 92,
+     "points": 92,
+     "position": 92,
+     "receiving.receptions": 92,
+     "receiving.touchdowns": 92,
+     "receiving.two_point_conversions": 92,
+     "receiving.yards": 92,
+     "returns.blocked_kick_touchdowns": 92,
+     "returns.fumble_touchdowns": 92,
+     "returns.interception_touchdowns": 92,
+     "returns.kickoff_touchdowns": 92,
+     "returns.punt_touchdowns": 92,
+     "returns.two_point_returns": 92,
+     "rushing.touchdowns": 92,
+     "rushing.two_point_conversions": 92,
+     "rushing.yards": 92,
+     "season": 92,
+     "season_type": 92,
+     "source_overrides": 92,
+     "unknown": 92,
+     "week": 92
+    },
+    "differences": 92,
+    "games": 46,
+    "pointsChanged": {
+     "new": 695.0,
+     "old": 0.0,
+     "rows": 92
+    },
+    "rowsNew": 534,
+    "rowsOld": 442,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "added": 1691,
+     "team_codes": 1694,
+     "values": 2866
+    },
+    "changedColumns": {
+     "evidence": 1691,
+     "label": 1691,
+     "position": 2642,
+     "roster_status": 4557,
+     "season": 1691,
+     "season_type": 1691,
+     "week": 1691
+    },
+    "differences": 6251,
+    "games": 107,
+    "rowsNew": 28282,
+    "rowsOld": 26591,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2013": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 797,
+     "team_codes": 2711
+    },
+    "changedColumns": {},
+    "differences": 3508,
+    "games": 48,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23797,
+    "rowsOld": 23797,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 96
+    },
+    "changedColumns": {
+     "basis": 96,
+     "contributions": 96,
+     "defense.blocked_kicks": 96,
+     "defense.fumbles_recovered": 96,
+     "defense.interceptions": 96,
+     "defense.points_allowed": 96,
+     "defense.sacks": 96,
+     "defense.safeties": 96,
+     "defense.yards_allowed": 96,
+     "kicking.extra_points_made": 96,
+     "kicking.field_goals_0_39": 96,
+     "kicking.field_goals_40_49": 96,
+     "kicking.field_goals_50_59": 96,
+     "kicking.field_goals_60_plus": 96,
+     "kicking.field_goals_missed": 96,
+     "misc.fumble_recovery_touchdowns": 96,
+     "misc.fumbles_lost": 96,
+     "misc.one_point_safeties": 96,
+     "passing.interceptions": 96,
+     "passing.touchdowns": 96,
+     "passing.two_point_conversions": 96,
+     "passing.yards": 96,
+     "points": 96,
+     "position": 96,
+     "receiving.receptions": 96,
+     "receiving.touchdowns": 96,
+     "receiving.two_point_conversions": 96,
+     "receiving.yards": 96,
+     "returns.blocked_kick_touchdowns": 96,
+     "returns.fumble_touchdowns": 96,
+     "returns.interception_touchdowns": 96,
+     "returns.kickoff_touchdowns": 96,
+     "returns.punt_touchdowns": 96,
+     "returns.two_point_returns": 96,
+     "rushing.touchdowns": 96,
+     "rushing.two_point_conversions": 96,
+     "rushing.yards": 96,
+     "season": 96,
+     "season_type": 96,
+     "source_overrides": 96,
+     "unknown": 96,
+     "week": 96
+    },
+    "differences": 96,
+    "games": 48,
+    "pointsChanged": {
+     "new": 625.0,
+     "old": 0.0,
+     "rows": 96
+    },
+    "rowsNew": 534,
+    "rowsOld": 438,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "added": 658,
+     "team_codes": 1802,
+     "values": 3579
+    },
+    "changedColumns": {
+     "evidence": 658,
+     "label": 658,
+     "position": 658,
+     "roster_status": 4237,
+     "season": 658,
+     "season_type": 658,
+     "week": 658
+    },
+    "differences": 6039,
+    "games": 103,
+    "rowsNew": 28290,
+    "rowsOld": 27632,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2014": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 787,
+     "team_codes": 2480
+    },
+    "changedColumns": {},
+    "differences": 3267,
+    "games": 44,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23863,
+    "rowsOld": 23863,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 88
+    },
+    "changedColumns": {
+     "basis": 88,
+     "contributions": 88,
+     "defense.blocked_kicks": 88,
+     "defense.fumbles_recovered": 88,
+     "defense.interceptions": 88,
+     "defense.points_allowed": 88,
+     "defense.sacks": 88,
+     "defense.safeties": 88,
+     "defense.yards_allowed": 88,
+     "kicking.extra_points_made": 88,
+     "kicking.field_goals_0_39": 88,
+     "kicking.field_goals_40_49": 88,
+     "kicking.field_goals_50_59": 88,
+     "kicking.field_goals_60_plus": 88,
+     "kicking.field_goals_missed": 88,
+     "misc.fumble_recovery_touchdowns": 88,
+     "misc.fumbles_lost": 88,
+     "misc.one_point_safeties": 88,
+     "passing.interceptions": 88,
+     "passing.touchdowns": 88,
+     "passing.two_point_conversions": 88,
+     "passing.yards": 88,
+     "points": 88,
+     "position": 88,
+     "receiving.receptions": 88,
+     "receiving.touchdowns": 88,
+     "receiving.two_point_conversions": 88,
+     "receiving.yards": 88,
+     "returns.blocked_kick_touchdowns": 88,
+     "returns.fumble_touchdowns": 88,
+     "returns.interception_touchdowns": 88,
+     "returns.kickoff_touchdowns": 88,
+     "returns.punt_touchdowns": 88,
+     "returns.two_point_returns": 88,
+     "rushing.touchdowns": 88,
+     "rushing.two_point_conversions": 88,
+     "rushing.yards": 88,
+     "season": 88,
+     "season_type": 88,
+     "source_overrides": 88,
+     "unknown": 88,
+     "week": 88
+    },
+    "differences": 88,
+    "games": 44,
+    "pointsChanged": {
+     "new": 629.0,
+     "old": 0.0,
+     "rows": 88
+    },
+    "rowsNew": 534,
+    "rowsOld": 446,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "added": 683,
+     "team_codes": 1695,
+     "values": 3716
+    },
+    "changedColumns": {
+     "evidence": 683,
+     "label": 683,
+     "position": 683,
+     "roster_status": 4398,
+     "season": 683,
+     "season_type": 683,
+     "week": 683
+    },
+    "differences": 6094,
+    "games": 100,
+    "rowsNew": 28300,
+    "rowsOld": 27617,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2015": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 782,
+     "team_codes": 2594
+    },
+    "changedColumns": {},
+    "differences": 3376,
+    "games": 46,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23841,
+    "rowsOld": 23841,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 92
+    },
+    "changedColumns": {
+     "basis": 92,
+     "contributions": 92,
+     "defense.blocked_kicks": 92,
+     "defense.fumbles_recovered": 92,
+     "defense.interceptions": 92,
+     "defense.points_allowed": 92,
+     "defense.sacks": 92,
+     "defense.safeties": 92,
+     "defense.yards_allowed": 92,
+     "kicking.extra_points_made": 92,
+     "kicking.field_goals_0_39": 92,
+     "kicking.field_goals_40_49": 92,
+     "kicking.field_goals_50_59": 92,
+     "kicking.field_goals_60_plus": 92,
+     "kicking.field_goals_missed": 92,
+     "misc.fumble_recovery_touchdowns": 92,
+     "misc.fumbles_lost": 92,
+     "misc.one_point_safeties": 92,
+     "passing.interceptions": 92,
+     "passing.touchdowns": 92,
+     "passing.two_point_conversions": 92,
+     "passing.yards": 92,
+     "points": 92,
+     "position": 92,
+     "receiving.receptions": 92,
+     "receiving.touchdowns": 92,
+     "receiving.two_point_conversions": 92,
+     "receiving.yards": 92,
+     "returns.blocked_kick_touchdowns": 92,
+     "returns.fumble_touchdowns": 92,
+     "returns.interception_touchdowns": 92,
+     "returns.kickoff_touchdowns": 92,
+     "returns.punt_touchdowns": 92,
+     "returns.two_point_returns": 92,
+     "rushing.touchdowns": 92,
+     "rushing.two_point_conversions": 92,
+     "rushing.yards": 92,
+     "season": 92,
+     "season_type": 92,
+     "source_overrides": 92,
+     "unknown": 92,
+     "week": 92
+    },
+    "differences": 92,
+    "games": 46,
+    "pointsChanged": {
+     "new": 611.0,
+     "old": 0.0,
+     "rows": 92
+    },
+    "rowsNew": 534,
+    "rowsOld": 442,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "added": 678,
+     "team_codes": 1697,
+     "values": 3719
+    },
+    "changedColumns": {
+     "evidence": 678,
+     "label": 678,
+     "position": 678,
+     "roster_status": 4397,
+     "season": 678,
+     "season_type": 678,
+     "week": 678
+    },
+    "differences": 6094,
+    "games": 101,
+    "rowsNew": 28299,
+    "rowsOld": 27621,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2016": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 526,
+     "team_codes": 1748
+    },
+    "changedColumns": {},
+    "differences": 2274,
+    "games": 31,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23888,
+    "rowsOld": 23888,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 62
+    },
+    "changedColumns": {
+     "basis": 62,
+     "contributions": 62,
+     "defense.blocked_kicks": 62,
+     "defense.fumbles_recovered": 62,
+     "defense.interceptions": 62,
+     "defense.points_allowed": 62,
+     "defense.sacks": 62,
+     "defense.safeties": 62,
+     "defense.yards_allowed": 62,
+     "kicking.extra_points_made": 62,
+     "kicking.field_goals_0_39": 62,
+     "kicking.field_goals_40_49": 62,
+     "kicking.field_goals_50_59": 62,
+     "kicking.field_goals_60_plus": 62,
+     "kicking.field_goals_missed": 62,
+     "misc.fumble_recovery_touchdowns": 62,
+     "misc.fumbles_lost": 62,
+     "misc.one_point_safeties": 62,
+     "passing.interceptions": 62,
+     "passing.touchdowns": 62,
+     "passing.two_point_conversions": 62,
+     "passing.yards": 62,
+     "points": 62,
+     "position": 62,
+     "receiving.receptions": 62,
+     "receiving.touchdowns": 62,
+     "receiving.two_point_conversions": 62,
+     "receiving.yards": 62,
+     "returns.blocked_kick_touchdowns": 62,
+     "returns.fumble_touchdowns": 62,
+     "returns.interception_touchdowns": 62,
+     "returns.kickoff_touchdowns": 62,
+     "returns.punt_touchdowns": 62,
+     "returns.two_point_returns": 62,
+     "rushing.touchdowns": 62,
+     "rushing.two_point_conversions": 62,
+     "rushing.yards": 62,
+     "season": 62,
+     "season_type": 62,
+     "source_overrides": 62,
+     "unknown": 62,
+     "week": 62
+    },
+    "differences": 62,
+    "games": 31,
+    "pointsChanged": {
+     "new": 340.0,
+     "old": 0.0,
+     "rows": 62
+    },
+    "rowsNew": 534,
+    "rowsOld": 472,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "team_codes": 2242
+    },
+    "changedColumns": {},
+    "differences": 2242,
+    "games": 31,
+    "rowsNew": 35022,
+    "rowsOld": 35022,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2017": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 261,
+     "team_codes": 916
+    },
+    "changedColumns": {},
+    "differences": 1177,
+    "games": 16,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23863,
+    "rowsOld": 23863,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 32
+    },
+    "changedColumns": {
+     "basis": 32,
+     "contributions": 32,
+     "defense.blocked_kicks": 32,
+     "defense.fumbles_recovered": 32,
+     "defense.interceptions": 32,
+     "defense.points_allowed": 32,
+     "defense.sacks": 32,
+     "defense.safeties": 32,
+     "defense.yards_allowed": 32,
+     "kicking.extra_points_made": 32,
+     "kicking.field_goals_0_39": 32,
+     "kicking.field_goals_40_49": 32,
+     "kicking.field_goals_50_59": 32,
+     "kicking.field_goals_60_plus": 32,
+     "kicking.field_goals_missed": 32,
+     "misc.fumble_recovery_touchdowns": 32,
+     "misc.fumbles_lost": 32,
+     "misc.one_point_safeties": 32,
+     "passing.interceptions": 32,
+     "passing.touchdowns": 32,
+     "passing.two_point_conversions": 32,
+     "passing.yards": 32,
+     "points": 32,
+     "position": 32,
+     "receiving.receptions": 32,
+     "receiving.touchdowns": 32,
+     "receiving.two_point_conversions": 32,
+     "receiving.yards": 32,
+     "returns.blocked_kick_touchdowns": 32,
+     "returns.fumble_touchdowns": 32,
+     "returns.interception_touchdowns": 32,
+     "returns.kickoff_touchdowns": 32,
+     "returns.punt_touchdowns": 32,
+     "returns.two_point_returns": 32,
+     "rushing.touchdowns": 32,
+     "rushing.two_point_conversions": 32,
+     "rushing.yards": 32,
+     "season": 32,
+     "season_type": 32,
+     "source_overrides": 32,
+     "unknown": 32,
+     "week": 32
+    },
+    "differences": 32,
+    "games": 16,
+    "pointsChanged": {
+     "new": 169.0,
+     "old": 0.0,
+     "rows": 32
+    },
+    "rowsNew": 534,
+    "rowsOld": 502,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "team_codes": 1384
+    },
+    "changedColumns": {},
+    "differences": 1384,
+    "games": 16,
+    "rowsNew": 51321,
+    "rowsOld": 51321,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2018": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 273,
+     "team_codes": 886
+    },
+    "changedColumns": {},
+    "differences": 1159,
+    "games": 16,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23877,
+    "rowsOld": 23877,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 32
+    },
+    "changedColumns": {
+     "basis": 32,
+     "contributions": 32,
+     "defense.blocked_kicks": 32,
+     "defense.fumbles_recovered": 32,
+     "defense.interceptions": 32,
+     "defense.points_allowed": 32,
+     "defense.sacks": 32,
+     "defense.safeties": 32,
+     "defense.yards_allowed": 32,
+     "kicking.extra_points_made": 32,
+     "kicking.field_goals_0_39": 32,
+     "kicking.field_goals_40_49": 32,
+     "kicking.field_goals_50_59": 32,
+     "kicking.field_goals_60_plus": 32,
+     "kicking.field_goals_missed": 32,
+     "misc.fumble_recovery_touchdowns": 32,
+     "misc.fumbles_lost": 32,
+     "misc.one_point_safeties": 32,
+     "passing.interceptions": 32,
+     "passing.touchdowns": 32,
+     "passing.two_point_conversions": 32,
+     "passing.yards": 32,
+     "points": 32,
+     "position": 32,
+     "receiving.receptions": 32,
+     "receiving.touchdowns": 32,
+     "receiving.two_point_conversions": 32,
+     "receiving.yards": 32,
+     "returns.blocked_kick_touchdowns": 32,
+     "returns.fumble_touchdowns": 32,
+     "returns.interception_touchdowns": 32,
+     "returns.kickoff_touchdowns": 32,
+     "returns.punt_touchdowns": 32,
+     "returns.two_point_returns": 32,
+     "rushing.touchdowns": 32,
+     "rushing.two_point_conversions": 32,
+     "rushing.yards": 32,
+     "season": 32,
+     "season_type": 32,
+     "source_overrides": 32,
+     "unknown": 32,
+     "week": 32
+    },
+    "differences": 32,
+    "games": 16,
+    "pointsChanged": {
+     "new": 165.0,
+     "old": 0.0,
+     "rows": 32
+    },
+    "rowsNew": 534,
+    "rowsOld": 502,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "team_codes": 1557
+    },
+    "changedColumns": {},
+    "differences": 1557,
+    "games": 16,
+    "rowsNew": 52200,
+    "rowsOld": 52200,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2019": {
+   "athlete": {
+    "byKind": {
+     "opponent_corrected": 267,
+     "team_codes": 905
+    },
+    "changedColumns": {},
+    "differences": 1172,
+    "games": 16,
+    "pointsChanged": {
+     "new": 0.0,
+     "old": 0.0,
+     "rows": 0
+    },
+    "rowsNew": 23848,
+    "rowsOld": 23848,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "defense": {
+    "byKind": {
+     "added": 32
+    },
+    "changedColumns": {
+     "basis": 32,
+     "contributions": 32,
+     "defense.blocked_kicks": 32,
+     "defense.fumbles_recovered": 32,
+     "defense.interceptions": 32,
+     "defense.points_allowed": 32,
+     "defense.sacks": 32,
+     "defense.safeties": 32,
+     "defense.yards_allowed": 32,
+     "kicking.extra_points_made": 32,
+     "kicking.field_goals_0_39": 32,
+     "kicking.field_goals_40_49": 32,
+     "kicking.field_goals_50_59": 32,
+     "kicking.field_goals_60_plus": 32,
+     "kicking.field_goals_missed": 32,
+     "misc.fumble_recovery_touchdowns": 32,
+     "misc.fumbles_lost": 32,
+     "misc.one_point_safeties": 32,
+     "passing.interceptions": 32,
+     "passing.touchdowns": 32,
+     "passing.two_point_conversions": 32,
+     "passing.yards": 32,
+     "points": 32,
+     "position": 32,
+     "receiving.receptions": 32,
+     "receiving.touchdowns": 32,
+     "receiving.two_point_conversions": 32,
+     "receiving.yards": 32,
+     "returns.blocked_kick_touchdowns": 32,
+     "returns.fumble_touchdowns": 32,
+     "returns.interception_touchdowns": 32,
+     "returns.kickoff_touchdowns": 32,
+     "returns.punt_touchdowns": 32,
+     "returns.two_point_returns": 32,
+     "rushing.touchdowns": 32,
+     "rushing.two_point_conversions": 32,
+     "rushing.yards": 32,
+     "season": 32,
+     "season_type": 32,
+     "source_overrides": 32,
+     "unknown": 32,
+     "week": 32
+    },
+    "differences": 32,
+    "games": 16,
+    "pointsChanged": {
+     "new": 130.0,
+     "old": 0.0,
+     "rows": 32
+    },
+    "rowsNew": 534,
+    "rowsOld": 502,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "identicalTables": {
+    "athlete": false,
+    "defense": false,
+    "participation": false
+   },
+   "participation": {
+    "byKind": {
+     "team_codes": 1508
+    },
+    "changedColumns": {},
+    "differences": 1508,
+    "games": 16,
+    "rowsNew": 51634,
+    "rowsOld": 51634,
+    "unexplained": 0,
+    "unexplainedSample": []
+   },
+   "sameInputs": true
+  },
+  "2020": {
+   "athlete": {
+    "differences": 0,
+    "rows": 24987
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 538
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 43810
+   },
+   "sameInputs": true
+  },
+  "2021": {
+   "athlete": {
+    "differences": 0,
+    "rows": 26441
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 570
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 46671
+   },
+   "sameInputs": true
+  },
+  "2022": {
+   "athlete": {
+    "differences": 0,
+    "rows": 26375
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 568
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 45983
+   },
+   "sameInputs": true
+  },
+  "2023": {
+   "athlete": {
+    "differences": 0,
+    "rows": 26530
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 570
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 45650
+   },
+   "sameInputs": true
+  },
+  "2024": {
+   "athlete": {
+    "differences": 0,
+    "rows": 26586
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 570
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 46579
+   },
+   "sameInputs": true
+  },
+  "2025": {
+   "athlete": {
+    "differences": 0,
+    "rows": 26588
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 570
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 46820
+   },
+   "sameInputs": true
+  },
+  "2026": {
+   "athlete": {
+    "differences": 0,
+    "rows": 12598
+   },
+   "defense": {
+    "differences": 0,
+    "rows": 270
+   },
+   "identicalTables": {
+    "athlete": true,
+    "defense": true,
+    "participation": true
+   },
+   "participation": {
+    "differences": 0,
+    "rows": 22131
+   },
+   "sameInputs": true
+  }
+ },
+ "status": "EXPLAINED",
+ "unexplained": 0
+}

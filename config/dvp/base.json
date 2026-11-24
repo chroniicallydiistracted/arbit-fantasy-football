@@ -9,7 +9,9 @@
   "shared_split_half": "scripts/model/ffa_signal_study.py",
   "scoring_source": "existing_canonical_ffa_layer",
   "scoring_basis": "actual_ffa_points_from_completed_games_only",
-  "targets_index": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
+  "targets_index": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+  "targets_repair": "R-072 (TASK-20261123-007): franchise codes, rebuilt on v0_targets_index's inputs; docs/research/targets-repair-r072.json",
+  "v0_targets_index": "4afbd8364fa7fd343ae3db2f4628c568f94f2e505b1eec1037aba33dd267ad18",
   "expected_scoring": {
     "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
     "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"

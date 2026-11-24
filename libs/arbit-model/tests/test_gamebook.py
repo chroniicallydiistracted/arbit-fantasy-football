@@ -11,6 +11,8 @@ from test_team_features import (
     FIRST,
     SEASON,
     WEEK1_PLAYERS,
+    WEEK1_PLAYS,
+    WEEK1_TEAMS,
     WEEK2_KICKOFF,
     files,
     player,
@@ -71,3 +73,69 @@ def test_a_fullback_scores_as_a_running_back():
         (book.position_points["team"] == "SEA") & (book.position_points["position"] == "RB")
     )
     assert rb["opportunities"][0] == 4
+
+
+def recoded(source, codes_by_table):
+    """Source files with team codes replaced per table (`codes_by_table[table prefix]`)."""
+    out = {}
+    for key, (versions, reads) in source.items():
+        codes = codes_by_table.get(key.split("/")[0], {})
+        out[key] = (
+            [
+                (
+                    at,
+                    [
+                        {c: codes.get(v, v) if isinstance(v, str) else v for c, v in r.items()}
+                        for r in rows
+                    ],
+                )
+                for at, rows in versions
+            ],
+            reads,
+        )
+    return out
+
+
+def test_r072_a_relocated_team_keeps_its_games_and_its_opponents():
+    # Seattle as a relocated franchise: OAK in the schedule, LV in play-by-play and statistics.
+    source = recoded(
+        files(),
+        {
+            "schedules": {"SEA": "OAK"},
+            "pbp": {"SEA": "LV"},
+            "stats_player": {"SEA": "LV"},
+            "stats_team": {"SEA": "LV"},
+        },
+    )
+    book = books(source).at(SEASON, WEEK2_KICKOFF)
+    plain = books(files()).at(SEASON, WEEK2_KICKOFF)
+
+    assert set(book.games["home"]) == {"LV", "KC"}
+    assert book.team_games.height == plain.team_games.height == 4
+    assert sorted(book.dst_points["points"]) == sorted(plain.dst_points["points"])
+    lv = book.position_points.filter(book.position_points["team"] == "LV")
+    assert set(lv["opponent"]) == {"NE"}
+    assert sea_wr_points(plain) == lv.filter(lv["position"] == "WR")["points"][0]
+
+
+def test_r074_playoff_games_are_left_out():
+    source = files()
+    versions, reads = source["schedules/games"]
+    playoff = {**versions[0][1][0], "game_id": "2025_19_NE_SEA", "week": 19, "game_type": "WC"}
+    source["schedules/games"] = ([(versions[0][0], [*versions[0][1], playoff])], reads)
+    for key, extra in (
+        ("pbp/play_by_play_2025", [{**r, "game_id": "2025_19_NE_SEA"} for r in WEEK1_PLAYS[:2]]),
+        (
+            "stats_player/stats_player_week_2025",
+            [{**r, "game_id": "2025_19_NE_SEA"} for r in WEEK1_PLAYERS[:3]],
+        ),
+        (
+            "stats_team/stats_team_week_2025",
+            [{**r, "game_id": "2025_19_NE_SEA"} for r in WEEK1_TEAMS[:2]],
+        ),
+    ):
+        versions, reads = source[key]
+        source[key] = ([(versions[0][0], [*versions[0][1], *extra])], reads)
+    book = books(source).at(SEASON, utc(2026, 2, 1))
+    assert set(book.games["game_type"]) == {"REG"}
+    assert "2025_19_NE_SEA" not in set(book.position_points["game_id"])

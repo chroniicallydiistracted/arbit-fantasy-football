@@ -19,6 +19,7 @@ import polars as pl
 from arbit_model.feature_specs import FEATURES, POSITIONS, SHRINKAGE, TEAM_RATES
 from arbit_model.gamebook import Gamebook, Gamebooks
 from arbit_model.point_in_time import KNOWN_FROM, PointInTime
+from arbit_model.teams import franchise_columns
 
 KEYS = ("game_id", "season", "week", "team", "opponent", "decision_at")
 CONTEXT_COLUMNS = (
@@ -175,6 +176,7 @@ def _at(
         pit.read("schedules/games", CONTEXT_COLUMNS, at)
         .frame.filter(pl.col("game_id").is_in(list(game_ids)))
         .drop(KNOWN_FROM, "_basis", "_manifest")
+        .pipe(franchise_columns)
     )
     sides = pl.concat(
         [
