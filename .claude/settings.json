@@ -1,4 +1,10 @@
 {
+  "permissions": {
+    "allow": [
+      "Github merge",
+      "Github"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
