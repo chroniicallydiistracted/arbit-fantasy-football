@@ -26,8 +26,8 @@ import polars as pl
 
 from arbit_model.dvp.provenance import SourceType
 from arbit_model.gamebook import POSITIONS
+from arbit_model.teams import FRANCHISE
 
-FRANCHISE: Mapping[str, str] = {"OAK": "LV", "SD": "LAC", "STL": "LA"}
 GROUPS = ("QB", "RB", "WR", "TE", "K")
 DST = "DST"
 POSITION_GROUPS = (*GROUPS, DST)

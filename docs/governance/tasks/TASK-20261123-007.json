@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "id": "TASK-20261123-007",
+  "title": "R-072 repair: one code per franchise across nflverse tables, rebuilt FFA targets, repaired reruns; R-074 regular-season gamebooks",
+  "objective": "Owner instruction 2026-11-23: fundamental data defects are necessary repairs, not decisions. Map every nflverse team code to one franchise code (OAK/SD/STL relocations and the 2012-2015 roster codes ARZ/BLT/CLV/HST/SL) at the targets, gamebook and team-feature boundaries, with a fail-closed check that every row's team is one of its game's two teams. Rebuild the canonical FFA targets from the same pinned nflverse inputs as index 4afbd836 so the difference is the repair alone, classify every changed row, keep the old index readable so v0 reproduces, rerun the signal study's team rates with the repair (its file stays byte-identical), update the team shrinkage constants it supplies, restrict gamebooks to regular seasons (R-074), and rerun the DvP phase 1 audit on the repaired index. Offline research store only: no service, deployment or live advisor change.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/teams.py",
+    "libs/arbit-model/src/arbit_model/targets.py",
+    "libs/arbit-model/src/arbit_model/gamebook.py",
+    "libs/arbit-model/src/arbit_model/team_features.py",
+    "libs/arbit-model/src/arbit_model/feature_specs.py",
+    "libs/arbit-model/src/arbit_model/dvp/observations.py",
+    "libs/arbit-model/tests/test_teams.py",
+    "libs/arbit-model/tests/test_model_targets.py",
+    "libs/arbit-model/tests/test_gamebook.py",
+    "libs/arbit-model/tests/test_team_features.py",
+    "libs/arbit-model/tests/test_dvp_continuity.py",
+    "libs/arbit-model/tests/test_dvp_observations.py",
+    "libs/arbit-model/README.md",
+    "scripts/model/build_targets.py",
+    "scripts/model/targets_diff.py",
+    "scripts/model/ffa_signal_study_r072.py",
+    "scripts/model/dvp.py",
+    "config/dvp/base.json",
+    "docs/research/ffa-signal-study-2026-11-23-r072.json",
+    "docs/research/targets-repair-r072.md",
+    "docs/research/targets-repair-r072.json",
+    "docs/research/team-features-2026-11-23.md",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/DATA_QUALITY.md",
+    "docs/research/dvp/V0_REPRODUCTION.md",
+    "docs/research/dvp/v0-reproduction.json",
+    "docs/research/dvp/audit-receipt.json",
+    "docs/research/dvp/SCORE_FINALITY_AUDIT.json",
+    "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json",
+    "docs/research/dvp/continuity-manifest.json",
+    "docs/research/dvp/experiment-registry.json",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/project/known-issues.md",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T02:08:15Z",
+  "updated_at": "2026-11-24T02:08:38Z",
+  "baseline": "9a7c0b1f6209a2b31f3b37fb369fbbf1ebe7e139",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Read targets.py, gamebook.py, team_features.py, timing.py, build_targets.py, ffa_signal_study.py, dvp.py and the DvP config. Surveyed team codes in every nflverse table 2012-2026: the schedule uses OAK 2012-2019, SD 2012-2016, STL 2012-2015; play-by-play and player/team statistics use LV, LAC, LA throughout; snap counts follow the schedule; 2012-2015 weekly rosters use ARZ, BLT, CLV, HST and SL. targets.py compares schedule codes with statistics codes (opponent, D/ST team rows) and roster codes (participation); gamebook._team_games and team_features join schedule codes with statistics codes. The signal study and v0 are byte-locked (T29), so their repair is a rerun that leaves the files unchanged. R-072 is wider than recorded (STL 2012-2015, roster-based participation labels for five teams).",
+      "files": [
+        "libs/arbit-model/src/arbit_model/targets.py",
+        "libs/arbit-model/src/arbit_model/gamebook.py",
+        "libs/arbit-model/src/arbit_model/team_features.py",
+        "scripts/model/build_targets.py",
+        "scripts/model/dvp.py",
+        "config/dvp/base.json"
+      ]
+    },
+    "plan": {
+      "summary": "1) arbit_model.teams: FRANCHISE map (OAK->LV, SD->LAC, STL->LA; roster codes ARZ->ARI, BLT->BAL, CLV->CLE, HST->HOU, SL->LA), franchise() and a polars expression. 2) targets.py normalizes every team field of SeasonRows (schedule, plays, statistics, snaps, rosters) and refuses (TeamCodeError) a statistics or team row whose franchise is not one of its game's two teams. 3) gamebook and team_features map schedule codes; gamebooks read regular-season games only (R-074). 4) build_targets.py --inputs-of INDEX pins every manifest an earlier index read and --set-current moves the pointer for a repair build; targets_diff.py classifies every changed row between two indexes. 5) Rebuild 2012-2026 pinned to 4afbd836, diff, require every change to touch a relocated or roster-coded team. 6) ffa_signal_study_r072.py reruns the locked study with pinned manifests and franchise-mapped schedules; update the eight TEAM shrinkage constants. 7) DvP: targets_index moves to the repaired index, v0_targets_index keeps 4afbd836, reproduce-v0 stages a pointer to the old index so v0 still reproduces; rerun phase 1 audit. 8) Tests, records, docs.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/teams.py",
+        "libs/arbit-model/src/arbit_model/targets.py",
+        "libs/arbit-model/src/arbit_model/gamebook.py",
+        "libs/arbit-model/src/arbit_model/team_features.py",
+        "scripts/model/build_targets.py",
+        "scripts/model/targets_diff.py",
+        "scripts/model/ffa_signal_study_r072.py",
+        "scripts/model/dvp.py",
+        "config/dvp/base.json"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}

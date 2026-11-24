@@ -10,7 +10,9 @@ nflverse store; writes only under the output root.
     python scripts/model/build_targets.py --output <main checkout>/data/model [--seasons 2012-2026]
 
 `--pin RECEIPT` reads the nflverse manifests a verification receipt lists, for reproduction;
-such a build does not move the current pointer.
+`--inputs-of INDEX` reads exactly the manifests an earlier index's seasons read, so a code repair
+can be rebuilt on the same inputs and compared row by row (`targets_diff.py`). A pinned build
+moves the current pointer only with `--set-current`.
 """
 
 import argparse
@@ -73,16 +75,36 @@ def code_version() -> str:
     return head + ("+uncommitted" if dirty else "")
 
 
+def inputs_of(objects: Path, digest: str) -> dict[str, str]:
+    """Every nflverse manifest an earlier index's seasons read, by table key."""
+    index = json.loads((objects / digest).read_bytes())
+    pins: dict[str, str] = {}
+    for manifest_digest in index["seasons"].values():
+        for key, manifest in json.loads((objects / manifest_digest).read_bytes())["inputs"].items():
+            if pins.setdefault(key, manifest) != manifest:
+                raise SystemExit(f"index {digest[:12]} read two versions of {key}")
+    return pins
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--seasons", type=seasons_argument, default=seasons_argument("2012-2026"))
     parser.add_argument("--pin", type=Path, help="a receipt whose nflverse manifests to read")
+    parser.add_argument("--inputs-of", help="an index whose seasons' nflverse manifests to read")
+    parser.add_argument(
+        "--set-current", action="store_true", help="move the current pointer after a pinned build"
+    )
+    parser.add_argument("--reason", help="why this build exists, recorded in its index")
     arguments = parser.parse_args()
+    if arguments.pin and arguments.inputs_of:
+        parser.error("--pin and --inputs-of are alternatives")
 
     engine = create_engine(os.environ["ARBIT_DATABASE_URL"], hide_parameters=True)
     nflverse = ObjectStore(Path(os.environ.get("ARBIT_NFLVERSE_PATH", "data/nflverse")) / "objects")
     pins = json.loads(arguments.pin.read_text())["nflverseManifests"] if arguments.pin else {}
+    if arguments.inputs_of:
+        pins = inputs_of(arguments.output / "objects", arguments.inputs_of)
     tables = NflverseTables(UnitOfWork(engine), nflverse, pins)
     store = ObjectStore(arguments.output / "objects")
     started = datetime.now(UTC)
@@ -111,7 +133,10 @@ def main() -> None:
         "code": code_version(),
         "adapter": ADAPTER_VERSION,
         "rules": {role: rs.content_hash for role, rs in rules.items()},
-        "pinnedFrom": str(arguments.pin) if arguments.pin else None,
+        "pinnedFrom": str(arguments.pin)
+        if arguments.pin
+        else (f"index:{arguments.inputs_of}" if arguments.inputs_of else None),
+        "reason": arguments.reason,
         "seasons": {},
     }
     summary: dict[str, Any] = {}
@@ -202,7 +227,7 @@ def main() -> None:
         print(json.dumps({season: summary[str(season)]}), flush=True)
     index["finishedAt"] = datetime.now(UTC).isoformat()
     digest = store.put_json(index).sha256
-    if not arguments.pin:
+    if not pins or arguments.set_current:
         pointer = arguments.output / "targets-current.json"
         temporary = pointer.with_suffix(".pending")
         temporary.write_text(json.dumps({"index": digest}) + "\n")

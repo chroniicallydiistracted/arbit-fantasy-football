@@ -1,7 +1,7 @@
 {
   "version": 1,
   "project": "arbit-fantasy-football",
-  "active_task": null,
+  "active_task": "TASK-20261123-007",
   "latest_handoff": "docs/project/handoffs/2026-11-23-task-20261123-006-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",

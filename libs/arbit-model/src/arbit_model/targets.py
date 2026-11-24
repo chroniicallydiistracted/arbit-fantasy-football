@@ -4,6 +4,10 @@ Lines come from `arbit_data.nflverse.stat_lines` and are scored only by `arbit_c
 under the stored FFA rules (ADR-006). Participation labels separate a player who played without a
 recorded statistic from one who did not play. Everything here is a pure function over rows;
 reading and storage belong to the caller.
+
+nflverse's tables disagree about team codes (R-072: the schedule says OAK where statistics say LV),
+so every row's team codes become franchise codes (`arbit_model.teams`) first, and a row whose
+team is not one of its game's two teams is refused with `TeamCodeError` rather than joined.
 """
 
 from collections import defaultdict
@@ -23,7 +27,10 @@ from arbit_data.nflverse.stat_lines import (
     game_events,
 )
 
-TARGETS_VERSION = "arbit-ffa-targets-v1"
+from arbit_model.teams import TeamCodeError, franchise_row
+
+# v2 (R-072): every team and opponent is a franchise code; the table schema is v1's.
+TARGETS_VERSION = "arbit-ffa-targets-v2"
 
 STAT_COLUMNS = tuple(sorted({column for columns in ATHLETE_COLUMNS.values() for column in columns}))
 NO_STATISTICS_SOURCE = "participation:snaps_without_statistics_row"
@@ -102,7 +109,57 @@ class _Game:
     away_score: int
 
     def opponent(self, team: str) -> str:
-        return self.away if team == self.home else self.home
+        if team == self.home:
+            return self.away
+        if team == self.away:
+            return self.home
+        raise TeamCodeError(f"{team} did not play in {self.game_id} ({self.away} at {self.home})")
+
+
+def franchise_rows(rows: SeasonRows) -> SeasonRows:
+    """The season with every table's team codes mapped to franchise codes (R-072)."""
+
+    def mapped(table: Sequence[Row]) -> list[Row]:
+        return [franchise_row(row) for row in table]
+
+    return replace(
+        rows,
+        games=mapped(rows.games),
+        plays=mapped(rows.plays),
+        players=mapped(rows.players),
+        teams=mapped(rows.teams),
+        snaps=mapped(rows.snaps),
+        rosters=mapped(rows.rosters),
+    )
+
+
+def _check_teams(rows: SeasonRows, games: Mapping[str, "_Game"]) -> None:
+    """Every row tied to a completed game names one of its two teams, and every roster row names
+    a team on the season's schedule."""
+    for name, table, columns in (
+        ("stats_player_week", rows.players, ("team",)),
+        ("stats_team_week", rows.teams, ("team",)),
+        ("snap_counts", rows.snaps, ("team", "opponent")),
+        ("play_by_play", rows.plays, ("posteam", "defteam")),
+    ):
+        for row in table:
+            game = games.get(str(row.get("game_id")))
+            if game is None:
+                continue
+            for column in columns:
+                code = row.get(column)
+                if code and code not in (game.home, game.away):
+                    raise TeamCodeError(f"{name}.{column} {code} not in {game.game_id}")
+    scheduled = {
+        str(g[side])
+        for g in rows.games
+        if g.get("season") == rows.season
+        for side in ("home_team", "away_team")
+    }
+    for row in rows.rosters:
+        code = row.get("team")
+        if code and scheduled and code not in scheduled:
+            raise TeamCodeError(f"weekly_rosters.team {code} not on the {rows.season} schedule")
 
 
 def _games(rows: SeasonRows) -> dict[str, _Game]:
@@ -152,7 +209,9 @@ def participation(rows: SeasonRows) -> list[Participation]:
     without a PFR ID to join them, a player with no statistic is `unknown`. Other statuses
     (reserve, practice squad, released) are `not_active_roster`.
     """
+    rows = franchise_rows(rows)
     games = _games(rows)
+    _check_teams(rows, games)
     by_team_week: dict[tuple[str, int], _Game] = {}
     for game in games.values():
         by_team_week[(game.home, game.week)] = game
@@ -266,6 +325,8 @@ def targets(
     all 1,464 such played-weeks in 2025 and 2026 at zero (slice 1 verification). Which players
     the Model projects is decided later, not by this table.
     """
+    rows = franchise_rows(rows)
+    _check_teams(rows, _games(rows))
     plays: dict[str, list[Row]] = defaultdict(list)
     for play in rows.plays:
         plays[str(play["game_id"])].append(play)

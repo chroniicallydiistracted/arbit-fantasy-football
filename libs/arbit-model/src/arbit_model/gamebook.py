@@ -8,6 +8,10 @@ again, and only decisions after that version see it.
 
 Positions are nflverse's labels mapped to FFA's (`FB` scores as RB). A player-game nflverse lists
 without a position, or at a position FFA doesn't score, adds to no position.
+
+Only regular-season games count (R-074): every shrinkage constant was measured on regular seasons.
+Team codes are franchise codes (`arbit_model.teams`, R-072), so the schedule's OAK and the
+statistics' LV are one team.
 """
 
 from collections.abc import Mapping
@@ -22,6 +26,7 @@ from arbit_data.nflverse.stat_lines import PLAY_COLUMNS
 
 from arbit_model.point_in_time import KNOWN_FROM, MANIFEST, PointInTime
 from arbit_model.targets import STAT_COLUMNS, SeasonRows, targets
+from arbit_model.teams import franchise_columns
 
 POSITIONS: Mapping[str, str] = {
     "QB": "QB",
@@ -122,7 +127,12 @@ class Gamebooks:
                 pl.col("season", "week").cast(pl.Int32),
                 pl.col("home_score", "away_score").cast(pl.Float64),
             )
-            .filter((pl.col("season") == season) & pl.col("home_score").is_not_null())
+            .filter(
+                (pl.col("season") == season)
+                & (pl.col("game_type") == "REG")
+                & pl.col("home_score").is_not_null()
+            )
+            .pipe(franchise_columns)
         )
         plays = read(f"pbp/play_by_play_{season}", PLAY_COLUMNS, at).frame.with_columns(
             pl.col("game_id").cast(text)
@@ -130,8 +140,11 @@ class Gamebooks:
         players = read(
             f"stats_player/stats_player_week_{season}", PLAYER_COLUMNS, at
         ).frame.with_columns(pl.col("game_id", "team", "player_id", "position").cast(text))
-        teams = read(f"stats_team/stats_team_week_{season}", TEAM_COLUMNS, at).frame.with_columns(
-            pl.col("game_id", "team").cast(text)
+        players = franchise_columns(players)
+        teams = franchise_columns(
+            read(f"stats_team/stats_team_week_{season}", TEAM_COLUMNS, at).frame.with_columns(
+                pl.col("game_id", "team").cast(text)
+            )
         )
         complete = (
             set(schedule["game_id"].to_list())

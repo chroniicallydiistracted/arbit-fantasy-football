@@ -9,6 +9,7 @@ import json
 from decimal import Decimal
 from pathlib import Path
 
+import pytest
 from arbit_data.espn.scoring_rules import normalize_scoring
 from arbit_model.storage import default_sources, participation_table, target_table
 from arbit_model.targets import (
@@ -19,6 +20,7 @@ from arbit_model.targets import (
     rule_metrics,
     targets,
 )
+from arbit_model.teams import TeamCodeError
 
 FIXTURE = Path(__file__).resolve().parents[3] / "tests/fixtures/espn/ffa-scoring.observed.json"
 SCORING = normalize_scoring(json.loads(FIXTURE.read_bytes())["scoringSettings"], 2026)
@@ -325,3 +327,69 @@ def test_tables_keep_unknowns_null_with_reasons_and_only_differing_sources():
     assert rows["SEA-TE"]["participation"] == "played"
     assert any(o["value"] == NO_STATISTICS_SOURCE for o in rows["SEA-TE"]["source_overrides"])
     assert participation_table(labels).num_rows == len(labels)
+
+
+# R-072: nflverse's schedule, snap counts and rosters keep a relocated team's code of the day
+# (OAK) while play-by-play and statistics use the franchise code (LV), and the 2012-2015 rosters
+# have codes of their own (BLT for Baltimore).
+TEAM_COLUMNS = ("home_team", "away_team", "team", "opponent", "opponent_team")
+PLAY_TEAMS = ("posteam", "defteam", "td_team")
+
+
+def recode(rows, codes, columns=TEAM_COLUMNS):
+    return [row | {c: codes.get(row[c], row[c]) for c in columns if c in row} for row in rows]
+
+
+def relocated_season():
+    """The fixture with Seattle as a relocated franchise (OAK in the schedule, snap counts and
+    rosters, LV in play-by-play and statistics) and New England as Baltimore, whose 2012-2015
+    roster code is BLT."""
+    day = {"SEA": "OAK", "NE": "BAL"}
+    franchise = {"SEA": "LV", "NE": "BAL"}
+    return season(
+        games=recode(GAMES, day),
+        snaps=recode(SNAPS, day),
+        rosters=recode(ROSTERS, {"SEA": "OAK", "NE": "BLT"}),
+        players=recode(PLAYERS, franchise),
+        teams=recode([team_row("SEA"), team_row("NE")], franchise),
+        plays=recode(PLAYS, franchise, PLAY_TEAMS),
+    )
+
+
+def comparable(found):
+    """Targets with team codes replaced by which side of the game they name."""
+    side = {"SEA": "home", "LV": "home", "NE": "away", "BAL": "away"}
+    return sorted(
+        (t.role, str(t.player_id), side[t.team], side[t.opponent], t.points, t.basis) for t in found
+    )
+
+
+def test_r072_a_relocated_franchise_scores_exactly_like_a_consistently_coded_one():
+    consistent = targets(season(), RULES, participation(season()))
+    rows = relocated_season()
+    relocated = targets(rows, RULES, participation(rows))
+
+    assert comparable(relocated) == comparable(consistent)
+    # Every row uses the franchise code, and no team is its own opponent.
+    assert {t.team for t in relocated} == {"LV", "BAL"}
+    assert all(t.team != t.opponent for t in relocated)
+    # Both D/ST lines exist (the scorer used to skip a game whose team row it couldn't find).
+    assert {t.team for t in relocated if t.role == "defense"} == {"LV", "BAL"}
+
+
+def test_r072_roster_codes_map_to_franchises_so_roster_labels_survive():
+    labels = {p.player_id: p for p in participation(relocated_season())}
+    consistent = {p.player_id: p.label for p in participation(season())}
+
+    assert {k: p.label for k, p in labels.items()} == consistent
+    assert labels["SEA-RB"].label == "inactive"  # known only from the OAK roster row
+    assert labels["SEA-RB"].team == "LV"
+    assert labels["NE-WR"].team == "BAL"  # the roster said BLT
+
+
+def test_a_row_whose_team_did_not_play_in_its_game_is_refused():
+    stray = [*PLAYERS, stat_row("KC-WR", "KC", "SEA", "WR", receptions=1)]
+    with pytest.raises(TeamCodeError, match="stats_player_week.team KC"):
+        targets(season(players=stray), RULES, [])
+    with pytest.raises(TeamCodeError, match="weekly_rosters.team ZZZ"):
+        participation(season(rosters=[*ROSTERS, roster("ZZ-WR", "ZZZ", "ACT")]))
