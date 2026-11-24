@@ -2259,7 +2259,8 @@ def report(args: argparse.Namespace) -> None:
                     100 * high / base,
                 )
             )
-    rows.sort(key=lambda r: (r[1], r[0]))
+    stages = {"dev": 0, "val": 1, "hol": 2}
+    rows.sort(key=lambda r: (r[1], stages[r[0].rsplit(" ", 1)[1]]))
     (receipts / "plots").mkdir(parents=True, exist_ok=True)
     (receipts / "plots" / "backtest-delta.svg").write_text(
         svg.forest(
