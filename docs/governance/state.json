@@ -1,8 +1,8 @@
 {
   "version": 1,
   "project": "arbit-fantasy-football",
-  "active_task": "TASK-20261124-006",
-  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md",
+  "active_task": null,
+  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-006-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
   "project_next_action": "Merge the DvP prospective-harness PR (branch claude/m3-dvp-prospective, TASK-20261124-006); ask the owner to approve installing the prospective sweep timer (sh infra/systemd/install-dvp-prospective.sh) or run `dvp_prospective.py sweep` in each week's window (week 13: 2026-12-01 12:00 to 12-04 01:15 UTC). Then continue the owner's audit remediations 2-7 (docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md): A09/B07 opportunity and efficiency, B05 rolling windows and split-half k, provenance enforcement, target/label decoupling for the historical engine, the simulation suite, the rebuilt plan audit and research eligibility metadata. After the season: evaluate the archived 2026 forecasts and put the D/ST weight decision to the owner (OWN-074).",
