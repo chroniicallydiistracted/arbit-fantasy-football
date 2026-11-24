@@ -1,0 +1,2903 @@
+{
+ "auditRun": "phase1-audit-20261124T024442Z",
+ "bootstrapBlock": "week",
+ "bootstrapReplicates": 2000,
+ "candidates": {
+  "frozenAt": "2026-11-24T03:05:59.229713+00:00",
+  "path": "config/dvp/frozen-candidates.json",
+  "sha256": "2b2ce424bc7c61f732a8b1d59eb07d05340678019945bc96fa4e83735e50199e"
+ },
+ "code": "165d140b0be131cd8b4a6092e6d3928fb3a3c706",
+ "config": {
+  "path": "config/dvp/backtest.json",
+  "sha256": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486"
+ },
+ "cutoff": "pre_first_game_of_nfl_week",
+ "decisions": {
+  "global": {
+   "label": "PROMISING",
+   "promisingPositions": [
+    "DST"
+   ]
+  },
+  "positions": {
+   "DST": {
+    "bestDvp": "b06",
+    "candidate": "b06",
+    "holdoutDelta95": [
+     -0.3943,
+     -0.114
+    ],
+    "holdoutIntervalExcludesZero": true,
+    "label": "PROMISING",
+    "meetsMinimum": {
+     "development": true,
+     "holdout": true,
+     "validation": true
+    },
+    "relativeDelta": {
+     "development": -0.02985,
+     "holdout": -0.04062,
+     "validation": -0.06362
+    }
+   },
+   "K": {
+    "bestDvp": "b06",
+    "candidate": "b00",
+    "holdoutDelta95": [
+     -0.0346,
+     0.0025
+    ],
+    "holdoutIntervalExcludesZero": false,
+    "label": "NOT_USEFUL",
+    "meetsMinimum": {
+     "development": false,
+     "holdout": false,
+     "validation": false
+    },
+    "relativeDelta": {
+     "development": -0.00117,
+     "holdout": -0.00302,
+     "validation": -0.00039
+    }
+   },
+   "QB": {
+    "bestDvp": "b06",
+    "candidate": "b00",
+    "holdoutDelta95": [
+     -0.1488,
+     -0.0233
+    ],
+    "holdoutIntervalExcludesZero": true,
+    "label": "INCONCLUSIVE",
+    "meetsMinimum": {
+     "development": false,
+     "holdout": true,
+     "validation": false
+    },
+    "relativeDelta": {
+     "development": -0.0085,
+     "holdout": -0.01141,
+     "validation": 0.0026
+    }
+   },
+   "RB": {
+    "bestDvp": "b06",
+    "candidate": "b00",
+    "holdoutDelta95": [
+     -0.1578,
+     0.064
+    ],
+    "holdoutIntervalExcludesZero": false,
+    "label": "NOT_USEFUL",
+    "meetsMinimum": {
+     "development": false,
+     "holdout": false,
+     "validation": false
+    },
+    "relativeDelta": {
+     "development": -0.00839,
+     "holdout": -0.00544,
+     "validation": -0.00845
+    }
+   },
+   "TE": {
+    "bestDvp": "b07",
+    "candidate": "b00",
+    "holdoutDelta95": [
+     -0.057,
+     -0.0023
+    ],
+    "holdoutIntervalExcludesZero": true,
+    "label": "NOT_USEFUL",
+    "meetsMinimum": {
+     "development": false,
+     "holdout": false,
+     "validation": false
+    },
+    "relativeDelta": {
+     "development": -0.00189,
+     "holdout": -0.00352,
+     "validation": -4e-05
+    }
+   },
+   "WR": {
+    "bestDvp": "b06",
+    "candidate": "b00",
+    "holdoutDelta95": [
+     -0.1893,
+     0.0339
+    ],
+    "holdoutIntervalExcludesZero": false,
+    "label": "NOT_USEFUL",
+    "meetsMinimum": {
+     "development": false,
+     "holdout": false,
+     "validation": false
+    },
+    "relativeDelta": {
+     "development": -0.00743,
+     "holdout": -0.00577,
+     "validation": 0.01207
+    }
+   }
+  },
+  "rule": "Per position, with the best DvP variant's relative change in RMSE against B00 in development (2017-2023), validation (2024) and the holdout (2025): PROMISING if the frozen candidate is a DvP variant and it cuts RMSE by at least the practical minimum (1%) in all three periods; NOT_USEFUL if the best DvP variant misses the minimum in all three; INCONCLUSIVE otherwise; BLOCKED if an integrity check fails (frozen hashes, coverage, projection dependency). Globally: PROMISING with the positions that are; NOT_USEFUL if every position is; INCONCLUSIVE otherwise. A paired holdout interval that excludes 0 is reported as stronger evidence, not required."
+ },
+ "folds": {
+  "2025": {
+   "kDvp": {
+    "DST": 7.381,
+    "K": 58.654,
+    "QB": 27.273,
+    "RB": 18.818,
+    "TE": 41.521,
+    "WR": 28.932
+   },
+   "kNonTd": {
+    "DST": 6.485,
+    "K": 58.792,
+    "QB": 19.301,
+    "RB": 18.757,
+    "TE": 42.839,
+    "WR": 23.371
+   },
+   "kOwn": {
+    "DST": 17.673,
+    "K": 21.924,
+    "QB": 6.333,
+    "RB": 6.526,
+    "TE": 4.083,
+    "WR": 4.2
+   },
+   "leaguePrev": {
+    "DST": 5.572,
+    "K": 8.18,
+    "QB": 16.811,
+    "RB": 22.137,
+    "TE": 12.232,
+    "WR": 33.43
+   },
+   "season": 2025,
+   "slopeDvp": {
+    "DST": 0.393,
+    "K": 0.153,
+    "QB": 0.306,
+    "RB": 0.277,
+    "TE": 0.136,
+    "WR": 0.252
+   },
+   "slopeOwn": {
+    "DST": 0.321,
+    "K": 0.175,
+    "QB": 0.483,
+    "RB": 0.424,
+    "TE": 0.501,
+    "WR": 0.444
+   },
+   "training": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  }
+ },
+ "forbidden_vendor_projection_dependencies": 0,
+ "forecastsSha256": "a310cb2334ed534ff269595a6df03f9581753432b38ccf9b599c05b838a12d03",
+ "format": "arbit-dvp-m3-3-backtest-holdout-v1",
+ "frozenManifest": {
+  "frozenAt": "2026-11-24T03:16:19.829107+00:00",
+  "path": "config/dvp/frozen.json",
+  "sha256": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6"
+ },
+ "generatedAt": "2026-11-24T03:16:31.071307+00:00",
+ "holdout": "not run: 2025 needs a frozen manifest (Phase 4)",
+ "holdoutStatus": "CONDITIONALLY_HELD_OUT",
+ "polarsMaxThreads": "2",
+ "practicalMinimumRelativeRmse": 0.01,
+ "results": {
+  "DST": {
+   "b00": {
+    "delta95": [
+     0.0,
+     0.0
+    ],
+    "deltaRmse": 0.0,
+    "mae": 5.0142,
+    "meanError": -0.1776,
+    "relativeDelta": 0.0,
+    "rmse": 6.3754,
+    "spearman": 0.1622
+   },
+   "b01": {
+    "delta95": [
+     -0.2265,
+     0.3046
+    ],
+    "deltaRmse": 0.0366,
+    "mae": 5.0492,
+    "meanError": -0.1865,
+    "relativeDelta": 0.00573,
+    "rmse": 6.4119,
+    "spearman": 0.288
+   },
+   "b02": {
+    "delta95": [
+     -0.2098,
+     0.3384
+    ],
+    "deltaRmse": 0.0611,
+    "mae": 5.0861,
+    "meanError": -0.1052,
+    "relativeDelta": 0.00958,
+    "rmse": 6.4364,
+    "spearman": 0.2825
+   },
+   "b02r": {
+    "delta95": [
+     -0.2251,
+     0.3037
+    ],
+    "deltaRmse": 0.0342,
+    "mae": 5.0516,
+    "meanError": -0.1825,
+    "relativeDelta": 0.00536,
+    "rmse": 6.4096,
+    "spearman": 0.2915
+   },
+   "b03": {
+    "delta95": [
+     -0.3359,
+     -0.0933
+    ],
+    "deltaRmse": -0.2153,
+    "mae": 4.8186,
+    "meanError": -0.132,
+    "relativeDelta": -0.03377,
+    "rmse": 6.1601,
+    "spearman": 0.3044
+   },
+   "b03r": {
+    "delta95": [
+     -0.3499,
+     -0.107
+    ],
+    "deltaRmse": -0.2306,
+    "mae": 4.7996,
+    "meanError": -0.1793,
+    "relativeDelta": -0.03617,
+    "rmse": 6.1448,
+    "spearman": 0.3139
+   },
+   "b04_k1": {
+    "delta95": [
+     -0.3216,
+     0.1071
+    ],
+    "deltaRmse": -0.111,
+    "mae": 4.9306,
+    "meanError": -0.1081,
+    "relativeDelta": -0.01741,
+    "rmse": 6.2644,
+    "spearman": 0.2921
+   },
+   "b04_k128": {
+    "delta95": [
+     -0.0662,
+     -0.0286
+    ],
+    "deltaRmse": -0.047,
+    "mae": 4.9716,
+    "meanError": -0.1714,
+    "relativeDelta": -0.00737,
+    "rmse": 6.3284,
+    "spearman": 0.2085
+   },
+   "b04_k16": {
+    "delta95": [
+     -0.2668,
+     -0.0995
+    ],
+    "deltaRmse": -0.1831,
+    "mae": 4.8448,
+    "meanError": -0.1464,
+    "relativeDelta": -0.02871,
+    "rmse": 6.1923,
+    "spearman": 0.2999
+   },
+   "b04_k2": {
+    "delta95": [
+     -0.3535,
+     0.0188
+    ],
+    "deltaRmse": -0.1685,
+    "mae": 4.8709,
+    "meanError": -0.113,
+    "relativeDelta": -0.02642,
+    "rmse": 6.2069,
+    "spearman": 0.2963
+   },
+   "b04_k256": {
+    "delta95": [
+     -0.0354,
+     -0.0154
+    ],
+    "deltaRmse": -0.0252,
+    "mae": 4.992,
+    "meanError": -0.1744,
+    "relativeDelta": -0.00395,
+    "rmse": 6.3502,
+    "spearman": 0.1887
+   },
+   "b04_k32": {
+    "delta95": [
+     -0.1885,
+     -0.0772
+    ],
+    "deltaRmse": -0.1319,
+    "mae": 4.8944,
+    "meanError": -0.1578,
+    "relativeDelta": -0.0207,
+    "rmse": 6.2434,
+    "spearman": 0.2777
+   },
+   "b04_k4": {
+    "delta95": [
+     -0.3569,
+     -0.0566
+    ],
+    "deltaRmse": -0.2082,
+    "mae": 4.8315,
+    "meanError": -0.1216,
+    "relativeDelta": -0.03266,
+    "rmse": 6.1672,
+    "spearman": 0.3003
+   },
+   "b04_k64": {
+    "delta95": [
+     -0.1166,
+     -0.0494
+    ],
+    "deltaRmse": -0.0827,
+    "mae": 4.9395,
+    "meanError": -0.1662,
+    "relativeDelta": -0.01297,
+    "rmse": 6.2927,
+    "spearman": 0.2417
+   },
+   "b04_k8": {
+    "delta95": [
+     -0.33,
+     -0.0961
+    ],
+    "deltaRmse": -0.2139,
+    "mae": 4.8193,
+    "meanError": -0.1334,
+    "relativeDelta": -0.03355,
+    "rmse": 6.1614,
+    "spearman": 0.3039
+   },
+   "b05_h2": {
+    "delta95": [
+     -0.2482,
+     -0.0492
+    ],
+    "deltaRmse": -0.1487,
+    "mae": 4.8834,
+    "meanError": -0.1379,
+    "relativeDelta": -0.02332,
+    "rmse": 6.2267,
+    "spearman": 0.2778
+   },
+   "b05_h4": {
+    "delta95": [
+     -0.2996,
+     -0.0789
+    ],
+    "deltaRmse": -0.1916,
+    "mae": 4.8456,
+    "meanError": -0.1284,
+    "relativeDelta": -0.03006,
+    "rmse": 6.1837,
+    "spearman": 0.2974
+   },
+   "b05_h8": {
+    "delta95": [
+     -0.3226,
+     -0.0885
+    ],
+    "deltaRmse": -0.2088,
+    "mae": 4.8287,
+    "meanError": -0.1275,
+    "relativeDelta": -0.03275,
+    "rmse": 6.1666,
+    "spearman": 0.3025
+   },
+   "b06": {
+    "delta95": [
+     -0.3943,
+     -0.114
+    ],
+    "deltaRmse": -0.259,
+    "mae": 4.7837,
+    "meanError": -0.132,
+    "relativeDelta": -0.04062,
+    "rmse": 6.1164,
+    "spearman": 0.3226
+   },
+   "b07": {
+    "delta95": [
+     -0.3381,
+     -0.1137
+    ],
+    "deltaRmse": -0.2233,
+    "mae": 4.8138,
+    "meanError": -0.1553,
+    "relativeDelta": -0.03502,
+    "rmse": 6.1521,
+    "spearman": 0.3125
+   },
+   "b09_lastopp": {
+    "delta95": [
+     0.0014,
+     0.332
+    ],
+    "deltaRmse": 0.1716,
+    "mae": 5.1521,
+    "meanError": -0.1331,
+    "relativeDelta": 0.02692,
+    "rmse": 6.547,
+    "spearman": 0.1062
+   },
+   "b09_noise": {
+    "delta95": [
+     0.1952,
+     0.5126
+    ],
+    "deltaRmse": 0.3511,
+    "mae": 5.3214,
+    "meanError": -0.2077,
+    "relativeDelta": 0.05508,
+    "rmse": 6.7265,
+    "spearman": 0.013
+   },
+   "b09_shuffle": {
+    "delta95": [
+     0.0035,
+     0.2722
+    ],
+    "deltaRmse": 0.1314,
+    "mae": 5.1569,
+    "meanError": -0.132,
+    "relativeDelta": 0.0206,
+    "rmse": 6.5067,
+    "spearman": 0.1082
+   },
+   "blocks": 18,
+   "calibrationB00": [
+    {
+     "decile": 1,
+     "forecast": 4.023,
+     "n": 54,
+     "observed": 5.278
+    },
+    {
+     "decile": 2,
+     "forecast": 4.558,
+     "n": 54,
+     "observed": 4.204
+    },
+    {
+     "decile": 3,
+     "forecast": 4.902,
+     "n": 55,
+     "observed": 4.436
+    },
+    {
+     "decile": 4,
+     "forecast": 5.225,
+     "n": 54,
+     "observed": 5.481
+    },
+    {
+     "decile": 5,
+     "forecast": 5.459,
+     "n": 55,
+     "observed": 5.345
+    },
+    {
+     "decile": 6,
+     "forecast": 5.711,
+     "n": 54,
+     "observed": 5.389
+    },
+    {
+     "decile": 7,
+     "forecast": 5.975,
+     "n": 55,
+     "observed": 6.618
+    },
+    {
+     "decile": 8,
+     "forecast": 6.257,
+     "n": 54,
+     "observed": 6.278
+    },
+    {
+     "decile": 9,
+     "forecast": 6.554,
+     "n": 55,
+     "observed": 6.455
+    },
+    {
+     "decile": 10,
+     "forecast": 7.436,
+     "n": 54,
+     "observed": 8.407
+    }
+   ],
+   "focus": {
+    "byOpponentGames": {
+     "0-0": {
+      "deltaRmse": -0.4126,
+      "rows": 32
+     },
+     "1-3": {
+      "deltaRmse": -0.3094,
+      "rows": 96
+     },
+     "4-7": {
+      "deltaRmse": -0.1856,
+      "rows": 128
+     },
+     "8-17": {
+      "deltaRmse": -0.2619,
+      "rows": 288
+     }
+    },
+    "bySeason": {
+     "2025": {
+      "deltaRmse": -0.259,
+      "rows": 544
+     }
+    },
+    "byWeek": {
+     "1-4": {
+      "deltaRmse": -0.3285,
+      "rows": 128
+     },
+     "10-18": {
+      "deltaRmse": -0.3259,
+      "rows": 274
+     },
+     "5-9": {
+      "deltaRmse": -0.0786,
+      "rows": 142
+     }
+    },
+    "calibration": [
+     {
+      "decile": 1,
+      "forecast": 2.149,
+      "n": 54,
+      "observed": 4.389
+     },
+     {
+      "decile": 2,
+      "forecast": 3.397,
+      "n": 54,
+      "observed": 3.185
+     },
+     {
+      "decile": 3,
+      "forecast": 4.189,
+      "n": 55,
+      "observed": 3.0
+     },
+     {
+      "decile": 4,
+      "forecast": 4.801,
+      "n": 54,
+      "observed": 3.944
+     },
+     {
+      "decile": 5,
+      "forecast": 5.307,
+      "n": 55,
+      "observed": 5.673
+     },
+     {
+      "decile": 6,
+      "forecast": 5.84,
+      "n": 54,
+      "observed": 5.13
+     },
+     {
+      "decile": 7,
+      "forecast": 6.331,
+      "n": 55,
+      "observed": 7.4
+     },
+     {
+      "decile": 8,
+      "forecast": 6.986,
+      "n": 54,
+      "observed": 6.481
+     },
+     {
+      "decile": 9,
+      "forecast": 7.878,
+      "n": 55,
+      "observed": 9.055
+     },
+     {
+      "decile": 10,
+      "forecast": 9.667,
+      "n": 54,
+      "observed": 9.593
+     }
+    ],
+    "variant": "b06"
+   },
+   "rows": 544
+  },
+  "K": {
+   "b00": {
+    "delta95": [
+     0.0,
+     0.0
+    ],
+    "deltaRmse": 0.0,
+    "mae": 3.823,
+    "meanError": -0.0411,
+    "relativeDelta": 0.0,
+    "rmse": 4.7617,
+    "spearman": 0.1214
+   },
+   "b01": {
+    "delta95": [
+     0.1113,
+     0.4656
+    ],
+    "deltaRmse": 0.2901,
+    "mae": 4.0159,
+    "meanError": -0.0309,
+    "relativeDelta": 0.06093,
+    "rmse": 5.0519,
+    "spearman": 0.0896
+   },
+   "b02": {
+    "delta95": [
+     0.1238,
+     0.4914
+    ],
+    "deltaRmse": 0.3072,
+    "mae": 4.0278,
+    "meanError": 0.0923,
+    "relativeDelta": 0.06451,
+    "rmse": 5.0689,
+    "spearman": 0.0876
+   },
+   "b02r": {
+    "delta95": [
+     0.1202,
+     0.4757
+    ],
+    "deltaRmse": 0.2983,
+    "mae": 4.0232,
+    "meanError": -0.027,
+    "relativeDelta": 0.06264,
+    "rmse": 5.06,
+    "spearman": 0.0894
+   },
+   "b03": {
+    "delta95": [
+     -0.0302,
+     0.0019
+    ],
+    "deltaRmse": -0.0124,
+    "mae": 3.8111,
+    "meanError": -0.0364,
+    "relativeDelta": -0.00261,
+    "rmse": 4.7493,
+    "spearman": 0.1387
+   },
+   "b03r": {
+    "delta95": [
+     -0.0301,
+     0.0004
+    ],
+    "deltaRmse": -0.0136,
+    "mae": 3.8098,
+    "meanError": -0.0394,
+    "relativeDelta": -0.00286,
+    "rmse": 4.7481,
+    "spearman": 0.1398
+   },
+   "b04_k1": {
+    "delta95": [
+     0.0324,
+     0.2819
+    ],
+    "deltaRmse": 0.1573,
+    "mae": 3.9193,
+    "meanError": 0.0517,
+    "relativeDelta": 0.03303,
+    "rmse": 4.919,
+    "spearman": 0.0984
+   },
+   "b04_k128": {
+    "delta95": [
+     -0.0164,
+     -0.0002
+    ],
+    "deltaRmse": -0.0074,
+    "mae": 3.8159,
+    "meanError": -0.039,
+    "relativeDelta": -0.00156,
+    "rmse": 4.7543,
+    "spearman": 0.1316
+   },
+   "b04_k16": {
+    "delta95": [
+     -0.056,
+     0.027
+    ],
+    "deltaRmse": -0.0112,
+    "mae": 3.8056,
+    "meanError": -0.0245,
+    "relativeDelta": -0.00235,
+    "rmse": 4.7506,
+    "spearman": 0.1429
+   },
+   "b04_k2": {
+    "delta95": [
+     -0.0069,
+     0.203
+    ],
+    "deltaRmse": 0.0997,
+    "mae": 3.8781,
+    "meanError": 0.0308,
+    "relativeDelta": 0.02093,
+    "rmse": 4.8614,
+    "spearman": 0.1049
+   },
+   "b04_k256": {
+    "delta95": [
+     -0.0089,
+     -0.0003
+    ],
+    "deltaRmse": -0.0042,
+    "mae": 3.8192,
+    "meanError": -0.04,
+    "relativeDelta": -0.00088,
+    "rmse": 4.7576,
+    "spearman": 0.1275
+   },
+   "b04_k32": {
+    "delta95": [
+     -0.0436,
+     0.0083
+    ],
+    "deltaRmse": -0.0151,
+    "mae": 3.8068,
+    "meanError": -0.0326,
+    "relativeDelta": -0.00318,
+    "rmse": 4.7466,
+    "spearman": 0.1446
+   },
+   "b04_k4": {
+    "delta95": [
+     -0.0397,
+     0.128
+    ],
+    "deltaRmse": 0.0467,
+    "mae": 3.8391,
+    "meanError": 0.0085,
+    "relativeDelta": 0.0098,
+    "rmse": 4.8084,
+    "spearman": 0.1153
+   },
+   "b04_k64": {
+    "delta95": [
+     -0.0284,
+     0.0015
+    ],
+    "deltaRmse": -0.0119,
+    "mae": 3.8117,
+    "meanError": -0.0368,
+    "relativeDelta": -0.00249,
+    "rmse": 4.7499,
+    "spearman": 0.1379
+   },
+   "b04_k8": {
+    "delta95": [
+     -0.0557,
+     0.0661
+    ],
+    "deltaRmse": 0.0082,
+    "mae": 3.8143,
+    "meanError": -0.0109,
+    "relativeDelta": 0.00172,
+    "rmse": 4.7699,
+    "spearman": 0.1293
+   },
+   "b05_h2": {
+    "delta95": [
+     -0.0245,
+     0.0009
+    ],
+    "deltaRmse": -0.0117,
+    "mae": 3.8113,
+    "meanError": -0.0431,
+    "relativeDelta": -0.00246,
+    "rmse": 4.75,
+    "spearman": 0.1394
+   },
+   "b05_h4": {
+    "delta95": [
+     -0.0303,
+     -0.0004
+    ],
+    "deltaRmse": -0.0143,
+    "mae": 3.8092,
+    "meanError": -0.0433,
+    "relativeDelta": -0.00299,
+    "rmse": 4.7475,
+    "spearman": 0.1388
+   },
+   "b05_h8": {
+    "delta95": [
+     -0.032,
+     0.0
+    ],
+    "deltaRmse": -0.0145,
+    "mae": 3.8093,
+    "meanError": -0.0414,
+    "relativeDelta": -0.00304,
+    "rmse": 4.7473,
+    "spearman": 0.1398
+   },
+   "b06": {
+    "delta95": [
+     -0.0346,
+     0.0025
+    ],
+    "deltaRmse": -0.0144,
+    "mae": 3.8113,
+    "meanError": -0.0359,
+    "relativeDelta": -0.00302,
+    "rmse": 4.7474,
+    "spearman": 0.1542
+   },
+   "b07": {
+    "delta95": [
+     -0.0298,
+     0.0019
+    ],
+    "deltaRmse": -0.0125,
+    "mae": 3.8108,
+    "meanError": -0.0367,
+    "relativeDelta": -0.00263,
+    "rmse": 4.7492,
+    "spearman": 0.1391
+   },
+   "b09_lastopp": {
+    "delta95": [
+     -0.0244,
+     0.0145
+    ],
+    "deltaRmse": -0.0057,
+    "mae": 3.8172,
+    "meanError": -0.0373,
+    "relativeDelta": -0.0012,
+    "rmse": 4.756,
+    "spearman": 0.1362
+   },
+   "b09_noise": {
+    "delta95": [
+     0.0134,
+     0.0663
+    ],
+    "deltaRmse": 0.0386,
+    "mae": 3.8642,
+    "meanError": -0.0447,
+    "relativeDelta": 0.0081,
+    "rmse": 4.8003,
+    "spearman": 0.0641
+   },
+   "b09_shuffle": {
+    "delta95": [
+     0.0026,
+     0.0353
+    ],
+    "deltaRmse": 0.0193,
+    "mae": 3.8397,
+    "meanError": -0.0364,
+    "relativeDelta": 0.00404,
+    "rmse": 4.781,
+    "spearman": 0.0907
+   },
+   "blocks": 18,
+   "calibrationB00": [
+    {
+     "decile": 1,
+     "forecast": 7.233,
+     "n": 54,
+     "observed": 7.685
+    },
+    {
+     "decile": 2,
+     "forecast": 7.661,
+     "n": 54,
+     "observed": 7.407
+    },
+    {
+     "decile": 3,
+     "forecast": 7.851,
+     "n": 54,
+     "observed": 7.056
+    },
+    {
+     "decile": 4,
+     "forecast": 7.99,
+     "n": 55,
+     "observed": 8.745
+    },
+    {
+     "decile": 5,
+     "forecast": 8.11,
+     "n": 54,
+     "observed": 8.278
+    },
+    {
+     "decile": 6,
+     "forecast": 8.227,
+     "n": 54,
+     "observed": 7.704
+    },
+    {
+     "decile": 7,
+     "forecast": 8.386,
+     "n": 55,
+     "observed": 7.8
+    },
+    {
+     "decile": 8,
+     "forecast": 8.543,
+     "n": 54,
+     "observed": 9.204
+    },
+    {
+     "decile": 9,
+     "forecast": 8.742,
+     "n": 54,
+     "observed": 8.667
+    },
+    {
+     "decile": 10,
+     "forecast": 9.256,
+     "n": 54,
+     "observed": 9.863
+    }
+   ],
+   "focus": {
+    "byOpponentGames": {
+     "0-0": {
+      "deltaRmse": -0.0217,
+      "rows": 32
+     },
+     "1-3": {
+      "deltaRmse": -0.0165,
+      "rows": 96
+     },
+     "4-7": {
+      "deltaRmse": 0.005,
+      "rows": 128
+     },
+     "8-17": {
+      "deltaRmse": -0.0214,
+      "rows": 286
+     }
+    },
+    "bySeason": {
+     "2025": {
+      "deltaRmse": -0.0144,
+      "rows": 542
+     }
+    },
+    "byWeek": {
+     "1-4": {
+      "deltaRmse": -0.0152,
+      "rows": 127
+     },
+     "10-18": {
+      "deltaRmse": -0.0236,
+      "rows": 273
+     },
+     "5-9": {
+      "deltaRmse": 0.0052,
+      "rows": 142
+     }
+    },
+    "calibration": [
+     {
+      "decile": 1,
+      "forecast": 7.139,
+      "n": 54,
+      "observed": 7.074
+     },
+     {
+      "decile": 2,
+      "forecast": 7.588,
+      "n": 54,
+      "observed": 7.093
+     },
+     {
+      "decile": 3,
+      "forecast": 7.827,
+      "n": 54,
+      "observed": 8.315
+     },
+     {
+      "decile": 4,
+      "forecast": 7.988,
+      "n": 55,
+      "observed": 7.455
+     },
+     {
+      "decile": 5,
+      "forecast": 8.134,
+      "n": 54,
+      "observed": 7.907
+     },
+     {
+      "decile": 6,
+      "forecast": 8.255,
+      "n": 54,
+      "observed": 7.426
+     },
+     {
+      "decile": 7,
+      "forecast": 8.414,
+      "n": 55,
+      "observed": 9.491
+     },
+     {
+      "decile": 8,
+      "forecast": 8.586,
+      "n": 54,
+      "observed": 9.204
+     },
+     {
+      "decile": 9,
+      "forecast": 8.811,
+      "n": 54,
+      "observed": 8.444
+     },
+     {
+      "decile": 10,
+      "forecast": 9.307,
+      "n": 54,
+      "observed": 9.993
+     }
+    ],
+    "variant": "b06"
+   },
+   "rows": 542
+  },
+  "QB": {
+   "b00": {
+    "delta95": [
+     0.0,
+     0.0
+    ],
+    "deltaRmse": 0.0,
+    "mae": 6.2789,
+    "meanError": 0.4949,
+    "relativeDelta": 0.0,
+    "rmse": 7.8037,
+    "spearman": 0.2156
+   },
+   "b01": {
+    "delta95": [
+     0.0184,
+     1.4186
+    ],
+    "deltaRmse": 0.5627,
+    "mae": 6.7304,
+    "meanError": 0.4838,
+    "relativeDelta": 0.07211,
+    "rmse": 8.3664,
+    "spearman": 0.2057
+   },
+   "b02": {
+    "delta95": [
+     -0.0243,
+     1.2702
+    ],
+    "deltaRmse": 0.4834,
+    "mae": 6.6671,
+    "meanError": 0.4695,
+    "relativeDelta": 0.06194,
+    "rmse": 8.2871,
+    "spearman": 0.224
+   },
+   "b02r": {
+    "delta95": [
+     -0.0004,
+     1.4057
+    ],
+    "deltaRmse": 0.5455,
+    "mae": 6.707,
+    "meanError": 0.4882,
+    "relativeDelta": 0.0699,
+    "rmse": 8.3492,
+    "spearman": 0.2176
+   },
+   "b03": {
+    "delta95": [
+     -0.1315,
+     -0.0287
+    ],
+    "deltaRmse": -0.0816,
+    "mae": 6.2259,
+    "meanError": 0.4661,
+    "relativeDelta": -0.01046,
+    "rmse": 7.7221,
+    "spearman": 0.2574
+   },
+   "b03r": {
+    "delta95": [
+     -0.1229,
+     -0.0241
+    ],
+    "deltaRmse": -0.0753,
+    "mae": 6.2347,
+    "meanError": 0.4937,
+    "relativeDelta": -0.00966,
+    "rmse": 7.7284,
+    "spearman": 0.2545
+   },
+   "b04_k1": {
+    "delta95": [
+     -0.1055,
+     0.4612
+    ],
+    "deltaRmse": 0.1391,
+    "mae": 6.4252,
+    "meanError": 0.4483,
+    "relativeDelta": 0.01782,
+    "rmse": 7.9428,
+    "spearman": 0.2446
+   },
+   "b04_k128": {
+    "delta95": [
+     -0.0443,
+     -0.0139
+    ],
+    "deltaRmse": -0.0291,
+    "mae": 6.2602,
+    "meanError": 0.4862,
+    "relativeDelta": -0.00373,
+    "rmse": 7.7746,
+    "spearman": 0.2284
+   },
+   "b04_k16": {
+    "delta95": [
+     -0.1631,
+     -0.0208
+    ],
+    "deltaRmse": -0.0955,
+    "mae": 6.2212,
+    "meanError": 0.4564,
+    "relativeDelta": -0.01224,
+    "rmse": 7.7082,
+    "spearman": 0.2672
+   },
+   "b04_k2": {
+    "delta95": [
+     -0.1469,
+     0.2488
+    ],
+    "deltaRmse": 0.0335,
+    "mae": 6.3491,
+    "meanError": 0.4423,
+    "relativeDelta": 0.00429,
+    "rmse": 7.8372,
+    "spearman": 0.257
+   },
+   "b04_k256": {
+    "delta95": [
+     -0.0239,
+     -0.0076
+    ],
+    "deltaRmse": -0.0158,
+    "mae": 6.2686,
+    "meanError": 0.4903,
+    "relativeDelta": -0.00202,
+    "rmse": 7.7879,
+    "spearman": 0.222
+   },
+   "b04_k32": {
+    "delta95": [
+     -0.1208,
+     -0.0289
+    ],
+    "deltaRmse": -0.0759,
+    "mae": 6.2293,
+    "meanError": 0.4688,
+    "relativeDelta": -0.00972,
+    "rmse": 7.7278,
+    "spearman": 0.2534
+   },
+   "b04_k4": {
+    "delta95": [
+     -0.1838,
+     0.1101
+    ],
+    "deltaRmse": -0.0472,
+    "mae": 6.2811,
+    "meanError": 0.4407,
+    "relativeDelta": -0.00604,
+    "rmse": 7.7566,
+    "spearman": 0.2685
+   },
+   "b04_k64": {
+    "delta95": [
+     -0.0771,
+     -0.0223
+    ],
+    "deltaRmse": -0.0499,
+    "mae": 6.2467,
+    "meanError": 0.4792,
+    "relativeDelta": -0.0064,
+    "rmse": 7.7538,
+    "spearman": 0.2379
+   },
+   "b04_k8": {
+    "delta95": [
+     -0.1902,
+     0.0183
+    ],
+    "deltaRmse": -0.0904,
+    "mae": 6.2362,
+    "meanError": 0.4457,
+    "relativeDelta": -0.01158,
+    "rmse": 7.7133,
+    "spearman": 0.2731
+   },
+   "b05_h2": {
+    "delta95": [
+     -0.1185,
+     -0.0192
+    ],
+    "deltaRmse": -0.0698,
+    "mae": 6.225,
+    "meanError": 0.4521,
+    "relativeDelta": -0.00894,
+    "rmse": 7.7339,
+    "spearman": 0.2522
+   },
+   "b05_h4": {
+    "delta95": [
+     -0.1401,
+     -0.0255
+    ],
+    "deltaRmse": -0.0835,
+    "mae": 6.2196,
+    "meanError": 0.4469,
+    "relativeDelta": -0.01071,
+    "rmse": 7.7202,
+    "spearman": 0.259
+   },
+   "b05_h8": {
+    "delta95": [
+     -0.1415,
+     -0.0279
+    ],
+    "deltaRmse": -0.0861,
+    "mae": 6.2204,
+    "meanError": 0.4516,
+    "relativeDelta": -0.01104,
+    "rmse": 7.7176,
+    "spearman": 0.2597
+   },
+   "b06": {
+    "delta95": [
+     -0.1488,
+     -0.0233
+    ],
+    "deltaRmse": -0.0891,
+    "mae": 6.2295,
+    "meanError": 0.4661,
+    "relativeDelta": -0.01141,
+    "rmse": 7.7147,
+    "spearman": 0.2568
+   },
+   "b07": {
+    "delta95": [
+     -0.0801,
+     -0.0214
+    ],
+    "deltaRmse": -0.0502,
+    "mae": 6.2453,
+    "meanError": 0.4379,
+    "relativeDelta": -0.00643,
+    "rmse": 7.7535,
+    "spearman": 0.2371
+   },
+   "b09_lastopp": {
+    "delta95": [
+     0.0204,
+     0.1088
+    ],
+    "deltaRmse": 0.0635,
+    "mae": 6.3433,
+    "meanError": 0.4674,
+    "relativeDelta": 0.00814,
+    "rmse": 7.8673,
+    "spearman": 0.208
+   },
+   "b09_noise": {
+    "delta95": [
+     0.0165,
+     0.1363
+    ],
+    "deltaRmse": 0.0744,
+    "mae": 6.3268,
+    "meanError": 0.5148,
+    "relativeDelta": 0.00954,
+    "rmse": 7.8781,
+    "spearman": 0.2113
+   },
+   "b09_shuffle": {
+    "delta95": [
+     -0.0331,
+     0.0746
+    ],
+    "deltaRmse": 0.0179,
+    "mae": 6.2839,
+    "meanError": 0.4661,
+    "relativeDelta": 0.00229,
+    "rmse": 7.8216,
+    "spearman": 0.2164
+   },
+   "blocks": 18,
+   "calibrationB00": [
+    {
+     "decile": 1,
+     "forecast": 12.446,
+     "n": 54,
+     "observed": 11.98
+    },
+    {
+     "decile": 2,
+     "forecast": 14.196,
+     "n": 54,
+     "observed": 13.821
+    },
+    {
+     "decile": 3,
+     "forecast": 15.147,
+     "n": 55,
+     "observed": 13.891
+    },
+    {
+     "decile": 4,
+     "forecast": 16.024,
+     "n": 54,
+     "observed": 16.561
+    },
+    {
+     "decile": 5,
+     "forecast": 16.75,
+     "n": 55,
+     "observed": 19.522
+    },
+    {
+     "decile": 6,
+     "forecast": 17.348,
+     "n": 54,
+     "observed": 17.556
+    },
+    {
+     "decile": 7,
+     "forecast": 17.871,
+     "n": 55,
+     "observed": 17.067
+    },
+    {
+     "decile": 8,
+     "forecast": 18.309,
+     "n": 54,
+     "observed": 17.334
+    },
+    {
+     "decile": 9,
+     "forecast": 18.973,
+     "n": 55,
+     "observed": 15.655
+    },
+    {
+     "decile": 10,
+     "forecast": 20.806,
+     "n": 54,
+     "observed": 19.546
+    }
+   ],
+   "focus": {
+    "byOpponentGames": {
+     "0-0": {
+      "deltaRmse": 0.0993,
+      "rows": 32
+     },
+     "1-3": {
+      "deltaRmse": 0.0229,
+      "rows": 96
+     },
+     "4-7": {
+      "deltaRmse": -0.0224,
+      "rows": 128
+     },
+     "8-17": {
+      "deltaRmse": -0.1698,
+      "rows": 288
+     }
+    },
+    "bySeason": {
+     "2025": {
+      "deltaRmse": -0.0891,
+      "rows": 544
+     }
+    },
+    "byWeek": {
+     "1-4": {
+      "deltaRmse": 0.0444,
+      "rows": 128
+     },
+     "10-18": {
+      "deltaRmse": -0.1679,
+      "rows": 274
+     },
+     "5-9": {
+      "deltaRmse": -0.0445,
+      "rows": 142
+     }
+    },
+    "calibration": [
+     {
+      "decile": 1,
+      "forecast": 12.215,
+      "n": 54,
+      "observed": 11.599
+     },
+     {
+      "decile": 2,
+      "forecast": 14.195,
+      "n": 54,
+      "observed": 12.767
+     },
+     {
+      "decile": 3,
+      "forecast": 15.125,
+      "n": 55,
+      "observed": 14.663
+     },
+     {
+      "decile": 4,
+      "forecast": 15.851,
+      "n": 54,
+      "observed": 16.86
+     },
+     {
+      "decile": 5,
+      "forecast": 16.531,
+      "n": 55,
+      "observed": 17.498
+     },
+     {
+      "decile": 6,
+      "forecast": 17.175,
+      "n": 54,
+      "observed": 18.303
+     },
+     {
+      "decile": 7,
+      "forecast": 17.722,
+      "n": 55,
+      "observed": 18.313
+     },
+     {
+      "decile": 8,
+      "forecast": 18.438,
+      "n": 54,
+      "observed": 16.136
+     },
+     {
+      "decile": 9,
+      "forecast": 19.247,
+      "n": 55,
+      "observed": 16.785
+     },
+     {
+      "decile": 10,
+      "forecast": 21.082,
+      "n": 54,
+      "observed": 19.989
+     }
+    ],
+    "variant": "b06"
+   },
+   "rows": 544
+  },
+  "RB": {
+   "b00": {
+    "delta95": [
+     0.0,
+     0.0
+    ],
+    "deltaRmse": 0.0,
+    "mae": 7.7593,
+    "meanError": -0.1855,
+    "relativeDelta": 0.0,
+    "rmse": 9.7559,
+    "spearman": 0.2281
+   },
+   "b01": {
+    "delta95": [
+     0.09,
+     0.7558
+    ],
+    "deltaRmse": 0.4155,
+    "mae": 8.1113,
+    "meanError": -0.2249,
+    "relativeDelta": 0.04259,
+    "rmse": 10.1714,
+    "spearman": 0.1748
+   },
+   "b02": {
+    "delta95": [
+     0.1615,
+     0.7608
+    ],
+    "deltaRmse": 0.466,
+    "mae": 8.163,
+    "meanError": -0.4528,
+    "relativeDelta": 0.04776,
+    "rmse": 10.2219,
+    "spearman": 0.1639
+   },
+   "b02r": {
+    "delta95": [
+     0.1167,
+     0.7871
+    ],
+    "deltaRmse": 0.4539,
+    "mae": 8.1255,
+    "meanError": -0.2131,
+    "relativeDelta": 0.04652,
+    "rmse": 10.2097,
+    "spearman": 0.1668
+   },
+   "b03": {
+    "delta95": [
+     -0.1275,
+     0.0597
+    ],
+    "deltaRmse": -0.0349,
+    "mae": 7.7309,
+    "meanError": -0.1834,
+    "relativeDelta": -0.00357,
+    "rmse": 9.721,
+    "spearman": 0.2262
+   },
+   "b03r": {
+    "delta95": [
+     -0.1353,
+     0.0584
+    ],
+    "deltaRmse": -0.0396,
+    "mae": 7.7295,
+    "meanError": -0.1918,
+    "relativeDelta": -0.00406,
+    "rmse": 9.7162,
+    "spearman": 0.2297
+   },
+   "b04_k1": {
+    "delta95": [
+     -0.0048,
+     0.4745
+    ],
+    "deltaRmse": 0.2357,
+    "mae": 7.9396,
+    "meanError": -0.3252,
+    "relativeDelta": 0.02415,
+    "rmse": 9.9915,
+    "spearman": 0.1763
+   },
+   "b04_k128": {
+    "delta95": [
+     -0.0373,
+     0.0046
+    ],
+    "deltaRmse": -0.0164,
+    "mae": 7.7489,
+    "meanError": -0.1828,
+    "relativeDelta": -0.00168,
+    "rmse": 9.7395,
+    "spearman": 0.2318
+   },
+   "b04_k16": {
+    "delta95": [
+     -0.1341,
+     0.0727
+    ],
+    "deltaRmse": -0.0321,
+    "mae": 7.731,
+    "meanError": -0.185,
+    "relativeDelta": -0.00329,
+    "rmse": 9.7237,
+    "spearman": 0.2254
+   },
+   "b04_k2": {
+    "delta95": [
+     -0.0745,
+     0.3667
+    ],
+    "deltaRmse": 0.1453,
+    "mae": 7.8541,
+    "meanError": -0.2745,
+    "relativeDelta": 0.01489,
+    "rmse": 9.9011,
+    "spearman": 0.1866
+   },
+   "b04_k256": {
+    "delta95": [
+     -0.0201,
+     0.0018
+    ],
+    "deltaRmse": -0.0091,
+    "mae": 7.7538,
+    "meanError": -0.184,
+    "relativeDelta": -0.00094,
+    "rmse": 9.7467,
+    "spearman": 0.2299
+   },
+   "b04_k32": {
+    "delta95": [
+     -0.0999,
+     0.0309
+    ],
+    "deltaRmse": -0.0355,
+    "mae": 7.7326,
+    "meanError": -0.1809,
+    "relativeDelta": -0.00364,
+    "rmse": 9.7203,
+    "spearman": 0.2299
+   },
+   "b04_k4": {
+    "delta95": [
+     -0.1236,
+     0.2509
+    ],
+    "deltaRmse": 0.0604,
+    "mae": 7.7856,
+    "meanError": -0.2299,
+    "relativeDelta": 0.0062,
+    "rmse": 9.8163,
+    "spearman": 0.1986
+   },
+   "b04_k64": {
+    "delta95": [
+     -0.0642,
+     0.0122
+    ],
+    "deltaRmse": -0.0265,
+    "mae": 7.7409,
+    "meanError": -0.1814,
+    "relativeDelta": -0.00272,
+    "rmse": 9.7293,
+    "spearman": 0.2325
+   },
+   "b04_k8": {
+    "delta95": [
+     -0.1442,
+     0.1489
+    ],
+    "deltaRmse": -0.0019,
+    "mae": 7.7442,
+    "meanError": -0.1998,
+    "relativeDelta": -0.00019,
+    "rmse": 9.754,
+    "spearman": 0.2126
+   },
+   "b05_h2": {
+    "delta95": [
+     -0.1272,
+     -0.0144
+    ],
+    "deltaRmse": -0.0706,
+    "mae": 7.7049,
+    "meanError": -0.1346,
+    "relativeDelta": -0.00723,
+    "rmse": 9.6853,
+    "spearman": 0.2476
+   },
+   "b05_h4": {
+    "delta95": [
+     -0.1398,
+     0.006
+    ],
+    "deltaRmse": -0.0674,
+    "mae": 7.7074,
+    "meanError": -0.1376,
+    "relativeDelta": -0.00691,
+    "rmse": 9.6884,
+    "spearman": 0.2421
+   },
+   "b05_h8": {
+    "delta95": [
+     -0.1398,
+     0.03
+    ],
+    "deltaRmse": -0.0558,
+    "mae": 7.7148,
+    "meanError": -0.1524,
+    "relativeDelta": -0.00572,
+    "rmse": 9.7001,
+    "spearman": 0.2356
+   },
+   "b06": {
+    "delta95": [
+     -0.1578,
+     0.064
+    ],
+    "deltaRmse": -0.053,
+    "mae": 7.69,
+    "meanError": -0.1849,
+    "relativeDelta": -0.00544,
+    "rmse": 9.7028,
+    "spearman": 0.2351
+   },
+   "b07": {
+    "delta95": [
+     -0.0605,
+     0.0351
+    ],
+    "deltaRmse": -0.0114,
+    "mae": 7.7442,
+    "meanError": -0.2194,
+    "relativeDelta": -0.00117,
+    "rmse": 9.7445,
+    "spearman": 0.2246
+   },
+   "b09_lastopp": {
+    "delta95": [
+     -0.0611,
+     0.164
+    ],
+    "deltaRmse": 0.0513,
+    "mae": 7.7881,
+    "meanError": -0.178,
+    "relativeDelta": 0.00526,
+    "rmse": 9.8072,
+    "spearman": 0.2209
+   },
+   "b09_noise": {
+    "delta95": [
+     -0.0398,
+     0.1725
+    ],
+    "deltaRmse": 0.0645,
+    "mae": 7.8024,
+    "meanError": -0.1826,
+    "relativeDelta": 0.00661,
+    "rmse": 9.8203,
+    "spearman": 0.2085
+   },
+   "b09_shuffle": {
+    "delta95": [
+     -0.0857,
+     0.1123
+    ],
+    "deltaRmse": 0.0033,
+    "mae": 7.7683,
+    "meanError": -0.1834,
+    "relativeDelta": 0.00034,
+    "rmse": 9.7592,
+    "spearman": 0.2289
+   },
+   "blocks": 18,
+   "calibrationB00": [
+    {
+     "decile": 1,
+     "forecast": 17.961,
+     "n": 54,
+     "observed": 19.594
+    },
+    {
+     "decile": 2,
+     "forecast": 19.357,
+     "n": 54,
+     "observed": 19.871
+    },
+    {
+     "decile": 3,
+     "forecast": 20.143,
+     "n": 54,
+     "observed": 19.969
+    },
+    {
+     "decile": 4,
+     "forecast": 20.749,
+     "n": 55,
+     "observed": 21.045
+    },
+    {
+     "decile": 5,
+     "forecast": 21.341,
+     "n": 54,
+     "observed": 20.633
+    },
+    {
+     "decile": 6,
+     "forecast": 21.867,
+     "n": 54,
+     "observed": 21.111
+    },
+    {
+     "decile": 7,
+     "forecast": 22.573,
+     "n": 55,
+     "observed": 22.367
+    },
+    {
+     "decile": 8,
+     "forecast": 23.57,
+     "n": 54,
+     "observed": 22.494
+    },
+    {
+     "decile": 9,
+     "forecast": 24.686,
+     "n": 54,
+     "observed": 26.676
+    },
+    {
+     "decile": 10,
+     "forecast": 28.163,
+     "n": 54,
+     "observed": 28.51
+    }
+   ],
+   "focus": {
+    "byOpponentGames": {
+     "0-0": {
+      "deltaRmse": -0.2078,
+      "rows": 32
+     },
+     "1-3": {
+      "deltaRmse": -0.1206,
+      "rows": 96
+     },
+     "4-7": {
+      "deltaRmse": -0.0877,
+      "rows": 128
+     },
+     "8-17": {
+      "deltaRmse": -0.0063,
+      "rows": 286
+     }
+    },
+    "bySeason": {
+     "2025": {
+      "deltaRmse": -0.053,
+      "rows": 542
+     }
+    },
+    "byWeek": {
+     "1-4": {
+      "deltaRmse": -0.1345,
+      "rows": 127
+     },
+     "10-18": {
+      "deltaRmse": -0.0005,
+      "rows": 273
+     },
+     "5-9": {
+      "deltaRmse": -0.0938,
+      "rows": 142
+     }
+    },
+    "calibration": [
+     {
+      "decile": 1,
+      "forecast": 17.368,
+      "n": 54,
+      "observed": 18.715
+     },
+     {
+      "decile": 2,
+      "forecast": 18.971,
+      "n": 54,
+      "observed": 19.2
+     },
+     {
+      "decile": 3,
+      "forecast": 20.001,
+      "n": 54,
+      "observed": 22.546
+     },
+     {
+      "decile": 4,
+      "forecast": 20.833,
+      "n": 55,
+      "observed": 20.933
+     },
+     {
+      "decile": 5,
+      "forecast": 21.396,
+      "n": 54,
+      "observed": 19.202
+     },
+     {
+      "decile": 6,
+      "forecast": 22.037,
+      "n": 54,
+      "observed": 20.162
+     },
+     {
+      "decile": 7,
+      "forecast": 22.716,
+      "n": 55,
+      "observed": 23.702
+     },
+     {
+      "decile": 8,
+      "forecast": 23.643,
+      "n": 54,
+      "observed": 24.931
+     },
+     {
+      "decile": 9,
+      "forecast": 25.078,
+      "n": 54,
+      "observed": 23.15
+     },
+     {
+      "decile": 10,
+      "forecast": 28.371,
+      "n": 54,
+      "observed": 29.708
+     }
+    ],
+    "variant": "b06"
+   },
+   "rows": 542
+  },
+  "TE": {
+   "b00": {
+    "delta95": [
+     0.0,
+     0.0
+    ],
+    "deltaRmse": 0.0,
+    "mae": 6.4962,
+    "meanError": -0.5433,
+    "relativeDelta": 0.0,
+    "rmse": 8.3712,
+    "spearman": 0.1861
+   },
+   "b01": {
+    "delta95": [
+     0.0576,
+     0.8619
+    ],
+    "deltaRmse": 0.4201,
+    "mae": 6.8468,
+    "meanError": -0.5625,
+    "relativeDelta": 0.05019,
+    "rmse": 8.7914,
+    "spearman": 0.2009
+   },
+   "b02": {
+    "delta95": [
+     0.0312,
+     0.7501
+    ],
+    "deltaRmse": 0.3598,
+    "mae": 6.8656,
+    "meanError": -0.1142,
+    "relativeDelta": 0.04297,
+    "rmse": 8.731,
+    "spearman": 0.201
+   },
+   "b02r": {
+    "delta95": [
+     0.0555,
+     0.8464
+    ],
+    "deltaRmse": 0.409,
+    "mae": 6.8522,
+    "meanError": -0.5651,
+    "relativeDelta": 0.04886,
+    "rmse": 8.7802,
+    "spearman": 0.2041
+   },
+   "b03": {
+    "delta95": [
+     -0.0924,
+     -0.0138
+    ],
+    "deltaRmse": -0.0519,
+    "mae": 6.4757,
+    "meanError": -0.4454,
+    "relativeDelta": -0.0062,
+    "rmse": 8.3194,
+    "spearman": 0.2098
+   },
+   "b03r": {
+    "delta95": [
+     -0.0844,
+     -0.0067
+    ],
+    "deltaRmse": -0.044,
+    "mae": 6.4669,
+    "meanError": -0.5462,
+    "relativeDelta": -0.00526,
+    "rmse": 8.3272,
+    "spearman": 0.2096
+   },
+   "b04_k1": {
+    "delta95": [
+     -0.0707,
+     0.3551
+    ],
+    "deltaRmse": 0.1393,
+    "mae": 6.6868,
+    "meanError": -0.1306,
+    "relativeDelta": 0.01664,
+    "rmse": 8.5105,
+    "spearman": 0.2141
+   },
+   "b04_k128": {
+    "delta95": [
+     -0.0391,
+     -0.0094
+    ],
+    "deltaRmse": -0.0236,
+    "mae": 6.4852,
+    "meanError": -0.5061,
+    "relativeDelta": -0.00282,
+    "rmse": 8.3476,
+    "spearman": 0.1956
+   },
+   "b04_k16": {
+    "delta95": [
+     -0.1474,
+     0.0063
+    ],
+    "deltaRmse": -0.0693,
+    "mae": 6.4816,
+    "meanError": -0.3538,
+    "relativeDelta": -0.00828,
+    "rmse": 8.302,
+    "spearman": 0.2245
+   },
+   "b04_k2": {
+    "delta95": [
+     -0.1191,
+     0.2436
+    ],
+    "deltaRmse": 0.0591,
+    "mae": 6.6152,
+    "meanError": -0.1565,
+    "relativeDelta": 0.00706,
+    "rmse": 8.4303,
+    "spearman": 0.2215
+   },
+   "b04_k256": {
+    "delta95": [
+     -0.021,
+     -0.0055
+    ],
+    "deltaRmse": -0.0129,
+    "mae": 6.4891,
+    "meanError": -0.5239,
+    "relativeDelta": -0.00154,
+    "rmse": 8.3583,
+    "spearman": 0.1913
+   },
+   "b04_k32": {
+    "delta95": [
+     -0.1085,
+     -0.0126
+    ],
+    "deltaRmse": -0.0588,
+    "mae": 6.4764,
+    "meanError": -0.4239,
+    "relativeDelta": -0.00702,
+    "rmse": 8.3125,
+    "spearman": 0.2138
+   },
+   "b04_k4": {
+    "delta95": [
+     -0.1609,
+     0.1402
+    ],
+    "deltaRmse": -0.0109,
+    "mae": 6.556,
+    "meanError": -0.2048,
+    "relativeDelta": -0.0013,
+    "rmse": 8.3604,
+    "spearman": 0.226
+   },
+   "b04_k64": {
+    "delta95": [
+     -0.0687,
+     -0.0138
+    ],
+    "deltaRmse": -0.0399,
+    "mae": 6.4792,
+    "meanError": -0.4746,
+    "relativeDelta": -0.00477,
+    "rmse": 8.3313,
+    "spearman": 0.2032
+   },
+   "b04_k8": {
+    "delta95": [
+     -0.1704,
+     0.0566
+    ],
+    "deltaRmse": -0.0559,
+    "mae": 6.5043,
+    "meanError": -0.2748,
+    "relativeDelta": -0.00668,
+    "rmse": 8.3153,
+    "spearman": 0.2269
+   },
+   "b05_h2": {
+    "delta95": [
+     -0.0746,
+     -0.0102
+    ],
+    "deltaRmse": -0.0407,
+    "mae": 6.4827,
+    "meanError": -0.4801,
+    "relativeDelta": -0.00486,
+    "rmse": 8.3306,
+    "spearman": 0.2061
+   },
+   "b05_h4": {
+    "delta95": [
+     -0.0899,
+     -0.0122
+    ],
+    "deltaRmse": -0.0499,
+    "mae": 6.4777,
+    "meanError": -0.4561,
+    "relativeDelta": -0.00596,
+    "rmse": 8.3213,
+    "spearman": 0.2102
+   },
+   "b05_h8": {
+    "delta95": [
+     -0.0945,
+     -0.0123
+    ],
+    "deltaRmse": -0.0521,
+    "mae": 6.4756,
+    "meanError": -0.445,
+    "relativeDelta": -0.00623,
+    "rmse": 8.3191,
+    "spearman": 0.2116
+   },
+   "b06": {
+    "delta95": [
+     -0.1227,
+     -0.0148
+    ],
+    "deltaRmse": -0.0678,
+    "mae": 6.4721,
+    "meanError": -0.4454,
+    "relativeDelta": -0.0081,
+    "rmse": 8.3034,
+    "spearman": 0.2153
+   },
+   "b07": {
+    "delta95": [
+     -0.057,
+     -0.0023
+    ],
+    "deltaRmse": -0.0295,
+    "mae": 6.4794,
+    "meanError": -0.4992,
+    "relativeDelta": -0.00352,
+    "rmse": 8.3418,
+    "spearman": 0.1989
+   },
+   "b09_lastopp": {
+    "delta95": [
+     -0.0368,
+     0.034
+    ],
+    "deltaRmse": -0.0042,
+    "mae": 6.4988,
+    "meanError": -0.4443,
+    "relativeDelta": -0.0005,
+    "rmse": 8.367,
+    "spearman": 0.1909
+   },
+   "b09_noise": {
+    "delta95": [
+     -0.0945,
+     -0.0118
+    ],
+    "deltaRmse": -0.0546,
+    "mae": 6.457,
+    "meanError": -0.5079,
+    "relativeDelta": -0.00653,
+    "rmse": 8.3166,
+    "spearman": 0.205
+   },
+   "b09_shuffle": {
+    "delta95": [
+     -0.0465,
+     0.026
+    ],
+    "deltaRmse": -0.0144,
+    "mae": 6.497,
+    "meanError": -0.4454,
+    "relativeDelta": -0.00172,
+    "rmse": 8.3568,
+    "spearman": 0.1939
+   },
+   "blocks": 18,
+   "calibrationB00": [
+    {
+     "decile": 1,
+     "forecast": 8.869,
+     "n": 54,
+     "observed": 11.561
+    },
+    {
+     "decile": 2,
+     "forecast": 10.206,
+     "n": 54,
+     "observed": 12.648
+    },
+    {
+     "decile": 3,
+     "forecast": 10.823,
+     "n": 54,
+     "observed": 11.004
+    },
+    {
+     "decile": 4,
+     "forecast": 11.496,
+     "n": 55,
+     "observed": 11.0
+    },
+    {
+     "decile": 5,
+     "forecast": 12.143,
+     "n": 54,
+     "observed": 13.048
+    },
+    {
+     "decile": 6,
+     "forecast": 12.83,
+     "n": 54,
+     "observed": 13.548
+    },
+    {
+     "decile": 7,
+     "forecast": 13.647,
+     "n": 55,
+     "observed": 14.349
+    },
+    {
+     "decile": 8,
+     "forecast": 14.463,
+     "n": 54,
+     "observed": 13.899
+    },
+    {
+     "decile": 9,
+     "forecast": 15.444,
+     "n": 54,
+     "observed": 16.066
+    },
+    {
+     "decile": 10,
+     "forecast": 17.127,
+     "n": 54,
+     "observed": 15.376
+    }
+   ],
+   "focus": {
+    "byOpponentGames": {
+     "0-0": {
+      "deltaRmse": 0.0,
+      "rows": 32
+     },
+     "1-3": {
+      "deltaRmse": 0.0136,
+      "rows": 96
+     },
+     "4-7": {
+      "deltaRmse": -0.0597,
+      "rows": 128
+     },
+     "8-17": {
+      "deltaRmse": -0.03,
+      "rows": 286
+     }
+    },
+    "bySeason": {
+     "2025": {
+      "deltaRmse": -0.0295,
+      "rows": 542
+     }
+    },
+    "byWeek": {
+     "1-4": {
+      "deltaRmse": 0.0122,
+      "rows": 127
+     },
+     "10-18": {
+      "deltaRmse": -0.0214,
+      "rows": 273
+     },
+     "5-9": {
+      "deltaRmse": -0.0713,
+      "rows": 142
+     }
+    },
+    "calibration": [
+     {
+      "decile": 1,
+      "forecast": 8.877,
+      "n": 54,
+      "observed": 11.722
+     },
+     {
+      "decile": 2,
+      "forecast": 10.217,
+      "n": 54,
+      "observed": 11.12
+     },
+     {
+      "decile": 3,
+      "forecast": 10.846,
+      "n": 54,
+      "observed": 12.73
+     },
+     {
+      "decile": 4,
+      "forecast": 11.482,
+      "n": 55,
+      "observed": 11.529
+     },
+     {
+      "decile": 5,
+      "forecast": 12.17,
+      "n": 54,
+      "observed": 12.13
+     },
+     {
+      "decile": 6,
+      "forecast": 12.922,
+      "n": 54,
+      "observed": 12.665
+     },
+     {
+      "decile": 7,
+      "forecast": 13.69,
+      "n": 55,
+      "observed": 15.205
+     },
+     {
+      "decile": 8,
+      "forecast": 14.518,
+      "n": 54,
+      "observed": 13.599
+     },
+     {
+      "decile": 9,
+      "forecast": 15.487,
+      "n": 54,
+      "observed": 14.729
+     },
+     {
+      "decile": 10,
+      "forecast": 17.283,
+      "n": 54,
+      "observed": 17.044
+     }
+    ],
+    "variant": "b07"
+   },
+   "rows": 542
+  },
+  "WR": {
+   "b00": {
+    "delta95": [
+     0.0,
+     0.0
+    ],
+    "deltaRmse": 0.0,
+    "mae": 10.0941,
+    "meanError": 1.7196,
+    "relativeDelta": 0.0,
+    "rmse": 12.661,
+    "spearman": 0.3432
+   },
+   "b01": {
+    "delta95": [
+     0.281,
+     2.1555
+    ],
+    "deltaRmse": 1.0843,
+    "mae": 10.8673,
+    "meanError": 1.7323,
+    "relativeDelta": 0.08564,
+    "rmse": 13.7452,
+    "spearman": 0.2825
+   },
+   "b02": {
+    "delta95": [
+     0.0173,
+     2.3338
+    ],
+    "deltaRmse": 0.9896,
+    "mae": 10.6383,
+    "meanError": 0.6288,
+    "relativeDelta": 0.07817,
+    "rmse": 13.6506,
+    "spearman": 0.2933
+   },
+   "b02r": {
+    "delta95": [
+     0.1524,
+     2.1014
+    ],
+    "deltaRmse": 1.0115,
+    "mae": 10.801,
+    "meanError": 1.747,
+    "relativeDelta": 0.07989,
+    "rmse": 13.6724,
+    "spearman": 0.297
+   },
+   "b03": {
+    "delta95": [
+     -0.2153,
+     -0.0258
+    ],
+    "deltaRmse": -0.1134,
+    "mae": 9.9742,
+    "meanError": 1.4844,
+    "relativeDelta": -0.00895,
+    "rmse": 12.5476,
+    "spearman": 0.3674
+   },
+   "b03r": {
+    "delta95": [
+     -0.1688,
+     -0.006
+    ],
+    "deltaRmse": -0.0839,
+    "mae": 10.0167,
+    "meanError": 1.725,
+    "relativeDelta": -0.00663,
+    "rmse": 12.5771,
+    "spearman": 0.3677
+   },
+   "b04_k1": {
+    "delta95": [
+     -0.1204,
+     0.9751
+    ],
+    "deltaRmse": 0.3683,
+    "mae": 10.2908,
+    "meanError": 0.8203,
+    "relativeDelta": 0.02909,
+    "rmse": 13.0293,
+    "spearman": 0.3227
+   },
+   "b04_k128": {
+    "delta95": [
+     -0.0748,
+     -0.0155
+    ],
+    "deltaRmse": -0.043,
+    "mae": 10.0501,
+    "meanError": 1.6519,
+    "relativeDelta": -0.0034,
+    "rmse": 12.618,
+    "spearman": 0.3533
+   },
+   "b04_k16": {
+    "delta95": [
+     -0.2748,
+     -0.0026
+    ],
+    "deltaRmse": -0.1296,
+    "mae": 9.9572,
+    "meanError": 1.3699,
+    "relativeDelta": -0.01024,
+    "rmse": 12.5314,
+    "spearman": 0.3716
+   },
+   "b04_k2": {
+    "delta95": [
+     -0.2003,
+     0.5731
+    ],
+    "deltaRmse": 0.1612,
+    "mae": 10.1591,
+    "meanError": 0.9252,
+    "relativeDelta": 0.01273,
+    "rmse": 12.8221,
+    "spearman": 0.3407
+   },
+   "b04_k256": {
+    "delta95": [
+     -0.0403,
+     -0.0087
+    ],
+    "deltaRmse": -0.0234,
+    "mae": 10.0707,
+    "meanError": 1.6843,
+    "relativeDelta": -0.00185,
+    "rmse": 12.6375,
+    "spearman": 0.3486
+   },
+   "b04_k32": {
+    "delta95": [
+     -0.2038,
+     -0.0269
+    ],
+    "deltaRmse": -0.1087,
+    "mae": 9.979,
+    "meanError": 1.5012,
+    "relativeDelta": -0.00859,
+    "rmse": 12.5523,
+    "spearman": 0.3673
+   },
+   "b04_k4": {
+    "delta95": [
+     -0.2764,
+     0.2649
+    ],
+    "deltaRmse": -0.0053,
+    "mae": 10.0368,
+    "meanError": 1.059,
+    "relativeDelta": -0.00042,
+    "rmse": 12.6557,
+    "spearman": 0.3595
+   },
+   "b04_k64": {
+    "delta95": [
+     -0.1297,
+     -0.024
+    ],
+    "deltaRmse": -0.0731,
+    "mae": 10.0166,
+    "meanError": 1.5944,
+    "relativeDelta": -0.00577,
+    "rmse": 12.5879,
+    "spearman": 0.3598
+   },
+   "b04_k8": {
+    "delta95": [
+     -0.3077,
+     0.0826
+    ],
+    "deltaRmse": -0.1031,
+    "mae": 9.9736,
+    "meanError": 1.214,
+    "relativeDelta": -0.00814,
+    "rmse": 12.5579,
+    "spearman": 0.3721
+   },
+   "b05_h2": {
+    "delta95": [
+     -0.1379,
+     0.0183
+    ],
+    "deltaRmse": -0.0553,
+    "mae": 10.0469,
+    "meanError": 1.5478,
+    "relativeDelta": -0.00436,
+    "rmse": 12.6057,
+    "spearman": 0.3562
+   },
+   "b05_h4": {
+    "delta95": [
+     -0.1781,
+     -0.0009
+    ],
+    "deltaRmse": -0.0843,
+    "mae": 10.0133,
+    "meanError": 1.4981,
+    "relativeDelta": -0.00666,
+    "rmse": 12.5767,
+    "spearman": 0.3617
+   },
+   "b05_h8": {
+    "delta95": [
+     -0.2012,
+     -0.0161
+    ],
+    "deltaRmse": -0.102,
+    "mae": 9.9909,
+    "meanError": 1.4801,
+    "relativeDelta": -0.00805,
+    "rmse": 12.559,
+    "spearman": 0.3654
+   },
+   "b06": {
+    "delta95": [
+     -0.1893,
+     0.0339
+    ],
+    "deltaRmse": -0.073,
+    "mae": 10.0085,
+    "meanError": 1.4872,
+    "relativeDelta": -0.00577,
+    "rmse": 12.5879,
+    "spearman": 0.3581
+   },
+   "b07": {
+    "delta95": [
+     -0.1508,
+     -0.0085
+    ],
+    "deltaRmse": -0.0757,
+    "mae": 9.9983,
+    "meanError": 1.5117,
+    "relativeDelta": -0.00598,
+    "rmse": 12.5853,
+    "spearman": 0.3609
+   },
+   "b09_lastopp": {
+    "delta95": [
+     -0.0456,
+     0.14
+    ],
+    "deltaRmse": 0.0511,
+    "mae": 10.1262,
+    "meanError": 1.4826,
+    "relativeDelta": 0.00404,
+    "rmse": 12.7121,
+    "spearman": 0.3361
+   },
+   "b09_noise": {
+    "delta95": [
+     -0.045,
+     0.0881
+    ],
+    "deltaRmse": 0.0236,
+    "mae": 10.0992,
+    "meanError": 1.6994,
+    "relativeDelta": 0.00187,
+    "rmse": 12.6846,
+    "spearman": 0.3408
+   },
+   "b09_shuffle": {
+    "delta95": [
+     -0.0186,
+     0.1376
+    ],
+    "deltaRmse": 0.0581,
+    "mae": 10.1139,
+    "meanError": 1.4844,
+    "relativeDelta": 0.00459,
+    "rmse": 12.7191,
+    "spearman": 0.3294
+   },
+   "blocks": 18,
+   "calibrationB00": [
+    {
+     "decile": 1,
+     "forecast": 24.66,
+     "n": 54,
+     "observed": 22.137
+    },
+    {
+     "decile": 2,
+     "forecast": 27.539,
+     "n": 54,
+     "observed": 25.794
+    },
+    {
+     "decile": 3,
+     "forecast": 29.122,
+     "n": 54,
+     "observed": 28.289
+    },
+    {
+     "decile": 4,
+     "forecast": 30.213,
+     "n": 55,
+     "observed": 27.475
+    },
+    {
+     "decile": 5,
+     "forecast": 31.425,
+     "n": 54,
+     "observed": 30.456
+    },
+    {
+     "decile": 6,
+     "forecast": 33.104,
+     "n": 54,
+     "observed": 32.524
+    },
+    {
+     "decile": 7,
+     "forecast": 34.344,
+     "n": 55,
+     "observed": 34.44
+    },
+    {
+     "decile": 8,
+     "forecast": 35.718,
+     "n": 54,
+     "observed": 31.713
+    },
+    {
+     "decile": 9,
+     "forecast": 37.415,
+     "n": 54,
+     "observed": 36.335
+    },
+    {
+     "decile": 10,
+     "forecast": 40.55,
+     "n": 54,
+     "observed": 37.715
+    }
+   ],
+   "focus": {
+    "byOpponentGames": {
+     "0-0": {
+      "deltaRmse": -0.0097,
+      "rows": 32
+     },
+     "1-3": {
+      "deltaRmse": 0.121,
+      "rows": 96
+     },
+     "4-7": {
+      "deltaRmse": 0.0246,
+      "rows": 128
+     },
+     "8-17": {
+      "deltaRmse": -0.1977,
+      "rows": 286
+     }
+    },
+    "bySeason": {
+     "2025": {
+      "deltaRmse": -0.073,
+      "rows": 542
+     }
+    },
+    "byWeek": {
+     "1-4": {
+      "deltaRmse": 0.0886,
+      "rows": 127
+     },
+     "10-18": {
+      "deltaRmse": -0.2024,
+      "rows": 273
+     },
+     "5-9": {
+      "deltaRmse": 0.021,
+      "rows": 142
+     }
+    },
+    "calibration": [
+     {
+      "decile": 1,
+      "forecast": 24.084,
+      "n": 54,
+      "observed": 21.77
+     },
+     {
+      "decile": 2,
+      "forecast": 27.155,
+      "n": 54,
+      "observed": 26.47
+     },
+     {
+      "decile": 3,
+      "forecast": 28.772,
+      "n": 54,
+      "observed": 27.271
+     },
+     {
+      "decile": 4,
+      "forecast": 29.962,
+      "n": 55,
+      "observed": 28.518
+     },
+     {
+      "decile": 5,
+      "forecast": 31.439,
+      "n": 54,
+      "observed": 29.608
+     },
+     {
+      "decile": 6,
+      "forecast": 32.949,
+      "n": 54,
+      "observed": 33.869
+     },
+     {
+      "decile": 7,
+      "forecast": 34.14,
+      "n": 55,
+      "observed": 31.353
+     },
+     {
+      "decile": 8,
+      "forecast": 35.405,
+      "n": 54,
+      "observed": 32.9
+     },
+     {
+      "decile": 9,
+      "forecast": 37.203,
+      "n": 54,
+      "observed": 37.42
+     },
+     {
+      "decile": 10,
+      "forecast": 40.657,
+      "n": 54,
+      "observed": 37.737
+     }
+    ],
+    "variant": "b06"
+   },
+   "rows": 542
+  }
+ },
+ "seasons": [
+  2025
+ ],
+ "seed": 1729,
+ "sensitivity": {},
+ "stage": "holdout",
+ "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
+}

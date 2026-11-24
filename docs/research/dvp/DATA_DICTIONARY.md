@@ -72,6 +72,8 @@ Every scheduled 2016–2025 regular-season game:
 | `config/dvp/frozen-candidates.json` | The development selection (tuned k and half-life, best DvP variant, candidate per position), frozen before validation |
 | `artifacts/dvp/<audit run>/backtest-<stage>/forecasts.parquet` (ignored by git) | Every frozen forecast beside its label: keys, `feature_as_of`, `n_d` (the opponent's games before the cutoff), `b00` … `b09_*`, `points` |
 | `plots/backtest-delta.svg` | The best DvP variant against B00 by position and stage |
+| `backtest-holdout.json` | The 2025 conditional holdout: the same metrics, the frozen manifest's hash, and the decision per position and overall |
+| `config/dvp/frozen.json` | The frozen method (file hashes), inputs (audit run outputs, targets index), protocol, decision rule, the development and validation periods, and the prospective 2026 window |
 
 ## Sources added in Phase 2 ([provenance](SOURCE_PROVENANCE.md))
 

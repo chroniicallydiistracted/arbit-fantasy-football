@@ -625,12 +625,51 @@ def breakdown(joined: pl.DataFrame, name: str, column: str) -> dict[str, Any]:
     return dict(sorted(out.items()))
 
 
-def check_stage(stage: str, seasons: Sequence[int], split: Mapping[str, Sequence[int]]) -> None:
-    """Refuse a stage that would forecast outside its split. The holdout never runs from here:
-    Phase 4 needs a frozen manifest (spec §9, T18)."""
+def check_stage(
+    stage: str,
+    seasons: Sequence[int],
+    split: Mapping[str, Sequence[int]],
+    *,
+    frozen_verified: bool = False,
+) -> None:
+    """Refuse a stage that would forecast outside its split. The holdout runs only as the holdout
+    stage, after the frozen manifest has been verified against the files on disk (spec §9, T18)."""
     holdout = [s for s in seasons if s in split["holdout"]]
-    if holdout:
+    if holdout and not (stage == "holdout" and frozen_verified):
         raise ValueError(f"seasons {holdout} are the holdout and need a frozen manifest")
     outside = [s for s in seasons if s not in split[stage]]
     if outside:
         raise ValueError(f"seasons {outside} are not in the {stage} split")
+
+
+DECISIONS = ("PROMISING", "INCONCLUSIVE", "NOT_USEFUL", "BLOCKED")
+
+
+def decide(
+    candidate: str,
+    development: float | None,
+    validation: float | None,
+    holdout: float | None,
+    minimum: float,
+    *,
+    blocked: str | None = None,
+) -> dict[str, Any]:
+    """The predeclared Phase 4 rule (config/dvp/frozen.json) for one position. The arguments are
+    the best DvP variant's relative change in RMSE against B00 in each period.
+
+    - BLOCKED: an integrity check failed; never a scientific finding.
+    - PROMISING: the candidate is a DvP variant and it meets the practical minimum in development,
+      validation and the holdout.
+    - NOT_USEFUL: the best DvP variant misses the minimum in all three periods.
+    - INCONCLUSIVE: anything between."""
+    if blocked:
+        return {"label": "BLOCKED", "reason": blocked}
+    periods = {"development": development, "validation": validation, "holdout": holdout}
+    meets = {k: v is not None and v <= -minimum for k, v in periods.items()}
+    if candidate != "b00" and all(meets.values()):
+        label = "PROMISING"
+    elif not any(meets.values()):
+        label = "NOT_USEFUL"
+    else:
+        label = "INCONCLUSIVE"
+    return {"label": label, "meetsMinimum": meets}

@@ -248,3 +248,22 @@ def test_t13_forecasts_and_metrics_are_reproducible():
         .sort(keys)
         .equals(two.frame.drop("feature_as_of").sort(keys))
     )
+
+
+def test_t18_the_holdout_runs_only_as_a_verified_holdout_stage():
+    split = {"development": [2016], "validation": [2024], "holdout": [2025]}
+    with pytest.raises(ValueError, match="frozen manifest"):
+        wf.check_stage("holdout", [2025], split)
+    with pytest.raises(ValueError, match="frozen manifest"):
+        wf.check_stage("validation", [2025], split, frozen_verified=True)
+    assert wf.check_stage("holdout", [2025], split, frozen_verified=True) is None
+
+
+def test_phase4_decision_rule():
+    assert wf.decide("b06", -0.03, -0.06, -0.02, 0.01)["label"] == "PROMISING"
+    assert wf.decide("b06", -0.03, -0.06, -0.005, 0.01)["label"] == "INCONCLUSIVE"
+    assert wf.decide("b00", -0.008, 0.003, -0.002, 0.01)["label"] == "NOT_USEFUL"
+    assert wf.decide("b00", -0.008, -0.012, 0.001, 0.01)["label"] == "INCONCLUSIVE"
+    # A best DvP that meets the minimum everywhere but wasn't the frozen candidate isn't promoted.
+    assert wf.decide("b00", -0.02, -0.02, -0.02, 0.01)["label"] == "INCONCLUSIVE"
+    assert wf.decide("b06", None, None, None, 0.01, blocked="hash mismatch")["label"] == "BLOCKED"

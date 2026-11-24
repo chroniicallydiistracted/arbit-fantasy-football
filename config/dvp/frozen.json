@@ -1,0 +1,95 @@
+{
+ "auditOutputs": {
+  "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
+  "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
+ },
+ "auditRun": "phase1-audit-20261124T024442Z",
+ "code": "f75868b725795cb50ca71c20f80fd383f670669b",
+ "decisionRule": "Per position, with the best DvP variant's relative change in RMSE against B00 in development (2017-2023), validation (2024) and the holdout (2025): PROMISING if the frozen candidate is a DvP variant and it cuts RMSE by at least the practical minimum (1%) in all three periods; NOT_USEFUL if the best DvP variant misses the minimum in all three; INCONCLUSIVE otherwise; BLOCKED if an integrity check fails (frozen hashes, coverage, projection dependency). Globally: PROMISING with the positions that are; NOT_USEFUL if every position is; INCONCLUSIVE otherwise. A paired holdout interval that excludes 0 is reported as stronger evidence, not required.",
+ "forbidden_vendor_projection_dependencies": 0,
+ "format": "arbit-dvp-m3-3-frozen-v1",
+ "frozenAt": "2026-11-24T03:16:19.829107+00:00",
+ "holdout": {
+  "exposure": "v0 (2026-11-23) and Phase A (reliability lab) described 2016-2025, 2025 included, for repeatability only. No 2025 forecast was made or inspected, and no parameter was estimated on 2025: candidates came from development folds 2017-2023 and were frozen before the 2024 validation. The Phase B variant designs (a last-season prior, non-touchdown points) drew on Phase A's descriptive findings, which included 2025.",
+  "season": 2025,
+  "status": "CONDITIONALLY_HELD_OUT",
+  "trainingThrough": 2024
+ },
+ "method": {
+  "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+  "config/dvp/base.json": "26333daf50b09c4f85cfd35ab3a9680deb07a7663470c419c063a6df22dda2df",
+  "config/dvp/frozen-candidates.json": "2b2ce424bc7c61f732a8b1d59eb07d05340678019945bc96fa4e83735e50199e",
+  "libs/arbit-model/src/arbit_model/dvp/asof.py": "87a109f406d2cc8d2c59c1b41bea4d0b56f7fdd2fddbd82a468898546517c9c0",
+  "libs/arbit-model/src/arbit_model/dvp/lab.py": "3cfe315d1c80c847e31a2cc5b4614eb01975d122dc4c082c37b93e20149265c3",
+  "libs/arbit-model/src/arbit_model/dvp/observations.py": "6540b51a0cf12dada43edce9907349e588d0a0b26084065a047b53ea304ab1be",
+  "libs/arbit-model/src/arbit_model/dvp/provenance.py": "6189c7d7f4117284d79d237d6d798278b475a574125aeb6fb4b727ceedef3086",
+  "libs/arbit-model/src/arbit_model/dvp/reliability.py": "a57b3535eb8f8474c785b09dbbc50ad62119f2973b5ccac50fa6a49bbc460cba",
+  "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+  "libs/arbit-model/src/arbit_model/teams.py": "454c0ff7834504b3b736dfdf9e450ddf0fdadf08d540f7cb821805f7807ae6aa",
+  "scripts/model/dvp.py": "9c1ad50f73a49a7f29c6cf7a4a549f9438cb3e80c75735df85ad93b0189eb17a"
+ },
+ "periods": {
+  "DST": {
+   "bestDvp": "b06",
+   "candidate": "b06",
+   "development": -0.02985,
+   "validation": -0.06362
+  },
+  "K": {
+   "bestDvp": "b06",
+   "candidate": "b00",
+   "development": -0.00117,
+   "validation": -0.00039
+  },
+  "QB": {
+   "bestDvp": "b06",
+   "candidate": "b00",
+   "development": -0.0085,
+   "validation": 0.0026
+  },
+  "RB": {
+   "bestDvp": "b06",
+   "candidate": "b00",
+   "development": -0.00839,
+   "validation": -0.00845
+  },
+  "TE": {
+   "bestDvp": "b07",
+   "candidate": "b00",
+   "development": -0.00189,
+   "validation": -4e-05
+  },
+  "WR": {
+   "bestDvp": "b06",
+   "candidate": "b00",
+   "development": -0.00743,
+   "validation": 0.01207
+  }
+ },
+ "prospective": {
+  "firstKickoff": "2026-11-26T01:00:00+00:00",
+  "plan": "Forecast these weeks with this frozen method, each from the actuals available before its cutoff, once the season is complete and the targets are rebuilt; evaluate with the same protocol. Confirmatory, independent of every earlier season.",
+  "season": 2026,
+  "weeks": [
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18
+  ]
+ },
+ "protocol": {
+  "block": "week",
+  "bootstrapReplicates": 2000,
+  "metric": "RMSE per position on common rows, relative to B00",
+  "practicalMinimumRelativeRmse": 0.01,
+  "seed": 1729
+ },
+ "receipts": {
+  "development": "18e7bceb116401d39a4e0114607c2d1dfdbe82b707f31de0074654ff50564530",
+  "validation": "1131dfafeaf2bfe38af4faef62c1479fc4a2142ee02ee8fb8c86a92cf4e8d855"
+ },
+ "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
+}

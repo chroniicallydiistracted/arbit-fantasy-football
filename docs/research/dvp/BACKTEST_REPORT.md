@@ -78,6 +78,25 @@ In 2024, shrunk WR DvP (B03) was *worse* than B00 by 0.7% (0.2 to 1.2). For QB, 
 
 **Plot:** [backtest-delta.svg](plots/backtest-delta.svg).
 
+## Phase 4: the 2025 conditional holdout
+
+The method was frozen in [`config/dvp/frozen.json`](../../../config/dvp/frozen.json) at 2026-11-24 03:16 UTC, before 2025 was forecast. It holds the hashes of the method files, configs and candidates, the audit run's outputs, the protocol, and the decision rule. The holdout stage verified every hash before running (code `165d140`; receipt [backtest-holdout.json](backtest-holdout.json)). Parameters were fit on 2016–2024.
+
+| Group | Best DvP variant | 2025 change in RMSE (95%, week blocks) | Label |
+| --- | --- | --- | --- |
+| **D/ST** | B06 (the frozen candidate) | **−4.1% (−0.39 to −0.11 points)** | **PROMISING** |
+| QB | B06 | −1.1% (−0.15 to −0.02) | INCONCLUSIVE: meets 1% only in 2025 |
+| RB | B06 | −0.5% (−0.16 to +0.06) | NOT_USEFUL |
+| WR | B06 | −0.6% (−0.19 to +0.03) | NOT_USEFUL |
+| TE | B07 | −0.4% (−0.06 to −0.00) | NOT_USEFUL |
+| K | B06 | −0.3% (−0.03 to +0.00) | NOT_USEFUL |
+
+**Overall: PROMISING, for D/ST only.**
+- **Status:** `CONDITIONALLY_HELD_OUT`. v0 and Phase A described 2025, but no 2025 forecast or parameter entered selection.
+- **Placebos in 2025:** they give no uplift except one. The noise term improved TE by 0.65%, a reminder that sub-1% changes arise by chance.
+- **Confirmation:** independent confirmation is the prospective 2026 window ([PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)).
+- **Model card:** [MODEL_CARD.md](MODEL_CARD.md).
+
 ## What the variants teach
 
 - **Shrinkage is the whole story.** Unshrunk DvP, whether a raw "points allowed" ranking (B01) or a residual (B02), makes QB-to-K forecasts 7–8% worse in development and 6–13% worse in 2024. For D/ST it is 4% worse in development and about even in 2024. A defense's season-to-date average is mostly noise, as Phase 2 found (k 20–50 games). Using it at face value hurts.
@@ -116,7 +135,7 @@ In 2024, shrunk WR DvP (B03) was *worse* than B00 by 0.7% (0.2 to 1.2). For QB, 
 | Method and metrics committed before evaluation | Yes: B00 and metrics in METHODOLOGY.md; practical minimum in the config before any forecast; candidates frozen before validation |
 | Leakage tests | T15–T20, T22, T24 and T25 pass on synthetic seasons; T13 and B11 pass |
 | `forbidden_vendor_projection_dependencies` | 0 |
-| 2025 exposure | Seen descriptively by v0 and Phase A. No 2025 forecast has been made or inspected, and no parameter was fit on it. Phase 4 can use it only as `CONDITIONALLY_HELD_OUT`, from `frozen-candidates.json` |
+| 2025 exposure | Seen descriptively by v0 and Phase A. No 2025 forecast was made or inspected before the freeze, and no parameter was fit on it. Phase 4 then used it as `CONDITIONALLY_HELD_OUT` (above) |
 
 ## Where this points (no production decision is made here)
 
