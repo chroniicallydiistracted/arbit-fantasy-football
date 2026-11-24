@@ -3,8 +3,8 @@
   "id": "TASK-20261124-003",
   "title": "M3-3 DvP Phase 4: frozen manifest, 2025 conditional holdout, decisions, model card, prospective 2026 freeze",
   "objective": "Phase 4 of the owner's DvP specification (OWN-074). Freeze the Phase 3 method in a manifest (code and config hashes, frozen candidates, audit run, evaluation protocol and predeclared decision rules) before 2025 is forecast; a holdout stage that refuses to run unless every frozen hash matches; evaluate the frozen candidates (D/ST B06, B00 elsewhere, plus each position's best DvP for information) on 2025 as CONDITIONALLY_HELD_OUT with parameters fit through 2024; label each position and the whole PROMISING, INCONCLUSIVE, NOT_USEFUL or BLOCKED by the predeclared rule; write MODEL_CARD.md and a prospective 2026 freeze for confirmation on games completed after it. Research only: no weight, service or production change; any production use needs the owner.",
-  "status": "active",
-  "phase": "implement",
+  "status": "completed",
+  "phase": "handoff",
   "change_class": "model",
   "requirements": [
     "MD-002",
@@ -35,9 +35,9 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-24T03:13:59Z",
-  "updated_at": "2026-11-24T03:14:27Z",
+  "updated_at": "2026-11-24T03:21:40Z",
   "baseline": "09cde9099b0cc3697fc5a3a21a8d8419e2da7c63",
-  "next_action": "Record implement evidence",
+  "next_action": "Merge PR #10 (Phase 3) and this Phase 4 PR (branch claude/m3-dvp-phase4). DvP research then waits for the 2026 regular season to end: rebuild targets with 2026, add a prospective stage that verifies the frozen method hashes against the new targets, score 2026 weeks 12-18 (PROSPECTIVE_2026.md). Meanwhile resume M3 slices 3c-3e and weather W1.",
   "sections": {
     "review": {
       "summary": "Read the specification's Phase 4 (frozen manifest, CONDITIONALLY_HELD_OUT labeling, prospective confirmation, decision labels per position and globally) and section 12, the Phase 3 receipts and frozen candidates, and the stage guard. 2025 exposure: descriptive only (v0 and Phase A used 2016-2025 for repeatability); no 2025 forecast, outcome or parameter entered model selection, which used development folds 2017-2023 and was confirmed on 2024.",
@@ -57,23 +57,313 @@
       ]
     },
     "implementation": {
-      "summary": "",
-      "files": []
+      "summary": "walkforward: check_stage admits the holdout only as a verified holdout stage; decide() applies the predeclared rule. dvp.py: freeze (method and config hashes, audit outputs, targets index, protocol, decision rule, periods, prospective window from the schedule; refuses uncommitted code and mismatched candidates); backtest --stage holdout (verifies every frozen hash first, coverage check, decisions per position and overall); registry record M3-3-HOLDOUT-2025; report plot with all three periods. Runs: freeze at f75868b (2026-11-24 03:16 UTC, prospective 2026 weeks 12-18), holdout at 165d140 (all hashes verified), report and registry afterwards (dvp.py changed only in registry and plot order after the holdout).",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+        "libs/arbit-model/tests/test_dvp_walkforward.py",
+        "scripts/model/dvp.py",
+        "config/dvp/frozen.json",
+        "config/dvp/backtest.json"
+      ]
     },
     "validation": {
-      "summary": "",
-      "files": []
+      "summary": "Checks: foundation, model tests (125), point-in-time, ruff check and format, mypy, the full Python suite: all exit 0. Holdout guard tests: holdout refused without a verified manifest and outside the holdout stage (T18); decision rule unit-tested for every label. The holdout receipt records the frozen manifest hash (1ef59583) and code 165d140; every frozen hash was verified before forecasting; coverage complete (3,256 forecasts = every valid 2025 cell). Freeze cross-checked the candidates against the development receipt and the validation receipt's candidates hash. Model card and report numbers checked against the receipt (one overstatement about unshrunk D/ST corrected).",
+      "files": [
+        "libs/arbit-model/tests/test_dvp_walkforward.py",
+        "docs/research/dvp/backtest-holdout.json",
+        "config/dvp/frozen.json"
+      ]
     },
     "documentation": {
-      "summary": "",
-      "files": []
+      "summary": "MODEL_CARD.md, PROSPECTIVE_2026.md, BACKTEST_REPORT.md (Phase 4 section), README, EXPERIMENT_REGISTRY.md, DATA_DICTIONARY.md, backtest plot; decision register ENG-061; status, changelog, M3 plan.",
+      "files": [
+        "docs/research/dvp/MODEL_CARD.md",
+        "docs/research/dvp/PROSPECTIVE_2026.md",
+        "docs/research/dvp/BACKTEST_REPORT.md",
+        "docs/research/dvp/README.md",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+        "docs/research/dvp/DATA_DICTIONARY.md",
+        "docs/project/decision-register.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/superpowers/plans/2026-11-09-m3-model.md"
+      ]
     },
     "handoff": {
-      "path": null,
-      "next_action": "",
-      "unresolved": ""
+      "path": "docs/project/handoffs/2026-11-24-task-20261124-003-governance-handoff.md",
+      "next_action": "Merge PR #10 (Phase 3) and this Phase 4 PR (branch claude/m3-dvp-phase4). DvP research then waits for the 2026 regular season to end: rebuild targets with 2026, add a prospective stage that verifies the frozen method hashes against the new targets, score 2026 weeks 12-18 (PROSPECTIVE_2026.md). Meanwhile resume M3 slices 3c-3e and weather W1.",
+      "unresolved": "Production use of the D/ST term needs the owner's approval after prospective confirmation. feature_specs DvP constants are still v0's. NWS User-Agent contact still needed before weather W3."
     }
   },
-  "checks": [],
-  "journal": []
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-24T03:18:47Z",
+      "exit_code": 0,
+      "duration_seconds": 0.165,
+      "stdout_stderr_sha256": "56a3a2e481f4fc5ede809b4fe9c4bc8e5a3974114c415aa9efdd149a57b4ba0b",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-24T03:19:38Z",
+      "exit_code": 0,
+      "duration_seconds": 50.406,
+      "stdout_stderr_sha256": "67757b3cb1c026cad85974573c1b93e38f8a35131bbb055739a93f26c1067b6f",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-24T03:19:40Z",
+      "exit_code": 0,
+      "duration_seconds": 1.714,
+      "stdout_stderr_sha256": "1aed7ba9461f6031dc638c64f5d433d6a8ba71caa1d00b11698780fafd5a7f86",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "lint",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "at": "2026-11-24T03:19:40Z",
+      "exit_code": 0,
+      "duration_seconds": 0.053,
+      "stdout_stderr_sha256": "e83204db783718300b1d1f1af1f60eb1a350f4140d5c653994fb67bc65273b1d",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "format",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "at": "2026-11-24T03:19:40Z",
+      "exit_code": 0,
+      "duration_seconds": 0.054,
+      "stdout_stderr_sha256": "1b1cee5ee82fdde072764580fe64fa8a6ebbc86621afb47e2edab178da1ca138",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "types",
+      "argv": [
+        "uv",
+        "run",
+        "mypy",
+        "libs/arbit-model/src",
+        "scripts/model/dvp.py"
+      ],
+      "at": "2026-11-24T03:19:41Z",
+      "exit_code": 0,
+      "duration_seconds": 0.749,
+      "stdout_stderr_sha256": "bfe68eeda4b395a659102ac01a1d7cc8c48c5a2ea08ac09714f9ce1731a87089",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    },
+    {
+      "name": "python-suite",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "at": "2026-11-24T03:21:27Z",
+      "exit_code": 0,
+      "duration_seconds": 106.318,
+      "stdout_stderr_sha256": "07b69af150eab65c8b8a90997255e902f92f741627048a9af59355a49e343c77",
+      "git_head": "277c3adce4f570bd904d303f9694de2a69973425",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py": "220fe19d6e985cabf315ff89415c7b7557c53c0228e8f4c26073651d67c2d117",
+        "libs/arbit-model/tests/test_dvp_walkforward.py": "920f8f9626f340b7fcd0571efb3c591f864711b5c9889f59222353b3d8eda360",
+        "scripts/model/dvp.py": "1f25363050d9545ee898417dd5ca992583f1d3e6117eb0f99330a9c174885f9c",
+        "config/dvp/frozen.json": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+        "config/dvp/backtest.json": "b083e3f6cc13b500096cf8b09ab63ac1cf16b0184c1668e3ac8ec07f8cdfb486",
+        "docs/research/dvp/backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+        "docs/research/dvp/MODEL_CARD.md": "33f55df3a0938357952d58b99b46347d800fba27954a91ed606f8f8ccd90663b",
+        "docs/research/dvp/PROSPECTIVE_2026.md": "8aad44c14eb2df1197e293b5147464c596c94ffb51b4a94164ace8990a7f0cc9",
+        "docs/research/dvp/BACKTEST_REPORT.md": "06de6a805b1038c89e78711ff63d799d3bb5cc394af4d089d9e1fc4af1482e7f",
+        "docs/research/dvp/README.md": "daa29cc92fccfd66df99c97fc1d743cdc9134b5291660e01d8a946fb370514f8",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "3c006e12a5bc14d09253fac5404f0ff0daa720adceec5a5ca0c8cd60337dfc5b",
+        "docs/research/dvp/experiment-registry.json": "8865bf7e43eea95773d150cc0bb190c2705dd02420d14edec9053e48cedfae95",
+        "docs/research/dvp/DATA_DICTIONARY.md": "edb644dd90ce07b12516b2df09f340653d16a448eb1e7eb3e9b9bc527e8efd5c",
+        "docs/research/dvp/plots/backtest-delta.svg": "70eda646096c699534dc67056a1f127de1f226735e34b3d6052ac851ed28ea2d",
+        "docs/project/status.md": "2ab3b3271b3e9a99b679d579c5b847e3ddd85ee4470d3a40bea6beca85fed7b8",
+        "docs/project/changelog.md": "898bff5279518473998cfd08f3cbeaed1ccafb74769f92fd6c09606a6e9f6c27",
+        "docs/project/decision-register.md": "ec635262896277427c35f6250a09a732191d4f614eab0cd2319482d6694ddd93",
+        "docs/superpowers/plans/2026-11-09-m3-model.md": "57b3f4fe475b06c835ea1ff44bc248737b71662d37f858606202dbd02064ee8b",
+        "docs/governance/state.json": "DYNAMIC-STATE"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-24T03:21:39Z",
+      "kind": "observation",
+      "note": "2025 conditional holdout: D/ST B06 -4.1% RMSE (interval excludes 0) -> PROMISING; QB best DvP -1.1% only in 2025 -> INCONCLUSIVE; RB, WR, TE, K NOT_USEFUL. A 2025 noise placebo improved TE by 0.65%: sub-1% changes arise by chance.",
+      "evidence": "docs/research/dvp/backtest-holdout.json"
+    },
+    {
+      "at": "2026-11-24T03:21:40Z",
+      "kind": "correction",
+      "note": "scripts/model/dvp.py changed after the holdout run (registry record and plot ordering only), so its hash no longer matches config/dvp/frozen.json; the holdout ran at 165d140 with every hash verified, and a re-run or the prospective scoring must use the frozen commit (f75868b) for the method files.",
+      "evidence": "config/dvp/frozen.json"
+    },
+    {
+      "at": "2026-11-24T03:21:40Z",
+      "kind": "question",
+      "note": "Owner decision after the prospective 2026 window: whether a D/ST opponent term (B06, k about 8, last-season prior) may enter the Sit/Start model as a weighted contribution (OWN-074 requires approval).",
+      "evidence": "docs/research/dvp/MODEL_CARD.md"
+    }
+  ],
+  "closed_at": "2026-11-24T03:21:40Z"
 }
