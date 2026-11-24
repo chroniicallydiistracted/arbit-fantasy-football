@@ -12,6 +12,21 @@ Specification §2.1, §3.1, T30–T33, T37, T40. Receipt: [PROJECTION_EXCLUSION_
 - It also proves a set of specific contaminations stop the run: unknown columns, unknown sources or source types, wrong scoring hashes, forbidden or unknown values inside permitted columns, and corrupted store objects.
 - It does not prove resistance to every possible contamination. A wrong value that looks exactly like a legitimate FFA actual (the right type, hash, status and timing) would not be detected by lineage checks; only recomputing it from the statistics, as T30 does at audit time, catches that.
 
+## Realized statistics for opportunity and efficiency (owner audit AUD-02, TASK-20261124-008)
+
+`provenance.py` is frozen, so the two statistics sources enter through a versioned allowlist, `arbit_model.dvp.opportunity.SOURCES_V2`. Its `admit_realized` applies the same rules:
+- known source and the realized-statistics type;
+- ancestry;
+- every column classified by the field catalog, with excluded columns dropped and recorded;
+- unknown columns refused;
+- used columns present;
+- row values known.
+
+| Source | Type | Used columns | Ancestry | Dropped |
+| --- | --- | --- | --- | --- |
+| `nflverse.stats_player` | REALIZED_NFL_STAT | game, season, week, season type, team, player, position, attempts, sacks suffered, carries, targets, receptions, FG and PAT attempts | The `stats_player_week_<season>` manifest each season's FFA targets were built from (index `6ffb62fb…`); bytes re-hashed | `fantasy_points`, `fantasy_points_ppr` (catalog rule generic-fantasy-points) |
+| `nflverse.stats_team` | REALIZED_NFL_STAT | game, season, week, season type, team, attempts, sacks suffered, carries, interceptions thrown, fumbles lost | The pinned `stats_team_week_<season>` manifest | None |
+
 ## Enforcement at use (owner audit AUD-04, TASK-20261124-007)
 
 Admission checks a source when it enters. The same lineage is checked again wherever observations are fit, forecast or decided on:

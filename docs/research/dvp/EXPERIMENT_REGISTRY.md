@@ -43,6 +43,8 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | M3-3-V2-DECOUPLED | EXECUTED, EXPLORATORY | Owner audit AUD-05: development, 2024 and 2025 through separate stages (schedule targets, contract-checked features, forecast-only outputs persisted before labels, keep-every-target join, coverage). Frozen variants reproduce v1 exactly on valid rows | [EXPLORATORY_V2.md](EXPLORATORY_V2.md), `explore-v2.json` |
 | M3-3-V2-B05W | EXECUTED, EXPLORATORY | Owner audit AUD-03: rolling 3-, 5- and 8-game residual windows with REML-k shrinkage. Shorter windows are worse; none beats B03 or B06 | Same |
 | M3-3-V2-B03SH | EXECUTED, EXPLORATORY | Owner audit AUD-03: B03 with v0's split-half k fit on training seasons only. Forecasts about as well as REML k | Same |
+| M3-3-V3-A09VE | EXECUTED, EXPLORATORY | Owner audit AUD-02: volume allowed and efficiency allowed, REML k with season intervals. The repeatable part is volume for RB, WR and K, and efficiency for D/ST | [OPPORTUNITY_EFFICIENCY.md](OPPORTUNITY_EFFICIENCY.md), `explore-v3.json` |
+| M3-3-V3-B07VE | EXECUTED, EXPLORATORY | Owner audit AUD-02: volume channel, efficiency channel and both, against B00, B03, B06 and the retained non-touchdown B07. Nothing crosses 1% outside D/ST; for D/ST, B06 stays best | Same |
 | M3-3-PROSPECTIVE-2026 | PENDING_FUTURE_DATA | Weeks 12–18 archived before each kickoff (week 12 done 2026-11-24 23:12 UTC); evaluated after the games | [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) |
 
 **Phase C covers D/ST only.** The specification starts Phase C only after a credible group-level signal. QB (INCONCLUSIVE) and RB, WR, TE and K (NOT_USEFUL) don't have one, so they were not run. That is the gate, not a finding about players.

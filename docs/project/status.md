@@ -20,7 +20,8 @@
   - the tunnel was restarted;
   - the database was backed up first, and no migration was pending.
 - **On `main` since PR #14 (`4708bde`):** owner audit remediation 1, the DvP prospective harness (TASK-20261124-006). Offline research.
-- **Not yet on `main`:** owner audit remediations 3–5 (TASK-20261124-007, branch `claude/m3-dvp-remediation-345`). Offline research.
+- **On `main` since PR #15 (`7e227ba`):** owner audit remediations 3–5 (TASK-20261124-007). Offline research.
+- **Not yet on `main`:** owner audit remediation 2, opportunity and efficiency (TASK-20261124-008, branch `claude/m3-dvp-opportunity`). Offline research.
 
 **Owner's independent DvP audit (2026-11-24; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md)):** seven findings, AUD-01 to AUD-07, with remediations 1–7.
 - **Remediation 1 (AUD-01), done in TASK-20261124-006 ([procedure](../research/dvp/PROSPECTIVE_2026.md), ENG-063):** the 2026 weeks 12–18 confirmation is now truly prospective. Forecasts are archived before each week's kickoff and evaluated after the games.
@@ -31,7 +32,11 @@
   - **Remediation 4:** the row contract and store-byte checks wherever observations are fit, forecast or decided on, with contamination fixtures inside permitted columns.
   - **Remediation 5:** historical stages decoupled. The frozen variants reproduce v1 exactly on valid rows, and the refused-label cells are now forecast and reported.
   - **Remediation 3:** rolling 3/5/8-game windows and split-half k, all exploratory. Shorter windows are worse, split-half k matches REML, and nothing beats the frozen candidates.
-- **Still open:** remediation 2 (opportunity and efficiency, A09/B07), remediation 6 (the simulation suite, AUD-06), the threshold wording (AUD-07), remediation 7 (the rebuilt plan audit) and the research eligibility metadata.
+- **Remediation 2 (AUD-02), done in TASK-20261124-008 ([report](../research/dvp/OPPORTUNITY_EFFICIENCY.md), ENG-065):**
+  - **Data:** player and team statistics admitted through a versioned admission and reconciled exactly (5,278 of 5,278 team-games).
+  - **Reliability:** volume allowed repeats faster than points for RB, WR and K. Per-play efficiency carries the whole D/ST signal.
+  - **Forecasting (exploratory):** no channel crosses 1% outside D/ST, and for D/ST B06 stays best. K's volume channel beats B03 in every period and B06 in 2024 and 2025, but only by 0.1–0.5%.
+- **Still open:** remediation 6 (the simulation suite, AUD-06), the threshold wording (AUD-07), remediation 7 (the rebuilt plan audit) and the research eligibility metadata.
 - **Repaired:** moving the specification into `docs/research/dvp` had broken four links, the audit's path and a task record, so `main` CI was red.
 
 **DvP plan completion audit (2026-11-24, TASK-20261124-005; [scope document](../research/dvp/PLAN_COMPLETION_SCOPE.md)):** every action item of the owner's specification, checked against rerun evidence.

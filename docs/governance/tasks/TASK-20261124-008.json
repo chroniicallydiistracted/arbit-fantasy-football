@@ -1,0 +1,451 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-008",
+  "title": "M3-3 DvP audit remediation 2: opportunity volume and scoring efficiency (A09, B07 extensions)",
+  "objective": "Owner audit AUD-02. Admit nflverse player and team statistics (the exact files the FFA targets were built from) through a versioned admission with the firewall's rules and field catalog; build per team-game-position opportunity volume (QB dropbacks and carries, RB carries and targets, WR/TE targets, K FG and PAT attempts, D/ST opponent plays) with receptions and D/ST sack and turnover counts; reconcile player volumes with team totals and points with volumes; report coverage, true zeros, missing and invalid cells; measure volume and efficiency allowed reliability separately (REML k, season-cluster intervals) and their duplication; add actual-history-only forward predictors (volume channel, efficiency channel, both) through the exploratory hook, compared with B00, B03, B06 and the retained non-touchdown B07 on common rows; all EXPLORATORY, declared in config before results, never changing frozen candidates.",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/dvp/opportunity.py",
+    "libs/arbit-model/src/arbit_model/dvp/explore.py",
+    "scripts/model/dvp_explore.py",
+    "scripts/model/dvp.py",
+    "config/dvp/explore-v3.json",
+    "libs/arbit-model/tests/test_dvp_opportunity.py",
+    "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md",
+    "docs/research/dvp/explore-v3.json",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/SOURCE_PROVENANCE.md",
+    "docs/research/dvp/METHODOLOGY.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/project/decision-register.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T23:42:54Z",
+  "updated_at": "2026-11-24T23:53:45Z",
+  "baseline": "7e227ba74fc256e0714eae4865cc100a7fcb696c",
+  "next_action": "Merge the PR for TASK-20261124-008 (branch claude/m3-dvp-opportunity). Owner decision pending on the prospective sweep timer. Next: remediation 7 (rebuild dvp_plan_audit.py and PLAN_COMPLETION_SCOPE.md with COMPLETE_VERIFIED/PARTIAL/BLOCKED_EXTERNAL/PENDING_FUTURE_DATA/NOT_APPLICABLE/DEFERRED_APPROVAL/NOT_IMPLEMENTED/FAILED, per-variant per-position per-stage validation, test coverage complete vs partial) and research eligibility metadata; AUD-06/AUD-07 as the owner directs.",
+  "sections": {
+    "review": {
+      "summary": "AUD-02: A09 split points by scoring rule only; B07 used non-touchdown points; true volume was called unavailable. Arbit already holds it: gamebook.OPPORTUNITY_COLUMNS (attempts, carries, targets, fg_att, pat_att), team_features opps_pg, feature_specs opp_dvp_<pos>_opps_pg. nflverse stats_player and stats_team carry every needed count with no nulls in 2016-2025, and the field catalog classifies them as history (generic fantasy points excluded). The frozen provenance allowlist has no stats source and provenance.py is frozen, so a versioned admission with the same rules is needed. Each season's FFA targets manifest pins the exact stats files used.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/gamebook.py",
+        "libs/arbit-model/src/arbit_model/team_features.py",
+        "libs/arbit-model/src/arbit_model/feature_specs.py",
+        "libs/arbit-model/src/arbit_model/fields.py",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py"
+      ]
+    },
+    "plan": {
+      "summary": "1) arbit_model.dvp.opportunity: versioned admission (admit_realized) with the firewall's rules; volume per cell (QB dropbacks + carries, RB carries + targets, WR/TE targets, K FG + PAT attempts, D/ST the offense's plays) with components; cells with missing/zero/ok status and ratio efficiency; reconciliation of player sums with team statistics; coverage; REML reliability of points, volume and efficiency allowed with season-cluster intervals and their correlation. 2) explore.make_opportunity_extra: volume channel b07v, efficiency channel b07e, both b07ve, training-only k, ratio-of-sums efficiency with a league pseudo-volume prior; explore.compose. 3) dvp_explore.py: --config version, opportunity command, composed hooks, B07 comparison and term correlations. 4) config/dvp/explore-v3.json declared before results. 5) Tests. 6) Recorded run, OPPORTUNITY_EFFICIENCY.md, records.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py",
+        "scripts/model/dvp_explore.py",
+        "config/dvp/explore-v3.json",
+        "libs/arbit-model/tests/test_dvp_opportunity.py"
+      ]
+    },
+    "implementation": {
+      "summary": "opportunity.py (SOURCES_V2, admit_realized, player_volumes, dst_volumes, cells with missing/zero/ok status and ratio efficiency, reconcile, coverage, unit_frame, reliability); explore.py (opportunity_parameters with training-only REML k, make_opportunity_extra for b07v/b07e/b07ve, compose); dvp_explore.py (--config version, opportunity command reading the pinned stats manifests with bytes re-hashed, composed hooks, B07 comparison, term correlations, opportunity summary in the receipt); config/dvp/explore-v3.json declared first; SCANNED gains opportunity.py. Recorded run run-20261124-ef59e6f at ef59e6f: reconciliation 5,278/5,278, v1 reproduced on valid rows; receipt docs/research/dvp/explore-v3.json.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py",
+        "scripts/model/dvp_explore.py",
+        "scripts/model/dvp.py",
+        "config/dvp/explore-v3.json",
+        "docs/research/dvp/explore-v3.json",
+        "libs/arbit-model/tests/test_dvp_opportunity.py"
+      ]
+    },
+    "validation": {
+      "summary": "Governance checks on the final tree, all exit 0: foundation, model-tests (211 with ARBIT_DVP_AUDIT_RUN; 7 new opportunity tests incl. planted-trait recovery and pure-noise non-reward), point-in-time, lint, format, types, python-suite. Real data at ef59e6f: admission dropped fantasy_points and fantasy_points_ppr and admitted 2016-2025 stats from the pinned manifests; player sums equal team statistics in 5,278 of 5,278 team-games; all 43 cells without a statistics row have 0 points; frozen variants still reproduce v1 on valid rows; every number in OPPORTUNITY_EFFICIENCY.md checked against explore-v3.json (two drafted claims corrected: K's volume channel ties B06 in development; term correlations range wider).",
+      "files": [
+        "docs/research/dvp/explore-v3.json",
+        "libs/arbit-model/tests/test_dvp_opportunity.py"
+      ]
+    },
+    "documentation": {
+      "summary": "OPPORTUNITY_EFFICIENCY.md (data, admission, reconciliation, coverage, reliability, forecasting, findings, comparison with original results, possible future tests); SOURCE_PROVENANCE.md (realized statistics through the versioned allowlist); METHODOLOGY.md; EXPERIMENT_REGISTRY.md (V3 rows); README (status, documents, commands); ENG-065; status; changelog; state.json next action.",
+      "files": [
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md",
+        "docs/research/dvp/SOURCE_PROVENANCE.md",
+        "docs/research/dvp/METHODOLOGY.md",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+        "docs/research/dvp/README.md",
+        "docs/project/decision-register.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/governance/state.json"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md",
+      "next_action": "Merge the PR for TASK-20261124-008 (branch claude/m3-dvp-opportunity). Owner decision pending on the prospective sweep timer. Next: remediation 7 (rebuild dvp_plan_audit.py and PLAN_COMPLETION_SCOPE.md with COMPLETE_VERIFIED/PARTIAL/BLOCKED_EXTERNAL/PENDING_FUTURE_DATA/NOT_APPLICABLE/DEFERRED_APPROVAL/NOT_IMPLEMENTED/FAILED, per-variant per-position per-stage validation, test coverage complete vs partial) and research eligibility metadata; AUD-06/AUD-07 as the owner directs.",
+      "unresolved": "Remediation 6 (simulation suite, AUD-06), AUD-07 threshold wording, remediation 7 and eligibility metadata are open; the committed plan-audit receipt is from db0d802; the prospective timer awaits owner approval."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-24T23:51:51Z",
+      "exit_code": 0,
+      "duration_seconds": 0.16,
+      "stdout_stderr_sha256": "6682b49cd350113d3c1bf51eb0adadd82dea524bc56503f66f4aade0931f5e8d",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-24T23:52:04Z",
+      "exit_code": 0,
+      "duration_seconds": 13.513,
+      "stdout_stderr_sha256": "9697903e1813d30fb9578f4418116dcc433db825b022085ef46168df1b01af2b",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-24T23:52:06Z",
+      "exit_code": 0,
+      "duration_seconds": 1.597,
+      "stdout_stderr_sha256": "33a7644ae9ddc91317f923451765cd3af70226d9ce4b0541a717cc23c970c414",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "lint",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "at": "2026-11-24T23:52:06Z",
+      "exit_code": 0,
+      "duration_seconds": 0.042,
+      "stdout_stderr_sha256": "98733c3446b52dc3e6b6943142b19a142025d9727521f6abc3783a20e4b6d3c6",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "format",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "at": "2026-11-24T23:52:06Z",
+      "exit_code": 0,
+      "duration_seconds": 0.034,
+      "stdout_stderr_sha256": "4005a3baef41e1147158243a5f95a933f558f473d17d288b6610d0488113c185",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "types",
+      "argv": [
+        "uv",
+        "run",
+        "mypy",
+        "libs/arbit-model/src",
+        "scripts/model/dvp.py",
+        "scripts/model/dvp_plan_audit.py",
+        "scripts/model/dvp_prospective.py",
+        "scripts/model/dvp_explore.py"
+      ],
+      "at": "2026-11-24T23:52:06Z",
+      "exit_code": 0,
+      "duration_seconds": 0.19,
+      "stdout_stderr_sha256": "b3429aa44ddb9f8cd6d195c59088566d18eacf7d37a41d57a8c574445f6a4851",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "python-suite",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "at": "2026-11-24T23:53:14Z",
+      "exit_code": 0,
+      "duration_seconds": 67.129,
+      "stdout_stderr_sha256": "ff216a5168975f4b5999d79a1c7a8bbdbbb9de16ac8da253206c1d4ac70e461e",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-24T23:53:26Z",
+      "exit_code": 0,
+      "duration_seconds": 0.167,
+      "stdout_stderr_sha256": "d768a48be947af0fb775ebccecf62eff7118713d6e4cbbf95f15273334b39381",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "b985b36cf168bf36ebb0814ea13c5b2f9b68782d652363c2c436bef3f7c02758"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-24T23:53:39Z",
+      "exit_code": 0,
+      "duration_seconds": 13.537,
+      "stdout_stderr_sha256": "6d7983efdc3af4730afd92418f9a3f4f743141ca1db6add14f21e3d000dd00c5",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "b985b36cf168bf36ebb0814ea13c5b2f9b68782d652363c2c436bef3f7c02758"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-24T23:53:41Z",
+      "exit_code": 0,
+      "duration_seconds": 1.419,
+      "stdout_stderr_sha256": "95dc2f821ef5cf420f4825da139911387631dc1df9d1d3f5fe8c8350002f6c34",
+      "git_head": "ef59e6f7ce615a8866bc0b21a43ede1fe074c8b1",
+      "scope_sha256": {
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py": "15329cf875b82c48a7da5f678f82bf4d3e7bf97a8b6a603689f3d9476e756369",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py": "deaad3a87f280229514b3ff81af4afb5190728f6c47c8a8e954f01794622f93a",
+        "scripts/model/dvp_explore.py": "6e8fd2e576fee8971ce14e0937cfa6ec33218f30526bcb56c3796ac329873ac7",
+        "scripts/model/dvp.py": "754e7e57837aaadd9570abd95057b94b945587089d5c0f398bee1d2b796b973c",
+        "config/dvp/explore-v3.json": "efe8357ac90e2c69c8fc03981511244e3f66e044efe85441f98c460f8cda28a6",
+        "libs/arbit-model/tests/test_dvp_opportunity.py": "2b3b42f44edc088cddfe69c9db47fb78f065a50373f7e3ebbecb92638c525474",
+        "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md": "7783a4ddc527568b91f51516e65374f9ee2fedcb76c8568af37ecac35ad3fdab",
+        "docs/research/dvp/explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+        "docs/research/dvp/README.md": "e3a92780e788840fbd12dabd48d332eef8663397af1234a57bffee2b54d640c6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "e4a8f1342c4f166c48e0f0ad4ed2f47a6b0c0d29340457031287df3c94be2cda",
+        "docs/research/dvp/SOURCE_PROVENANCE.md": "fd2d10fa7c9553279be651e67ad6ec62be0a8b77dba3a7f515ee52e59fc60a06",
+        "docs/research/dvp/METHODOLOGY.md": "4c510fe0115e6b7c38ec9b620113ac2eed213a7b15b8223bc93b6a9a1b991746",
+        "docs/project/status.md": "b62ee8312369ac00f1d7b8c996cebcdf99ac7c928c55e2fc6a3e21dd0eae19b1",
+        "docs/project/changelog.md": "46e5dd91714096115ad0415550c50931693ca6050c34bbc01d683983ac54c707",
+        "docs/project/decision-register.md": "83c0b4592dacbf945a3945b489d88ee1e93bfb5ff1d89503d95295762798d959",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md": "b985b36cf168bf36ebb0814ea13c5b2f9b68782d652363c2c436bef3f7c02758"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-24T23:53:45Z",
+      "kind": "correction",
+      "note": "Two claims in the first draft of OPPORTUNITY_EFFICIENCY.md were wrong and corrected against explore-v3.json before commit: K's volume channel does not beat B06 in development (-0.11% vs -0.12%; it does in 2024 and 2025), and the opportunity terms' correlation with B03 outside D/ST spans 0.14 to 0.9, not 0.4 to 0.85.",
+      "evidence": "docs/research/dvp/explore-v3.json"
+    },
+    {
+      "at": "2026-11-24T23:53:45Z",
+      "kind": "observation",
+      "note": "Opportunity data was never missing: nflverse stats_player/stats_team hold every count for 2016-2025 with no nulls, player sums equal team statistics in all 5,278 team-games. The earlier 'not yet admitted' note described the allowlist, not the data.",
+      "evidence": "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md"
+    }
+  ],
+  "closed_at": "2026-11-24T23:53:45Z"
+}
