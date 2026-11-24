@@ -317,7 +317,7 @@
    "status": "PASSED"
   }
  },
- "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
+ "code": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
  "examples": {
   "dstTurnover": {
    "dst": "JAX",
@@ -489,7 +489,7 @@
   }
  },
  "format": "arbit-dvp-m3-3-audit-v1",
- "generatedAt": "2026-11-24T02:19:10.066310+00:00",
+ "generatedAt": "2026-11-24T02:44:42.219387+00:00",
  "positions": {
   "leagueLineupSlots": [
    "QB",
@@ -745,9 +745,9 @@
   "teamGames": 5278,
   "teamGamesWithoutMirror": 0
  },
- "runId": "phase1-audit-20261124T021910Z",
+ "runId": "phase1-audit-20261124T024442Z",
  "runManifest": {
-  "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
+  "code": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
   "command": "audit",
   "config": {
    "path": "config/dvp/base.json",
@@ -758,9 +758,9 @@
    "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
    "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
   },
-  "runId": "phase1-audit-20261124T021910Z",
+  "runId": "phase1-audit-20261124T024442Z",
   "scheduleManifest": "f7cfa1af1ab7038d07e6a723202b62112303e6c4d82e0ea9d7cab6bd917f070d",
-  "startedAt": "2026-11-24T02:19:10.066310+00:00",
+  "startedAt": "2026-11-24T02:44:42.219387+00:00",
   "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
  },
  "validCellsByPosition": {

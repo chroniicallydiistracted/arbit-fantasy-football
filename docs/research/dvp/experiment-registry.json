@@ -82,7 +82,7 @@
    "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": "bc414a01e05f28ef937751c74c474c8cdf526ef8+uncommitted",
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": {
     "DST_adjusted": 100.0,
     "DST_raw": 100.0,
@@ -348,7 +348,7 @@
    "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": "bc414a01e05f28ef937751c74c474c8cdf526ef8",
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
    "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
@@ -408,354 +408,1076 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "descriptive statistics per position; per-season Spearman of raw vs adjusted ranks",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A00",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Raw DvP landscape: distributions, team means, within-team spread, raw vs adjusted ranks",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Raw DvP landscape: distributions, unit-season spread and raw vs adjusted ranks",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "cells": 5278,
+     "mean": 5.853,
+     "rankSpearmanMean": 0.9793,
+     "sd": 6.635,
+     "skew": 0.521,
+     "unitSeasonMeanSd": 2.766,
+     "withinUnitSeasonSd": 6.103
+    },
+    "K": {
+     "cells": 5264,
+     "mean": 7.768,
+     "rankSpearmanMean": 0.9574,
+     "sd": 4.581,
+     "skew": 0.522,
+     "unitSeasonMeanSd": 1.295,
+     "withinUnitSeasonSd": 4.455
+    },
+    "QB": {
+     "cells": 5278,
+     "mean": 16.579,
+     "rankSpearmanMean": 0.939,
+     "sd": 7.837,
+     "skew": 0.392,
+     "unitSeasonMeanSd": 2.38,
+     "withinUnitSeasonSd": 7.561
+    },
+    "RB": {
+     "cells": 5265,
+     "mean": 23.068,
+     "rankSpearmanMean": 0.9317,
+     "sd": 10.167,
+     "skew": 0.844,
+     "unitSeasonMeanSd": 3.321,
+     "withinUnitSeasonSd": 9.674
+    },
+    "TE": {
+     "cells": 5264,
+     "mean": 12.4,
+     "rankSpearmanMean": 0.9044,
+     "sd": 8.303,
+     "skew": 1.022,
+     "unitSeasonMeanSd": 2.424,
+     "withinUnitSeasonSd": 7.979
+    },
+    "WR": {
+     "cells": 5261,
+     "mean": 33.673,
+     "rankSpearmanMean": 0.8976,
+     "sd": 14.027,
+     "skew": 0.527,
+     "unitSeasonMeanSd": 4.296,
+     "withinUnitSeasonSd": 13.556
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": 5278,
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T03",
+    "T04"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "split-half r and k for odd/even weeks, alternating games, first vs second half, first 6 vs next 6, home vs away and 1,000 seeded balanced random splits",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A02",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Split-method sensitivity: alternating games, halves, 6+6, seeded random balanced splits",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Split-method sensitivity of the repeatability estimate",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "alternating": 7.36,
+     "calendar": 8.74,
+     "chronological": 8.48,
+     "first6_next6": 6.36,
+     "home_away": 6.2,
+     "randomMedian": 7.2506
+    },
+    "K": {
+     "alternating": 35.95,
+     "calendar": 48.86,
+     "chronological": 71.4,
+     "first6_next6": 54.41,
+     "home_away": 49.36,
+     "randomMedian": 49.5508
+    },
+    "QB": {
+     "alternating": 19.31,
+     "calendar": 22.23,
+     "chronological": 45.21,
+     "first6_next6": 51.18,
+     "home_away": 33.46,
+     "randomMedian": 24.2485
+    },
+    "RB": {
+     "alternating": 20.3,
+     "calendar": 21.03,
+     "chronological": 26.28,
+     "first6_next6": 24.17,
+     "home_away": 15.39,
+     "randomMedian": 19.2533
+    },
+    "TE": {
+     "alternating": 39.92,
+     "calendar": 42.07,
+     "chronological": 69.55,
+     "first6_next6": 31.74,
+     "home_away": 25.9,
+     "randomMedian": 36.9091
+    },
+    "WR": {
+     "alternating": 22.78,
+     "calendar": 42.36,
+     "chronological": 38.26,
+     "first6_next6": 27.98,
+     "home_away": 33.49,
+     "randomMedian": 26.7654
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T09",
+    "T10",
+    "T13"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "odd/even k and REML k for none, season-centered, leave-one-out mean, leave-one-out median and leave-one-out mean shrunk toward the season mean",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A03",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Opponent-adjustment sensitivity: none, leave-one-out, robust median, strength-adjusted",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Opponent-adjustment sensitivity of repeatability",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "loo_mean": 7.23,
+     "loo_median": 7.46,
+     "loo_shrunk": 7.22,
+     "none": 7.32,
+     "season": 7.73
+    },
+    "K": {
+     "loo_mean": 50.51,
+     "loo_median": 48.43,
+     "loo_shrunk": 52.31,
+     "none": 47.98,
+     "season": 57.81
+    },
+    "QB": {
+     "loo_mean": 24.22,
+     "loo_median": 24.82,
+     "loo_shrunk": 25.58,
+     "none": 29.13,
+     "season": 38.28
+    },
+    "RB": {
+     "loo_mean": 19.48,
+     "loo_median": 19.77,
+     "loo_shrunk": 19.27,
+     "none": 19.53,
+     "season": 22.85
+    },
+    "TE": {
+     "loo_mean": 37.43,
+     "loo_median": 34.51,
+     "loo_shrunk": 36.34,
+     "none": 37.69,
+     "season": 42.85
+    },
+    "WR": {
+     "loo_mean": 26.69,
+     "loo_median": 27.29,
+     "loo_shrunk": 28.06,
+     "none": 27.83,
+     "season": 48.61
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T08"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "odd/even k by era with season-bootstrap intervals; joint season bootstrap of which position's k is lower",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A04",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Position-specific sample stability by game count and era, with intervals",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Position-specific stability by era and half size, with joint orderings",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "eras": {
+     "DST": {
+      "2016-2020": 9.15,
+      "2021-2025": 8.32
+     },
+     "K": {
+      "2016-2020": 78.46,
+      "2021-2025": 35.12
+     },
+     "QB": {
+      "2016-2020": 23.61,
+      "2021-2025": 20.48
+     },
+     "RB": {
+      "2016-2020": 16.52,
+      "2021-2025": 26.97
+     },
+     "TE": {
+      "2016-2020": 32.62,
+      "2021-2025": 49.31
+     },
+     "WR": {
+      "2016-2020": 33.04,
+      "2021-2025": 54.15
+     }
+    },
+    "pKLower": {
+     "DST<K": 1.0,
+     "DST<QB": 1.0,
+     "DST<RB": 0.998,
+     "DST<TE": 1.0,
+     "DST<WR": 1.0,
+     "K<QB": 0.0341,
+     "K<RB": 0.0402,
+     "K<TE": 0.373,
+     "K<WR": 0.4158,
+     "QB<RB": 0.461,
+     "QB<TE": 0.8946,
+     "QB<WR": 0.9211,
+     "RB<TE": 0.9187,
+     "RB<WR": 0.8902,
+     "TE<WR": 0.4977
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T13"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "one-way random effects by unit-season: method of moments and REML, season-cluster bootstrap of the REML k",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A05",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Variance components (tau2, sigma2, season effects) with unequal game counts vs v0 k",
-   "interval": null,
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Variance components with each unit's own game count, compared with v0's k",
+   "interval": {
+    "DST": [
+     6.0326,
+     8.5747
+    ],
+    "K": [
+     33.1966,
+     101.4751
+    ],
+    "QB": [
+     16.2266,
+     42.3465
+    ],
+    "RB": [
+     15.8406,
+     26.8884
+    ],
+    "TE": [
+     23.0074,
+     96.7246
+    ],
+    "WR": [
+     17.8411,
+     58.3388
+    ]
+   },
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "remlK": {
+     "DST": 7.23,
+     "K": 50.51,
+     "QB": 24.22,
+     "RB": 19.48,
+     "TE": 37.43,
+     "WR": 26.69
+    },
+    "remlK95Seasons": {
+     "DST": [
+      6.0326,
+      8.5747
+     ],
+     "K": [
+      33.1966,
+      101.4751
+     ],
+     "QB": [
+      16.2266,
+      42.3465
+     ],
+     "RB": [
+      15.8406,
+      26.8884
+     ],
+     "TE": [
+      23.0074,
+      96.7246
+     ],
+     "WR": [
+      17.8411,
+      58.3388
+     ]
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T11",
+    "T12",
+    "T14"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "odd/even minus first-vs-second-half r with a paired season bootstrap; covariance by weeks apart; rolling-window correlations against the stable-trait model",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A06",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Temporal stability: first vs second half, decay with weeks apart, rolling windows",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Temporal stability within a season",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "difference": -0.0076,
+     "interval95": [
+      -0.0892,
+      0.0818
+     ]
+    },
+    "K": {
+     "difference": 0.0408,
+     "interval95": [
+      -0.0656,
+      0.1285
+     ]
+    },
+    "QB": {
+     "difference": 0.1164,
+     "interval95": [
+      0.0192,
+      0.2013
+     ]
+    },
+    "RB": {
+     "difference": 0.0428,
+     "interval95": [
+      -0.0674,
+      0.153
+     ]
+    },
+    "TE": {
+     "difference": 0.0578,
+     "interval95": [
+      -0.0466,
+      0.1645
+     ]
+    },
+    "WR": {
+     "difference": -0.0143,
+     "interval95": [
+      -0.0878,
+      0.0588
+     ]
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T23"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "same-franchise consecutive-season means (8+ games): r, slope and leave-one-season-out error of a decayed prior against a reset",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A07",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Between-season carryover of a defense's tendency, with relocations",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Between-season carryover of a unit's tendency",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "cvMseDecay": 6.3788,
+     "cvMseReset": 7.5512,
+     "pearson": 0.399,
+     "pearson95": [
+      0.33,
+      0.4669
+     ],
+     "slope": 0.3966
+    },
+    "K": {
+     "cvMseDecay": 1.6441,
+     "cvMseReset": 1.6739,
+     "pearson": 0.1429,
+     "pearson95": [
+      0.0783,
+      0.2032
+     ],
+     "slope": 0.1458
+    },
+    "QB": {
+     "cvMseDecay": 5.2146,
+     "cvMseReset": 5.6389,
+     "pearson": 0.2876,
+     "pearson95": [
+      0.176,
+      0.4
+     ],
+     "slope": 0.298
+    },
+    "RB": {
+     "cvMseDecay": 9.407,
+     "cvMseReset": 10.16,
+     "pearson": 0.2791,
+     "pearson95": [
+      0.1852,
+      0.3611
+     ],
+     "slope": 0.2777
+    },
+    "TE": {
+     "cvMseDecay": 4.6733,
+     "cvMseReset": 4.7747,
+     "pearson": 0.1583,
+     "pearson95": [
+      0.0822,
+      0.2293
+     ],
+     "slope": 0.1566
+    },
+    "WR": {
+     "cvMseDecay": 15.0721,
+     "cvMseReset": 15.703,
+     "pearson": 0.2275,
+     "pearson95": [
+      0.1095,
+      0.3411
+     ],
+     "slope": 0.229
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": null,
-   "train_validation_test_periods": null,
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "1,000 within-week permutations of unit labels; Holm across 12 tests; unit, season and franchise cluster bootstraps",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A08",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Noise, placebo and null distributions; clustered and iid bootstrap",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Noise, placebo and null distributions",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
-   "placebo_summary": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "adjusted": 0.001,
+     "raw": 0.001
+    },
+    "K": {
+     "adjusted": 0.00599,
+     "raw": 0.00899
+    },
+    "QB": {
+     "adjusted": 0.001,
+     "raw": 0.001
+    },
+    "RB": {
+     "adjusted": 0.001,
+     "raw": 0.001
+    },
+    "TE": {
+     "adjusted": 0.002,
+     "raw": 0.003
+    },
+    "WR": {
+     "adjusted": 0.001,
+     "raw": 0.07692
+    }
+   },
+   "placebo_summary": {
+    "adjusted": {
+     "DST_adjusted": 0.012,
+     "DST_raw": 0.012,
+     "K_adjusted": 0.01797,
+     "K_raw": 0.01798,
+     "QB_adjusted": 0.012,
+     "QB_raw": 0.012,
+     "RB_adjusted": 0.012,
+     "RB_raw": 0.012,
+     "TE_adjusted": 0.012,
+     "TE_raw": 0.012,
+     "WR_adjusted": 0.012,
+     "WR_raw": 0.07692
+    },
+    "family": 12
+   },
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T13",
+    "T24"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "the scorer's rule contributions summed per cell; variance share and REML k per component",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A09",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Volume vs efficiency vs touchdowns: which part of DvP repeats",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Which part of the points repeats: yards, receptions, touchdowns, turnovers, kicking",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "points_allowed_tier": 7.8,
+     "return_td": 106.77,
+     "sacks": 10.08,
+     "takeaways": 43.23,
+     "yards_allowed_tier": 8.03
+    },
+    "K": {
+     "extra_points": 29.92,
+     "field_goals": 163.73
+    },
+    "QB": {
+     "pass_td": 74.21,
+     "pass_yards": 28.05,
+     "rush_td": 83149.04,
+     "rush_yards": null,
+     "turnovers": 57.73
+    },
+    "RB": {
+     "rec_td": 850.21,
+     "rec_yards": 42.68,
+     "receptions": 32.45,
+     "rush_td": 40.77,
+     "rush_yards": 13.5
+    },
+    "TE": {
+     "rec_td": 179.8,
+     "rec_yards": 48.32,
+     "receptions": 44.39
+    },
+    "WR": {
+     "rec_td": 182.26,
+     "rec_yards": 40.17,
+     "receptions": 37.81
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": null,
-   "train_validation_test_periods": null,
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "odd/even k excluding 2020 or 2022, leaving out each season, winsorized, trimmed, without the largest cell; jackknife influence; home/away; after a bye",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A10",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Era robustness: 16 vs 17 games, leave-one-season-out, trimming, home/away, rest",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Era and data robustness, and one unit's influence",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "DST": {
+     "kMax": 9.19,
+     "kMin": 8.41,
+     "pearsonMax": 0.4942,
+     "pearsonMin": 0.472
+    },
+    "K": {
+     "kMax": 69.91,
+     "kMin": 35.24,
+     "pearsonMax": 0.1897,
+     "pearsonMin": 0.105
+    },
+    "QB": {
+     "kMax": 27.65,
+     "kMin": 18.69,
+     "pearsonMax": 0.3069,
+     "pearsonMin": 0.2303
+    },
+    "RB": {
+     "kMax": 26.18,
+     "kMin": 17.35,
+     "pearsonMax": 0.3224,
+     "pearsonMin": 0.2397
+    },
+    "TE": {
+     "kMax": 55.63,
+     "kMin": 33.73,
+     "pearsonMax": 0.1955,
+     "pearsonMin": 0.1284
+    },
+    "WR": {
+     "kMax": 62.36,
+     "kMin": 33.01,
+     "pearsonMax": 0.1988,
+     "pearsonMin": 0.1161
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": null,
+   "tests_passed": [
+    "T28"
+   ],
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "retrospective description over full seasons; the same-season leave-one-out adjustment uses later games, so it is never a forecast",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "refused-line cells excluded vs kept as partial sums; 2026 FFA points as first held vs latest through the point-in-time gamebooks",
+   "evidence_paths": [
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md"
+   ],
    "experiment_id": "M3-3-A12",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Completion and correction sensitivity of r, k and coverage",
+   "holdout_independence_status": "2025 used descriptively (v0); not an untouched holdout",
+   "hypothesis": "Completion and correction sensitivity",
    "interval": null,
-   "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "limitations": [
+    "Arbit's nflverse vintages start 2026-10-31 and miss 2026-11-10 to 11-22, so games of weeks 1-7 and 10 were first held long after their corrections; their change is a lower bound. Seasons 2016-2025 have only final revisions."
+   ],
+   "next_steps": "Phase B walk-forward against the offense-only B00",
+   "parameters": {
+    "refusal": {
+     "DST": {
+      "excluded": 8.74,
+      "partialSums": 8.74
+     },
+     "K": {
+      "excluded": 48.86,
+      "partialSums": 49.95
+     },
+     "QB": {
+      "excluded": 22.23,
+      "partialSums": 22.23
+     },
+     "RB": {
+      "excluded": 21.03,
+      "partialSums": 20.84
+     },
+     "TE": {
+      "excluded": 42.07,
+      "partialSums": 41.33
+     },
+     "WR": {
+      "excluded": 42.36,
+      "partialSums": 44.4
+     }
+    },
+    "vintages2026": {
+     "DST": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     },
+     "K": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     },
+     "QB": {
+      "cells": 316,
+      "changeVariance": 1e-05,
+      "changed": 1,
+      "maxAbsChange": 0.04,
+      "meanAbsChange": 0.0001
+     },
+     "RB": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     },
+     "TE": {
+      "cells": 316,
+      "changeVariance": 3e-05,
+      "changed": 1,
+      "maxAbsChange": 0.1,
+      "meanAbsChange": 0.0003
+     },
+     "WR": {
+      "cells": 316,
+      "changeVariance": 0.0,
+      "changed": 0,
+      "maxAbsChange": 0.0,
+      "meanAbsChange": 0.0
+     }
+    }
+   },
    "placebo_summary": null,
    "primary_metric": null,
-   "reason": null,
+   "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "DST": 320,
+    "K": 320,
+    "QB": 320,
+    "RB": 320,
+    "TE": 320,
+    "WR": 320
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": null,
-   "train_validation_test_periods": null,
+   "train_validation_test_periods": {
+    "descriptive": "2016-2025 regular seasons"
+   },
    "workstream_id": "M3-3"
   },
   {

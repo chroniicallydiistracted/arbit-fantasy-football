@@ -9,7 +9,8 @@
 - **On `main` since PR #5 (`cace69c`):** the columnar reader and timing order (TASK-20261123-002) and game-day availability (TASK-20261123-003).
 - **On `main` since PR #6 (`b3c0a9a`, merged 2026-11-23 as the frozen v0 baseline the owner's DvP specification preserves):** M3 slice 3b, team environment and defense against the position (TASK-20261123-004). It runs in no service.
 - **On `main` since PR #7 (`9a7c0b1`):** the DvP research, phases 0-1 (TASK-20261123-005 and -006). Offline research; it runs in no service.
-- **Not yet on `main`:** the R-072 repair and rebuilt FFA targets (TASK-20261123-007, branch `claude/r072-franchise-codes`). The research store's current pointer already names the rebuilt index `6ffb62fb…`; no service reads it.
+- **On `main` since PR #8 (`efff624`):** the R-072 repair and rebuilt FFA targets (TASK-20261123-007). The research store's current pointer names the rebuilt index `6ffb62fb…`; no service reads it.
+- **Not yet on `main`:** DvP Phase 2, the reliability lab (TASK-20261124-001, branch `claude/m3-dvp-phase2`). Offline research.
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
@@ -60,8 +61,17 @@
   - v0 still reproduces exactly on its own index.
 - **R-074 fixed:** gamebooks read regular-season games only.
 
+**DvP Phase 2, the reliability lab (2026-11-24, TASK-20261124-001, ENG-059; [report](../research/dvp/RELIABILITY_REPORT.md)):** A00, A02-A10 and A12 on the repaired observations, reproducible to the byte.
+- **D/ST conceded is the one strong, stable tendency:** REML k 7.2 (6.0-8.6). It is flat within seasons and carries into the next.
+- **The other groups:** RB 19.5, QB 24.2 (drifts within a season), WR 26.7, TE 37.4, K 50.5.
+  - v0's WR 44 was an unlucky odd/even split.
+  - The order among WR, TE and K isn't established.
+- **The offense dominates:** its own production at a position settles in 4-7 games, so a result says three to seven times more about the offense than about the defense.
+- **What repeats:** yards and receptions allowed; touchdowns allowed to WRs and TEs don't.
+- **Next:** Phase 3, the walk-forward. B00 and the metrics are declared in the [methodology](../research/dvp/METHODOLOGY.md).
+
 **Open work, in order** (owner direction 2026-11-22):
-1. DvP Phase 2 (reliability lab) and Phase 3 (walk-forward), per OWN-074; M3 slice 3c–3e: availability and role (on `arbit_model.availability`), efficiency and priors, and the Q-014 note; the 3b follow-up for play-by-play rates. Weather W1 (venue table and forecast record) runs beside it.
+1. DvP Phase 3 (walk-forward against the offense-only B00), per OWN-074; M3 slice 3c–3e: availability and role (on `arbit_model.availability`), efficiency and priors, and the Q-014 note; the 3b follow-up for play-by-play rates. Weather W1 (venue table and forecast record) runs beside it.
 2. M3 slices 4–6.
 3. M4 sit/start (OWN-068), weather W2–W6, the Q-014 study and ablation.
 

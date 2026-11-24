@@ -1,0 +1,35 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='720' height='262' viewBox='0 0 720 262' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Season-to-next-season correlation of a unit&#x27;s adjusted mean</title>
+<rect width='720' height='262' fill='#ffffff'/>
+<text x='16' y='24' font-size='15' font-weight='bold' fill='#1a1a1a'>Season-to-next-season correlation of a unit&#x27;s adjusted mean</text>
+<line x1='250.91' y1='50' x2='250.91' y2='182' stroke='#e3e3e3'/>
+<text x='250.91' y='197' text-anchor='middle' fill='#666666'>-0.25</text>
+<line x1='355.45' y1='50' x2='355.45' y2='182' stroke='#e3e3e3'/>
+<text x='355.45' y='197' text-anchor='middle' fill='#666666'>0</text>
+<line x1='460' y1='50' x2='460' y2='182' stroke='#e3e3e3'/>
+<text x='460' y='197' text-anchor='middle' fill='#666666'>0.25</text>
+<line x1='564.55' y1='50' x2='564.55' y2='182' stroke='#e3e3e3'/>
+<text x='564.55' y='197' text-anchor='middle' fill='#666666'>0.5</text>
+<line x1='669.09' y1='50' x2='669.09' y2='182' stroke='#e3e3e3'/>
+<text x='669.09' y='197' text-anchor='middle' fill='#666666'>0.75</text>
+<text x='460' y='214' text-anchor='middle' fill='#1a1a1a'>Pearson r (95% season bootstrap)</text>
+<text x='222' y='65' text-anchor='end' fill='#1a1a1a'>QB adjusted</text>
+<line x1='429.05' y1='61' x2='522.73' y2='61' stroke='#0072B2' stroke-width='2'/>
+<circle cx='475.72' cy='61' r='4' fill='#0072B2'/>
+<text x='222' y='87' text-anchor='end' fill='#1a1a1a'>RB adjusted</text>
+<line x1='432.9' y1='83' x2='506.46' y2='83' stroke='#009E73' stroke-width='2'/>
+<circle cx='472.17' cy='83' r='4' fill='#009E73'/>
+<text x='222' y='109' text-anchor='end' fill='#1a1a1a'>WR adjusted</text>
+<line x1='401.25' y1='105' x2='498.1' y2='105' stroke='#D55E00' stroke-width='2'/>
+<circle cx='450.59' cy='105' r='4' fill='#D55E00'/>
+<text x='222' y='131' text-anchor='end' fill='#1a1a1a'>TE adjusted</text>
+<line x1='389.83' y1='127' x2='451.34' y2='127' stroke='#CC79A7' stroke-width='2'/>
+<circle cx='421.65' cy='127' r='4' fill='#CC79A7'/>
+<text x='222' y='153' text-anchor='end' fill='#1a1a1a'>K adjusted</text>
+<line x1='388.2' y1='149' x2='440.43' y2='149' stroke='#E69F00' stroke-width='2'/>
+<circle cx='415.21' cy='149' r='4' fill='#E69F00'/>
+<text x='222' y='175' text-anchor='end' fill='#1a1a1a'>DST adjusted</text>
+<line x1='493.45' y1='171' x2='550.7' y2='171' stroke='#000000' stroke-width='2'/>
+<circle cx='522.31' cy='171' r='4' fill='#000000'/>
+<text x='16' y='250' fill='#666666'>Same franchise, consecutive seasons, 8+ games each.</text>
+</svg>

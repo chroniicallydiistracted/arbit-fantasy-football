@@ -1,8 +1,8 @@
 {
- "auditRun": "phase1-audit-20261124T021910Z",
- "code": "bc414a01e05f28ef937751c74c474c8cdf526ef8+uncommitted",
+ "auditRun": "phase1-audit-20261124T024442Z",
+ "code": "3a1fe115610a6fb3e1605e53e7366b923a244e67",
  "format": "arbit-dvp-m3-3-v0-reproduction-v1",
- "generatedAt": "2026-11-24T02:19:19.766509+00:00",
+ "generatedAt": "2026-11-24T02:44:44.094911+00:00",
  "independent": {
   "DST_adjusted": {
    "k": 9.1,

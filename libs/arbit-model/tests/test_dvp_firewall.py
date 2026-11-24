@@ -155,3 +155,67 @@ def test_schedule_betting_lines_are_dropped_and_recorded():
     entered = admit(schedule, "nflverse.schedules", ancestry="fixture")
     assert entered.dropped == {"spread_line": "betting-lines"}
     assert entered.record()["columnsDropped"] == {"spread_line": "betting-lines"}
+
+
+def test_phase2_sources_enter_only_with_lineage_and_their_scoring_hash():
+    """The reliability lab's extra sources: rule contributions of the same FFA lines (A09), and
+    gamebook points as known at a decision time (A12)."""
+    lines = athlete_frame().with_columns(
+        pl.lit(
+            [{"rule_id": "1", "stat_id": "receiving.yards", "points": "5.0"}],
+            dtype=pl.List(
+                pl.Struct({"rule_id": pl.String, "stat_id": pl.String, "points": pl.String})
+            ),
+        ).alias("contributions")
+    )
+    admitted = admit(
+        lines,
+        "ffa_targets.athlete_contributions",
+        ancestry="fixture",
+        scoring_hash=SCORING["athlete"],
+        expected_scoring=SCORING,
+    )
+    assert "contributions" in admitted.frame.columns
+    book = pl.DataFrame(
+        {
+            "game_id": ["g"],
+            "team": ["SEA"],
+            "opponent": ["NE"],
+            "position": ["WR"],
+            "points": [12.0],
+            "refused": [0],
+            "opportunities": [9.0],
+        }
+    )
+    as_of = admit(
+        book,
+        "gamebook.position_points",
+        ancestry="gamebook 2026 at a decision time",
+        scoring_hash=SCORING["athlete"],
+        expected_scoring=SCORING,
+    )
+    assert as_of.source_type is SourceType.FFA_ACTUAL_AS_OF
+    with pytest.raises(LineageError, match="SCORING_HASH_MISMATCH"):
+        admit(
+            book,
+            "gamebook.position_points",
+            ancestry="x",
+            scoring_hash="other",
+            expected_scoring=SCORING,
+        )
+    with pytest.raises(LineageError, match="UNKNOWN_COLUMN"):
+        admit(
+            book.with_columns(pl.lit(9.9).alias("projected_points")),
+            "gamebook.position_points",
+            ancestry="x",
+            scoring_hash=SCORING["athlete"],
+            expected_scoring=SCORING,
+        )
+    with pytest.raises(LineageError, match="MISSING_ANCESTRY"):
+        admit(
+            book,
+            "gamebook.position_points",
+            ancestry=None,
+            scoring_hash=SCORING["athlete"],
+            expected_scoring=SCORING,
+        )

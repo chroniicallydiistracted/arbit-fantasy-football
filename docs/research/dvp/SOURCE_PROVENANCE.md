@@ -26,22 +26,25 @@ Admission follows lineage, not names. A projection renamed `opponent_expected` i
 | --- | --- | --- | --- | --- | --- |
 | `ffa_targets.athlete` | FFA_ACTUAL_FINAL | Arbit | season, week, season_type, game_id, team, opponent (compared only), player_id, position, basis, points, refusal | Format `arbit-ffa-targets-v1` (13 keys, 26 statistic components, unknown, overrides, contributions) | Targets index, season manifest, Parquet digest, rules hash |
 | `ffa_targets.defense` | FFA_ACTUAL_FINAL | Arbit | season, week, season_type, game_id, team, opponent, basis, points, refusal | The same plus 7 D/ST statistics | The same |
+| `ffa_targets.athlete_contributions`, `ffa_targets.defense_contributions` (Phase 2, A09) | FFA_ACTUAL_FINAL | Arbit | The same keys plus `contributions` (each rule's points) | The same target formats | The same, under the same rules hash |
+| `gamebook.position_points`, `gamebook.dst_points` (Phase 2, A12) | FFA_ACTUAL_AS_OF | Arbit | game_id, team, opponent, position, points, refused | The gamebook's fixed columns | The decision time, the point-in-time reader's file versions, the rules hash |
 | `nflverse.schedules` | SCHEDULE | nflverse | game_id, season, week, game_type, gameday, gametime, home/away team and score | The nflverse field catalog (`arbit_model.fields`); excluded fields are dropped and recorded | The schedule manifest the targets were built from |
 
 **Dropped on admission:** the schedule's betting-line columns (catalog rule `betting-lines`, OWN-067). A market forecast is not a fantasy projection, but it is gated out of this slice.
 
 **Scoring authority (T30, T37):**
 - The targets carry athlete rules `10e938eb…` and D/ST rules `16885a80…`, the rule set in the league's current ESPN settings. The audit re-derives both hashes from the stored rule version.
-- Each line's points equal the sum of its per-rule contributions (257,756 lines).
+- Each line's points equal the sum of its per-rule contributions (257,914 lines on the repaired index).
 - Separately, slice 2 compared stored 2026 lines with ESPN's actual applied totals: 10,734 of 10,771 agree ([ffa-targets-check-2026-11-10.json](../ffa-targets-check-2026-11-10.json)). That comparison used ESPN's actual blocks only. It is an audit and was never an input.
 
 **What made the targets:**
 - **Inputs:** each season's manifest names its nflverse inputs, all from seven families: pbp, players, schedules, snap_counts, stats_player, stats_team and weekly_rosters. None is outside the allowlist.
 - **Scoring rules:** the stored league rule version.
 - **Builds:**
-  - The current index `4afbd836…` was built on 2026-11-10 from code `de72924` with uncommitted changes.
-  - Slice 2's comparison ran on a pinned build of the same code, index `994b3018…`.
-  - Both are recorded as lineage limitations, not as contamination.
+  - The current index `6ffb62fb…` is the R-072 repair, built on 2026-11-24 from clean commit `9504631`, on exactly the nflverse inputs of `4afbd836…` ([repair](../targets-repair-r072.md)).
+  - `4afbd836…`, which v0 ran on, was built on 2026-11-10 from code `de72924` with uncommitted changes.
+  - Slice 2's comparison ran on a pinned build of that code, index `994b3018…`.
+  - The uncommitted builds are recorded as lineage limitations, not as contamination.
 
 ## Code scan (T31)
 

@@ -25,7 +25,8 @@ Research (M3-3 defense against the position, ENG-057; [runbook](../../docs/resea
 - `arbit_model.dvp.observations`: completed-game team-game-position cells from the canonical FFA actuals, with schedule-decided opponents and missing kept missing.
 - `arbit_model.dvp.asof`: preweek and per-game cutoffs, feature views apart from labels, a frozen-forecast evaluation join.
 - `arbit_model.dvp.reliability` and `results`: v0's split-half arithmetic with intervals, and experiment records a projection dependency invalidates.
-- `scripts/model/dvp.py`: `audit`, `reproduce-v0`, `registry`.
+- `arbit_model.dvp.lab` and `svg`: the Phase 2 reliability lab (ENG-059): adjustments, split methods, method-of-moments and REML variance components, lag and carryover, permutation nulls, cluster bootstraps, and deterministic SVG plots.
+- `scripts/model/dvp.py`: `audit`, `reproduce-v0`, `reliability`, `registry`.
 
 `scripts/model/point_in_time_audit.py` checks the reader against the real history ([audit](../../docs/research/point-in-time-audit-2026-11-23.md)).
 

@@ -25,7 +25,7 @@ import json
 import os
 import subprocess
 import sys
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -39,7 +39,7 @@ from arbit_model.dvp import reliability as rel
 from arbit_model.dvp.provenance import FORBIDDEN, SOURCES, Admission, admit, scan_code
 from arbit_model.gamebook import FFA_POSITIONS, POSITIONS
 from arbit_model.inputs import NflverseTables
-from arbit_model.teams import franchise
+from arbit_model.teams import franchise, franchise_expr
 from sqlalchemy import create_engine, select, text
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -57,6 +57,9 @@ SCANNED = (
     "libs/arbit-model/src/arbit_model/dvp/asof.py",
     "libs/arbit-model/src/arbit_model/dvp/reliability.py",
     "libs/arbit-model/src/arbit_model/dvp/results.py",
+    "libs/arbit-model/src/arbit_model/dvp/lab.py",
+    "libs/arbit-model/src/arbit_model/dvp/svg.py",
+    "libs/arbit-model/src/arbit_model/teams.py",
     "scripts/model/dvp.py",
     "scripts/model/defense_position_study.py",
     "scripts/model/ffa_signal_study.py",
@@ -84,8 +87,9 @@ def code_version() -> str:
     head = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
     ).stdout.strip()
+    # Code, not receipts: the runs themselves rewrite docs/research/dvp between steps.
     dirty = subprocess.run(
-        ["git", "status", "--porcelain", "--untracked-files=no"],
+        ["git", "status", "--porcelain", "--untracked-files=no", "--", ".", ":(exclude)docs"],
         cwd=ROOT,
         capture_output=True,
         text=True,
@@ -904,7 +908,12 @@ def registry(args: argparse.Namespace) -> None:
             **descriptive,
         ),
     ]
+    executed = _phase_a_records(config, receipts, common, descriptive)
+    entries.extend(executed)
+    done = {e["experiment_id"].removeprefix("M3-3-") for e in executed}
     for code, hypothesis in PLANNED.items():
+        if code in done:
+            continue
         conditional = code.startswith("C")
         entries.append(
             results.record(
@@ -933,6 +942,982 @@ def registry(args: argparse.Namespace) -> None:
     print(f"{len(entries)} experiments registered")
 
 
+# --- Phase 2: the reliability lab (A00, A02-A10, A12) -------------------------------------------
+
+
+def reliability(args: argparse.Namespace) -> None:
+    """Every Phase A experiment on the audit run's validated observations; descriptive only."""
+    from arbit_model.dvp import lab
+
+    config = json.loads(args.config.read_text())
+    base = json.loads((ROOT / config["base"]).read_text())
+    started = datetime.now(UTC)
+    run = args.run
+    run_manifest = json.loads((run / "run-manifest.json").read_text())
+    if run_manifest["targetsIndex"] != base["targets_index"]:
+        raise SystemExit("the audit run read a different targets index from the configured one")
+    for name, digest in run_manifest["outputs"].items():
+        if sha256(run / name) != digest:
+            raise SystemExit(f"{name} changed since the audit run wrote it")
+    observations = pl.read_parquet(run / "observations.parquet")
+    schedule = pl.read_parquet(run / "schedule_games.parquet")
+    seed, reps = base["random_seed"], base["bootstrap_replicates"]
+    min_games = base["min_split_half_games"]
+    out = run / "reliability"
+    out.mkdir(exist_ok=True)
+
+    def boot(result: Any, clusters: Any) -> dict[str, Any]:
+        return lab.cluster_bootstrap(result, clusters, reps, seed)
+
+    def unit_seasons(g: Any, result: Any) -> Any:
+        import numpy as np
+
+        return np.asarray([g.keys[i][1] for i in result.unit_index])
+
+    def summary(result: Any) -> dict[str, Any]:
+        return {
+            "units": result.units,
+            "pearson": None if result.r is None else round(result.r, 4),
+            "meanHalfGames": None if result.m is None else round(result.m, 3),
+            "k": None if result.k is None else round(result.k, 2),
+        }
+
+    def calendar(frame: pl.DataFrame, with_boot: bool = True) -> dict[str, Any]:
+        g = lab.groups(frame)
+        result = lab.split(g, lab.assignment(g, "calendar"), min_games)
+        entry = summary(result)
+        if with_boot and result.r is not None:
+            entry["bootstrapSeasons"] = boot(result, unit_seasons(g, result))
+        return entry
+
+    results: dict[str, Any] = {e: {} for e in config["experiments"]}
+    plots: dict[str, Any] = {"scatter": {}, "forest": [], "weights": [], "lags": [], "nulls": []}
+    carry_rows: list[tuple[str, str, float | None, float | None, float | None]] = []
+    joint: dict[str, Any] = {}
+    joint_seasons: dict[str, Any] = {}
+    contributions = _contribution_cells(args.targets, base, observations)
+
+    for pos in base["position_groups"]:
+        frame = lab.position_frame(observations, schedule, pos)
+        raw = lab.adjust(frame, "none")
+        centered = lab.adjust(frame, "season")
+        adjusted = lab.adjust(frame, config["adjusted"])
+        g_raw, g_cen, g_adj = lab.groups(raw), lab.groups(centered), lab.groups(adjusted)
+        cal_raw = lab.split(g_raw, lab.assignment(g_raw, "calendar"), min_games)
+        cal_adj = lab.split(g_adj, lab.assignment(g_adj, "calendar"), min_games)
+        seasons_adj = unit_seasons(g_adj, cal_adj)
+
+        # A00: the landscape.
+        per_season = (
+            frame.group_by("season")
+            .agg(pl.col("points").mean().round(3).alias("mean"))
+            .sort("season")
+        )
+        results["A00"][pos] = lab.landscape(frame) | {
+            "seasonMeans": dict(
+                zip(map(str, per_season["season"]), per_season["mean"], strict=True)
+            ),
+            "rankAgreement": lab.rank_agreement(raw, adjusted),
+        }
+
+        # A02: split methods, random splits and minimum games.
+        a02: dict[str, Any] = {}
+        for kind, g in (("raw", g_raw), ("adjusted", g_adj)):
+            entry: dict[str, Any] = {}
+            for method in lab.SPLITS:
+                result = lab.split(g, lab.assignment(g, method), min_games)
+                entry[method] = summary(result)
+                if result.r is not None:
+                    entry[method]["bootstrapSeasons"] = boot(result, unit_seasons(g, result))
+            entry["random"] = lab.random_splits(g, config["random_splits"], seed, min_games)
+            entry["minGames"] = {
+                str(n): summary(lab.split(g, lab.assignment(g, "calendar"), n))
+                for n in config["min_games_sensitivity"]
+            }
+            a02[kind] = entry
+        results["A02"][pos] = a02
+
+        # A03: what the cell is adjusted for.
+        faced = lab.adjust(
+            frame.rename({"entity": "_faced", "faced": "entity"}).rename({"_faced": "faced"}),
+            "season",
+        )
+        k_faced = lab.reml_components(lab.groups(faced)).k
+        a03: dict[str, Any] = {"kFaced": None if k_faced is None else round(k_faced, 2)}
+        for method in lab.ADJUSTMENTS:
+            variant = lab.adjust(frame, method, k_faced if method == "loo_shrunk" else None)
+            g = lab.groups(variant)
+            a03[method] = calendar(variant) | {"reml": lab.reml_components(g).summary()}
+        results["A03"][pos] = a03
+
+        # A05: variance components with each unit's own game count.
+        a05: dict[str, Any] = {}
+        for kind, g in (("raw", g_raw), ("seasonCentered", g_cen), ("adjusted", g_adj)):
+            reml = lab.reml_components(g)
+            entry = {
+                "momentMethod": lab.anova_components(g).summary(),
+                "reml": reml.summary(),
+            }
+            if kind != "raw":
+                entry["remlBootstrapSeasons"] = lab.bootstrap_components(
+                    g, reps, seed, lab.reml_components
+                )
+            split_result = cal_raw if kind == "raw" else (cal_adj if kind == "adjusted" else None)
+            if split_result is not None and reml.k is not None:
+                entry["oddEvenObserved"] = round(split_result.r or 0, 4)
+                entry["oddEvenImpliedByReml"] = round(
+                    lab.implied_split_r(split_result.a_n, split_result.b_n, reml.k), 4
+                )
+            a05[kind] = entry
+        a05["seasonEffect"] = lab.season_component(g_raw)
+        results["A05"][pos] = a05
+
+        # A04: stability by era and half size; position orderings come after the loop.
+        a04: dict[str, Any] = {"eras": {}, "halfSize": {}}
+        for era, seasons in config["eras"].items():
+            a04["eras"][era] = {
+                kind: calendar(variant.filter(pl.col("season").is_in(seasons)))
+                for kind, variant in (("raw", raw), ("adjusted", adjusted))
+            }
+        smallest = cal_adj.a_n.clip(max=cal_adj.b_n)
+        for label, mask in (("bothHalves8Plus", smallest >= 8), ("aHalfUnder8", smallest < 8)):
+            r = lab.corr(cal_adj.a_mean[mask], cal_adj.b_mean[mask])
+            a04["halfSize"][label] = {
+                "units": int(mask.sum()),
+                "pearson": None if r is None else round(r, 4),
+            }
+        reml_adj = a05["adjusted"]["reml"]
+        k_boot = a05["adjusted"]["remlBootstrapSeasons"]["k95"]
+        a04["weights"] = {
+            str(n): {
+                "w": _r4(rel.weight(n, reml_adj["k"])),
+                "low": _r4(rel.weight(n, k_boot[1])) if k_boot else None,
+                "high": _r4(rel.weight(n, k_boot[0])) if k_boot else None,
+            }
+            for n in config["weight_curve_games"]
+        }
+        results["A04"][pos] = a04
+        joint[pos], joint_seasons[pos] = cal_adj, seasons_adj
+
+        # A06: within-season time.
+        a06: dict[str, Any] = {}
+        for kind, g, k in (
+            ("seasonCentered", g_cen, a05["seasonCentered"]["reml"]["k"]),
+            ("adjusted", g_adj, reml_adj["k"]),
+        ):
+            chrono = lab.split(g, lab.assignment(g, "chronological"), min_games)
+            odd_even = lab.split(g, lab.assignment(g, "calendar"), min_games)
+            profile = lab.lag_profile(g)
+            a06[kind] = {
+                "oddEven": summary(odd_even),
+                "firstVsSecondHalf": summary(chrono),
+                "oddEvenMinusHalves": _paired_difference(
+                    lab,
+                    odd_even,
+                    unit_seasons(g, odd_even),
+                    chrono,
+                    unit_seasons(g, chrono),
+                    reps,
+                    seed,
+                ),
+                "lag": profile["bins"],
+                "lag95": lab.lag_bootstrap(profile, reps, seed),
+                "rolling": [
+                    lab.rolling_window(g, w) | {"impliedByReml": _r4(lab.implied_window_r(k, w))}
+                    for w in config["rolling_windows"]
+                ],
+            }
+        results["A06"][pos] = a06
+
+        # A07: between seasons.
+        a07: dict[str, Any] = {}
+        for kind, variant, k in (
+            ("seasonCentered", centered, a05["seasonCentered"]["reml"]["k"]),
+            ("adjusted", adjusted, reml_adj["k"]),
+        ):
+            pairs = lab.carryover(variant, config["carryover_min_games"])
+            entry = lab.carryover_summary(pairs) | _carry_boot(lab, pairs, reps, seed)
+            if k is not None and entry["pearson"] is not None:
+                lam = 1 / k
+                rel1 = (pairs["n"] * lam / (1 + pairs["n"] * lam)).mean()
+                rel2 = (pairs["next_n"] * lam / (1 + pairs["next_n"] * lam)).mean()
+                entry["persistence"] = round(entry["pearson"] / (rel1 * rel2) ** 0.5, 4)
+            a07[kind] = entry
+        results["A07"][pos] = a07
+        lo, hi = a07["adjusted"].get("pearson95") or [None, None]
+        carry_rows.append((f"{pos} adjusted", pos, a07["adjusted"]["pearson"], lo, hi))
+
+        # A08: nulls and resampling schemes.
+        a08: dict[str, Any] = {}
+        for kind, variant in (("raw", raw), ("adjusted", adjusted)):
+            null = lab.permutation_null(variant, config["permutations"], seed, min_games)
+            values = null.pop("_values")
+            pl.DataFrame({"r": values}).write_parquet(out / f"null-{pos}-{kind}.parquet")
+            a08[kind] = {"permutation": null}
+            if kind == "adjusted":
+                plots["nulls"].append((pos, pos, values.tolist(), null["observed"]))
+        import numpy as np
+
+        entities = np.asarray([g_adj.keys[i][0] for i in cal_adj.unit_index])
+        a08["adjusted"]["bootstrap"] = {
+            "unit": boot(cal_adj, np.arange(cal_adj.units)),
+            "season": boot(cal_adj, seasons_adj),
+            "franchise": boot(cal_adj, entities),
+        }
+        results["A08"][pos] = a08
+
+        # A09: which part of the points repeats.
+        results["A09"][pos] = _components(
+            lab, frame, contributions.get(pos), pos == obs.DST, min_games
+        )
+
+        # A10: robustness and influence.
+        a10: dict[str, Any] = {}
+        for kind, variant in (("raw", raw), ("adjusted", adjusted)):
+            subsets = {"all": variant} | {
+                f"exclude{s}": variant.filter(pl.col("season") != s)
+                for s in config["exclude_seasons"]
+            }
+            entry = {name: calendar(part, with_boot=False) for name, part in subsets.items()}
+            loso = [
+                calendar(variant.filter(pl.col("season") != s), with_boot=False)
+                for s in base["seasons"]
+            ]
+            entry["leaveOneSeasonOut"] = {
+                "pearsonMin": min(e["pearson"] for e in loso),
+                "pearsonMax": max(e["pearson"] for e in loso),
+                "kMin": min(e["k"] for e in loso if e["k"] is not None),
+                "kMax": max(e["k"] for e in loso if e["k"] is not None),
+            }
+            entry["winsorized"] = calendar(
+                lab.winsorize(variant, *config["winsorize"]), with_boot=False
+            )
+            entry["trimmed"] = calendar(lab.trim(variant, config["trim_sd"]), with_boot=False)
+            g = lab.groups(variant)
+            result = lab.split(g, lab.assignment(g, "calendar"), min_games)
+            entry["influence"] = lab.influence(result) | {
+                "worstUnitKey": list(g.keys[lab.influence(result)["worstUnit"]])
+            }
+            biggest = variant.with_columns(pl.col("value").abs().alias("_abs")).sort("_abs").tail(1)
+            without = variant.join(
+                biggest.select("game_id", "entity"), on=["game_id", "entity"], how="anti"
+            )
+            entry["withoutLargestCell"] = calendar(without, with_boot=False) | {
+                "cell": biggest.select("game_id", "entity", pl.col("value").round(2)).row(
+                    0, named=True
+                )
+            }
+            a10[kind] = entry
+        a10["adjusted"]["homeAway"] = a02["adjusted"]["home_away"]
+        a10["adjusted"]["afterBye"] = _after_bye(adjusted)
+        results["A10"][pos] = a10
+
+        # A12: refused lines kept as partial sums (v0's handling) against excluding them.
+        results["A12"][pos] = _refusal_sensitivity(
+            lab, observations, schedule, pos, config["adjusted"], min_games
+        )
+
+        # Plots.
+        plots["scatter"][pos] = (cal_adj.a_mean.tolist(), cal_adj.b_mean.tolist(), cal_adj)
+        for label, value, interval in (
+            (
+                "odd/even",
+                a02["adjusted"]["calendar"]["k"],
+                a02["adjusted"]["calendar"].get("bootstrapSeasons", {}).get("k95"),
+            ),
+            ("REML", reml_adj["k"], k_boot),
+            (
+                "1st/2nd half",
+                a02["adjusted"]["chronological"]["k"],
+                a02["adjusted"]["chronological"].get("bootstrapSeasons", {}).get("k95"),
+            ),
+        ):
+            plots["forest"].append((f"{pos} {label}", pos, value, *(interval or [None, None])))
+        weights = a04["weights"]
+        plots["weights"].append(
+            (
+                pos,
+                pos,
+                [int(n) for n in weights],
+                [weights[n]["w"] or 0 for n in weights],
+                [weights[n]["low"] or 0 for n in weights],
+                [weights[n]["high"] or 0 for n in weights],
+            )
+        )
+        lag = a06["adjusted"]
+        centers = [(a + b) / 2 for a, b in lab.LAG_BINS]
+        plots["lags"].append(
+            (
+                pos,
+                pos,
+                centers,
+                [lag["lag"][f"{a}-{b}"]["reliability"] or 0 for a, b in lab.LAG_BINS],
+                [(lag["lag95"][f"{a}-{b}"] or [0, 0])[0] for a, b in lab.LAG_BINS],
+                [(lag["lag95"][f"{a}-{b}"] or [0, 0])[1] for a, b in lab.LAG_BINS],
+            )
+        )
+
+    results["A04"]["orderings"] = lab.joint_orderings(joint, joint_seasons, reps, seed)
+    tests = {
+        f"{pos}_{kind}": results["A08"][pos][kind]["permutation"]["pValue"]
+        for pos in base["position_groups"]
+        for kind in ("raw", "adjusted")
+    }
+    results["A08"]["holm"] = _holm(tests)
+    if "A12" in results:
+        results["A12"]["vintages"] = _vintage_diagnostic(base, config)
+
+    report = {
+        "format": FORMAT + "-reliability-v1",
+        "generatedAt": started.isoformat(),
+        "code": code_version(),
+        "auditRun": run.name,
+        "targetsIndex": base["targets_index"],
+        "config": {"path": str(args.config), "sha256": sha256(args.config)},
+        "seed": seed,
+        "bootstrapReplicates": reps,
+        "adjusted": config["adjusted"],
+        "minSplitHalfGames": min_games,
+        "results": results,
+        "forbidden_vendor_projection_dependencies": 0,
+    }
+    write_json(args.receipts / "reliability-results.json", report)
+    _write_plots(plots, carry_rows, args.receipts / "plots")
+    print(f"reliability: {len(base['position_groups'])} groups, {len(results)} experiments")
+
+
+def _holm(p_values: dict[str, float]) -> dict[str, Any]:
+    """Holm's step-down adjustment across the permutation tests (exploratory family)."""
+    ordered = sorted(p_values.items(), key=lambda item: item[1])
+    adjusted: dict[str, float] = {}
+    running = 0.0
+    for rank, (name, p) in enumerate(ordered):
+        running = max(running, min(1.0, (len(ordered) - rank) * p))
+        adjusted[name] = round(running, 5)
+    return {"family": len(ordered), "adjusted": dict(sorted(adjusted.items()))}
+
+
+def _r4(value: float | None) -> float | None:
+    return None if value is None else round(value, 4)
+
+
+def _paired_difference(
+    lab: Any, a: Any, seasons_a: Any, b: Any, seasons_b: Any, reps: int, seed: int
+) -> dict[str, Any]:
+    """r(a) - r(b) with a season-cluster interval: whole seasons resampled for both together."""
+    import numpy as np
+
+    seasons = np.unique(np.concatenate([seasons_a, seasons_b]))
+    rng = np.random.default_rng(seed)
+    diffs = []
+    for _ in range(reps):
+        picks = seasons[rng.integers(0, seasons.size, seasons.size)]
+        ia = np.concatenate([np.flatnonzero(seasons_a == s) for s in picks])
+        ib = np.concatenate([np.flatnonzero(seasons_b == s) for s in picks])
+        ra = lab.corr(a.a_mean[ia], a.b_mean[ia])
+        rb = lab.corr(b.a_mean[ib], b.b_mean[ib])
+        if ra is not None and rb is not None:
+            diffs.append(ra - rb)
+    point = (a.r or 0) - (b.r or 0)
+    return {"difference": round(point, 4), "interval95": lab.interval95(diffs)}
+
+
+def _carry_boot(lab: Any, pairs: pl.DataFrame, reps: int, seed: int) -> dict[str, Any]:
+    import numpy as np
+
+    x = pairs.get_column("mean").to_numpy()
+    y = pairs.get_column("next_mean").to_numpy()
+    seasons = pairs.get_column("season").to_numpy()
+    labels = np.unique(seasons)
+    rng = np.random.default_rng(seed)
+    rs, slopes = [], []
+    for _ in range(reps):
+        picks = labels[rng.integers(0, labels.size, labels.size)]
+        index = np.concatenate([np.flatnonzero(seasons == s) for s in picks])
+        r = lab.corr(x[index], y[index])
+        if r is not None:
+            rs.append(r)
+        slope = lab.slope(x[index], y[index])
+        if slope is not None:
+            slopes.append(slope)
+    return {"pearson95": lab.interval95(rs), "slope95": lab.interval95(slopes)}
+
+
+def _after_bye(adjusted: pl.DataFrame) -> dict[str, Any]:
+    gaps = adjusted.sort("entity", "season", "week").with_columns(
+        (pl.col("week") - pl.col("week").shift(1).over("entity", "season")).alias("gap")
+    )
+    after = gaps.filter(pl.col("gap") > 1).get_column("value").drop_nulls()
+    regular = gaps.filter(pl.col("gap") == 1).get_column("value").drop_nulls()
+    difference = float(after.mean()) - float(regular.mean())  # type: ignore[arg-type]
+    se = (float(after.var()) / after.len() + float(regular.var()) / regular.len()) ** 0.5  # type: ignore[arg-type]
+    return {
+        "afterByeCells": after.len(),
+        "otherCells": regular.len(),
+        "meanDifference": round(difference, 3),
+        "approxSe": round(se, 3),
+    }
+
+
+COMPONENTS = {
+    "passing.yards": "pass_yards",
+    "passing.touchdowns": "pass_td",
+    "passing.interceptions": "turnovers",
+    "misc.fumbles_lost": "turnovers",
+    "rushing.yards": "rush_yards",
+    "rushing.touchdowns": "rush_td",
+    "receiving.receptions": "receptions",
+    "receiving.yards": "rec_yards",
+    "receiving.touchdowns": "rec_td",
+    "passing.two_point_conversions": "two_point",
+    "rushing.two_point_conversions": "two_point",
+    "receiving.two_point_conversions": "two_point",
+    "kicking.field_goals_0_39": "field_goals",
+    "kicking.field_goals_40_49": "field_goals",
+    "kicking.field_goals_50_59": "field_goals",
+    "kicking.field_goals_60_plus": "field_goals",
+    "kicking.field_goals_missed": "fg_missed",
+    "kicking.extra_points_made": "extra_points",
+    "defense.sacks": "sacks",
+    "defense.interceptions": "takeaways",
+    "defense.fumbles_recovered": "takeaways",
+    "defense.points_allowed": "points_allowed_tier",
+    "defense.yards_allowed": "yards_allowed_tier",
+    "defense.safeties": "safeties_blocks",
+    "defense.blocked_kicks": "safeties_blocks",
+    "returns.kickoff_touchdowns": "return_td",
+    "returns.punt_touchdowns": "return_td",
+    "returns.interception_touchdowns": "return_td",
+    "returns.fumble_touchdowns": "return_td",
+    "returns.blocked_kick_touchdowns": "return_td",
+    "misc.fumble_recovery_touchdowns": "return_td",
+}
+
+
+def _contribution_cells(
+    targets: Path, base: dict[str, Any], observations: pl.DataFrame
+) -> dict[str, pl.DataFrame]:
+    """Each valid cell's FFA points split by scoring component, from the rule contributions."""
+    index = load_index(targets, base["targets_index"])
+    parts: dict[str, list[pl.DataFrame]] = {"athlete": [], "defense": []}
+    for season in base["seasons"]:
+        manifest = season_manifest(targets, index, season)
+        for role in ("athlete", "defense"):
+            digest = manifest["tables"][role]["parquet"]
+            path = targets / "objects" / digest
+            spec = SOURCES[f"ffa_targets.{role}_contributions"]
+            admitted = admit(
+                pl.read_parquet(path, columns=list(spec.used)),
+                spec.source_id,
+                ancestry=f"targets index {base['targets_index']}, season {season}, parquet {digest}",
+                scoring_hash=manifest["rules"][role],
+                expected_scoring=base["expected_scoring"],
+                schema=list(pl.read_parquet_schema(path)),
+            )
+            parts[role].append(admitted.frame.filter(pl.col("season_type") == "REG"))
+    component = pl.col("stat_id").replace_strict(
+        COMPONENTS, default="other", return_dtype=pl.String
+    )
+    athlete = (
+        pl.concat(parts["athlete"])
+        .with_columns(
+            franchise_expr(pl.col("team")).alias("offense"),
+            pl.col("position")
+            .cast(pl.String)
+            .replace_strict(dict(POSITIONS), default=None)
+            .alias("pos"),
+        )
+        .filter(pl.col("pos").is_not_null())
+        .select("game_id", "offense", "pos", "contributions")
+        .explode("contributions", empty_as_null=True)
+        .drop_nulls("contributions")
+        .unnest("contributions")
+        .with_columns(component.alias("component"), pl.col("points").cast(pl.Float64))
+        .group_by("game_id", "offense", "pos", "component")
+        .agg(pl.col("points").sum())
+    )
+    defense = (
+        pl.concat(parts["defense"])
+        .with_columns(franchise_expr(pl.col("team")).alias("defense"), pl.lit("DST").alias("pos"))
+        .select("game_id", "defense", "pos", "contributions")
+        .explode("contributions", empty_as_null=True)
+        .drop_nulls("contributions")
+        .unnest("contributions")
+        .with_columns(component.alias("component"), pl.col("points").cast(pl.Float64))
+        .group_by("game_id", "defense", "pos", "component")
+        .agg(pl.col("points").sum())
+    )
+    valid = observations.filter(pl.col("status") == obs.VALID)
+    out: dict[str, pl.DataFrame] = {}
+    for pos in (*obs.GROUPS, obs.DST):
+        cells = valid.filter(pl.col("position") == pos).select("game_id", "offense", "defense")
+        if pos == obs.DST:
+            joined = cells.join(
+                defense.filter(pl.col("pos") == pos), on=["game_id", "defense"], how="left"
+            )
+        else:
+            joined = cells.join(
+                athlete.filter(pl.col("pos") == pos), on=["game_id", "offense"], how="left"
+            )
+        out[pos] = (
+            joined.filter(pl.col("component").is_not_null())
+            .pivot(on="component", index=["game_id", "offense", "defense"], values="points")
+            .fill_null(0.0)
+        )
+    return out
+
+
+def _components(
+    lab: Any, frame: pl.DataFrame, parts: pl.DataFrame | None, dst: bool, min_games: int
+) -> dict[str, Any]:
+    """Each scoring component's share of the cell variance and its own repeatability."""
+    import numpy as np
+
+    if parts is None or parts.is_empty():
+        return {}
+    keys = ("entity", "faced") if dst else ("faced", "entity")
+    matched = frame.join(
+        parts, left_on=["game_id", *keys], right_on=["game_id", "offense", "defense"], how="left"
+    )
+    if matched.height != frame.height:
+        raise SystemExit("component cells do not match the observation cells one to one")
+    names = sorted(c for c in parts.columns if c not in ("game_id", "offense", "defense"))
+    matched = matched.with_columns(pl.col(names).fill_null(0.0))
+    total = matched.get_column("points").to_numpy()
+    total_var = float(np.var(total, ddof=1))
+    out: dict[str, Any] = {}
+    for name in names:
+        values = matched.get_column(name).to_numpy()
+        if float(np.var(values)) == 0:
+            continue
+        variant = lab.adjust(matched.with_columns(pl.col(name).alias("points")), "season")
+        g = lab.groups(variant)
+        result = lab.split(g, lab.assignment(g, "calendar"), min_games)
+        reml = lab.reml_components(g)
+        out[name] = {
+            "meanPoints": round(float(values.mean()), 3),
+            "varianceShare": round(float(np.cov(values, total)[0, 1]) / total_var, 3),
+            "oddEvenPearson": _r4(result.r),
+            "oddEvenK": None if result.k is None else round(result.k, 2),
+            "remlK": None if reml.k is None else round(reml.k, 2),
+            "remlBoundary": reml.boundary,
+        }
+    gap = total - matched.select(pl.sum_horizontal(names)).to_series().to_numpy()
+    out["_check"] = {"maxAbsDifferenceFromCellPoints": round(float(np.abs(gap).max()), 6)}
+    return out
+
+
+def _refusal_sensitivity(
+    lab: Any,
+    observations: pl.DataFrame,
+    schedule: pl.DataFrame,
+    pos: str,
+    adjusted: str,
+    min_games: int,
+) -> dict[str, Any]:
+    """r and k with refused-line cells excluded (validated) or kept as their partial sums (v0)."""
+    refused = pl.col("status") == "invalid_refused_line"
+    with_partial = observations.with_columns(
+        pl.when(refused).then(pl.col("points_partial")).otherwise(pl.col("points")).alias("points"),
+        pl.when(refused).then(pl.lit(obs.VALID)).otherwise(pl.col("status")).alias("status"),
+    )
+    out: dict[str, Any] = {
+        "refusedCells": observations.filter((pl.col("position") == pos) & refused).height
+    }
+    for label, source in (("excluded", observations), ("partialSums", with_partial)):
+        frame = lab.position_frame(source, schedule, pos)
+        for kind in ("none", adjusted):
+            g = lab.groups(lab.adjust(frame, kind))
+            result = lab.split(g, lab.assignment(g, "calendar"), min_games)
+            out.setdefault(label, {})["raw" if kind == "none" else "adjusted"] = {
+                "cells": g.cells,
+                "units": result.units,
+                "pearson": _r4(result.r),
+                "k": None if result.k is None else round(result.k, 2),
+            }
+    return out
+
+
+def _vintage_diagnostic(base: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
+    """Late stat corrections, measured where Arbit holds them: each completed game's FFA points by
+    position as first known (the first nflverse version Arbit held with the game) against the
+    latest version, through the point-in-time gamebooks."""
+    from arbit_data.schema import dataset_manifest
+    from arbit_model.gamebook import Gamebooks
+    from arbit_model.point_in_time import PointInTime
+
+    season = config["vintage_season"]
+    engine = create_engine(
+        os.environ["ARBIT_DATABASE_URL"],
+        hide_parameters=True,
+        execution_options={"postgresql_readonly": True},
+    )
+    with engine.connect() as c:
+        payload: dict[str, Any] = c.execute(
+            text(
+                "select r.payload from rule_version r "
+                "join league_document d on d.rules_hash = r.hash "
+                "join current_snapshot s on s.snapshot_id = d.snapshot_id"
+            )
+        ).scalar_one()
+        times: list[datetime] = sorted(
+            c.execute(
+                select(dataset_manifest.c.observed_at).where(
+                    dataset_manifest.c.logical_key
+                    == f"nflverse/nflverse-data/stats_player/stats_player_week_{season}"
+                )
+            ).scalars()
+        )
+    rules = {
+        role: RuleSet.model_validate_json(json.dumps(payload[f"{role}_rules"]))
+        for role in ("athlete", "defense")
+    }
+    hashes = {role: rs.content_hash for role, rs in rules.items()}
+    if hashes != base["expected_scoring"]:
+        raise SystemExit("the league's rules are not the configured scoring")
+    store = ObjectStore(Path(os.environ.get("ARBIT_NFLVERSE_PATH", "data/nflverse")) / "objects")
+    books = Gamebooks(PointInTime.from_store(UnitOfWork(engine), store), rules)
+
+    def frames(at: datetime) -> tuple[pl.DataFrame, pl.DataFrame]:
+        book = books.at(season, at)
+        ancestry = f"gamebook {season} at {at.isoformat()}"
+        positions = admit(
+            book.position_points,
+            "gamebook.position_points",
+            ancestry=ancestry,
+            scoring_hash=hashes["athlete"],
+            expected_scoring=base["expected_scoring"],
+        ).frame.select("game_id", "team", "position", "points", "refused")
+        dst = admit(
+            book.dst_points,
+            "gamebook.dst_points",
+            ancestry=ancestry,
+            scoring_hash=hashes["defense"],
+            expected_scoring=base["expected_scoring"],
+        ).frame.select("game_id", "team", pl.lit("DST").alias("position"), "points")
+        return positions, dst.with_columns(pl.lit(0, dtype=pl.UInt32).alias("refused"))
+
+    first: dict[tuple[str, str, str], tuple[float | None, int, str]] = {}
+    seen_games: set[str] = set()
+    for observed in times:
+        at = observed + timedelta(minutes=1)
+        positions, dst = frames(at)
+        both = pl.concat([positions, dst.select(positions.columns)], how="vertical_relaxed")
+        new = both.filter(~pl.col("game_id").is_in(list(seen_games)))
+        for row in new.iter_rows(named=True):
+            first[(row["game_id"], row["team"], row["position"])] = (
+                row["points"],
+                int(row["refused"]),
+                at.isoformat(),
+            )
+        seen_games |= set(new.get_column("game_id").to_list())
+    now = datetime.now(UTC)
+    positions, dst = frames(now)
+    latest = pl.concat([positions, dst.select(positions.columns)], how="vertical_relaxed")
+    rows = []
+    for row in latest.iter_rows(named=True):
+        key = (row["game_id"], row["team"], row["position"])
+        if key in first:
+            before, refused_before, at_text = first[key]
+            rows.append(
+                {
+                    "game_id": key[0],
+                    "position": key[2],
+                    "first": before,
+                    "latest": row["points"],
+                    "firstAt": at_text,
+                }
+            )
+    compared = pl.DataFrame(rows).with_columns(
+        (pl.col("latest") - pl.col("first")).alias("change"),
+        pl.col("game_id").str.slice(5, 2).cast(pl.Int32).alias("week"),
+    )
+    first_times = compared.group_by("week").agg(pl.col("firstAt").min()).sort("week")
+    by_position: dict[str, Any] = {}
+    for (pos,), part in compared.group_by(["position"], maintain_order=True):
+        changes = part.get_column("change").drop_nulls()
+        by_position[str(pos)] = {
+            "cells": part.height,
+            "changed": int((changes.abs() > 1e-9).sum()),
+            "meanAbsChange": round(float(changes.abs().mean() or 0.0), 4),  # type: ignore[arg-type]
+            "maxAbsChange": round(float(changes.abs().max() or 0.0), 3),  # type: ignore[arg-type]
+            "changeVariance": round(float(changes.var() or 0.0), 5),  # type: ignore[arg-type]
+        }
+    return {
+        "season": season,
+        "versionsHeld": len(times),
+        "firstVersionHeld": times[0].isoformat() if times else None,
+        "games": compared.get_column("game_id").n_unique(),
+        "firstKnownByWeek": dict(
+            zip(map(str, first_times["week"]), first_times["firstAt"], strict=True)
+        ),
+        "byPosition": by_position,
+        "limitation": "Arbit's nflverse vintages start 2026-10-31 and miss 2026-11-10 to 11-22, so "
+        "games of weeks 1-7 and 10 were first held long after their corrections; their change is "
+        "a lower bound. Seasons 2016-2025 have only final revisions.",
+    }
+
+
+def _write_plots(plots: dict[str, Any], carry_rows: list[Any], folder: Path) -> None:
+    from arbit_model.dvp import svg
+
+    folder.mkdir(parents=True, exist_ok=True)
+    for pos, (xs, ys, result) in plots["scatter"].items():
+        (folder / f"split-scatter-{pos}.svg").write_text(
+            svg.scatter(
+                f"{pos}: odd-week vs even-week means, adjusted",
+                xs,
+                ys,
+                color=svg.COLORS[pos],
+                xlabel="Odd NFL weeks: mean adjusted FFA points",
+                ylabel="Even NFL weeks",
+                note=f"{result.units} unit-seasons, 2016-2025; r = {result.r:.3f}; dashed: identity",
+            )
+        )
+    (folder / "k-forest.svg").write_text(
+        svg.forest(
+            "Games for half signal (k), adjusted, with 95% season-bootstrap intervals",
+            plots["forest"],
+            xlabel="k (games, log scale)",
+            xlim=(2, 1000),
+            note="Odd/even and 1st/2nd half: split-half k. REML: variance components with each "
+            "unit's own game count. Arrow: no upper bound.",
+        )
+    )
+    (folder / "weight-curves.svg").write_text(
+        svg.lines(
+            "Weight on a unit's own record after n games, w(n) = n / (n + k)",
+            plots["weights"],
+            xlabel="Games played this season",
+            ylabel="w(n)",
+            ylim=(0, 1),
+            note="k: REML, adjusted points; bands: season-bootstrap interval of k. Not a Sit/Start "
+            "weight.",
+        )
+    )
+    (folder / "lag-decay.svg").write_text(
+        svg.lines(
+            "Single-game reliability by weeks apart, adjusted",
+            plots["lags"],
+            xlabel="Weeks between two games of the same unit-season",
+            ylabel="Covariance / variance",
+            ylim=(-0.05, 0.25),
+            note="A stable trait is flat; a drifting one decays. Bands: 95% season bootstrap.",
+            xticks=[1.5, 3.5, 5.5, 7.5, 9.5, 11.5, 15],
+        )
+    )
+    (folder / "null-distributions.svg").write_text(
+        svg.histograms(
+            "Odd/even r under within-week permutation (1,000 shuffles), adjusted",
+            plots["nulls"],
+            xlabel="split-half r",
+            note="Grey: r after shuffling which unit each cell belongs to within its week. "
+            "Line: the observed r.",
+        )
+    )
+    (folder / "carryover.svg").write_text(
+        svg.forest(
+            "Season-to-next-season correlation of a unit's adjusted mean",
+            carry_rows,
+            xlabel="Pearson r (95% season bootstrap)",
+            xlim=(-0.3, 0.8),
+            note="Same franchise, consecutive seasons, 8+ games each.",
+            log=False,
+        )
+    )
+
+
+def _phase_a_records(
+    config: dict[str, Any], receipts: Path, common: dict[str, Any], descriptive: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Registry records of the reliability lab, from its receipt (none before it has run)."""
+    from arbit_model.dvp import results as records
+
+    path = receipts / "reliability-results.json"
+    if not path.exists():
+        return []
+    lab_receipt = json.loads(path.read_text())
+    r = lab_receipt["results"]
+    groups = config["position_groups"]
+    evidence = [
+        "docs/research/dvp/reliability-results.json",
+        "docs/research/dvp/RELIABILITY_REPORT.md",
+    ]
+    shared = common | descriptive | {"code_commit": lab_receipt["code"]}
+
+    def per(fn: Any) -> dict[str, Any]:
+        return {pos: fn(pos) for pos in groups}
+
+    reml = per(lambda p: r["A05"][p]["adjusted"]["reml"]["k"])
+    reml95 = per(lambda p: r["A05"][p]["adjusted"]["remlBootstrapSeasons"]["k95"])
+    specs: list[tuple[str, str, str, dict[str, Any], dict[str, Any]]] = [
+        (
+            "A00",
+            "Raw DvP landscape: distributions, unit-season spread and raw vs adjusted ranks",
+            "descriptive statistics per position; per-season Spearman of raw vs adjusted ranks",
+            per(
+                lambda p: (
+                    {
+                        k: r["A00"][p][k]
+                        for k in (
+                            "cells",
+                            "mean",
+                            "sd",
+                            "skew",
+                            "unitSeasonMeanSd",
+                            "withinUnitSeasonSd",
+                        )
+                    }
+                    | {"rankSpearmanMean": r["A00"][p]["rankAgreement"]["spearmanMean"]}
+                )
+            ),
+            {"tests_passed": ["T03", "T04"]},
+        ),
+        (
+            "A02",
+            "Split-method sensitivity of the repeatability estimate",
+            "split-half r and k for odd/even weeks, alternating games, first vs second half, "
+            "first 6 vs next 6, home vs away and 1,000 seeded balanced random splits",
+            per(
+                lambda p: (
+                    {
+                        m: r["A02"][p]["adjusted"][m]["k"]
+                        for m in (
+                            "calendar",
+                            "alternating",
+                            "chronological",
+                            "first6_next6",
+                            "home_away",
+                        )
+                    }
+                    | {"randomMedian": r["A02"][p]["adjusted"]["random"]["k"]["median"]}
+                )
+            ),
+            {"tests_passed": ["T09", "T10", "T13"]},
+        ),
+        (
+            "A03",
+            "Opponent-adjustment sensitivity of repeatability",
+            "odd/even k and REML k for none, season-centered, leave-one-out mean, leave-one-out "
+            "median and leave-one-out mean shrunk toward the season mean",
+            per(
+                lambda p: {
+                    m: r["A03"][p][m]["reml"]["k"]
+                    for m in ("none", "season", "loo_mean", "loo_median", "loo_shrunk")
+                }
+            ),
+            {"tests_passed": ["T08"]},
+        ),
+        (
+            "A04",
+            "Position-specific stability by era and half size, with joint orderings",
+            "odd/even k by era with season-bootstrap intervals; joint season bootstrap of which "
+            "position's k is lower",
+            {
+                "eras": per(
+                    lambda p: {e: v["adjusted"]["k"] for e, v in r["A04"][p]["eras"].items()}
+                ),
+                "pKLower": r["A04"]["orderings"]["pKLower"],
+            },
+            {"tests_passed": ["T13"]},
+        ),
+        (
+            "A05",
+            "Variance components with each unit's own game count, compared with v0's k",
+            "one-way random effects by unit-season: method of moments and REML, season-cluster "
+            "bootstrap of the REML k",
+            {"remlK": reml, "remlK95Seasons": reml95},
+            {"tests_passed": ["T11", "T12", "T14"], "interval": reml95},
+        ),
+        (
+            "A06",
+            "Temporal stability within a season",
+            "odd/even minus first-vs-second-half r with a paired season bootstrap; covariance by "
+            "weeks apart; rolling-window correlations against the stable-trait model",
+            per(lambda p: r["A06"][p]["adjusted"]["oddEvenMinusHalves"]),
+            {"tests_passed": ["T23"]},
+        ),
+        (
+            "A07",
+            "Between-season carryover of a unit's tendency",
+            "same-franchise consecutive-season means (8+ games): r, slope and leave-one-season-out "
+            "error of a decayed prior against a reset",
+            per(
+                lambda p: {
+                    k: r["A07"][p]["adjusted"][k]
+                    for k in ("pearson", "pearson95", "slope", "cvMseDecay", "cvMseReset")
+                }
+            ),
+            {},
+        ),
+        (
+            "A08",
+            "Noise, placebo and null distributions",
+            "1,000 within-week permutations of unit labels; Holm across 12 tests; unit, season and "
+            "franchise cluster bootstraps",
+            per(
+                lambda p: {k: r["A08"][p][k]["permutation"]["pValue"] for k in ("raw", "adjusted")}
+            ),
+            {"tests_passed": ["T13", "T24"], "placebo_summary": r["A08"]["holm"]},
+        ),
+        (
+            "A09",
+            "Which part of the points repeats: yards, receptions, touchdowns, turnovers, kicking",
+            "the scorer's rule contributions summed per cell; variance share and REML k per component",
+            per(
+                lambda p: {
+                    c: v["remlK"]
+                    for c, v in r["A09"][p].items()
+                    if c != "_check" and abs(v["varianceShare"]) >= 0.05
+                }
+            ),
+            {},
+        ),
+        (
+            "A10",
+            "Era and data robustness, and one unit's influence",
+            "odd/even k excluding 2020 or 2022, leaving out each season, winsorized, trimmed, without "
+            "the largest cell; jackknife influence; home/away; after a bye",
+            per(lambda p: r["A10"][p]["adjusted"]["leaveOneSeasonOut"]),
+            {"tests_passed": ["T28"]},
+        ),
+        (
+            "A12",
+            "Completion and correction sensitivity",
+            "refused-line cells excluded vs kept as partial sums; 2026 FFA points as first held vs "
+            "latest through the point-in-time gamebooks",
+            {
+                "refusal": per(
+                    lambda p: {
+                        k: r["A12"][p][k]["adjusted"]["k"] for k in ("excluded", "partialSums")
+                    }
+                ),
+                "vintages2026": r["A12"]["vintages"]["byPosition"],
+            },
+            {"limitations": [r["A12"]["vintages"]["limitation"]]},
+        ),
+    ]
+    out = []
+    for code, hypothesis, estimator, parameters, extra in specs:
+        out.append(
+            records.record(
+                f"M3-3-{code}",
+                "EXECUTED",
+                hypothesis=hypothesis,
+                estimator=estimator,
+                parameters=parameters,
+                sample_count=lab_receipt["results"]["A00"][groups[0]]["cells"]
+                if code == "A00"
+                else {p: r["A02"][p]["adjusted"]["calendar"]["units"] for p in groups},
+                evidence_paths=evidence,
+                reason="See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
+                next_steps="Phase B walk-forward against the offense-only B00",
+                **(shared | extra),
+            )
+        )
+    return out
+
+
 def _pair(value: tuple[float, float] | None) -> list[float] | None:
     return None if value is None else [round(value[0], 4), round(value[1], 4)]
 
@@ -950,11 +1935,21 @@ def main() -> None:
     r.add_argument("--targets", type=Path, required=True)
     r.add_argument("--run", type=Path, required=True)
     r.add_argument("--receipts", type=Path, required=True)
+    q = commands.add_parser("reliability")
+    q.add_argument("--config", type=Path, required=True)
+    q.add_argument("--targets", type=Path, required=True)
+    q.add_argument("--run", type=Path, required=True)
+    q.add_argument("--receipts", type=Path, required=True)
     g = commands.add_parser("registry")
     g.add_argument("--config", type=Path, required=True)
     g.add_argument("--receipts", type=Path, required=True)
     args = parser.parse_args()
-    {"audit": audit, "reproduce-v0": reproduce, "registry": registry}[args.command](args)
+    {
+        "audit": audit,
+        "reproduce-v0": reproduce,
+        "reliability": reliability,
+        "registry": registry,
+    }[args.command](args)
 
 
 if __name__ == "__main__":
