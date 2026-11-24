@@ -1,20 +1,92 @@
 {
   "base": "config/dvp/base.json",
   "stages": {
-    "development": [2017, 2018, 2019, 2020, 2021, 2022, 2023],
-    "validation": [2024]
+    "development": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "validation": [
+      2024
+    ],
+    "holdout": [
+      2025
+    ]
   },
   "candidates": "config/dvp/frozen-candidates.json",
   "cutoff": "pre_first_game_of_nfl_week",
-  "k_grid": [1, 2, 4, 8, 16, 32, 64, 128, 256],
-  "half_lives": [2, 4, 8],
-  "dvp_variants": ["b01", "b02", "b02r", "b03", "b03r", "b04", "b05", "b06", "b07"],
-  "controls": ["b09_shuffle", "b09_noise", "b09_lastopp"],
+  "k_grid": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "half_lives": [
+    2,
+    4,
+    8
+  ],
+  "dvp_variants": [
+    "b01",
+    "b02",
+    "b02r",
+    "b03",
+    "b03r",
+    "b04",
+    "b05",
+    "b06",
+    "b07"
+  ],
+  "controls": [
+    "b09_shuffle",
+    "b09_noise",
+    "b09_lastopp"
+  ],
   "practical_minimum_relative_rmse": 0.01,
   "practical_minimum_basis": "Fixed on 2026-11-24 before any Phase B forecast was run: a DvP variant must cut a position's RMSE by at least 1% of B00's on development folds to become that position's candidate. Assumption (the conservative choice, spec section 7): group-level DvP moves team-position totals by a few points at most, so a smaller gain would not change a Sit/Start decision.",
   "availability_delay_hours_b12": 48,
-  "week_bins": [[1, 4], [5, 9], [10, 18]],
-  "history_bins": [[0, 0], [1, 3], [4, 7], [8, 17]],
+  "week_bins": [
+    [
+      1,
+      4
+    ],
+    [
+      5,
+      9
+    ],
+    [
+      10,
+      18
+    ]
+  ],
+  "history_bins": [
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      8,
+      17
+    ]
+  ],
   "threads": "POLARS_MAX_THREADS=2 (set for the run; recorded in the receipt)",
-  "note": "Phase 3 (spec section 9). 2025 is the holdout and is refused here; Phase 4 runs it from a frozen manifest."
+  "note": "Phase 3 (spec section 9). 2025 is the holdout and is refused here; Phase 4 runs it from a frozen manifest.",
+  "frozen": "config/dvp/frozen.json"
 }

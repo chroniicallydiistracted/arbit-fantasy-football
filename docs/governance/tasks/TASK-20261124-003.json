@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-003",
+  "title": "M3-3 DvP Phase 4: frozen manifest, 2025 conditional holdout, decisions, model card, prospective 2026 freeze",
+  "objective": "Phase 4 of the owner's DvP specification (OWN-074). Freeze the Phase 3 method in a manifest (code and config hashes, frozen candidates, audit run, evaluation protocol and predeclared decision rules) before 2025 is forecast; a holdout stage that refuses to run unless every frozen hash matches; evaluate the frozen candidates (D/ST B06, B00 elsewhere, plus each position's best DvP for information) on 2025 as CONDITIONALLY_HELD_OUT with parameters fit through 2024; label each position and the whole PROMISING, INCONCLUSIVE, NOT_USEFUL or BLOCKED by the predeclared rule; write MODEL_CARD.md and a prospective 2026 freeze for confirmation on games completed after it. Research only: no weight, service or production change; any production use needs the owner.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+    "libs/arbit-model/tests/test_dvp_walkforward.py",
+    "scripts/model/dvp.py",
+    "config/dvp/frozen.json",
+    "config/dvp/backtest.json",
+    "docs/research/dvp/backtest-holdout.json",
+    "docs/research/dvp/MODEL_CARD.md",
+    "docs/research/dvp/PROSPECTIVE_2026.md",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/experiment-registry.json",
+    "docs/research/dvp/DATA_DICTIONARY.md",
+    "docs/research/dvp/plots/backtest-delta.svg",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/project/decision-register.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T03:13:59Z",
+  "updated_at": "2026-11-24T03:14:27Z",
+  "baseline": "09cde9099b0cc3697fc5a3a21a8d8419e2da7c63",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Read the specification's Phase 4 (frozen manifest, CONDITIONALLY_HELD_OUT labeling, prospective confirmation, decision labels per position and globally) and section 12, the Phase 3 receipts and frozen candidates, and the stage guard. 2025 exposure: descriptive only (v0 and Phase A used 2016-2025 for repeatability); no 2025 forecast, outcome or parameter entered model selection, which used development folds 2017-2023 and was confirmed on 2024.",
+      "files": [
+        "config/dvp/backtest.json",
+        "scripts/model/dvp.py",
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py"
+      ]
+    },
+    "plan": {
+      "summary": "1) dvp.py freeze writes config/dvp/frozen.json: SHA-256 of the method files (walkforward.py, lab.py, asof.py, observations.py, dvp.py, base/backtest configs, frozen candidates), the audit run's output hashes and targets index, the protocol (RMSE, week-block bootstrap, seed, practical minimum) and the decision rule, plus the prospective 2026 window. 2) backtest --stage holdout runs only when every frozen hash matches the files on disk; parameters fit on 2016-2024; candidates evaluated on 2025; decisions by the predeclared rule (PROMISING if the candidate is a DvP variant meeting the minimum in development, validation and holdout; NOT_USEFUL if the best DvP misses the minimum in all three; INCONCLUSIVE otherwise; BLOCKED on any integrity failure). 3) Tests for the holdout guard. 4) MODEL_CARD.md, PROSPECTIVE_2026.md, registry decisions, records.",
+      "files": [
+        "scripts/model/dvp.py",
+        "config/dvp/frozen.json",
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+        "libs/arbit-model/tests/test_dvp_walkforward.py"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}

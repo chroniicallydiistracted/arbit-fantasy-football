@@ -1935,9 +1935,17 @@ def backtest(args: argparse.Namespace) -> None:
     base = json.loads((ROOT / config["base"]).read_text())
     stage = args.stage
     seasons: list[int] = config["stages"][stage]
-    wf.check_stage(stage, seasons, base["split"])
     started = datetime.now(UTC)
     run = args.run
+    frozen_manifest: dict[str, Any] | None = None
+    blocked: str | None = None
+    if stage == "holdout":
+        frozen_manifest = json.loads((ROOT / config["frozen"]).read_text())
+        mismatches = _verify_frozen(frozen_manifest, run, base)
+        if mismatches:
+            blocked = "frozen manifest does not match: " + "; ".join(mismatches)
+            raise SystemExit(blocked)
+    wf.check_stage(stage, seasons, base["split"], frozen_verified=frozen_manifest is not None)
     run_manifest = json.loads((run / "run-manifest.json").read_text())
     if run_manifest["targetsIndex"] != base["targets_index"]:
         raise SystemExit("the audit run read a different targets index from the configured one")
@@ -1952,7 +1960,7 @@ def backtest(args: argparse.Namespace) -> None:
     seed, reps = base["random_seed"], base["bootstrap_replicates"]
     candidates_path = ROOT / config["candidates"]
     candidates = None
-    if stage == "validation":
+    if stage in ("validation", "holdout"):
         if not candidates_path.exists():
             raise SystemExit("validation needs the candidates frozen after development")
         candidates = json.loads(candidates_path.read_text())
@@ -2004,23 +2012,27 @@ def backtest(args: argparse.Namespace) -> None:
             "calibration": wf.calibration(part, focus),
         }
 
-    # B10: per-game cutoffs; B12: a slower availability rule. B00 and B03 only.
+    # B10: per-game cutoffs; B12: a slower availability rule. B00 and B03 only; not on the holdout.
     sensitivity: dict[str, Any] = {}
     for label, variant_settings in (
-        (
-            "B10_perGame",
-            wf.Settings(mode=asof.Cutoff.PER_GAME, k_grid=(), half_lives=(), seed=seed),
-        ),
-        (
-            "B12_delay48h",
-            wf.Settings(
-                mode=asof.Cutoff(config["cutoff"]),
-                k_grid=(),
-                half_lives=(),
-                availability_delay=timedelta(hours=config["availability_delay_hours_b12"]),
-                seed=seed,
+        ()
+        if stage == "holdout"
+        else (
+            (
+                "B10_perGame",
+                wf.Settings(mode=asof.Cutoff.PER_GAME, k_grid=(), half_lives=(), seed=seed),
             ),
-        ),
+            (
+                "B12_delay48h",
+                wf.Settings(
+                    mode=asof.Cutoff(config["cutoff"]),
+                    k_grid=(),
+                    half_lives=(),
+                    availability_delay=timedelta(hours=config["availability_delay_hours_b12"]),
+                    seed=seed,
+                ),
+            ),
+        )
     ):
         alt, _ = run_stage(variant_settings)
         compare = joined.select(
@@ -2081,7 +2093,7 @@ def backtest(args: argparse.Namespace) -> None:
             "practicalMinimumRelativeRmse": config["practical_minimum_relative_rmse"],
         } | selection
         write_json(candidates_path, frozen)
-    else:
+    elif stage == "validation":
         assert candidates is not None
         report["candidates"] = {
             "path": config["candidates"],
@@ -2093,6 +2105,25 @@ def backtest(args: argparse.Namespace) -> None:
             for pos in positions
         }
         write_json(args.receipts / "backtest-validation.json", report)
+    else:
+        assert candidates is not None and frozen_manifest is not None
+        report["candidates"] = {
+            "path": config["candidates"],
+            "sha256": sha256(candidates_path),
+            "frozenAt": candidates["frozenAt"],
+        }
+        report["frozenManifest"] = {
+            "path": config["frozen"],
+            "sha256": sha256(ROOT / config["frozen"]),
+            "frozenAt": frozen_manifest["frozenAt"],
+        }
+        report["holdoutStatus"] = frozen_manifest["holdout"]["status"]
+        expected = rows.filter(pl.col("season").is_in(seasons)).height
+        coverage_problem = (
+            None if joined.height == expected else f"{joined.height} forecasts for {expected} cells"
+        )
+        report["decisions"] = _decisions(by_position, frozen_manifest, positions, coverage_problem)
+        write_json(args.receipts / "backtest-holdout.json", report)
     print(f"backtest {stage}: {joined.height} forecasts over {seasons}")
 
 
@@ -2207,7 +2238,7 @@ def report(args: argparse.Namespace) -> None:
 
     receipts = args.receipts
     rows: list[tuple[str, str, float | None, float | None, float | None]] = []
-    for stage in ("development", "validation"):
+    for stage in ("development", "validation", "holdout"):
         path = receipts / f"backtest-{stage}.json"
         if not path.exists():
             continue
@@ -2236,7 +2267,7 @@ def report(args: argparse.Namespace) -> None:
             rows,
             xlabel="% change in RMSE (negative is better); 95% block bootstrap",
             xlim=(-10.0, 4.0),
-            note="dev: 2017-2023 rolling folds (best chosen here); val: 2024 with the choice frozen.",
+            note="dev: 2017-2023 folds (chosen here); val: 2024; hol: 2025 conditional holdout. Frozen in between.",
             log=False,
         )
     )
@@ -2394,6 +2425,192 @@ def _phase_b_records(
     return out
 
 
+FROZEN_METHOD = (
+    "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+    "libs/arbit-model/src/arbit_model/dvp/lab.py",
+    "libs/arbit-model/src/arbit_model/dvp/asof.py",
+    "libs/arbit-model/src/arbit_model/dvp/observations.py",
+    "libs/arbit-model/src/arbit_model/dvp/reliability.py",
+    "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+    "libs/arbit-model/src/arbit_model/teams.py",
+    "scripts/model/dvp.py",
+    "config/dvp/base.json",
+    "config/dvp/backtest.json",
+    "config/dvp/frozen-candidates.json",
+)
+DECISION_RULE = (
+    "Per position, with the best DvP variant's relative change in RMSE against B00 in development "
+    "(2017-2023), validation (2024) and the holdout (2025): PROMISING if the frozen candidate is a "
+    "DvP variant and it cuts RMSE by at least the practical minimum (1%) in all three periods; "
+    "NOT_USEFUL if the best DvP variant misses the minimum in all three; INCONCLUSIVE otherwise; "
+    "BLOCKED if an integrity check fails (frozen hashes, coverage, projection dependency). Globally: "
+    "PROMISING with the positions that are; NOT_USEFUL if every position is; INCONCLUSIVE otherwise. "
+    "A paired holdout interval that excludes 0 is reported as stronger evidence, not required."
+)
+
+
+def freeze(args: argparse.Namespace) -> None:
+    """Fix the Phase 3 method, its inputs and the decision rule before 2025 is forecast."""
+    from arbit_model.dvp import observations as observation_rules
+
+    config = json.loads(args.config.read_text())
+    base = json.loads((ROOT / config["base"]).read_text())
+    code = code_version()
+    if code.endswith("+uncommitted"):
+        raise SystemExit("freeze from committed code only")
+    run_manifest = json.loads((args.run / "run-manifest.json").read_text())
+    if run_manifest["targetsIndex"] != base["targets_index"]:
+        raise SystemExit("the audit run read a different targets index from the configured one")
+    receipts = args.receipts
+    development = json.loads((receipts / "backtest-development.json").read_text())
+    validation = json.loads((receipts / "backtest-validation.json").read_text())
+    candidates = json.loads((ROOT / config["candidates"]).read_text())
+    if candidates["fromDevelopment"]["forecastsSha256"] != development["forecastsSha256"]:
+        raise SystemExit("the frozen candidates don't come from this development receipt")
+    if validation["candidates"]["sha256"] != sha256(ROOT / config["candidates"]):
+        raise SystemExit("validation ran on different candidates")
+    now = datetime.now(UTC)
+    engine = create_engine(
+        os.environ["ARBIT_DATABASE_URL"],
+        hide_parameters=True,
+        execution_options={"postgresql_readonly": True},
+    )
+    nflverse = ObjectStore(Path(os.environ.get("ARBIT_NFLVERSE_PATH", "data/nflverse")) / "objects")
+    schedule = pl.from_dicts(
+        NflverseTables(UnitOfWork(engine), nflverse).read("schedules/games"),
+        infer_schema_length=None,
+    )
+    upcoming = (
+        observation_rules.games(schedule, [now.year])
+        .group_by("week")
+        .agg(pl.col("kickoff").min().alias("first"))
+        .filter(pl.col("first") > now)
+        .sort("week")
+    )
+    weeks = upcoming.get_column("week").to_list()
+    periods = {
+        pos: {
+            "candidate": candidates["positions"][pos]["candidate"],
+            "bestDvp": candidates["positions"][pos]["bestDvp"],
+            "development": candidates["positions"][pos]["bestRelativeDelta"],
+            "validation": validation["results"][pos][candidates["positions"][pos]["bestDvp"]][
+                "relativeDelta"
+            ],
+        }
+        for pos in base["position_groups"]
+    }
+    manifest = {
+        "format": FORMAT + "-frozen-v1",
+        "frozenAt": now.isoformat(),
+        "code": code,
+        "method": {path: sha256(ROOT / path) for path in FROZEN_METHOD},
+        "auditRun": args.run.name,
+        "auditOutputs": run_manifest["outputs"],
+        "targetsIndex": base["targets_index"],
+        "receipts": {
+            "development": sha256(receipts / "backtest-development.json"),
+            "validation": sha256(receipts / "backtest-validation.json"),
+        },
+        "holdout": {
+            "season": 2025,
+            "trainingThrough": 2024,
+            "status": "CONDITIONALLY_HELD_OUT",
+            "exposure": "v0 (2026-11-23) and Phase A (reliability lab) described 2016-2025, 2025 "
+            "included, for repeatability only. No 2025 forecast was made or inspected, and no "
+            "parameter was estimated on 2025: candidates came from development folds 2017-2023 and "
+            "were frozen before the 2024 validation. The Phase B variant designs (a last-season "
+            "prior, non-touchdown points) drew on Phase A's descriptive findings, which included 2025.",
+        },
+        "protocol": {
+            "metric": "RMSE per position on common rows, relative to B00",
+            "block": "week",
+            "bootstrapReplicates": base["bootstrap_replicates"],
+            "seed": base["random_seed"],
+            "practicalMinimumRelativeRmse": config["practical_minimum_relative_rmse"],
+        },
+        "decisionRule": DECISION_RULE,
+        "periods": periods,
+        "prospective": {
+            "season": now.year,
+            "weeks": weeks,
+            "firstKickoff": upcoming.get_column("first").min().isoformat() if weeks else None,  # type: ignore[union-attr]
+            "plan": "Forecast these weeks with this frozen method, each from the actuals available "
+            "before its cutoff, once the season is complete and the targets are rebuilt; evaluate "
+            "with the same protocol. Confirmatory, independent of every earlier season.",
+        },
+        "forbidden_vendor_projection_dependencies": 0,
+    }
+    write_json(ROOT / config["frozen"], manifest)
+    print(f"frozen at {manifest['frozenAt']}; prospective {now.year} weeks {weeks}")
+
+
+def _verify_frozen(manifest: dict[str, Any], run: Path, base: dict[str, Any]) -> list[str]:
+    """Every way the files on disk differ from the frozen manifest."""
+    problems = [
+        f"{path} changed"
+        for path, digest in manifest["method"].items()
+        if sha256(ROOT / path) != digest
+    ]
+    if run.name != manifest["auditRun"]:
+        problems.append(f"audit run {run.name} is not {manifest['auditRun']}")
+    problems += [
+        f"{name} changed"
+        for name, digest in manifest["auditOutputs"].items()
+        if sha256(run / name) != digest
+    ]
+    if manifest["targetsIndex"] != base["targets_index"]:
+        problems.append("targets index changed")
+    if manifest.get("forbidden_vendor_projection_dependencies") != 0:
+        problems.append("projection dependency recorded")
+    return problems
+
+
+def _decisions(
+    by_position: dict[str, Any],
+    manifest: dict[str, Any],
+    positions: list[str],
+    coverage_problem: str | None,
+) -> dict[str, Any]:
+    from arbit_model.dvp import walkforward as wf
+
+    minimum = manifest["protocol"]["practicalMinimumRelativeRmse"]
+    out: dict[str, Any] = {"rule": manifest["decisionRule"], "positions": {}}
+    for pos in positions:
+        period = manifest["periods"][pos]
+        result = by_position[pos][period["bestDvp"]]
+        decision = wf.decide(
+            period["candidate"],
+            period["development"],
+            period["validation"],
+            result["relativeDelta"],
+            minimum,
+            blocked=coverage_problem,
+        )
+        out["positions"][pos] = decision | {
+            "candidate": period["candidate"],
+            "bestDvp": period["bestDvp"],
+            "relativeDelta": {
+                "development": period["development"],
+                "validation": period["validation"],
+                "holdout": result["relativeDelta"],
+            },
+            "holdoutDelta95": result["delta95"],
+            "holdoutIntervalExcludesZero": result["delta95"][1] < 0 or result["delta95"][0] > 0,
+        }
+    labels = {p: d["label"] for p, d in out["positions"].items()}
+    promising = sorted(p for p, label in labels.items() if label == "PROMISING")
+    if any(label == "BLOCKED" for label in labels.values()):
+        overall = "BLOCKED"
+    elif promising:
+        overall = "PROMISING"
+    elif all(label == "NOT_USEFUL" for label in labels.values()):
+        overall = "NOT_USEFUL"
+    else:
+        overall = "INCONCLUSIVE"
+    out["global"] = {"label": overall, "promisingPositions": promising}
+    return out
+
+
 def _pair(value: tuple[float, float] | None) -> list[float] | None:
     return None if value is None else [round(value[0], 4), round(value[1], 4)]
 
@@ -2418,10 +2635,14 @@ def main() -> None:
     q.add_argument("--receipts", type=Path, required=True)
     b = commands.add_parser("backtest")
     b.add_argument("--config", type=Path, required=True)
-    b.add_argument("--stage", choices=("development", "validation"), required=True)
+    b.add_argument("--stage", choices=("development", "validation", "holdout"), required=True)
     b.add_argument("--targets", type=Path, required=True)
     b.add_argument("--run", type=Path, required=True)
     b.add_argument("--receipts", type=Path, required=True)
+    fz = commands.add_parser("freeze")
+    fz.add_argument("--config", type=Path, required=True)
+    fz.add_argument("--run", type=Path, required=True)
+    fz.add_argument("--receipts", type=Path, required=True)
     rp = commands.add_parser("report")
     rp.add_argument("--receipts", type=Path, required=True)
     g = commands.add_parser("registry")
@@ -2433,6 +2654,7 @@ def main() -> None:
         "reproduce-v0": reproduce,
         "reliability": reliability,
         "backtest": backtest,
+        "freeze": freeze,
         "report": report,
         "registry": registry,
     }[args.command](args)
