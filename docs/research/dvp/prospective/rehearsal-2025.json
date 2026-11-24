@@ -1,6 +1,6 @@
 {
  "classification": "REHEARSAL (2025, completed; never prospective)",
- "code": "6f44e5b71fa7919b64b9f7f72421fb18bd5e1616",
+ "code": "5529152ed77d5c2a6473397e74c1467bf371d871",
  "equivalence": {
   "adapterOnlyByPosition": {
    "K": 2,
@@ -166,7 +166,7 @@
    "DST": {
     "bestDvpAtFreeze": "b06",
     "candidate": "b06",
-    "label": "CONFIRMED",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
     "metrics": {
      "b00": {
       "delta95": [
@@ -447,12 +447,13 @@
      "blocks": 7,
      "rows": 216
     },
-    "relativeDelta": -0.05544
+    "relativeDelta": -0.05544,
+    "ruleOutcome": "CONFIRMED"
    },
    "K": {
     "bestDvpAtFreeze": "b06",
     "candidate": "b00",
-    "label": "NO_CANDIDATE (noted, never promoted)",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
     "metrics": {
      "b00": {
       "delta95": [
@@ -733,12 +734,13 @@
      "blocks": 7,
      "rows": 215
     },
-    "relativeDelta": -0.00775
+    "relativeDelta": -0.00775,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
    },
    "QB": {
     "bestDvpAtFreeze": "b06",
     "candidate": "b00",
-    "label": "NO_CANDIDATE (noted, never promoted)",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
     "metrics": {
      "b00": {
       "delta95": [
@@ -1019,12 +1021,13 @@
      "blocks": 7,
      "rows": 216
     },
-    "relativeDelta": -0.02031
+    "relativeDelta": -0.02031,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
    },
    "RB": {
     "bestDvpAtFreeze": "b06",
     "candidate": "b00",
-    "label": "NO_CANDIDATE (noted, never promoted)",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
     "metrics": {
      "b00": {
       "delta95": [
@@ -1305,12 +1308,13 @@
      "blocks": 7,
      "rows": 215
     },
-    "relativeDelta": 0.00012
+    "relativeDelta": 0.00012,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
    },
    "TE": {
     "bestDvpAtFreeze": "b07",
     "candidate": "b00",
-    "label": "NO_CANDIDATE (noted, never promoted)",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
     "metrics": {
      "b00": {
       "delta95": [
@@ -1591,12 +1595,13 @@
      "blocks": 7,
      "rows": 215
     },
-    "relativeDelta": -0.00319
+    "relativeDelta": -0.00319,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
    },
    "WR": {
     "bestDvpAtFreeze": "b06",
     "candidate": "b00",
-    "label": "NO_CANDIDATE (noted, never promoted)",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
     "metrics": {
      "b00": {
       "delta95": [
@@ -1877,11 +1882,12 @@
      "blocks": 7,
      "rows": 215
     },
-    "relativeDelta": -0.01994
+    "relativeDelta": -0.01994,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
    }
   },
   "phaseC": {
-   "label": "CONFIRMED",
+   "label": "REHEARSAL: 2025 was known; never a confirmation",
    "metrics": {
     "accuracy": {
      "b00": 56.887,
@@ -1955,6 +1961,7 @@
    },
    "reason": "clears 1.8 pp with net points gained in every period: prospective +7.29 pp, +2184.0 points",
    "rule": "PROMISING",
+   "ruleOutcome": "CONFIRMED",
    "units": 216
   }
  },
@@ -1967,7 +1974,7 @@
   "groupLevelCode": "f75868b725795cb50ca71c20f80fd383f670669b",
   "phaseCSha256": "39bd0bc038312b18ffd630db9c8c24cf609e40122ff1987822a52c55a63c400e"
  },
- "generatedAt": "2026-11-24T23:12:35.739612+00:00",
+ "generatedAt": "2026-11-24T23:17:43.375514+00:00",
  "history": {
   "auditOutputs": {
    "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
