@@ -1,0 +1,4567 @@
+{
+  "format": "arbit-dvp-m3-3-plan-audit-v1",
+  "generatedAt": "2026-11-24T21:33:28.757070+00:00",
+  "code": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+  "specification": {
+    "path": "docs/research/Arbit_FFA_M3_DvP_Plan.md",
+    "sha256": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d"
+  },
+  "auditRun": "phase1-audit-20261124T024442Z",
+  "reruns": {
+    "code": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+    "frozenTree": "165d140b0be131cd8b4a6092e6d3928fb3a3c706",
+    "steps": [
+      {
+        "step": "audit",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 1.5
+      },
+      {
+        "step": "reproduce-v0",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 6.9
+      },
+      {
+        "step": "reliability",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 72.2
+      },
+      {
+        "step": "backtest-development",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.1
+      },
+      {
+        "step": "backtest-validation",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 7.0
+      },
+      {
+        "step": "backtest-holdout-frozen-tree",
+        "cwd": "frozen-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 4.3
+      },
+      {
+        "step": "backtest-holdout-refused-here",
+        "cwd": "this-tree",
+        "exit": 1,
+        "expectedExit": 1,
+        "seconds": 0.5
+      },
+      {
+        "step": "sitstart",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.8
+      },
+      {
+        "step": "verify",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 10.3
+      },
+      {
+        "step": "report",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.5
+      },
+      {
+        "step": "registry",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.5
+      },
+      {
+        "step": "model-tests",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 8.0
+      }
+    ]
+  },
+  "tests": {
+    "passed": 157,
+    "failed": 0,
+    "skipped": 0
+  },
+  "status": "PASSED",
+  "summary": {
+    "items": 214,
+    "DONE": 209,
+    "OPEN": 5,
+    "FAILED": 0,
+    "checks": 156,
+    "checksPassed": 156
+  },
+  "items": [
+    {
+      "id": "R01",
+      "section": "\u00a70.1",
+      "title": "Resume M3-3 from v0: inventory, verify and continue it",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T29",
+        "v0:bytes",
+        "v0:reproduced",
+        "registry:v0"
+      ]
+    },
+    {
+      "id": "R02",
+      "section": "\u00a70.2",
+      "title": "Read AGENTS.md and inspect scoring, contracts, tests and v0 before changing anything",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:4",
+        "test:T29"
+      ]
+    },
+    {
+      "id": "R03",
+      "section": "\u00a70.3",
+      "title": "Use Arbit's canonical FFA actuals under the league's rules only",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T30",
+        "audit:checks",
+        "test:T37"
+      ]
+    },
+    {
+      "id": "R04",
+      "section": "\u00a70.4",
+      "title": "Exclude every provider projection by schema, lineage and executable tests",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T31",
+        "test:T32",
+        "test:T33",
+        "test:T40",
+        "provenance:passed",
+        "receipts:no-projection"
+      ]
+    },
+    {
+      "id": "R05",
+      "section": "\u00a70.5",
+      "title": "B00 and every variant forecast only from eligible completed-game actuals",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T38",
+        "test:B11",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "R06",
+      "section": "\u00a70.6",
+      "title": "Realized data counts only once completed and available by the cutoff",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T15",
+        "test:T34",
+        "test:T35",
+        "test:T39"
+      ]
+    },
+    {
+      "id": "R07",
+      "section": "\u00a70.7",
+      "title": "Isolated branch; no production write, weight change or canonical-table replacement",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T26",
+        "config:no-production",
+        "open:owner-weight"
+      ]
+    },
+    {
+      "id": "R08",
+      "section": "\u00a70.8",
+      "title": "Preserve v0 untouched; extend through versioned experiments",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:bytes",
+        "test:T29",
+        "rerun:continuity"
+      ]
+    },
+    {
+      "id": "R09",
+      "section": "\u00a70.9",
+      "title": "nflverse is the statistical foundation; no paid, opaque or projected inputs",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "provenance:passed",
+        "provenance:forbidden-inventory"
+      ]
+    },
+    {
+      "id": "R10",
+      "section": "\u00a70.10",
+      "title": "Report repeatability, forecasting, player-level impact and shrinkage separately",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions",
+        "registry:A05",
+        "registry:B06",
+        "registry:C05"
+      ]
+    },
+    {
+      "id": "R11",
+      "section": "\u00a70.11",
+      "title": "Every forecast uses inputs and parameters available at its cutoff; vintage limits documented",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T16",
+        "test:T17",
+        "test:T18",
+        "finality:recorded"
+      ]
+    },
+    {
+      "id": "R12",
+      "section": "\u00a70.12",
+      "title": "No fabrication; unavailable inputs disable experiments, recorded as BLOCKED",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C03",
+        "phasec:not-available",
+        "rerun:steps"
+      ]
+    },
+    {
+      "id": "R13",
+      "section": "\u00a70.13",
+      "title": "Durable documentation so a fresh agent can resume",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:1",
+        "deliverable:9",
+        "docs:prospective"
+      ]
+    },
+    {
+      "id": "R14",
+      "section": "\u00a70.14",
+      "title": "Use the status vocabulary; never claim unrun tests; never promote without approval",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:complete",
+        "test:dvp-all",
+        "docs:status-vocabulary"
+      ]
+    },
+    {
+      "id": "RQ1",
+      "section": "\u00a71",
+      "title": "RQ1 measure: is there a repeatable position-specific defensive tendency?",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A01",
+        "registry:A05",
+        "v0:validated",
+        "reliability:a05"
+      ]
+    },
+    {
+      "id": "RQ2",
+      "section": "\u00a71",
+      "title": "RQ2 explain noise: trait vs schedule, offense, randomness, transient conditions",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A03",
+        "registry:A05",
+        "registry:A06",
+        "registry:A08",
+        "registry:A09"
+      ]
+    },
+    {
+      "id": "RQ3",
+      "section": "\u00a71",
+      "title": "RQ3 evidence strength by position and sample size; v0 conversion vs variance models",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A04",
+        "registry:A05",
+        "v0:wr-k",
+        "test:T12"
+      ]
+    },
+    {
+      "id": "RQ4",
+      "section": "\u00a71",
+      "title": "RQ4 forecast: does pre-week defensive information improve next-game forecasts?",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B00",
+        "registry:B03",
+        "registry:B06",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "RQ5",
+      "section": "\u00a71",
+      "title": "RQ5 add value over the offense-only baseline, consistently",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:decisions",
+        "backtest:dev-folds",
+        "registry:HOLDOUT-2025"
+      ]
+    },
+    {
+      "id": "RQ6",
+      "section": "\u00a71",
+      "title": "RQ6 translate (conditional): player-level forecasts and pairwise start/sit",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "phasec:decision",
+        "registry:C04",
+        "registry:C05"
+      ]
+    },
+    {
+      "id": "RQ7",
+      "section": "\u00a71",
+      "title": "RQ7 operationalize (conditional): estimator, shrinkage, freshness, fallback; approval-gated",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions",
+        "docs:prospective",
+        "open:owner-weight"
+      ]
+    },
+    {
+      "id": "D01",
+      "section": "\u00a72",
+      "title": "position: groups from the league configuration; FB as RB; K and D/ST in scope; negatives kept",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:positions",
+        "test:T02",
+        "test:T04"
+      ]
+    },
+    {
+      "id": "D02",
+      "section": "\u00a72",
+      "title": "game and team_game: completed regular-season games, exactly two team-games each",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:reconciliation",
+        "test:T06"
+      ]
+    },
+    {
+      "id": "D03",
+      "section": "\u00a72",
+      "title": "offense and defense: the offense's points by group are the opposing defense's points allowed",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T07",
+        "test:T01"
+      ]
+    },
+    {
+      "id": "D04",
+      "section": "\u00a72",
+      "title": "D/ST special case: the opposing D/ST's points against the offense (offense vulnerability)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T07",
+        "audit:examples"
+      ]
+    },
+    {
+      "id": "D05",
+      "section": "\u00a72",
+      "title": "true zero vs missing or invalid",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T03",
+        "audit:cells"
+      ]
+    },
+    {
+      "id": "D06",
+      "section": "\u00a72",
+      "title": "delta: points less a stated offense expectation; positive means the defense allowed more",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T08",
+        "registry:A03"
+      ]
+    },
+    {
+      "id": "D07",
+      "section": "\u00a72",
+      "title": "defense-season: no presumption that a trait survives seasons",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A07",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "D08",
+      "section": "\u00a72",
+      "title": "forecast cutoff: pre-week default; per-game is a separate experiment; never mixed",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T15",
+        "test:T35",
+        "registry:B10"
+      ]
+    },
+    {
+      "id": "D09",
+      "section": "\u00a72",
+      "title": "game count n: eligible games, not calendar weeks; byes and cancellations add no exposure",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T10",
+        "test:T34"
+      ]
+    },
+    {
+      "id": "H01",
+      "section": "\u00a72.1",
+      "title": "Scoring truth: FFA rules, Arbit's canonical actuals, nflverse raw stats for reconciliation",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T30",
+        "audit:checks"
+      ]
+    },
+    {
+      "id": "H02",
+      "section": "\u00a72.1",
+      "title": "Pregame features: only previously completed actuals and realized stats; priors from actuals",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T38",
+        "test:T15"
+      ]
+    },
+    {
+      "id": "H03",
+      "section": "\u00a72.1",
+      "title": "Prohibited everywhere: ESPN and vendor projections, rankings, forecasts, copied points-allowed tables",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T31",
+        "test:T32",
+        "provenance:forbidden-inventory"
+      ]
+    },
+    {
+      "id": "H04",
+      "section": "\u00a72.1",
+      "title": "Arbit forecasts are outputs with traceable ancestry, never fed back as actuals",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T36",
+        "test:T20"
+      ]
+    },
+    {
+      "id": "H05",
+      "section": "\u00a72.1",
+      "title": "Mandatory row metadata: source, type, lineage, IDs, status, finality, scoring hash, feature_as_of",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:observation-lineage",
+        "test:T36"
+      ]
+    },
+    {
+      "id": "H06",
+      "section": "\u00a72.1",
+      "title": "Enforcement by allowlist and typed schemas; unknowns fail closed; machine-readable exclusion audit",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T33",
+        "test:T32",
+        "provenance:passed"
+      ]
+    },
+    {
+      "id": "E01",
+      "section": "\u00a72.2",
+      "title": "Prior-week completed FFA points: eligible",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T34",
+        "test:T25"
+      ]
+    },
+    {
+      "id": "E02",
+      "section": "\u00a72.2",
+      "title": "Prior completed-game nflverse stats for validating actuals: eligible under the as-of rule",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T30",
+        "finality:recorded"
+      ]
+    },
+    {
+      "id": "E03",
+      "section": "\u00a72.2",
+      "title": "This week's Thursday result: only under a per-game cutoff",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T35",
+        "test:T15"
+      ]
+    },
+    {
+      "id": "E04",
+      "section": "\u00a72.2",
+      "title": "Game underway, delayed or unfinished at the cutoff: never",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T34"
+      ]
+    },
+    {
+      "id": "E05",
+      "section": "\u00a72.2",
+      "title": "Game completed after the cutoff: label only, never a feature",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T16",
+        "test:T17",
+        "test:T39"
+      ]
+    },
+    {
+      "id": "E06",
+      "section": "\u00a72.2",
+      "title": "ESPN projected points, even pregame: never",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T32",
+        "test:B11"
+      ]
+    },
+    {
+      "id": "E07",
+      "section": "\u00a72.2",
+      "title": "Vendor projections renamed opponent_expected: never",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T32",
+        "test:T33"
+      ]
+    },
+    {
+      "id": "E08",
+      "section": "\u00a72.2",
+      "title": "Arbit B00 from prior actuals: allowed as output and comparator",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T38",
+        "registry:B00"
+      ]
+    },
+    {
+      "id": "E09",
+      "section": "\u00a72.2",
+      "title": "Two isolated views (features as of T, targets after T), joined only after forecasts are written",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T36",
+        "test:T20"
+      ]
+    },
+    {
+      "id": "S01",
+      "section": "\u00a73.1",
+      "title": "canonical_ffa_player_week: Arbit's FFA target store (index 6ffb62fb)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:checks",
+        "test:T30",
+        "test:T05"
+      ]
+    },
+    {
+      "id": "S02",
+      "section": "\u00a73.1",
+      "title": "canonical_ffa_dst_week: one D/ST line per completed team-game",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:cells",
+        "test:T07"
+      ]
+    },
+    {
+      "id": "S03",
+      "section": "\u00a73.1",
+      "title": "nfl_schedule: schedule_games.parquet, completed regular-season games only",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:seasons",
+        "test:T06"
+      ]
+    },
+    {
+      "id": "S04",
+      "section": "\u00a73.1",
+      "title": "team_game_position and defense_game_position: observations.parquet",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:observation-lineage",
+        "rerun:observations",
+        "test:T01"
+      ]
+    },
+    {
+      "id": "S05",
+      "section": "\u00a73.1",
+      "title": "historical_cutoff_index: per-game cutoffs and feature_as_of",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T15",
+        "test:T35"
+      ]
+    },
+    {
+      "id": "S06",
+      "section": "\u00a73.1",
+      "title": "experiment_registry: every experiment with config, hashes, seed and status",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:complete",
+        "rerun:registry"
+      ]
+    },
+    {
+      "id": "S07",
+      "section": "\u00a73.1",
+      "title": "source_provenance_allowlist: admitted sources with ancestry and scoring hash",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "provenance:passed",
+        "test:T33"
+      ]
+    },
+    {
+      "id": "S08",
+      "section": "\u00a73.1",
+      "title": "prohibited_source_audit: reject or quarantine inventory of forbidden sources",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "provenance:forbidden-inventory",
+        "test:T31"
+      ]
+    },
+    {
+      "id": "S09",
+      "section": "\u00a73.1",
+      "title": "No new scoring engine: reuse stored FFA actuals; recompute only to audit",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:checks",
+        "test:T30"
+      ]
+    },
+    {
+      "id": "S10",
+      "section": "\u00a73.2",
+      "title": "Supplementary sources only with lineage; component stats for A09 and B07",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "provenance:passed",
+        "registry:A09",
+        "registry:B07"
+      ]
+    },
+    {
+      "id": "Q01",
+      "section": "\u00a73.3",
+      "title": "5,278 completed team-games verified against the schedule (canceled BUF-CIN excluded)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:reconciliation",
+        "audit:seasons",
+        "test:T06"
+      ]
+    },
+    {
+      "id": "Q02",
+      "section": "\u00a73.3",
+      "title": "320 defense-seasons audited per filter",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:validated",
+        "audit:seasons"
+      ]
+    },
+    {
+      "id": "Q03",
+      "section": "\u00a73.3",
+      "title": "Two team-games per game, offense-defense symmetry, D/ST reverse orientation; no postseason or phantom zeros",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:reconciliation",
+        "test:T06",
+        "test:T07",
+        "test:T34"
+      ]
+    },
+    {
+      "id": "Q04",
+      "section": "\u00a73.3",
+      "title": "Team renames and relocations, trades, duplicates, multi-position mapping, negatives, corrections",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:checks",
+        "test:T05",
+        "test:T02",
+        "test:T04"
+      ]
+    },
+    {
+      "id": "Q05",
+      "section": "\u00a73.3",
+      "title": "Hand-checked samples: zero TE, multi-WR, traded player, D/ST turnover, canceled game",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:examples",
+        "audit:checks"
+      ]
+    },
+    {
+      "id": "Q06",
+      "section": "\u00a73.3",
+      "title": "Data quality report and machine-readable anomalies; invalid rows blocked",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:2",
+        "audit:cells"
+      ]
+    },
+    {
+      "id": "Q07",
+      "section": "\u00a73.3",
+      "title": "Finality and availability at every cutoff; conservative fallback declared",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "finality:recorded",
+        "rerun:finality-audit",
+        "registry:A12",
+        "registry:B12"
+      ]
+    },
+    {
+      "id": "Q08",
+      "section": "\u00a73.3",
+      "title": "Full projection-lineage scan over v0 and every new input",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "provenance:passed",
+        "rerun:projection-audit",
+        "test:T31"
+      ]
+    },
+    {
+      "id": "V01",
+      "section": "\u00a74.1",
+      "title": "Position sums per complete team-game; FB as RB; valid zeros",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T01",
+        "test:T02",
+        "test:T03"
+      ]
+    },
+    {
+      "id": "V02",
+      "section": "\u00a74.2",
+      "title": "Defense inversion with the separate D/ST interpretation",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T07"
+      ]
+    },
+    {
+      "id": "V03",
+      "section": "\u00a74.3",
+      "title": "Same-season leave-one-game-out offense adjustment; singletons handled",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T08"
+      ]
+    },
+    {
+      "id": "V04",
+      "section": "\u00a74.4",
+      "title": "Odd vs even NFL calendar weeks; at least 4 games per half; unequal halves recorded",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T09",
+        "test:T10"
+      ]
+    },
+    {
+      "id": "V05",
+      "section": "\u00a74.5",
+      "title": "Split-half Pearson and Spearman, raw and adjusted, counts and intervals, scatter plots",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:validated",
+        "deliverable:10"
+      ]
+    },
+    {
+      "id": "V06",
+      "section": "\u00a74.6",
+      "title": "Reproduce v0 r, single-game reliability, k and w(n); explain WR 44.1 vs 42.63",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:reproduced",
+        "v0:wr-k",
+        "rerun:v0",
+        "test:T11"
+      ]
+    },
+    {
+      "id": "V07",
+      "section": "\u00a74",
+      "title": "Freeze v0: outputs, hashes, config and a discrepancy report; lineage audited",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:bytes",
+        "rerun:continuity",
+        "registry:A11",
+        "deliverable:4"
+      ]
+    },
+    {
+      "id": "X00",
+      "section": "\u00a75",
+      "title": "Every experiment states hypothesis, estimator, data, cutoff, ancestry, comparator, metric, interval, conclusion",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:complete"
+      ]
+    },
+    {
+      "id": "A00",
+      "section": "\u00a75 Phase A",
+      "title": "A00: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A00",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A01",
+      "section": "\u00a75 Phase A",
+      "title": "A01: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A01",
+        "rerun:v0"
+      ]
+    },
+    {
+      "id": "A02",
+      "section": "\u00a75 Phase A",
+      "title": "A02: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A02",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A03",
+      "section": "\u00a75 Phase A",
+      "title": "A03: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A03",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A04",
+      "section": "\u00a75 Phase A",
+      "title": "A04: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A04",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A05",
+      "section": "\u00a75 Phase A",
+      "title": "A05: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A05",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A06",
+      "section": "\u00a75 Phase A",
+      "title": "A06: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A06",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A07",
+      "section": "\u00a75 Phase A",
+      "title": "A07: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A07",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A08",
+      "section": "\u00a75 Phase A",
+      "title": "A08: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A08",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A09",
+      "section": "\u00a75 Phase A",
+      "title": "A09: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A09",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A10",
+      "section": "\u00a75 Phase A",
+      "title": "A10: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A10",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "A11",
+      "section": "\u00a75 Phase A",
+      "title": "A11: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A11",
+        "rerun:v0"
+      ]
+    },
+    {
+      "id": "A12",
+      "section": "\u00a75 Phase A",
+      "title": "A12: reliability experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A12",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "B00",
+      "section": "\u00a75 Phase B",
+      "title": "B00: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B00",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B01",
+      "section": "\u00a75 Phase B",
+      "title": "B01: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B01",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B02",
+      "section": "\u00a75 Phase B",
+      "title": "B02: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B02",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B03",
+      "section": "\u00a75 Phase B",
+      "title": "B03: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B03",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B04",
+      "section": "\u00a75 Phase B",
+      "title": "B04: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B04",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B05",
+      "section": "\u00a75 Phase B",
+      "title": "B05: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B05",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B06",
+      "section": "\u00a75 Phase B",
+      "title": "B06: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B06",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B07",
+      "section": "\u00a75 Phase B",
+      "title": "B07: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B07",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B08",
+      "section": "\u00a75 Phase B",
+      "title": "B08: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B08",
+        "backtest:b08-focus"
+      ]
+    },
+    {
+      "id": "B09",
+      "section": "\u00a75 Phase B",
+      "title": "B09: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B09",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "B10",
+      "section": "\u00a75 Phase B",
+      "title": "B10: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B10",
+        "backtest:sensitivity"
+      ]
+    },
+    {
+      "id": "B11",
+      "section": "\u00a75 Phase B",
+      "title": "B11: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B11",
+        "test:B11"
+      ]
+    },
+    {
+      "id": "B12",
+      "section": "\u00a75 Phase B",
+      "title": "B12: walk-forward experiment",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B12",
+        "backtest:sensitivity"
+      ]
+    },
+    {
+      "id": "C00",
+      "section": "\u00a75 Phase C",
+      "title": "C00: Arbit-computed baseline (B00), no DvP",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C00",
+        "phasec:decision"
+      ]
+    },
+    {
+      "id": "C01",
+      "section": "\u00a75 Phase C",
+      "title": "C01: group adjustment allocated by player share (one D/ST per team: share 1)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C01",
+        "test:phase-c"
+      ]
+    },
+    {
+      "id": "C02",
+      "section": "\u00a75 Phase C",
+      "title": "C02: allocation methods compared (identical for D/ST)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C02",
+        "test:phase-c"
+      ]
+    },
+    {
+      "id": "C03",
+      "section": "\u00a75 Phase C",
+      "title": "C03: route, slot and target-share interactions: BLOCKED (no meaning for D/ST)",
+      "kind": "open",
+      "status": "OPEN",
+      "checks": [
+        "registry:C03"
+      ]
+    },
+    {
+      "id": "C04",
+      "section": "\u00a75 Phase C",
+      "title": "C04: historical same-position start/sit pairs; close-call subgroup separate",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C04",
+        "phasec:decision",
+        "test:phase-c"
+      ]
+    },
+    {
+      "id": "C05",
+      "section": "\u00a75 Phase C",
+      "title": "C05: decisions and errors vs baseline: accuracy, ties, points, changes, regret",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C05",
+        "phasec:decision",
+        "rerun:sitstart"
+      ]
+    },
+    {
+      "id": "C05L",
+      "section": "\u00a75 Phase C",
+      "title": "C05: league-constrained lineup evaluation: BLOCKED (no FFA lineups before 2026)",
+      "kind": "open",
+      "status": "OPEN",
+      "checks": [
+        "phasec:not-available"
+      ]
+    },
+    {
+      "id": "M01",
+      "section": "\u00a76",
+      "title": "Research estimator: residuals, odd/even means, correlations with intervals; hierarchical form",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A01",
+        "registry:A05",
+        "test:T14"
+      ]
+    },
+    {
+      "id": "M02",
+      "section": "\u00a76",
+      "title": "Forecast estimator: O_hat + w * R_hist; point-in-time vs recomputed residuals both tested",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:B02",
+        "registry:B03",
+        "test:T25"
+      ]
+    },
+    {
+      "id": "M03",
+      "section": "\u00a76",
+      "title": "Unequal split sizes: expected correlation from each unit's own half sizes; no negative k",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T11",
+        "test:T12"
+      ]
+    },
+    {
+      "id": "M04",
+      "section": "\u00a76",
+      "title": "Clustered resampling (season and unit-season blocks), 2,000 seeded replicates, multiple comparisons",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T13",
+        "reliability:experiments",
+        "registry:A08"
+      ]
+    },
+    {
+      "id": "M05",
+      "section": "\u00a76",
+      "title": "Shrinkage w(n) is credibility inside DvP, not a Sit/Start weight",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions",
+        "registry:A05"
+      ]
+    },
+    {
+      "id": "M06",
+      "section": "\u00a76",
+      "title": "Distribution: means vs robust estimates; RMSE beside MAE; winsorizing and trimming",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A10",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "M07",
+      "section": "\u00a76",
+      "title": "Conditional dependence between groups examined, not assumed independent",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A04",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "K01",
+      "section": "\u00a77",
+      "title": "Phase A metrics: split-half r, variance components, k, w(n), intervals, decay",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "reliability:experiments",
+        "reliability:a05"
+      ]
+    },
+    {
+      "id": "K02",
+      "section": "\u00a77",
+      "title": "Phase B metrics: per-position RMSE and paired delta vs B00 on matching rows; MAE, bias, calibration, rank",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:variants",
+        "verify:passed",
+        "test:T19"
+      ]
+    },
+    {
+      "id": "K03",
+      "section": "\u00a77",
+      "title": "Phase C metrics: pairwise accuracy, points from changed choices, number of changes",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "phasec:decision"
+      ]
+    },
+    {
+      "id": "K04",
+      "section": "\u00a77",
+      "title": "Baseline parity: common eligible rows; coverage differences surfaced",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T19",
+        "verify:passed"
+      ]
+    },
+    {
+      "id": "K05",
+      "section": "\u00a77",
+      "title": "Predeclared decision rule: PROMISING, INCONCLUSIVE, NOT USEFUL, BLOCKED",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:decisions",
+        "test:phase4-rule",
+        "phasec:rule-first"
+      ]
+    },
+    {
+      "id": "K06",
+      "section": "\u00a77",
+      "title": "Practical minimum declared from development data only",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:practical-minimum",
+        "phasec:rule-first"
+      ]
+    },
+    {
+      "id": "K07",
+      "section": "\u00a77",
+      "title": "2025 conditionally confirmatory at best; no retuning to 2025",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:holdout-status",
+        "backtest:timeline",
+        "test:T18"
+      ]
+    },
+    {
+      "id": "T01",
+      "section": "\u00a78",
+      "title": "Test T01",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T01"
+      ]
+    },
+    {
+      "id": "T02",
+      "section": "\u00a78",
+      "title": "Test T02",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T02"
+      ]
+    },
+    {
+      "id": "T03",
+      "section": "\u00a78",
+      "title": "Test T03",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T03"
+      ]
+    },
+    {
+      "id": "T04",
+      "section": "\u00a78",
+      "title": "Test T04",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T04"
+      ]
+    },
+    {
+      "id": "T05",
+      "section": "\u00a78",
+      "title": "Test T05",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T05"
+      ]
+    },
+    {
+      "id": "T06",
+      "section": "\u00a78",
+      "title": "Test T06",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T06"
+      ]
+    },
+    {
+      "id": "T07",
+      "section": "\u00a78",
+      "title": "Test T07",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T07"
+      ]
+    },
+    {
+      "id": "T08",
+      "section": "\u00a78",
+      "title": "Test T08",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T08"
+      ]
+    },
+    {
+      "id": "T09",
+      "section": "\u00a78",
+      "title": "Test T09",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T09"
+      ]
+    },
+    {
+      "id": "T10",
+      "section": "\u00a78",
+      "title": "Test T10",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T10"
+      ]
+    },
+    {
+      "id": "T11",
+      "section": "\u00a78",
+      "title": "Test T11",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T11"
+      ]
+    },
+    {
+      "id": "T12",
+      "section": "\u00a78",
+      "title": "Test T12",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T12"
+      ]
+    },
+    {
+      "id": "T13",
+      "section": "\u00a78",
+      "title": "Test T13",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T13"
+      ]
+    },
+    {
+      "id": "T14",
+      "section": "\u00a78",
+      "title": "Test T14",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T14"
+      ]
+    },
+    {
+      "id": "T15",
+      "section": "\u00a78",
+      "title": "Test T15",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T15"
+      ]
+    },
+    {
+      "id": "T16",
+      "section": "\u00a78",
+      "title": "Test T16",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T16"
+      ]
+    },
+    {
+      "id": "T17",
+      "section": "\u00a78",
+      "title": "Test T17",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T17"
+      ]
+    },
+    {
+      "id": "T18",
+      "section": "\u00a78",
+      "title": "Test T18",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T18"
+      ]
+    },
+    {
+      "id": "T19",
+      "section": "\u00a78",
+      "title": "Test T19",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T19"
+      ]
+    },
+    {
+      "id": "T20",
+      "section": "\u00a78",
+      "title": "Test T20",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T20"
+      ]
+    },
+    {
+      "id": "T21",
+      "section": "\u00a78",
+      "title": "Test T21",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T21"
+      ]
+    },
+    {
+      "id": "T22",
+      "section": "\u00a78",
+      "title": "Test T22",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T22"
+      ]
+    },
+    {
+      "id": "T23",
+      "section": "\u00a78",
+      "title": "Test T23",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T23"
+      ]
+    },
+    {
+      "id": "T24",
+      "section": "\u00a78",
+      "title": "Test T24",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T24"
+      ]
+    },
+    {
+      "id": "T25",
+      "section": "\u00a78",
+      "title": "Test T25",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T25"
+      ]
+    },
+    {
+      "id": "T26",
+      "section": "\u00a78",
+      "title": "Test T26",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T26"
+      ]
+    },
+    {
+      "id": "T27",
+      "section": "\u00a78",
+      "title": "Test T27",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T27"
+      ]
+    },
+    {
+      "id": "T28",
+      "section": "\u00a78",
+      "title": "Test T28",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T28"
+      ]
+    },
+    {
+      "id": "T29",
+      "section": "\u00a78",
+      "title": "Test T29",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T29"
+      ]
+    },
+    {
+      "id": "T30",
+      "section": "\u00a78",
+      "title": "Test T30",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T30"
+      ]
+    },
+    {
+      "id": "T31",
+      "section": "\u00a78",
+      "title": "Test T31",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T31"
+      ]
+    },
+    {
+      "id": "T32",
+      "section": "\u00a78",
+      "title": "Test T32",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T32"
+      ]
+    },
+    {
+      "id": "T33",
+      "section": "\u00a78",
+      "title": "Test T33",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T33"
+      ]
+    },
+    {
+      "id": "T34",
+      "section": "\u00a78",
+      "title": "Test T34",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T34"
+      ]
+    },
+    {
+      "id": "T35",
+      "section": "\u00a78",
+      "title": "Test T35",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T35"
+      ]
+    },
+    {
+      "id": "T36",
+      "section": "\u00a78",
+      "title": "Test T36",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T36"
+      ]
+    },
+    {
+      "id": "T37",
+      "section": "\u00a78",
+      "title": "Test T37",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T37"
+      ]
+    },
+    {
+      "id": "T38",
+      "section": "\u00a78",
+      "title": "Test T38",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T38"
+      ]
+    },
+    {
+      "id": "T39",
+      "section": "\u00a78",
+      "title": "Test T39",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T39"
+      ]
+    },
+    {
+      "id": "T40",
+      "section": "\u00a78",
+      "title": "Test T40",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T40"
+      ]
+    },
+    {
+      "id": "T00",
+      "section": "\u00a78",
+      "title": "T29-T40 executed as gates; the full DvP suite passes with nothing skipped",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:dvp-all",
+        "test:model-suite"
+      ]
+    },
+    {
+      "id": "P0",
+      "section": "\u00a79",
+      "title": "Phase 0: continuity, audit, v0 reproduced, no projection dependency (T29-T33, T37-T38)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:audit",
+        "rerun:v0",
+        "test:T29",
+        "test:T33",
+        "test:T38"
+      ]
+    },
+    {
+      "id": "P1",
+      "section": "\u00a79",
+      "title": "Phase 1: projection-free completed-game pipeline; T01-T07 and T30-T40 pass",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:observations",
+        "audit:checks",
+        "test:T07",
+        "test:T40"
+      ]
+    },
+    {
+      "id": "P2",
+      "section": "\u00a79",
+      "title": "Phase 2: reliability lab A00-A12 reproducible",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:reliability",
+        "reliability:experiments"
+      ]
+    },
+    {
+      "id": "P3",
+      "section": "\u00a79",
+      "title": "Phase 3: walk-forward B00-B12, development folds, 2024 validation, candidates committed",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:development",
+        "rerun:validation",
+        "rerun:forecasts-development",
+        "rerun:forecasts-validation",
+        "backtest:dev-folds"
+      ]
+    },
+    {
+      "id": "P4",
+      "section": "\u00a79",
+      "title": "Phase 4: frozen manifest, 2025 conditional holdout, labels per position",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:holdout-frozen-tree",
+        "rerun:forecasts-holdout",
+        "rerun:frozen-tree",
+        "audit:frozen-outputs",
+        "frozen:commit-matches",
+        "backtest:decisions"
+      ]
+    },
+    {
+      "id": "P4P",
+      "section": "\u00a79",
+      "title": "Phase 4 prospective: 2026 weeks 12-18 frozen before kickoff; scored after the season",
+      "kind": "open",
+      "status": "OPEN",
+      "checks": [
+        "open:prospective",
+        "backtest:timeline"
+      ]
+    },
+    {
+      "id": "P5",
+      "section": "\u00a79",
+      "title": "Phase 5: C00-C05 where justified; promotion only with approval",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:sitstart",
+        "phasec:decision",
+        "phasec:frozen"
+      ]
+    },
+    {
+      "id": "P5W",
+      "section": "\u00a79",
+      "title": "Promotion: the owner's decision on a D/ST production weight (OWN-074)",
+      "kind": "open",
+      "status": "OPEN",
+      "checks": [
+        "open:owner-weight"
+      ]
+    },
+    {
+      "id": "G01",
+      "section": "\u00a79",
+      "title": "Repository structure adapted: scripts/model/dvp.py, config/dvp, arbit_model.dvp, tests, docs, artifacts",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "cli:commands",
+        "deliverable:5"
+      ]
+    },
+    {
+      "id": "G02",
+      "section": "\u00a79",
+      "title": "CLI contracts: audit, reproduce-v0, reliability, backtest x3, report; pytest",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "cli:commands",
+        "rerun:steps"
+      ]
+    },
+    {
+      "id": "G03",
+      "section": "\u00a79",
+      "title": "The holdout requires a frozen, verified manifest; it refuses elsewhere",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:holdout-refused-here",
+        "test:T18",
+        "config:spec-keys"
+      ]
+    },
+    {
+      "id": "G04",
+      "section": "\u00a79",
+      "title": "Verify-only mode",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "verify:passed",
+        "rerun:verify"
+      ]
+    },
+    {
+      "id": "G05",
+      "section": "\u00a79",
+      "title": "Atomic writes and idempotent reruns",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:forecasts-development",
+        "rerun:forecasts-validation",
+        "rerun:committed-run-unchanged",
+        "test:T27"
+      ]
+    },
+    {
+      "id": "G06",
+      "section": "\u00a79",
+      "title": "Dry-run and resume modes: not built (stages are separate commands of 1-75 s)",
+      "kind": "open",
+      "status": "OPEN",
+      "checks": [
+        "open:modes"
+      ]
+    },
+    {
+      "id": "F01",
+      "section": "\u00a710",
+      "title": "Explicit config with the specification's keys",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "config:spec-keys"
+      ]
+    },
+    {
+      "id": "F02",
+      "section": "\u00a710",
+      "title": "Every experiment record carries the \u00a710 fields",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:complete"
+      ]
+    },
+    {
+      "id": "F03",
+      "section": "\u00a710",
+      "title": "Assertions fail if an external projected-point dependency is detected",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T40",
+        "receipts:no-projection"
+      ]
+    },
+    {
+      "id": "O01",
+      "section": "\u00a711",
+      "title": "Deliverable 1",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:1"
+      ]
+    },
+    {
+      "id": "O02",
+      "section": "\u00a711",
+      "title": "Deliverable 2",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:2"
+      ]
+    },
+    {
+      "id": "O03",
+      "section": "\u00a711",
+      "title": "Deliverable 3",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:3"
+      ]
+    },
+    {
+      "id": "O04",
+      "section": "\u00a711",
+      "title": "Deliverable 4",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:4"
+      ]
+    },
+    {
+      "id": "O05",
+      "section": "\u00a711",
+      "title": "Deliverable 5",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:5"
+      ]
+    },
+    {
+      "id": "O06",
+      "section": "\u00a711",
+      "title": "Deliverable 6",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:6"
+      ]
+    },
+    {
+      "id": "O07",
+      "section": "\u00a711",
+      "title": "Deliverable 7",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:7"
+      ]
+    },
+    {
+      "id": "O08",
+      "section": "\u00a711",
+      "title": "Deliverable 8",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:8"
+      ]
+    },
+    {
+      "id": "O09",
+      "section": "\u00a711",
+      "title": "Deliverable 9",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:9"
+      ]
+    },
+    {
+      "id": "O10",
+      "section": "\u00a711",
+      "title": "Deliverable 10",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:10"
+      ]
+    },
+    {
+      "id": "O11",
+      "section": "\u00a711",
+      "title": "Deliverable 11",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:11"
+      ]
+    },
+    {
+      "id": "O10F",
+      "section": "\u00a711",
+      "title": "FORECASTS.parquet per stage, hashed in its receipt (git-ignored artifacts)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "deliverable:forecasts"
+      ]
+    },
+    {
+      "id": "Z01",
+      "section": "\u00a711",
+      "title": "Before completion: whole relevant suite including T29-T40",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:dvp-all",
+        "test:model-suite"
+      ]
+    },
+    {
+      "id": "Z02",
+      "section": "\u00a711",
+      "title": "Before completion: original M3-3 artifacts unchanged",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:bytes",
+        "verify:passed"
+      ]
+    },
+    {
+      "id": "Z03",
+      "section": "\u00a711",
+      "title": "Before completion: reproduce from the pinned configuration",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "rerun:steps",
+        "rerun:report-files",
+        "rerun:registry",
+        "rerun:config-freeze-only-added"
+      ]
+    },
+    {
+      "id": "Z04",
+      "section": "\u00a711",
+      "title": "Before completion: inspect an independently generated sample for sign, units and joins",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "verify:sample",
+        "verify:passed"
+      ]
+    },
+    {
+      "id": "Z05",
+      "section": "\u00a711",
+      "title": "Before completion: per-position conclusion table with the specified columns",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions"
+      ]
+    },
+    {
+      "id": "Z06",
+      "section": "\u00a711",
+      "title": "Before completion: report provenance, finality, zero projections and holdout status",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions",
+        "provenance:passed",
+        "finality:recorded",
+        "backtest:holdout-status"
+      ]
+    },
+    {
+      "id": "L01",
+      "section": "\u00a712",
+      "title": "v0 discovered and preserved",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:bytes",
+        "test:T29"
+      ]
+    },
+    {
+      "id": "L02",
+      "section": "\u00a712",
+      "title": "Inputs canonical, completed, point-in-time, projection-free",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "provenance:passed",
+        "finality:recorded",
+        "audit:checks"
+      ]
+    },
+    {
+      "id": "L03",
+      "section": "\u00a712",
+      "title": "v0 reproducible",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "v0:reproduced",
+        "rerun:v0"
+      ]
+    },
+    {
+      "id": "L04",
+      "section": "\u00a712",
+      "title": "Reliability and uncertainty estimated; forward test run even where the signal is weak",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "reliability:a05",
+        "backtest:variants"
+      ]
+    },
+    {
+      "id": "L05",
+      "section": "\u00a712",
+      "title": "Forward comparison decides per position: production effect 0 where not useful",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:decisions",
+        "open:owner-weight"
+      ]
+    },
+    {
+      "id": "L06",
+      "section": "\u00a712",
+      "title": "Robust to eras, perturbations, coverage, leakage: PROMISING at team-position level (D/ST)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:A10",
+        "test:T28",
+        "test:T19",
+        "backtest:decisions"
+      ]
+    },
+    {
+      "id": "L07",
+      "section": "\u00a712",
+      "title": "Player-level A/B improves start/sit: recommend controlled integration after approval",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "phasec:decision",
+        "open:owner-weight"
+      ]
+    },
+    {
+      "id": "L08",
+      "section": "\u00a712",
+      "title": "2025 status labeled accurately (CONDITIONALLY_HELD_OUT)",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:holdout-status"
+      ]
+    },
+    {
+      "id": "W01",
+      "section": "\u00a713",
+      "title": "32 teams x 10 seasons are not 320 independent units: clustered intervals",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T13",
+        "v0:validated"
+      ]
+    },
+    {
+      "id": "W02",
+      "section": "\u00a713",
+      "title": "v0 used 2025: never called untouched; no 2025-derived parameters",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "backtest:holdout-status",
+        "test:T18"
+      ]
+    },
+    {
+      "id": "W03",
+      "section": "\u00a713",
+      "title": "v0's same-season adjustment is retrospective only; backtests are point-in-time",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T17",
+        "registry:B02"
+      ]
+    },
+    {
+      "id": "W04",
+      "section": "\u00a713",
+      "title": "Only actuals available by each cutoff inform forecasts; labels separate",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T36",
+        "test:T15"
+      ]
+    },
+    {
+      "id": "W05",
+      "section": "\u00a713",
+      "title": "Odd/even can hide midseason change: chronological tests added",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "test:T23",
+        "registry:A06"
+      ]
+    },
+    {
+      "id": "W06",
+      "section": "\u00a713",
+      "title": "w(8) is within-DvP shrinkage, not a model weight",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions"
+      ]
+    },
+    {
+      "id": "W07",
+      "section": "\u00a713",
+      "title": "Group totals measure matchup context, not a player's share",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "registry:C01"
+      ]
+    },
+    {
+      "id": "W08",
+      "section": "\u00a713",
+      "title": "A null group result does not exclude player-level signals; repeatability is not usefulness",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "docs:conclusions",
+        "registry:A05",
+        "backtest:decisions"
+      ]
+    },
+    {
+      "id": "W09",
+      "section": "\u00a713",
+      "title": "Each position evaluated independently; no WR k reused for other groups",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "reliability:a05",
+        "backtest:dev-folds"
+      ]
+    },
+    {
+      "id": "W10",
+      "section": "\u00a713",
+      "title": "Source availability through 2025 verified; canonical data take precedence",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "audit:seasons",
+        "finality:recorded"
+      ]
+    },
+    {
+      "id": "W11",
+      "section": "\u00a713",
+      "title": "Stat corrections: final revisions only, limitation reported",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "finality:recorded",
+        "registry:A12"
+      ]
+    },
+    {
+      "id": "W12",
+      "section": "\u00a713",
+      "title": "No production merge from correlations; only confirmatory incremental value",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "open:owner-weight",
+        "docs:status-vocabulary"
+      ]
+    }
+  ],
+  "checks": {
+    "audit:cells": {
+      "id": "audit:cells",
+      "description": "Cell status: every group's cells are valid or carry an explicit invalid status",
+      "passed": true,
+      "observed": {
+        "DST/valid": 5278,
+        "K/invalid_refused_line": 14,
+        "K/valid": 5264,
+        "QB/valid": 5278,
+        "RB/invalid_refused_line": 13,
+        "RB/valid": 5265,
+        "TE/invalid_refused_line": 14,
+        "TE/valid": 5264,
+        "WR/invalid_refused_line": 17,
+        "WR/valid": 5261
+      }
+    },
+    "audit:checks": {
+      "id": "audit:checks",
+      "description": "Every Phase 1 audit check PASSED",
+      "passed": true,
+      "observed": {
+        "T05 every target line belongs to a completed team-game": "PASSED",
+        "T05 no player has two lines in one game": "PASSED",
+        "T06 32 teams each season, 16 or 17 games each": "PASSED",
+        "T06 completed team-games reconcile to 5,278": "PASSED",
+        "T06 every completed game has exactly two mirrored team-games": "PASSED",
+        "T30 configured rules are the league's current FFA rules": "PASSED",
+        "T30 each scored line's points equal the sum of its rule contributions": "PASSED",
+        "T31 no provider projection in the scoring path or DvP code": "PASSED",
+        "T34 the canceled 2022 BUF-CIN game has no team-games and no zeros": "PASSED",
+        "T37 targets index scored with the configured rules": "PASSED"
+      }
+    },
+    "audit:examples": {
+      "id": "audit:examples",
+      "description": "Hand-checked examples recorded: zero TE, multi-WR offense, traded player, D/ST turnovers",
+      "passed": true,
+      "observed": [
+        "dstTurnover",
+        "multiWrOffense",
+        "tradedPlayer",
+        "zeroProductionTe"
+      ]
+    },
+    "audit:frozen-outputs": {
+      "id": "audit:frozen-outputs",
+      "description": "The audit run's outputs still match the hashes frozen in config/dvp/frozen.json",
+      "passed": true,
+      "observed": {
+        "observations.parquet": true,
+        "schedule_games.parquet": true
+      }
+    },
+    "audit:observation-lineage": {
+      "id": "audit:observation-lineage",
+      "description": "Every observation row carries its lineage: source, type, scoring hash, finality, availability",
+      "passed": true,
+      "observed": {
+        "rows": 31668,
+        "missing": [],
+        "nulls": {
+          "source_id": 0,
+          "source_type": 0,
+          "scoring_hash": 0,
+          "available_at": 0
+        },
+        "sourceTypes": [
+          "FFA_ACTUAL_FINAL"
+        ],
+        "observedOrGenerated": [
+          "observed"
+        ]
+      }
+    },
+    "audit:positions": {
+      "id": "audit:positions",
+      "description": "Groups come from the league's lineup slots; FB and HB count as RB, PK as K",
+      "passed": true,
+      "observed": {
+        "modeledGroups": [
+          "DST",
+          "K",
+          "QB",
+          "RB",
+          "TE",
+          "WR"
+        ],
+        "lineupSlots": [
+          "QB",
+          "RB",
+          "WR",
+          "TE",
+          "FLEX",
+          "DST",
+          "K",
+          "BENCH",
+          "IR"
+        ]
+      }
+    },
+    "audit:reconciliation": {
+      "id": "audit:reconciliation",
+      "description": "5,278 completed team-games from 2,639 games; two mirrored rows each; no duplicates",
+      "passed": true,
+      "observed": {
+        "completedGames": 2639,
+        "duplicateGameIds": 0,
+        "gamesWithoutExactlyTwoTeamGames": 0,
+        "teamGames": 5278,
+        "teamGamesWithoutMirror": 0
+      }
+    },
+    "audit:seasons": {
+      "id": "audit:seasons",
+      "description": "Per season: 32 teams; 16 games each in 2016-2020, 17 in 2021-2025, BUF and CIN 16 in 2022",
+      "passed": true,
+      "observed": {
+        "2016": 512,
+        "2017": 512,
+        "2018": 512,
+        "2019": 512,
+        "2020": 512,
+        "2021": 544,
+        "2022": 542,
+        "2023": 544,
+        "2024": 544,
+        "2025": 544
+      }
+    },
+    "backtest:b08-focus": {
+      "id": "backtest:b08-focus",
+      "description": "B08: every group's change against B00 broken down by opponent games, week and season",
+      "passed": true,
+      "observed": {
+        "development": [
+          "byOpponentGames",
+          "bySeason",
+          "byWeek",
+          "calibration",
+          "variant"
+        ],
+        "validation": [
+          "byOpponentGames",
+          "bySeason",
+          "byWeek",
+          "calibration",
+          "variant"
+        ],
+        "holdout": [
+          "byOpponentGames",
+          "bySeason",
+          "byWeek",
+          "calibration",
+          "variant"
+        ]
+      }
+    },
+    "backtest:decisions": {
+      "id": "backtest:decisions",
+      "description": "Phase 4 labels: D/ST PROMISING; QB INCONCLUSIVE; RB, WR, TE, K NOT_USEFUL; global PROMISING",
+      "passed": true,
+      "observed": {
+        "positions": {
+          "QB": "INCONCLUSIVE",
+          "RB": "NOT_USEFUL",
+          "WR": "NOT_USEFUL",
+          "TE": "NOT_USEFUL",
+          "K": "NOT_USEFUL",
+          "DST": "PROMISING"
+        },
+        "global": {
+          "label": "PROMISING",
+          "promisingPositions": [
+            "DST"
+          ]
+        }
+      }
+    },
+    "backtest:dev-folds": {
+      "id": "backtest:dev-folds",
+      "description": "Development is rolling-origin: each fold's parameters come from earlier seasons only",
+      "passed": true,
+      "observed": {
+        "folds": [
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023"
+        ],
+        "leaky": []
+      }
+    },
+    "backtest:holdout-status": {
+      "id": "backtest:holdout-status",
+      "description": "The 2025 holdout is labeled CONDITIONALLY_HELD_OUT with its exposure stated",
+      "passed": true,
+      "observed": {
+        "holdoutStatus": "CONDITIONALLY_HELD_OUT",
+        "exposure": "v0 (2026-11-23) and Phase A (reliability lab) described 2016-2025, 2025 included, for repeatability only. No 2025 forecast was made or inspected, and no parameter was estimated on 2025: candidates cam"
+      }
+    },
+    "backtest:practical-minimum": {
+      "id": "backtest:practical-minimum",
+      "description": "The 1% practical minimum was fixed on development data, before validation and the holdout",
+      "passed": true,
+      "observed": {
+        "minimum": 0.01,
+        "fromDevelopment": "docs/research/dvp/backtest-development.json"
+      }
+    },
+    "backtest:sensitivity": {
+      "id": "backtest:sensitivity",
+      "description": "B10 cutoff and B12 availability sensitivity recorded for development and validation",
+      "passed": true,
+      "observed": {
+        "development": [
+          "B10_perGame",
+          "B12_delay48h"
+        ],
+        "validation": [
+          "B10_perGame",
+          "B12_delay48h"
+        ]
+      }
+    },
+    "backtest:timeline": {
+      "id": "backtest:timeline",
+      "description": "Candidates frozen before validation; method frozen before the holdout ran; Phase C frozen before 2026 week 12",
+      "passed": true,
+      "observed": {
+        "candidatesFrozen": "2026-11-24T03:05:59.229713+00:00",
+        "validationRan": "2026-11-24T03:06:54.223199+00:00",
+        "methodFrozen": "2026-11-24T03:16:19.829107+00:00",
+        "holdoutRan": "2026-11-24T03:16:31.071307+00:00",
+        "phaseCFrozen": "2026-11-24T06:57:55.648402+00:00",
+        "prospectiveFirstKickoff": "2026-11-26T01:00:00+00:00"
+      }
+    },
+    "backtest:variants": {
+      "id": "backtest:variants",
+      "description": "Development, validation and holdout score B00 and every DvP variant and control for every group",
+      "passed": true,
+      "observed": {
+        "development": {
+          "groups": [
+            "DST",
+            "K",
+            "QB",
+            "RB",
+            "TE",
+            "WR"
+          ],
+          "variants": 23,
+          "families": [
+            "b00",
+            "b01",
+            "b02",
+            "b03",
+            "b04",
+            "b05",
+            "b06",
+            "b07",
+            "b09"
+          ]
+        },
+        "validation": {
+          "groups": [
+            "DST",
+            "K",
+            "QB",
+            "RB",
+            "TE",
+            "WR"
+          ],
+          "variants": 23,
+          "families": [
+            "b00",
+            "b01",
+            "b02",
+            "b03",
+            "b04",
+            "b05",
+            "b06",
+            "b07",
+            "b09"
+          ]
+        },
+        "holdout": {
+          "groups": [
+            "DST",
+            "K",
+            "QB",
+            "RB",
+            "TE",
+            "WR"
+          ],
+          "variants": 23,
+          "families": [
+            "b00",
+            "b01",
+            "b02",
+            "b03",
+            "b04",
+            "b05",
+            "b06",
+            "b07",
+            "b09"
+          ]
+        }
+      }
+    },
+    "cli:commands": {
+      "id": "cli:commands",
+      "description": "dvp.py provides audit, reproduce-v0, reliability, backtest (3 stages), freeze, report, registry, sitstart, verify",
+      "passed": true,
+      "observed": [
+        "audit",
+        "backtest",
+        "freeze",
+        "registry",
+        "reliability",
+        "report",
+        "reproduce-v0",
+        "sitstart",
+        "verify"
+      ]
+    },
+    "config:no-production": {
+      "id": "config:no-production",
+      "description": "Nothing is set to write to production: base, sitstart and frozen Phase C say write_to_production false",
+      "passed": true,
+      "observed": {
+        "config/dvp/base.json": false,
+        "config/dvp/sitstart.json": false,
+        "config/dvp/frozen-phase-c.json": false
+      }
+    },
+    "config:spec-keys": {
+      "id": "config:spec-keys",
+      "description": "config/dvp/base.json carries the specification's \u00a710 keys with the specified values",
+      "passed": true,
+      "observed": {
+        "wrong": {},
+        "split": true,
+        "seasons": true,
+        "experimentMethods": true,
+        "lineagePolicy": true
+      }
+    },
+    "deliverable:1": {
+      "id": "deliverable:1",
+      "description": "\u00a711 deliverable 1 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 1,
+        "missing": []
+      }
+    },
+    "deliverable:10": {
+      "id": "deliverable:10",
+      "description": "\u00a711 deliverable 10 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 9,
+        "missing": []
+      }
+    },
+    "deliverable:11": {
+      "id": "deliverable:11",
+      "description": "\u00a711 deliverable 11 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 2,
+        "missing": []
+      }
+    },
+    "deliverable:2": {
+      "id": "deliverable:2",
+      "description": "\u00a711 deliverable 2 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 3,
+        "missing": []
+      }
+    },
+    "deliverable:3": {
+      "id": "deliverable:3",
+      "description": "\u00a711 deliverable 3 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 1,
+        "missing": []
+      }
+    },
+    "deliverable:4": {
+      "id": "deliverable:4",
+      "description": "\u00a711 deliverable 4 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 4,
+        "missing": []
+      }
+    },
+    "deliverable:5": {
+      "id": "deliverable:5",
+      "description": "\u00a711 deliverable 5 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 5,
+        "missing": []
+      }
+    },
+    "deliverable:6": {
+      "id": "deliverable:6",
+      "description": "\u00a711 deliverable 6 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 2,
+        "missing": []
+      }
+    },
+    "deliverable:7": {
+      "id": "deliverable:7",
+      "description": "\u00a711 deliverable 7 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 4,
+        "missing": []
+      }
+    },
+    "deliverable:8": {
+      "id": "deliverable:8",
+      "description": "\u00a711 deliverable 8 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 1,
+        "missing": []
+      }
+    },
+    "deliverable:9": {
+      "id": "deliverable:9",
+      "description": "\u00a711 deliverable 9 exists and is not empty",
+      "passed": true,
+      "observed": {
+        "files": 3,
+        "missing": []
+      }
+    },
+    "deliverable:forecasts": {
+      "id": "deliverable:forecasts",
+      "description": "Every stage's FORECASTS.parquet exists in the audit run with the hash its receipt names",
+      "passed": true,
+      "observed": {
+        "development": true,
+        "validation": true,
+        "holdout": true
+      }
+    },
+    "docs:conclusions": {
+      "id": "docs:conclusions",
+      "description": "MODEL_CARD.md holds the per-position conclusion table with the specification's columns and the integrity flags",
+      "passed": true,
+      "observed": {
+        "table": true,
+        "rows": 6,
+        "flags": {
+          "source_provenance_pass": true,
+          "score_finality_pass": true,
+          "forbidden_vendor_projection_dependencies": true,
+          "2025 holdout status": true
+        }
+      }
+    },
+    "docs:prospective": {
+      "id": "docs:prospective",
+      "description": "The prospective 2026 window is frozen and its procedure written down",
+      "passed": true,
+      "observed": {
+        "firstKickoff": "2026-11-26T01:00:00+00:00"
+      }
+    },
+    "docs:status-vocabulary": {
+      "id": "docs:status-vocabulary",
+      "description": "The research uses the specification's status words; nothing claims production readiness",
+      "passed": true,
+      "observed": {
+        "modelCard": "Not eligible yet"
+      }
+    },
+    "finality:recorded": {
+      "id": "finality:recorded",
+      "description": "Score finality audit: completed games only, conservative availability, limitation stated",
+      "passed": true,
+      "observed": {
+        "status": "PASSED_WITH_LIMITATION",
+        "seasons": [
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "rule": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)"
+      }
+    },
+    "frozen:commit-matches": {
+      "id": "frozen:commit-matches",
+      "description": "The frozen commit's files match every hash in config/dvp/frozen.json (verify)",
+      "passed": true,
+      "observed": {
+        "files": 11,
+        "receiptsMatch": {
+          "development": true,
+          "validation": true
+        },
+        "changedSinceFreeze": [
+          "scripts/model/dvp.py"
+        ]
+      }
+    },
+    "open:modes": {
+      "id": "open:modes",
+      "description": "NOT BUILT: dry-run and resume modes (the specification asks for them only 'when appropriate')",
+      "passed": true,
+      "observed": {
+        "stageSeconds": {
+          "audit": 1.5,
+          "reproduce-v0": 6.9,
+          "reliability": 72.2,
+          "backtest-development": 26.1,
+          "backtest-validation": 7.0,
+          "backtest-holdout-frozen-tree": 4.3,
+          "backtest-holdout-refused-here": 0.5,
+          "sitstart": 0.8,
+          "verify": 10.3,
+          "report": 0.5,
+          "registry": 0.5,
+          "model-tests": 8.0
+        }
+      }
+    },
+    "open:owner-weight": {
+      "id": "open:owner-weight",
+      "description": "OPEN: no production weight is set; OWN-074 asks the owner after the prospective window",
+      "passed": true,
+      "observed": {
+        "featureSpecsUnchangedSinceV0": true
+      }
+    },
+    "open:prospective": {
+      "id": "open:prospective",
+      "description": "OPEN: the 2026 weeks 12-18 confirmation waits on games that have not been played",
+      "passed": true,
+      "observed": {
+        "firstKickoff": "2026-11-26T01:00:00+00:00",
+        "frozenBeforeIt": true,
+        "auditedAt": "2026-11-24T21:33:28.661630+00:00"
+      }
+    },
+    "phasec:decision": {
+      "id": "phasec:decision",
+      "description": "Phase C D/ST: B06 clears the 1.8-point minimum with net points gained in every period: PROMISING",
+      "passed": true,
+      "observed": {
+        "development": {
+          "deltaPp": 4.448,
+          "deltaPp95": [
+            3.271,
+            5.635
+          ],
+          "points": 27362.5
+        },
+        "holdout": {
+          "deltaPp": 6.617,
+          "deltaPp95": [
+            2.563,
+            10.487
+          ],
+          "points": 5617.5
+        },
+        "validation": {
+          "deltaPp": 8.546,
+          "deltaPp95": [
+            4.128,
+            12.546
+          ],
+          "points": 7978.0
+        }
+      }
+    },
+    "phasec:frozen": {
+      "id": "phasec:frozen",
+      "description": "Phase C is frozen for 2026: the method and the historical receipt match the hashes in frozen-phase-c.json",
+      "passed": true,
+      "observed": {
+        "method": {
+          "config/dvp/sitstart.json": true,
+          "libs/arbit-model/src/arbit_model/dvp/decisions.py": true
+        },
+        "historicalReceipt": true,
+        "groupLevelFreeze": true
+      }
+    },
+    "phasec:not-available": {
+      "id": "phasec:not-available",
+      "description": "Phase C states what it could not evaluate and why (league lineups, roles)",
+      "passed": true,
+      "observed": {
+        "leagueLineups": "Arbit holds FFA lineups only for 2026 scoring periods 1-10; earlier seasons have none, and 2026 is not a stage of this study (its weeks 1-11",
+        "roles": "C03 (route, slot, target-share interactions) has no meaning for a D/ST."
+      }
+    },
+    "phasec:rule-first": {
+      "id": "phasec:rule-first",
+      "description": "Phase C's rule (config/dvp/sitstart.json) was committed before any Phase C result and is unchanged",
+      "passed": true,
+      "observed": {
+        "declaredIn": "317361f",
+        "committedAt": "2026-11-23T23:48:39-07:00",
+        "firstResultAt": "2026-11-24T06:56:53.179862+00:00",
+        "configUnchangedSince": true
+      }
+    },
+    "provenance:forbidden-inventory": {
+      "id": "provenance:forbidden-inventory",
+      "description": "Every reachable forbidden source is inventoried with REJECT or QUARANTINE and a guard",
+      "passed": true,
+      "observed": [
+        {
+          "action": "REJECT",
+          "decision": "OWN-061"
+        },
+        {
+          "action": "REJECT",
+          "decision": "OWN-061"
+        },
+        {
+          "action": "REJECT",
+          "decision": "OWN-061"
+        },
+        {
+          "action": "REJECT",
+          "decision": "OWN-061"
+        },
+        {
+          "action": "REJECT",
+          "decision": "OWN-061"
+        },
+        {
+          "action": "REJECT",
+          "decision": "OWN-061"
+        },
+        {
+          "action": "REJECT",
+          "decision": "OWN-067"
+        }
+      ]
+    },
+    "provenance:passed": {
+      "id": "provenance:passed",
+      "description": "Projection exclusion audit PASSED with 0 dependencies; every input family is allowlisted",
+      "passed": true,
+      "observed": {
+        "status": "PASSED",
+        "admittedSources": 21,
+        "forbiddenInventory": 7,
+        "codeScanFiles": {
+          "committed": 19,
+          "rerun": 21
+        },
+        "unlistedFamilies": []
+      }
+    },
+    "receipts:no-projection": {
+      "id": "receipts:no-projection",
+      "description": "Every receipt and experiment record states forbidden_vendor_projection_dependencies = 0",
+      "passed": true,
+      "observed": {
+        "receipts": {
+          "PROJECTION_EXCLUSION_AUDIT.json": 0,
+          "backtest-development.json": 0,
+          "backtest-holdout.json": 0,
+          "backtest-validation.json": 0,
+          "reliability-results.json": 0,
+          "sitstart.json": 0
+        },
+        "recordsNonzero": []
+      }
+    },
+    "registry:A00": {
+      "id": "registry:A00",
+      "description": "Registry status of M3-3-A00 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A01": {
+      "id": "registry:A01",
+      "description": "Registry status of M3-3-A01 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "Repeatability is real but weak for every position group except D/ST, and the WR, TE and K intervals overlap: their order is not established"
+      }
+    },
+    "registry:A02": {
+      "id": "registry:A02",
+      "description": "Registry status of M3-3-A02 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A03": {
+      "id": "registry:A03",
+      "description": "Registry status of M3-3-A03 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A04": {
+      "id": "registry:A04",
+      "description": "Registry status of M3-3-A04 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A05": {
+      "id": "registry:A05",
+      "description": "Registry status of M3-3-A05 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A06": {
+      "id": "registry:A06",
+      "description": "Registry status of M3-3-A06 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A07": {
+      "id": "registry:A07",
+      "description": "Registry status of M3-3-A07 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A08": {
+      "id": "registry:A08",
+      "description": "Registry status of M3-3-A08 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A09": {
+      "id": "registry:A09",
+      "description": "Registry status of M3-3-A09 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A10": {
+      "id": "registry:A10",
+      "description": "Registry status of M3-3-A10 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:A11": {
+      "id": "registry:A11",
+      "description": "Registry status of M3-3-A11 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "PASSED",
+        "decision": null,
+        "reason": "Every audit check passed; data defects are recorded in DATA_QUALITY.md"
+      }
+    },
+    "registry:A12": {
+      "id": "registry:A12",
+      "description": "Registry status of M3-3-A12 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast"
+      }
+    },
+    "registry:B00": {
+      "id": "registry:B00",
+      "description": "Registry status of M3-3-B00 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B01": {
+      "id": "registry:B01",
+      "description": "Registry status of M3-3-B01 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B02": {
+      "id": "registry:B02",
+      "description": "Registry status of M3-3-B02 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B03": {
+      "id": "registry:B03",
+      "description": "Registry status of M3-3-B03 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B04": {
+      "id": "registry:B04",
+      "description": "Registry status of M3-3-B04 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B05": {
+      "id": "registry:B05",
+      "description": "Registry status of M3-3-B05 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B06": {
+      "id": "registry:B06",
+      "description": "Registry status of M3-3-B06 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B07": {
+      "id": "registry:B07",
+      "description": "Registry status of M3-3-B07 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B08": {
+      "id": "registry:B08",
+      "description": "Registry status of M3-3-B08 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": ""
+      }
+    },
+    "registry:B09": {
+      "id": "registry:B09",
+      "description": "Registry status of M3-3-B09 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "See BACKTEST_REPORT.md"
+      }
+    },
+    "registry:B10": {
+      "id": "registry:B10",
+      "description": "Registry status of M3-3-B10 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": ""
+      }
+    },
+    "registry:B11": {
+      "id": "registry:B11",
+      "description": "Registry status of M3-3-B11 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "PASSED",
+        "decision": null,
+        "reason": ""
+      }
+    },
+    "registry:B12": {
+      "id": "registry:B12",
+      "description": "Registry status of M3-3-B12 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": ""
+      }
+    },
+    "registry:C00": {
+      "id": "registry:C00",
+      "description": "Registry status of M3-3-C00 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "D/ST only: Phase C runs for a group with a credible group-level signal (\u00a75); QB is INCONCLUSIVE and RB, WR, TE, K NOT_USEFUL, so they are not run, by the specif"
+      }
+    },
+    "registry:C01": {
+      "id": "registry:C01",
+      "description": "Registry status of M3-3-C01 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "Identity for D/ST: the player-level forecast is the group-level forecast"
+      }
+    },
+    "registry:C02": {
+      "id": "registry:C02",
+      "description": "Registry status of M3-3-C02 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": null,
+        "reason": "Identical by construction for D/ST; nothing to choose between"
+      }
+    },
+    "registry:C03": {
+      "id": "registry:C03",
+      "description": "Registry status of M3-3-C03 is BLOCKED",
+      "passed": true,
+      "observed": {
+        "status": "BLOCKED",
+        "decision": null,
+        "reason": "C03 (route, slot, target-share interactions) has no meaning for a D/ST."
+      }
+    },
+    "registry:C04": {
+      "id": "registry:C04",
+      "description": "Registry status of M3-3-C04 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": "PROMISING",
+        "reason": "clears 1.8 pp with net points gained in every period: development +4.45 pp, +27362.5 points, validation +8.55 pp, +7978.0 points, holdout +6.62 pp, +5617.5 poin"
+      }
+    },
+    "registry:C05": {
+      "id": "registry:C05",
+      "description": "Registry status of M3-3-C05 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": "PROMISING",
+        "reason": "clears 1.8 pp with net points gained in every period: development +4.45 pp, +27362.5 points, validation +8.55 pp, +7978.0 points, holdout +6.62 pp, +5617.5 poin"
+      }
+    },
+    "registry:HOLDOUT-2025": {
+      "id": "registry:HOLDOUT-2025",
+      "description": "Registry status of M3-3-HOLDOUT-2025 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "EXECUTED",
+        "decision": "PROMISING",
+        "reason": "Promising: DST; see MODEL_CARD.md"
+      }
+    },
+    "registry:complete": {
+      "id": "registry:complete",
+      "description": "Every specified experiment is registered; every record has the \u00a710 fields and a known status",
+      "passed": true,
+      "observed": {
+        "records": 34,
+        "missingExperiments": [],
+        "recordsMissingFields": [],
+        "unknownStatus": []
+      }
+    },
+    "registry:v0": {
+      "id": "registry:v0",
+      "description": "Registry status of M3-3-v0 is EXECUTED or PASSED or REPRODUCED",
+      "passed": true,
+      "observed": {
+        "status": "REPRODUCED",
+        "decision": null,
+        "reason": "Frozen v0 rerun equals its receipt; an independent recompute matches all 12 measures"
+      }
+    },
+    "reliability:a05": {
+      "id": "reliability:a05",
+      "description": "A05 REML k per group (each unit with its own game count) with season-cluster intervals",
+      "passed": true,
+      "observed": {
+        "QB": {
+          "k": 24.22,
+          "converged": true,
+          "k95Seasons": [
+            16.2266,
+            42.3465
+          ]
+        },
+        "RB": {
+          "k": 19.48,
+          "converged": true,
+          "k95Seasons": [
+            15.8406,
+            26.8884
+          ]
+        },
+        "WR": {
+          "k": 26.69,
+          "converged": true,
+          "k95Seasons": [
+            17.8411,
+            58.3388
+          ]
+        },
+        "TE": {
+          "k": 37.43,
+          "converged": true,
+          "k95Seasons": [
+            23.0074,
+            96.7246
+          ]
+        },
+        "K": {
+          "k": 50.51,
+          "converged": true,
+          "k95Seasons": [
+            33.1966,
+            101.4751
+          ]
+        },
+        "DST": {
+          "k": 7.23,
+          "converged": true,
+          "k95Seasons": [
+            6.0326,
+            8.5747
+          ]
+        }
+      }
+    },
+    "reliability:experiments": {
+      "id": "reliability:experiments",
+      "description": "The reliability receipt holds A00 and A02-A12 for every group; A08 carries Holm's correction",
+      "passed": true,
+      "observed": {
+        "experiments": [
+          "A00",
+          "A02",
+          "A03",
+          "A04",
+          "A05",
+          "A06",
+          "A07",
+          "A08",
+          "A09",
+          "A10",
+          "A12"
+        ],
+        "missingGroups": {},
+        "seed": 1729
+      }
+    },
+    "rerun:audit": {
+      "id": "rerun:audit",
+      "description": "A fresh rerun reproduces audit-receipt.json; only ['/code', '/generatedAt', '/runId', '/runManifest/code', '/runManifest/runId', '/runManifest/startedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/generatedAt",
+          "/runId",
+          "/runManifest/code",
+          "/runManifest/runId",
+          "/runManifest/startedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:committed-run-unchanged": {
+      "id": "rerun:committed-run-unchanged",
+      "description": "The committed audit run and config/dvp were not modified",
+      "passed": true,
+      "observed": {
+        "committedRunUnchanged": true,
+        "configUnchanged": true
+      }
+    },
+    "rerun:config-freeze-only-added": {
+      "id": "rerun:config-freeze-only-added",
+      "description": "The freeze only added keys to backtest.json; development and validation settings are unchanged",
+      "passed": true,
+      "observed": {
+        "added": [
+          "frozen"
+        ],
+        "changed": []
+      }
+    },
+    "rerun:continuity": {
+      "id": "rerun:continuity",
+      "description": "A fresh rerun reproduces continuity-manifest.json; only nothing may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [],
+        "unexpected": []
+      }
+    },
+    "rerun:development": {
+      "id": "rerun:development",
+      "description": "A fresh rerun reproduces backtest-development.json; only ['/code', '/config/sha256', '/forecastsContentSha256', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/config/sha256",
+          "/forecastsContentSha256",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:finality-audit": {
+      "id": "rerun:finality-audit",
+      "description": "A fresh rerun reproduces SCORE_FINALITY_AUDIT.json; only ['/generatedAt', '/runId'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/generatedAt",
+          "/runId"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:forecasts-development": {
+      "id": "rerun:forecasts-development",
+      "description": "The development rerun reproduced its forecasts within 1e-09 and left the file unchanged",
+      "passed": true,
+      "observed": {
+        "fileBytesUnchanged": true,
+        "loggedLeftUnchanged": true
+      }
+    },
+    "rerun:forecasts-holdout": {
+      "id": "rerun:forecasts-holdout",
+      "description": "The frozen-tree holdout forecasts equal the committed ones within 1e-09",
+      "passed": true,
+      "observed": {
+        "comparable": true,
+        "rows": 3256,
+        "nonFloatOrMissingDifferences": [],
+        "floatValuesDiffering": 18,
+        "maxAbsDifference": 7.105427357601002e-15
+      }
+    },
+    "rerun:forecasts-validation": {
+      "id": "rerun:forecasts-validation",
+      "description": "The validation rerun reproduced its forecasts within 1e-09 and left the file unchanged",
+      "passed": true,
+      "observed": {
+        "fileBytesUnchanged": true,
+        "loggedLeftUnchanged": true
+      }
+    },
+    "rerun:frozen-tree": {
+      "id": "rerun:frozen-tree",
+      "description": "The holdout reran at the commit recorded in its receipt",
+      "passed": true,
+      "observed": {
+        "frozenTree": "165d140b0be131cd8b4a6092e6d3928fb3a3c706",
+        "receipt": "165d140b0be131cd8b4a6092e6d3928fb3a3c706"
+      }
+    },
+    "rerun:holdout-frozen-tree": {
+      "id": "rerun:holdout-frozen-tree",
+      "description": "A fresh rerun reproduces backtest-holdout.json; only ['/forecastsSha256', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/forecastsSha256",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:holdout-refused-here": {
+      "id": "rerun:holdout-refused-here",
+      "description": "From this tree the holdout refuses: dvp.py no longer matches its frozen hash",
+      "passed": true,
+      "observed": {
+        "exit": 1,
+        "message": true,
+        "receiptUntouched": true
+      }
+    },
+    "rerun:observations": {
+      "id": "rerun:observations",
+      "description": "The rerun audit rebuilds the same observation table",
+      "passed": true,
+      "observed": {
+        "rows": 31668,
+        "columns": 19,
+        "newRun": "phase1-audit-20261124T213110Z"
+      }
+    },
+    "rerun:projection-audit": {
+      "id": "rerun:projection-audit",
+      "description": "A fresh rerun reproduces PROJECTION_EXCLUSION_AUDIT.json; only ['/code', '/codeScan/files', '/generatedAt', '/runId'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/decisions.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+          "/codeScan/files/scripts/model/dvp.py",
+          "/generatedAt",
+          "/runId"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:registry": {
+      "id": "rerun:registry",
+      "description": "A fresh rerun reproduces experiment-registry.json; only nothing may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [],
+        "unexpected": []
+      }
+    },
+    "rerun:reliability": {
+      "id": "rerun:reliability",
+      "description": "A fresh rerun reproduces reliability-results.json; only ['/code', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:report-files": {
+      "id": "rerun:report-files",
+      "description": "report regenerates METRICS.csv and every plot byte for byte",
+      "passed": true,
+      "observed": {
+        "files": 16,
+        "differ": []
+      }
+    },
+    "rerun:sitstart": {
+      "id": "rerun:sitstart",
+      "description": "A fresh rerun reproduces sitstart.json; only ['/code', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:steps": {
+      "id": "rerun:steps",
+      "description": "Every rerun step exited as expected",
+      "passed": true,
+      "observed": {
+        "audit": [
+          0,
+          0,
+          1.5
+        ],
+        "reproduce-v0": [
+          0,
+          0,
+          6.9
+        ],
+        "reliability": [
+          0,
+          0,
+          72.2
+        ],
+        "backtest-development": [
+          0,
+          0,
+          26.1
+        ],
+        "backtest-validation": [
+          0,
+          0,
+          7.0
+        ],
+        "backtest-holdout-frozen-tree": [
+          0,
+          0,
+          4.3
+        ],
+        "backtest-holdout-refused-here": [
+          1,
+          1,
+          0.5
+        ],
+        "sitstart": [
+          0,
+          0,
+          0.8
+        ],
+        "verify": [
+          0,
+          0,
+          10.3
+        ],
+        "report": [
+          0,
+          0,
+          0.5
+        ],
+        "registry": [
+          0,
+          0,
+          0.5
+        ],
+        "model-tests": [
+          0,
+          0,
+          8.0
+        ]
+      }
+    },
+    "rerun:v0": {
+      "id": "rerun:v0",
+      "description": "A fresh rerun reproduces v0-reproduction.json; only ['/code', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:validation": {
+      "id": "rerun:validation",
+      "description": "A fresh rerun reproduces backtest-validation.json; only ['/code', '/config/sha256', '/forecastsContentSha256', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/config/sha256",
+          "/forecastsContentSha256",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "rerun:verify": {
+      "id": "rerun:verify",
+      "description": "A fresh rerun reproduces verify-receipt.json; only ['/code', '/generatedAt'] may differ",
+      "passed": true,
+      "observed": {
+        "differingFields": [
+          "/code",
+          "/generatedAt"
+        ],
+        "unexpected": []
+      }
+    },
+    "test:B11": {
+      "id": "test:B11",
+      "description": "The B11 projection-injection test ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_b11_a_planted_projection_fails_closed"
+        ]
+      }
+    },
+    "test:T01": {
+      "id": "test:T01",
+      "description": "Every test tagged T01 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t01_position_points_are_sums_of_canonical_lines"
+        ]
+      }
+    },
+    "test:T02": {
+      "id": "test:T02",
+      "description": "Every test tagged T02 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t02_fb_counts_as_rb_and_only_ffa_groups_are_summed"
+        ]
+      }
+    },
+    "test:T03": {
+      "id": "test:T03",
+      "description": "Every test tagged T03 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t03_true_zero_is_distinct_from_missing_and_invalid"
+        ]
+      }
+    },
+    "test:T04": {
+      "id": "test:T04",
+      "description": "Every test tagged T04 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t04_negative_and_decimal_points_are_preserved"
+        ]
+      }
+    },
+    "test:T05": {
+      "id": "test:T05",
+      "description": "Every test tagged T05 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t05_traded_player_duplicates_and_coverage"
+        ]
+      }
+    },
+    "test:T06": {
+      "id": "test:T06",
+      "description": "Every test tagged T06 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t06_two_team_games_per_completed_regular_season_game"
+        ]
+      }
+    },
+    "test:T07": {
+      "id": "test:T07",
+      "description": "Every test tagged T07 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t07_defense_comes_from_the_schedule_and_dst_is_the_offense_vulnerability"
+        ]
+      }
+    },
+    "test:T08": {
+      "id": "test:T08",
+      "description": "Every test tagged T08 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t08_leave_one_out_matches_a_hand_calculation"
+        ]
+      }
+    },
+    "test:T09": {
+      "id": "test:T09",
+      "description": "Every test tagged T09 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t09_halves_follow_nfl_week_parity_not_game_order"
+        ]
+      }
+    },
+    "test:T10": {
+      "id": "test:T10",
+      "description": "Every test tagged T10 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t10_each_half_needs_four_real_games"
+        ]
+      }
+    },
+    "test:T11": {
+      "id": "test:T11",
+      "description": "Every test tagged T11 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t11_known_values_bounds_and_invalid_inputs"
+        ]
+      }
+    },
+    "test:T12": {
+      "id": "test:T12",
+      "description": "Every test tagged T12 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 2,
+        "passed": 2,
+        "names": [
+          "test_t12_reml_uses_each_units_own_game_count",
+          "test_t12_unequal_halves_follow_the_variance_model"
+        ]
+      }
+    },
+    "test:T13": {
+      "id": "test:T13",
+      "description": "Every test tagged T13 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 4,
+        "passed": 4,
+        "names": [
+          "test_t13_forecasts_and_metrics_are_reproducible",
+          "test_t13_rank_agreement_does_not_depend_on_row_order",
+          "test_t13_seeded_resampling_is_deterministic",
+          "test_t13_seeded_resampling_is_reproducible_and_seed_dependent"
+        ]
+      }
+    },
+    "test:T14": {
+      "id": "test:T14",
+      "description": "Every test tagged T14 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 3,
+        "passed": 3,
+        "names": [
+          "test_t14_a_maximum_at_the_grid_edge_is_flagged_unconverged",
+          "test_t14_equal_group_means_are_a_boundary_estimate_not_an_effect",
+          "test_t14_pure_noise_never_yields_a_credible_effect"
+        ]
+      }
+    },
+    "test:T15": {
+      "id": "test:T15",
+      "description": "Every test tagged T15 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t15_a_thursday_result_reaches_sunday_only_under_per_game_cutoffs"
+        ]
+      }
+    },
+    "test:T16": {
+      "id": "test:T16",
+      "description": "Every test tagged T16 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t16_t17_future_and_own_results_never_change_a_forecast"
+        ]
+      }
+    },
+    "test:T17": {
+      "id": "test:T17",
+      "description": "Every test tagged T17 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t16_t17_future_and_own_results_never_change_a_forecast"
+        ]
+      }
+    },
+    "test:T18": {
+      "id": "test:T18",
+      "description": "Every test tagged T18 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 2,
+        "passed": 2,
+        "names": [
+          "test_t18_fold_parameters_come_from_earlier_seasons_only",
+          "test_t18_the_holdout_runs_only_as_a_verified_holdout_stage"
+        ]
+      }
+    },
+    "test:T19": {
+      "id": "test:T19",
+      "description": "Every test tagged T19 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t19_t20_every_variant_covers_the_same_rows_and_labels_join_only_once_frozen"
+        ]
+      }
+    },
+    "test:T20": {
+      "id": "test:T20",
+      "description": "Every test tagged T20 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t19_t20_every_variant_covers_the_same_rows_and_labels_join_only_once_frozen"
+        ]
+      }
+    },
+    "test:T21": {
+      "id": "test:T21",
+      "description": "Every test tagged T21 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 2,
+        "passed": 2,
+        "names": [
+          "test_t21_a_real_defense_effect_improves_on_the_offense_only_baseline",
+          "test_t21_t22_a_real_trait_is_recovered_and_noise_identifies_little"
+        ]
+      }
+    },
+    "test:T22": {
+      "id": "test:T22",
+      "description": "Every test tagged T22 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 2,
+        "passed": 2,
+        "names": [
+          "test_t21_t22_a_real_trait_is_recovered_and_noise_identifies_little",
+          "test_t22_pure_noise_defenses_do_not_improve_on_the_baseline"
+        ]
+      }
+    },
+    "test:T23": {
+      "id": "test:T23",
+      "description": "Every test tagged T23 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t23_a_mid_season_shift_is_seen_by_halves_and_lags_not_by_odd_even"
+        ]
+      }
+    },
+    "test:T24": {
+      "id": "test:T24",
+      "description": "Every test tagged T24 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 2,
+        "passed": 2,
+        "names": [
+          "test_t24_permutation_nulls_center_on_zero_and_reject_only_real_signal",
+          "test_t24_placebo_opponents_give_no_uplift_where_the_real_one_does"
+        ]
+      }
+    },
+    "test:T25": {
+      "id": "test:T25",
+      "description": "Every test tagged T25 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t25_week_one_is_the_prior_and_nothing_is_missing"
+        ]
+      }
+    },
+    "test:T26": {
+      "id": "test:T26",
+      "description": "Every test tagged T26 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 15,
+        "passed": 15,
+        "names": [
+          "test_c01_c02_t26_the_dst_forecast_row_is_the_opposing_unit_share_one",
+          "test_t26_an_unmapped_or_mismatched_unit_fails_closed",
+          "test_t26_every_database_connection_is_read_only",
+          "test_t26_forecasts_use_arbit_franchise_codes_and_ffa_groups",
+          "test_t26_no_write_statement_commit_or_weight_import"
+        ]
+      }
+    },
+    "test:T27": {
+      "id": "test:T27",
+      "description": "Every test tagged T27 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 8,
+        "passed": 8,
+        "names": [
+          "test_t27_a_rerun_never_overwrites_evidence",
+          "test_t27_committed_receipts_carry_their_schema",
+          "test_t27_content_hash_ignores_order_and_last_bit_noise_but_sees_real_changes",
+          "test_t27_metrics_survive_a_round_trip_and_a_shuffle",
+          "test_t27_real_holdout_forecasts_reproduce_their_receipt",
+          "test_t27_the_committed_verification_covers_the_committed_receipts"
+        ]
+      }
+    },
+    "test:T28": {
+      "id": "test:T28",
+      "description": "Every test tagged T28 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t28_one_extreme_unit_season_is_found_and_its_effect_measured"
+        ]
+      }
+    },
+    "test:T29": {
+      "id": "test:T29",
+      "description": "Every test tagged T29 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 3,
+        "passed": 3,
+        "names": [
+          "test_t29_every_specified_experiment_is_registered_with_a_status",
+          "test_t29_v0_files_are_byte_identical_to_the_continuity_manifest",
+          "test_t29_v0_was_reproduced_exactly_and_independently"
+        ]
+      }
+    },
+    "test:T30": {
+      "id": "test:T30",
+      "description": "Every test tagged T30 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t30_ffa_actuals_enter_only_under_the_league_scoring_hash_and_unchanged"
+        ]
+      }
+    },
+    "test:T31": {
+      "id": "test:T31",
+      "description": "Every test tagged T31 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 3,
+        "passed": 3,
+        "names": [
+          "test_t31_every_dvp_module_is_scanned_and_clean",
+          "test_t31_scoring_path_and_dvp_code_hold_no_provider_projection",
+          "test_t31_the_scan_finds_a_planted_projection"
+        ]
+      }
+    },
+    "test:T32": {
+      "id": "test:T32",
+      "description": "Every test tagged T32 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 6,
+        "passed": 6,
+        "names": [
+          "test_t32_a_planted_projection_column_fails_closed_under_any_name",
+          "test_t32_a_projection_source_type_is_refused_even_if_registered",
+          "test_t32_planted_projection_rows_fail_closed_and_observations_do_not_change"
+        ]
+      }
+    },
+    "test:T33": {
+      "id": "test:T33",
+      "description": "Every test tagged T33 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t33_unknown_category_or_missing_ancestry_fails_closed"
+        ]
+      }
+    },
+    "test:T34": {
+      "id": "test:T34",
+      "description": "Every test tagged T34 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t34_unfinished_in_progress_and_later_games_are_never_features"
+        ]
+      }
+    },
+    "test:T35": {
+      "id": "test:T35",
+      "description": "Every test tagged T35 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t35_a_thursday_result_reaches_only_the_per_game_forecast"
+        ]
+      }
+    },
+    "test:T36": {
+      "id": "test:T36",
+      "description": "Every test tagged T36 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t36_features_and_labels_stay_apart_until_forecasts_are_frozen"
+        ]
+      }
+    },
+    "test:T37": {
+      "id": "test:T37",
+      "description": "Every test tagged T37 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t37_a_changed_scoring_hash_stops_the_pipeline"
+        ]
+      }
+    },
+    "test:T38": {
+      "id": "test:T38",
+      "description": "Every test tagged T38 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t38_a_prior_comes_only_from_observed_ffa_actuals"
+        ]
+      }
+    },
+    "test:T39": {
+      "id": "test:T39",
+      "description": "Every test tagged T39 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_t39_later_corrections_and_results_never_change_an_earlier_view"
+        ]
+      }
+    },
+    "test:T40": {
+      "id": "test:T40",
+      "description": "Every test tagged T40 ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 2,
+        "passed": 2,
+        "names": [
+          "test_t40_a_projection_dependency_invalidates_a_result",
+          "test_t40_the_committed_registry_has_no_projection_dependency"
+        ]
+      }
+    },
+    "test:dvp-all": {
+      "id": "test:dvp-all",
+      "description": "Every DvP test ran and passed; none skipped (the real-artifact tests ran)",
+      "passed": true,
+      "observed": {
+        "passed": 97,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "test:model-suite": {
+      "id": "test:model-suite",
+      "description": "The whole model test suite passed with nothing skipped (the audit's own tests run in CI)",
+      "passed": true,
+      "observed": {
+        "passed": 157,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "test:phase-c": {
+      "id": "test:phase-c",
+      "description": "Every Phase C test (test_dvp_decisions.py) ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 10
+      }
+    },
+    "test:phase4-rule": {
+      "id": "test:phase4-rule",
+      "description": "The Phase 4 decision-rule test ran and passed",
+      "passed": true,
+      "observed": {
+        "tests": 1,
+        "passed": 1,
+        "names": [
+          "test_phase4_decision_rule"
+        ]
+      }
+    },
+    "v0:bytes": {
+      "id": "v0:bytes",
+      "description": "v0's files are byte-identical to the hashes pinned in the continuity manifest",
+      "passed": true,
+      "observed": {
+        "docs/research/defense-position-study-2026-11-23.json": true,
+        "docs/research/ffa-signal-study-2026-11-09.json": true,
+        "scripts/model/defense_position_study.py": true,
+        "scripts/model/ffa_signal_study.py": true,
+        "libs/arbit-model/src/arbit_model/feature_specs.py": true
+      }
+    },
+    "v0:reproduced": {
+      "id": "v0:reproduced",
+      "description": "v0 reproduces exactly (rerun) and independently (all measures match)",
+      "passed": true,
+      "observed": {
+        "status": "REPRODUCED",
+        "independentMeasures": 12,
+        "allMatch": true
+      }
+    },
+    "v0:validated": {
+      "id": "v0:validated",
+      "description": "v0's method on validated observations: 320 units per group, seeded intervals",
+      "passed": true,
+      "observed": {
+        "measures": 12,
+        "units": [
+          320
+        ]
+      }
+    },
+    "v0:wr-k": {
+      "id": "v0:wr-k",
+      "description": "WR k: v0's 44.1 comes from the mean half size 8.25; halves of 8 give 42.7",
+      "passed": true,
+      "observed": {
+        "pearson": 0.15766,
+        "meanHalfGames": 8.2469,
+        "kV0": 44.1,
+        "kIfHalvesWere8": 42.74
+      }
+    },
+    "verify:passed": {
+      "id": "verify:passed",
+      "description": "verify PASSED on the rerun: every committed metric recomputed, labels join 1:1, signs and units checked",
+      "passed": true,
+      "observed": {
+        "status": "PASSED",
+        "metrics": 468,
+        "stages": {
+          "development": {
+            "metricsCompared": 156,
+            "mismatched": 0,
+            "labelsOneToOne": true,
+            "labelsEqual": true,
+            "dstWhole": true,
+            "dstSign": 0.2437
+          },
+          "holdout": {
+            "metricsCompared": 156,
+            "mismatched": 0,
+            "labelsOneToOne": true,
+            "labelsEqual": true,
+            "dstWhole": true,
+            "dstSign": 0.2826
+          },
+          "validation": {
+            "metricsCompared": 156,
+            "mismatched": 0,
+            "labelsOneToOne": true,
+            "labelsEqual": true,
+            "dstWhole": true,
+            "dstSign": 0.3455
+          }
+        }
+      }
+    },
+    "verify:sample": {
+      "id": "verify:sample",
+      "description": "verify draws an independent sample of joined forecasts per stage for sign, unit and join inspection",
+      "passed": true,
+      "observed": {
+        "development": 6,
+        "holdout": 6,
+        "validation": 6
+      }
+    }
+  }
+}
