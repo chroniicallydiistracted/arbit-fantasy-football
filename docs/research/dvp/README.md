@@ -24,6 +24,7 @@
 | Phase 5, C00–C05: D/ST start/sit (the only group past the gate) | EXECUTED. **PROMISING:** +4.4 / +8.5 / +6.6 points of pairwise accuracy (dev / 2024 / 2025). C03 and league lineups BLOCKED ([player-level report](PLAYER_LEVEL_REPORT.md)) |
 | Verify-only: artifacts read back, all 468 committed metrics reproduced, frozen commit matches every frozen hash | PASSED ([verify-receipt.json](verify-receipt.json)) |
 | Canonical targets repaired (R-072): all 5,278 D/ST team-games, every opponent from the schedule | DONE ([targets repair](../targets-repair-r072.md), TASK-20261123-007) |
+| Owner audit remediations 3–5 (AUD-03 to AUD-05) | DONE: the row contract and store byte checks at use; decoupled historical stages that reproduce v1 exactly on valid rows; rolling-window and split-half-k estimators, exploratory, none better than the frozen candidates ([EXPLORATORY_V2.md](EXPLORATORY_V2.md)) |
 | Plan completion audit: every action item of the specification against rerun evidence | PASSED: 214 items, 209 done and 5 open; 156 of 156 checks ([scope document](PLAN_COMPLETION_SCOPE.md), [plan-audit-receipt.json](plan-audit-receipt.json), TASK-20261124-005) |
 
 **Headline so far (repeatability only, not forecasting):** REML variance components on adjusted points, each unit with its own game count (A05).
@@ -88,6 +89,10 @@ POLARS_MAX_THREADS=2 ARBIT_NFLVERSE_PATH=<main>/data/nflverse uv run --env-file 
   python scripts/model/dvp_prospective.py --main <main> sweep      # or: forecast --week W
 #   rehearse (2025 equivalence and evaluation), evaluate (after the games), verify (ledger and files)
 
+# Exploratory v2 (AUD-03, AUD-05): decoupled stages and new estimators; one run id for all four commands
+... python scripts/model/dvp_explore.py --main <main> --run <id> forecast --stage development   # then validation, holdout
+... python scripts/model/dvp_explore.py --main <main> --run <id> evaluate                        # writes explore-v2.json
+
 # Plan completion audit: rerun every stage on scratch copies (holdout from the frozen tree), then check every item
 uv run python scripts/model/dvp_plan_audit.py rerun --main <main> --run <main>/artifacts/dvp/<audit run> \
   --frozen-tree <worktree at 165d140> --scratch <empty dir>
@@ -137,6 +142,7 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [MODEL_CARD.md](MODEL_CARD.md) | What the forecast is, results by position, intended and unintended use, limits, fallback, eligibility |
 | [PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md) | Phase C: D/ST start/sit decisions, rule declared first, results, what is blocked |
 | [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The 2026 weeks 12–18 confirmation (both levels): forecasts archived before kickoff, the harness, the window's status and the evaluation |
+| [EXPLORATORY_V2.md](EXPLORATORY_V2.md) | Owner audit remediations 3 and 5: decoupled historical stages, rolling-window and split-half-k estimators (exploratory) |
 | [prospective/](prospective/2026/README.md) | The exported prospective archive (ledger, forecasts, manifests, league captures) and the 2025 rehearsal |
 | [AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md](AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md) | The owner's independent audit remediation requirements (AUD-01 to AUD-07) |
 | [PLAN_COMPLETION_SCOPE.md](PLAN_COMPLETION_SCOPE.md) | Every action item of the specification: status, code and model logic, and the audit check that proves it; the open items |

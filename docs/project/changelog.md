@@ -1,5 +1,25 @@
 # Development Changelog
 
+## 2026-11-24 — DvP owner audit remediations 3–5: row contract, decoupled stages, rolling windows and split-half k (TASK-20261124-007)
+
+- **PR #14 merged** (`4708bde`): the prospective harness. Week 12 was archived before kickoff.
+- **AUD-04:**
+  - `arbit_model.dvp.contract` checks every observation row's lineage wherever observations are fit, forecast or decided on: `shadow.prepare_checked`, the prospective harness, and `dvp.py` reliability, backtest, sitstart and verify.
+  - `dvp.verified_object` hashes each content-addressed season manifest and Parquet before reading.
+  - `test_dvp_contract.py` plants forbidden and unknown values inside permitted columns, and a store object altered under its own name. Each stops the run.
+  - `SOURCE_PROVENANCE.md` now states what the firewall does and doesn't prove.
+- **AUD-05:** `scripts/model/dvp_explore.py` runs development, 2024 and 2025 through separate stages:
+  - schedule targets;
+  - contract-checked features;
+  - forecast-only outputs persisted with hashes before any label is read;
+  - a separate label read;
+  - a join that keeps every target, with coverage reported.
+  The frozen variants' metrics equal the committed v1 receipts exactly on valid rows. The 7–9 development, 1–2 validation and 2 holdout refused-label cells per position are now forecast and reported as invalid labels.
+- **AUD-03 (exploratory, `config/dvp/explore-v2.json` declared first):**
+  - **Rolling windows:** 3-, 5- and 8-game residual windows with REML-k shrinkage. Shorter windows are worse; for D/ST: 3-game −1.5% / −2.9% / −1.3%, 8-game −2.6% / −4.5% / −3.3%, against B06's −3.0% / −6.4% / −4.1%.
+  - **Split-half k:** v0's split-half k fit on training seasons forecasts like REML k.
+  - No estimator beats the frozen candidates; [EXPLORATORY_V2.md](../research/dvp/EXPLORATORY_V2.md).
+
 ## 2026-11-24 — DvP prospective shadow forecasts, week 12 archived before kickoff (TASK-20261124-006)
 
 - **Owner audit AUD-01 (remediation 1):** the 2026 confirmation is now truly prospective.
