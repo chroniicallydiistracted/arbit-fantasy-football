@@ -288,3 +288,54 @@ def test_the_predeclared_config_names_the_frozen_window():
     assert config["season"] == frozen["prospective"]["season"]
     assert config["write_to_production"] is False
     assert set(config["classification"]) == {"PROSPECTIVE", "MISSED", "RETROSPECTIVE", "REHEARSAL"}
+
+
+def test_only_the_complete_prospective_window_can_confirm(harness):
+    """A rehearsal, a reconstruction or an interim window is descriptive: its rule outcome is
+    shown, but its label never says CONFIRMED."""
+    observations, schedule, rows, params = setup()
+    targets = shadow.scheduled_targets(schedule, 2018, range(1, 15), POSITIONS)
+    out = shadow.walk_targets(rows, targets, schedule, params, POSITIONS, wf.Settings())
+    stored = shadow.forecast_only(out, targets).filter(pl.col("week") >= 8)
+    fz = harness.Frozen(
+        cli=None,
+        group={
+            "protocol": {
+                "bootstrapReplicates": 50,
+                "seed": 1729,
+                "practicalMinimumRelativeRmse": 0.01,
+            },
+            "periods": {"DST": {"candidate": "b06"}},
+        },
+        phase_c={
+            "parameters": {
+                "close": 1.0,
+                "waiverPoolRanks": [9, 24],
+                "top": 8,
+                "bootstrapReplicates": 50,
+                "seed": 1729,
+            },
+            "practicalMinimumAccuracyPp": 1.8,
+        },
+        base={"position_groups": list(POSITIONS)},
+        backtest={},
+        candidates={
+            "positions": {
+                "WR": {"candidate": "b00", "bestDvp": "b06"},
+                "DST": {"candidate": "b06", "bestDvp": "b06"},
+            }
+        },
+        sitstart={},
+        verification={},
+    )
+    labels = observations.filter(pl.col("season") == 2018).with_columns(
+        pl.col("offense").alias("unit")
+    )
+    final = harness.evaluate_frame(fz, stored, labels)
+    assert final["phaseB"]["DST"]["label"] in ("CONFIRMED", "NOT_CONFIRMED")
+    assert final["phaseB"]["WR"]["label"].startswith("NO_CANDIDATE")
+    assert final["phaseC"]["label"] in ("CONFIRMED", "NOT_CONFIRMED")
+    interim = harness.evaluate_frame(fz, stored, labels, descriptive="INTERIM: not yet")
+    for part in (interim["phaseB"]["DST"], interim["phaseB"]["WR"], interim["phaseC"]):
+        assert part["label"] == "INTERIM: not yet"
+    assert interim["phaseB"]["DST"]["ruleOutcome"] == final["phaseB"]["DST"]["label"]

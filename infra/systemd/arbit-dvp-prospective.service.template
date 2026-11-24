@@ -1,0 +1,16 @@
+[Unit]
+Description=Arbit M3-3 DvP prospective forecasts: archive each window week before its kickoff (research only)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@ROOT@
+Environment=PATH=@PATH@
+Environment=POLARS_MAX_THREADS=2
+# Forecasts each 2026 week 12-18 once its inputs are complete and before its cutoff; records a
+# week whose cutoff passed unarchived as MISSED. Read-only against the database. Writes only
+# artifacts/dvp/prospective/ (git-ignored); config/dvp/prospective.json declares the rest.
+ExecStart=@UV@ run --frozen --env-file .env.local python scripts/model/dvp_prospective.py --export @ROOT@/artifacts/dvp/prospective/export sweep
+NoNewPrivileges=true
+TimeoutStartSec=900

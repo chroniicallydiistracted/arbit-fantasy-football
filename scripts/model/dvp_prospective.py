@@ -717,8 +717,14 @@ def evaluate_frame(
     forecasts: pl.DataFrame,
     labels: pl.DataFrame,
     leagues: dict[int, dict[str, Any]] | None = None,
+    *,
+    descriptive: str | None = None,
 ) -> dict[str, Any]:
-    """The frozen Phase B protocol and Phase C rule on stored forecasts, keeping every target."""
+    """The frozen Phase B protocol and Phase C rule on stored forecasts, keeping every target.
+
+    A confirmation label (CONFIRMED / NOT_CONFIRMED) is assigned only for the complete,
+    predeclared prospective window. Otherwise `descriptive` says why there is none, and the rule's
+    outcome stays visible as `ruleOutcome`."""
     labelled = shadow.attach_labels(forecasts, labels)
     reps, seed = fz.group["protocol"]["bootstrapReplicates"], fz.group["protocol"]["seed"]
     minimum = fz.group["protocol"]["practicalMinimumRelativeRmse"]
@@ -806,6 +812,11 @@ def evaluate_frame(
             if gain
             else None,
         }
+    if descriptive is not None:
+        for value in [*phase_b.values(), phase_c]:
+            if "label" in value:
+                value["ruleOutcome"] = value["label"]
+                value["label"] = descriptive
     return {
         "coverage": shadow.coverage(labelled),
         "phaseB": phase_b,
@@ -850,7 +861,9 @@ def rehearse(args: argparse.Namespace) -> None:
         part = adapter.filter(pl.col("week") == week)
         by_week[week] = part
     window = pl.concat(by_week.values())
-    evaluation = evaluate_frame(fz, window, labels)
+    evaluation = evaluate_frame(
+        fz, window, labels, descriptive="REHEARSAL: 2025 was known; never a confirmation"
+    )
     receipt = {
         "format": FORMAT + "-rehearsal-v1",
         "generatedAt": now_utc().isoformat(),
@@ -906,7 +919,8 @@ def evaluate(args: argparse.Namespace) -> None:
     archived: dict[int, pl.DataFrame] = {}
     retrospective: dict[int, pl.DataFrame] = {}
     leagues: dict[int, dict[str, Any]] = {}
-    for week in config["weeks"]:
+    weeks: list[int] = args.weeks or config["weeks"]
+    for week in weeks:
         found = entries_for(lines, week)
         prospective = [e for e in found if e["classification"] == "PROSPECTIVE"]
         if prospective:
@@ -940,25 +954,34 @@ def evaluate(args: argparse.Namespace) -> None:
     weeks_done = set(
         label_schedule.filter(pl.col("status") == "completed").get_column("week").unique().to_list()
     )
-    complete = all(status[str(w)] in ("PROSPECTIVE", "MISSED") for w in config["weeks"]) and all(
-        w in weeks_done for w in config["weeks"]
+    predeclared = weeks == config["weeks"]
+    complete = (
+        predeclared
+        and all(status[str(w)] in ("PROSPECTIVE", "MISSED") for w in weeks)
+        and all(w in weeks_done for w in weeks)
     )
-    result: dict[str, Any] = {"weeks": status, "windowComplete": complete}
+    result: dict[str, Any] = {
+        "weeks": status,
+        "predeclaredWindow": predeclared,
+        "windowComplete": complete,
+    }
     if archived:
         frame = pl.concat(list(archived.values()), how="vertical_relaxed")
-        result["prospective"] = evaluate_frame(fz, frame, labels, leagues)
-        if not complete:
-            for part in ("phaseB", "phaseC"):
-                for value in (
-                    result["prospective"][part].values()
-                    if part == "phaseB"
-                    else [result["prospective"][part]]
-                ):
-                    if isinstance(value, dict) and "label" in value:
-                        value["label"] = "INTERIM (no label until the window is complete)"
+        result["prospective"] = evaluate_frame(
+            fz,
+            frame,
+            labels,
+            leagues,
+            descriptive=None
+            if complete
+            else "INTERIM: no label until the predeclared window is complete",
+        )
     if retrospective:
         result["retrospectiveOnly"] = evaluate_frame(
-            fz, pl.concat(list(retrospective.values()), how="vertical_relaxed"), labels
+            fz,
+            pl.concat(list(retrospective.values()), how="vertical_relaxed"),
+            labels,
+            descriptive="RETROSPECTIVE: made after the cutoff; never a confirmation",
         )
     receipt = {
         "format": FORMAT + "-evaluation-v1",
@@ -970,7 +993,8 @@ def evaluate(args: argparse.Namespace) -> None:
         **result,
         "forbidden_vendor_projection_dependencies": 0,
     }
-    out = Path(args.receipts) / str(season) / "evaluation.json"
+    name = "evaluation.json" if predeclared else f"evaluation-weeks-{min(weeks)}-{max(weeks)}.json"
+    out = Path(args.receipts) / str(season) / name
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(receipt, indent=1, sort_keys=True, default=str) + "\n")
     shutil.rmtree(work, ignore_errors=True)
@@ -1018,6 +1042,11 @@ def main() -> None:
     h.add_argument("--receipts", type=Path, default=ROOT / "docs/research/dvp/prospective")
     e = commands.add_parser("evaluate")
     e.add_argument("--labels", type=Path, help="a targets store built after the games")
+    e.add_argument(
+        "--weeks",
+        type=lambda v: [int(w) for w in v.split(",")],
+        help="weeks other than the predeclared window, for checks only: never a confirmation",
+    )
     e.add_argument("--receipts", type=Path, default=ROOT / "docs/research/dvp/prospective")
     commands.add_parser("verify")
     args = parser.parse_args()
