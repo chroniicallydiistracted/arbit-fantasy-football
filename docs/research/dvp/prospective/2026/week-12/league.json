@@ -1,0 +1,124 @@
+{
+ "contentHash": "c5e92d77e80dbf2c2936eaf4524f388d9687503be9bfb86679f9b0600faa167d",
+ "freeAgents": [
+  "ARI",
+  "ATL",
+  "CAR",
+  "CIN",
+  "CLE",
+  "DAL",
+  "DEN",
+  "IND",
+  "JAX",
+  "LV",
+  "MIA",
+  "NE",
+  "NO",
+  "NYG",
+  "NYJ",
+  "PHI",
+  "TB",
+  "TEN",
+  "WAS"
+ ],
+ "observedAt": "2026-11-24T23:12:13.568810+00:00",
+ "playingThisWeek": [
+  "ARI",
+  "ATL",
+  "BAL",
+  "BUF",
+  "CAR",
+  "CHI",
+  "CIN",
+  "CLE",
+  "DAL",
+  "DEN",
+  "DET",
+  "GB",
+  "HOU",
+  "IND",
+  "JAX",
+  "KC",
+  "LA",
+  "LAC",
+  "LV",
+  "MIA",
+  "MIN",
+  "NE",
+  "NO",
+  "NYG",
+  "NYJ",
+  "PHI",
+  "PIT",
+  "SEA",
+  "SF",
+  "TB",
+  "TEN",
+  "WAS"
+ ],
+ "rosters": {
+  "366ec856-5fae-4b81-8096-d3d9ec110249": [
+   "HOU"
+  ],
+  "54e49c44-5158-4d38-abfc-28a066c83c54": [
+   "LAC",
+   "SF"
+  ],
+  "768524aa-6978-4de3-b931-3fd98595c66b": [
+   "PIT"
+  ],
+  "86831e99-e42e-4b26-9f59-33cf10262fe5": [
+   "BUF"
+  ],
+  "8b1c13cb-d193-4eee-ac0f-fee67d808c89": [
+   "KC",
+   "LA"
+  ],
+  "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef": [
+   "DET",
+   "SEA"
+  ],
+  "b23a6090-e041-4430-91c8-12fcdf39f157": [
+   "BAL",
+   "MIN"
+  ],
+  "bfb0db9f-45e8-40af-a213-c70eda2499b0": [
+   "CHI",
+   "GB"
+  ]
+ },
+ "slots": {
+  "366ec856-5fae-4b81-8096-d3d9ec110249": {
+   "HOU": "DST"
+  },
+  "54e49c44-5158-4d38-abfc-28a066c83c54": {
+   "LAC": "DST",
+   "SF": "BENCH"
+  },
+  "768524aa-6978-4de3-b931-3fd98595c66b": {
+   "PIT": "DST"
+  },
+  "86831e99-e42e-4b26-9f59-33cf10262fe5": {
+   "BUF": "DST"
+  },
+  "8b1c13cb-d193-4eee-ac0f-fee67d808c89": {
+   "KC": "DST",
+   "LA": "BENCH"
+  },
+  "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef": {
+   "DET": "DST",
+   "SEA": "BENCH"
+  },
+  "b23a6090-e041-4430-91c8-12fcdf39f157": {
+   "BAL": "BENCH",
+   "MIN": "DST"
+  },
+  "bfb0db9f-45e8-40af-a213-c70eda2499b0": {
+   "CHI": "DST",
+   "GB": "BENCH"
+  }
+ },
+ "snapshotId": "b52284bf-e28d-41b5-ab31-985a9b90f45d",
+ "units": 32,
+ "unitsNotInSchedule": []
+}
