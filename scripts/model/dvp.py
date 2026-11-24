@@ -2411,6 +2411,39 @@ def _phase_b_records(
                 **shared,
             )
         )
+    holdout_path = receipts / "backtest-holdout.json"
+    if holdout_path.exists():
+        holdout = json.loads(holdout_path.read_text())
+        decisions = holdout["decisions"]
+        out.append(
+            records.record(
+                "M3-3-HOLDOUT-2025",
+                "EXECUTED",
+                hypothesis="The frozen candidates (D/ST B06; B00 elsewhere) hold on 2025",
+                estimator="the Phase 3 method frozen in config/dvp/frozen.json, parameters fit on "
+                "2016-2024, every frozen hash verified before running",
+                sample_count={p: holdout["results"][p]["rows"] for p in groups},
+                baseline_metric={p: holdout["results"][p]["b00"]["rmse"] for p in groups},
+                subgroups=decisions["positions"],
+                decision=decisions["global"]["label"],
+                reason=f"Promising: {', '.join(decisions['global']['promisingPositions']) or 'none'}; "
+                "see MODEL_CARD.md",
+                next_steps="Prospective 2026 weeks frozen in config/dvp/frozen.json; any production "
+                "use needs the owner (OWN-074)",
+                evidence_paths=[
+                    "docs/research/dvp/backtest-holdout.json",
+                    "config/dvp/frozen.json",
+                    "docs/research/dvp/MODEL_CARD.md",
+                ],
+                **(
+                    shared
+                    | {
+                        "code_commit": holdout["code"],
+                        "holdout_independence_status": holdout["holdoutStatus"],
+                    }
+                ),
+            )
+        )
     out.append(
         records.record(
             "M3-3-B11",
