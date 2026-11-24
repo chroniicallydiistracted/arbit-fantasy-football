@@ -1,5 +1,17 @@
 # Development Changelog
 
+## 2026-11-24 — DvP Phase 3: the walk-forward (TASK-20261124-002)
+
+- **PR #9 merged** (`ceba441`): DvP Phase 2.
+- **`arbit_model.dvp.walkforward` and `dvp.py backtest|report` (ENG-060):** the preweek walk-forward with B00 and B01-B12, frozen forecasts and `evaluation_join`. Development folds 2017-2023 and 2024 validation; 2025 is refused.
+- **Order of decisions:** the 1% practical minimum was in the config before any forecast; candidates were frozen in `config/dvp/frozen-candidates.json` before validation ran.
+- **Results ([report](../research/dvp/BACKTEST_REPORT.md)):**
+  - D/ST B06: −3.0% RMSE in development, −6.4% in 2024.
+  - QB, RB, WR: under 1%, not replicated in 2024. TE, K: nothing.
+  - Unshrunk DvP hurts everywhere. Placebos give no uplift.
+  - Per-game refresh changes nothing; a slower availability rule costs nothing.
+- **Tests:** 10 new (T13, T15-T22, T24, T25, B11).
+
 ## 2026-11-24 — DvP Phase 2: the reliability lab (TASK-20261124-001)
 
 - **PR #8 merged** (`efff624`): the R-072 repair and rebuilt FFA targets.

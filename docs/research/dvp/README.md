@@ -18,7 +18,8 @@
 | Tests T01–T07 and T29–T40 (with T08–T13, T21–T22) | PASSED, 38 tests |
 | A01 on validated observations, with intervals | EXECUTED |
 | Phase 2 reliability lab: A00, A02–A10, A12 | EXECUTED ([reliability report](RELIABILITY_REPORT.md), [methodology](METHODOLOGY.md)) |
-| B00–B12; C00–C05 | PLANNED ([registry](EXPERIMENT_REGISTRY.md)) |
+| Phase 3 walk-forward: B00–B12 on development folds 2017–2023 and 2024 validation | EXECUTED ([backtest report](BACKTEST_REPORT.md)); candidates frozen in `config/dvp/frozen-candidates.json` |
+| Phase 4 (2025 conditional holdout, then prospective 2026); C00–C05 | PLANNED ([registry](EXPERIMENT_REGISTRY.md)) |
 | Canonical targets repaired (R-072): all 5,278 D/ST team-games, every opponent from the schedule | DONE ([targets repair](../targets-repair-r072.md), TASK-20261123-007) |
 
 **Headline so far (repeatability only, not forecasting):** REML variance components on adjusted points, each unit with its own game count (A05).
@@ -32,6 +33,12 @@
 | TE, K | ≈ 37, ≈ 50 | 23–97, 33–101 | Weakest; the order among WR, TE and K isn't established |
 
 An offense's own production at a position settles in 4–7 games, so per game a team's result says three to seven times more about its offense than about the defense it faced.
+
+**Forecasting (Phase 3), next-game RMSE against the offense-only B00:**
+- **D/ST:** the opponent term (B06: shrunk, k about 8, with a last-season prior) cuts error by 3.0% in development and 6.4% in 2024.
+- **QB, RB and WR:** under 1% in development, not replicated in 2024 (WR got worse).
+- **TE and K:** nothing.
+- **Unshrunk DvP:** makes every position worse.
 
 Whether any of this improves next-game forecasts over an offense-only baseline is Phase B.
 
@@ -54,13 +61,20 @@ ARBIT_NFLVERSE_PATH=<main>/data/nflverse uv run --env-file <main>/.env.local \
   python scripts/model/dvp.py reliability --config config/dvp/reliability.json \
     --targets <main>/data/model --run <main>/artifacts/dvp/<audit run> --receipts docs/research/dvp
 
+# Phase 3 walk-forward: development folds, then validation from the frozen candidates
+POLARS_MAX_THREADS=2 ARBIT_NFLVERSE_PATH=<main>/data/nflverse uv run --env-file <main>/.env.local \
+  python scripts/model/dvp.py backtest --config config/dvp/backtest.json --stage development \
+    --targets <main>/data/model --run <main>/artifacts/dvp/<audit run> --receipts docs/research/dvp
+# (commit config/dvp/frozen-candidates.json, then the same with --stage validation)
+uv run python scripts/model/dvp.py report --receipts docs/research/dvp
+
 # The experiment registry, from the receipts
 uv run python scripts/model/dvp.py registry --config config/dvp/base.json --receipts docs/research/dvp
 
 uv run pytest libs/arbit-model/tests/test_dvp_*.py -q
 ```
 
-**Runtime:** the audit takes about 2 s, the reproduction 8 s, the reliability lab about 80 s and the DvP tests about 3 s.
+**Runtime:** the audit takes about 2 s, the reproduction 8 s, the reliability lab about 80 s, the development backtest about 26 s and validation about 8 s. The DvP tests take about 8 s with `POLARS_MAX_THREADS=2`; with the default thread pool, tiny frames make them several times slower.
 
 **What it reads:**
 - the database, read-only, for the league's rules and the pinned nflverse manifests;
@@ -85,11 +99,12 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [EXPERIMENT_REGISTRY.md](EXPERIMENT_REGISTRY.md) | Every M3-3 experiment and its status |
 | [RELIABILITY_REPORT.md](RELIABILITY_REPORT.md) | Phase 2 results: splits, adjustments, variance components, time, carryover, nulls, components, robustness, corrections |
 | [METHODOLOGY.md](METHODOLOGY.md) | Hypotheses, estimators, look-ahead protections, and Phase B's comparator and metrics declared before it runs |
+| [BACKTEST_REPORT.md](BACKTEST_REPORT.md) | Phase 3: B00 and every variant on development folds and 2024, controls, cutoff and availability sensitivity, candidates |
 
 Decisions, risks, history and handoffs live in the repository's own records:
 - the [decision register](../../project/decision-register.md): OWN-074, ENG-057, OWN-075, ENG-058;
 - [known issues](../../project/known-issues.md): R-072 to R-074;
 - the [changelog](../../project/changelog.md);
-- governance tasks TASK-20261123-005, TASK-20261123-007 and TASK-20261124-001.
+- governance tasks TASK-20261123-005, TASK-20261123-007, TASK-20261124-001 and TASK-20261124-002.
 
-**Still to write:** the backtest report and the model card, with phases 3–4.
+**Still to write:** the model card, with Phase 4.

@@ -1,0 +1,85 @@
+{
+ "format": "arbit-dvp-m3-3-frozen-candidates-v1",
+ "fromDevelopment": {
+  "auditRun": "phase1-audit-20261124T024442Z",
+  "code": "d8117118f9b81b310e6a8f979723161dd3645863",
+  "forecastsSha256": "c7a5f424e052fdaf725d53450ca527bfcb7945f35a7721f3887b0a39a344fb7e",
+  "receipt": "docs/research/dvp/backtest-development.json"
+ },
+ "frozenAt": "2026-11-24T03:05:59.229713+00:00",
+ "positions": {
+  "DST": {
+   "b04Selected": "b04_k8",
+   "b05Selected": "b05_h8",
+   "bestDelta95": [
+    -0.2285,
+    -0.1741
+   ],
+   "bestDvp": "b06",
+   "bestRelativeDelta": -0.02985,
+   "candidate": "b06",
+   "rule": "best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by at least 1%"
+  },
+  "K": {
+   "b04Selected": "b04_k64",
+   "b05Selected": "b05_h4",
+   "bestDelta95": [
+    -0.0123,
+    0.0028
+   ],
+   "bestDvp": "b06",
+   "bestRelativeDelta": -0.00117,
+   "candidate": "b00",
+   "rule": "best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by at least 1%"
+  },
+  "QB": {
+   "b04Selected": "b04_k16",
+   "b05Selected": "b05_h4",
+   "bestDelta95": [
+    -0.0965,
+    -0.0401
+   ],
+   "bestDvp": "b06",
+   "bestRelativeDelta": -0.0085,
+   "candidate": "b00",
+   "rule": "best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by at least 1%"
+  },
+  "RB": {
+   "b04Selected": "b04_k16",
+   "b05Selected": "b05_h8",
+   "bestDelta95": [
+    -0.123,
+    -0.0294
+   ],
+   "bestDvp": "b06",
+   "bestRelativeDelta": -0.00839,
+   "candidate": "b00",
+   "rule": "best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by at least 1%"
+  },
+  "TE": {
+   "b04Selected": "b04_k32",
+   "b05Selected": "b05_h8",
+   "bestDelta95": [
+    -0.0265,
+    -0.0008
+   ],
+   "bestDvp": "b07",
+   "bestRelativeDelta": -0.00189,
+   "candidate": "b00",
+   "rule": "best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by at least 1%"
+  },
+  "WR": {
+   "b04Selected": "b04_k16",
+   "b05Selected": "b05_h8",
+   "bestDelta95": [
+    -0.1573,
+    -0.0433
+   ],
+   "bestDvp": "b06",
+   "bestRelativeDelta": -0.00743,
+   "candidate": "b00",
+   "rule": "best DvP variant by development RMSE; candidate only if it cuts B00's RMSE by at least 1%"
+  }
+ },
+ "practicalMinimumRelativeRmse": 0.01
+}

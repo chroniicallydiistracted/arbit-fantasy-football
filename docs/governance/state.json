@@ -2,7 +2,7 @@
   "version": 1,
   "project": "arbit-fantasy-football",
   "active_task": null,
-  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-001-governance-handoff.md",
+  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-002-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
   "project_next_action": "Merge the PR for branch claude/weather-plan-and-backfill (TASK-20261122-007 to -009). Then start M3 slice 3 under a model-class task (gap-aware ADR-007 reader with labeled bases, defense-against-position features per OWN-068, catalog re-review per A2, Q-014 research note), with weather W1 (venue table, forecast record) beside it per ADR-008. Ask the owner for the NWS User-Agent contact before W3.",

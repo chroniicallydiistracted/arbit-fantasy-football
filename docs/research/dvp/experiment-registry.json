@@ -1482,36 +1482,180 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B00",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
    "hypothesis": "Offense-only next-game forecast from prior FFA actuals: the comparator",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b00": {
+      "DST": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 6.6425
+      },
+      "K": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 4.5109
+      },
+      "QB": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 7.5804
+      },
+      "RB": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 9.8731
+      },
+      "TE": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 7.6568
+      },
+      "WR": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 13.2359
+      }
+     }
+    },
+    "validation": {
+     "b00": {
+      "DST": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 6.3982
+      },
+      "K": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 4.8715
+      },
+      "QB": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 7.4468
+      },
+      "RB": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 9.1979
+      },
+      "TE": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 7.6701
+      },
+      "WR": {
+       "delta95": [
+        0.0,
+        0.0
+       ],
+       "relativeDelta": 0.0,
+       "rmse": 13.1925
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1520,9 +1664,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1531,36 +1673,180 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B01",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Raw prior-games DvP added to B00",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Raw prior-games DvP added to B00, unshrunk",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b01": {
+      "DST": {
+       "delta95": [
+        0.1729,
+        0.356
+       ],
+       "relativeDelta": 0.03936,
+       "rmse": 6.9039
+      },
+      "K": {
+       "delta95": [
+        0.3216,
+        0.4149
+       ],
+       "relativeDelta": 0.08061,
+       "rmse": 4.8746
+      },
+      "QB": {
+       "delta95": [
+        0.4724,
+        0.6887
+       ],
+       "relativeDelta": 0.07548,
+       "rmse": 8.1526
+      },
+      "RB": {
+       "delta95": [
+        0.6594,
+        0.8804
+       ],
+       "relativeDelta": 0.07529,
+       "rmse": 10.6164
+      },
+      "TE": {
+       "delta95": [
+        0.5591,
+        0.7251
+       ],
+       "relativeDelta": 0.08358,
+       "rmse": 8.2967
+      },
+      "WR": {
+       "delta95": [
+        0.8745,
+        1.3483
+       ],
+       "relativeDelta": 0.08418,
+       "rmse": 14.3501
+      }
+     }
+    },
+    "validation": {
+     "b01": {
+      "DST": {
+       "delta95": [
+        -0.4268,
+        0.495
+       ],
+       "relativeDelta": -0.00246,
+       "rmse": 6.3824
+      },
+      "K": {
+       "delta95": [
+        0.1662,
+        1.2723
+       ],
+       "relativeDelta": 0.12643,
+       "rmse": 5.4874
+      },
+      "QB": {
+       "delta95": [
+        0.1427,
+        1.0338
+       ],
+       "relativeDelta": 0.07059,
+       "rmse": 7.9725
+      },
+      "RB": {
+       "delta95": [
+        0.1275,
+        1.1068
+       ],
+       "relativeDelta": 0.06573,
+       "rmse": 9.8025
+      },
+      "TE": {
+       "delta95": [
+        0.2417,
+        0.9524
+       ],
+       "relativeDelta": 0.07267,
+       "rmse": 8.2275
+      },
+      "WR": {
+       "delta95": [
+        0.7441,
+        1.7503
+       ],
+       "relativeDelta": 0.09059,
+       "rmse": 14.3876
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1569,9 +1855,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1580,36 +1864,280 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B02",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Prior-only offense-adjusted DvP added to B00, unshrunk",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Point-in-time residual DvP added to B00, unshrunk (and with recomputed baselines)",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b02": {
+      "DST": {
+       "delta95": [
+        0.1575,
+        0.3589
+       ],
+       "relativeDelta": 0.03865,
+       "rmse": 6.8992
+      },
+      "K": {
+       "delta95": [
+        0.3312,
+        0.4217
+       ],
+       "relativeDelta": 0.0828,
+       "rmse": 4.8844
+      },
+      "QB": {
+       "delta95": [
+        0.4641,
+        0.6538
+       ],
+       "relativeDelta": 0.07226,
+       "rmse": 8.1282
+      },
+      "RB": {
+       "delta95": [
+        0.5869,
+        0.8854
+       ],
+       "relativeDelta": 0.07252,
+       "rmse": 10.5891
+      },
+      "TE": {
+       "delta95": [
+        0.5287,
+        0.7171
+       ],
+       "relativeDelta": 0.08153,
+       "rmse": 8.281
+      },
+      "WR": {
+       "delta95": [
+        0.8195,
+        1.2864
+       ],
+       "relativeDelta": 0.08037,
+       "rmse": 14.2997
+      }
+     },
+     "b02r": {
+      "DST": {
+       "delta95": [
+        0.1758,
+        0.347
+       ],
+       "relativeDelta": 0.03904,
+       "rmse": 6.9018
+      },
+      "K": {
+       "delta95": [
+        0.3241,
+        0.4103
+       ],
+       "relativeDelta": 0.08034,
+       "rmse": 4.8734
+      },
+      "QB": {
+       "delta95": [
+        0.4324,
+        0.6467
+       ],
+       "relativeDelta": 0.07068,
+       "rmse": 8.1162
+      },
+      "RB": {
+       "delta95": [
+        0.6161,
+        0.8935
+       ],
+       "relativeDelta": 0.07414,
+       "rmse": 10.6051
+      },
+      "TE": {
+       "delta95": [
+        0.522,
+        0.6947
+       ],
+       "relativeDelta": 0.07968,
+       "rmse": 8.2668
+      },
+      "WR": {
+       "delta95": [
+        0.8076,
+        1.2947
+       ],
+       "relativeDelta": 0.07993,
+       "rmse": 14.2938
+      }
+     }
+    },
+    "validation": {
+     "b02": {
+      "DST": {
+       "delta95": [
+        -0.4467,
+        0.4433
+       ],
+       "relativeDelta": -0.00741,
+       "rmse": 6.3508
+      },
+      "K": {
+       "delta95": [
+        0.1797,
+        1.28
+       ],
+       "relativeDelta": 0.13442,
+       "rmse": 5.5263
+      },
+      "QB": {
+       "delta95": [
+        0.1258,
+        0.8853
+       ],
+       "relativeDelta": 0.06295,
+       "rmse": 7.9156
+      },
+      "RB": {
+       "delta95": [
+        0.1268,
+        1.1115
+       ],
+       "relativeDelta": 0.06541,
+       "rmse": 9.7995
+      },
+      "TE": {
+       "delta95": [
+        0.283,
+        0.9499
+       ],
+       "relativeDelta": 0.0763,
+       "rmse": 8.2554
+      },
+      "WR": {
+       "delta95": [
+        0.7979,
+        1.6444
+       ],
+       "relativeDelta": 0.09073,
+       "rmse": 14.3894
+      }
+     },
+     "b02r": {
+      "DST": {
+       "delta95": [
+        -0.4314,
+        0.5066
+       ],
+       "relativeDelta": -0.0011,
+       "rmse": 6.3912
+      },
+      "K": {
+       "delta95": [
+        0.1672,
+        1.2721
+       ],
+       "relativeDelta": 0.12667,
+       "rmse": 5.4885
+      },
+      "QB": {
+       "delta95": [
+        0.1297,
+        1.0125
+       ],
+       "relativeDelta": 0.06901,
+       "rmse": 7.9607
+      },
+      "RB": {
+       "delta95": [
+        0.129,
+        1.1172
+       ],
+       "relativeDelta": 0.06595,
+       "rmse": 9.8045
+      },
+      "TE": {
+       "delta95": [
+        0.2428,
+        0.9333
+       ],
+       "relativeDelta": 0.0721,
+       "rmse": 8.2231
+      },
+      "WR": {
+       "delta95": [
+        0.7008,
+        1.7251
+       ],
+       "relativeDelta": 0.08858,
+       "rmse": 14.3611
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1618,9 +2146,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1629,36 +2155,280 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B03",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "v0-k-shrunk adjusted DvP with k estimated on training years only",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Residual DvP shrunk with k fit on training seasons only",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b03": {
+      "DST": {
+       "delta95": [
+        -0.1983,
+        -0.1567
+       ],
+       "relativeDelta": -0.02653,
+       "rmse": 6.4662
+      },
+      "K": {
+       "delta95": [
+        -0.0079,
+        0.004
+       ],
+       "relativeDelta": -0.0005,
+       "rmse": 4.5087
+      },
+      "QB": {
+       "delta95": [
+        -0.066,
+        -0.0272
+       ],
+       "relativeDelta": -0.0059,
+       "rmse": 7.5357
+      },
+      "RB": {
+       "delta95": [
+        -0.0994,
+        -0.0186
+       ],
+       "relativeDelta": -0.00646,
+       "rmse": 9.8094
+      },
+      "TE": {
+       "delta95": [
+        -0.0303,
+        0.015
+       ],
+       "relativeDelta": -0.00101,
+       "rmse": 7.649
+      },
+      "WR": {
+       "delta95": [
+        -0.1143,
+        -0.0348
+       ],
+       "relativeDelta": -0.00514,
+       "rmse": 13.1678
+      }
+     },
+     "b03r": {
+      "DST": {
+       "delta95": [
+        -0.1865,
+        -0.1443
+       ],
+       "relativeDelta": -0.02451,
+       "rmse": 6.4797
+      },
+      "K": {
+       "delta95": [
+        -0.0079,
+        0.0034
+       ],
+       "relativeDelta": -0.0006,
+       "rmse": 4.5083
+      },
+      "QB": {
+       "delta95": [
+        -0.0627,
+        -0.0098
+       ],
+       "relativeDelta": -0.0046,
+       "rmse": 7.5455
+      },
+      "RB": {
+       "delta95": [
+        -0.1011,
+        -0.0207
+       ],
+       "relativeDelta": -0.00674,
+       "rmse": 9.8066
+      },
+      "TE": {
+       "delta95": [
+        -0.0321,
+        0.0161
+       ],
+       "relativeDelta": -0.00113,
+       "rmse": 7.6481
+      },
+      "WR": {
+       "delta95": [
+        -0.106,
+        -0.0113
+       ],
+       "relativeDelta": -0.00411,
+       "rmse": 13.1815
+      }
+     }
+    },
+    "validation": {
+     "b03": {
+      "DST": {
+       "delta95": [
+        -0.4865,
+        -0.2173
+       ],
+       "relativeDelta": -0.05353,
+       "rmse": 6.0557
+      },
+      "K": {
+       "delta95": [
+        -0.0199,
+        0.0136
+       ],
+       "relativeDelta": -0.00059,
+       "rmse": 4.8686
+      },
+      "QB": {
+       "delta95": [
+        -0.0707,
+        0.0449
+       ],
+       "relativeDelta": -0.00193,
+       "rmse": 7.4325
+      },
+      "RB": {
+       "delta95": [
+        -0.1519,
+        0.0532
+       ],
+       "relativeDelta": -0.00459,
+       "rmse": 9.1557
+      },
+      "TE": {
+       "delta95": [
+        -0.0406,
+        0.0224
+       ],
+       "relativeDelta": -0.00115,
+       "rmse": 7.6613
+      },
+      "WR": {
+       "delta95": [
+        0.032,
+        0.1644
+       ],
+       "relativeDelta": 0.00728,
+       "rmse": 13.2885
+      }
+     },
+     "b03r": {
+      "DST": {
+       "delta95": [
+        -0.4716,
+        -0.1841
+       ],
+       "relativeDelta": -0.0498,
+       "rmse": 6.0795
+      },
+      "K": {
+       "delta95": [
+        -0.0211,
+        0.0145
+       ],
+       "relativeDelta": -0.00067,
+       "rmse": 4.8682
+      },
+      "QB": {
+       "delta95": [
+        -0.0601,
+        0.052
+       ],
+       "relativeDelta": -0.00069,
+       "rmse": 7.4417
+      },
+      "RB": {
+       "delta95": [
+        -0.1539,
+        0.0382
+       ],
+       "relativeDelta": -0.00561,
+       "rmse": 9.1463
+      },
+      "TE": {
+       "delta95": [
+        -0.0358,
+        0.0276
+       ],
+       "relativeDelta": -0.00063,
+       "rmse": 7.6653
+      },
+      "WR": {
+       "delta95": [
+        -0.0047,
+        0.1562
+       ],
+       "relativeDelta": 0.00571,
+       "rmse": 13.2678
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1667,9 +2437,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1678,36 +2446,987 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B04",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Prediction-tuned k on a predeclared grid (development and 2024 only)",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Prediction-tuned k on a declared grid (development only)",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
+   "parameters": {
+    "DST": "b04_k8",
+    "K": "b04_k64",
+    "QB": "b04_k16",
+    "RB": "b04_k16",
+    "TE": "b04_k32",
+    "WR": "b04_k16"
+   },
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b04_k1": {
+      "DST": {
+       "delta95": [
+        -0.0682,
+        0.0287
+       ],
+       "relativeDelta": -0.00302,
+       "rmse": 6.6224
+      },
+      "K": {
+       "delta95": [
+        0.1692,
+        0.2332
+       ],
+       "relativeDelta": 0.04426,
+       "rmse": 4.7106
+      },
+      "QB": {
+       "delta95": [
+        0.1639,
+        0.3048
+       ],
+       "relativeDelta": 0.03102,
+       "rmse": 7.8156
+      },
+      "RB": {
+       "delta95": [
+        0.2035,
+        0.4294
+       ],
+       "relativeDelta": 0.03055,
+       "rmse": 10.1747
+      },
+      "TE": {
+       "delta95": [
+        0.25,
+        0.3855
+       ],
+       "relativeDelta": 0.04198,
+       "rmse": 7.9782
+      },
+      "WR": {
+       "delta95": [
+        0.2982,
+        0.5846
+       ],
+       "relativeDelta": 0.03453,
+       "rmse": 13.6928
+      }
+     },
+     "b04_k128": {
+      "DST": {
+       "delta95": [
+        -0.0438,
+        -0.0382
+       ],
+       "relativeDelta": -0.00617,
+       "rmse": 6.6015
+      },
+      "K": {
+       "delta95": [
+        -0.006,
+        -0.0003
+       ],
+       "relativeDelta": -0.00069,
+       "rmse": 4.5078
+      },
+      "QB": {
+       "delta95": [
+        -0.0251,
+        -0.0132
+       ],
+       "relativeDelta": -0.00244,
+       "rmse": 7.562
+      },
+      "RB": {
+       "delta95": [
+        -0.0338,
+        -0.014
+       ],
+       "relativeDelta": -0.00257,
+       "rmse": 9.8478
+      },
+      "TE": {
+       "delta95": [
+        -0.0162,
+        -0.0001
+       ],
+       "relativeDelta": -0.00104,
+       "rmse": 7.6488
+      },
+      "WR": {
+       "delta95": [
+        -0.044,
+        -0.0198
+       ],
+       "relativeDelta": -0.00224,
+       "rmse": 13.2061
+      }
+     },
+     "b04_k16": {
+      "DST": {
+       "delta95": [
+        -0.1703,
+        -0.144
+       ],
+       "relativeDelta": -0.0236,
+       "rmse": 6.4857
+      },
+      "K": {
+       "delta95": [
+        -0.0053,
+        0.0215
+       ],
+       "relativeDelta": 0.00178,
+       "rmse": 4.519
+      },
+      "QB": {
+       "delta95": [
+        -0.0787,
+        -0.0212
+       ],
+       "relativeDelta": -0.0062,
+       "rmse": 7.5334
+      },
+      "RB": {
+       "delta95": [
+        -0.108,
+        -0.0136
+       ],
+       "relativeDelta": -0.00679,
+       "rmse": 9.8061
+      },
+      "TE": {
+       "delta95": [
+        -0.0352,
+        0.0358
+       ],
+       "relativeDelta": 0.00016,
+       "rmse": 7.658
+      },
+      "WR": {
+       "delta95": [
+        -0.1363,
+        -0.0258
+       ],
+       "relativeDelta": -0.00532,
+       "rmse": 13.1655
+      }
+     },
+     "b04_k2": {
+      "DST": {
+       "delta95": [
+        -0.1387,
+        -0.0684
+       ],
+       "relativeDelta": -0.01546,
+       "rmse": 6.5398
+      },
+      "K": {
+       "delta95": [
+        0.1102,
+        0.1648
+       ],
+       "relativeDelta": 0.0302,
+       "rmse": 4.6472
+      },
+      "QB": {
+       "delta95": [
+        0.0645,
+        0.1874
+       ],
+       "relativeDelta": 0.01684,
+       "rmse": 7.7081
+      },
+      "RB": {
+       "delta95": [
+        0.0734,
+        0.2691
+       ],
+       "relativeDelta": 0.01612,
+       "rmse": 10.0323
+      },
+      "TE": {
+       "delta95": [
+        0.1471,
+        0.2703
+       ],
+       "relativeDelta": 0.02769,
+       "rmse": 7.8688
+      },
+      "WR": {
+       "delta95": [
+        0.116,
+        0.3565
+       ],
+       "relativeDelta": 0.01926,
+       "rmse": 13.4907
+      }
+     },
+     "b04_k256": {
+      "DST": {
+       "delta95": [
+        -0.0234,
+        -0.0205
+       ],
+       "relativeDelta": -0.00331,
+       "rmse": 6.6205
+      },
+      "K": {
+       "delta95": [
+        -0.0034,
+        -0.0004
+       ],
+       "relativeDelta": -0.00042,
+       "rmse": 4.5091
+      },
+      "QB": {
+       "delta95": [
+        -0.0136,
+        -0.0074
+       ],
+       "relativeDelta": -0.00134,
+       "rmse": 7.5703
+      },
+      "RB": {
+       "delta95": [
+        -0.0183,
+        -0.0079
+       ],
+       "relativeDelta": -0.00141,
+       "rmse": 9.8592
+      },
+      "TE": {
+       "delta95": [
+        -0.009,
+        -0.0004
+       ],
+       "relativeDelta": -0.0006,
+       "rmse": 7.6521
+      },
+      "WR": {
+       "delta95": [
+        -0.0239,
+        -0.0112
+       ],
+       "relativeDelta": -0.00124,
+       "rmse": 13.2195
+      }
+     },
+     "b04_k32": {
+      "DST": {
+       "delta95": [
+        -0.123,
+        -0.1062
+       ],
+       "relativeDelta": -0.01721,
+       "rmse": 6.5281
+      },
+      "K": {
+       "delta95": [
+        -0.0111,
+        0.0065
+       ],
+       "relativeDelta": -0.0005,
+       "rmse": 4.5087
+      },
+      "QB": {
+       "delta95": [
+        -0.0646,
+        -0.0276
+       ],
+       "relativeDelta": -0.0058,
+       "rmse": 7.5365
+      },
+      "RB": {
+       "delta95": [
+        -0.0877,
+        -0.0262
+       ],
+       "relativeDelta": -0.0062,
+       "rmse": 9.812
+      },
+      "TE": {
+       "delta95": [
+        -0.0365,
+        0.0112
+       ],
+       "relativeDelta": -0.00158,
+       "rmse": 7.6447
+      },
+      "WR": {
+       "delta95": [
+        -0.1122,
+        -0.0394
+       ],
+       "relativeDelta": -0.00522,
+       "rmse": 13.1668
+      }
+     },
+     "b04_k4": {
+      "DST": {
+       "delta95": [
+        -0.1869,
+        -0.135
+       ],
+       "relativeDelta": -0.02406,
+       "rmse": 6.4827
+      },
+      "K": {
+       "delta95": [
+        0.0558,
+        0.1012
+       ],
+       "relativeDelta": 0.01729,
+       "rmse": 4.5889
+      },
+      "QB": {
+       "delta95": [
+        -0.0182,
+        0.084
+       ],
+       "relativeDelta": 0.00476,
+       "rmse": 7.6165
+      },
+      "RB": {
+       "delta95": [
+        -0.0319,
+        0.1316
+       ],
+       "relativeDelta": 0.00395,
+       "rmse": 9.9121
+      },
+      "TE": {
+       "delta95": [
+        0.0564,
+        0.1675
+       ],
+       "relativeDelta": 0.01482,
+       "rmse": 7.7702
+      },
+      "WR": {
+       "delta95": [
+        -0.0276,
+        0.1643
+       ],
+       "relativeDelta": 0.00646,
+       "rmse": 13.3214
+      }
+     },
+     "b04_k64": {
+      "DST": {
+       "delta95": [
+        -0.077,
+        -0.067
+       ],
+       "relativeDelta": -0.01083,
+       "rmse": 6.5705
+      },
+      "K": {
+       "delta95": [
+        -0.0094,
+        0.0011
+       ],
+       "relativeDelta": -0.00091,
+       "rmse": 4.5069
+      },
+      "QB": {
+       "delta95": [
+        -0.043,
+        -0.0212
+       ],
+       "relativeDelta": -0.00407,
+       "rmse": 7.5496
+      },
+      "RB": {
+       "delta95": [
+        -0.0579,
+        -0.0217
+       ],
+       "relativeDelta": -0.0043,
+       "rmse": 9.8306
+      },
+      "TE": {
+       "delta95": [
+        -0.0266,
+        0.0023
+       ],
+       "relativeDelta": -0.00155,
+       "rmse": 7.6449
+      },
+      "WR": {
+       "delta95": [
+        -0.075,
+        -0.0314
+       ],
+       "relativeDelta": -0.00372,
+       "rmse": 13.1866
+      }
+     },
+     "b04_k8": {
+      "DST": {
+       "delta95": [
+        -0.1976,
+        -0.1593
+       ],
+       "relativeDelta": -0.02676,
+       "rmse": 6.4648
+      },
+      "K": {
+       "delta95": [
+        0.0158,
+        0.0523
+       ],
+       "relativeDelta": 0.0075,
+       "rmse": 4.5448
+      },
+      "QB": {
+       "delta95": [
+        -0.0671,
+        0.0126
+       ],
+       "relativeDelta": -0.00312,
+       "rmse": 7.5568
+      },
+      "RB": {
+       "delta95": [
+        -0.0946,
+        0.0352
+       ],
+       "relativeDelta": -0.00388,
+       "rmse": 9.8348
+      },
+      "TE": {
+       "delta95": [
+        -0.0068,
+        0.086
+       ],
+       "relativeDelta": 0.00536,
+       "rmse": 7.6978
+      },
+      "WR": {
+       "delta95": [
+        -0.1141,
+        0.0364
+       ],
+       "relativeDelta": -0.00188,
+       "rmse": 13.211
+      }
+     }
+    },
+    "validation": {
+     "b04_k1": {
+      "DST": {
+       "delta95": [
+        -0.5352,
+        -0.0542
+       ],
+       "relativeDelta": -0.04449,
+       "rmse": 6.1135
+      },
+      "K": {
+       "delta95": [
+        0.1141,
+        0.5441
+       ],
+       "relativeDelta": 0.06453,
+       "rmse": 5.1858
+      },
+      "QB": {
+       "delta95": [
+        0.0273,
+        0.4422
+       ],
+       "relativeDelta": 0.03138,
+       "rmse": 7.6805
+      },
+      "RB": {
+       "delta95": [
+        -0.0376,
+        0.5917
+       ],
+       "relativeDelta": 0.03133,
+       "rmse": 9.486
+      },
+      "TE": {
+       "delta95": [
+        0.0987,
+        0.5557
+       ],
+       "relativeDelta": 0.04136,
+       "rmse": 7.9874
+      },
+      "WR": {
+       "delta95": [
+        0.5446,
+        0.9977
+       ],
+       "relativeDelta": 0.05684,
+       "rmse": 13.9424
+      }
+     },
+     "b04_k128": {
+      "DST": {
+       "delta95": [
+        -0.0911,
+        -0.0441
+       ],
+       "relativeDelta": -0.01042,
+       "rmse": 6.3315
+      },
+      "K": {
+       "delta95": [
+        -0.011,
+        0.0051
+       ],
+       "relativeDelta": -0.00056,
+       "rmse": 4.8687
+      },
+      "QB": {
+       "delta95": [
+        -0.023,
+        0.0067
+       ],
+       "relativeDelta": -0.00116,
+       "rmse": 7.4382
+      },
+      "RB": {
+       "delta95": [
+        -0.0436,
+        0.0006
+       ],
+       "relativeDelta": -0.00206,
+       "rmse": 9.179
+      },
+      "TE": {
+       "delta95": [
+        -0.0177,
+        0.0045
+       ],
+       "relativeDelta": -0.00086,
+       "rmse": 7.6635
+      },
+      "WR": {
+       "delta95": [
+        0.0022,
+        0.0347
+       ],
+       "relativeDelta": 0.00133,
+       "rmse": 13.21
+      }
+     },
+     "b04_k16": {
+      "DST": {
+       "delta95": [
+        -0.3829,
+        -0.1813
+       ],
+       "relativeDelta": -0.04325,
+       "rmse": 6.1214
+      },
+      "K": {
+       "delta95": [
+        -0.0271,
+        0.0573
+       ],
+       "relativeDelta": 0.00312,
+       "rmse": 4.8867
+      },
+      "QB": {
+       "delta95": [
+        -0.0829,
+        0.0713
+       ],
+       "relativeDelta": -0.00097,
+       "rmse": 7.4396
+      },
+      "RB": {
+       "delta95": [
+        -0.1607,
+        0.0661
+       ],
+       "relativeDelta": -0.00429,
+       "rmse": 9.1584
+      },
+      "TE": {
+       "delta95": [
+        -0.0521,
+        0.0692
+       ],
+       "relativeDelta": 0.00109,
+       "rmse": 7.6785
+      },
+      "WR": {
+       "delta95": [
+        0.0567,
+        0.2286
+       ],
+       "relativeDelta": 0.01065,
+       "rmse": 13.333
+      }
+     },
+     "b04_k2": {
+      "DST": {
+       "delta95": [
+        -0.5525,
+        -0.1578
+       ],
+       "relativeDelta": -0.05353,
+       "rmse": 6.0557
+      },
+      "K": {
+       "delta95": [
+        0.0717,
+        0.3439
+       ],
+       "relativeDelta": 0.04206,
+       "rmse": 5.0764
+      },
+      "QB": {
+       "delta95": [
+        -0.0269,
+        0.3259
+       ],
+       "relativeDelta": 0.02025,
+       "rmse": 7.5976
+      },
+      "RB": {
+       "delta95": [
+        -0.1088,
+        0.4296
+       ],
+       "relativeDelta": 0.01871,
+       "rmse": 9.37
+      },
+      "TE": {
+       "delta95": [
+        0.037,
+        0.3991
+       ],
+       "relativeDelta": 0.02814,
+       "rmse": 7.8859
+      },
+      "WR": {
+       "delta95": [
+        0.3904,
+        0.7898
+       ],
+       "relativeDelta": 0.04353,
+       "rmse": 13.7667
+      }
+     },
+     "b04_k256": {
+      "DST": {
+       "delta95": [
+        -0.0486,
+        -0.0235
+       ],
+       "relativeDelta": -0.00555,
+       "rmse": 6.3627
+      },
+      "K": {
+       "delta95": [
+        -0.006,
+        0.0023
+       ],
+       "relativeDelta": -0.00036,
+       "rmse": 4.8697
+      },
+      "QB": {
+       "delta95": [
+        -0.0124,
+        0.0031
+       ],
+       "relativeDelta": -0.00066,
+       "rmse": 7.4419
+      },
+      "RB": {
+       "delta95": [
+        -0.0234,
+        -0.0003
+       ],
+       "relativeDelta": -0.00114,
+       "rmse": 9.1874
+      },
+      "TE": {
+       "delta95": [
+        -0.0097,
+        0.0018
+       ],
+       "relativeDelta": -0.00051,
+       "rmse": 7.6662
+      },
+      "WR": {
+       "delta95": [
+        0.0007,
+        0.0175
+       ],
+       "relativeDelta": 0.00065,
+       "rmse": 13.2011
+      }
+     },
+     "b04_k32": {
+      "DST": {
+       "delta95": [
+        -0.2635,
+        -0.1274
+       ],
+       "relativeDelta": -0.03012,
+       "rmse": 6.2055
+      },
+      "K": {
+       "delta95": [
+        -0.026,
+        0.0266
+       ],
+       "relativeDelta": 0.0001,
+       "rmse": 4.872
+      },
+      "QB": {
+       "delta95": [
+        -0.0622,
+        0.0337
+       ],
+       "relativeDelta": -0.00209,
+       "rmse": 7.4312
+      },
+      "RB": {
+       "delta95": [
+        -0.1184,
+        0.0227
+       ],
+       "relativeDelta": -0.00457,
+       "rmse": 9.1559
+      },
+      "TE": {
+       "delta95": [
+        -0.0443,
+        0.029
+       ],
+       "relativeDelta": -0.00097,
+       "rmse": 7.6627
+      },
+      "WR": {
+       "delta95": [
+        0.0211,
+        0.1283
+       ],
+       "relativeDelta": 0.0055,
+       "rmse": 13.265
+      }
+     },
+     "b04_k4": {
+      "DST": {
+       "delta95": [
+        -0.5429,
+        -0.2101
+       ],
+       "relativeDelta": -0.05723,
+       "rmse": 6.032
+      },
+      "K": {
+       "delta95": [
+        0.023,
+        0.2016
+       ],
+       "relativeDelta": 0.0234,
+       "rmse": 4.9855
+      },
+      "QB": {
+       "delta95": [
+        -0.0695,
+        0.2227
+       ],
+       "relativeDelta": 0.01027,
+       "rmse": 7.5233
+      },
+      "RB": {
+       "delta95": [
+        -0.1663,
+        0.2792
+       ],
+       "relativeDelta": 0.00736,
+       "rmse": 9.2656
+      },
+      "TE": {
+       "delta95": [
+        -0.0112,
+        0.2596
+       ],
+       "relativeDelta": 0.01586,
+       "rmse": 7.7917
+      },
+      "WR": {
+       "delta95": [
+        0.2405,
+        0.5723
+       ],
+       "relativeDelta": 0.03033,
+       "rmse": 13.5926
+      }
+     },
+     "b04_k64": {
+      "DST": {
+       "delta95": [
+        -0.1619,
+        -0.0784
+       ],
+       "relativeDelta": -0.01851,
+       "rmse": 6.2797
+      },
+      "K": {
+       "delta95": [
+        -0.0183,
+        0.0115
+       ],
+       "relativeDelta": -0.00063,
+       "rmse": 4.8684
+      },
+      "QB": {
+       "delta95": [
+        -0.0397,
+        0.0152
+       ],
+       "relativeDelta": -0.00179,
+       "rmse": 7.4335
+      },
+      "RB": {
+       "delta95": [
+        -0.0755,
+        0.0055
+       ],
+       "relativeDelta": -0.00336,
+       "rmse": 9.167
+      },
+      "TE": {
+       "delta95": [
+        -0.0302,
+        0.0113
+       ],
+       "relativeDelta": -0.0012,
+       "rmse": 7.6609
+      },
+      "WR": {
+       "delta95": [
+        0.0067,
+        0.0679
+       ],
+       "relativeDelta": 0.00272,
+       "rmse": 13.2284
+      }
+     },
+     "b04_k8": {
+      "DST": {
+       "delta95": [
+        -0.4869,
+        -0.2174
+       ],
+       "relativeDelta": -0.05356,
+       "rmse": 6.0555
+      },
+      "K": {
+       "delta95": [
+        -0.0119,
+        0.1118
+       ],
+       "relativeDelta": 0.01041,
+       "rmse": 4.9222
+      },
+      "QB": {
+       "delta95": [
+        -0.0891,
+        0.1347
+       ],
+       "relativeDelta": 0.00296,
+       "rmse": 7.4688
+      },
+      "RB": {
+       "delta95": [
+        -0.1807,
+        0.1511
+       ],
+       "relativeDelta": -0.00062,
+       "rmse": 9.1922
+      },
+      "TE": {
+       "delta95": [
+        -0.0423,
+        0.1458
+       ],
+       "relativeDelta": 0.00651,
+       "rmse": 7.7201
+      },
+      "WR": {
+       "delta95": [
+        0.1273,
+        0.3795
+       ],
+       "relativeDelta": 0.01896,
+       "rmse": 13.4427
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1716,9 +3435,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1727,36 +3444,387 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B05",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
    "hypothesis": "Recency-weighted DvP with effective sample size",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
-   "parameters": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
+   "parameters": {
+    "DST": "b05_h8",
+    "K": "b05_h4",
+    "QB": "b05_h4",
+    "RB": "b05_h8",
+    "TE": "b05_h8",
+    "WR": "b05_h8"
+   },
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b05_h2": {
+      "DST": {
+       "delta95": [
+        -0.1815,
+        -0.1256
+       ],
+       "relativeDelta": -0.02247,
+       "rmse": 6.4932
+      },
+      "K": {
+       "delta95": [
+        -0.0082,
+        0.005
+       ],
+       "relativeDelta": -0.0005,
+       "rmse": 4.5087
+      },
+      "QB": {
+       "delta95": [
+        -0.0605,
+        -0.0321
+       ],
+       "relativeDelta": -0.00607,
+       "rmse": 7.5344
+      },
+      "RB": {
+       "delta95": [
+        -0.08,
+        -0.0194
+       ],
+       "relativeDelta": -0.00531,
+       "rmse": 9.8207
+      },
+      "TE": {
+       "delta95": [
+        -0.0173,
+        0.0168
+       ],
+       "relativeDelta": 2e-05,
+       "rmse": 7.6569
+      },
+      "WR": {
+       "delta95": [
+        -0.0952,
+        -0.0235
+       ],
+       "relativeDelta": -0.00453,
+       "rmse": 13.176
+      }
+     },
+     "b05_h4": {
+      "DST": {
+       "delta95": [
+        -0.1992,
+        -0.1508
+       ],
+       "relativeDelta": -0.02579,
+       "rmse": 6.4712
+      },
+      "K": {
+       "delta95": [
+        -0.0089,
+        0.004
+       ],
+       "relativeDelta": -0.00068,
+       "rmse": 4.5079
+      },
+      "QB": {
+       "delta95": [
+        -0.0678,
+        -0.0372
+       ],
+       "relativeDelta": -0.00673,
+       "rmse": 7.5295
+      },
+      "RB": {
+       "delta95": [
+        -0.0982,
+        -0.0218
+       ],
+       "relativeDelta": -0.00644,
+       "rmse": 9.8095
+      },
+      "TE": {
+       "delta95": [
+        -0.0253,
+        0.0148
+       ],
+       "relativeDelta": -0.00056,
+       "rmse": 7.6525
+      },
+      "WR": {
+       "delta95": [
+        -0.1167,
+        -0.0316
+       ],
+       "relativeDelta": -0.00549,
+       "rmse": 13.1632
+      }
+     },
+     "b05_h8": {
+      "DST": {
+       "delta95": [
+        -0.2016,
+        -0.159
+       ],
+       "relativeDelta": -0.02671,
+       "rmse": 6.4651
+      },
+      "K": {
+       "delta95": [
+        -0.0086,
+        0.0038
+       ],
+       "relativeDelta": -0.00067,
+       "rmse": 4.5079
+      },
+      "QB": {
+       "delta95": [
+        -0.0685,
+        -0.0365
+       ],
+       "relativeDelta": -0.00663,
+       "rmse": 7.5302
+      },
+      "RB": {
+       "delta95": [
+        -0.1015,
+        -0.0215
+       ],
+       "relativeDelta": -0.00676,
+       "rmse": 9.8064
+      },
+      "TE": {
+       "delta95": [
+        -0.029,
+        0.0145
+       ],
+       "relativeDelta": -0.00083,
+       "rmse": 7.6504
+      },
+      "WR": {
+       "delta95": [
+        -0.1213,
+        -0.0358
+       ],
+       "relativeDelta": -0.00566,
+       "rmse": 13.161
+      }
+     }
+    },
+    "validation": {
+     "b05_h2": {
+      "DST": {
+       "delta95": [
+        -0.3346,
+        -0.1597
+       ],
+       "relativeDelta": -0.03834,
+       "rmse": 6.1528
+      },
+      "K": {
+       "delta95": [
+        -0.014,
+        0.0065
+       ],
+       "relativeDelta": -0.0007,
+       "rmse": 4.8681
+      },
+      "QB": {
+       "delta95": [
+        -0.0492,
+        0.0645
+       ],
+       "relativeDelta": 0.00074,
+       "rmse": 7.4523
+      },
+      "RB": {
+       "delta95": [
+        -0.0779,
+        0.0528
+       ],
+       "relativeDelta": -0.00152,
+       "rmse": 9.1839
+      },
+      "TE": {
+       "delta95": [
+        -0.0511,
+        0.005
+       ],
+       "relativeDelta": -0.00312,
+       "rmse": 7.6462
+      },
+      "WR": {
+       "delta95": [
+        0.0175,
+        0.1529
+       ],
+       "relativeDelta": 0.00646,
+       "rmse": 13.2778
+      }
+     },
+     "b05_h4": {
+      "DST": {
+       "delta95": [
+        -0.4197,
+        -0.1929
+       ],
+       "relativeDelta": -0.04686,
+       "rmse": 6.0983
+      },
+      "K": {
+       "delta95": [
+        -0.0173,
+        0.009
+       ],
+       "relativeDelta": -0.00073,
+       "rmse": 4.8679
+      },
+      "QB": {
+       "delta95": [
+        -0.0619,
+        0.0625
+       ],
+       "relativeDelta": -0.0003,
+       "rmse": 7.4446
+      },
+      "RB": {
+       "delta95": [
+        -0.1181,
+        0.047
+       ],
+       "relativeDelta": -0.00349,
+       "rmse": 9.1657
+      },
+      "TE": {
+       "delta95": [
+        -0.0467,
+        0.0117
+       ],
+       "relativeDelta": -0.00234,
+       "rmse": 7.6522
+      },
+      "WR": {
+       "delta95": [
+        0.0246,
+        0.163
+       ],
+       "relativeDelta": 0.00709,
+       "rmse": 13.286
+      }
+     },
+     "b05_h8": {
+      "DST": {
+       "delta95": [
+        -0.4621,
+        -0.2085
+       ],
+       "relativeDelta": -0.05102,
+       "rmse": 6.0717
+      },
+      "K": {
+       "delta95": [
+        -0.0191,
+        0.0116
+       ],
+       "relativeDelta": -0.00066,
+       "rmse": 4.8683
+      },
+      "QB": {
+       "delta95": [
+        -0.0686,
+        0.0576
+       ],
+       "relativeDelta": -0.00108,
+       "rmse": 7.4387
+      },
+      "RB": {
+       "delta95": [
+        -0.1423,
+        0.0492
+       ],
+       "relativeDelta": -0.00438,
+       "rmse": 9.1575
+      },
+      "TE": {
+       "delta95": [
+        -0.0439,
+        0.0147
+       ],
+       "relativeDelta": -0.00179,
+       "rmse": 7.6564
+      },
+      "WR": {
+       "delta95": [
+        0.0282,
+        0.1689
+       ],
+       "relativeDelta": 0.00731,
+       "rmse": 13.289
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1765,9 +3833,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1776,36 +3842,180 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B06",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Hierarchical or dynamic DvP learned from past years only",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Dynamic DvP with a prior from last season (slope fit on training seasons)",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b06": {
+      "DST": {
+       "delta95": [
+        -0.2285,
+        -0.1741
+       ],
+       "relativeDelta": -0.02985,
+       "rmse": 6.4442
+      },
+      "K": {
+       "delta95": [
+        -0.0123,
+        0.0028
+       ],
+       "relativeDelta": -0.00117,
+       "rmse": 4.5056
+      },
+      "QB": {
+       "delta95": [
+        -0.0965,
+        -0.0401
+       ],
+       "relativeDelta": -0.0085,
+       "rmse": 7.516
+      },
+      "RB": {
+       "delta95": [
+        -0.123,
+        -0.0294
+       ],
+       "relativeDelta": -0.00839,
+       "rmse": 9.7903
+      },
+      "TE": {
+       "delta95": [
+        -0.0338,
+        0.0154
+       ],
+       "relativeDelta": -0.00105,
+       "rmse": 7.6487
+      },
+      "WR": {
+       "delta95": [
+        -0.1573,
+        -0.0433
+       ],
+       "relativeDelta": -0.00743,
+       "rmse": 13.1375
+      }
+     }
+    },
+    "validation": {
+     "b06": {
+      "DST": {
+       "delta95": [
+        -0.5537,
+        -0.2673
+       ],
+       "relativeDelta": -0.06362,
+       "rmse": 5.9911
+      },
+      "K": {
+       "delta95": [
+        -0.0274,
+        0.0254
+       ],
+       "relativeDelta": -0.00039,
+       "rmse": 4.8696
+      },
+      "QB": {
+       "delta95": [
+        -0.0427,
+        0.0851
+       ],
+       "relativeDelta": 0.0026,
+       "rmse": 7.4662
+      },
+      "RB": {
+       "delta95": [
+        -0.2183,
+        0.0608
+       ],
+       "relativeDelta": -0.00845,
+       "rmse": 9.1202
+      },
+      "TE": {
+       "delta95": [
+        -0.0457,
+        0.0238
+       ],
+       "relativeDelta": -0.00137,
+       "rmse": 7.6596
+      },
+      "WR": {
+       "delta95": [
+        -0.0014,
+        0.317
+       ],
+       "relativeDelta": 0.01207,
+       "rmse": 13.3518
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1814,9 +4024,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1825,36 +4033,180 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
+   },
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B07",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Opportunity and efficiency allowed, alone and jointly",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "DvP on non-touchdown points only",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b07": {
+      "DST": {
+       "delta95": [
+        -0.2167,
+        -0.1633
+       ],
+       "relativeDelta": -0.02803,
+       "rmse": 6.4563
+      },
+      "K": {
+       "delta95": [
+        -0.0077,
+        0.0038
+       ],
+       "relativeDelta": -0.00052,
+       "rmse": 4.5086
+      },
+      "QB": {
+       "delta95": [
+        -0.0449,
+        -0.0272
+       ],
+       "relativeDelta": -0.00473,
+       "rmse": 7.5446
+      },
+      "RB": {
+       "delta95": [
+        -0.0715,
+        -0.0266
+       ],
+       "relativeDelta": -0.0052,
+       "rmse": 9.8218
+      },
+      "TE": {
+       "delta95": [
+        -0.0265,
+        -0.0008
+       ],
+       "relativeDelta": -0.00189,
+       "rmse": 7.6423
+      },
+      "WR": {
+       "delta95": [
+        -0.1078,
+        -0.0358
+       ],
+       "relativeDelta": -0.00496,
+       "rmse": 13.1702
+      }
+     }
+    },
+    "validation": {
+     "b07": {
+      "DST": {
+       "delta95": [
+        -0.4557,
+        -0.2084
+       ],
+       "relativeDelta": -0.05091,
+       "rmse": 6.0724
+      },
+      "K": {
+       "delta95": [
+        -0.0196,
+        0.0136
+       ],
+       "relativeDelta": -0.00054,
+       "rmse": 4.8688
+      },
+      "QB": {
+       "delta95": [
+        -0.0616,
+        0.0111
+       ],
+       "relativeDelta": -0.00362,
+       "rmse": 7.4198
+      },
+      "RB": {
+       "delta95": [
+        -0.0892,
+        0.0399
+       ],
+       "relativeDelta": -0.00271,
+       "rmse": 9.1729
+      },
+      "TE": {
+       "delta95": [
+        -0.0289,
+        0.0283
+       ],
+       "relativeDelta": -4e-05,
+       "rmse": 7.6699
+      },
+      "WR": {
+       "delta95": [
+        -0.0235,
+        0.1326
+       ],
+       "relativeDelta": 0.00382,
+       "rmse": 13.243
+      }
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1863,9 +4215,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1874,85 +4224,382 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
-   "coverage_pct": null,
-   "data_hash": null,
-   "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
-   "experiment_id": "M3-3-B08",
-   "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Context-stratified diagnostics (week, sample size, matchup type)",
-   "interval": null,
-   "limitations": null,
-   "next_steps": null,
-   "parameters": null,
-   "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
-   "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": {
-    "development": [
-     2016,
-     2017,
-     2018,
-     2019,
-     2020,
-     2021,
-     2022,
-     2023
-    ],
-    "holdout": [
-     2025
-    ],
-    "validation": [
-     2024
-    ]
+   "baseline_metric": {
+    "DST": {
+     "development": 6.6425,
+     "validation": 6.3982
+    },
+    "K": {
+     "development": 4.5109,
+     "validation": 4.8715
+    },
+    "QB": {
+     "development": 7.5804,
+     "validation": 7.4468
+    },
+    "RB": {
+     "development": 9.8731,
+     "validation": 9.1979
+    },
+    "TE": {
+     "development": 7.6568,
+     "validation": 7.6701
+    },
+    "WR": {
+     "development": 13.2359,
+     "validation": 13.1925
+    }
    },
-   "workstream_id": "M3-3"
-  },
-  {
-   "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "walk-forward, preweek cutoff, forecasts frozen before labels join",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B09",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Adversarial negative controls: shuffled defenses, noise, shifted labels",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Negative controls: shuffled opponents, noise, last week's opponent",
    "interval": null,
    "limitations": null,
-   "next_steps": null,
+   "next_steps": "Phase 4: 2025 conditional holdout from frozen-candidates.json",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": "See BACKTEST_REPORT.md",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
-   "tests_passed": null,
+   "sample_count": {
+    "DST": 3678,
+    "K": 3671,
+    "QB": 3678,
+    "RB": 3671,
+    "TE": 3671,
+    "WR": 3669
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "b09_lastopp": {
+      "DST": {
+       "delta95": [
+        0.1003,
+        0.2465
+       ],
+       "relativeDelta": 0.02643,
+       "rmse": 6.818
+      },
+      "K": {
+       "delta95": [
+        -0.0049,
+        0.0049
+       ],
+       "relativeDelta": -6e-05,
+       "rmse": 4.5107
+      },
+      "QB": {
+       "delta95": [
+        0.001,
+        0.0291
+       ],
+       "relativeDelta": 0.0019,
+       "rmse": 7.5948
+      },
+      "RB": {
+       "delta95": [
+        0.0165,
+        0.0537
+       ],
+       "relativeDelta": 0.00371,
+       "rmse": 9.9097
+      },
+      "TE": {
+       "delta95": [
+        0.0072,
+        0.0363
+       ],
+       "relativeDelta": 0.0026,
+       "rmse": 7.6766
+      },
+      "WR": {
+       "delta95": [
+        0.0,
+        0.0603
+       ],
+       "relativeDelta": 0.00215,
+       "rmse": 13.2643
+      }
+     },
+     "b09_noise": {
+      "DST": {
+       "delta95": [
+        0.226,
+        0.3048
+       ],
+       "relativeDelta": 0.03973,
+       "rmse": 6.9064
+      },
+      "K": {
+       "delta95": [
+        0.0073,
+        0.0378
+       ],
+       "relativeDelta": 0.00489,
+       "rmse": 4.533
+      },
+      "QB": {
+       "delta95": [
+        0.0283,
+        0.053
+       ],
+       "relativeDelta": 0.00527,
+       "rmse": 7.6204
+      },
+      "RB": {
+       "delta95": [
+        0.0486,
+        0.1235
+       ],
+       "relativeDelta": 0.00878,
+       "rmse": 9.9598
+      },
+      "TE": {
+       "delta95": [
+        0.0313,
+        0.0806
+       ],
+       "relativeDelta": 0.00715,
+       "rmse": 7.7115
+      },
+      "WR": {
+       "delta95": [
+        0.0004,
+        0.0575
+       ],
+       "relativeDelta": 0.00225,
+       "rmse": 13.2657
+      }
+     },
+     "b09_shuffle": {
+      "DST": {
+       "delta95": [
+        0.0536,
+        0.1868
+       ],
+       "relativeDelta": 0.01813,
+       "rmse": 6.7629
+      },
+      "K": {
+       "delta95": [
+        -0.0062,
+        0.0061
+       ],
+       "relativeDelta": -2e-05,
+       "rmse": 4.5109
+      },
+      "QB": {
+       "delta95": [
+        -0.0035,
+        0.06
+       ],
+       "relativeDelta": 0.00381,
+       "rmse": 7.6093
+      },
+      "RB": {
+       "delta95": [
+        0.0118,
+        0.0795
+       ],
+       "relativeDelta": 0.00457,
+       "rmse": 9.9183
+      },
+      "TE": {
+       "delta95": [
+        0.0085,
+        0.0344
+       ],
+       "relativeDelta": 0.00281,
+       "rmse": 7.6783
+      },
+      "WR": {
+       "delta95": [
+        0.0063,
+        0.0869
+       ],
+       "relativeDelta": 0.00327,
+       "rmse": 13.2791
+      }
+     }
+    },
+    "validation": {
+     "b09_lastopp": {
+      "DST": {
+       "delta95": [
+        -0.0391,
+        0.1903
+       ],
+       "relativeDelta": 0.01345,
+       "rmse": 6.4842
+      },
+      "K": {
+       "delta95": [
+        -0.011,
+        0.0277
+       ],
+       "relativeDelta": 0.00178,
+       "rmse": 4.8801
+      },
+      "QB": {
+       "delta95": [
+        -0.0447,
+        0.0641
+       ],
+       "relativeDelta": 0.0018,
+       "rmse": 7.4602
+      },
+      "RB": {
+       "delta95": [
+        -0.073,
+        0.1076
+       ],
+       "relativeDelta": 0.00147,
+       "rmse": 9.2114
+      },
+      "TE": {
+       "delta95": [
+        -0.0465,
+        0.0036
+       ],
+       "relativeDelta": -0.00275,
+       "rmse": 7.649
+      },
+      "WR": {
+       "delta95": [
+        -0.0101,
+        0.173
+       ],
+       "relativeDelta": 0.00638,
+       "rmse": 13.2767
+      }
+     },
+     "b09_noise": {
+      "DST": {
+       "delta95": [
+        0.0746,
+        0.3964
+       ],
+       "relativeDelta": 0.03633,
+       "rmse": 6.6306
+      },
+      "K": {
+       "delta95": [
+        -0.0462,
+        0.0223
+       ],
+       "relativeDelta": -0.00258,
+       "rmse": 4.8589
+      },
+      "QB": {
+       "delta95": [
+        -0.0136,
+        0.0926
+       ],
+       "relativeDelta": 0.00548,
+       "rmse": 7.4876
+      },
+      "RB": {
+       "delta95": [
+        -0.0573,
+        0.1371
+       ],
+       "relativeDelta": 0.00403,
+       "rmse": 9.2349
+      },
+      "TE": {
+       "delta95": [
+        -0.0198,
+        0.0725
+       ],
+       "relativeDelta": 0.00276,
+       "rmse": 7.6913
+      },
+      "WR": {
+       "delta95": [
+        -0.0082,
+        0.1319
+       ],
+       "relativeDelta": 0.00423,
+       "rmse": 13.2484
+      }
+     },
+     "b09_shuffle": {
+      "DST": {
+       "delta95": [
+        0.0627,
+        0.3146
+       ],
+       "relativeDelta": 0.02936,
+       "rmse": 6.586
+      },
+      "K": {
+       "delta95": [
+        -0.0166,
+        0.0137
+       ],
+       "relativeDelta": 3e-05,
+       "rmse": 4.8716
+      },
+      "QB": {
+       "delta95": [
+        -0.0415,
+        0.0735
+       ],
+       "relativeDelta": 0.00156,
+       "rmse": 7.4584
+      },
+      "RB": {
+       "delta95": [
+        -0.0188,
+        0.2174
+       ],
+       "relativeDelta": 0.01074,
+       "rmse": 9.2966
+      },
+      "TE": {
+       "delta95": [
+        -0.0451,
+        0.0301
+       ],
+       "relativeDelta": -0.00061,
+       "rmse": 7.6655
+      },
+      "WR": {
+       "delta95": [
+        -0.0343,
+        0.1521
+       ],
+       "relativeDelta": 0.00453,
+       "rmse": 13.2522
+      }
+     }
+    }
+   },
+   "tests_passed": [
+    "T24"
+   ],
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -1961,9 +4608,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -1972,36 +4617,1045 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "RMSE change by season, week bin and opponent games",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
+   "experiment_id": "M3-3-B08",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Context-stratified diagnostics of the best DvP variant",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "DST": {
+     "byOpponentGames": {
+      "0-0": {
+       "deltaRmse": -0.0973,
+       "rows": 224
+      },
+      "1-3": {
+       "deltaRmse": -0.1692,
+       "rows": 672
+      },
+      "4-7": {
+       "deltaRmse": -0.1997,
+       "rows": 896
+      },
+      "8-17": {
+       "deltaRmse": -0.2211,
+       "rows": 1886
+      }
+     },
+     "bySeason": {
+      "2017": {
+       "deltaRmse": -0.1673,
+       "rows": 512
+      },
+      "2018": {
+       "deltaRmse": -0.2712,
+       "rows": 512
+      },
+      "2019": {
+       "deltaRmse": -0.153,
+       "rows": 512
+      },
+      "2020": {
+       "deltaRmse": -0.222,
+       "rows": 512
+      },
+      "2021": {
+       "deltaRmse": -0.2073,
+       "rows": 544
+      },
+      "2022": {
+       "deltaRmse": -0.1778,
+       "rows": 542
+      },
+      "2023": {
+       "deltaRmse": -0.1965,
+       "rows": 544
+      }
+     },
+     "byWeek": {
+      "1-4": {
+       "deltaRmse": -0.137,
+       "rows": 888
+      },
+      "10-18": {
+       "deltaRmse": -0.2131,
+       "rows": 1794
+      },
+      "5-9": {
+       "deltaRmse": -0.2266,
+       "rows": 996
+      }
+     },
+     "calibration": [
+      {
+       "decile": 1,
+       "forecast": 2.109,
+       "n": 367,
+       "observed": 2.629
+      },
+      {
+       "decile": 2,
+       "forecast": 3.587,
+       "n": 368,
+       "observed": 3.595
+      },
+      {
+       "decile": 3,
+       "forecast": 4.411,
+       "n": 368,
+       "observed": 4.677
+      },
+      {
+       "decile": 4,
+       "forecast": 5.001,
+       "n": 368,
+       "observed": 5.049
+      },
+      {
+       "decile": 5,
+       "forecast": 5.554,
+       "n": 368,
+       "observed": 5.823
+      },
+      {
+       "decile": 6,
+       "forecast": 6.058,
+       "n": 368,
+       "observed": 6.158
+      },
+      {
+       "decile": 7,
+       "forecast": 6.603,
+       "n": 368,
+       "observed": 6.886
+      },
+      {
+       "decile": 8,
+       "forecast": 7.202,
+       "n": 368,
+       "observed": 7.628
+      },
+      {
+       "decile": 9,
+       "forecast": 8.019,
+       "n": 368,
+       "observed": 7.913
+      },
+      {
+       "decile": 10,
+       "forecast": 9.653,
+       "n": 367,
+       "observed": 8.91
+      }
+     ],
+     "variant": "b06"
+    },
+    "K": {
+     "byOpponentGames": {
+      "0-0": {
+       "deltaRmse": 0.0015,
+       "rows": 224
+      },
+      "1-3": {
+       "deltaRmse": -0.0007,
+       "rows": 672
+      },
+      "4-7": {
+       "deltaRmse": -0.0006,
+       "rows": 896
+      },
+      "8-17": {
+       "deltaRmse": -0.0101,
+       "rows": 1879
+      }
+     },
+     "bySeason": {
+      "2017": {
+       "deltaRmse": 0.012,
+       "rows": 511
+      },
+      "2018": {
+       "deltaRmse": 0.0049,
+       "rows": 510
+      },
+      "2019": {
+       "deltaRmse": -0.0057,
+       "rows": 510
+      },
+      "2020": {
+       "deltaRmse": -0.0185,
+       "rows": 512
+      },
+      "2021": {
+       "deltaRmse": -0.0144,
+       "rows": 543
+      },
+      "2022": {
+       "deltaRmse": -0.0138,
+       "rows": 542
+      },
+      "2023": {
+       "deltaRmse": -0.0022,
+       "rows": 543
+      }
+     },
+     "byWeek": {
+      "1-4": {
+       "deltaRmse": -0.0005,
+       "rows": 888
+      },
+      "10-18": {
+       "deltaRmse": -0.0095,
+       "rows": 1787
+      },
+      "5-9": {
+       "deltaRmse": -0.0021,
+       "rows": 996
+      }
+     },
+     "calibration": [
+      {
+       "decile": 1,
+       "forecast": 6.302,
+       "n": 367,
+       "observed": 6.442
+      },
+      {
+       "decile": 2,
+       "forecast": 6.905,
+       "n": 367,
+       "observed": 7.112
+      },
+      {
+       "decile": 3,
+       "forecast": 7.194,
+       "n": 367,
+       "observed": 7.371
+      },
+      {
+       "decile": 4,
+       "forecast": 7.408,
+       "n": 367,
+       "observed": 7.54
+      },
+      {
+       "decile": 5,
+       "forecast": 7.583,
+       "n": 367,
+       "observed": 8.093
+      },
+      {
+       "decile": 6,
+       "forecast": 7.746,
+       "n": 368,
+       "observed": 7.789
+      },
+      {
+       "decile": 7,
+       "forecast": 7.931,
+       "n": 367,
+       "observed": 7.556
+      },
+      {
+       "decile": 8,
+       "forecast": 8.143,
+       "n": 367,
+       "observed": 7.785
+      },
+      {
+       "decile": 9,
+       "forecast": 8.417,
+       "n": 367,
+       "observed": 8.346
+      },
+      {
+       "decile": 10,
+       "forecast": 8.985,
+       "n": 367,
+       "observed": 8.516
+      }
+     ],
+     "variant": "b06"
+    },
+    "QB": {
+     "byOpponentGames": {
+      "0-0": {
+       "deltaRmse": -0.1125,
+       "rows": 224
+      },
+      "1-3": {
+       "deltaRmse": -0.0386,
+       "rows": 672
+      },
+      "4-7": {
+       "deltaRmse": -0.0691,
+       "rows": 896
+      },
+      "8-17": {
+       "deltaRmse": -0.0663,
+       "rows": 1886
+      }
+     },
+     "bySeason": {
+      "2017": {
+       "deltaRmse": -0.0416,
+       "rows": 512
+      },
+      "2018": {
+       "deltaRmse": -0.0779,
+       "rows": 512
+      },
+      "2019": {
+       "deltaRmse": -0.1484,
+       "rows": 512
+      },
+      "2020": {
+       "deltaRmse": -0.0336,
+       "rows": 512
+      },
+      "2021": {
+       "deltaRmse": -0.0306,
+       "rows": 544
+      },
+      "2022": {
+       "deltaRmse": -0.0742,
+       "rows": 542
+      },
+      "2023": {
+       "deltaRmse": -0.0449,
+       "rows": 544
+      }
+     },
+     "byWeek": {
+      "1-4": {
+       "deltaRmse": -0.0631,
+       "rows": 888
+      },
+      "10-18": {
+       "deltaRmse": -0.0726,
+       "rows": 1794
+      },
+      "5-9": {
+       "deltaRmse": -0.0511,
+       "rows": 996
+      }
+     },
+     "calibration": [
+      {
+       "decile": 1,
+       "forecast": 12.625,
+       "n": 367,
+       "observed": 12.67
+      },
+      {
+       "decile": 2,
+       "forecast": 14.248,
+       "n": 368,
+       "observed": 14.016
+      },
+      {
+       "decile": 3,
+       "forecast": 15.107,
+       "n": 368,
+       "observed": 14.973
+      },
+      {
+       "decile": 4,
+       "forecast": 15.729,
+       "n": 368,
+       "observed": 15.685
+      },
+      {
+       "decile": 5,
+       "forecast": 16.31,
+       "n": 368,
+       "observed": 15.856
+      },
+      {
+       "decile": 6,
+       "forecast": 16.902,
+       "n": 368,
+       "observed": 17.025
+      },
+      {
+       "decile": 7,
+       "forecast": 17.569,
+       "n": 368,
+       "observed": 17.172
+      },
+      {
+       "decile": 8,
+       "forecast": 18.397,
+       "n": 368,
+       "observed": 17.881
+      },
+      {
+       "decile": 9,
+       "forecast": 19.504,
+       "n": 368,
+       "observed": 19.154
+      },
+      {
+       "decile": 10,
+       "forecast": 21.762,
+       "n": 367,
+       "observed": 21.694
+      }
+     ],
+     "variant": "b06"
+    },
+    "RB": {
+     "byOpponentGames": {
+      "0-0": {
+       "deltaRmse": -0.0817,
+       "rows": 224
+      },
+      "1-3": {
+       "deltaRmse": -0.0953,
+       "rows": 672
+      },
+      "4-7": {
+       "deltaRmse": -0.0807,
+       "rows": 896
+      },
+      "8-17": {
+       "deltaRmse": -0.0792,
+       "rows": 1879
+      }
+     },
+     "bySeason": {
+      "2017": {
+       "deltaRmse": 0.056,
+       "rows": 511
+      },
+      "2018": {
+       "deltaRmse": -0.0734,
+       "rows": 510
+      },
+      "2019": {
+       "deltaRmse": -0.0998,
+       "rows": 510
+      },
+      "2020": {
+       "deltaRmse": -0.1732,
+       "rows": 512
+      },
+      "2021": {
+       "deltaRmse": -0.1009,
+       "rows": 543
+      },
+      "2022": {
+       "deltaRmse": -0.1065,
+       "rows": 542
+      },
+      "2023": {
+       "deltaRmse": -0.0769,
+       "rows": 543
+      }
+     },
+     "byWeek": {
+      "1-4": {
+       "deltaRmse": -0.0932,
+       "rows": 888
+      },
+      "10-18": {
+       "deltaRmse": -0.0881,
+       "rows": 1787
+      },
+      "5-9": {
+       "deltaRmse": -0.063,
+       "rows": 996
+      }
+     },
+     "calibration": [
+      {
+       "decile": 1,
+       "forecast": 17.777,
+       "n": 367,
+       "observed": 18.881
+      },
+      {
+       "decile": 2,
+       "forecast": 19.809,
+       "n": 367,
+       "observed": 20.067
+      },
+      {
+       "decile": 3,
+       "forecast": 20.915,
+       "n": 367,
+       "observed": 20.656
+      },
+      {
+       "decile": 4,
+       "forecast": 21.829,
+       "n": 367,
+       "observed": 22.3
+      },
+      {
+       "decile": 5,
+       "forecast": 22.669,
+       "n": 367,
+       "observed": 22.984
+      },
+      {
+       "decile": 6,
+       "forecast": 23.43,
+       "n": 368,
+       "observed": 23.675
+      },
+      {
+       "decile": 7,
+       "forecast": 24.319,
+       "n": 367,
+       "observed": 23.483
+      },
+      {
+       "decile": 8,
+       "forecast": 25.51,
+       "n": 367,
+       "observed": 25.088
+      },
+      {
+       "decile": 9,
+       "forecast": 27.036,
+       "n": 367,
+       "observed": 26.476
+      },
+      {
+       "decile": 10,
+       "forecast": 30.588,
+       "n": 367,
+       "observed": 29.275
+      }
+     ],
+     "variant": "b06"
+    },
+    "TE": {
+     "byOpponentGames": {
+      "0-0": {
+       "deltaRmse": 0.0,
+       "rows": 224
+      },
+      "1-3": {
+       "deltaRmse": -0.0095,
+       "rows": 672
+      },
+      "4-7": {
+       "deltaRmse": -0.0234,
+       "rows": 896
+      },
+      "8-17": {
+       "deltaRmse": -0.0138,
+       "rows": 1879
+      }
+     },
+     "bySeason": {
+      "2017": {
+       "deltaRmse": -0.0159,
+       "rows": 511
+      },
+      "2018": {
+       "deltaRmse": -0.0139,
+       "rows": 510
+      },
+      "2019": {
+       "deltaRmse": -0.0063,
+       "rows": 510
+      },
+      "2020": {
+       "deltaRmse": -0.0111,
+       "rows": 512
+      },
+      "2021": {
+       "deltaRmse": -0.0423,
+       "rows": 543
+      },
+      "2022": {
+       "deltaRmse": -0.0274,
+       "rows": 542
+      },
+      "2023": {
+       "deltaRmse": 0.0194,
+       "rows": 543
+      }
+     },
+     "byWeek": {
+      "1-4": {
+       "deltaRmse": -0.0066,
+       "rows": 888
+      },
+      "10-18": {
+       "deltaRmse": -0.0152,
+       "rows": 1787
+      },
+      "5-9": {
+       "deltaRmse": -0.0203,
+       "rows": 996
+      }
+     },
+     "calibration": [
+      {
+       "decile": 1,
+       "forecast": 7.514,
+       "n": 367,
+       "observed": 8.43
+      },
+      {
+       "decile": 2,
+       "forecast": 9.205,
+       "n": 367,
+       "observed": 9.177
+      },
+      {
+       "decile": 3,
+       "forecast": 10.127,
+       "n": 367,
+       "observed": 10.065
+      },
+      {
+       "decile": 4,
+       "forecast": 10.842,
+       "n": 367,
+       "observed": 11.172
+      },
+      {
+       "decile": 5,
+       "forecast": 11.528,
+       "n": 367,
+       "observed": 11.613
+      },
+      {
+       "decile": 6,
+       "forecast": 12.26,
+       "n": 368,
+       "observed": 11.649
+      },
+      {
+       "decile": 7,
+       "forecast": 13.046,
+       "n": 367,
+       "observed": 12.82
+      },
+      {
+       "decile": 8,
+       "forecast": 14.103,
+       "n": 367,
+       "observed": 13.483
+      },
+      {
+       "decile": 9,
+       "forecast": 15.503,
+       "n": 367,
+       "observed": 15.421
+      },
+      {
+       "decile": 10,
+       "forecast": 18.901,
+       "n": 367,
+       "observed": 18.703
+      }
+     ],
+     "variant": "b07"
+    },
+    "WR": {
+     "byOpponentGames": {
+      "0-0": {
+       "deltaRmse": -0.049,
+       "rows": 224
+      },
+      "1-3": {
+       "deltaRmse": -0.0405,
+       "rows": 672
+      },
+      "4-7": {
+       "deltaRmse": -0.1325,
+       "rows": 896
+      },
+      "8-17": {
+       "deltaRmse": -0.1103,
+       "rows": 1877
+      }
+     },
+     "bySeason": {
+      "2017": {
+       "deltaRmse": -0.0055,
+       "rows": 511
+      },
+      "2018": {
+       "deltaRmse": -0.1255,
+       "rows": 510
+      },
+      "2019": {
+       "deltaRmse": -0.0613,
+       "rows": 510
+      },
+      "2020": {
+       "deltaRmse": -0.1217,
+       "rows": 511
+      },
+      "2021": {
+       "deltaRmse": -0.0142,
+       "rows": 542
+      },
+      "2022": {
+       "deltaRmse": -0.1155,
+       "rows": 542
+      },
+      "2023": {
+       "deltaRmse": -0.2386,
+       "rows": 543
+      }
+     },
+     "byWeek": {
+      "1-4": {
+       "deltaRmse": -0.0519,
+       "rows": 887
+      },
+      "10-18": {
+       "deltaRmse": -0.1129,
+       "rows": 1786
+      },
+      "5-9": {
+       "deltaRmse": -0.1157,
+       "rows": 996
+      }
+     },
+     "calibration": [
+      {
+       "decile": 1,
+       "forecast": 24.775,
+       "n": 366,
+       "observed": 25.032
+      },
+      {
+       "decile": 2,
+       "forecast": 28.539,
+       "n": 367,
+       "observed": 28.622
+      },
+      {
+       "decile": 3,
+       "forecast": 30.434,
+       "n": 367,
+       "observed": 29.958
+      },
+      {
+       "decile": 4,
+       "forecast": 32.052,
+       "n": 367,
+       "observed": 31.292
+      },
+      {
+       "decile": 5,
+       "forecast": 33.537,
+       "n": 367,
+       "observed": 33.22
+      },
+      {
+       "decile": 6,
+       "forecast": 34.913,
+       "n": 367,
+       "observed": 35.796
+      },
+      {
+       "decile": 7,
+       "forecast": 36.414,
+       "n": 367,
+       "observed": 34.499
+      },
+      {
+       "decile": 8,
+       "forecast": 38.222,
+       "n": 367,
+       "observed": 37.669
+      },
+      {
+       "decile": 9,
+       "forecast": 40.664,
+       "n": 367,
+       "observed": 40.177
+      },
+      {
+       "decile": 10,
+       "forecast": 45.394,
+       "n": 367,
+       "observed": 43.343
+      }
+     ],
+     "variant": "b06"
+    }
+   },
+   "tests_passed": null,
+   "train_validation_test_periods": {
+    "development": [
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
+    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
+   "coverage_pct": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+   "decision": null,
+   "estimator": "B00 and B03 rerun under the alternative, compared row by row",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B10",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Preweek vs per-game cutoff: accuracy and coverage",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Preweek vs per-game cutoff",
    "interval": null,
    "limitations": null,
    "next_steps": null,
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
+   "primary_metric": "RMSE per position on common rows",
    "reason": null,
    "relative_delta": null,
    "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "DST": {
+      "b00": {
+       "rmseAlternative": 6.6425,
+       "rmseDefault": 6.6425,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 6.4662,
+       "rmseDefault": 6.4662,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.717,
+      "meanOpponentGamesDefault": 7.717,
+      "rows": 3678
+     },
+     "K": {
+      "b00": {
+       "rmseAlternative": 4.5109,
+       "rmseDefault": 4.5109,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 4.5087,
+       "rmseDefault": 4.5087,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.703,
+      "meanOpponentGamesDefault": 7.703,
+      "rows": 3671
+     },
+     "QB": {
+      "b00": {
+       "rmseAlternative": 7.5804,
+       "rmseDefault": 7.5804,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 7.5357,
+       "rmseDefault": 7.5357,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.717,
+      "meanOpponentGamesDefault": 7.717,
+      "rows": 3678
+     },
+     "RB": {
+      "b00": {
+       "rmseAlternative": 9.8731,
+       "rmseDefault": 9.8731,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 9.8094,
+       "rmseDefault": 9.8094,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.703,
+      "meanOpponentGamesDefault": 7.703,
+      "rows": 3671
+     },
+     "TE": {
+      "b00": {
+       "rmseAlternative": 7.6568,
+       "rmseDefault": 7.6568,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 7.649,
+       "rmseDefault": 7.649,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.703,
+      "meanOpponentGamesDefault": 7.703,
+      "rows": 3671
+     },
+     "WR": {
+      "b00": {
+       "rmseAlternative": 13.2359,
+       "rmseDefault": 13.2359,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 13.1678,
+       "rmseDefault": 13.1678,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.699,
+      "meanOpponentGamesDefault": 7.699,
+      "rows": 3669
+     }
+    },
+    "validation": {
+     "DST": {
+      "b00": {
+       "rmseAlternative": 6.3982,
+       "rmseDefault": 6.3982,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 6.0557,
+       "rmseDefault": 6.0557,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 8.0,
+      "meanOpponentGamesDefault": 8.0,
+      "rows": 544
+     },
+     "K": {
+      "b00": {
+       "rmseAlternative": 4.8715,
+       "rmseDefault": 4.8715,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 4.8686,
+       "rmseDefault": 4.8686,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.985,
+      "meanOpponentGamesDefault": 7.985,
+      "rows": 543
+     },
+     "QB": {
+      "b00": {
+       "rmseAlternative": 7.4468,
+       "rmseDefault": 7.4468,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 7.4325,
+       "rmseDefault": 7.4325,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 8.0,
+      "meanOpponentGamesDefault": 8.0,
+      "rows": 544
+     },
+     "RB": {
+      "b00": {
+       "rmseAlternative": 9.1979,
+       "rmseDefault": 9.1979,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 9.1557,
+       "rmseDefault": 9.1557,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.985,
+      "meanOpponentGamesDefault": 7.985,
+      "rows": 543
+     },
+     "TE": {
+      "b00": {
+       "rmseAlternative": 7.6701,
+       "rmseDefault": 7.6701,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 7.6613,
+       "rmseDefault": 7.6613,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.985,
+      "meanOpponentGamesDefault": 7.985,
+      "rows": 543
+     },
+     "WR": {
+      "b00": {
+       "rmseAlternative": 13.1925,
+       "rmseDefault": 13.1925,
+       "rowsChanged": 0
+      },
+      "b03": {
+       "rmseAlternative": 13.2885,
+       "rmseDefault": 13.2885,
+       "rowsChanged": 0
+      },
+      "meanOpponentGamesAlternative": 7.97,
+      "meanOpponentGamesDefault": 7.97,
+      "rows": 542
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -2010,9 +5664,7 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
-    ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]
@@ -2021,85 +5673,228 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
-   "experiment_id": "M3-3-B11",
-   "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Projection-contamination resistance of B00-B10 (integrity test)",
-   "interval": null,
-   "limitations": null,
-   "next_steps": null,
-   "parameters": null,
-   "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
-   "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
-   "tests_passed": null,
-   "train_validation_test_periods": {
-    "development": [
-     2016,
-     2017,
-     2018,
-     2019,
-     2020,
-     2021,
-     2022,
-     2023
-    ],
-    "holdout": [
-     2025
-    ],
-    "validation": [
-     2024
-    ]
-   },
-   "workstream_id": "M3-3"
-  },
-  {
-   "absolute_delta": null,
-   "actual_game_finality_policy": null,
-   "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
-   "coverage_pct": null,
-   "data_hash": null,
-   "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "B00 and B03 rerun under the alternative, compared row by row",
+   "evidence_paths": [
+    "docs/research/dvp/backtest-development.json",
+    "docs/research/dvp/backtest-validation.json",
+    "docs/research/dvp/BACKTEST_REPORT.md",
+    "config/dvp/frozen-candidates.json"
+   ],
    "experiment_id": "M3-3-B12",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Availability of finalized actuals by cutoff: coverage lost under conservative rules",
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "Availability of finalized actuals: a 48-hour slower rule",
    "interval": null,
    "limitations": null,
    "next_steps": null,
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
+   "primary_metric": "RMSE per position on common rows",
    "reason": null,
    "relative_delta": null,
    "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "DST": {
+      "b00": {
+       "rmseAlternative": 6.6425,
+       "rmseDefault": 6.6425,
+       "rowsChanged": 6
+      },
+      "b03": {
+       "rmseAlternative": 6.4662,
+       "rmseDefault": 6.4662,
+       "rowsChanged": 26
+      },
+      "meanOpponentGamesAlternative": 7.716,
+      "meanOpponentGamesDefault": 7.717,
+      "rows": 3678
+     },
+     "K": {
+      "b00": {
+       "rmseAlternative": 4.5109,
+       "rmseDefault": 4.5109,
+       "rowsChanged": 6
+      },
+      "b03": {
+       "rmseAlternative": 4.5086,
+       "rmseDefault": 4.5087,
+       "rowsChanged": 26
+      },
+      "meanOpponentGamesAlternative": 7.701,
+      "meanOpponentGamesDefault": 7.703,
+      "rows": 3671
+     },
+     "QB": {
+      "b00": {
+       "rmseAlternative": 7.5808,
+       "rmseDefault": 7.5804,
+       "rowsChanged": 6
+      },
+      "b03": {
+       "rmseAlternative": 7.5362,
+       "rmseDefault": 7.5357,
+       "rowsChanged": 26
+      },
+      "meanOpponentGamesAlternative": 7.716,
+      "meanOpponentGamesDefault": 7.717,
+      "rows": 3678
+     },
+     "RB": {
+      "b00": {
+       "rmseAlternative": 9.8733,
+       "rmseDefault": 9.8731,
+       "rowsChanged": 6
+      },
+      "b03": {
+       "rmseAlternative": 9.8094,
+       "rmseDefault": 9.8094,
+       "rowsChanged": 26
+      },
+      "meanOpponentGamesAlternative": 7.701,
+      "meanOpponentGamesDefault": 7.703,
+      "rows": 3671
+     },
+     "TE": {
+      "b00": {
+       "rmseAlternative": 7.6567,
+       "rmseDefault": 7.6568,
+       "rowsChanged": 6
+      },
+      "b03": {
+       "rmseAlternative": 7.649,
+       "rmseDefault": 7.649,
+       "rowsChanged": 26
+      },
+      "meanOpponentGamesAlternative": 7.701,
+      "meanOpponentGamesDefault": 7.703,
+      "rows": 3671
+     },
+     "WR": {
+      "b00": {
+       "rmseAlternative": 13.2361,
+       "rmseDefault": 13.2359,
+       "rowsChanged": 6
+      },
+      "b03": {
+       "rmseAlternative": 13.1681,
+       "rmseDefault": 13.1678,
+       "rowsChanged": 26
+      },
+      "meanOpponentGamesAlternative": 7.697,
+      "meanOpponentGamesDefault": 7.699,
+      "rows": 3669
+     }
+    },
+    "validation": {
+     "DST": {
+      "b00": {
+       "rmseAlternative": 6.398,
+       "rmseDefault": 6.3982,
+       "rowsChanged": 2
+      },
+      "b03": {
+       "rmseAlternative": 6.0563,
+       "rmseDefault": 6.0557,
+       "rowsChanged": 6
+      },
+      "meanOpponentGamesAlternative": 7.996,
+      "meanOpponentGamesDefault": 8.0,
+      "rows": 544
+     },
+     "K": {
+      "b00": {
+       "rmseAlternative": 4.8716,
+       "rmseDefault": 4.8715,
+       "rowsChanged": 2
+      },
+      "b03": {
+       "rmseAlternative": 4.869,
+       "rmseDefault": 4.8686,
+       "rowsChanged": 6
+      },
+      "meanOpponentGamesAlternative": 7.982,
+      "meanOpponentGamesDefault": 7.985,
+      "rows": 543
+     },
+     "QB": {
+      "b00": {
+       "rmseAlternative": 7.4471,
+       "rmseDefault": 7.4468,
+       "rowsChanged": 2
+      },
+      "b03": {
+       "rmseAlternative": 7.4323,
+       "rmseDefault": 7.4325,
+       "rowsChanged": 6
+      },
+      "meanOpponentGamesAlternative": 7.996,
+      "meanOpponentGamesDefault": 8.0,
+      "rows": 544
+     },
+     "RB": {
+      "b00": {
+       "rmseAlternative": 9.1981,
+       "rmseDefault": 9.1979,
+       "rowsChanged": 2
+      },
+      "b03": {
+       "rmseAlternative": 9.1561,
+       "rmseDefault": 9.1557,
+       "rowsChanged": 6
+      },
+      "meanOpponentGamesAlternative": 7.982,
+      "meanOpponentGamesDefault": 7.985,
+      "rows": 543
+     },
+     "TE": {
+      "b00": {
+       "rmseAlternative": 7.6693,
+       "rmseDefault": 7.6701,
+       "rowsChanged": 2
+      },
+      "b03": {
+       "rmseAlternative": 7.6606,
+       "rmseDefault": 7.6613,
+       "rowsChanged": 6
+      },
+      "meanOpponentGamesAlternative": 7.982,
+      "meanOpponentGamesDefault": 7.985,
+      "rows": 543
+     },
+     "WR": {
+      "b00": {
+       "rmseAlternative": 13.1941,
+       "rmseDefault": 13.1925,
+       "rowsChanged": 2
+      },
+      "b03": {
+       "rmseAlternative": 13.2891,
+       "rmseDefault": 13.2885,
+       "rowsChanged": 6
+      },
+      "meanOpponentGamesAlternative": 7.967,
+      "meanOpponentGamesDefault": 7.97,
+      "rows": 542
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -2108,9 +5903,62 @@
      2022,
      2023
     ],
-    "holdout": [
-     2025
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
+    "validation": [
+     2024
+    ]
+   },
+   "workstream_id": "M3-3"
+  },
+  {
+   "absolute_delta": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
+   "as_of_policy": "pre_first_game_of_nfl_week",
+   "baseline_metric": null,
+   "code_commit": "3a920c219d41e3a47e9550ee6f5f239d93142215",
+   "coverage_pct": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+   "decision": null,
+   "estimator": "walkforward.prepare fails closed on unknown columns; admission by lineage",
+   "evidence_paths": [
+    "libs/arbit-model/tests/test_dvp_walkforward.py"
+   ],
+   "experiment_id": "M3-3-B11",
+   "forbidden_vendor_projection_dependencies": 0,
+   "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional holdout at best; no 2025 forecast made or inspected",
+   "hypothesis": "A planted provider projection cannot reach a B-phase forecast",
+   "interval": null,
+   "limitations": null,
+   "next_steps": null,
+   "parameters": null,
+   "placebo_summary": null,
+   "primary_metric": "RMSE per position on common rows",
+   "reason": null,
+   "relative_delta": null,
+   "sample_count": null,
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "PASSED",
+   "subgroups": null,
+   "tests_passed": [
+    "T32",
+    "T33",
+    "B11"
+   ],
+   "train_validation_test_periods": {
+    "development": [
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023
     ],
+    "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
     "validation": [
      2024
     ]

@@ -25,7 +25,13 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | M3-3-A09 | EXECUTED | Components: yards, receptions, touchdowns, turnovers, kicking, D/ST tiers | Same |
 | M3-3-A10 | EXECUTED | Era robustness, season exclusion, trimming, influence, home/away, byes | Same |
 | M3-3-A12 | EXECUTED | Refused-line handling and 2026 stat corrections | Same |
-| M3-3-B00–B12 | PLANNED | Walk-forward: offense-only comparator B00, DvP variants B01–B08, controls and integrity B09–B12 | Preweek cutoff; development 2016–2023, validation 2024 |
+| M3-3-B00 | EXECUTED | Offense-only next-game forecast from prior FFA actuals (the comparator) | [BACKTEST_REPORT.md](BACKTEST_REPORT.md) |
+| M3-3-B01–B07 | EXECUTED | DvP variants: raw, unshrunk, shrunk, tuned k, recency, last-season prior, non-touchdown | Same. D/ST B06 −3.0% (development), −6.4% (2024); positions below the 1% minimum |
+| M3-3-B08 | EXECUTED | Where the gain comes from: season, week, opponent games | Same |
+| M3-3-B09 | EXECUTED | Negative controls: shuffled opponents, noise, last week's opponent | Same: no meaningful uplift |
+| M3-3-B10 | EXECUTED | Preweek vs per-game cutoff | Same: no forecast changes |
+| M3-3-B11 | PASSED | A planted projection cannot reach a forecast | `test_dvp_walkforward.py` |
+| M3-3-B12 | EXECUTED | A 48-hour slower availability rule | Same: negligible |
 | M3-3-C00–C05 | PLANNED (conditional) | Player-level Sit/Start impact | Runs only if Phase B finds a credible group-level signal |
 
 **No longer blocked:** the canonical targets were repaired and rebuilt (R-072, TASK-20261123-007; owner instruction OWN-075). Every experiment runs on index `6ffb62fb…`, where all 5,278 team-games have a D/ST line. v0 alone keeps reading `4afbd836…`, the index it ran on.
