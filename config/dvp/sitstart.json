@@ -1,0 +1,52 @@
+{
+ "format": "arbit-dvp-m3-3-sitstart-config-v1",
+ "workstream_id": "M3-3",
+ "phase": "C (specification §5 Phase C, §7, §9 Phase 5)",
+ "declaredAt": "2026-11-24, before any Phase C result was computed (TASK-20261124-004)",
+ "base": "config/dvp/base.json",
+ "backtest": "config/dvp/backtest.json",
+ "scope": {
+  "positions": ["DST"],
+  "why": "Phase C begins only after Phase B identifies a credible group-level signal (§5). Only D/ST is PROMISING (backtest-holdout.json). QB is INCONCLUSIVE and RB, WR, TE and K are NOT_USEFUL, so Phase C does not run for them; that is the specification's gate, not a finding about players."
+ },
+ "unit": "A D/ST is one unit per NFL team, so its group-level forecast is its player-level forecast (share 1). The D/ST forecast for unit X in a game is the forecast row whose offense is X's opponent (dst_points_conceded_by_offense).",
+ "baseline": "C00 = B00, Arbit's offense-only forecast from prior FFA actuals. Arbit has no other player projection (the app reports projections as not built), and no provider projection is used anywhere.",
+ "candidate": "b06, the frozen D/ST candidate (config/dvp/frozen-candidates.json). No new parameter is fit or tuned in Phase C.",
+ "forecasts": "The frozen forecasts of each stage, read from the audit run's backtest-<stage>/forecasts.parquet and checked against the stage receipt's forecastsSha256 before use.",
+ "periods": {
+  "development": "rolling folds 2017-2023",
+  "validation": "2024",
+  "holdout": "2025 (CONDITIONALLY_HELD_OUT: the same frozen forecasts were already scored for group-level RMSE; no Phase C quantity was computed before this declaration)"
+ },
+ "pairs": {
+  "primary": "Every unordered pair of D/STs that both play in the same season and week and both have b00 and b06 forecasts with a valid label (common rows). Each model starts the unit with the higher forecast.",
+  "actualTies": "A pair whose units scored the same actual points is excluded from accuracy and counted.",
+  "forecastTies": "A pair whose forecasts are equal under a model earns that model 0.5 and changes no points.",
+  "close": "Secondary subgroup: pairs whose B00 forecasts differ by less than 1.0 point.",
+  "waiverPool": "Secondary subgroup, an assumption: pairs where both units rank 9-24 by B00 that week, a proxy for an 8-team league's unrostered D/STs (league history before 2026 does not exist in Arbit)."
+ },
+ "metrics": {
+  "primary": "Pairwise accuracy of b06 minus b00 on the primary pairs, in percentage points.",
+  "secondary": [
+   "pairwise accuracy of each model",
+   "changed decisions: count and share of pairs where b06 starts the other unit",
+   "points gained from changed decisions: sum and mean of actual(b06 pick) - actual(b00 pick)",
+   "worst-case regret: the largest single loss and the worst week's net loss from changed decisions",
+   "mean within-week Spearman between forecast and actual",
+   "league top-8: actual points of the 8 highest-forecast D/STs each week, b06 minus b00",
+   "close and waiver-pool subgroups"
+  ],
+  "uncertainty": "Week-block bootstrap (season-week clusters): 2,000 replicates, seed 1729, 95% percentile intervals for the accuracy change and for net points per week."
+ },
+ "practicalMinimumAccuracyPp": 1.8,
+ "practicalMinimumDerivation": "The pairwise-accuracy change implied by Phase B's 1% relative RMSE minimum at B00's development correlation (D/ST B00 development Spearman 0.1448, backtest-development.json), under a bivariate normal: accuracy = 0.5 + asin(rho)/pi, and a 1% RMSE cut moves rho from 0.1448 to sqrt(1 - 0.99^2 (1 - 0.1448^2)) = 0.2011, so accuracy rises from 54.63% to 56.45%: 1.8 points. Only B00 development data entered this number.",
+ "decisionRule": "Per period, with b06's accuracy change against b00 on the primary pairs: PROMISING if it is at least 1.8 points and the net points from changed decisions are positive in development, validation and the holdout; NOT_USEFUL if it misses 1.8 points in all three; INCONCLUSIVE otherwise; BLOCKED if an integrity check fails (forecast hashes, common rows, projection dependency). A bootstrap interval for the accuracy change that excludes 0 is reported as stronger evidence, not required.",
+ "prospective": "The same rule is applied to 2026 weeks 12-18 with the frozen method (PROSPECTIVE_2026.md), as an independent confirmation.",
+ "notAvailable": {
+  "leagueLineups": "Arbit holds FFA lineups only for 2026 scoring periods 1-10; earlier seasons have none, and 2026 is not a stage of this study (its weeks 1-11 were known at the freeze). League-constrained lineup evaluation (C05) is therefore not possible on 2016-2025 and is recorded as BLOCKED for that part only.",
+  "roles": "C03 (route, slot, target-share interactions) has no meaning for a D/ST."
+ },
+ "bootstrapReplicates": 2000,
+ "seed": 1729,
+ "write_to_production": false
+}
