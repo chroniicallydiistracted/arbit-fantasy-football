@@ -29,6 +29,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import polars as pl
 from arbit_core.rules import RuleSet
 from arbit_data.db import UnitOfWork
@@ -60,6 +61,7 @@ SCANNED = (
     "libs/arbit-model/src/arbit_model/dvp/lab.py",
     "libs/arbit-model/src/arbit_model/dvp/svg.py",
     "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+    "libs/arbit-model/src/arbit_model/dvp/decisions.py",
     "libs/arbit-model/src/arbit_model/teams.py",
     "scripts/model/dvp.py",
     "scripts/model/defense_position_study.py",
@@ -82,6 +84,32 @@ EXPECTED_TEAM_GAMES = 5278
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+FORECAST_KEY = ("season", "week", "game_id", "offense", "position")
+
+
+def content_sha256(frame: pl.DataFrame) -> str:
+    """A hash of a forecast frame's content that ignores row and column order (rows sorted by key,
+    columns by name, written as CSV). Parquet bytes differ between runs whose rows come out of a
+    parallel group-by in another order; their content does not."""
+    keyed = frame.select(sorted(frame.columns)).sort(list(FORECAST_KEY))
+    return hashlib.sha256(keyed.write_csv().encode()).hexdigest()
+
+
+def write_forecasts(path: Path, frame: pl.DataFrame) -> None:
+    """Write a stage's forecasts once. A rerun with the same content leaves the file, and every
+    receipt naming its hash, alone; a rerun with different content refuses to overwrite evidence."""
+    if path.exists():
+        if content_sha256(pl.read_parquet(path)) == content_sha256(frame):
+            print(f"{path.name}: same content as the existing file; left unchanged")
+            return
+        raise SystemExit(
+            f"{path} holds different forecasts; run a new audit instead of overwriting evidence"
+        )
+    tmp = path.with_suffix(".parquet.tmp")
+    frame.sort(list(FORECAST_KEY)).write_parquet(tmp)
+    tmp.replace(path)
 
 
 def code_version() -> str:
@@ -911,6 +939,7 @@ def registry(args: argparse.Namespace) -> None:
     ]
     executed = _phase_a_records(config, receipts, common, descriptive)
     executed += _phase_b_records(config, receipts, common)
+    executed += _phase_c_records(config, receipts, common)
     entries.extend(executed)
     done = {e["experiment_id"].removeprefix("M3-3-") for e in executed}
     for code, hypothesis in PLANNED.items():
@@ -1983,7 +2012,7 @@ def backtest(args: argparse.Namespace) -> None:
     joined, folds = run_stage(settings)
     out = run / f"backtest-{stage}"
     out.mkdir(exist_ok=True)
-    joined.write_parquet(out / "forecasts.parquet")
+    write_forecasts(out / "forecasts.parquet", joined)
     block = "season" if len(seasons) > 1 else "week"
     variants = sorted(c for c in joined.columns if c.startswith("b0") and c not in ("b00_nontd",))
     week_bin = _bin_expr("week", config["week_bins"])
@@ -2074,6 +2103,7 @@ def backtest(args: argparse.Namespace) -> None:
         "results": by_position,
         "sensitivity": sensitivity,
         "forecastsSha256": sha256(out / "forecasts.parquet"),
+        "forecastsContentSha256": content_sha256(joined),
         "forbidden_vendor_projection_dependencies": 0,
         "holdout": "not run: 2025 needs a frozen manifest (Phase 4)",
     }
@@ -2092,7 +2122,18 @@ def backtest(args: argparse.Namespace) -> None:
             },
             "practicalMinimumRelativeRmse": config["practical_minimum_relative_rmse"],
         } | selection
-        write_json(candidates_path, frozen)
+        if candidates_path.exists():
+            # Frozen inputs are never rewritten: a rerun must select the same candidates.
+            existing = json.loads(candidates_path.read_text())
+            fresh = json.loads(json.dumps(selection, default=str))
+            if {key: existing.get(key) for key in fresh} != fresh:
+                raise SystemExit(
+                    f"development selected other candidates than the frozen {candidates_path}; "
+                    "refusing to rewrite it"
+                )
+            print(f"{candidates_path.name}: selection reproduced; frozen file left unchanged")
+        else:
+            write_json(candidates_path, frozen)
     elif stage == "validation":
         assert candidates is not None
         report["candidates"] = {
@@ -2272,7 +2313,166 @@ def report(args: argparse.Namespace) -> None:
             log=False,
         )
     )
+    _metrics_csv(receipts)
+    _calibration_plot(receipts)
+    _season_plot(receipts)
+    _sitstart_plot(receipts)
     print(f"report: {len(rows)} rows")
+
+
+def _receipt(receipts: Path, stage: str) -> dict[str, Any] | None:
+    path = receipts / f"backtest-{stage}.json"
+    return json.loads(path.read_text()) if path.exists() else None
+
+
+def _metrics_csv(receipts: Path) -> None:
+    """METRICS.csv: every variant's metrics per stage and position, from the receipts."""
+    frozen = json.loads((ROOT / "config/dvp/frozen-candidates.json").read_text())["positions"]
+    rows = []
+    for stage in STAGES:
+        receipt = _receipt(receipts, stage)
+        if receipt is None:
+            continue
+        for pos, result in receipt["results"].items():
+            for variant, m in sorted(result.items()):
+                if not variant.startswith("b"):
+                    continue
+                rows.append(
+                    {
+                        "stage": stage,
+                        "seasons": "-".join(
+                            str(x) for x in (receipt["seasons"][0], receipt["seasons"][-1])
+                        ),
+                        "position": pos,
+                        "variant": variant,
+                        "rows": result["rows"],
+                        "rmse": m["rmse"],
+                        "mae": m["mae"],
+                        "mean_error": m["meanError"],
+                        "spearman": m["spearman"],
+                        "delta_rmse_vs_b00": m["deltaRmse"],
+                        "relative_delta": m["relativeDelta"],
+                        "delta95_low": m["delta95"][0],
+                        "delta95_high": m["delta95"][1],
+                        "best_dvp": variant == frozen[pos]["bestDvp"],
+                        "frozen_candidate": variant == frozen[pos]["candidate"],
+                    }
+                )
+    pl.DataFrame(rows).write_csv(receipts / "METRICS.csv", float_precision=5)
+
+
+def _calibration_plot(receipts: Path) -> None:
+    """Mean forecast against mean outcome by forecast decile: B00 and the best DvP variant in
+    development, and the best DvP variant in the 2025 holdout; one panel per position."""
+    from arbit_model.dvp import svg
+
+    dev, hold = _receipt(receipts, "development"), _receipt(receipts, "holdout")
+    if dev is None:
+        return
+    frozen = json.loads((ROOT / "config/dvp/frozen-candidates.json").read_text())["positions"]
+    positions = list(dev["results"])
+    canvas = svg.Canvas(780, 610, "Calibration by forecast decile: mean forecast vs mean outcome")
+    for i, pos in enumerate(positions):
+        col, row = i % 3, i // 3
+        series = [("B00 dev", dev["results"][pos]["calibrationB00"], svg.MUTED, "")]
+        best = frozen[pos]["bestDvp"].upper()
+        series.append(
+            (f"{best} dev", dev["results"][pos]["focus"]["calibration"], svg.COLORS[pos], "")
+        )
+        if hold is not None:
+            series.append(
+                (
+                    f"{best} 2025",
+                    hold["results"][pos]["focus"]["calibration"],
+                    svg.COLORS[pos],
+                    "5 3",
+                )
+            )
+        values = [
+            v for _, table, _, _ in series for r in table for v in (r["forecast"], r["observed"])
+        ]
+        lim = svg._limits(values)
+        left, top = 60 + col * 250, 60 + row * 265
+        panel = svg.Panel(canvas, (left, top + 16, 190, 170), lim, lim)
+        panel.axes("forecast", "outcome")
+        panel.line([lim[0], lim[1]], [lim[0], lim[1]], svg.MUTED, 1, "2 3")
+        canvas.text(left, top + 8, pos, fill=svg.INK)
+        for j, (label, table, color, dash) in enumerate(series):
+            xs = [r["forecast"] for r in table]
+            ys = [r["observed"] for r in table]
+            panel.line(xs, ys, color, 1.6, dash)
+            panel.dots(xs, ys, color, 2)
+            canvas.text(left + 110, top + 30 + 13 * j, label, fill=color)
+    canvas.text(
+        16,
+        600,
+        "Deciles of each variant's own forecast. Dotted: perfect calibration. Holdout dashed.",
+        fill=svg.MUTED,
+    )
+    (receipts / "plots" / "calibration.svg").write_text(canvas.render())
+
+
+def _season_plot(receipts: Path) -> None:
+    """The best DvP variant's change in RMSE against B00, by season, per position."""
+    from arbit_model.dvp import svg
+
+    by: dict[str, dict[int, float]] = {}
+    for stage in STAGES:
+        receipt = _receipt(receipts, stage)
+        if receipt is None:
+            continue
+        for pos, result in receipt["results"].items():
+            for season, value in result["focus"]["bySeason"].items():
+                by.setdefault(pos, {})[int(season)] = value["deltaRmse"]
+    if not by:
+        return
+    series = []
+    for pos, values in by.items():
+        seasons = sorted(values)
+        series.append((pos, pos, seasons, [values[x] for x in seasons], None, None))
+    ys = [y for s in series for y in s[3]]
+    seasons = sorted({x for s in series for x in s[2]})
+    (receipts / "plots" / "error-by-season.svg").write_text(
+        svg.lines(
+            "Best DvP variant vs B00 by season: change in RMSE (points)",
+            series,
+            xlabel="season (2017-2023 development folds, 2024 validation, 2025 holdout)",
+            ylabel="RMSE change, points (negative is better)",
+            ylim=(min(min(ys), 0.0) - 0.05, max(max(ys), 0.0) + 0.05),
+            note="Each position's best DvP variant as chosen on development; per-season ΔRMSE from the receipts.",
+            xticks=seasons,
+        )
+    )
+
+
+def _sitstart_plot(receipts: Path) -> None:
+    """Phase C: change in pairwise start/sit accuracy, frozen candidate vs B00, per period."""
+    from arbit_model.dvp import svg
+
+    path = receipts / "sitstart.json"
+    if not path.exists():
+        return
+    c = json.loads(path.read_text())
+    rows: list[tuple[str, str, float | None, float | None, float | None]] = []
+    for stage in STAGES:
+        m = c["periods"][stage]
+        low, high = m["deltaPp95"]
+        rows.append((f"all pairs {stage[:3]}", c["position"], m["deltaPp"], low, high))
+    for stage in STAGES:
+        m = c["periods"][stage]
+        rows.append((f"close pairs {stage[:3]}", "QB", m["close"].get("deltaPp"), None, None))
+        rows.append((f"waiver pool {stage[:3]}", "WR", m["waiverPool"].get("deltaPp"), None, None))
+    values = [v for r in rows for v in r[2:] if v is not None]
+    (receipts / "plots" / "sitstart.svg").write_text(
+        svg.forest(
+            f"D/ST start/sit: {c['candidate'].upper()} vs B00, change in pairwise accuracy",
+            rows,
+            xlabel="percentage points (positive is better); all pairs with 95% week-block interval",
+            xlim=(min(min(values), 0.0) - 1.0, max(values) + 1.0),
+            note=f"Practical minimum {c['decision']['practicalMinimumPp']} points, declared before the run. Decision: {c['decision']['label']}.",
+            log=False,
+        )
+    )
 
 
 def _phase_b_records(
@@ -2645,6 +2845,397 @@ def _decisions(
     return out
 
 
+# --- Phase C: start/sit decisions (C00-C05), D/ST only -------------------------------------------
+
+SITSTART_CLOSE = 1.0  # config/dvp/sitstart.json: "differ by less than 1.0 point"
+SITSTART_POOL = (9, 24)  # "both units rank 9-24 by B00 that week"
+SITSTART_TOP = 8  # "the 8 highest-forecast D/STs each week"
+STAGES = ("development", "validation", "holdout")
+
+
+def _stage_forecasts(run: Path, receipt: dict[str, Any], stage: str) -> tuple[pl.DataFrame, str]:
+    """A stage's frozen forecasts, after checking them against the hash its receipt recorded."""
+    path = run / f"backtest-{stage}" / "forecasts.parquet"
+    if not path.exists():
+        raise SystemExit(f"{path} is missing")
+    frame = pl.read_parquet(path)
+    if sha256(path) == receipt["forecastsSha256"]:
+        return frame, "bytes"
+    if content_sha256(frame) == receipt.get("forecastsContentSha256"):
+        return frame, "content"
+    raise SystemExit(f"{path} does not match backtest-{stage}.json")
+
+
+def sitstart(args: argparse.Namespace) -> None:
+    """Phase C for D/ST: the frozen b06 against b00 as start/sit choices, on every stage's frozen
+    forecasts. Fits nothing; the rule was declared in config/dvp/sitstart.json beforehand."""
+    from arbit_model.dvp import decisions
+    from arbit_model.dvp.provenance import PROJECTION_TOKENS
+
+    config = json.loads(args.config.read_text())
+    backtest_config = json.loads((ROOT / config["backtest"]).read_text())
+    frozen = json.loads((ROOT / backtest_config["frozen"]).read_text())
+    candidates_rel = backtest_config["candidates"]
+    candidates = json.loads((ROOT / candidates_rel).read_text())
+    started = datetime.now(UTC)
+    run, receipts = args.run, args.receipts
+    problems: list[str] = []
+    if sha256(ROOT / candidates_rel) != frozen["method"][candidates_rel]:
+        problems.append("frozen candidates changed since the freeze")
+    if run.name != frozen["auditRun"]:
+        problems.append(f"audit run {run.name} is not the frozen {frozen['auditRun']}")
+    run_manifest = json.loads((run / "run-manifest.json").read_text())
+    if sha256(run / "observations.parquet") != run_manifest["outputs"]["observations.parquet"]:
+        problems.append("observations changed since the audit run")
+    (position,) = config["scope"]["positions"]
+    model = candidates["positions"][position]["candidate"]
+    if not config["candidate"].startswith(model + ","):
+        problems.append(f"declared candidate is not the frozen {model}")
+    observations = pl.read_parquet(run / "observations.parquet")
+    models = ("b00", model)
+    periods: dict[str, Any] = {}
+    checks: dict[str, Any] = {}
+    for stage in STAGES:
+        receipt = json.loads((receipts / f"backtest-{stage}.json").read_text())
+        forecasts, matched = _stage_forecasts(run, receipt, stage)
+        flagged = [c for c in forecasts.columns if PROJECTION_TOKENS.search(c)]
+        if flagged:
+            problems.append(f"{stage}: projection-like columns {flagged}")
+        table = decisions.units(forecasts, observations, models)
+        rows = forecasts.filter(pl.col("position") == position)
+        labelled = rows.filter(pl.col("status") == "valid").height
+        checks[stage] = {
+            "forecastsMatchedBy": matched,
+            "seasons": receipt["seasons"],
+            "dstForecastRows": rows.height,
+            "validLabels": labelled,
+            "commonRows": table.height,
+            "unitsPerGameAreOne": table.group_by("game_id", "unit").len().get_column("len").max()
+            == 1,
+        }
+        if table.height != labelled:
+            problems.append(f"{stage}: {labelled - table.height} labelled rows lack a forecast")
+        pairs = decisions.pairs(table, models, "b00")
+        periods[stage] = decisions.metrics(
+            table,
+            pairs,
+            "b00",
+            model,
+            close=SITSTART_CLOSE,
+            pool=SITSTART_POOL,
+            top=SITSTART_TOP,
+            reps=config["bootstrapReplicates"],
+            seed=config["seed"],
+        )
+        print(stage, periods[stage]["pairs"], "pairs", periods[stage]["deltaPp"], "pp")
+    minimum = config["practicalMinimumAccuracyPp"]
+    if problems:
+        label, reason = "BLOCKED", "; ".join(problems)
+    else:
+        label, reason = decisions.decide(periods, minimum)
+    write_json(
+        receipts / "sitstart.json",
+        {
+            "format": FORMAT + "-sitstart-v1",
+            "generatedAt": started.isoformat(),
+            "code": code_version(),
+            "auditRun": run.name,
+            "config": {"path": str(args.config), "sha256": sha256(args.config)},
+            "candidates": {"path": candidates_rel, "sha256": sha256(ROOT / candidates_rel)},
+            "frozenManifest": {
+                "path": backtest_config["frozen"],
+                "sha256": sha256(ROOT / backtest_config["frozen"]),
+            },
+            "polarsMaxThreads": os.environ.get("POLARS_MAX_THREADS"),
+            "position": position,
+            "baseline": "b00",
+            "candidate": model,
+            "parameters": {
+                "close": SITSTART_CLOSE,
+                "waiverPoolRanks": list(SITSTART_POOL),
+                "top": SITSTART_TOP,
+                "bootstrapReplicates": config["bootstrapReplicates"],
+                "bootstrapBlock": "season-week",
+                "seed": config["seed"],
+            },
+            "checks": checks,
+            "periods": periods,
+            "decision": {"label": label, "reason": reason, "practicalMinimumPp": minimum},
+            "holdoutStatus": frozen["holdout"]["status"],
+            "forbidden_vendor_projection_dependencies": 0,
+            "notAvailable": config["notAvailable"],
+        },
+    )
+    print("Phase C:", label, "-", reason)
+
+
+def _phase_c_records(
+    config: dict[str, Any], receipts: Path, common: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Registry records of Phase C, from its receipt (none before it has run)."""
+    from arbit_model.dvp import results as records
+
+    path = receipts / "sitstart.json"
+    if not path.exists():
+        return []
+    c = json.loads(path.read_text())
+    periods = c["periods"]
+    evidence = [
+        "docs/research/dvp/sitstart.json",
+        "config/dvp/sitstart.json",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md",
+    ]
+    shared = common | {
+        "code_commit": c["code"],
+        "as_of_policy": config["as_of_policy"]["default_cutoff"],
+        "train_validation_test_periods": {stage: c["checks"][stage]["seasons"] for stage in STAGES},
+        "holdout_independence_status": f"{c['holdoutStatus']}: the same frozen 2025 forecasts "
+        "were scored for group-level RMSE before; no Phase C quantity was computed before its "
+        "rule was declared",
+        "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+        "evidence_paths": evidence,
+    }
+    scope = (
+        "D/ST only: Phase C runs for a group with a credible group-level signal (§5); QB is "
+        "INCONCLUSIVE and RB, WR, TE, K NOT_USEFUL, so they are not run, by the specification's gate"
+    )
+    out = [
+        records.record(
+            "M3-3-C00",
+            "EXECUTED",
+            hypothesis="An Arbit-computed, actuals-only D/ST baseline exists for player-level tests",
+            estimator="B00, the offense-only forecast from prior FFA actuals; Arbit has no other "
+            "player projection and uses no provider projection",
+            sample_count={s: c["checks"][s]["commonRows"] for s in STAGES},
+            reason=scope,
+            **shared,
+        ),
+        records.record(
+            "M3-3-C01",
+            "EXECUTED",
+            hypothesis="The group-level D/ST term allocates to players by past-known share",
+            estimator="a D/ST is one unit per team: each D/ST forecast row maps to exactly one "
+            "canonical unit, the defense of the game, so the share is 1",
+            parameters={s: c["checks"][s]["unitsPerGameAreOne"] for s in STAGES},
+            tests_passed=["T26"],
+            reason="Identity for D/ST: the player-level forecast is the group-level forecast",
+            **shared,
+        ),
+        records.record(
+            "M3-3-C02",
+            "EXECUTED",
+            hypothesis="Additive, proportional and opportunity x efficiency allocation differ",
+            estimator="with a share of 1 and no opportunity split, all three allocations give "
+            "the same D/ST forecast",
+            reason="Identical by construction for D/ST; nothing to choose between",
+            **shared,
+        ),
+        records.record(
+            "M3-3-C03",
+            "BLOCKED",
+            hypothesis="Role interactions (slot, outside, target share) refine the matchup",
+            reason=c["notAvailable"]["roles"],
+            next_steps="Only for a position group that first shows a group-level signal",
+            **shared,
+        ),
+        records.record(
+            "M3-3-C04",
+            "EXECUTED",
+            hypothesis="The frozen D/ST candidate picks the higher-scoring D/ST more often",
+            estimator="every unordered pair of D/STs playing the same week; each model starts "
+            "the higher forecast",
+            sample_count={s: periods[s]["pairs"] for s in STAGES},
+            baseline_metric={s: periods[s]["accuracy"]["b00"] for s in STAGES},
+            absolute_delta={s: periods[s]["deltaPp"] for s in STAGES},
+            interval={s: periods[s]["deltaPp95"] for s in STAGES},
+            subgroups={
+                s: {"close": periods[s]["close"], "waiverPool": periods[s]["waiverPool"]}
+                for s in STAGES
+            },
+            decision=c["decision"]["label"],
+            reason=c["decision"]["reason"],
+            limitations=[
+                c["notAvailable"]["leagueLineups"],
+                "The waiver-pool subgroup assumes an 8-team league rosters the top 8 by B00",
+            ],
+            next_steps="Score 2026 weeks 12-18 with the same frozen rule (PROSPECTIVE_2026.md)",
+            **shared,
+        ),
+        records.record(
+            "M3-3-C05",
+            "EXECUTED",
+            hypothesis="Changed D/ST choices gain actual FFA points without large regret",
+            estimator="actual(candidate pick) - actual(baseline pick) over changed decisions; "
+            "worst single decision and week; league top-8 points",
+            parameters={
+                s: {
+                    "changed": periods[s]["changed"],
+                    "pointsFromChanges": periods[s]["pointsFromChanges"],
+                    "worstCase": periods[s]["worstCase"],
+                    "top8": periods[s]["top8"],
+                }
+                for s in STAGES
+            },
+            decision=c["decision"]["label"],
+            reason=c["decision"]["reason"],
+            limitations=[c["notAvailable"]["leagueLineups"]],
+            **shared,
+        ),
+    ]
+    return out
+
+
+# --- Verify: read every artifact back and reproduce its receipt (T27) -----------------------------
+
+
+def verify(args: argparse.Namespace) -> None:
+    """Verify-only: nothing is recomputed into the receipts. Checks v0's files, the frozen manifest
+    against the frozen commit and the working tree, the audit run's outputs, each stage's forecasts
+    against its receipt, every metric recomputed from those forecasts, and label joins, units and
+    the sign of the D/ST term. Writes verify-receipt.json."""
+    from arbit_model.dvp import walkforward as wf
+
+    config = json.loads(args.config.read_text())
+    base = json.loads((ROOT / config["base"]).read_text())
+    frozen = json.loads((ROOT / config["frozen"]).read_text())
+    receipts, run = args.receipts, args.run
+    started = datetime.now(UTC)
+    out: dict[str, Any] = {}
+
+    continuity = json.loads((receipts / "continuity-manifest.json").read_text())["v0"]["files"]
+    out["v0ByteIdentical"] = {p: sha256(ROOT / p) == d for p, d in continuity.items()}
+
+    def at_commit(path: str) -> str:
+        blob = subprocess.run(
+            ["git", "show", f"{frozen['code']}:{path}"], cwd=ROOT, capture_output=True, check=True
+        ).stdout
+        return hashlib.sha256(blob).hexdigest()
+
+    method = frozen["method"]
+    out["frozen"] = {
+        "code": frozen["code"],
+        "frozenCommitMatchesManifest": {p: at_commit(p) == d for p, d in method.items()},
+        "changedInWorkingTreeSinceFreeze": sorted(
+            p for p, d in method.items() if sha256(ROOT / p) != d
+        ),
+        "receiptsMatchManifest": {
+            stage: sha256(receipts / f"backtest-{stage}.json") == digest
+            for stage, digest in frozen["receipts"].items()
+        },
+        "rule": "Frozen stages (holdout, prospective) run from the frozen commit's tree, which "
+        "matches every frozen hash; the working tree may differ only outside the method",
+    }
+    manifest = json.loads((run / "run-manifest.json").read_text())
+    out["auditOutputs"] = {n: sha256(run / n) == d for n, d in manifest["outputs"].items()}
+    observations = pl.read_parquet(run / "observations.parquet")
+    labels = observations.select("game_id", "offense", "position", pl.col("points").alias("_obs"))
+
+    stages: dict[str, Any] = {}
+    for stage in STAGES:
+        receipt = json.loads((receipts / f"backtest-{stage}.json").read_text())
+        joined, matched = _stage_forecasts(run, receipt, stage)
+        variants = sorted(
+            c for c in joined.columns if c.startswith("b0") and c not in ("b00_nontd",)
+        )
+        mismatched: list[str] = []
+        compared = 0
+        for pos, expected in receipt["results"].items():
+            part = joined.filter(pl.col("position") == pos)
+            again = wf.metrics(
+                part,
+                variants,
+                block=receipt["bootstrapBlock"],
+                reps=receipt["bootstrapReplicates"],
+                seed=receipt["seed"],
+            )
+            again["calibrationB00"] = wf.calibration(part, "b00")
+            for key, value in expected.items():
+                if key == "focus":
+                    continue
+                compared += 1
+                if again.get(key) != value:
+                    mismatched.append(f"{pos}.{key}")
+        join = joined.join(labels, on=["game_id", "offense", "position"], how="left")
+        dst = joined.filter(pl.col("position") == "DST")
+        dst_points = dst.get_column("points").to_numpy()
+        residual = dst_points - dst.get_column("b00").to_numpy()
+        adjustment = (dst.get_column("b06") - dst.get_column("b00")).to_numpy()
+        stages[stage] = {
+            "forecastsMatchedBy": matched,
+            "rows": joined.height,
+            "metricsCompared": compared,
+            "metricsMismatched": mismatched,
+            "labelsJoinObservationsOneToOne": join.height == joined.height
+            and join.filter(pl.col("_obs").is_null()).height == 0,
+            "labelsEqualObservations": join.filter(
+                (pl.col("points") - pl.col("_obs")).abs() > 1e-9
+            ).height
+            == 0,
+            "dstLabelsAreWholePoints": bool(np.allclose(dst_points, np.round(dst_points))),
+            # A units check, not an accuracy one: a scale or scoring mix-up shifts the mean by
+            # far more than a season's level does (WR 2025: 1.7 points on ~28, about 6%).
+            "meanBiasRelativeToMeanLabel": {
+                pos: round(
+                    float(
+                        joined.filter(pl.col("position") == pos)
+                        .select(
+                            (pl.col("b00").mean() - pl.col("points").mean())
+                            / pl.col("points").mean()
+                        )
+                        .item()
+                    ),
+                    4,
+                )
+                for pos in receipt["results"]
+            },
+            "dstTermSignCorrelation": round(float(np.corrcoef(adjustment, residual)[0, 1]), 4),
+            "sample": dst.sort("game_id", "offense")
+            .gather_every(max(1, dst.height // 6))
+            .head(6)
+            .select("game_id", "offense", "week", "n_d", "b00", "b06", "points")
+            .with_columns(pl.col("b00", "b06").round(3))
+            .to_dicts(),
+        }
+    out["stages"] = stages
+    # The receipts this verification read, so a later change to any of them is detectable (T27).
+    out["receiptsVerified"] = {
+        name: sha256(receipts / name)
+        for name in [f"backtest-{stage}.json" for stage in STAGES] + ["sitstart.json"]
+        if (receipts / name).exists()
+    }
+    passed = (
+        all(out["v0ByteIdentical"].values())
+        and all(out["frozen"]["frozenCommitMatchesManifest"].values())
+        and all(out["frozen"]["receiptsMatchManifest"].values())
+        and all(out["auditOutputs"].values())
+        and all(
+            not s["metricsMismatched"]
+            and s["labelsJoinObservationsOneToOne"]
+            and s["labelsEqualObservations"]
+            and s["dstLabelsAreWholePoints"]
+            and s["dstTermSignCorrelation"] > 0
+            and all(abs(v) < 0.2 for v in s["meanBiasRelativeToMeanLabel"].values())
+            for s in stages.values()
+        )
+    )
+    write_json(
+        receipts / "verify-receipt.json",
+        {
+            "format": FORMAT + "-verify-v1",
+            "generatedAt": started.isoformat(),
+            "code": code_version(),
+            "auditRun": run.name,
+            "targetsIndex": base["targets_index"],
+            "polarsMaxThreads": os.environ.get("POLARS_MAX_THREADS"),
+            "status": "PASSED" if passed else "FAILED",
+            **out,
+        },
+    )
+    print("verify:", "PASSED" if passed else "FAILED")
+    if not passed:
+        raise SystemExit(1)
+
+
 def _pair(value: tuple[float, float] | None) -> list[float] | None:
     return None if value is None else [round(value[0], 4), round(value[1], 4)]
 
@@ -2682,6 +3273,14 @@ def main() -> None:
     g = commands.add_parser("registry")
     g.add_argument("--config", type=Path, required=True)
     g.add_argument("--receipts", type=Path, required=True)
+    c = commands.add_parser("sitstart")
+    c.add_argument("--config", type=Path, required=True)
+    c.add_argument("--run", type=Path, required=True)
+    c.add_argument("--receipts", type=Path, required=True)
+    v = commands.add_parser("verify")
+    v.add_argument("--config", type=Path, required=True)
+    v.add_argument("--run", type=Path, required=True)
+    v.add_argument("--receipts", type=Path, required=True)
     args = parser.parse_args()
     {
         "audit": audit,
@@ -2691,6 +3290,8 @@ def main() -> None:
         "freeze": freeze,
         "report": report,
         "registry": registry,
+        "sitstart": sitstart,
+        "verify": verify,
     }[args.command](args)
 
 

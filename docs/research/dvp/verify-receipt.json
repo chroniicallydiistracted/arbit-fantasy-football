@@ -1,0 +1,273 @@
+{
+ "auditOutputs": {
+  "observations.parquet": true,
+  "schedule_games.parquet": true
+ },
+ "auditRun": "phase1-audit-20261124T024442Z",
+ "code": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
+ "format": "arbit-dvp-m3-3-verify-v1",
+ "frozen": {
+  "changedInWorkingTreeSinceFreeze": [
+   "scripts/model/dvp.py"
+  ],
+  "code": "f75868b725795cb50ca71c20f80fd383f670669b",
+  "frozenCommitMatchesManifest": {
+   "config/dvp/backtest.json": true,
+   "config/dvp/base.json": true,
+   "config/dvp/frozen-candidates.json": true,
+   "libs/arbit-model/src/arbit_model/dvp/asof.py": true,
+   "libs/arbit-model/src/arbit_model/dvp/lab.py": true,
+   "libs/arbit-model/src/arbit_model/dvp/observations.py": true,
+   "libs/arbit-model/src/arbit_model/dvp/provenance.py": true,
+   "libs/arbit-model/src/arbit_model/dvp/reliability.py": true,
+   "libs/arbit-model/src/arbit_model/dvp/walkforward.py": true,
+   "libs/arbit-model/src/arbit_model/teams.py": true,
+   "scripts/model/dvp.py": true
+  },
+  "receiptsMatchManifest": {
+   "development": true,
+   "validation": true
+  },
+  "rule": "Frozen stages (holdout, prospective) run from the frozen commit's tree, which matches every frozen hash; the working tree may differ only outside the method"
+ },
+ "generatedAt": "2026-11-24T06:56:53.960355+00:00",
+ "polarsMaxThreads": "2",
+ "receiptsVerified": {
+  "backtest-development.json": "18e7bceb116401d39a4e0114607c2d1dfdbe82b707f31de0074654ff50564530",
+  "backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+  "backtest-validation.json": "1131dfafeaf2bfe38af4faef62c1479fc4a2142ee02ee8fb8c86a92cf4e8d855",
+  "sitstart.json": "9740e882e019a1216a97ddd3aea21be0fd2d10b1960144f6836a33aed61700a3"
+ },
+ "stages": {
+  "development": {
+   "dstLabelsAreWholePoints": true,
+   "dstTermSignCorrelation": 0.2437,
+   "forecastsMatchedBy": "bytes",
+   "labelsEqualObservations": true,
+   "labelsJoinObservationsOneToOne": true,
+   "meanBiasRelativeToMeanLabel": {
+    "DST": -0.021,
+    "K": -0.0006,
+    "QB": 0.0101,
+    "RB": 0.0062,
+    "TE": 0.0045,
+    "WR": 0.0163
+   },
+   "metricsCompared": 156,
+   "metricsMismatched": [],
+   "rows": 22038,
+   "sample": [
+    {
+     "b00": 5.689,
+     "b06": 5.689,
+     "game_id": "2017_01_ARI_DET",
+     "n_d": null,
+     "offense": "ARI",
+     "points": 16.0,
+     "week": 1
+    },
+    {
+     "b00": 5.664,
+     "b06": 4.878,
+     "game_id": "2018_04_CIN_ATL",
+     "n_d": 3,
+     "offense": "CIN",
+     "points": 1.0,
+     "week": 4
+    },
+    {
+     "b00": 5.973,
+     "b06": 4.401,
+     "game_id": "2019_07_NE_NYJ",
+     "n_d": 6,
+     "offense": "NE",
+     "points": 1.0,
+     "week": 7
+    },
+    {
+     "b00": 4.188,
+     "b06": 3.782,
+     "game_id": "2020_11_DET_CAR",
+     "n_d": 9,
+     "offense": "DET",
+     "points": 15.0,
+     "week": 11
+    },
+    {
+     "b00": 3.334,
+     "b06": 2.284,
+     "game_id": "2021_14_LV_KC",
+     "n_d": 12,
+     "offense": "KC",
+     "points": -1.0,
+     "week": 14
+    },
+    {
+     "b00": 8.279,
+     "b06": 5.91,
+     "game_id": "2022_16_PHI_DAL",
+     "n_d": 14,
+     "offense": "PHI",
+     "points": 4.0,
+     "week": 16
+    }
+   ]
+  },
+  "holdout": {
+   "dstLabelsAreWholePoints": true,
+   "dstTermSignCorrelation": 0.2826,
+   "forecastsMatchedBy": "bytes",
+   "labelsEqualObservations": true,
+   "labelsJoinObservationsOneToOne": true,
+   "meanBiasRelativeToMeanLabel": {
+    "DST": -0.0307,
+    "K": -0.005,
+    "QB": 0.0304,
+    "RB": -0.0083,
+    "TE": -0.041,
+    "WR": 0.056
+   },
+   "metricsCompared": 156,
+   "metricsMismatched": [],
+   "rows": 3256,
+   "sample": [
+    {
+     "b00": 5.029,
+     "b06": 4.565,
+     "game_id": "2025_01_ARI_NO",
+     "n_d": null,
+     "offense": "ARI",
+     "points": 9.0,
+     "week": 1
+    },
+    {
+     "b00": 6.62,
+     "b06": 6.947,
+     "game_id": "2025_03_NO_SEA",
+     "n_d": 2,
+     "offense": "NO",
+     "points": 17.0,
+     "week": 3
+    },
+    {
+     "b00": 6.803,
+     "b06": 6.069,
+     "game_id": "2025_06_SEA_JAX",
+     "n_d": 5,
+     "offense": "JAX",
+     "points": 12.0,
+     "week": 6
+    },
+    {
+     "b00": 7.293,
+     "b06": 8.09,
+     "game_id": "2025_10_ARI_SEA",
+     "n_d": 8,
+     "offense": "ARI",
+     "points": 21.0,
+     "week": 10
+    },
+    {
+     "b00": 6.728,
+     "b06": 4.278,
+     "game_id": "2025_13_BUF_PIT",
+     "n_d": 11,
+     "offense": "BUF",
+     "points": 3.0,
+     "week": 13
+    },
+    {
+     "b00": 6.385,
+     "b06": 3.631,
+     "game_id": "2025_16_BUF_CLE",
+     "n_d": 14,
+     "offense": "BUF",
+     "points": 4.0,
+     "week": 16
+    }
+   ]
+  },
+  "validation": {
+   "dstLabelsAreWholePoints": true,
+   "dstTermSignCorrelation": 0.3455,
+   "forecastsMatchedBy": "bytes",
+   "labelsEqualObservations": true,
+   "labelsJoinObservationsOneToOne": true,
+   "meanBiasRelativeToMeanLabel": {
+    "DST": 0.142,
+    "K": -0.0298,
+    "QB": -0.0443,
+    "RB": -0.0066,
+    "TE": -0.0551,
+    "WR": -0.0118
+   },
+   "metricsCompared": 156,
+   "metricsMismatched": [],
+   "rows": 3259,
+   "sample": [
+    {
+     "b00": 7.536,
+     "b06": 7.467,
+     "game_id": "2024_01_ARI_BUF",
+     "n_d": null,
+     "offense": "ARI",
+     "points": 7.0,
+     "week": 1
+    },
+    {
+     "b00": 5.288,
+     "b06": 2.925,
+     "game_id": "2024_03_PHI_NO",
+     "n_d": 2,
+     "offense": "NO",
+     "points": 8.0,
+     "week": 3
+    },
+    {
+     "b00": 5.746,
+     "b06": 5.024,
+     "game_id": "2024_06_TB_NO",
+     "n_d": 5,
+     "offense": "NO",
+     "points": 17.0,
+     "week": 6
+    },
+    {
+     "b00": 6.234,
+     "b06": 8.385,
+     "game_id": "2024_09_NO_CAR",
+     "n_d": 8,
+     "offense": "CAR",
+     "points": 5.0,
+     "week": 9
+    },
+    {
+     "b00": 6.964,
+     "b06": 8.265,
+     "game_id": "2024_13_CHI_DET",
+     "n_d": 11,
+     "offense": "CHI",
+     "points": 5.0,
+     "week": 13
+    },
+    {
+     "b00": 6.227,
+     "b06": 4.729,
+     "game_id": "2024_16_CLE_CIN",
+     "n_d": 14,
+     "offense": "CIN",
+     "points": 6.0,
+     "week": 16
+    }
+   ]
+  }
+ },
+ "status": "PASSED",
+ "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+ "v0ByteIdentical": {
+  "docs/research/defense-position-study-2026-11-23.json": true,
+  "docs/research/ffa-signal-study-2026-11-09.json": true,
+  "scripts/model/defense_position_study.py": true,
+  "scripts/model/ffa_signal_study.py": true
+ }
+}
