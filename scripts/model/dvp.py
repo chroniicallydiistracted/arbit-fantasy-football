@@ -39,6 +39,7 @@ from arbit_model.dvp import reliability as rel
 from arbit_model.dvp.provenance import FORBIDDEN, SOURCES, Admission, admit, scan_code
 from arbit_model.gamebook import FFA_POSITIONS, POSITIONS
 from arbit_model.inputs import NflverseTables
+from arbit_model.teams import franchise
 from sqlalchemy import create_engine, select, text
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -104,8 +105,7 @@ def check(passed: bool, detail: Any) -> dict[str, Any]:
     return {"status": "PASSED" if passed else "FAILED", "detail": detail}
 
 
-def load_index(targets: Path, config: dict[str, Any]) -> dict[str, Any]:
-    digest = config["targets_index"]
+def load_index(targets: Path, digest: str) -> dict[str, Any]:
     raw = (targets / "objects" / digest).read_bytes()
     if hashlib.sha256(raw).hexdigest() != digest:
         raise SystemExit("targets index object does not match its digest")
@@ -149,7 +149,7 @@ def audit(args: argparse.Namespace) -> None:
     run_id = "phase1-audit-" + started.strftime("%Y%m%dT%H%M%SZ")
     out = args.out / run_id
     out.mkdir(parents=True, exist_ok=False)
-    index = load_index(args.targets, config)
+    index = load_index(args.targets, config["targets_index"])
     seasons: list[int] = config["seasons"]
     manifests = {s: season_manifest(args.targets, index, s) for s in seasons}
     checks: dict[str, Any] = {}
@@ -518,7 +518,7 @@ def _examples(
     dst_row = rows.filter(
         (pl.col("position") == obs.DST)
         & (pl.col("game_id") == turnover["game_id"])
-        & (pl.col("defense") == obs.FRANCHISE.get(turnover["team"], turnover["team"]))
+        & (pl.col("defense") == franchise(turnover["team"]))
     ).row(0, named=True)
     return {
         "zeroProductionTe": zero_te.select(
@@ -635,21 +635,29 @@ def _v0_frames(targets: Path, index: dict[str, Any], seasons: list[int]) -> pl.D
 def reproduce(args: argparse.Namespace) -> None:
     config = json.loads(args.config.read_text())
     started = datetime.now(UTC)
-    index = load_index(args.targets, config)
+    v0_digest = config["v0_targets_index"]
+    index = load_index(args.targets, v0_digest)
     seasons: list[int] = config["seasons"]
-    pointer = json.loads((args.targets / "targets-current.json").read_text())["index"]
-    if pointer != config["targets_index"]:
-        raise SystemExit("v0 reads the current targets pointer, which no longer names its index")
+    audit_run = json.loads((args.run / "run-manifest.json").read_text())
+    if audit_run["targetsIndex"] != config["targets_index"]:
+        raise SystemExit("the audit run read a different targets index from the configured one")
     frozen = json.loads((ROOT / config["original_study_receipt"]).read_text())
     out = args.run / "v0"
     out.mkdir(parents=True, exist_ok=True)
+    # v0 reads whatever `targets-current.json` names. It ran on the index before the R-072
+    # repair, so it reads that index through a pointer of its own, beside the same objects.
+    staged = out / "v0-targets"
+    staged.mkdir(exist_ok=True)
+    (staged / "targets-current.json").write_text(json.dumps({"index": v0_digest}) + "\n")
+    if not (staged / "objects").exists():
+        (staged / "objects").symlink_to((args.targets / "objects").resolve())
     rerun_path = out / "v0-rerun.json"
     subprocess.run(
         [
             sys.executable,
             str(ROOT / config["original_study_script"]),
             "--targets",
-            str(args.targets),
+            str(staged),
             str(rerun_path),
         ],
         cwd=ROOT,
@@ -724,7 +732,8 @@ def reproduce(args: argparse.Namespace) -> None:
         "generatedAt": started.isoformat(),
         "code": code_version(),
         "auditRun": args.run.name,
-        "targetsIndex": config["targets_index"],
+        "v0TargetsIndex": v0_digest,
+        "validatedTargetsIndex": config["targets_index"],
         "rerun": {
             "command": f"{config['original_study_script']} --targets <targets> <out>",
             "comparedWith": config["original_study_receipt"],
@@ -825,7 +834,8 @@ def registry(args: argparse.Namespace) -> None:
             estimator="odd/even split-half Pearson; k = m(1-r)/r with m the mean half size",
             parameters={"gamesForHalfSignal": continuity["v0"]["gamesForHalfSignal"]},
             tests_passed=["T29"],
-            limitations=v0_limits,
+            limitations=v0_limits
+            + [f"Read targets index {config['v0_targets_index']}, built before the R-072 repair"],
             evidence_paths=[
                 config["original_study_receipt"],
                 "docs/research/dvp/v0-reproduction.json",
@@ -835,7 +845,7 @@ def registry(args: argparse.Namespace) -> None:
             "measures",
             next_steps="Superseded for inference by M3-3-A01 (validated observations); kept as "
             "the baseline",
-            **common,
+            **(common | {"data_hash": config["v0_targets_index"]}),
             **descriptive,
         ),
         results.record(
@@ -858,8 +868,11 @@ def registry(args: argparse.Namespace) -> None:
             },
             interval={k: v["fisher95"] for k, v in validated.items()},
             tests_passed=["T01-T07", "T08-T13", "T29"],
-            limitations=v0_limits[1:2]
-            + ["D/ST still lacks the 156 missing lines (canonical gap, not repaired here)"],
+            limitations=[
+                v0_limits[3],
+                "Measured on the repaired targets (R-072): every completed team-game has its "
+                "D/ST line and its schedule opponent",
+            ],
             evidence_paths=["docs/research/dvp/v0-reproduction.json"],
             reason="Repeatability is real but weak for every position group except D/ST, and "
             "the WR, TE and K intervals overlap: their order is not established",
@@ -885,7 +898,8 @@ def registry(args: argparse.Namespace) -> None:
                 "docs/research/dvp/SCORE_FINALITY_AUDIT.json",
             ],
             reason="Every audit check passed; data defects are recorded in DATA_QUALITY.md",
-            next_steps="Repair of the canonical OAK/SD mapping is an owner decision (slice 2)",
+            next_steps="R-072 repaired in the canonical targets (TASK-20261123-007); v0 keeps "
+            "reading the index it ran on",
             **common,
             **descriptive,
         ),

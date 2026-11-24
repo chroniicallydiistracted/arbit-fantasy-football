@@ -10,7 +10,10 @@ n / (n + k) of an adjusted value, toward zero.
 from collections.abc import Mapping
 from dataclasses import dataclass
 
-SIGNAL_STUDY = "docs/research/ffa-signal-study-2026-11-09.json"
+# The 2026-11-09 signal study rerun with R-072 repaired (all 320 team-seasons, its pinned inputs).
+SIGNAL_STUDY = "docs/research/ffa-signal-study-2026-11-23-r072.json"
+# M3-3 v0, measured before the R-072 repair. The DvP research (OWN-074) replaces these only
+# through its Phase B decision.
 POSITION_STUDY = "docs/research/defense-position-study-2026-11-23.json"
 CUTOFF = (
     "The decision time (the game's kickoff unless given). Only rows the point-in-time reader "
@@ -24,14 +27,14 @@ POSITION_ROWS = ("stats_player_week", "pbp (scoring events)", "FFA rules (shared
 
 # Games for half signal, with the receipt and measure each comes from.
 SHRINKAGE: Mapping[str, tuple[float, str, str]] = {
-    "off_plays_pg": (13.6, SIGNAL_STUDY, "TEAM/offensive_plays_per_game"),
-    "off_dropback_rate": (6.5, SIGNAL_STUDY, "TEAM/dropback_rate"),
+    "off_plays_pg": (13.3, SIGNAL_STUDY, "TEAM/offensive_plays_per_game"),
+    "off_dropback_rate": (6.4, SIGNAL_STUDY, "TEAM/dropback_rate"),
     "off_epa_per_play": (5.7, SIGNAL_STUDY, "TEAM/offensive_epa_per_play"),
     "off_points_pg": (7.5, SIGNAL_STUDY, "TEAM/points_scored_per_game"),
-    "def_epa_per_play": (20.8, SIGNAL_STUDY, "TEAM/defensive_epa_per_play_allowed"),
-    "def_points_allowed_pg": (22.4, SIGNAL_STUDY, "TEAM/points_allowed_per_game"),
-    "def_sack_rate": (23.0, SIGNAL_STUDY, "TEAM/sack_rate_forced"),
-    "def_takeaways_pg": (54.0, SIGNAL_STUDY, "TEAM/takeaways_per_game"),
+    "def_epa_per_play": (19.7, SIGNAL_STUDY, "TEAM/defensive_epa_per_play_allowed"),
+    "def_points_allowed_pg": (22.0, SIGNAL_STUDY, "TEAM/points_allowed_per_game"),
+    "def_sack_rate": (21.4, SIGNAL_STUDY, "TEAM/sack_rate_forced"),
+    "def_takeaways_pg": (62.6, SIGNAL_STUDY, "TEAM/takeaways_per_game"),
     "dvp_QB": (30.6, POSITION_STUDY, "QB_raw"),
     "dvp_RB": (18.7, POSITION_STUDY, "RB_raw"),
     "dvp_WR": (44.1, POSITION_STUDY, "WR_raw"),
