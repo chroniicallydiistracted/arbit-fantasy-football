@@ -248,7 +248,7 @@ def walk(
                 ),
             ]
         )
-    frame = pl.concat(out, how="diagonal_relaxed").drop("cutoff", "side", "opp", "week")
+    frame = pl.concat(out, how="diagonal_relaxed").drop("cutoff", "side", "opp")
     return asof.FrozenForecasts(frozen_at=datetime.now(UTC), frame=frame)
 
 
