@@ -1,6 +1,6 @@
 # M3-3 defense against the position: research runbook
 
-**Slice M3-3 continuation.** This continues the existing v0 study under the owner's [DvP specification v1.1](../Arbit_FFA_M3_DvP_Plan.md) (OWN-074). It is not a new slice.
+**Slice M3-3 continuation.** This continues the existing v0 study under the owner's [DvP specification v1.1](Arbit_FFA_M3_DvP_Plan.md) (OWN-074). It is not a new slice.
 
 **Purpose:** measure, not assume, whether a defense's record against a position helps predict FFA points. Zero production influence is a valid outcome.
 

@@ -101,7 +101,7 @@
 ## 2026-11-23 — DvP research phases 0-1: v0 reproduced, projection firewall, completed-game observations (TASK-20261123-005)
 
 - **PR #6 merged** (`b3c0a9a`): slice 3b, kept unchanged as the v0 baseline the owner's specification preserves.
-- **OWN-074:** the owner's DvP research specification v1.1 ([plan](../research/Arbit_FFA_M3_DvP_Plan.md)).
+- **OWN-074:** the owner's DvP research specification v1.1 ([plan](../research/dvp/Arbit_FFA_M3_DvP_Plan.md)).
 - **`arbit_model.dvp` (ENG-057):**
   - `provenance` admits sources by lineage and fails closed;
   - `observations` builds completed-game team-game-position cells with schedule-decided opponents;

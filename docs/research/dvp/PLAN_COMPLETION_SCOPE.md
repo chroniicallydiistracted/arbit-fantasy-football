@@ -1,6 +1,6 @@
 # M3-3 DvP: plan completion scope and audit
 
-This audit holds every action item of the owner's [DvP specification v1.1](../Arbit_FFA_M3_DvP_Plan.md) (OWN-074) against the work in this repository. For each item it gives:
+This audit holds every action item of the owner's [DvP specification v1.1](Arbit_FFA_M3_DvP_Plan.md) (OWN-074) against the work in this repository. For each item it gives:
 - the status;
 - the code and model logic that carries it out;
 - the audit check that proves it, with what the check observed.

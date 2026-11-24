@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-006",
+  "title": "M3-3 DvP audit remediation 1: prospective shadow-forecast harness; week-12 forecasts archived before kickoff",
+  "objective": "Remediation 1 of the owner's independent audit (AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md, AUD-01): a versioned prospective harness outside the frozen method that builds forecast targets from scheduled upcoming games, verifies every frozen method and config hash (loading the frozen dvp.py from git by hash), uses only data available before each preweek cutoff, captures the data snapshots and manifests used, generates and immutably archives forecast-only B00/B06 (all frozen variants) artifacts before kickoff with a hash-chained ledger, refuses overwrites and backdating, records missed weeks as missed and reconstructions as retrospective, captures FFA D/ST roster availability for a predeclared league-constrained evaluation, and evaluates archived forecasts later with the frozen Phase B and Phase C rules, keeping missing labels. Archive 2026 week 12 before its 2026-11-26 01:00 UTC cutoff. Also repair the references broken by the owner's move of the specification into docs/research/dvp (main CI red). No change to frozen files, production or weights.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/dvp/shadow.py",
+    "scripts/model/dvp_prospective.py",
+    "config/dvp/prospective.json",
+    "libs/arbit-model/tests/test_dvp_shadow.py",
+    "docs/research/dvp/PROSPECTIVE_2026.md",
+    "docs/research/dvp/prospective/2026/ledger.jsonl",
+    "docs/research/dvp/prospective/2026/week-12/forecasts.csv",
+    "docs/research/dvp/prospective/2026/week-12/manifest.json",
+    "docs/research/dvp/prospective/2026/week-12/league.json",
+    "infra/systemd/arbit-dvp-prospective.service",
+    "infra/systemd/arbit-dvp-prospective.timer",
+    "docs/project/changelog.md",
+    "docs/project/decision-register.md",
+    "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+    "docs/research/dvp/README.md",
+    "scripts/model/dvp_plan_audit.py",
+    "libs/arbit-model/tests/test_dvp_plan_audit.py",
+    "docs/governance/tasks/TASK-20261123-005.json",
+    "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md",
+    "docs/project/status.md",
+    "docs/governance/state.json",
+    "scripts/model/dvp.py",
+    "libs/arbit-model/tests/test_dvp_firewall.py",
+    "docs/project/handoffs/2026-11-24-task-20261124-006-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T23:03:12Z",
+  "updated_at": "2026-11-24T23:12:20Z",
+  "baseline": "15fb3102483b0276ac58d9aa16349facc5ba7112",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Read the owner's audit (AUD-01..AUD-07) and AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md. Confirmed AUD-01: walkforward.walk builds targets from completed observation rows (prepare keeps valid rows), so it cannot forecast an unplayed week; PROSPECTIVE_2026.md planned post-season reconstruction. Week 12's preweek cutoff is 2026-11-26 01:00 UTC (GB at LA, Wednesday), per nflverse's schedule and frozen.json. Data state: the canonical targets index 6ffb62fb holds 2026 only through week 9; nflverse holds 2026 through week 11 (observed 2026-11-24 22:57 UTC); the league's current snapshot has 8 FFA teams holding 13 D/STs. walk() needs every earlier week's point-in-time B00 for residuals, so a week-W forecast walks weeks 1..W. evaluation_join requires 1:1 labels, so missing labels need their own join. CI on main was red after the owner moved the specification into docs/research/dvp (four broken links, the audit script and test path, and a completed task's review file).",
+      "files": [
+        "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md",
+        "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+        "libs/arbit-model/src/arbit_model/dvp/asof.py",
+        "docs/research/dvp/PROSPECTIVE_2026.md"
+      ]
+    },
+    "plan": {
+      "summary": "1) Repair the moved-specification references. 2) config/dvp/prospective.json: predeclare the window, data sources, readiness, classifications (PROSPECTIVE, MISSED, RETROSPECTIVE, REHEARSAL), archive and ledger, the evaluation (frozen Phase B protocol and Phase C rule on prospective weeks only; interim without labels) and an exploratory league-constrained D/ST evaluation, committed and pushed before any week-12 forecast. 3) arbit_model.dvp.shadow (adapter, not a frozen file): schedule targets, walk_targets with the frozen walk's own steps, forecast_only, attach_labels keeping every target, coverage, hash-chained ledger, league choices. 4) scripts/model/dvp_prospective.py: verify every frozen hash and load the frozen dvp.py from git by hash; history from the frozen audit run; the target season from a fresh build_targets into the week's archive with object bytes verified; readiness; write-once archive and export; MISSED and RETROSPECTIVE handling; sweep; rehearse (2025 equivalence plus evaluation); evaluate; verify. 5) Tests. 6) Rehearse, then archive week 12 before 2026-11-26 01:00 UTC and push the export. 7) A systemd timer for weeks 13-18, proposed for the owner's approval. 8) Documents and records.",
+      "files": [
+        "config/dvp/prospective.json",
+        "libs/arbit-model/src/arbit_model/dvp/shadow.py",
+        "scripts/model/dvp_prospective.py",
+        "libs/arbit-model/tests/test_dvp_shadow.py"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}

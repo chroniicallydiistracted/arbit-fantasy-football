@@ -1,0 +1,52 @@
+{
+  "format": "arbit-dvp-m3-3-prospective-config-v1",
+  "workstream_id": "M3-3",
+  "remediation": "Owner audit AUD-01 / remediation 1 (docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md): generate and archive forecasts before kickoff, evaluate the archived forecasts after the games.",
+  "declaredAt": "2026-11-24, before the first 2026 week-12 kickoff (2026-11-26 01:00 UTC) and before any 2026 week-12 forecast was generated (TASK-20261124-006).",
+  "season": 2026,
+  "weeks": [12, 13, 14, 15, 16, 17, 18],
+  "frozen": {
+    "groupLevel": "config/dvp/frozen.json",
+    "phaseC": "config/dvp/frozen-phase-c.json",
+    "rule": "Every file hash in both freezes is verified before each run. The frozen dvp.py is loaded from git at frozen.json's code commit and checked against its hash; the library modules and configs must equal their frozen hashes on disk and be the ones imported. Any mismatch stops the run (BLOCKED)."
+  },
+  "adapter": "arbit-dvp-shadow-v1 (libs/arbit-model/src/arbit_model/dvp/shadow.py): targets from the schedule; the frozen estimator's own steps over them. It reproduces the frozen walk exactly when given the frozen walk's targets (tests and the 2025 rehearsal).",
+  "data": {
+    "history": "Seasons 2016-2025: the frozen audit run's observations and schedule (phase1-audit-20261124T024442Z; hashes pinned in config/dvp/frozen.json), with non-touchdown points from the pinned targets index.",
+    "targetSeason": "The forecast season: a fresh build_targets.py of that season alone, into the week's archive, from the nflverse files Arbit holds at forecast time; every object's bytes verified against its digest; observations built with the frozen observations module and admitted through the projection firewall.",
+    "parameters": "Fit by walkforward.fit_fold on every season before the forecast season (2016-2025 for 2026), as the frozen rolling-origin method does.",
+    "cutoff": "pre_first_game_of_nfl_week: the first scheduled kickoff of the target week, from the target-season schedule the build read. Features are rows available by the cutoff (12:00 UTC the day after a game)."
+  },
+  "readiness": "Week W is forecast only when every game of weeks before W has a result in the schedule and FFA lines in the fresh build, and the time is past each such game's availability; otherwise the run waits and retries. A game of an earlier week still without a result 4 days after its kickoff is recorded and does not block.",
+  "classification": {
+    "PROSPECTIVE": "Generated and archived before the week's cutoff. Only these enter the prospective evaluation.",
+    "MISSED": "No forecast archived before the cutoff. Recorded in the ledger as missed; the week is excluded from the prospective evaluation and reported.",
+    "RETROSPECTIVE": "A forecast reconstructed after the cutoff, stored apart and labeled. Never counted as prospective.",
+    "REHEARSAL": "A run on a completed season (2025) to prove the harness reproduces the frozen forecasts and that evaluation works. Never counted as prospective."
+  },
+  "archive": {
+    "root": "artifacts/dvp/prospective/<season>/ (git-ignored): week-WW/ holds forecasts.parquet, forecasts.csv, manifest.json, league.json and inputs/ (the target-season observations and schedule used, and the fresh targets store).",
+    "immutability": "A week's directory is created once; files are written to a temporary directory and renamed into place; a second run for an archived week refuses. Files are made read-only.",
+    "ledger": "ledger.jsonl, append-only, each line carrying the SHA-256 of the line before it and of itself. Every archive, miss and reconstruction appends one line.",
+    "export": "docs/research/dvp/prospective/<season>/: the ledger and each week's forecasts.csv, manifest.json and league.json, committed and pushed to GitHub before the week's kickoff when possible, for an external timestamp."
+  },
+  "evaluation": {
+    "labels": "After the games: a fresh build of the season's targets; observations built the same way. Forecasts join labels by (game_id, offense, position) without dropping any target; label status valid, invalid_* or missing is counted per position and week. Only valid labels enter metrics.",
+    "phaseB": "Frozen protocol over the PROSPECTIVE weeks only: per position, RMSE of every forecast column against B00 on rows with valid labels; week-block bootstrap, 2,000 replicates, seed 1729; practical minimum 1% relative RMSE. D/ST (frozen candidate B06): CONFIRMED if B06 cuts RMSE by at least 1%; NOT_CONFIRMED otherwise. Positions whose frozen candidate is B00: their best DvP variant is reported for information and is never promoted (PROSPECTIVE_2026.md).",
+    "phaseC": "Frozen decisions.py with config/dvp/sitstart.json parameters on the D/ST rows of the PROSPECTIVE weeks as one period: units, pairs, metrics, decide. CONFIRMED needs B06 to clear 1.8 points of pairwise accuracy with net points gained.",
+    "interim": "Until all seven weeks are archived or recorded missed and labeled, results are descriptive and no confirmation label is assigned.",
+    "missed": "Missed weeks are excluded and listed. Retrospective reconstructions are evaluated separately, labeled, and never enter a confirmation."
+  },
+  "leagueEvaluation": {
+    "status": "Exploratory and descriptive, declared here before week 12. Not part of the frozen decision rules; no label or promotion rests on it.",
+    "capture": "At forecast time, read-only: the FFA league's current snapshot (id, observed time, content hash), each FFA team's rostered D/STs and the D/STs on no roster. ESPN team codes map to franchise codes (LAR to LA, WSH to WAS); every D/ST must map to a team in the schedule.",
+    "decisions": {
+      "start": "Per FFA team holding two or more D/STs with a game that week: the higher-forecast one, by B00 and by B06.",
+      "stream": "Per FFA team: the highest-forecast D/ST among those it holds and those on no roster at the capture, by B00 and by B06."
+    },
+    "metric": "Per decision where B06 and B00 pick differently: actual FFA points of B06's pick minus B00's; reported as totals, counts and the share where B06's pick scored more (ties 0.5). Picks without a valid label are counted and excluded.",
+    "limits": "Rosters can change after the capture (waivers, trades); the capture is what a manager could act on at forecast time. Eight teams, seven weeks: few decisions."
+  },
+  "write_to_production": false,
+  "forbidden_vendor_projection_dependencies": 0
+}

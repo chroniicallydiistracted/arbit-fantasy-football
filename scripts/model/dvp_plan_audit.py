@@ -1,6 +1,6 @@
 """Audit the M3-3 DvP research against every action item of the owner's specification v1.1.
 
-`docs/research/Arbit_FFA_M3_DvP_Plan.md` (OWN-074) lists the action items. Each one appears in
+`docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md` (OWN-074) lists the action items. Each one appears in
 `ITEMS` below with the checks that prove it, and `docs/research/dvp/PLAN_COMPLETION_SCOPE.md`
 explains each item's logic under the same ID. The audit reruns the evidence and does not take old
 receipts on trust:
@@ -43,7 +43,7 @@ import polars as pl
 
 ROOT = Path(__file__).resolve().parents[2]
 RECEIPTS = ROOT / "docs/research/dvp"
-SPEC = ROOT / "docs/research/Arbit_FFA_M3_DvP_Plan.md"
+SPEC = ROOT / "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md"
 FORMAT = "arbit-dvp-m3-3-plan-audit-v1"
 AUDIT_RUN = "phase1-audit-20261124T024442Z"
 FORECAST_KEY = ("season", "week", "game_id", "offense", "position")
