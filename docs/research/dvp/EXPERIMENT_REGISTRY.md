@@ -33,6 +33,13 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | M3-3-B11 | PASSED | A planted projection cannot reach a forecast | `test_dvp_walkforward.py` |
 | M3-3-B12 | EXECUTED | A 48-hour slower availability rule | Same: negligible |
 | M3-3-HOLDOUT-2025 | EXECUTED, decision PROMISING (D/ST only) | The frozen candidates on 2025 (conditional holdout) | [MODEL_CARD.md](MODEL_CARD.md), `backtest-holdout.json` |
-| M3-3-C00–C05 | PLANNED (conditional) | Player-level Sit/Start impact | Runs only if Phase B finds a credible group-level signal |
+| M3-3-C00 | EXECUTED | An Arbit-computed, actuals-only D/ST baseline (B00; Arbit has no other player projection) | [PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md), `sitstart.json` |
+| M3-3-C01 | EXECUTED | Allocating the group term to players: a D/ST is one unit per team, share 1 (checked, T26) | Same |
+| M3-3-C02 | EXECUTED | Additive vs proportional vs opportunity × efficiency: identical for a share of 1 | Same |
+| M3-3-C03 | BLOCKED | Role interactions (slot, outside, target share): no meaning for a D/ST | Same |
+| M3-3-C04 | EXECUTED, decision PROMISING | Pairwise D/ST start/sit accuracy, B06 vs B00: +4.4 (dev), +8.5 (2024), +6.6 (2025) points; minimum 1.8 declared first | Same; `config/dvp/sitstart.json` |
+| M3-3-C05 | EXECUTED, decision PROMISING | Points per changed choice +1.6 to +2.7; worst single choice −40; league top-8 +8 to +19 points a week. League-constrained lineups BLOCKED (no league history before 2026) | Same |
+
+**Phase C covers D/ST only.** The specification starts Phase C only after a credible group-level signal. QB (INCONCLUSIVE) and RB, WR, TE and K (NOT_USEFUL) don't have one, so they were not run. That is the gate, not a finding about players.
 
 **No longer blocked:** the canonical targets were repaired and rebuilt (R-072, TASK-20261123-007; owner instruction OWN-075). Every experiment runs on index `6ffb62fb…`, where all 5,278 team-games have a D/ST line. v0 alone keeps reading `4afbd836…`, the index it ran on.

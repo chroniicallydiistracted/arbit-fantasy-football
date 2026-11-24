@@ -74,6 +74,20 @@ Every scheduled 2016–2025 regular-season game:
 | `plots/backtest-delta.svg` | The best DvP variant against B00 by position and stage |
 | `backtest-holdout.json` | The 2025 conditional holdout: the same metrics, the frozen manifest's hash, and the decision per position and overall |
 | `config/dvp/frozen.json` | The frozen method (file hashes), inputs (audit run outputs, targets index), protocol, decision rule, the development and validation periods, and the prospective 2026 window |
+| `METRICS.csv` | Every variant's metrics per stage and position, flat: rows, RMSE, MAE, mean error, Spearman, ΔRMSE vs B00 with its interval, and whether the variant is the best DvP or the frozen candidate. Written by `report` from the receipts |
+| `plots/calibration.svg`, `plots/error-by-season.svg` | Calibration by forecast decile (B00 and the best DvP variant, development and 2025), and the best DvP variant's ΔRMSE by season |
+| `verify-receipt.json` | `dvp.py verify`: v0 byte identity; the frozen commit's files against the frozen hashes, and which working-tree files changed since; audit-run outputs; per stage, the forecasts' hash match, every metric recomputed against the receipt, label joins, D/ST whole points, relative mean bias, the D/ST term's sign, a sample; and the hashes of the receipts it verified |
+
+New receipts carry `forecastsContentSha256`: a fingerprint of the forecasts' content, with rows sorted by key, columns by name and floats rounded to 6 decimals. It is unaffected by row order and by the last-bit noise of parallel sums. Reruns compare forecasts within 10⁻⁹ points (`same_forecasts`).
+
+## Phase C outputs
+
+| File | Contents |
+| --- | --- |
+| `config/dvp/sitstart.json` | The Phase C rule, declared before any result: scope (D/ST), pairs, ties, subgroups, metrics, the 1.8-point minimum and its derivation |
+| `sitstart.json` | Per stage: the integrity checks (forecast hash, common rows, one unit per game), pairwise accuracy of B00 and B06 with the change and its week-block interval, changed choices, points from changes, worst cases, within-week Spearman, league top 8, close and waiver-pool subgroups; the decision |
+| `config/dvp/frozen-phase-c.json` | `decisions.py` and the rule frozen before the 2026 week-12 kickoff, the parameters, and the prospective procedure |
+| `plots/sitstart.svg` | The accuracy change per period, with subgroups |
 
 ## Sources added in Phase 2 ([provenance](SOURCE_PROVENANCE.md))
 

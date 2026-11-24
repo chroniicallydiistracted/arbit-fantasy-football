@@ -1,5 +1,30 @@
 # Development Changelog
 
+## 2026-11-24 — DvP plan completion: Phase C for D/ST, T26/T27, verify, idempotent reruns (TASK-20261124-004)
+
+- **PR #11 merged** (`cf50b73`): DvP Phase 4.
+- **Audit of the specification's action items** found these open, and closed them:
+  - Phase 5 (C00–C05) had not run, though D/ST had passed its gate;
+  - tests T26 and T27 were missing;
+  - there was no verify-only mode;
+  - `METRICS.csv`, calibration and error-by-season plots were missing;
+  - the per-position conclusions table was missing;
+  - the project status named a stale next action.
+- **Phase C (ENG-062):**
+  - The rule was committed first (`config/dvp/sitstart.json`, `317361f`).
+  - `arbit_model.dvp.decisions` and `dvp.py sitstart` ran on the frozen forecasts.
+  - D/ST B06 vs B00 pairwise start/sit accuracy: +4.4 (dev), +8.5 (2024), +6.6 (2025) points against a 1.8 minimum. **PROMISING.**
+  - Frozen for 2026 weeks 12–18 in `config/dvp/frozen-phase-c.json`, before kickoff.
+- **`dvp.py verify`:** every artifact read back. All 468 committed metrics recompute exactly; the frozen commit matches every frozen hash. The 2025 holdout reran from `165d140` with forecasts equal to within 7×10⁻¹⁵ points and identical results.
+- **R-075 fixed:** a development rerun had rewritten the frozen candidates' metadata, and stage reruns overwrote forecast files with reordered bytes. Forecasts are now written once and reruns compare them within 10⁻⁹ points, and frozen candidates are never rewritten.
+- **`dvp.py report`:** adds `METRICS.csv`, `plots/calibration.svg`, `plots/error-by-season.svg` and `plots/sitstart.svg`.
+- **Documents:**
+  - [PLAYER_LEVEL_REPORT.md](../research/dvp/PLAYER_LEVEL_REPORT.md);
+  - the model card's conclusions table and integrity flags;
+  - the README's §11 deliverables map;
+  - the continuity inventory brought up to date.
+- **Tests:** 19 new across Phase C (10), T26/T27 (8) and the T31 scan list (1). The model library now has 157 tests.
+
 ## 2026-11-24 — DvP Phase 4: frozen method, 2025 holdout, model card (TASK-20261124-003)
 
 - **`dvp.py freeze`:** writes `config/dvp/frozen.json` with method and input hashes, the protocol, the decision rule and the prospective 2026 window.

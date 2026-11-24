@@ -87,22 +87,50 @@ def sha256(path: Path) -> str:
 
 
 FORECAST_KEY = ("season", "week", "game_id", "offense", "position")
+# Polars sums in parallel in a varying order, so a rerun's forecasts can differ in the last bit
+# (measured: at most 7e-15 points). Two forecast files are the same within this tolerance.
+FORECAST_TOLERANCE = 1e-9
 
 
 def content_sha256(frame: pl.DataFrame) -> str:
-    """A hash of a forecast frame's content that ignores row and column order (rows sorted by key,
-    columns by name, written as CSV). Parquet bytes differ between runs whose rows come out of a
-    parallel group-by in another order; their content does not."""
+    """A fingerprint of a forecast frame's content that ignores row and column order and the
+    last-bit noise of parallel sums: rows sorted by key, columns by name, floats rounded to 6
+    decimals, written as CSV. Byte hashes of Parquet files differ between such reruns."""
     keyed = frame.select(sorted(frame.columns)).sort(list(FORECAST_KEY))
+    keyed = keyed.with_columns(
+        [pl.col(c).round(6) for c, t in keyed.schema.items() if t.is_float()]
+    )
     return hashlib.sha256(keyed.write_csv().encode()).hexdigest()
 
 
+def same_forecasts(a: pl.DataFrame, b: pl.DataFrame) -> bool:
+    """Same rows, same non-float values and missing cells, and floats within FORECAST_TOLERANCE."""
+    if set(a.columns) != set(b.columns) or a.height != b.height:
+        return False
+    order = sorted(a.columns)
+    a = a.select(order).sort(list(FORECAST_KEY))
+    b = b.select(order).sort(list(FORECAST_KEY))
+    for name in order:
+        x, y = a.get_column(name), b.get_column(name)
+        if not x.dtype.is_float():
+            if not x.equals(y):
+                return False
+            continue
+        xs, ys = x.to_numpy(), y.to_numpy()
+        missing = np.isnan(xs)
+        if not np.array_equal(missing, np.isnan(ys)):
+            return False
+        if (~missing).any() and np.abs(xs[~missing] - ys[~missing]).max() > FORECAST_TOLERANCE:
+            return False
+    return True
+
+
 def write_forecasts(path: Path, frame: pl.DataFrame) -> None:
-    """Write a stage's forecasts once. A rerun with the same content leaves the file, and every
-    receipt naming its hash, alone; a rerun with different content refuses to overwrite evidence."""
+    """Write a stage's forecasts once. A rerun with the same forecasts leaves the file, and every
+    receipt naming its hash, alone; a rerun with different forecasts refuses to overwrite evidence."""
     if path.exists():
-        if content_sha256(pl.read_parquet(path)) == content_sha256(frame):
-            print(f"{path.name}: same content as the existing file; left unchanged")
+        if same_forecasts(pl.read_parquet(path), frame):
+            print(f"{path.name}: same forecasts as the existing file; left unchanged")
             return
         raise SystemExit(
             f"{path} holds different forecasts; run a new audit instead of overwriting evidence"
@@ -2103,7 +2131,7 @@ def backtest(args: argparse.Namespace) -> None:
         "results": by_position,
         "sensitivity": sensitivity,
         "forecastsSha256": sha256(out / "forecasts.parquet"),
-        "forecastsContentSha256": content_sha256(joined),
+        "forecastsContentSha256": content_sha256(pl.read_parquet(out / "forecasts.parquet")),
         "forbidden_vendor_projection_dependencies": 0,
         "holdout": "not run: 2025 needs a frozen manifest (Phase 4)",
     }
@@ -2335,7 +2363,7 @@ def _metrics_csv(receipts: Path) -> None:
             continue
         for pos, result in receipt["results"].items():
             for variant, m in sorted(result.items()):
-                if not variant.startswith("b"):
+                if not variant.startswith("b0"):  # not "blocks"
                     continue
                 rows.append(
                     {
@@ -2402,7 +2430,7 @@ def _calibration_plot(receipts: Path) -> None:
             ys = [r["observed"] for r in table]
             panel.line(xs, ys, color, 1.6, dash)
             panel.dots(xs, ys, color, 2)
-            canvas.text(left + 110, top + 30 + 13 * j, label, fill=color)
+            canvas.text(left + 30 + 58 * j, top + 8, label, fill=color)
     canvas.text(
         16,
         600,
@@ -2460,8 +2488,12 @@ def _sitstart_plot(receipts: Path) -> None:
         rows.append((f"all pairs {stage[:3]}", c["position"], m["deltaPp"], low, high))
     for stage in STAGES:
         m = c["periods"][stage]
-        rows.append((f"close pairs {stage[:3]}", "QB", m["close"].get("deltaPp"), None, None))
-        rows.append((f"waiver pool {stage[:3]}", "WR", m["waiverPool"].get("deltaPp"), None, None))
+        for name, key, group in (
+            ("close pairs", "close", "QB"),
+            ("waiver pool", "waiverPool", "WR"),
+        ):
+            point = m[key].get("deltaPp")
+            rows.append((f"{name} {stage[:3]}", group, point, point, point))  # point estimate only
     values = [v for r in rows for v in r[2:] if v is not None]
     (receipts / "plots" / "sitstart.svg").write_text(
         svg.forest(
@@ -2469,7 +2501,8 @@ def _sitstart_plot(receipts: Path) -> None:
             rows,
             xlabel="percentage points (positive is better); all pairs with 95% week-block interval",
             xlim=(min(min(values), 0.0) - 1.0, max(values) + 1.0),
-            note=f"Practical minimum {c['decision']['practicalMinimumPp']} points, declared before the run. Decision: {c['decision']['label']}.",
+            note=f"Minimum {c['decision']['practicalMinimumPp']} points, declared before the run; "
+            f"decision {c['decision']['label']}. Subgroups: point estimates.",
             log=False,
         )
     )

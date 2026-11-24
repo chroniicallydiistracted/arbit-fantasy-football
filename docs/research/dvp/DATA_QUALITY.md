@@ -76,6 +76,10 @@ A cell is zero only when the team-game has target rows. A team-game without rows
 - **Traded players:** 645 player-seasons have lines for two franchises. Every line belongs to a completed team-game of the team named on it, so each game's points go to that game's team.
 - **Points on positions outside FFA's groups:** 1,030 lines, 4,312.52 points. These are defensive and line players' return and recovery touchdowns, and the occasional trick-play pass. They are not a rosterable FFA position's production and aren't summed.
 
+## Read-back of the forecasts (`dvp.py verify`, 2026-11-24)
+
+In all three stages, every forecast label joins its observation one to one and equals it. D/ST labels are whole points, and the D/ST term has the right sign. See [verify-receipt.json](verify-receipt.json) and [BACKTEST_REPORT.md](BACKTEST_REPORT.md#reproduction).
+
 ## Examples checked by hand (§3.3)
 
 - **Zero-production TE:** 2025 week 1, TB at ATL. Tampa Bay's three tight ends with statistics lines scored 0.0 between them, so the cell is a valid 0.0, defense ATL. Seven 2025 TE cells are true zeros.

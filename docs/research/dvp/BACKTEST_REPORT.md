@@ -137,9 +137,38 @@ The method was frozen in [`config/dvp/frozen.json`](../../../config/dvp/frozen.j
 | `forbidden_vendor_projection_dependencies` | 0 |
 | 2025 exposure | Seen descriptively by v0 and Phase A. No 2025 forecast was made or inspected before the freeze, and no parameter was fit on it. Phase 4 then used it as `CONDITIONALLY_HELD_OUT` (above) |
 
+## Reproduction
+
+Checked 2026-11-24 (TASK-20261124-004), on copies of the audit run so that no kept artifact could change.
+
+| Check | Result |
+| --- | --- |
+| **2025 holdout, rerun from the frozen commit** (`git worktree add <dir> 165d140`; every frozen hash matches there) | Every key, label and missing cell is identical. 18 of the forecast values differ from the originals in the last bit, by at most 7×10⁻¹⁵ points. The receipt is identical apart from its time stamp and the forecasts' byte hash |
+| **Development and 2024, rerun from `main`** | 2024 forecasts are bit-identical. In development, 881 values differ by at most 7×10⁻¹⁵ points. Results, sensitivity, fold parameters and the frozen selection are identical. The receipts differ only in time stamp, code and byte hash; development also differs in the config hash, because `backtest.json` gained its holdout keys after development ran |
+| **`dvp.py verify`** ([verify-receipt.json](verify-receipt.json)) | All 468 committed metric entries (156 per stage) recompute exactly from the stored forecasts. Every label joins its observation one to one and equals it. D/ST labels are whole points. B00's mean bias is within 15% of the mean label for every group (a units check). The D/ST term correlates positively with B00's residual in every stage (0.24, 0.35, 0.28) |
+
+**Why the byte hashes differ:** polars' parallel group-by returns rows in varying order, and its parallel sums add in varying order, which moves the last bit of some values. Every metric is order-free and rounds far above that noise.
+
+A rerun also used to overwrite the forecast file and rewrite the frozen candidates' metadata (R-075). Both are now prevented:
+- forecasts are written once, sorted, with a content fingerprint, `forecastsContentSha256`;
+- a rerun whose forecasts match within 10⁻⁹ points leaves the file alone, and one with other forecasts refuses (shown on the real development stage: both hashes unchanged);
+- development never rewrites `frozen-candidates.json`.
+
+**Sample of the frozen 2025 D/ST forecasts** (from the verify receipt; `points` is the opposing D/ST's FFA score against `offense`):
+
+| Game | Offense | Week | Opponent games `n_d` | B00 | B06 | Actual |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2025_01_ARI_NO | ARI | 1 | 0 | 5.03 | 4.57 | 9 |
+| 2025_03_NO_SEA | NO | 3 | 2 | 6.62 | 6.95 | 17 |
+| 2025_06_SEA_JAX | JAX | 6 | 5 | 6.80 | 6.07 | 12 |
+
+These are sign and unit checks, not accuracy:
+- In week 1, B06 moves off B00 through the last-season prior alone. ARI's offense gave up fewer D/ST points in 2024 than its baselines expected, so B06 lowers the opposing D/ST.
+- By week 3 the in-season residuals add in, shrunk by n / (n + k).
+
 ## Where this points (no production decision is made here)
 
 - **D/ST:** the one group where DvP earns a place. B06 (k fit on training seasons, about 8, with a last-season prior) beats B00 by 3% in development and 6% in 2024. Phase 4 tests the frozen candidate on 2025, then on prospectively frozen 2026 games.
-- **QB, RB, WR, TE and K:** the group-level matchup adds less than 1% in development and didn't replicate in 2024 (WR got worse). Expected label: `INCONCLUSIVE` (QB, RB) or `NOT_USEFUL` (WR, TE, K). That means zero DvP influence in a Sit/Start model unless a player-level test (Phase C) independently shows value.
+- **QB, RB, WR, TE and K:** the group-level matchup adds less than 1% in development and didn't replicate in 2024 (WR got worse). Expected label: `INCONCLUSIVE` (QB, RB) or `NOT_USEFUL` (WR, TE, K). That means zero DvP influence in a Sit/Start model unless a player-level test independently shows value. Phase C runs only after a group-level signal, so it ran for D/ST alone: PROMISING ([PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md)).
 - **Never use unshrunk DvP rankings:** they make forecasts worse at every position.
 - **Weights are unchanged.** `feature_specs` still holds v0's constants, and no production weight changes without the owner (OWN-074).

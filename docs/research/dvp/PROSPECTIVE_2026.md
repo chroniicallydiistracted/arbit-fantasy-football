@@ -13,15 +13,22 @@ At **2026-11-24 03:16 UTC**, before the first 2026 week-12 game (kickoff 2026-11
 
 None of those games had been played at the freeze.
 
+**Phase C was frozen too.** At **2026-11-24 06:57 UTC**, also before the week-12 kickoff, [`config/dvp/frozen-phase-c.json`](../../../config/dvp/frozen-phase-c.json) fixed:
+- `decisions.py`;
+- the start/sit rule (`config/dvp/sitstart.json`) and its parameters.
+
+The 2026 window therefore confirms both levels: forecast error and D/ST start/sit choices ([PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md)).
+
 ## How it will be evaluated
 
 1. **When the 2026 regular season is complete,** rebuild the FFA targets with the 2026 games (`build_targets.py`, a new index). Rerun the DvP audit on it: 2026 cells, reconciliation, projection firewall.
-2. **Check out the frozen code** (`f75868b`; `scripts/model/dvp.py` later gained only reporting) and verify every frozen method hash.
+2. **Check out the frozen code** (`git worktree add <dir> 165d140`, the freeze commit; its method files equal `f75868b`'s). `dvp.py verify` confirms that every frozen hash matches there. On `main`, `scripts/model/dvp.py` later gained reporting, Phase C and verify, so the frozen holdout command refuses on `main`, as designed. The 2025 holdout was rerun from that tree on 2026-11-24 with forecasts equal to within 7×10⁻¹⁵ points (the last bit of polars' parallel sums) and identical results.
 3. **Forecast weeks 12–18 of 2026,** each before its own preweek cutoff, from the actuals available then. Parameters are fit on 2016–2025.
    - Weeks 1–11 of 2026 supply in-season history only. They are not evaluated: their results were known at the freeze.
 4. **Score** D/ST B06 and each position's B00, plus the best DvP variants for information, against the 2026 actuals with the frozen protocol and rule.
+5. **Score Phase C** on the same window's D/ST rows: `decisions.units`, `pairs`, `metrics` and `decide` from the frozen `decisions.py`, with the frozen parameters. Confirmation needs B06 to clear 1.8 points of accuracy with net points gained.
 
-This needs a small `prospective` stage that accepts the new targets index while verifying the method hashes. It is to be written then, and must not change any frozen method file.
+This needs a small `prospective` harness that accepts the new targets index while verifying the method hashes. It is to be written then, as a new file outside the frozen method, and it calls the frozen tree's library functions unchanged.
 
 ## What would change the conclusion
 

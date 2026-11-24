@@ -64,18 +64,24 @@ def forecasts(seed: int = 3, n: int = 60) -> pl.DataFrame:
 # --- T27 ------------------------------------------------------------------------------------------
 
 
-def test_t27_content_hash_ignores_order_and_sees_every_value():
+def nudge(frame: pl.DataFrame, by: float, row: int = 7) -> pl.DataFrame:
+    return frame.with_columns(
+        pl.when(pl.int_range(pl.len()) == row)
+        .then(pl.col("b06") + by)
+        .otherwise("b06")
+        .alias("b06")
+    )
+
+
+def test_t27_content_hash_ignores_order_and_last_bit_noise_but_sees_real_changes():
     dvp = cli()
     frame = forecasts()
     shuffled = frame.sample(fraction=1.0, shuffle=True, seed=1).select(reversed(frame.columns))
     assert dvp.content_sha256(shuffled) == dvp.content_sha256(frame)
-    changed = frame.with_columns(
-        pl.when(pl.int_range(pl.len()) == 7)
-        .then(pl.col("b06") + 1e-6)
-        .otherwise("b06")
-        .alias("b06")
-    )
-    assert dvp.content_sha256(changed) != dvp.content_sha256(frame)
+    assert dvp.same_forecasts(nudge(frame, 7e-15), frame)  # parallel-sum noise, as measured
+    assert dvp.content_sha256(nudge(frame, 1e-3)) != dvp.content_sha256(frame)
+    assert not dvp.same_forecasts(nudge(frame, 1e-6), frame)
+    assert not dvp.same_forecasts(frame.with_columns(pl.lit(None).alias("b06")), frame)
 
 
 def test_t27_a_rerun_never_overwrites_evidence(tmp_path):
@@ -84,10 +90,11 @@ def test_t27_a_rerun_never_overwrites_evidence(tmp_path):
     frame = forecasts()
     dvp.write_forecasts(path, frame)
     written = path.read_bytes()
-    dvp.write_forecasts(path, frame.sample(fraction=1.0, shuffle=True, seed=2))
-    assert path.read_bytes() == written  # same content: the file and its hash stay
+    rerun = nudge(frame.sample(fraction=1.0, shuffle=True, seed=2), 7e-15)
+    dvp.write_forecasts(path, rerun)
+    assert path.read_bytes() == written  # the same forecasts: the file and its hash stay
     with pytest.raises(SystemExit, match="different forecasts"):
-        dvp.write_forecasts(path, frame.with_columns(pl.col("b06") * 2))
+        dvp.write_forecasts(path, nudge(frame, 0.01))
     assert path.read_bytes() == written
 
 

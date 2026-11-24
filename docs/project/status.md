@@ -11,7 +11,14 @@
 - **On `main` since PR #7 (`9a7c0b1`):** the DvP research, phases 0-1 (TASK-20261123-005 and -006). Offline research; it runs in no service.
 - **On `main` since PR #8 (`efff624`):** the R-072 repair and rebuilt FFA targets (TASK-20261123-007). The research store's current pointer names the rebuilt index `6ffb62fb…`; no service reads it.
 - **On `main` since PR #9 (`ceba441`):** DvP Phase 2, the reliability lab (TASK-20261124-001).
-- **Not yet on `main`:** DvP Phase 3, the walk-forward (TASK-20261124-002, PR #10), and Phase 4, the holdout and model card (TASK-20261124-003, branch `claude/m3-dvp-phase4`). Offline research.
+- **On `main` since PRs #10 and #11 (`cf50b73`):** DvP Phase 3, the walk-forward (TASK-20261124-002), and Phase 4, the holdout and model card (TASK-20261124-003). Offline research.
+- **Not yet on `main`:** the DvP plan completion (TASK-20261124-004, branch `claude/m3-dvp-completion`): Phase C for D/ST, T26/T27, verify-only mode and idempotent reruns. Offline research.
+
+**DvP plan completion (2026-11-24, TASK-20261124-004, ENG-062; [player-level report](../research/dvp/PLAYER_LEVEL_REPORT.md)):** an item-by-item audit of the owner's specification found Phase 5 (C00–C05) unrun though D/ST had passed its gate, T26 and T27 missing, no verify-only mode, and some §11 outputs missing. All are now done.
+- **Phase C, D/ST:** the rule was committed before any result. B06 picks the higher-scoring D/ST in 60–62% of weekly pairs, against B00's 54–56%: +4.4, +8.5 and +6.6 points (dev, 2024, 2025) against a 1.8 minimum. **PROMISING.** Frozen for 2026 weeks 12–18 before kickoff.
+- **Verified:** all 468 committed backtest metrics recompute exactly from the stored forecasts. The 2025 holdout reran from its frozen commit with forecasts equal to within 7×10⁻¹⁵ points (the last bit of polars' parallel sums) and identical results.
+- **R-075 fixed:** reruns can no longer rewrite frozen candidates or forecast evidence.
+- **What remains of the plan:** only the prospective 2026 weeks 12–18 scoring, at both levels, after the regular season. Then the owner decides on a D/ST production weight (OWN-074).
 
 **M3 slice 3a, point-in-time reader (2026-11-23, TASK-20261123-001, ENG-053):** every Model feature now has a reader that returns only what was known before its decision time under ADR-007 as amended (OWN-066).
 - **What it returns:** the version Arbit held, plus, inside a capture gap, what the source published before the decision (A1). Each value is labeled `observed`, `source-timestamp` or `retrospective-rule`.
@@ -46,7 +53,7 @@
   - R-073: refused lines summed as zero.
 - **On validated observations:** D/ST conceded by an offense repeats strongly (k about 9). QB and RB repeat modestly (20-30). WR, TE and K are weak, and their intervals (about 20 to over 140 games) overlap, so v0's order among them isn't established.
 - **Tests:** T01-T07 and T29-T40 pass (38), and five deliberate breaks each fail a test.
-- **Next:** Phase 2 (A00, A02-A10, A12), then the walk-forward against an offense-only baseline.
+- **Next (done since):** Phases 2-5 ran on 2026-11-24; see the plan completion above.
 
 **R-072 repair and rebuilt FFA targets (2026-11-24, TASK-20261123-007, ENG-058, OWN-075; [receipt](../research/targets-repair-r072.md)):** the owner ruled that fundamental defects are repairs, not decisions.
 - **Fix:** every nflverse team code becomes its franchise code (`arbit_model.teams`) in targets, gamebooks and team features. The survey found more than the DvP audit had: STL 2012-2015 and five roster-only codes. The build now refuses a row whose team didn't play in its game.
