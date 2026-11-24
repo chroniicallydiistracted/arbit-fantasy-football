@@ -1,0 +1,40 @@
+{
+  "format": "arbit-dvp-m3-3-explore-config-v3",
+  "workstream_id": "M3-3",
+  "version": "explore-v3",
+  "classification": "EXPLORATORY",
+  "declaredAt": "2026-11-24, before any opportunity or efficiency result was computed (TASK-20261124-008)",
+  "why": "Owner audit AUD-02 (remediation 2): separate opportunity volume from scoring efficiency, measure each part's repeatability, and test actual-history-only forward predictors built from them. All of it comes after the 2025 holdout was inspected, so it is exploratory and changes no frozen candidate or the 2026 confirmation.",
+  "inherits": "config/dvp/explore-v2.json: the same seven decoupled stages, seasons, comparison protocol and the rolling-window and split-half-k estimators, rerun here so every estimator shares one run.",
+  "sources": {
+    "nflverse.stats_player": "Weekly player statistics, regular season: attempts, sacks suffered, carries, targets, receptions, field-goal and extra-point attempts. The exact files (manifests) each season's FFA targets were built from (targets index 6ffb62fb...), every object's bytes re-hashed.",
+    "nflverse.stats_team": "Weekly team statistics, regular season: attempts, sacks suffered, carries, interceptions thrown, fumbles lost. The same pinned files.",
+    "admission": "arbit_model.dvp.opportunity.admit_realized: provenance.admit's checks (known source, realized-statistics type, ancestry, every column classified by the field catalog, excluded columns such as generic fantasy points dropped and recorded, unknown columns refused, row values known), on a versioned allowlist because provenance.py is frozen."
+  },
+  "volume": {
+    "QB": "dropbacks (pass attempts + sacks suffered) + carries",
+    "RB": "carries + targets",
+    "WR": "targets",
+    "TE": "targets",
+    "K": "field-goal attempts + extra-point attempts",
+    "DST": "the offense's plays (pass attempts + sacks suffered + carries), the D/ST's opportunities"
+  },
+  "efficiency": "FFA points per unit of volume. Zero volume keeps volume 0 and no efficiency (never a division); a cell with no statistics rows is volume_status missing.",
+  "reliability": "Per position: REML k of points, volume and efficiency allowed, each leave-one-out adjusted for the side faced (descriptive, retrospective), with season-cluster bootstrap intervals; the correlation of unit-season volume, efficiency and points tendencies (duplicated information).",
+  "reliabilityReplicates": 1000,
+  "estimators": {
+    "b05w3": "As explore-v2.",
+    "b05w5": "As explore-v2.",
+    "b05w8": "As explore-v2.",
+    "b03sh": "As explore-v2.",
+    "b07v": "Volume channel: B00 + w_v x (opposing unit's mean volume residual) x (the scoring side's expected efficiency). Residuals are against the side's other games this season, shrunk to last season's league volume with the side's own volume k; w_v = n / (n + k_v), k_v the REML k of opponent-adjusted volume allowed on training seasons.",
+    "b07e": "Efficiency channel: B00 + w_e x (opposing unit's volume-weighted efficiency residual: sum(points - volume x side's expected efficiency) / sum(volume)) x (the side's expected volume); w_e = n / (n + k_e), k_e the REML k of opponent-adjusted efficiency allowed on training seasons.",
+    "b07ve": "Both channels added to B00.",
+    "b07": "The existing non-touchdown B07, kept as its own variant."
+  },
+  "comparisons": "On common rows with valid labels, every estimator against B00 with the frozen block bootstrap (seasons in development, weeks otherwise; 2,000 replicates, seed 1729), and against B03, B04, B05, B06 and B07. Duplication: correlation of the volume, efficiency, non-touchdown and B03 terms. The frozen variants must still reproduce the committed v1 receipts on valid rows.",
+  "denominators": "Unstable denominators are handled by ratio-of-sums efficiency (never a mean of per-game ratios), a league pseudo-volume prior on each side's efficiency, and shrinkage by game count; cells with zero volume carry no efficiency.",
+  "decision": "None. Descriptive only; a promising estimator can only be proposed for a new, separately frozen test on future games.",
+  "write_to_production": false,
+  "forbidden_vendor_projection_dependencies": 0
+}

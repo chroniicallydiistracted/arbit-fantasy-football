@@ -66,6 +66,7 @@ SCANNED = (
     "libs/arbit-model/src/arbit_model/dvp/shadow.py",
     "libs/arbit-model/src/arbit_model/dvp/contract.py",
     "libs/arbit-model/src/arbit_model/dvp/explore.py",
+    "libs/arbit-model/src/arbit_model/dvp/opportunity.py",
     "libs/arbit-model/src/arbit_model/teams.py",
     "scripts/model/dvp.py",
     "scripts/model/dvp_prospective.py",

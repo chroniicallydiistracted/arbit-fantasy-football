@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-008",
+  "title": "M3-3 DvP audit remediation 2: opportunity volume and scoring efficiency (A09, B07 extensions)",
+  "objective": "Owner audit AUD-02. Admit nflverse player and team statistics (the exact files the FFA targets were built from) through a versioned admission with the firewall's rules and field catalog; build per team-game-position opportunity volume (QB dropbacks and carries, RB carries and targets, WR/TE targets, K FG and PAT attempts, D/ST opponent plays) with receptions and D/ST sack and turnover counts; reconcile player volumes with team totals and points with volumes; report coverage, true zeros, missing and invalid cells; measure volume and efficiency allowed reliability separately (REML k, season-cluster intervals) and their duplication; add actual-history-only forward predictors (volume channel, efficiency channel, both) through the exploratory hook, compared with B00, B03, B06 and the retained non-touchdown B07 on common rows; all EXPLORATORY, declared in config before results, never changing frozen candidates.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/dvp/opportunity.py",
+    "libs/arbit-model/src/arbit_model/dvp/explore.py",
+    "scripts/model/dvp_explore.py",
+    "scripts/model/dvp.py",
+    "config/dvp/explore-v3.json",
+    "libs/arbit-model/tests/test_dvp_opportunity.py",
+    "docs/research/dvp/OPPORTUNITY_EFFICIENCY.md",
+    "docs/research/dvp/explore-v3.json",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/SOURCE_PROVENANCE.md",
+    "docs/research/dvp/METHODOLOGY.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/project/decision-register.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T23:42:54Z",
+  "updated_at": "2026-11-24T23:49:17Z",
+  "baseline": "7e227ba74fc256e0714eae4865cc100a7fcb696c",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "AUD-02: A09 split points by scoring rule only; B07 used non-touchdown points; true volume was called unavailable. Arbit already holds it: gamebook.OPPORTUNITY_COLUMNS (attempts, carries, targets, fg_att, pat_att), team_features opps_pg, feature_specs opp_dvp_<pos>_opps_pg. nflverse stats_player and stats_team carry every needed count with no nulls in 2016-2025, and the field catalog classifies them as history (generic fantasy points excluded). The frozen provenance allowlist has no stats source and provenance.py is frozen, so a versioned admission with the same rules is needed. Each season's FFA targets manifest pins the exact stats files used.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/gamebook.py",
+        "libs/arbit-model/src/arbit_model/team_features.py",
+        "libs/arbit-model/src/arbit_model/feature_specs.py",
+        "libs/arbit-model/src/arbit_model/fields.py",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py"
+      ]
+    },
+    "plan": {
+      "summary": "1) arbit_model.dvp.opportunity: versioned admission (admit_realized) with the firewall's rules; volume per cell (QB dropbacks + carries, RB carries + targets, WR/TE targets, K FG + PAT attempts, D/ST the offense's plays) with components; cells with missing/zero/ok status and ratio efficiency; reconciliation of player sums with team statistics; coverage; REML reliability of points, volume and efficiency allowed with season-cluster intervals and their correlation. 2) explore.make_opportunity_extra: volume channel b07v, efficiency channel b07e, both b07ve, training-only k, ratio-of-sums efficiency with a league pseudo-volume prior; explore.compose. 3) dvp_explore.py: --config version, opportunity command, composed hooks, B07 comparison and term correlations. 4) config/dvp/explore-v3.json declared before results. 5) Tests. 6) Recorded run, OPPORTUNITY_EFFICIENCY.md, records.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/opportunity.py",
+        "libs/arbit-model/src/arbit_model/dvp/explore.py",
+        "scripts/model/dvp_explore.py",
+        "config/dvp/explore-v3.json",
+        "libs/arbit-model/tests/test_dvp_opportunity.py"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}
