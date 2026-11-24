@@ -340,7 +340,7 @@ def _reml_profile(
     w = n / (1 + n * ratio)
     mu = float((w * means).sum() / w.sum())
     q = ssw + float((w * (means - mu) ** 2).sum())
-    sigma2 = q / (cells - 1)
+    sigma2 = max(q / (cells - 1), 1e-12)  # no within-group noise at all: keep the log finite
     loglik = -0.5 * (
         (cells - 1) * math.log(sigma2) + float(np.log1p(n * ratio).sum()) + math.log(w.sum())
     )

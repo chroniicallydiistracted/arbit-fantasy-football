@@ -907,7 +907,12 @@ def registry(args: argparse.Namespace) -> None:
             **descriptive,
         ),
     ]
+    executed = _phase_a_records(config, receipts, common, descriptive)
+    entries.extend(executed)
+    done = {e["experiment_id"].removeprefix("M3-3-") for e in executed}
     for code, hypothesis in PLANNED.items():
+        if code in done:
+            continue
         conditional = code.startswith("C")
         entries.append(
             results.record(
@@ -937,6 +942,7 @@ def registry(args: argparse.Namespace) -> None:
 
 
 # --- Phase 2: the reliability lab (A00, A02-A10, A12) -------------------------------------------
+
 
 def reliability(args: argparse.Namespace) -> None:
     """Every Phase A experiment on the audit run's validated observations; descriptive only."""
@@ -1251,6 +1257,12 @@ def reliability(args: argparse.Namespace) -> None:
         )
 
     results["A04"]["orderings"] = lab.joint_orderings(joint, joint_seasons, reps, seed)
+    tests = {
+        f"{pos}_{kind}": results["A08"][pos][kind]["permutation"]["pValue"]
+        for pos in base["position_groups"]
+        for kind in ("raw", "adjusted")
+    }
+    results["A08"]["holm"] = _holm(tests)
     if "A12" in results:
         results["A12"]["vintages"] = _vintage_diagnostic(base, config)
 
@@ -1271,6 +1283,17 @@ def reliability(args: argparse.Namespace) -> None:
     write_json(args.receipts / "reliability-results.json", report)
     _write_plots(plots, carry_rows, args.receipts / "plots")
     print(f"reliability: {len(base['position_groups'])} groups, {len(results)} experiments")
+
+
+def _holm(p_values: dict[str, float]) -> dict[str, Any]:
+    """Holm's step-down adjustment across the permutation tests (exploratory family)."""
+    ordered = sorted(p_values.items(), key=lambda item: item[1])
+    adjusted: dict[str, float] = {}
+    running = 0.0
+    for rank, (name, p) in enumerate(ordered):
+        running = max(running, min(1.0, (len(ordered) - rank) * p))
+        adjusted[name] = round(running, 5)
+    return {"family": len(ordered), "adjusted": dict(sorted(adjusted.items()))}
 
 
 def _r4(value: float | None) -> float | None:
@@ -1667,8 +1690,8 @@ def _write_plots(plots: dict[str, Any], carry_rows: list[Any], folder: Path) -> 
             xlabel="Games played this season",
             ylabel="w(n)",
             ylim=(0, 1),
-            note="k from REML on adjusted points; bands from the season-bootstrap interval of k. "
-            "Credibility inside a DvP estimate, not a share of a Sit/Start model.",
+            note="k: REML, adjusted points; bands: season-bootstrap interval of k. Not a Sit/Start "
+            "weight.",
         )
     )
     (folder / "lag-decay.svg").write_text(
@@ -1701,6 +1724,197 @@ def _write_plots(plots: dict[str, Any], carry_rows: list[Any], folder: Path) -> 
             log=False,
         )
     )
+
+
+def _phase_a_records(
+    config: dict[str, Any], receipts: Path, common: dict[str, Any], descriptive: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Registry records of the reliability lab, from its receipt (none before it has run)."""
+    from arbit_model.dvp import results as records
+
+    path = receipts / "reliability-results.json"
+    if not path.exists():
+        return []
+    lab_receipt = json.loads(path.read_text())
+    r = lab_receipt["results"]
+    groups = config["position_groups"]
+    evidence = [
+        "docs/research/dvp/reliability-results.json",
+        "docs/research/dvp/RELIABILITY_REPORT.md",
+    ]
+    shared = common | descriptive | {"code_commit": lab_receipt["code"]}
+
+    def per(fn: Any) -> dict[str, Any]:
+        return {pos: fn(pos) for pos in groups}
+
+    reml = per(lambda p: r["A05"][p]["adjusted"]["reml"]["k"])
+    reml95 = per(lambda p: r["A05"][p]["adjusted"]["remlBootstrapSeasons"]["k95"])
+    specs: list[tuple[str, str, str, dict[str, Any], dict[str, Any]]] = [
+        (
+            "A00",
+            "Raw DvP landscape: distributions, unit-season spread and raw vs adjusted ranks",
+            "descriptive statistics per position; per-season Spearman of raw vs adjusted ranks",
+            per(
+                lambda p: (
+                    {
+                        k: r["A00"][p][k]
+                        for k in (
+                            "cells",
+                            "mean",
+                            "sd",
+                            "skew",
+                            "unitSeasonMeanSd",
+                            "withinUnitSeasonSd",
+                        )
+                    }
+                    | {"rankSpearmanMean": r["A00"][p]["rankAgreement"]["spearmanMean"]}
+                )
+            ),
+            {"tests_passed": ["T03", "T04"]},
+        ),
+        (
+            "A02",
+            "Split-method sensitivity of the repeatability estimate",
+            "split-half r and k for odd/even weeks, alternating games, first vs second half, "
+            "first 6 vs next 6, home vs away and 1,000 seeded balanced random splits",
+            per(
+                lambda p: (
+                    {
+                        m: r["A02"][p]["adjusted"][m]["k"]
+                        for m in (
+                            "calendar",
+                            "alternating",
+                            "chronological",
+                            "first6_next6",
+                            "home_away",
+                        )
+                    }
+                    | {"randomMedian": r["A02"][p]["adjusted"]["random"]["k"]["median"]}
+                )
+            ),
+            {"tests_passed": ["T09", "T10", "T13"]},
+        ),
+        (
+            "A03",
+            "Opponent-adjustment sensitivity of repeatability",
+            "odd/even k and REML k for none, season-centered, leave-one-out mean, leave-one-out "
+            "median and leave-one-out mean shrunk toward the season mean",
+            per(
+                lambda p: {
+                    m: r["A03"][p][m]["reml"]["k"]
+                    for m in ("none", "season", "loo_mean", "loo_median", "loo_shrunk")
+                }
+            ),
+            {"tests_passed": ["T08"]},
+        ),
+        (
+            "A04",
+            "Position-specific stability by era and half size, with joint orderings",
+            "odd/even k by era with season-bootstrap intervals; joint season bootstrap of which "
+            "position's k is lower",
+            {
+                "eras": per(
+                    lambda p: {e: v["adjusted"]["k"] for e, v in r["A04"][p]["eras"].items()}
+                ),
+                "pKLower": r["A04"]["orderings"]["pKLower"],
+            },
+            {"tests_passed": ["T13"]},
+        ),
+        (
+            "A05",
+            "Variance components with each unit's own game count, compared with v0's k",
+            "one-way random effects by unit-season: method of moments and REML, season-cluster "
+            "bootstrap of the REML k",
+            {"remlK": reml, "remlK95Seasons": reml95},
+            {"tests_passed": ["T11", "T12", "T14"], "interval": reml95},
+        ),
+        (
+            "A06",
+            "Temporal stability within a season",
+            "odd/even minus first-vs-second-half r with a paired season bootstrap; covariance by "
+            "weeks apart; rolling-window correlations against the stable-trait model",
+            per(lambda p: r["A06"][p]["adjusted"]["oddEvenMinusHalves"]),
+            {"tests_passed": ["T23"]},
+        ),
+        (
+            "A07",
+            "Between-season carryover of a unit's tendency",
+            "same-franchise consecutive-season means (8+ games): r, slope and leave-one-season-out "
+            "error of a decayed prior against a reset",
+            per(
+                lambda p: {
+                    k: r["A07"][p]["adjusted"][k]
+                    for k in ("pearson", "pearson95", "slope", "cvMseDecay", "cvMseReset")
+                }
+            ),
+            {},
+        ),
+        (
+            "A08",
+            "Noise, placebo and null distributions",
+            "1,000 within-week permutations of unit labels; Holm across 12 tests; unit, season and "
+            "franchise cluster bootstraps",
+            per(
+                lambda p: {k: r["A08"][p][k]["permutation"]["pValue"] for k in ("raw", "adjusted")}
+            ),
+            {"tests_passed": ["T13", "T24"], "placebo_summary": r["A08"]["holm"]},
+        ),
+        (
+            "A09",
+            "Which part of the points repeats: yards, receptions, touchdowns, turnovers, kicking",
+            "the scorer's rule contributions summed per cell; variance share and REML k per component",
+            per(
+                lambda p: {
+                    c: v["remlK"]
+                    for c, v in r["A09"][p].items()
+                    if c != "_check" and abs(v["varianceShare"]) >= 0.05
+                }
+            ),
+            {},
+        ),
+        (
+            "A10",
+            "Era and data robustness, and one unit's influence",
+            "odd/even k excluding 2020 or 2022, leaving out each season, winsorized, trimmed, without "
+            "the largest cell; jackknife influence; home/away; after a bye",
+            per(lambda p: r["A10"][p]["adjusted"]["leaveOneSeasonOut"]),
+            {"tests_passed": ["T28"]},
+        ),
+        (
+            "A12",
+            "Completion and correction sensitivity",
+            "refused-line cells excluded vs kept as partial sums; 2026 FFA points as first held vs "
+            "latest through the point-in-time gamebooks",
+            {
+                "refusal": per(
+                    lambda p: {
+                        k: r["A12"][p][k]["adjusted"]["k"] for k in ("excluded", "partialSums")
+                    }
+                ),
+                "vintages2026": r["A12"]["vintages"]["byPosition"],
+            },
+            {"limitations": [r["A12"]["vintages"]["limitation"]]},
+        ),
+    ]
+    out = []
+    for code, hypothesis, estimator, parameters, extra in specs:
+        out.append(
+            records.record(
+                f"M3-3-{code}",
+                "EXECUTED",
+                hypothesis=hypothesis,
+                estimator=estimator,
+                parameters=parameters,
+                sample_count=lab_receipt["results"]["A00"][groups[0]]["cells"]
+                if code == "A00"
+                else {p: r["A02"][p]["adjusted"]["calendar"]["units"] for p in groups},
+                evidence_paths=evidence,
+                reason="See RELIABILITY_REPORT.md: descriptive repeatability only, no forecast",
+                next_steps="Phase B walk-forward against the offense-only B00",
+                **(shared | extra),
+            )
+        )
+    return out
 
 
 def _pair(value: tuple[float, float] | None) -> list[float] | None:
