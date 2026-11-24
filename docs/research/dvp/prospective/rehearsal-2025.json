@@ -1,0 +1,1987 @@
+{
+ "classification": "REHEARSAL (2025, completed; never prospective)",
+ "code": "5529152ed77d5c2a6473397e74c1467bf371d871",
+ "equivalence": {
+  "adapterOnlyByPosition": {
+   "K": 2,
+   "RB": 2,
+   "TE": 2,
+   "WR": 2
+  },
+  "adapterOnlyTargets": 8,
+  "adapterRows": 3264,
+  "columns": {
+   "b00": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b00_nontd": {
+    "maxAbsDifference": 7.105427357601002e-15,
+    "nullPatternEqual": true
+   },
+   "b01": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b02": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b02r": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b03": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b03r": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k1": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k128": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k16": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k2": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k256": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k32": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k4": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k64": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b04_k8": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b05_h2": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b05_h4": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b05_h8": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b06": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b07": {
+    "maxAbsDifference": 3.552713678800501e-15,
+    "nullPatternEqual": true
+   },
+   "b09_lastopp": {
+    "maxAbsDifference": 0.0,
+    "nullPatternEqual": true
+   },
+   "b09_noise": {
+    "maxAbsDifference": 7.4649914266895685,
+    "nullPatternEqual": true
+   },
+   "b09_shuffle": {
+    "maxAbsDifference": 6.703085925795648,
+    "nullPatternEqual": true
+   }
+  },
+  "committedRows": 3256,
+  "everyNonControlColumnWithin1e-9": true,
+  "note": "B09 controls draw random numbers per batch; the adapter's extra targets (cells whose label turned out invalid) change the batch size, so controls may differ."
+ },
+ "evaluationOfWeeks12to18": {
+  "coverage": {
+   "DST": {
+    "evaluated": 216,
+    "labels": {
+     "valid": 216
+    },
+    "targets": 216
+   },
+   "K": {
+    "evaluated": 215,
+    "labels": {
+     "invalid_refused_line": 1,
+     "valid": 215
+    },
+    "targets": 216
+   },
+   "QB": {
+    "evaluated": 216,
+    "labels": {
+     "valid": 216
+    },
+    "targets": 216
+   },
+   "RB": {
+    "evaluated": 215,
+    "labels": {
+     "invalid_refused_line": 1,
+     "valid": 215
+    },
+    "targets": 216
+   },
+   "TE": {
+    "evaluated": 215,
+    "labels": {
+     "invalid_refused_line": 1,
+     "valid": 215
+    },
+    "targets": 216
+   },
+   "WR": {
+    "evaluated": 215,
+    "labels": {
+     "invalid_refused_line": 1,
+     "valid": 215
+    },
+    "targets": 216
+   }
+  },
+  "league": {},
+  "phaseB": {
+   "DST": {
+    "bestDvpAtFreeze": "b06",
+    "candidate": "b06",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
+    "metrics": {
+     "b00": {
+      "delta95": [
+       0.0,
+       0.0
+      ],
+      "deltaRmse": 0.0,
+      "mae": 4.992,
+      "meanError": -0.3114,
+      "relativeDelta": 0.0,
+      "rmse": 6.2913,
+      "spearman": 0.1787
+     },
+     "b01": {
+      "delta95": [
+       -0.7087,
+       0.0058
+      ],
+      "deltaRmse": -0.3522,
+      "mae": 4.5995,
+      "meanError": -0.3159,
+      "relativeDelta": -0.05597,
+      "rmse": 5.9391,
+      "spearman": 0.3838
+     },
+     "b02": {
+      "delta95": [
+       -0.6604,
+       0.0396
+      ],
+      "deltaRmse": -0.3182,
+      "mae": 4.6566,
+      "meanError": -0.1639,
+      "relativeDelta": -0.05058,
+      "rmse": 5.9731,
+      "spearman": 0.3692
+     },
+     "b02r": {
+      "delta95": [
+       -0.7011,
+       0.0142
+      ],
+      "deltaRmse": -0.3537,
+      "mae": 4.6167,
+      "meanError": -0.3157,
+      "relativeDelta": -0.05622,
+      "rmse": 5.9376,
+      "spearman": 0.3824
+     },
+     "b03": {
+      "delta95": [
+       -0.5628,
+       -0.1372
+      ],
+      "deltaRmse": -0.3582,
+      "mae": 4.6596,
+      "meanError": -0.2182,
+      "relativeDelta": -0.05694,
+      "rmse": 5.933,
+      "spearman": 0.3787
+     },
+     "b03r": {
+      "delta95": [
+       -0.5941,
+       -0.1535
+      ],
+      "deltaRmse": -0.3809,
+      "mae": 4.6277,
+      "meanError": -0.3136,
+      "relativeDelta": -0.06054,
+      "rmse": 5.9104,
+      "spearman": 0.3905
+     },
+     "b04_k1": {
+      "delta95": [
+       -0.6573,
+       -0.0093
+      ],
+      "deltaRmse": -0.3411,
+      "mae": 4.6422,
+      "meanError": -0.1747,
+      "relativeDelta": -0.05421,
+      "rmse": 5.9502,
+      "spearman": 0.3719
+     },
+     "b04_k128": {
+      "delta95": [
+       -0.1085,
+       -0.0564
+      ],
+      "deltaRmse": -0.0837,
+      "mae": 4.9217,
+      "meanError": -0.2981,
+      "relativeDelta": -0.01331,
+      "rmse": 6.2075,
+      "spearman": 0.2682
+     },
+     "b04_k16": {
+      "delta95": [
+       -0.4468,
+       -0.1578
+      ],
+      "deltaRmse": -0.3067,
+      "mae": 4.7183,
+      "meanError": -0.2462,
+      "relativeDelta": -0.04876,
+      "rmse": 5.9845,
+      "spearman": 0.3796
+     },
+     "b04_k2": {
+      "delta95": [
+       -0.6488,
+       -0.0462
+      ],
+      "deltaRmse": -0.3548,
+      "mae": 4.635,
+      "meanError": -0.1841,
+      "relativeDelta": -0.0564,
+      "rmse": 5.9364,
+      "spearman": 0.3727
+     },
+     "b04_k256": {
+      "delta95": [
+       -0.0582,
+       -0.031
+      ],
+      "deltaRmse": -0.0452,
+      "mae": 4.955,
+      "meanError": -0.3044,
+      "relativeDelta": -0.00719,
+      "rmse": 6.2461,
+      "spearman": 0.2254
+     },
+     "b04_k32": {
+      "delta95": [
+       -0.3108,
+       -0.1345
+      ],
+      "deltaRmse": -0.2269,
+      "mae": 4.7999,
+      "meanError": -0.2695,
+      "relativeDelta": -0.03606,
+      "rmse": 6.0644,
+      "spearman": 0.3599
+     },
+     "b04_k4": {
+      "delta95": [
+       -0.6211,
+       -0.0955
+      ],
+      "deltaRmse": -0.3654,
+      "mae": 4.6387,
+      "meanError": -0.1994,
+      "relativeDelta": -0.05809,
+      "rmse": 5.9258,
+      "spearman": 0.376
+     },
+     "b04_k64": {
+      "delta95": [
+       -0.1922,
+       -0.0939
+      ],
+      "deltaRmse": -0.1453,
+      "mae": 4.8716,
+      "meanError": -0.287,
+      "relativeDelta": -0.02309,
+      "rmse": 6.146,
+      "spearman": 0.3175
+     },
+     "b04_k8": {
+      "delta95": [
+       -0.5534,
+       -0.1415
+      ],
+      "deltaRmse": -0.3553,
+      "mae": 4.6635,
+      "meanError": -0.221,
+      "relativeDelta": -0.05647,
+      "rmse": 5.936,
+      "spearman": 0.3788
+     },
+     "b05_h2": {
+      "delta95": [
+       -0.4291,
+       -0.096
+      ],
+      "deltaRmse": -0.2672,
+      "mae": 4.7877,
+      "meanError": -0.2281,
+      "relativeDelta": -0.04248,
+      "rmse": 6.024,
+      "spearman": 0.3602
+     },
+     "b05_h4": {
+      "delta95": [
+       -0.5187,
+       -0.1486
+      ],
+      "deltaRmse": -0.3416,
+      "mae": 4.7146,
+      "meanError": -0.2048,
+      "relativeDelta": -0.0543,
+      "rmse": 5.9497,
+      "spearman": 0.3848
+     },
+     "b05_h8": {
+      "delta95": [
+       -0.5502,
+       -0.1576
+      ],
+      "deltaRmse": -0.3635,
+      "mae": 4.6782,
+      "meanError": -0.2043,
+      "relativeDelta": -0.05777,
+      "rmse": 5.9278,
+      "spearman": 0.3893
+     },
+     "b06": {
+      "delta95": [
+       -0.5747,
+       -0.1065
+      ],
+      "deltaRmse": -0.3488,
+      "mae": 4.6312,
+      "meanError": -0.2216,
+      "relativeDelta": -0.05544,
+      "rmse": 5.9425,
+      "spearman": 0.3719
+     },
+     "b07": {
+      "delta95": [
+       -0.541,
+       -0.1728
+      ],
+      "deltaRmse": -0.3616,
+      "mae": 4.6634,
+      "meanError": -0.2604,
+      "relativeDelta": -0.05747,
+      "rmse": 5.9297,
+      "spearman": 0.3908
+     },
+     "b09_lastopp": {
+      "delta95": [
+       -0.3432,
+       0.2363
+      ],
+      "deltaRmse": -0.0538,
+      "mae": 4.9735,
+      "meanError": -0.2096,
+      "relativeDelta": -0.00855,
+      "rmse": 6.2374,
+      "spearman": 0.2228
+     },
+     "b09_noise": {
+      "delta95": [
+       0.1861,
+       0.5965
+      ],
+      "deltaRmse": 0.3782,
+      "mae": 5.2308,
+      "meanError": -0.3349,
+      "relativeDelta": 0.06011,
+      "rmse": 6.6694,
+      "spearman": 0.044
+     },
+     "b09_shuffle": {
+      "delta95": [
+       0.0965,
+       0.413
+      ],
+      "deltaRmse": 0.2614,
+      "mae": 5.1534,
+      "meanError": -0.2182,
+      "relativeDelta": 0.04155,
+      "rmse": 6.5527,
+      "spearman": 0.1162
+     },
+     "blocks": 7,
+     "rows": 216
+    },
+    "relativeDelta": -0.05544,
+    "ruleOutcome": "CONFIRMED"
+   },
+   "K": {
+    "bestDvpAtFreeze": "b06",
+    "candidate": "b00",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
+    "metrics": {
+     "b00": {
+      "delta95": [
+       0.0,
+       0.0
+      ],
+      "deltaRmse": 0.0,
+      "mae": 3.9803,
+      "meanError": -0.2651,
+      "relativeDelta": 0.0,
+      "rmse": 5.0055,
+      "spearman": 0.1578
+     },
+     "b01": {
+      "delta95": [
+       -0.1727,
+       0.1164
+      ],
+      "deltaRmse": -0.0143,
+      "mae": 3.9256,
+      "meanError": -0.2628,
+      "relativeDelta": -0.00286,
+      "rmse": 4.9912,
+      "spearman": 0.2018
+     },
+     "b02": {
+      "delta95": [
+       -0.1708,
+       0.1507
+      ],
+      "deltaRmse": 0.0051,
+      "mae": 3.9282,
+      "meanError": -0.3162,
+      "relativeDelta": 0.00102,
+      "rmse": 5.0106,
+      "spearman": 0.2008
+     },
+     "b02r": {
+      "delta95": [
+       -0.1644,
+       0.1262
+      ],
+      "deltaRmse": -0.0093,
+      "mae": 3.9259,
+      "meanError": -0.263,
+      "relativeDelta": -0.00186,
+      "rmse": 4.9962,
+      "spearman": 0.2073
+     },
+     "b03": {
+      "delta95": [
+       -0.0606,
+       -0.0053
+      ],
+      "deltaRmse": -0.0308,
+      "mae": 3.9501,
+      "meanError": -0.2735,
+      "relativeDelta": -0.00616,
+      "rmse": 4.9747,
+      "spearman": 0.1986
+     },
+     "b03r": {
+      "delta95": [
+       -0.0592,
+       -0.011
+      ],
+      "deltaRmse": -0.0335,
+      "mae": 3.95,
+      "meanError": -0.2648,
+      "relativeDelta": -0.00669,
+      "rmse": 4.972,
+      "spearman": 0.2
+     },
+     "b04_k1": {
+      "delta95": [
+       -0.1733,
+       0.122
+      ],
+      "deltaRmse": -0.0098,
+      "mae": 3.9206,
+      "meanError": -0.3121,
+      "relativeDelta": -0.00195,
+      "rmse": 4.9957,
+      "spearman": 0.2048
+     },
+     "b04_k128": {
+      "delta95": [
+       -0.0322,
+       -0.0045
+      ],
+      "deltaRmse": -0.0174,
+      "mae": 3.9634,
+      "meanError": -0.2693,
+      "relativeDelta": -0.00348,
+      "rmse": 4.988,
+      "spearman": 0.1866
+     },
+     "b04_k16": {
+      "delta95": [
+       -0.1266,
+       0.0124
+      ],
+      "deltaRmse": -0.0507,
+      "mae": 3.9225,
+      "meanError": -0.2865,
+      "relativeDelta": -0.01013,
+      "rmse": 4.9548,
+      "spearman": 0.2158
+     },
+     "b04_k2": {
+      "delta95": [
+       -0.1738,
+       0.1014
+      ],
+      "deltaRmse": -0.0207,
+      "mae": 3.9153,
+      "meanError": -0.3086,
+      "relativeDelta": -0.00414,
+      "rmse": 4.9847,
+      "spearman": 0.2061
+     },
+     "b04_k256": {
+      "delta95": [
+       -0.0174,
+       -0.0029
+      ],
+      "deltaRmse": -0.0096,
+      "mae": 3.9712,
+      "meanError": -0.2673,
+      "relativeDelta": -0.00192,
+      "rmse": 4.9959,
+      "spearman": 0.1748
+     },
+     "b04_k32": {
+      "delta95": [
+       -0.0908,
+       -0.0017
+      ],
+      "deltaRmse": -0.0424,
+      "mae": 3.9365,
+      "meanError": -0.2786,
+      "relativeDelta": -0.00848,
+      "rmse": 4.963,
+      "spearman": 0.2095
+     },
+     "b04_k4": {
+      "delta95": [
+       -0.1684,
+       0.0732
+      ],
+      "deltaRmse": -0.0351,
+      "mae": 3.9115,
+      "meanError": -0.303,
+      "relativeDelta": -0.007,
+      "rmse": 4.9704,
+      "spearman": 0.2095
+     },
+     "b04_k64": {
+      "delta95": [
+       -0.0566,
+       -0.0054
+      ],
+      "deltaRmse": -0.0291,
+      "mae": 3.9519,
+      "meanError": -0.2729,
+      "relativeDelta": -0.00582,
+      "rmse": 4.9763,
+      "spearman": 0.1982
+     },
+     "b04_k8": {
+      "delta95": [
+       -0.1552,
+       0.0399
+      ],
+      "deltaRmse": -0.0476,
+      "mae": 3.9129,
+      "meanError": -0.2952,
+      "relativeDelta": -0.00951,
+      "rmse": 4.9579,
+      "spearman": 0.2165
+     },
+     "b05_h2": {
+      "delta95": [
+       -0.0465,
+       -0.0062
+      ],
+      "deltaRmse": -0.0278,
+      "mae": 3.951,
+      "meanError": -0.2701,
+      "relativeDelta": -0.00555,
+      "rmse": 4.9777,
+      "spearman": 0.194
+     },
+     "b05_h4": {
+      "delta95": [
+       -0.0592,
+       -0.0106
+      ],
+      "deltaRmse": -0.0344,
+      "mae": 3.9469,
+      "meanError": -0.2776,
+      "relativeDelta": -0.00687,
+      "rmse": 4.9711,
+      "spearman": 0.1972
+     },
+     "b05_h8": {
+      "delta95": [
+       -0.0641,
+       -0.0111
+      ],
+      "deltaRmse": -0.0353,
+      "mae": 3.9467,
+      "meanError": -0.2789,
+      "relativeDelta": -0.00705,
+      "rmse": 4.9702,
+      "spearman": 0.2039
+     },
+     "b06": {
+      "delta95": [
+       -0.0677,
+       -0.0092
+      ],
+      "deltaRmse": -0.0388,
+      "mae": 3.9364,
+      "meanError": -0.2754,
+      "relativeDelta": -0.00775,
+      "rmse": 4.9667,
+      "spearman": 0.2177
+     },
+     "b07": {
+      "delta95": [
+       -0.0602,
+       -0.0065
+      ],
+      "deltaRmse": -0.0312,
+      "mae": 3.95,
+      "meanError": -0.2737,
+      "relativeDelta": -0.00624,
+      "rmse": 4.9743,
+      "spearman": 0.2005
+     },
+     "b09_lastopp": {
+      "delta95": [
+       -0.038,
+       0.0088
+      ],
+      "deltaRmse": -0.0143,
+      "mae": 3.9523,
+      "meanError": -0.2722,
+      "relativeDelta": -0.00285,
+      "rmse": 4.9912,
+      "spearman": 0.1826
+     },
+     "b09_noise": {
+      "delta95": [
+       0.0278,
+       0.164
+      ],
+      "deltaRmse": 0.0919,
+      "mae": 4.0909,
+      "meanError": -0.2382,
+      "relativeDelta": 0.01835,
+      "rmse": 5.0974,
+      "spearman": 0.0552
+     },
+     "b09_shuffle": {
+      "delta95": [
+       0.0181,
+       0.0723
+      ],
+      "deltaRmse": 0.0442,
+      "mae": 4.0169,
+      "meanError": -0.2718,
+      "relativeDelta": 0.00883,
+      "rmse": 5.0497,
+      "spearman": 0.1107
+     },
+     "blocks": 7,
+     "rows": 215
+    },
+    "relativeDelta": -0.00775,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
+   },
+   "QB": {
+    "bestDvpAtFreeze": "b06",
+    "candidate": "b00",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
+    "metrics": {
+     "b00": {
+      "delta95": [
+       0.0,
+       0.0
+      ],
+      "deltaRmse": 0.0,
+      "mae": 6.46,
+      "meanError": 1.1119,
+      "relativeDelta": 0.0,
+      "rmse": 8.1169,
+      "spearman": 0.1872
+     },
+     "b01": {
+      "delta95": [
+       -0.2979,
+       0.0275
+      ],
+      "deltaRmse": -0.1272,
+      "mae": 6.4697,
+      "meanError": 1.1084,
+      "relativeDelta": -0.01567,
+      "rmse": 7.9897,
+      "spearman": 0.2802
+     },
+     "b02": {
+      "delta95": [
+       -0.3168,
+       0.0366
+      ],
+      "deltaRmse": -0.156,
+      "mae": 6.4595,
+      "meanError": 0.8069,
+      "relativeDelta": -0.01921,
+      "rmse": 7.9609,
+      "spearman": 0.2836
+     },
+     "b02r": {
+      "delta95": [
+       -0.2632,
+       0.0681
+      ],
+      "deltaRmse": -0.1093,
+      "mae": 6.4862,
+      "meanError": 1.1106,
+      "relativeDelta": -0.01347,
+      "rmse": 8.0076,
+      "spearman": 0.2733
+     },
+     "b03": {
+      "delta95": [
+       -0.2049,
+       -0.0994
+      ],
+      "deltaRmse": -0.157,
+      "mae": 6.3718,
+      "meanError": 1.0122,
+      "relativeDelta": -0.01934,
+      "rmse": 7.9599,
+      "spearman": 0.2461
+     },
+     "b03r": {
+      "delta95": [
+       -0.1786,
+       -0.0946
+      ],
+      "deltaRmse": -0.1399,
+      "mae": 6.3894,
+      "meanError": 1.1118,
+      "relativeDelta": -0.01723,
+      "rmse": 7.977,
+      "spearman": 0.2455
+     },
+     "b04_k1": {
+      "delta95": [
+       -0.3243,
+       -0.0027
+      ],
+      "deltaRmse": -0.1777,
+      "mae": 6.4364,
+      "meanError": 0.8286,
+      "relativeDelta": -0.0219,
+      "rmse": 7.9392,
+      "spearman": 0.2824
+     },
+     "b04_k128": {
+      "delta95": [
+       -0.0713,
+       -0.0382
+      ],
+      "deltaRmse": -0.0552,
+      "mae": 6.4284,
+      "meanError": 1.0832,
+      "relativeDelta": -0.0068,
+      "rmse": 8.0617,
+      "spearman": 0.2061
+     },
+     "b04_k16": {
+      "delta95": [
+       -0.2569,
+       -0.1113
+      ],
+      "deltaRmse": -0.1907,
+      "mae": 6.3659,
+      "meanError": 0.974,
+      "relativeDelta": -0.0235,
+      "rmse": 7.9262,
+      "spearman": 0.2587
+     },
+     "b04_k2": {
+      "delta95": [
+       -0.3271,
+       -0.0299
+      ],
+      "deltaRmse": -0.1923,
+      "mae": 6.4216,
+      "meanError": 0.8473,
+      "relativeDelta": -0.02369,
+      "rmse": 7.9246,
+      "spearman": 0.2808
+     },
+     "b04_k256": {
+      "delta95": [
+       -0.0388,
+       -0.021
+      ],
+      "deltaRmse": -0.03,
+      "mae": 6.4427,
+      "meanError": 1.0968,
+      "relativeDelta": -0.0037,
+      "rmse": 8.0869,
+      "spearman": 0.1971
+     },
+     "b04_k32": {
+      "delta95": [
+       -0.1889,
+       -0.0938
+      ],
+      "deltaRmse": -0.1452,
+      "mae": 6.377,
+      "meanError": 1.0226,
+      "relativeDelta": -0.01789,
+      "rmse": 7.9717,
+      "spearman": 0.2428
+     },
+     "b04_k4": {
+      "delta95": [
+       -0.3256,
+       -0.0678
+      ],
+      "deltaRmse": -0.2079,
+      "mae": 6.4001,
+      "meanError": 0.8782,
+      "relativeDelta": -0.02561,
+      "rmse": 7.909,
+      "spearman": 0.2786
+     },
+     "b04_k64": {
+      "delta95": [
+       -0.123,
+       -0.0638
+      ],
+      "deltaRmse": -0.0948,
+      "mae": 6.4062,
+      "meanError": 1.0595,
+      "relativeDelta": -0.01168,
+      "rmse": 8.0221,
+      "spearman": 0.2205
+     },
+     "b04_k8": {
+      "delta95": [
+       -0.3038,
+       -0.1033
+      ],
+      "deltaRmse": -0.2121,
+      "mae": 6.3753,
+      "meanError": 0.9222,
+      "relativeDelta": -0.02614,
+      "rmse": 7.9048,
+      "spearman": 0.274
+     },
+     "b05_h2": {
+      "delta95": [
+       -0.2054,
+       -0.075
+      ],
+      "deltaRmse": -0.1361,
+      "mae": 6.3695,
+      "meanError": 0.9833,
+      "relativeDelta": -0.01676,
+      "rmse": 7.9808,
+      "spearman": 0.2451
+     },
+     "b05_h4": {
+      "delta95": [
+       -0.2394,
+       -0.0913
+      ],
+      "deltaRmse": -0.163,
+      "mae": 6.3614,
+      "meanError": 0.9668,
+      "relativeDelta": -0.02008,
+      "rmse": 7.9539,
+      "spearman": 0.2509
+     },
+     "b05_h8": {
+      "delta95": [
+       -0.2356,
+       -0.0998
+      ],
+      "deltaRmse": -0.1676,
+      "mae": 6.3626,
+      "meanError": 0.9772,
+      "relativeDelta": -0.02064,
+      "rmse": 7.9493,
+      "spearman": 0.2512
+     },
+     "b06": {
+      "delta95": [
+       -0.2278,
+       -0.1082
+      ],
+      "deltaRmse": -0.1648,
+      "mae": 6.387,
+      "meanError": 1.0162,
+      "relativeDelta": -0.02031,
+      "rmse": 7.9521,
+      "spearman": 0.2429
+     },
+     "b07": {
+      "delta95": [
+       -0.139,
+       -0.0672
+      ],
+      "deltaRmse": -0.1049,
+      "mae": 6.4021,
+      "meanError": 0.9898,
+      "relativeDelta": -0.01292,
+      "rmse": 8.012,
+      "spearman": 0.2153
+     },
+     "b09_lastopp": {
+      "delta95": [
+       0.0227,
+       0.1525
+      ],
+      "deltaRmse": 0.0873,
+      "mae": 6.5326,
+      "meanError": 1.0092,
+      "relativeDelta": 0.01076,
+      "rmse": 8.2042,
+      "spearman": 0.1765
+     },
+     "b09_noise": {
+      "delta95": [
+       -0.1591,
+       0.1347
+      ],
+      "deltaRmse": -0.0034,
+      "mae": 6.4793,
+      "meanError": 1.1399,
+      "relativeDelta": -0.00041,
+      "rmse": 8.1135,
+      "spearman": 0.2112
+     },
+     "b09_shuffle": {
+      "delta95": [
+       -0.0466,
+       0.1764
+      ],
+      "deltaRmse": 0.0638,
+      "mae": 6.455,
+      "meanError": 1.0122,
+      "relativeDelta": 0.00786,
+      "rmse": 8.1807,
+      "spearman": 0.1698
+     },
+     "blocks": 7,
+     "rows": 216
+    },
+    "relativeDelta": -0.02031,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
+   },
+   "RB": {
+    "bestDvpAtFreeze": "b06",
+    "candidate": "b00",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
+    "metrics": {
+     "b00": {
+      "delta95": [
+       0.0,
+       0.0
+      ],
+      "deltaRmse": 0.0,
+      "mae": 8.2553,
+      "meanError": -0.2285,
+      "relativeDelta": 0.0,
+      "rmse": 10.3551,
+      "spearman": 0.2278
+     },
+     "b01": {
+      "delta95": [
+       -0.3053,
+       0.6579
+      ],
+      "deltaRmse": 0.1999,
+      "mae": 8.3241,
+      "meanError": -0.2589,
+      "relativeDelta": 0.0193,
+      "rmse": 10.555,
+      "spearman": 0.1997
+     },
+     "b02": {
+      "delta95": [
+       -0.241,
+       0.6985
+      ],
+      "deltaRmse": 0.2579,
+      "mae": 8.3949,
+      "meanError": -0.0495,
+      "relativeDelta": 0.02491,
+      "rmse": 10.613,
+      "spearman": 0.1871
+     },
+     "b02r": {
+      "delta95": [
+       -0.277,
+       0.7023
+      ],
+      "deltaRmse": 0.247,
+      "mae": 8.3478,
+      "meanError": -0.2622,
+      "relativeDelta": 0.02386,
+      "rmse": 10.6021,
+      "spearman": 0.186
+     },
+     "b03": {
+      "delta95": [
+       -0.2256,
+       0.1742
+      ],
+      "deltaRmse": -0.0178,
+      "mae": 8.1899,
+      "meanError": -0.1494,
+      "relativeDelta": -0.00172,
+      "rmse": 10.3373,
+      "spearman": 0.2219
+     },
+     "b03r": {
+      "delta95": [
+       -0.241,
+       0.1806
+      ],
+      "deltaRmse": -0.0236,
+      "mae": 8.1864,
+      "meanError": -0.2386,
+      "relativeDelta": -0.00228,
+      "rmse": 10.3315,
+      "spearman": 0.2239
+     },
+     "b04_k1": {
+      "delta95": [
+       -0.2613,
+       0.6149
+      ],
+      "deltaRmse": 0.2047,
+      "mae": 8.3489,
+      "meanError": -0.0607,
+      "relativeDelta": 0.01977,
+      "rmse": 10.5598,
+      "spearman": 0.1893
+     },
+     "b04_k128": {
+      "delta95": [
+       -0.0667,
+       0.0257
+      ],
+      "deltaRmse": -0.0187,
+      "mae": 8.2315,
+      "meanError": -0.2099,
+      "relativeDelta": -0.0018,
+      "rmse": 10.3364,
+      "spearman": 0.2334
+     },
+     "b04_k16": {
+      "delta95": [
+       -0.2378,
+       0.1992
+      ],
+      "deltaRmse": -0.0106,
+      "mae": 8.1886,
+      "meanError": -0.1422,
+      "relativeDelta": -0.00102,
+      "rmse": 10.3445,
+      "spearman": 0.2228
+     },
+     "b04_k2": {
+      "delta95": [
+       -0.2698,
+       0.5488
+      ],
+      "deltaRmse": 0.1632,
+      "mae": 8.3094,
+      "meanError": -0.0707,
+      "relativeDelta": 0.01576,
+      "rmse": 10.5183,
+      "spearman": 0.1886
+     },
+     "b04_k256": {
+      "delta95": [
+       -0.0362,
+       0.0125
+      ],
+      "deltaRmse": -0.0109,
+      "mae": 8.2425,
+      "meanError": -0.2187,
+      "relativeDelta": -0.00105,
+      "rmse": 10.3442,
+      "spearman": 0.2311
+     },
+     "b04_k32": {
+      "delta95": [
+       -0.1774,
+       0.1073
+      ],
+      "deltaRmse": -0.0299,
+      "mae": 8.194,
+      "meanError": -0.1717,
+      "relativeDelta": -0.00289,
+      "rmse": 10.3252,
+      "spearman": 0.2249
+     },
+     "b04_k4": {
+      "delta95": [
+       -0.2818,
+       0.4495
+      ],
+      "deltaRmse": 0.104,
+      "mae": 8.25,
+      "meanError": -0.0874,
+      "relativeDelta": 0.01004,
+      "rmse": 10.4591,
+      "spearman": 0.1935
+     },
+     "b04_k64": {
+      "delta95": [
+       -0.1143,
+       0.0532
+      ],
+      "deltaRmse": -0.0277,
+      "mae": 8.2137,
+      "meanError": -0.1947,
+      "relativeDelta": -0.00267,
+      "rmse": 10.3274,
+      "spearman": 0.2315
+     },
+     "b04_k8": {
+      "delta95": [
+       -0.2721,
+       0.3229
+      ],
+      "deltaRmse": 0.0385,
+      "mae": 8.2037,
+      "meanError": -0.112,
+      "relativeDelta": 0.00371,
+      "rmse": 10.3936,
+      "spearman": 0.2073
+     },
+     "b05_h2": {
+      "delta95": [
+       -0.1868,
+       0.0348
+      ],
+      "deltaRmse": -0.0745,
+      "mae": 8.1751,
+      "meanError": -0.0952,
+      "relativeDelta": -0.00719,
+      "rmse": 10.2806,
+      "spearman": 0.2501
+     },
+     "b05_h4": {
+      "delta95": [
+       -0.2317,
+       0.0775
+      ],
+      "deltaRmse": -0.0722,
+      "mae": 8.1611,
+      "meanError": -0.0821,
+      "relativeDelta": -0.00698,
+      "rmse": 10.2829,
+      "spearman": 0.2458
+     },
+     "b05_h8": {
+      "delta95": [
+       -0.2458,
+       0.1296
+      ],
+      "deltaRmse": -0.0538,
+      "mae": 8.1646,
+      "meanError": -0.0992,
+      "relativeDelta": -0.00519,
+      "rmse": 10.3013,
+      "spearman": 0.2396
+     },
+     "b06": {
+      "delta95": [
+       -0.2121,
+       0.2201
+      ],
+      "deltaRmse": 0.0012,
+      "mae": 8.1841,
+      "meanError": -0.1633,
+      "relativeDelta": 0.00012,
+      "rmse": 10.3563,
+      "spearman": 0.232
+     },
+     "b07": {
+      "delta95": [
+       -0.1042,
+       0.0942
+      ],
+      "deltaRmse": 0.0085,
+      "mae": 8.2357,
+      "meanError": -0.2381,
+      "relativeDelta": 0.00082,
+      "rmse": 10.3636,
+      "spearman": 0.2113
+     },
+     "b09_lastopp": {
+      "delta95": [
+       -0.2467,
+       0.1168
+      ],
+      "deltaRmse": -0.0723,
+      "mae": 8.2019,
+      "meanError": -0.1406,
+      "relativeDelta": -0.00698,
+      "rmse": 10.2828,
+      "spearman": 0.2394
+     },
+     "b09_noise": {
+      "delta95": [
+       -0.1915,
+       0.0748
+      ],
+      "deltaRmse": -0.0615,
+      "mae": 8.2428,
+      "meanError": -0.1021,
+      "relativeDelta": -0.00594,
+      "rmse": 10.2936,
+      "spearman": 0.2418
+     },
+     "b09_shuffle": {
+      "delta95": [
+       0.0924,
+       0.3131
+      ],
+      "deltaRmse": 0.2017,
+      "mae": 8.3789,
+      "meanError": -0.155,
+      "relativeDelta": 0.01948,
+      "rmse": 10.5568,
+      "spearman": 0.1508
+     },
+     "blocks": 7,
+     "rows": 215
+    },
+    "relativeDelta": 0.00012,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
+   },
+   "TE": {
+    "bestDvpAtFreeze": "b07",
+    "candidate": "b00",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
+    "metrics": {
+     "b00": {
+      "delta95": [
+       0.0,
+       0.0
+      ],
+      "deltaRmse": 0.0,
+      "mae": 6.5077,
+      "meanError": -0.0239,
+      "relativeDelta": 0.0,
+      "rmse": 8.3936,
+      "spearman": 0.258
+     },
+     "b01": {
+      "delta95": [
+       -0.1222,
+       0.4155
+      ],
+      "deltaRmse": 0.1836,
+      "mae": 6.6213,
+      "meanError": -0.0423,
+      "relativeDelta": 0.02187,
+      "rmse": 8.5772,
+      "spearman": 0.2728
+     },
+     "b02": {
+      "delta95": [
+       -0.0616,
+       0.3916
+      ],
+      "deltaRmse": 0.196,
+      "mae": 6.7275,
+      "meanError": 0.6453,
+      "relativeDelta": 0.02335,
+      "rmse": 8.5896,
+      "spearman": 0.279
+     },
+     "b02r": {
+      "delta95": [
+       -0.1507,
+       0.4373
+      ],
+      "deltaRmse": 0.189,
+      "mae": 6.6313,
+      "meanError": -0.0416,
+      "relativeDelta": 0.02251,
+      "rmse": 8.5826,
+      "spearman": 0.2747
+     },
+     "b03": {
+      "delta95": [
+       -0.1335,
+       0.0041
+      ],
+      "deltaRmse": -0.0571,
+      "mae": 6.4754,
+      "meanError": 0.1351,
+      "relativeDelta": -0.0068,
+      "rmse": 8.3365,
+      "spearman": 0.294
+     },
+     "b03r": {
+      "delta95": [
+       -0.1437,
+       0.0232
+      ],
+      "deltaRmse": -0.0508,
+      "mae": 6.4626,
+      "meanError": -0.0266,
+      "relativeDelta": -0.00605,
+      "rmse": 8.3429,
+      "spearman": 0.2916
+     },
+     "b04_k1": {
+      "delta95": [
+       -0.1077,
+       0.3363
+      ],
+      "deltaRmse": 0.1431,
+      "mae": 6.6874,
+      "meanError": 0.5966,
+      "relativeDelta": 0.01705,
+      "rmse": 8.5367,
+      "spearman": 0.2855
+     },
+     "b04_k128": {
+      "delta95": [
+       -0.0592,
+       -0.0056
+      ],
+      "deltaRmse": -0.0297,
+      "mae": 6.4869,
+      "meanError": 0.0377,
+      "relativeDelta": -0.00354,
+      "rmse": 8.3639,
+      "spearman": 0.2709
+     },
+     "b04_k16": {
+      "delta95": [
+       -0.1963,
+       0.057
+      ],
+      "deltaRmse": -0.0541,
+      "mae": 6.5032,
+      "meanError": 0.2746,
+      "relativeDelta": -0.00644,
+      "rmse": 8.3395,
+      "spearman": 0.3096
+     },
+     "b04_k2": {
+      "delta95": [
+       -0.1409,
+       0.2885
+      ],
+      "deltaRmse": 0.1024,
+      "mae": 6.6529,
+      "meanError": 0.5546,
+      "relativeDelta": 0.01219,
+      "rmse": 8.496,
+      "spearman": 0.2887
+     },
+     "b04_k256": {
+      "delta95": [
+       -0.0321,
+       -0.0041
+      ],
+      "deltaRmse": -0.0168,
+      "mae": 6.4934,
+      "meanError": 0.0084,
+      "relativeDelta": -0.002,
+      "rmse": 8.3768,
+      "spearman": 0.2635
+     },
+     "b04_k32": {
+      "delta95": [
+       -0.1536,
+       0.0127
+      ],
+      "deltaRmse": -0.0609,
+      "mae": 6.481,
+      "meanError": 0.1687,
+      "relativeDelta": -0.00726,
+      "rmse": 8.3327,
+      "spearman": 0.3013
+     },
+     "b04_k4": {
+      "delta95": [
+       -0.1798,
+       0.2146
+      ],
+      "deltaRmse": 0.0453,
+      "mae": 6.6089,
+      "meanError": 0.4859,
+      "relativeDelta": 0.0054,
+      "rmse": 8.439,
+      "spearman": 0.2966
+     },
+     "b04_k64": {
+      "delta95": [
+       -0.1015,
+       -0.0034
+      ],
+      "deltaRmse": -0.0471,
+      "mae": 6.4783,
+      "meanError": 0.0888,
+      "relativeDelta": -0.00561,
+      "rmse": 8.3465,
+      "spearman": 0.2867
+     },
+     "b04_k8": {
+      "delta95": [
+       -0.2055,
+       0.1298
+      ],
+      "deltaRmse": -0.0148,
+      "mae": 6.5511,
+      "meanError": 0.3883,
+      "relativeDelta": -0.00176,
+      "rmse": 8.3788,
+      "spearman": 0.3022
+     },
+     "b05_h2": {
+      "delta95": [
+       -0.0943,
+       0.01
+      ],
+      "deltaRmse": -0.0434,
+      "mae": 6.4791,
+      "meanError": 0.0278,
+      "relativeDelta": -0.00517,
+      "rmse": 8.3502,
+      "spearman": 0.2876
+     },
+     "b05_h4": {
+      "delta95": [
+       -0.1239,
+       0.0116
+      ],
+      "deltaRmse": -0.0552,
+      "mae": 6.472,
+      "meanError": 0.0839,
+      "relativeDelta": -0.00657,
+      "rmse": 8.3384,
+      "spearman": 0.2967
+     },
+     "b05_h8": {
+      "delta95": [
+       -0.1348,
+       0.0094
+      ],
+      "deltaRmse": -0.0577,
+      "mae": 6.4708,
+      "meanError": 0.1195,
+      "relativeDelta": -0.00687,
+      "rmse": 8.3359,
+      "spearman": 0.3003
+     },
+     "b06": {
+      "delta95": [
+       -0.1431,
+       0.0292
+      ],
+      "deltaRmse": -0.0465,
+      "mae": 6.489,
+      "meanError": 0.1396,
+      "relativeDelta": -0.00554,
+      "rmse": 8.3471,
+      "spearman": 0.2914
+     },
+     "b07": {
+      "delta95": [
+       -0.0795,
+       0.0185
+      ],
+      "deltaRmse": -0.0268,
+      "mae": 6.4874,
+      "meanError": 0.066,
+      "relativeDelta": -0.00319,
+      "rmse": 8.3668,
+      "spearman": 0.2738
+     },
+     "b09_lastopp": {
+      "delta95": [
+       -0.0799,
+       0.0329
+      ],
+      "deltaRmse": -0.0282,
+      "mae": 6.5094,
+      "meanError": 0.1265,
+      "relativeDelta": -0.00336,
+      "rmse": 8.3654,
+      "spearman": 0.2651
+     },
+     "b09_noise": {
+      "delta95": [
+       0.0146,
+       0.1405
+      ],
+      "deltaRmse": 0.0867,
+      "mae": 6.597,
+      "meanError": -0.0233,
+      "relativeDelta": 0.01032,
+      "rmse": 8.4803,
+      "spearman": 0.2357
+     },
+     "b09_shuffle": {
+      "delta95": [
+       -0.0495,
+       0.0963
+      ],
+      "deltaRmse": 0.0216,
+      "mae": 6.5573,
+      "meanError": 0.1377,
+      "relativeDelta": 0.00257,
+      "rmse": 8.4152,
+      "spearman": 0.2645
+     },
+     "blocks": 7,
+     "rows": 215
+    },
+    "relativeDelta": -0.00319,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
+   },
+   "WR": {
+    "bestDvpAtFreeze": "b06",
+    "candidate": "b00",
+    "label": "REHEARSAL: 2025 was known; never a confirmation",
+    "metrics": {
+     "b00": {
+      "delta95": [
+       0.0,
+       0.0
+      ],
+      "deltaRmse": 0.0,
+      "mae": 10.3068,
+      "meanError": 2.4277,
+      "relativeDelta": 0.0,
+      "rmse": 12.6883,
+      "spearman": 0.3947
+     },
+     "b01": {
+      "delta95": [
+       -0.5068,
+       0.3367
+      ],
+      "deltaRmse": -0.0419,
+      "mae": 10.1982,
+      "meanError": 2.458,
+      "relativeDelta": -0.0033,
+      "rmse": 12.6464,
+      "spearman": 0.4434
+     },
+     "b02": {
+      "delta95": [
+       -0.912,
+       0.0429
+      ],
+      "deltaRmse": -0.3976,
+      "mae": 9.8078,
+      "meanError": 1.1065,
+      "relativeDelta": -0.03134,
+      "rmse": 12.2906,
+      "spearman": 0.4629
+     },
+     "b02r": {
+      "delta95": [
+       -0.7113,
+       0.1745
+      ],
+      "deltaRmse": -0.2309,
+      "mae": 10.0999,
+      "meanError": 2.4679,
+      "relativeDelta": -0.0182,
+      "rmse": 12.4574,
+      "spearman": 0.4634
+     },
+     "b03": {
+      "delta95": [
+       -0.4465,
+       -0.1443
+      ],
+      "deltaRmse": -0.2821,
+      "mae": 10.0066,
+      "meanError": 2.0184,
+      "relativeDelta": -0.02223,
+      "rmse": 12.4062,
+      "spearman": 0.4417
+     },
+     "b03r": {
+      "delta95": [
+       -0.3605,
+       -0.092
+      ],
+      "deltaRmse": -0.2195,
+      "mae": 10.0898,
+      "meanError": 2.4406,
+      "relativeDelta": -0.0173,
+      "rmse": 12.4687,
+      "spearman": 0.4437
+     },
+     "b04_k1": {
+      "delta95": [
+       -0.8977,
+       -0.0108
+      ],
+      "deltaRmse": -0.4193,
+      "mae": 9.8061,
+      "meanError": 1.2022,
+      "relativeDelta": -0.03305,
+      "rmse": 12.2689,
+      "spearman": 0.4652
+     },
+     "b04_k128": {
+      "delta95": [
+       -0.1471,
+       -0.0574
+      ],
+      "deltaRmse": -0.0988,
+      "mae": 10.2104,
+      "meanError": 2.3055,
+      "relativeDelta": -0.00779,
+      "rmse": 12.5894,
+      "spearman": 0.4147
+     },
+     "b04_k16": {
+      "delta95": [
+       -0.5976,
+       -0.1619
+      ],
+      "deltaRmse": -0.3621,
+      "mae": 9.9209,
+      "meanError": 1.8368,
+      "relativeDelta": -0.02854,
+      "rmse": 12.3261,
+      "spearman": 0.4555
+     },
+     "b04_k2": {
+      "delta95": [
+       -0.8773,
+       -0.0504
+      ],
+      "deltaRmse": -0.4316,
+      "mae": 9.8083,
+      "meanError": 1.2848,
+      "relativeDelta": -0.03402,
+      "rmse": 12.2566,
+      "spearman": 0.467
+     },
+     "b04_k256": {
+      "delta95": [
+       -0.079,
+       -0.0314
+      ],
+      "deltaRmse": -0.0534,
+      "mae": 10.2554,
+      "meanError": 2.3636,
+      "relativeDelta": -0.00421,
+      "rmse": 12.6349,
+      "spearman": 0.4049
+     },
+     "b04_k32": {
+      "delta95": [
+       -0.4203,
+       -0.1391
+      ],
+      "deltaRmse": -0.2674,
+      "mae": 10.0239,
+      "meanError": 2.0462,
+      "relativeDelta": -0.02107,
+      "rmse": 12.4209,
+      "spearman": 0.4399
+     },
+     "b04_k4": {
+      "delta95": [
+       -0.8298,
+       -0.102
+      ],
+      "deltaRmse": -0.439,
+      "mae": 9.8161,
+      "meanError": 1.4201,
+      "relativeDelta": -0.0346,
+      "rmse": 12.2493,
+      "spearman": 0.4713
+     },
+     "b04_k64": {
+      "delta95": [
+       -0.2593,
+       -0.0967
+      ],
+      "deltaRmse": -0.1713,
+      "mae": 10.1327,
+      "meanError": 2.2043,
+      "relativeDelta": -0.0135,
+      "rmse": 12.5169,
+      "spearman": 0.4266
+     },
+     "b04_k8": {
+      "delta95": [
+       -0.7434,
+       -0.1475
+      ],
+      "deltaRmse": -0.4221,
+      "mae": 9.8534,
+      "meanError": 1.6124,
+      "relativeDelta": -0.03327,
+      "rmse": 12.2662,
+      "spearman": 0.4681
+     },
+     "b05_h2": {
+      "delta95": [
+       -0.3258,
+       -0.0239
+      ],
+      "deltaRmse": -0.1723,
+      "mae": 10.1345,
+      "meanError": 2.1339,
+      "relativeDelta": -0.01358,
+      "rmse": 12.5159,
+      "spearman": 0.4266
+     },
+     "b05_h4": {
+      "delta95": [
+       -0.3967,
+       -0.0844
+      ],
+      "deltaRmse": -0.2298,
+      "mae": 10.0726,
+      "meanError": 2.0368,
+      "relativeDelta": -0.01811,
+      "rmse": 12.4585,
+      "spearman": 0.4322
+     },
+     "b05_h8": {
+      "delta95": [
+       -0.4346,
+       -0.1287
+      ],
+      "deltaRmse": -0.2639,
+      "mae": 10.0317,
+      "meanError": 2.0024,
+      "relativeDelta": -0.0208,
+      "rmse": 12.4243,
+      "spearman": 0.4362
+     },
+     "b06": {
+      "delta95": [
+       -0.4353,
+       -0.099
+      ],
+      "deltaRmse": -0.253,
+      "mae": 10.0505,
+      "meanError": 2.0261,
+      "relativeDelta": -0.01994,
+      "rmse": 12.4353,
+      "spearman": 0.4363
+     },
+     "b07": {
+      "delta95": [
+       -0.3128,
+       -0.0809
+      ],
+      "deltaRmse": -0.1904,
+      "mae": 10.0798,
+      "meanError": 2.0658,
+      "relativeDelta": -0.01501,
+      "rmse": 12.4978,
+      "spearman": 0.4304
+     },
+     "b09_lastopp": {
+      "delta95": [
+       -0.1801,
+       0.2532
+      ],
+      "deltaRmse": 0.0515,
+      "mae": 10.4072,
+      "meanError": 2.0107,
+      "relativeDelta": 0.00406,
+      "rmse": 12.7398,
+      "spearman": 0.3781
+     },
+     "b09_noise": {
+      "delta95": [
+       0.0612,
+       0.2732
+      ],
+      "deltaRmse": 0.18,
+      "mae": 10.4575,
+      "meanError": 2.3666,
+      "relativeDelta": 0.01419,
+      "rmse": 12.8683,
+      "spearman": 0.3679
+     },
+     "b09_shuffle": {
+      "delta95": [
+       -0.2782,
+       0.1364
+      ],
+      "deltaRmse": -0.0599,
+      "mae": 10.2252,
+      "meanError": 2.0225,
+      "relativeDelta": -0.00472,
+      "rmse": 12.6283,
+      "spearman": 0.4053
+     },
+     "blocks": 7,
+     "rows": 215
+    },
+    "relativeDelta": -0.01994,
+    "ruleOutcome": "NO_CANDIDATE (noted, never promoted)"
+   }
+  },
+  "phaseC": {
+   "label": "REHEARSAL: 2025 was known; never a confirmation",
+   "metrics": {
+    "accuracy": {
+     "b00": 56.887,
+     "b06": 64.181
+    },
+    "actualTies": 165,
+    "changed": {
+     "candidateRightWhenChanged": 59.35,
+     "count": 1264,
+     "share": 0.3906
+    },
+    "close": {
+     "b00": 52.428,
+     "b06": 63.899,
+     "deltaPp": 11.471,
+     "pairs": 1487,
+     "threshold": 1.0
+    },
+    "deltaPp": 7.294,
+    "deltaPp95": [
+     0.268,
+     14.494
+    ],
+    "pairs": 3236,
+    "pointsFromChanges": {
+     "perChangedDecision": 1.7278,
+     "perWeek": 312.0,
+     "perWeek95": [
+      11.425,
+      607.714
+     ],
+     "total": 2184.0
+    },
+    "spearmanWithinWeek": {
+     "b00": 0.1969,
+     "b06": 0.3871
+    },
+    "top8": {
+     "b00": 61.0,
+     "b06": 74.714,
+     "deltaPerWeek": 13.714
+    },
+    "units": 216,
+    "waiverPool": {
+     "b00": 55.72,
+     "b06": 66.667,
+     "deltaPp": 10.947,
+     "pairs": 840,
+     "ranks": [
+      9,
+      24
+     ]
+    },
+    "weeks": 7,
+    "worstCase": {
+     "singleDecision": -27.0,
+     "week": -423.0,
+     "weeksWithNetLoss": 2
+    }
+   },
+   "parameters": {
+    "bootstrapBlock": "season-week",
+    "bootstrapReplicates": 2000,
+    "close": 1.0,
+    "seed": 1729,
+    "top": 8,
+    "waiverPoolRanks": [
+     9,
+     24
+    ]
+   },
+   "reason": "clears 1.8 pp with net points gained in every period: prospective +7.29 pp, +2184.0 points",
+   "rule": "PROMISING",
+   "ruleOutcome": "CONFIRMED",
+   "units": 216
+  }
+ },
+ "forbidden_vendor_projection_dependencies": 0,
+ "format": "arbit-dvp-m3-3-prospective-rehearsal-v1",
+ "frozen": {
+  "allMatch": true,
+  "filesVerified": 22,
+  "frozenSha256": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+  "groupLevelCode": "f75868b725795cb50ca71c20f80fd383f670669b",
+  "phaseCSha256": "39bd0bc038312b18ffd630db9c8c24cf609e40122ff1987822a52c55a63c400e"
+ },
+ "generatedAt": "2026-11-24T23:17:43.375514+00:00",
+ "history": {
+  "auditOutputs": {
+   "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
+   "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
+  },
+  "auditRun": "phase1-audit-20261124T024442Z",
+  "objectsVerified": 41,
+  "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
+ }
+}

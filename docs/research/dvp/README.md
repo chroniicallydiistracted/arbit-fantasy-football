@@ -1,6 +1,6 @@
 # M3-3 defense against the position: research runbook
 
-**Slice M3-3 continuation.** This continues the existing v0 study under the owner's [DvP specification v1.1](../Arbit_FFA_M3_DvP_Plan.md) (OWN-074). It is not a new slice.
+**Slice M3-3 continuation.** This continues the existing v0 study under the owner's [DvP specification v1.1](Arbit_FFA_M3_DvP_Plan.md) (OWN-074). It is not a new slice.
 
 **Purpose:** measure, not assume, whether a defense's record against a position helps predict FFA points. Zero production influence is a valid outcome.
 
@@ -20,7 +20,7 @@
 | Phase 2 reliability lab: A00, A02–A10, A12 | EXECUTED ([reliability report](RELIABILITY_REPORT.md), [methodology](METHODOLOGY.md)) |
 | Phase 3 walk-forward: B00–B12 on development folds 2017–2023 and 2024 validation | EXECUTED ([backtest report](BACKTEST_REPORT.md)); candidates frozen in `config/dvp/frozen-candidates.json` |
 | Phase 4: frozen manifest, 2025 conditional holdout, decisions | EXECUTED. **D/ST PROMISING; QB INCONCLUSIVE; RB, WR, TE, K NOT_USEFUL** ([model card](MODEL_CARD.md)) |
-| Prospective 2026 weeks 12–18, both levels (frozen before they were played) | FROZEN; scored after the season ([plan](PROSPECTIVE_2026.md)) |
+| Prospective 2026 weeks 12–18, both levels (frozen before they were played) | **True prospective** (owner audit AUD-01): forecasts are archived before each week's kickoff, then evaluated after the games. Week 12 was archived 2026-11-24 23:12 UTC, 25.8 h before its cutoff; weeks 13–18 are pending ([procedure](PROSPECTIVE_2026.md), [archive](prospective/2026/README.md)) |
 | Phase 5, C00–C05: D/ST start/sit (the only group past the gate) | EXECUTED. **PROMISING:** +4.4 / +8.5 / +6.6 points of pairwise accuracy (dev / 2024 / 2025). C03 and league lineups BLOCKED ([player-level report](PLAYER_LEVEL_REPORT.md)) |
 | Verify-only: artifacts read back, all 468 committed metrics reproduced, frozen commit matches every frozen hash | PASSED ([verify-receipt.json](verify-receipt.json)) |
 | Canonical targets repaired (R-072): all 5,278 D/ST team-games, every opponent from the schedule | DONE ([targets repair](../targets-repair-r072.md), TASK-20261123-007) |
@@ -83,6 +83,11 @@ POLARS_MAX_THREADS=2 uv run python scripts/model/dvp.py sitstart --config config
 POLARS_MAX_THREADS=2 uv run python scripts/model/dvp.py verify --config config/dvp/backtest.json \
   --run <main>/artifacts/dvp/<audit run> --receipts docs/research/dvp
 
+# Prospective forecasts (owner audit AUD-01): archive each window week before its cutoff, from main
+POLARS_MAX_THREADS=2 ARBIT_NFLVERSE_PATH=<main>/data/nflverse uv run --env-file <main>/.env.local \
+  python scripts/model/dvp_prospective.py --main <main> sweep      # or: forecast --week W
+#   rehearse (2025 equivalence and evaluation), evaluate (after the games), verify (ledger and files)
+
 # Plan completion audit: rerun every stage on scratch copies (holdout from the frozen tree), then check every item
 uv run python scripts/model/dvp_plan_audit.py rerun --main <main> --run <main>/artifacts/dvp/<audit run> \
   --frozen-tree <worktree at 165d140> --scratch <empty dir>
@@ -131,7 +136,9 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [BACKTEST_REPORT.md](BACKTEST_REPORT.md) | Phases 3–4: B00 and every variant on development folds, 2024 and the 2025 conditional holdout; controls, cutoff and availability sensitivity, candidates, decisions |
 | [MODEL_CARD.md](MODEL_CARD.md) | What the forecast is, results by position, intended and unintended use, limits, fallback, eligibility |
 | [PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md) | Phase C: D/ST start/sit decisions, rule declared first, results, what is blocked |
-| [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The frozen 2026 weeks 12–18 confirmation (both levels) and how it will be scored |
+| [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The 2026 weeks 12–18 confirmation (both levels): forecasts archived before kickoff, the harness, the window's status and the evaluation |
+| [prospective/](prospective/2026/README.md) | The exported prospective archive (ledger, forecasts, manifests, league captures) and the 2025 rehearsal |
+| [AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md](AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md) | The owner's independent audit remediation requirements (AUD-01 to AUD-07) |
 | [PLAN_COMPLETION_SCOPE.md](PLAN_COMPLETION_SCOPE.md) | Every action item of the specification: status, code and model logic, and the audit check that proves it; the open items |
 
 ## Specification §11 deliverables

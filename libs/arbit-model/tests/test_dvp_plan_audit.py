@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = ROOT / "scripts/model/dvp_plan_audit.py"
 RECEIPT = ROOT / "docs/research/dvp/plan-audit-receipt.json"
 SCOPE = ROOT / "docs/research/dvp/PLAN_COMPLETION_SCOPE.md"
-SPEC = ROOT / "docs/research/Arbit_FFA_M3_DvP_Plan.md"
+SPEC = ROOT / "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md"
 TESTS = ROOT / "libs/arbit-model/tests"
 
 

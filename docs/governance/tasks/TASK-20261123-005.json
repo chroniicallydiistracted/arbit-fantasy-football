@@ -13,7 +13,7 @@
     "GOVAI-013"
   ],
   "scope_files": [
-    "docs/research/Arbit_FFA_M3_DvP_Plan.md",
+    "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
     "libs/arbit-model/src/arbit_model/dvp/__init__.py",
     "libs/arbit-model/src/arbit_model/dvp/provenance.py",
     "libs/arbit-model/src/arbit_model/dvp/observations.py",
@@ -59,7 +59,7 @@
         "scripts/model/defense_position_study.py",
         "docs/research/defense-position-study-2026-11-23.json",
         "libs/arbit-model/src/arbit_model/targets.py",
-        "docs/research/Arbit_FFA_M3_DvP_Plan.md"
+        "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md"
       ]
     },
     "plan": {
@@ -288,6 +288,12 @@
       "kind": "assumption",
       "note": "Merged PR #6 (slice 3b, CI green) before starting so v0 sits on main unchanged as the specification's frozen baseline; the problems found in it are dispositioned here rather than edited into v0.",
       "evidence": "docs/research/dvp/M3-3_CONTINUITY.md"
+    },
+    {
+      "at": "2026-11-24T23:03:23Z",
+      "kind": "correction",
+      "note": "Path updated by TASK-20261124-006: the owner moved the specification to docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md in 15fb310 (content unchanged, same SHA-256); the inspected file is the same document.",
+      "evidence": "git show --stat 15fb310"
     }
   ],
   "closed_at": "2026-11-23T22:31:34Z"

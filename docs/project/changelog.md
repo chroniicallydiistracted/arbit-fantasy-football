@@ -1,5 +1,23 @@
 # Development Changelog
 
+## 2026-11-24 — DvP prospective shadow forecasts, week 12 archived before kickoff (TASK-20261124-006)
+
+- **Owner audit AUD-01 (remediation 1):** the 2026 confirmation is now truly prospective.
+  - **Why it was needed:** the frozen `walkforward.walk` builds its targets from completed observation rows, so it can't forecast an unplayed game.
+  - **`arbit_model.dvp.shadow`:** an adapter that builds targets from the schedule and runs the frozen walk's own steps. It equals `walk` bit for bit on its targets.
+  - **2025 rehearsal:** it reproduces every non-control holdout forecast within 7.1×10⁻¹⁵ points, and also forecasts the 8 cells whose labels later turned out invalid (AUD-05).
+- **`scripts/model/dvp_prospective.py`:**
+  - verifies every frozen hash and loads the frozen `dvp.py` from git by hash;
+  - builds the target season fresh, with every object's bytes verified;
+  - waits until the inputs are complete;
+  - archives forecast-only artifacts write-once, with a hash-chained ledger and the league's D/ST rosters;
+  - records misses and labels reconstructions apart;
+  - evaluates later with the frozen rules, keeping missing labels. Only the complete predeclared window can confirm.
+- **`config/dvp/prospective.json`:** declared and pushed before any week-12 forecast. A systemd timer template and installer are added, not installed.
+- **Week 12:** archived 2026-11-24 23:12:45 UTC, 1,547 minutes before its cutoff (`docs/research/dvp/prospective/2026/`).
+- **Real-data checks:** a scratch run recorded week 11 as MISSED, stored a RETROSPECTIVE reconstruction and evaluated it as descriptive. A real sweep waited on week 13.
+- **Fixed:** the moved specification's broken links, the plan audit's path, and TASK-20261123-005's review file. `main` CI had been red since `15fb310`.
+
 ## 2026-11-24 — DvP plan completion audit and scope document (TASK-20261124-005)
 
 - **PR #12 merged** (`249297c`): the DvP plan completion.
@@ -101,7 +119,7 @@
 ## 2026-11-23 — DvP research phases 0-1: v0 reproduced, projection firewall, completed-game observations (TASK-20261123-005)
 
 - **PR #6 merged** (`b3c0a9a`): slice 3b, kept unchanged as the v0 baseline the owner's specification preserves.
-- **OWN-074:** the owner's DvP research specification v1.1 ([plan](../research/Arbit_FFA_M3_DvP_Plan.md)).
+- **OWN-074:** the owner's DvP research specification v1.1 ([plan](../research/dvp/Arbit_FFA_M3_DvP_Plan.md)).
 - **`arbit_model.dvp` (ENG-057):**
   - `provenance` admits sources by lineage and fails closed;
   - `observations` builds completed-game team-game-position cells with schedule-decided opponents;

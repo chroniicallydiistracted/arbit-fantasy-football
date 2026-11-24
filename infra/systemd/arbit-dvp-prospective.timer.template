@@ -1,0 +1,12 @@
+[Unit]
+Description=Run the M3-3 DvP prospective sweep every six hours
+
+[Timer]
+# Week W-1's last results count from Tuesday 12:00 UTC; week W's first kickoff is usually
+# Thursday about 00:15 UTC. Six-hourly runs give five or more chances in that window.
+OnCalendar=*-*-* 00/6:17:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

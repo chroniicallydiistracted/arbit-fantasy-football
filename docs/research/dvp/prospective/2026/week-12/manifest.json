@@ -1,0 +1,216 @@
+{
+ "adapter": "arbit-dvp-shadow-v1",
+ "classification": "PROSPECTIVE",
+ "code": "6f44e5b71fa7919b64b9f7f72421fb18bd5e1616",
+ "config": {
+  "path": "config/dvp/prospective.json",
+  "sha256": "e07d7d55746eda97a347de86ce9f53ecd157e0b8bdba58ef1490a6d19b4e4d8c"
+ },
+ "cutoff": "2026-11-26T01:00:00+00:00",
+ "forbidden_vendor_projection_dependencies": 0,
+ "forecasts": {
+  "columns": [
+   "game_id",
+   "offense",
+   "position",
+   "season",
+   "week",
+   "kickoff",
+   "defense",
+   "feature_as_of",
+   "n_d",
+   "b00",
+   "b00_nontd",
+   "b01",
+   "b02",
+   "b02r",
+   "b03",
+   "b03r",
+   "b04_k1",
+   "b04_k128",
+   "b04_k16",
+   "b04_k2",
+   "b04_k256",
+   "b04_k32",
+   "b04_k4",
+   "b04_k64",
+   "b04_k8",
+   "b05_h2",
+   "b05_h4",
+   "b05_h8",
+   "b06",
+   "b07",
+   "b09_lastopp",
+   "b09_noise",
+   "b09_shuffle"
+  ],
+  "contentSha256": "98f2161a04daa961abf17dab520f1402e71c16eced7ae0ff47690fcb30a5176c",
+  "csvSha256": "419fc64b1bc936620d3d2410678bd5f7e644c06b5169c5bc26a815578ad7b9a3",
+  "parquetSha256": "d51ff2bb9d56198e4f5ebcb1ba4ecda3802384bdbac8a8e4c5f0a9e31eebb272",
+  "positions": {
+   "DST": 32,
+   "K": 32,
+   "QB": 32,
+   "RB": 32,
+   "TE": 32,
+   "WR": 32
+  },
+  "rows": 192
+ },
+ "format": "arbit-dvp-m3-3-prospective-forecast-v1",
+ "frozen": {
+  "allMatch": true,
+  "filesVerified": 22,
+  "frozenSha256": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+  "groupLevelCode": "f75868b725795cb50ca71c20f80fd383f670669b",
+  "phaseCSha256": "39bd0bc038312b18ffd630db9c8c24cf609e40122ff1987822a52c55a63c400e"
+ },
+ "generatedAt": "2026-11-24T23:12:45.441593+00:00",
+ "inputs": {
+  "observations-season.parquet": "0e09227faeaf395c180a2a14e00ce60eafc64475ce8d7dfae08d5d36ab85beba",
+  "schedule-season.parquet": "8ead98805ba5da009bc6fe67fa8cc261b984e5935b234d1dad1e68877701847b"
+ },
+ "labels": "none: forecast-only; labels are joined only by `evaluate` after the games",
+ "league": {
+  "sha256": "2eda72de7486ec88db6e99ae7f6f91282dc983f10d27ce71a12c5073da354384",
+  "snapshotObservedAt": "2026-11-24T23:12:13.568810+00:00"
+ },
+ "lineage": {
+  "history": {
+   "auditOutputs": {
+    "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
+    "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
+   },
+   "auditRun": "phase1-audit-20261124T024442Z",
+   "objectsVerified": 41,
+   "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
+  },
+  "season": {
+   "anomalies": {
+    "athleteRowsOutsideCompletedTeamGames": 0,
+    "dstLinesOutsideCompletedTeamGames": 0,
+    "duplicatePlayerGameLines": 0
+   },
+   "cells": {
+    "DST/valid": 326,
+    "K/invalid_refused_line": 1,
+    "K/valid": 325,
+    "QB/valid": 326,
+    "RB/invalid_refused_line": 1,
+    "RB/valid": 325,
+    "TE/invalid_refused_line": 1,
+    "TE/valid": 325,
+    "WR/invalid_refused_line": 1,
+    "WR/valid": 325
+   },
+   "nflverseManifests": {
+    "pbp/play_by_play_2026": "b35f8ad295f4ae473d192f202046e4e5c6b28b0bfe36484c395839a31baffba0",
+    "players/players": "caed5620848bcdac99fbe055c06009ae0935d1e09baecdda3760e9d7e65343e3",
+    "schedules/games": "cad4c99d43b6f60daaccbc9a5fdcc66c5c2ded9670dbf845e069215f64b43886",
+    "snap_counts/snap_counts_2026": "31b806cf986900b639fed13bd20c96d11b19b1fe67ed7323f505a4750292c341",
+    "stats_player/stats_player_week_2026": "00726b8115705a9c95c2bd242181c392c2d9d3e9f8fe6ef357321d040871311f",
+    "stats_team/stats_team_week_2026": "8deee7f3d1994437f494fc09a5df9f562cddfb431869a333019407b1721da1e4",
+    "weekly_rosters/roster_weekly_2026": "41bd75ab7ce7a14ef73f1c5d1f6be552243d051f7bc94e523cf669d4cdf9987a"
+   },
+   "nflverseObservedAt": {
+    "pbp/play_by_play_2026": "2026-11-24 22:58:22.825852+00:00",
+    "players/players": "2026-11-24 22:57:36.134980+00:00",
+    "schedules/games": "2026-11-24 22:57:37.103843+00:00",
+    "snap_counts/snap_counts_2026": "2026-11-24 22:58:53.438896+00:00",
+    "stats_player/stats_player_week_2026": "2026-11-24 22:57:38.701261+00:00",
+    "stats_team/stats_team_week_2026": "2026-11-24 22:58:58.933569+00:00",
+    "weekly_rosters/roster_weekly_2026": "2026-11-24 22:59:01.484008+00:00"
+   },
+   "objectsVerified": {
+    "2026 athlete": "5a96b79adaa9d25a08f39453794cf460e873df145c06d4d410ca86eb9fc62257",
+    "2026 defense": "a620d8e10d7d9291fe10b249a7eb8cf146d223fdbbb3bf159feeca36b7f04b1a",
+    "2026 manifest": "62db5c8a6705f36bd2abfda98897419497565b90f9e37e45759cd010c424e856",
+    "2026 participation": "998e3842af1b20919fbfec02404534bad4c7efcf9ed8147463871c5123ef19b6",
+    "index": "2e153c07e93dabaf8269f5978ca1e77370bcd89633b368357d2f14d99c0bbd26"
+   },
+   "scoring": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "seasonManifest": "62db5c8a6705f36bd2abfda98897419497565b90f9e37e45759cd010c424e856",
+   "sourceAncestrySha256": "4a50ebc8f28bb65daba8d95f2a137025fb70907d4bf4262b6a4ae0c725042321",
+   "targetsIndex": "2e153c07e93dabaf8269f5978ca1e77370bcd89633b368357d2f14d99c0bbd26"
+  }
+ },
+ "minutesBeforeCutoff": 1547.2,
+ "parameters": {
+  "kDvp": {
+   "DST": 7.232,
+   "K": 50.512,
+   "QB": 24.216,
+   "RB": 19.476,
+   "TE": 37.425,
+   "WR": 26.691
+  },
+  "kNonTd": {
+   "DST": 6.38,
+   "K": 50.597,
+   "QB": 18.444,
+   "RB": 19.726,
+   "TE": 37.843,
+   "WR": 22.794
+  },
+  "kOwn": {
+   "DST": 17.348,
+   "K": 21.975,
+   "QB": 6.526,
+   "RB": 6.614,
+   "TE": 4.421,
+   "WR": 4.235
+  },
+  "leaguePrev": {
+   "DST": 5.789,
+   "K": 8.241,
+   "QB": 16.295,
+   "RB": 22.225,
+   "TE": 13.248,
+   "WR": 30.689
+  },
+  "season": 2026,
+  "slopeDvp": {
+   "DST": 0.397,
+   "K": 0.146,
+   "QB": 0.298,
+   "RB": 0.278,
+   "TE": 0.157,
+   "WR": 0.229
+  },
+  "slopeOwn": {
+   "DST": 0.32,
+   "K": 0.206,
+   "QB": 0.454,
+   "RB": 0.421,
+   "TE": 0.481,
+   "WR": 0.453
+  },
+  "training": [
+   2016,
+   2017,
+   2018,
+   2019,
+   2020,
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ]
+ },
+ "readiness": {
+  "awaitingResult": [],
+  "completed": 163,
+  "completedWithoutFfaLines": [],
+  "earlierGames": 163,
+  "latestAvailability": "2026-11-24 12:00:00+00:00",
+  "noResultAfterGrace": []
+ },
+ "season": 2026,
+ "startedAt": "2026-11-24T23:12:40.272293+00:00",
+ "week": 12,
+ "write_to_production": false
+}
