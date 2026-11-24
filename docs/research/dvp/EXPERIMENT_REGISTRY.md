@@ -32,6 +32,7 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | M3-3-B10 | EXECUTED | Preweek vs per-game cutoff | Same: no forecast changes |
 | M3-3-B11 | PASSED | A planted projection cannot reach a forecast | `test_dvp_walkforward.py` |
 | M3-3-B12 | EXECUTED | A 48-hour slower availability rule | Same: negligible |
+| M3-3-HOLDOUT-2025 | EXECUTED, decision PROMISING (D/ST only) | The frozen candidates on 2025 (conditional holdout) | [MODEL_CARD.md](MODEL_CARD.md), `backtest-holdout.json` |
 | M3-3-C00–C05 | PLANNED (conditional) | Player-level Sit/Start impact | Runs only if Phase B finds a credible group-level signal |
 
 **No longer blocked:** the canonical targets were repaired and rebuilt (R-072, TASK-20261123-007; owner instruction OWN-075). Every experiment runs on index `6ffb62fb…`, where all 5,278 team-games have a D/ST line. v0 alone keeps reading `4afbd836…`, the index it ran on.

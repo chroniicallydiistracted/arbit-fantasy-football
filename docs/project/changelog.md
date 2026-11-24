@@ -1,5 +1,14 @@
 # Development Changelog
 
+## 2026-11-24 — DvP Phase 4: frozen method, 2025 holdout, model card (TASK-20261124-003)
+
+- **`dvp.py freeze`:** writes `config/dvp/frozen.json` with method and input hashes, the protocol, the decision rule and the prospective 2026 window.
+- **`backtest --stage holdout`:** runs only when every frozen hash matches. `walkforward.decide` applies the predeclared rule.
+- **2025 conditional holdout** (code `165d140`): D/ST B06 −4.1% RMSE, PROMISING. QB INCONCLUSIVE; RB, WR, TE and K NOT_USEFUL. Overall PROMISING (D/ST only) (ENG-061).
+- **Documents:** [MODEL_CARD.md](../research/dvp/MODEL_CARD.md) and [PROSPECTIVE_2026.md](../research/dvp/PROSPECTIVE_2026.md); the backtest report gains the holdout.
+- **Registry:** `M3-3-HOLDOUT-2025` (34 experiments).
+- **Tests:** the holdout guard and the decision rule.
+
 ## 2026-11-24 — DvP Phase 3: the walk-forward (TASK-20261124-002)
 
 - **PR #9 merged** (`ceba441`): DvP Phase 2.

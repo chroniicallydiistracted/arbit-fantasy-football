@@ -12,56 +12,56 @@
 <text x='222' y='65' text-anchor='end' fill='#1a1a1a'>DST B06 dev</text>
 <line x1='445.54' y1='61' x2='472.45' y2='61' stroke='#000000' stroke-width='2'/>
 <circle cx='460.49' cy='61' r='4' fill='#000000'/>
-<text x='222' y='87' text-anchor='end' fill='#1a1a1a'>DST B06 hol</text>
-<line x1='355.36' y1='83' x2='499.82' y2='83' stroke='#000000' stroke-width='2'/>
-<circle cx='425.11' cy='83' r='4' fill='#000000'/>
-<text x='222' y='109' text-anchor='end' fill='#1a1a1a'>DST B06 val</text>
-<line x1='274.23' y1='105' x2='421.3' y2='105' stroke='#000000' stroke-width='2'/>
-<circle cx='349.53' cy='105' r='4' fill='#000000'/>
+<text x='222' y='87' text-anchor='end' fill='#1a1a1a'>DST B06 val</text>
+<line x1='274.23' y1='83' x2='421.3' y2='83' stroke='#000000' stroke-width='2'/>
+<circle cx='349.53' cy='83' r='4' fill='#000000'/>
+<text x='222' y='109' text-anchor='end' fill='#1a1a1a'>DST B06 hol</text>
+<line x1='355.36' y1='105' x2='499.82' y2='105' stroke='#000000' stroke-width='2'/>
+<circle cx='425.11' cy='105' r='4' fill='#000000'/>
 <text x='222' y='131' text-anchor='end' fill='#1a1a1a'>K B06 dev</text>
 <line x1='549.61' y1='127' x2='560.61' y2='127' stroke='#E69F00' stroke-width='2'/>
 <circle cx='554.73' cy='127' r='4' fill='#E69F00'/>
-<text x='222' y='153' text-anchor='end' fill='#1a1a1a'>K B06 hol</text>
-<line x1='534.7' y1='149' x2='560.3' y2='149' stroke='#E69F00' stroke-width='2'/>
-<circle cx='548.65' cy='149' r='4' fill='#E69F00'/>
-<text x='222' y='175' text-anchor='end' fill='#1a1a1a'>K B06 val</text>
-<line x1='540.09' y1='171' x2='575.7' y2='171' stroke='#E69F00' stroke-width='2'/>
-<circle cx='557.29' cy='171' r='4' fill='#E69F00'/>
+<text x='222' y='153' text-anchor='end' fill='#1a1a1a'>K B06 val</text>
+<line x1='540.09' y1='149' x2='575.7' y2='149' stroke='#E69F00' stroke-width='2'/>
+<circle cx='557.29' cy='149' r='4' fill='#E69F00'/>
+<text x='222' y='175' text-anchor='end' fill='#1a1a1a'>K B06 hol</text>
+<line x1='534.7' y1='171' x2='560.3' y2='171' stroke='#E69F00' stroke-width='2'/>
+<circle cx='548.65' cy='171' r='4' fill='#E69F00'/>
 <text x='222' y='197' text-anchor='end' fill='#1a1a1a'>QB B06 dev</text>
 <line x1='516.74' y1='193' x2='541.19' y2='193' stroke='#0072B2' stroke-width='2'/>
 <circle cx='530.64' cy='193' r='4' fill='#0072B2'/>
-<text x='222' y='219' text-anchor='end' fill='#1a1a1a'>QB B06 hol</text>
-<line x1='495.92' y1='215' x2='548.76' y2='215' stroke='#0072B2' stroke-width='2'/>
-<circle cx='521.08' cy='215' r='4' fill='#0072B2'/>
-<text x='222' y='241' text-anchor='end' fill='#1a1a1a'>QB B06 val</text>
-<line x1='539.73' y1='237' x2='596.12' y2='237' stroke='#0072B2' stroke-width='2'/>
-<circle cx='567.11' cy='237' r='4' fill='#0072B2'/>
+<text x='222' y='219' text-anchor='end' fill='#1a1a1a'>QB B06 val</text>
+<line x1='539.73' y1='215' x2='596.12' y2='215' stroke='#0072B2' stroke-width='2'/>
+<circle cx='567.11' cy='215' r='4' fill='#0072B2'/>
+<text x='222' y='241' text-anchor='end' fill='#1a1a1a'>QB B06 hol</text>
+<line x1='495.92' y1='237' x2='548.76' y2='237' stroke='#0072B2' stroke-width='2'/>
+<circle cx='521.08' cy='237' r='4' fill='#0072B2'/>
 <text x='222' y='263' text-anchor='end' fill='#1a1a1a'>RB B06 dev</text>
 <line x1='517.64' y1='259' x2='548.79' y2='259' stroke='#009E73' stroke-width='2'/>
 <circle cx='531' cy='259' r='4' fill='#009E73'/>
-<text x='222' y='285' text-anchor='end' fill='#1a1a1a'>RB B06 hol</text>
-<line x1='505.43' y1='281' x2='580.13' y2='281' stroke='#009E73' stroke-width='2'/>
-<circle cx='540.7' cy='281' r='4' fill='#009E73'/>
-<text x='222' y='307' text-anchor='end' fill='#1a1a1a'>RB B06 val</text>
-<line x1='480.59' y1='303' x2='580.29' y2='303' stroke='#009E73' stroke-width='2'/>
-<circle cx='530.81' cy='303' r='4' fill='#009E73'/>
+<text x='222' y='285' text-anchor='end' fill='#1a1a1a'>RB B06 val</text>
+<line x1='480.59' y1='281' x2='580.29' y2='281' stroke='#009E73' stroke-width='2'/>
+<circle cx='530.81' cy='281' r='4' fill='#009E73'/>
+<text x='222' y='307' text-anchor='end' fill='#1a1a1a'>RB B06 hol</text>
+<line x1='505.43' y1='303' x2='580.13' y2='303' stroke='#009E73' stroke-width='2'/>
+<circle cx='540.7' cy='303' r='4' fill='#009E73'/>
 <text x='222' y='329' text-anchor='end' fill='#1a1a1a'>TE B07 dev</text>
 <line x1='547.2' y1='325' x2='558.23' y2='325' stroke='#CC79A7' stroke-width='2'/>
 <circle cx='552.36' cy='325' r='4' fill='#CC79A7'/>
-<text x='222' y='351' text-anchor='end' fill='#1a1a1a'>TE B07 hol</text>
-<line x1='536.2' y1='347' x2='557.67' y2='347' stroke='#CC79A7' stroke-width='2'/>
-<circle cx='547.01' cy='347' r='4' fill='#CC79A7'/>
-<text x='222' y='373' text-anchor='end' fill='#1a1a1a'>TE B07 val</text>
-<line x1='546.19' y1='369' x2='570.69' y2='369' stroke='#CC79A7' stroke-width='2'/>
-<circle cx='558.44' cy='369' r='4' fill='#CC79A7'/>
+<text x='222' y='351' text-anchor='end' fill='#1a1a1a'>TE B07 val</text>
+<line x1='546.19' y1='347' x2='570.69' y2='347' stroke='#CC79A7' stroke-width='2'/>
+<circle cx='558.44' cy='347' r='4' fill='#CC79A7'/>
+<text x='222' y='373' text-anchor='end' fill='#1a1a1a'>TE B07 hol</text>
+<line x1='536.2' y1='369' x2='557.67' y2='369' stroke='#CC79A7' stroke-width='2'/>
+<circle cx='547.01' cy='369' r='4' fill='#CC79A7'/>
 <text x='222' y='395' text-anchor='end' fill='#1a1a1a'>WR B06 dev</text>
 <line x1='519.52' y1='391' x2='547.82' y2='391' stroke='#D55E00' stroke-width='2'/>
 <circle cx='534.16' cy='391' r='4' fill='#D55E00'/>
-<text x='222' y='417' text-anchor='end' fill='#1a1a1a'>WR B06 hol</text>
-<line x1='509.45' y1='413' x2='567.37' y2='413' stroke='#D55E00' stroke-width='2'/>
-<circle cx='539.61' cy='413' r='4' fill='#D55E00'/>
-<text x='222' y='439' text-anchor='end' fill='#1a1a1a'>WR B06 val</text>
-<line x1='558.22' y1='435' x2='637.52' y2='435' stroke='#D55E00' stroke-width='2'/>
-<circle cx='598.23' cy='435' r='4' fill='#D55E00'/>
+<text x='222' y='417' text-anchor='end' fill='#1a1a1a'>WR B06 val</text>
+<line x1='558.22' y1='413' x2='637.52' y2='413' stroke='#D55E00' stroke-width='2'/>
+<circle cx='598.23' cy='413' r='4' fill='#D55E00'/>
+<text x='222' y='439' text-anchor='end' fill='#1a1a1a'>WR B06 hol</text>
+<line x1='509.45' y1='435' x2='567.37' y2='435' stroke='#D55E00' stroke-width='2'/>
+<circle cx='539.61' cy='435' r='4' fill='#D55E00'/>
 <text x='16' y='514' fill='#666666'>dev: 2017-2023 folds (chosen here); val: 2024; hol: 2025 conditional holdout. Frozen in between.</text>
 </svg>

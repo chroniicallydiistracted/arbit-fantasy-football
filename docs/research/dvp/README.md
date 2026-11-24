@@ -19,7 +19,9 @@
 | A01 on validated observations, with intervals | EXECUTED |
 | Phase 2 reliability lab: A00, A02–A10, A12 | EXECUTED ([reliability report](RELIABILITY_REPORT.md), [methodology](METHODOLOGY.md)) |
 | Phase 3 walk-forward: B00–B12 on development folds 2017–2023 and 2024 validation | EXECUTED ([backtest report](BACKTEST_REPORT.md)); candidates frozen in `config/dvp/frozen-candidates.json` |
-| Phase 4 (2025 conditional holdout, then prospective 2026); C00–C05 | PLANNED ([registry](EXPERIMENT_REGISTRY.md)) |
+| Phase 4: frozen manifest, 2025 conditional holdout, decisions | EXECUTED. **D/ST PROMISING; QB INCONCLUSIVE; RB, WR, TE, K NOT_USEFUL** ([model card](MODEL_CARD.md)) |
+| Prospective 2026 weeks 12–18 (frozen before they were played) | PLANNED ([plan](PROSPECTIVE_2026.md)) |
+| C00–C05 (player-level, D/ST only if confirmed) | PLANNED ([registry](EXPERIMENT_REGISTRY.md)) |
 | Canonical targets repaired (R-072): all 5,278 D/ST team-games, every opponent from the schedule | DONE ([targets repair](../targets-repair-r072.md), TASK-20261123-007) |
 
 **Headline so far (repeatability only, not forecasting):** REML variance components on adjusted points, each unit with its own game count (A05).
@@ -39,6 +41,7 @@ An offense's own production at a position settles in 4–7 games, so per game a 
 - **QB, RB and WR:** under 1% in development, not replicated in 2024 (WR got worse).
 - **TE and K:** nothing.
 - **Unshrunk DvP:** makes every position worse.
+- **2025 conditional holdout:** D/ST −4.1%, so D/ST is PROMISING; the positions are not.
 
 Whether any of this improves next-game forecasts over an offense-only baseline is Phase B.
 
@@ -66,6 +69,8 @@ POLARS_MAX_THREADS=2 ARBIT_NFLVERSE_PATH=<main>/data/nflverse uv run --env-file 
   python scripts/model/dvp.py backtest --config config/dvp/backtest.json --stage development \
     --targets <main>/data/model --run <main>/artifacts/dvp/<audit run> --receipts docs/research/dvp
 # (commit config/dvp/frozen-candidates.json, then the same with --stage validation)
+# Phase 4: freeze (reads the schedule from the database), commit config/dvp/frozen.json, then
+#   ... backtest --stage holdout   (refuses unless every frozen hash matches)
 uv run python scripts/model/dvp.py report --receipts docs/research/dvp
 
 # The experiment registry, from the receipts
@@ -99,12 +104,14 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [EXPERIMENT_REGISTRY.md](EXPERIMENT_REGISTRY.md) | Every M3-3 experiment and its status |
 | [RELIABILITY_REPORT.md](RELIABILITY_REPORT.md) | Phase 2 results: splits, adjustments, variance components, time, carryover, nulls, components, robustness, corrections |
 | [METHODOLOGY.md](METHODOLOGY.md) | Hypotheses, estimators, look-ahead protections, and Phase B's comparator and metrics declared before it runs |
-| [BACKTEST_REPORT.md](BACKTEST_REPORT.md) | Phase 3: B00 and every variant on development folds and 2024, controls, cutoff and availability sensitivity, candidates |
+| [BACKTEST_REPORT.md](BACKTEST_REPORT.md) | Phases 3–4: B00 and every variant on development folds, 2024 and the 2025 conditional holdout; controls, cutoff and availability sensitivity, candidates, decisions |
+| [MODEL_CARD.md](MODEL_CARD.md) | What the forecast is, results by position, intended and unintended use, limits, fallback, eligibility |
+| [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The frozen 2026 weeks 12–18 confirmation and how it will be scored |
 
 Decisions, risks, history and handoffs live in the repository's own records:
 - the [decision register](../../project/decision-register.md): OWN-074, ENG-057, OWN-075, ENG-058;
 - [known issues](../../project/known-issues.md): R-072 to R-074;
 - the [changelog](../../project/changelog.md);
-- governance tasks TASK-20261123-005, TASK-20261123-007, TASK-20261124-001 and TASK-20261124-002.
+- governance tasks TASK-20261123-005, TASK-20261123-007 and TASK-20261124-001 to -003.
 
-**Still to write:** the model card, with Phase 4.
+**Next:** the prospective 2026 scoring after the season, and Phase C for D/ST if it is confirmed.
