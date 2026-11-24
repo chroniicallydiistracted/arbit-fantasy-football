@@ -1,0 +1,401 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-005",
+  "title": "M3-3 DvP plan completion audit and scope document",
+  "objective": "Audit every action item of the owner's DvP specification v1.1 (docs/research/Arbit_FFA_M3_DvP_Plan.md, OWN-074) against the repository by rerunning its evidence, not by citing old receipts: the test suite with per-test results, v0 reproduction, the Phase 0-1 audit, the reliability lab, all three backtest stages (holdout from the frozen commit), Phase C and verify. Encode the item-to-evidence map as an executable audit that writes a machine-readable receipt, and write a scope document into the repository that lists each completed action item, the code and model logic behind it, and its passing proof. Open items (prospective 2026 scoring, owner weight decision, BLOCKED C03 and league lineups) are stated as open. No production, weight or canonical-table change.",
+  "status": "completed",
+  "phase": "handoff",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "scripts/model/dvp_plan_audit.py",
+    "libs/arbit-model/tests/test_dvp_plan_audit.py",
+    "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+    "docs/research/dvp/plan-audit-receipt.json",
+    "docs/research/dvp/README.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json",
+    "libs/arbit-model/tests/test_dvp_firewall.py",
+    "scripts/model/dvp.py",
+    "docs/research/dvp/DATA_QUALITY.md",
+    "docs/research/dvp/V0_REPRODUCTION.md",
+    "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T21:16:56Z",
+  "updated_at": "2026-11-24T21:41:38Z",
+  "baseline": "249297caeecbf0f96b09c4cb162accbd7b3031d7",
+  "next_action": "Merge the DvP plan-audit PR (branch claude/m3-dvp-scope-audit, TASK-20261124-005). DvP research then waits only on the 2026 regular season: rebuild the targets with 2026, score the frozen weeks 12-18 at both levels from the frozen commit 165d140 (docs/research/dvp/PROSPECTIVE_2026.md), rerun scripts/model/dvp_plan_audit.py, and put the D/ST weight decision to the owner (OWN-074). Meanwhile, M3 slices 3c-3e and weather W1; NWS User-Agent contact from the owner before W3.",
+  "sections": {
+    "review": {
+      "summary": "Read the owner's DvP specification v1.1 in full (sections 0-14) and the repository's DvP code, tests, configs, receipts and documents. Mapped every action item to evidence: 14 operating rules, RQ1-RQ7, definitions, the data boundary and eligibility table, datasets and reconciliation checks, v0 items, A00-A12, B00-B12, C00-C05, statistics, metrics and decision rules, T01-T40, phases 0-5, CLI contracts and modes, config and record fields, section 11 deliverables and before-completion checks, the section 12 decision chain and the section 13 caveats. Reran every stage on scratch copies (audit, reproduce-v0, reliability, development, validation from main; 2025 holdout from the frozen tree 165d140; holdout refused from main; sitstart; verify; report; registry): every receipt equals its committed version apart from code, time, run ID, byte hashes of Parquet files and fields added after a receipt was made; holdout forecasts equal within 7.1e-15 (18 values). Found: DATA_QUALITY.md and V0_REPRODUCTION.md cite an earlier audit run (021910Z, bc414a0) than their receipts (024442Z, 3a1fe11); dry-run and resume modes were never built; the project next action still says to merge PR #12, which is merged.",
+      "files": [
+        "docs/research/dvp/DATA_QUALITY.md",
+        "docs/research/dvp/V0_REPRODUCTION.md"
+      ]
+    },
+    "plan": {
+      "summary": "1) Encode the item-to-evidence map as an executable audit, scripts/model/dvp_plan_audit.py: 'rerun' copies the frozen audit run and receipts to scratch and reruns every stage (holdout from a worktree at 165d140; the holdout's refusal from this tree) plus the model tests with JUnit results; 'check' evaluates every item's checks and writes docs/research/dvp/plan-audit-receipt.json (DONE / OPEN / FAILED per item; exit 1 on any failure). Open items (prospective 2026 scoring, owner weight, C03, league lineups, dry-run/resume) are kind 'open': their checks prove the open state is recorded, never count as done. 2) Tests (test_dvp_plan_audit.py): catalog covers every specified ID; every check defined and used; every T tag names real tests; open items never count as done; receipt comparison and forecast-difference logic; committed receipt passes, matches the catalog and the specification hash; the scope document has a row for every item. 3) Commit code first, then run the audit so the receipt names a clean commit. 4) Write PLAN_COMPLETION_SCOPE.md (every item: status, code/model logic, proof) from the receipt. 5) Fix the stale run IDs; update README, status, changelog, state.json next action; handoff.",
+      "files": [
+        "scripts/model/dvp_plan_audit.py",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md"
+      ]
+    },
+    "implementation": {
+      "summary": "scripts/model/dvp_plan_audit.py (committed db0d802): ITEMS, 214 action items in specification order, each with its checks and kind (done/open); CHECKS, 156 checks: per-tag test results from JUnit (T01-T40, B11, Phase C, Phase 4 rule, whole suite), field-by-field rerun comparisons with explicit allowed fields per receipt, observation-table equality, forecast equality within 1e-9 (holdout: 18 values, at most 7.1e-15), byte identity of report outputs, holdout refusal from this tree, untouched committed run and config, v0 hashes, audit/provenance/finality/registry/reliability/backtest/verify/Phase C receipts, the frozen timeline, Phase C rule committed before results, config keys, deliverables, model card table and flags, and the open states. 'rerun' writes only to scratch and hashes the committed run and config/dvp before and after. Audit result at db0d802: PASSED, 209 done, 5 open, 156/156 checks, 157 tests 0 skipped. tests/test_dvp_plan_audit.py (9 tests). PLAN_COMPLETION_SCOPE.md: every item with status, logic and proof. DATA_QUALITY.md and V0_REPRODUCTION.md now cite run 024442Z (code 3a1fe11); the earlier run 021910Z built an identical observation table (verified).",
+      "files": [
+        "scripts/model/dvp_plan_audit.py",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+        "docs/research/dvp/plan-audit-receipt.json",
+        "docs/research/dvp/DATA_QUALITY.md",
+        "docs/research/dvp/V0_REPRODUCTION.md"
+      ]
+    },
+    "validation": {
+      "summary": "Plan audit at db0d802: PASSED, 214 items (209 done, 5 open), 156/156 checks; reruns: audit 1.5 s, reproduce-v0 6.9 s, reliability 72.2 s, development 26.1 s, validation 7.0 s, holdout from 165d140 4.3 s, holdout refused from this tree (exit 1, expected), sitstart, verify, report, registry, model tests 157 passed 0 skipped. Every rerun receipt equal to its committed version except allowed fields; observation table identical (31,668 rows); development and validation forecast files left byte-identical; holdout forecasts within 7.1e-15 (18 values); METRICS.csv and 15 plots byte-identical; committed run and config/dvp unchanged. Governance checks on the final tree: foundation, model-tests (with ARBIT_DVP_AUDIT_RUN), point-in-time, lint, format, types (mypy including dvp_plan_audit.py), python-suite: all exit 0. Without the audit run (as CI): 1491 passed, 2 skipped (the real-artifact tests).",
+      "files": [
+        "docs/research/dvp/plan-audit-receipt.json",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py"
+      ]
+    },
+    "documentation": {
+      "summary": "PLAN_COMPLETION_SCOPE.md (new): result, method, how the slice fits together, rerun table, and every item of sections 0-13 with status, code/model logic and proof check IDs with observed values; open items; corrections; how to reproduce. DvP README: status row, documents row and audit commands. DATA_QUALITY.md and V0_REPRODUCTION.md: correct audit run. Project: status (PR #12 on main; this task), changelog, state.json next action.",
+      "files": [
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+        "docs/research/dvp/README.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "docs/governance/state.json"
+      ]
+    },
+    "handoff": {
+      "path": "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md",
+      "next_action": "Merge the DvP plan-audit PR (branch claude/m3-dvp-scope-audit, TASK-20261124-005). DvP research then waits only on the 2026 regular season: rebuild the targets with 2026, score the frozen weeks 12-18 at both levels from the frozen commit 165d140 (docs/research/dvp/PROSPECTIVE_2026.md), rerun scripts/model/dvp_plan_audit.py, and put the D/ST weight decision to the owner (OWN-074). Meanwhile, M3 slices 3c-3e and weather W1; NWS User-Agent contact from the owner before W3.",
+      "unresolved": "Prospective 2026 weeks 12-18 scoring (after the season); owner decision on a D/ST production weight (OWN-074); C03 and league-constrained lineups BLOCKED (no meaning for D/ST; no FFA lineups before 2026); dry-run and resume modes not built."
+    }
+  },
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-24T21:38:31Z",
+      "exit_code": 0,
+      "duration_seconds": 0.173,
+      "stdout_stderr_sha256": "af7079ec74072414a2455ce54e85a74dd9a7045b346cbbcba957aab8c0094cc8",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-24T21:38:39Z",
+      "exit_code": 0,
+      "duration_seconds": 8.066,
+      "stdout_stderr_sha256": "156ece136dd4e81a25556f4a29fecc354b0e9ae0975bae9e36be61ac6f007624",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-24T21:38:41Z",
+      "exit_code": 0,
+      "duration_seconds": 1.752,
+      "stdout_stderr_sha256": "99ea0c98314503c11516d1ec256e687d684016ed9ac413fbc86c1d4ba36cc020",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "lint",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "at": "2026-11-24T21:38:41Z",
+      "exit_code": 0,
+      "duration_seconds": 0.05,
+      "stdout_stderr_sha256": "98733c3446b52dc3e6b6943142b19a142025d9727521f6abc3783a20e4b6d3c6",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "format",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "at": "2026-11-24T21:38:41Z",
+      "exit_code": 0,
+      "duration_seconds": 0.05,
+      "stdout_stderr_sha256": "f8b70b44179ea8bfc8a9879b9cda05be677d2e1782928711c970613714ee12a0",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "types",
+      "argv": [
+        "uv",
+        "run",
+        "mypy",
+        "libs/arbit-model/src",
+        "scripts/model/dvp.py",
+        "scripts/model/dvp_plan_audit.py"
+      ],
+      "at": "2026-11-24T21:38:44Z",
+      "exit_code": 0,
+      "duration_seconds": 2.441,
+      "stdout_stderr_sha256": "501f59ebd183d787086d4593129606e11d6cf6903f6cc2a9151dc25d860a0f47",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "python-suite",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "at": "2026-11-24T21:39:51Z",
+      "exit_code": 0,
+      "duration_seconds": 63.641,
+      "stdout_stderr_sha256": "7bdd263cbf3433c356f1a4e0489a717c369fe476fed9c7f7a81d018505e2094c",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-24T21:41:28Z",
+      "exit_code": 0,
+      "duration_seconds": 0.169,
+      "stdout_stderr_sha256": "c0cae7e35f54b547c14b4500e49a0a9f2a20bb0e8bfde0c3983d37f5625bc0f6",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "2d0e1e30adc7723cd30dd6fa409cd8f1e8e8fa04134ad35baf833c0ed89d96bd"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-24T21:41:36Z",
+      "exit_code": 0,
+      "duration_seconds": 8.428,
+      "stdout_stderr_sha256": "0a382578fd8740a906513414ac0738e2d018867def7dbad8fa79aadecd109b66",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "2d0e1e30adc7723cd30dd6fa409cd8f1e8e8fa04134ad35baf833c0ed89d96bd"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-24T21:41:38Z",
+      "exit_code": 0,
+      "duration_seconds": 1.48,
+      "stdout_stderr_sha256": "fe6a3be9683855da6f77d7a80f5f6789af7c9e4f5c2d3dcae71730a015e5d330",
+      "git_head": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+      "scope_sha256": {
+        "scripts/model/dvp_plan_audit.py": "9a15a5853346675172b6c6e903af99d86731d027e1bd633a12341171b92b913f",
+        "libs/arbit-model/tests/test_dvp_plan_audit.py": "93dc1969afdf73124a81ab2e236cec932c9b930f58b037e3a497294165401955",
+        "docs/research/dvp/PLAN_COMPLETION_SCOPE.md": "062923d4110b2c020928ba202db8362c23a56584081256d13e39cffeab19fc40",
+        "docs/research/dvp/plan-audit-receipt.json": "a837e3bd702ed76957658e2df0abaf0076e163d5f143e3419277f95daa1f9f7e",
+        "docs/research/dvp/README.md": "8c66c67d13a74f2dc7637d91819dc6f018601f8c08111d7c7b57672229277832",
+        "docs/project/status.md": "5991d99ac91b0477e6e3c6d1331c0d202376b78faef42b56d0367f01d9af124a",
+        "docs/project/changelog.md": "b038cdee9d3ee57f300440b34d67d690bfa706446325dbfcfc50c43c6f5ad539",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "libs/arbit-model/tests/test_dvp_firewall.py": "66ba6912e1cd86e7d8fefbae82848a16f5380fb2c256b1c3279929a4bb732293",
+        "scripts/model/dvp.py": "e2b8fd2ef8c61b8352f6c47defd2ccc2f0e70dadca6eed06bbade8b0e73e24f6",
+        "docs/research/dvp/DATA_QUALITY.md": "59c4a7549326d1b1455cb634e06c7b1b54964087bf858875c95508f989606ab3",
+        "docs/research/dvp/V0_REPRODUCTION.md": "99e4d8a4ff7f3b23a5711a0f2639d807486ad436cbb5655e54084dbebccf5ec6",
+        "docs/project/handoffs/2026-11-24-task-20261124-005-governance-handoff.md": "2d0e1e30adc7723cd30dd6fa409cd8f1e8e8fa04134ad35baf833c0ed89d96bd"
+      }
+    }
+  ],
+  "journal": [
+    {
+      "at": "2026-11-24T21:30:16Z",
+      "kind": "correction",
+      "note": "Scope extended by hand (governance has no scope command) with docs/research/dvp/DATA_QUALITY.md and V0_REPRODUCTION.md, which cite audit run phase1-audit-20261124T021910Z (code bc414a0) while their receipts come from phase1-audit-20261124T024442Z (code 3a1fe11), and with this task's handoff file.",
+      "evidence": "docs/research/dvp/DATA_QUALITY.md"
+    },
+    {
+      "at": "2026-11-24T21:41:19Z",
+      "kind": "observation",
+      "note": "Plan completion audit PASSED: 214 action items (209 done, 5 open), 156/156 checks, from reruns of every stage (holdout from the frozen commit) compared field by field with the committed receipts.",
+      "evidence": "docs/research/dvp/plan-audit-receipt.json"
+    },
+    {
+      "at": "2026-11-24T21:41:19Z",
+      "kind": "question",
+      "note": "Dry-run and resume modes (spec section 9, 'when appropriate') were never built; stages take 0.5-72 s and verify plus pre-write hash checks cover a dry run's purpose. Recorded as NOT BUILT; build them if the owner wants them.",
+      "evidence": "docs/research/dvp/PLAN_COMPLETION_SCOPE.md"
+    }
+  ],
+  "closed_at": "2026-11-24T21:41:38Z"
+}

@@ -1,5 +1,21 @@
 # Development Changelog
 
+## 2026-11-24 — DvP plan completion audit and scope document (TASK-20261124-005)
+
+- **PR #12 merged** (`249297c`): the DvP plan completion.
+- **`scripts/model/dvp_plan_audit.py`:** maps all 214 action items of the owner's DvP specification v1.1 to 156 checks.
+  - `rerun` reruns every stage on scratch copies, plus the model tests with per-test results. The 2025 holdout runs from the frozen commit `165d140`, and the audit also checks that it is refused from this tree.
+  - `check` compares each rerun with its committed receipt and writes `docs/research/dvp/plan-audit-receipt.json`. It fails on any failed check.
+- **Result: PASSED.** 209 items done and 5 open:
+  - the prospective 2026 scoring;
+  - the owner's weight decision;
+  - C03, BLOCKED;
+  - league lineups, BLOCKED;
+  - dry-run and resume, not built.
+- **Reruns:** every receipt is equal apart from run time, code, run ID, Parquet byte hashes and fields added after a receipt was made. The holdout's forecasts equal the originals within 7.1×10⁻¹⁵ points.
+- **[PLAN_COMPLETION_SCOPE.md](../research/dvp/PLAN_COMPLETION_SCOPE.md):** every item's status, its code and model logic, and its proof. `test_dvp_plan_audit.py` keeps the catalog complete and the document consistent with the receipt.
+- **Fixed:** DATA_QUALITY.md and V0_REPRODUCTION.md now name the audit run their receipts come from (`phase1-audit-20261124T024442Z`). The earlier run they named built an identical observation table.
+
 ## 2026-11-24 — DvP plan completion: Phase C for D/ST, T26/T27, verify, idempotent reruns (TASK-20261124-004)
 
 - **PR #11 merged** (`cf50b73`): DvP Phase 4.

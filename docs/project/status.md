@@ -12,7 +12,18 @@
 - **On `main` since PR #8 (`efff624`):** the R-072 repair and rebuilt FFA targets (TASK-20261123-007). The research store's current pointer names the rebuilt index `6ffb62fb…`; no service reads it.
 - **On `main` since PR #9 (`ceba441`):** DvP Phase 2, the reliability lab (TASK-20261124-001).
 - **On `main` since PRs #10 and #11 (`cf50b73`):** DvP Phase 3, the walk-forward (TASK-20261124-002), and Phase 4, the holdout and model card (TASK-20261124-003). Offline research.
-- **Not yet on `main`:** the DvP plan completion (TASK-20261124-004, branch `claude/m3-dvp-completion`): Phase C for D/ST, T26/T27, verify-only mode and idempotent reruns. Offline research.
+- **On `main` since PR #12 (`249297c`):** the DvP plan completion (TASK-20261124-004): Phase C for D/ST, T26/T27, verify-only mode and idempotent reruns. Offline research.
+- **Not yet on `main`:** the DvP plan completion audit and scope document (TASK-20261124-005, branch `claude/m3-dvp-scope-audit`). Offline research.
+
+**DvP plan completion audit (2026-11-24, TASK-20261124-005; [scope document](../research/dvp/PLAN_COMPLETION_SCOPE.md)):** every action item of the owner's specification, checked against rerun evidence.
+- **Result: PASSED.** 214 items: 209 done and 5 open, each open one with its reason. All 156 checks passed, and 157 model tests passed with none skipped.
+- **How it was checked:** `scripts/model/dvp_plan_audit.py` reran every stage on scratch copies, the 2025 holdout from the frozen commit. Each rerun equals its committed receipt apart from run time, code, run ID and Parquet byte order. The receipt is [plan-audit-receipt.json](../research/dvp/plan-audit-receipt.json).
+- **Corrected:** two DvP documents named an earlier audit run than their receipts. That run built an identical observation table, so no number changed.
+- **Open:**
+  - the prospective 2026 weeks 12–18 scoring;
+  - the owner's D/ST weight decision;
+  - C03 and league-lineup evaluation, both BLOCKED;
+  - dry-run and resume modes, not built.
 
 **DvP plan completion (2026-11-24, TASK-20261124-004, ENG-062; [player-level report](../research/dvp/PLAYER_LEVEL_REPORT.md)):** an item-by-item audit of the owner's specification found Phase 5 (C00–C05) unrun though D/ST had passed its gate, T26 and T27 missing, no verify-only mode, and some §11 outputs missing. All are now done.
 - **Phase C, D/ST:** the rule was committed before any result. B06 picks the higher-scoring D/ST in 60–62% of weekly pairs, against B00's 54–56%: +4.4, +8.5 and +6.6 points (dev, 2024, 2025) against a 1.8 minimum. **PROMISING.** Frozen for 2026 weeks 12–18 before kickoff.
