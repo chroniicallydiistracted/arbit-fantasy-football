@@ -25,6 +25,8 @@ from arbit_model.fields import classify
 
 class SourceType(StrEnum):
     FFA_ACTUAL_FINAL = "FFA_ACTUAL_FINAL"
+    # Completed-game FFA actuals as Arbit held them at a decision time (point-in-time reader).
+    FFA_ACTUAL_AS_OF = "FFA_ACTUAL_AS_OF"
     REALIZED_NFL_STAT = "REALIZED_NFL_STAT"
     SCHEDULE = "SCHEDULE"
     ARBIT_MODEL_OUTPUT = "ARBIT_MODEL_OUTPUT"
@@ -33,7 +35,12 @@ class SourceType(StrEnum):
 
 # Types that may feed features or labels. Model outputs are outputs only (spec §2.1).
 INPUT_TYPES = frozenset(
-    {SourceType.FFA_ACTUAL_FINAL, SourceType.REALIZED_NFL_STAT, SourceType.SCHEDULE}
+    {
+        SourceType.FFA_ACTUAL_FINAL,
+        SourceType.FFA_ACTUAL_AS_OF,
+        SourceType.REALIZED_NFL_STAT,
+        SourceType.SCHEDULE,
+    }
 )
 
 
@@ -165,6 +172,76 @@ SOURCES: Mapping[str, SourceSpec] = {
                 "basis": frozenset({"team_statistics"}),
                 "season_type": frozenset({"REG", "POST"}),
             },
+        ),
+        SourceSpec(
+            "ffa_targets.athlete_contributions",
+            SourceType.FFA_ACTUAL_FINAL,
+            "arbit",
+            "The same player-game FFA lines with each rule's contribution, for decomposing points "
+            "into yards, touchdowns, receptions, turnovers and kicking (A09)",
+            used=(
+                "season",
+                "week",
+                "season_type",
+                "game_id",
+                "team",
+                "player_id",
+                "position",
+                "basis",
+                "points",
+                "refusal",
+                "contributions",
+            ),
+            known=frozenset(TARGET_META + ATHLETE_STATS + TARGET_DETAIL),
+            scoring_role="athlete",
+            values={
+                "basis": frozenset({"statistics", "snaps_without_statistics"}),
+                "season_type": frozenset({"REG", "POST"}),
+            },
+        ),
+        SourceSpec(
+            "ffa_targets.defense_contributions",
+            SourceType.FFA_ACTUAL_FINAL,
+            "arbit",
+            "The same D/ST team-game FFA lines with each rule's contribution (A09)",
+            used=(
+                "season",
+                "week",
+                "season_type",
+                "game_id",
+                "team",
+                "basis",
+                "points",
+                "refusal",
+                "contributions",
+            ),
+            known=frozenset(TARGET_META + DEFENSE_STATS + TARGET_DETAIL),
+            scoring_role="defense",
+            values={
+                "basis": frozenset({"team_statistics"}),
+                "season_type": frozenset({"REG", "POST"}),
+            },
+        ),
+        SourceSpec(
+            "gamebook.position_points",
+            SourceType.FFA_ACTUAL_AS_OF,
+            "arbit",
+            "FFA points by team-game and position as known at a decision time: the point-in-time "
+            "reader's rows of completed games, scored by the shared scorer (slice 3b gamebooks)",
+            used=("game_id", "team", "opponent", "position", "points", "refused"),
+            known=frozenset(
+                {"game_id", "team", "opponent", "position", "points", "refused", "opportunities"}
+            ),
+            scoring_role="athlete",
+        ),
+        SourceSpec(
+            "gamebook.dst_points",
+            SourceType.FFA_ACTUAL_AS_OF,
+            "arbit",
+            "D/ST FFA points by team-game as known at a decision time (slice 3b gamebooks)",
+            used=("game_id", "team", "opponent", "points"),
+            known=frozenset({"game_id", "team", "opponent", "points"}),
+            scoring_role="defense",
         ),
         SourceSpec(
             "nflverse.schedules",

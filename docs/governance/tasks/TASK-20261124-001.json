@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-001",
+  "title": "M3-3 DvP Phase 2: reliability lab (A00, A02-A10, A12) on the repaired FFA targets",
+  "objective": "Run the specification's Phase A on the validated, R-072-repaired completed-game observations (OWN-074): A00 landscape and raw vs adjusted ranks; A02 split-method sensitivity including 1,000 seeded random balanced splits; A03 opponent-adjustment variants; A04 position stability by era and half size with joint season-bootstrap orderings; A05 variance components (method of moments and REML with unequal game counts, boundary and convergence reported); A06 temporal stability (first vs second half, lag decay, rolling windows); A07 between-season carryover; A08 within-week permutation nulls and cluster-bootstrap comparisons; A09 FFA-component decomposition from the scorer's rule contributions; A10 era, season-exclusion, trimming and influence robustness; A12 refused-line and stat-correction sensitivity. Tables, SVG plots, intervals, RELIABILITY_REPORT and METHODOLOGY; tests T12-T14, T23, T24, T28. Descriptive only: no forecast, no weight change, no production write.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "libs/arbit-model/src/arbit_model/dvp/lab.py",
+    "libs/arbit-model/src/arbit_model/dvp/svg.py",
+    "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+    "libs/arbit-model/tests/test_dvp_lab.py",
+    "libs/arbit-model/tests/test_dvp_firewall.py",
+    "scripts/model/dvp.py",
+    "config/dvp/reliability.json",
+    "docs/research/dvp/RELIABILITY_REPORT.md",
+    "docs/research/dvp/METHODOLOGY.md",
+    "docs/research/dvp/reliability-results.json",
+    "docs/research/dvp/plots/split-scatter-QB.svg",
+    "docs/research/dvp/plots/split-scatter-RB.svg",
+    "docs/research/dvp/plots/split-scatter-WR.svg",
+    "docs/research/dvp/plots/split-scatter-TE.svg",
+    "docs/research/dvp/plots/split-scatter-K.svg",
+    "docs/research/dvp/plots/split-scatter-DST.svg",
+    "docs/research/dvp/plots/k-forest.svg",
+    "docs/research/dvp/plots/weight-curves.svg",
+    "docs/research/dvp/plots/lag-decay.svg",
+    "docs/research/dvp/plots/null-distributions.svg",
+    "docs/research/dvp/plots/carryover.svg",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/experiment-registry.json",
+    "docs/research/dvp/DATA_DICTIONARY.md",
+    "docs/research/dvp/SOURCE_PROVENANCE.md",
+    "docs/research/dvp/PROJECTION_EXCLUSION_AUDIT.json",
+    "docs/research/dvp/audit-receipt.json",
+    "docs/research/dvp/SCORE_FINALITY_AUDIT.json",
+    "docs/research/dvp/continuity-manifest.json",
+    "docs/research/dvp/DATA_QUALITY.md",
+    "docs/research/dvp/V0_REPRODUCTION.md",
+    "docs/research/dvp/v0-reproduction.json",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/project/decision-register.md",
+    "docs/project/known-issues.md",
+    "docs/superpowers/plans/2026-11-09-m3-model.md",
+    "libs/arbit-model/README.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-24T02:29:15Z",
+  "updated_at": "2026-11-24T02:29:25Z",
+  "baseline": "51ded0b4f0183672c6a3a28a7070554177b94481",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Read the specification's Phase A (A00-A12), sections 6-9 and 11 (estimators, unequal halves, clustered resampling, multiple comparisons, required reports and plots, tests T12-T14, T21-T24, T28), the phase 1 code (observations, reliability, provenance, dvp.py) and receipts. Inputs: the audit run phase1-audit-20261124T021910Z observations on repaired index 6ffb62fb (31,668 cells, 31,610 valid) and its schedule. matplotlib and scipy are absent; plots will be deterministic SVG written by the lab, and estimators use numpy (installed). The athlete and D/ST target tables carry per-rule contributions, which allow the FFA-component decomposition (A09) without a new data family; true opportunity counts would need a new realized-statistics source and are left to Phase B/C.",
+      "files": [
+        "docs/research/dvp/V0_REPRODUCTION.md",
+        "docs/research/dvp/DATA_DICTIONARY.md",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+        "scripts/model/dvp.py"
+      ]
+    },
+    "plan": {
+      "summary": "lab.py: position frames (entity = defense, or offense for D/ST; faced = the other side); adjustments none/season/loo_mean/loo_median/loo_shrunk; split assignments calendar/alternating/chronological/first6_next6/home_away/random (numpy, seeded); method-of-moments and REML one-way components with unequal sizes, boundary and convergence; lag-binned ICC; rolling-window correlations with model-implied values; carryover with slope and leave-one-pair-out CV; within-week permutation nulls; season, unit and franchise cluster bootstraps; jackknife influence. svg.py: deterministic plots. provenance: a contributions source spec for A09. dvp.py reliability subcommand writing reliability-results.json, plots and run artifacts; registry records for A00-A10, A12. Tests T12-T14, T23, T24, T28 plus determinism. Then RELIABILITY_REPORT.md and METHODOLOGY.md written from the results.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/lab.py",
+        "libs/arbit-model/src/arbit_model/dvp/svg.py",
+        "libs/arbit-model/src/arbit_model/dvp/provenance.py",
+        "scripts/model/dvp.py",
+        "config/dvp/reliability.json",
+        "libs/arbit-model/tests/test_dvp_lab.py"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}
