@@ -6155,36 +6155,46 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "B00, the offense-only forecast from prior FFA actuals; Arbit has no other player projection and uses no provider projection",
+   "evidence_paths": [
+    "docs/research/dvp/sitstart.json",
+    "config/dvp/sitstart.json",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md"
+   ],
    "experiment_id": "M3-3-C00",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Arbit-computed player baseline from eligible actuals, no DvP",
+   "holdout_independence_status": "CONDITIONALLY_HELD_OUT: the same frozen 2025 forecasts were scored for group-level RMSE before; no Phase C quantity was computed before its rule was declared",
+   "hypothesis": "An Arbit-computed, actuals-only D/ST baseline exists for player-level tests",
    "interval": null,
    "limitations": null,
-   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "next_steps": null,
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+   "reason": "D/ST only: Phase C runs for a group with a credible group-level signal (\u00a75); QB is INCONCLUSIVE and RB, WR, TE, K NOT_USEFUL, so they are not run, by the specification's gate",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "sample_count": {
+    "development": 3678,
+    "holdout": 544,
+    "validation": 544
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -6204,36 +6214,48 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "a D/ST is one unit per team: each D/ST forecast row maps to exactly one canonical unit, the defense of the game, so the share is 1",
+   "evidence_paths": [
+    "docs/research/dvp/sitstart.json",
+    "config/dvp/sitstart.json",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md"
+   ],
    "experiment_id": "M3-3-C01",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Group DvP allocated to players by past-known usage share",
+   "holdout_independence_status": "CONDITIONALLY_HELD_OUT: the same frozen 2025 forecasts were scored for group-level RMSE before; no Phase C quantity was computed before its rule was declared",
+   "hypothesis": "The group-level D/ST term allocates to players by past-known share",
    "interval": null,
    "limitations": null,
-   "next_steps": "Runs only if Phase B finds a credible group-level signal",
-   "parameters": null,
+   "next_steps": null,
+   "parameters": {
+    "development": true,
+    "holdout": true,
+    "validation": true
+   },
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+   "reason": "Identity for D/ST: the player-level forecast is the group-level forecast",
    "relative_delta": null,
    "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
-   "tests_passed": null,
+   "tests_passed": [
+    "T26"
+   ],
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -6253,36 +6275,42 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "estimator": "with a share of 1 and no opportunity split, all three allocations give the same D/ST forecast",
+   "evidence_paths": [
+    "docs/research/dvp/sitstart.json",
+    "config/dvp/sitstart.json",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md"
+   ],
    "experiment_id": "M3-3-C02",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Additive vs proportional vs opportunity x efficiency allocation",
+   "holdout_independence_status": "CONDITIONALLY_HELD_OUT: the same frozen 2025 forecasts were scored for group-level RMSE before; no Phase C quantity was computed before its rule was declared",
+   "hypothesis": "Additive, proportional and opportunity x efficiency allocation differ",
    "interval": null,
    "limitations": null,
-   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "next_steps": null,
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+   "reason": "Identical by construction for D/ST; nothing to choose between",
    "relative_delta": null,
    "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -6302,36 +6330,42 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
    "coverage_pct": null,
-   "data_hash": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
    "decision": null,
    "estimator": null,
-   "evidence_paths": null,
+   "evidence_paths": [
+    "docs/research/dvp/sitstart.json",
+    "config/dvp/sitstart.json",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md"
+   ],
    "experiment_id": "M3-3-C03",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Role interactions (slot/outside, target share) where coverage allows",
+   "holdout_independence_status": "CONDITIONALLY_HELD_OUT: the same frozen 2025 forecasts were scored for group-level RMSE before; no Phase C quantity was computed before its rule was declared",
+   "hypothesis": "Role interactions (slot, outside, target share) refine the matchup",
    "interval": null,
    "limitations": null,
-   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "next_steps": "Only for a position group that first shows a group-level signal",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+   "reason": "C03 (route, slot, target-share interactions) has no meaning for a D/ST.",
    "relative_delta": null,
    "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "BLOCKED",
    "subgroups": null,
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -6350,37 +6384,129 @@
    "workstream_id": "M3-3"
   },
   {
-   "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "absolute_delta": {
+    "development": 4.448,
+    "holdout": 6.617,
+    "validation": 8.546
+   },
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
-   "baseline_metric": null,
-   "code_commit": null,
+   "baseline_metric": {
+    "development": 55.678,
+    "holdout": 55.336,
+    "validation": 53.761
+   },
+   "code_commit": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
    "coverage_pct": null,
-   "data_hash": null,
-   "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+   "decision": "PROMISING",
+   "estimator": "every unordered pair of D/STs playing the same week; each model starts the higher forecast",
+   "evidence_paths": [
+    "docs/research/dvp/sitstart.json",
+    "config/dvp/sitstart.json",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md"
+   ],
    "experiment_id": "M3-3-C04",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Historical same-position and lineup-slot Sit/Start comparisons",
-   "interval": null,
-   "limitations": null,
-   "next_steps": "Runs only if Phase B finds a credible group-level signal",
+   "holdout_independence_status": "CONDITIONALLY_HELD_OUT: the same frozen 2025 forecasts were scored for group-level RMSE before; no Phase C quantity was computed before its rule was declared",
+   "hypothesis": "The frozen D/ST candidate picks the higher-scoring D/ST more often",
+   "interval": {
+    "development": [
+     3.271,
+     5.635
+    ],
+    "holdout": [
+     2.563,
+     10.487
+    ],
+    "validation": [
+     4.128,
+     12.546
+    ]
+   },
+   "limitations": [
+    "Arbit holds FFA lineups only for 2026 scoring periods 1-10; earlier seasons have none, and 2026 is not a stage of this study (its weeks 1-11 were known at the freeze). League-constrained lineup evaluation (C05) is therefore not possible on 2016-2025 and is recorded as BLOCKED for that part only.",
+    "The waiver-pool subgroup assumes an 8-team league rosters the top 8 by B00"
+   ],
+   "next_steps": "Score 2026 weeks 12-18 with the same frozen rule (PROSPECTIVE_2026.md)",
    "parameters": null,
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+   "reason": "clears 1.8 pp with net points gained in every period: development +4.45 pp, +27362.5 points, validation +8.55 pp, +7978.0 points, holdout +6.62 pp, +5617.5 points",
    "relative_delta": null,
-   "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
-   "subgroups": null,
+   "sample_count": {
+    "development": 53867,
+    "holdout": 7984,
+    "validation": 7992
+   },
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
+   "subgroups": {
+    "development": {
+     "close": {
+      "b00": 52.514,
+      "b06": 58.626,
+      "deltaPp": 6.112,
+      "pairs": 26418,
+      "threshold": 1.0
+     },
+     "waiverPool": {
+      "b00": 52.023,
+      "b06": 59.104,
+      "deltaPp": 7.081,
+      "pairs": 14640,
+      "ranks": [
+       9,
+       24
+      ]
+     }
+    },
+    "holdout": {
+     "close": {
+      "b00": 51.677,
+      "b06": 61.655,
+      "deltaPp": 9.978,
+      "pairs": 4216,
+      "threshold": 1.0
+     },
+     "waiverPool": {
+      "b00": 55.036,
+      "b06": 64.578,
+      "deltaPp": 9.542,
+      "pairs": 2160,
+      "ranks": [
+       9,
+       24
+      ]
+     }
+    },
+    "validation": {
+     "close": {
+      "b00": 52.328,
+      "b06": 60.566,
+      "deltaPp": 8.238,
+      "pairs": 4197,
+      "threshold": 1.0
+     },
+     "waiverPool": {
+      "b00": 52.024,
+      "b06": 62.146,
+      "deltaPp": 10.122,
+      "pairs": 2160,
+      "ranks": [
+       9,
+       24
+      ]
+     }
+    }
+   },
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,
@@ -6400,36 +6526,123 @@
   },
   {
    "absolute_delta": null,
-   "actual_game_finality_policy": null,
+   "actual_game_finality_policy": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)",
    "as_of_policy": "pre_first_game_of_nfl_week",
    "baseline_metric": null,
-   "code_commit": null,
+   "code_commit": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
    "coverage_pct": null,
-   "data_hash": null,
-   "decision": null,
-   "estimator": null,
-   "evidence_paths": null,
+   "data_hash": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+   "decision": "PROMISING",
+   "estimator": "actual(candidate pick) - actual(baseline pick) over changed decisions; worst single decision and week; league top-8 points",
+   "evidence_paths": [
+    "docs/research/dvp/sitstart.json",
+    "config/dvp/sitstart.json",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md"
+   ],
    "experiment_id": "M3-3-C05",
    "forbidden_vendor_projection_dependencies": 0,
-   "holdout_independence_status": "2025 exposed descriptively by v0: conditional holdout at best; 2026 games after a registered freeze for confirmation",
-   "hypothesis": "Decision accuracy, points gained or lost, and regret vs the baseline",
+   "holdout_independence_status": "CONDITIONALLY_HELD_OUT: the same frozen 2025 forecasts were scored for group-level RMSE before; no Phase C quantity was computed before its rule was declared",
+   "hypothesis": "Changed D/ST choices gain actual FFA points without large regret",
    "interval": null,
-   "limitations": null,
-   "next_steps": "Runs only if Phase B finds a credible group-level signal",
-   "parameters": null,
+   "limitations": [
+    "Arbit holds FFA lineups only for 2026 scoring periods 1-10; earlier seasons have none, and 2026 is not a stage of this study (its weeks 1-11 were known at the freeze). League-constrained lineup evaluation (C05) is therefore not possible on 2016-2025 and is recorded as BLOCKED for that part only."
+   ],
+   "next_steps": null,
+   "parameters": {
+    "development": {
+     "changed": {
+      "candidateRightWhenChanged": 56.88,
+      "count": 17512,
+      "share": 0.3251
+     },
+     "pointsFromChanges": {
+      "perChangedDecision": 1.5625,
+      "perWeek": 224.283,
+      "perWeek95": [
+       172.753,
+       279.003
+      ],
+      "total": 27362.5
+     },
+     "top8": {
+      "b00": 58.984,
+      "b06": 66.664,
+      "deltaPerWeek": 7.68
+     },
+     "worstCase": {
+      "singleDecision": -40.0,
+      "week": -336.0,
+      "weeksWithNetLoss": 28
+     }
+    },
+    "holdout": {
+     "changed": {
+      "candidateRightWhenChanged": 58.67,
+      "count": 3062,
+      "share": 0.3835
+     },
+     "pointsFromChanges": {
+      "perChangedDecision": 1.8346,
+      "perWeek": 312.083,
+      "perWeek95": [
+       137.283,
+       481.645
+      ],
+      "total": 5617.5
+     },
+     "top8": {
+      "b00": 56.111,
+      "b06": 66.611,
+      "deltaPerWeek": 10.5
+     },
+     "worstCase": {
+      "singleDecision": -34.0,
+      "week": -423.0,
+      "weeksWithNetLoss": 4
+     }
+    },
+    "validation": {
+     "changed": {
+      "candidateRightWhenChanged": 61.48,
+      "count": 2977,
+      "share": 0.3725
+     },
+     "pointsFromChanges": {
+      "perChangedDecision": 2.6799,
+      "perWeek": 443.222,
+      "perWeek95": [
+       237.574,
+       657.569
+      ],
+      "total": 7978.0
+     },
+     "top8": {
+      "b00": 48.667,
+      "b06": 67.778,
+      "deltaPerWeek": 19.111
+     },
+     "worstCase": {
+      "singleDecision": -24.0,
+      "week": -251.0,
+      "weeksWithNetLoss": 3
+     }
+    }
+   },
    "placebo_summary": null,
-   "primary_metric": null,
-   "reason": null,
+   "primary_metric": "pairwise start/sit accuracy, candidate minus baseline (points)",
+   "reason": "clears 1.8 pp with net points gained in every period: development +4.45 pp, +27362.5 points, validation +8.55 pp, +7978.0 points, holdout +6.62 pp, +5617.5 points",
    "relative_delta": null,
    "sample_count": null,
-   "scoring_hash": null,
-   "source_ancestry_hash": null,
-   "status": "PLANNED",
+   "scoring_hash": {
+    "athlete": "10e938ebf6983eb132111ec7def4ba03e9bd29fe8bff0170a59d010586396fe3",
+    "defense": "16885a800c63cc6aff05eabe2905bd88cf90f67f1208f616742e5565aade93ee"
+   },
+   "source_ancestry_hash": "8cffb1de9d92422b57f9f1d8f8b7ead2d911d1a704cd4a2d5729bba215855da4",
+   "status": "EXECUTED",
    "subgroups": null,
    "tests_passed": null,
    "train_validation_test_periods": {
     "development": [
-     2016,
      2017,
      2018,
      2019,

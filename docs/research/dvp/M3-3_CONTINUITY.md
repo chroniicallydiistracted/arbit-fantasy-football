@@ -19,7 +19,7 @@ Specification §0 rule 1, §4 and §9 Phase 0 (T29). Manifest: [continuity-manif
 - The script, its receipt, the shared split-half script and the signal-study receipt are byte-identical. Their SHA-256 hashes are in the manifest, and T29 checks them on every test run.
 - The extension writes new receipts here and new runs under `artifacts/dvp/<run>/`.
 
-## Inventory (2026-11-23)
+## Inventory (updated 2026-11-24)
 
 | Phase | Work | Status |
 | --- | --- | --- |
@@ -28,14 +28,15 @@ Specification §0 rule 1, §4 and §9 Phase 0 (T29). Manifest: [continuity-manif
 | 0 | v0 reproduction: exact rerun and independent recompute | REPRODUCED |
 | 0 | Discrepancies dispositioned (misattribution, missing D/ST lines, refused lines, unequal halves) | EXECUTED ([V0_REPRODUCTION.md](V0_REPRODUCTION.md)) |
 | 1 | Completed-game observation pipeline, D/ST orientation, row lineage, as-of index | EXECUTED |
-| 1 | Tests T01–T07, T29–T40 (plus T08–T13, T21–T22) | PASSED (38 tests) |
+| 1 | Tests T01–T40, all of them | PASSED (`libs/arbit-model/tests/test_dvp_*.py`) |
 | 1 | Data quality, provenance and finality reports | EXECUTED |
-| 2 | A01 on validated observations, with intervals | EXECUTED |
-| 2 | A00, A02–A10, A12 | PLANNED |
-| 3 | B00–B12 walk-forward | PLANNED |
-| 4 | Restricted 2025 holdout or 2026 prospective confirmation | PLANNED |
-| 5 | C00–C05 player-level Sit/Start | PLANNED, conditional on Phase B |
-| — | Full D/ST coverage (156 missing lines) | BLOCKED on a canonical scorer repair, an owner decision (R-072) |
+| 1 | Full D/ST coverage (the R-072 repair, OWN-075) | DONE: 5,278 of 5,278 team-games on targets `6ffb62fb…` |
+| 2 | A00–A12 reliability lab | EXECUTED ([RELIABILITY_REPORT.md](RELIABILITY_REPORT.md)) |
+| 3 | B00–B12 walk-forward; development folds and 2024 validation | EXECUTED ([BACKTEST_REPORT.md](BACKTEST_REPORT.md)) |
+| 4 | Frozen manifest, 2025 conditional holdout, decisions | EXECUTED: D/ST PROMISING ([MODEL_CARD.md](MODEL_CARD.md)) |
+| 4 | 2026 weeks 12–18 prospective confirmation | FROZEN before the games, scored after the season ([PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)) |
+| 5 | C00–C05 player-level start/sit, D/ST (the only group past the gate) | EXECUTED: PROMISING; C03 and league lineups BLOCKED ([PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md)) |
+| — | Verify-only mode: every artifact read back, every receipt reproduced | PASSED ([verify-receipt.json](verify-receipt.json)) |
 
 ## What changed from v0, and what did not
 

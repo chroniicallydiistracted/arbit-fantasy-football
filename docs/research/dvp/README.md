@@ -15,13 +15,14 @@
 | v0 found, preserved and reproduced exactly | REPRODUCED ([continuity](M3-3_CONTINUITY.md), [reproduction](V0_REPRODUCTION.md)) |
 | Source and score audit; projection dependencies = 0 | PASSED |
 | Completed-game pipeline: 5,278 team-games reconciled | PASSED ([data quality](DATA_QUALITY.md)) |
-| Tests T01–T07 and T29–T40 (with T08–T13, T21–T22) | PASSED, 38 tests |
+| Tests T01–T40, every one in the specification | PASSED (`libs/arbit-model/tests/test_dvp_*.py`; T26 and T27 added by TASK-20261124-004) |
 | A01 on validated observations, with intervals | EXECUTED |
 | Phase 2 reliability lab: A00, A02–A10, A12 | EXECUTED ([reliability report](RELIABILITY_REPORT.md), [methodology](METHODOLOGY.md)) |
 | Phase 3 walk-forward: B00–B12 on development folds 2017–2023 and 2024 validation | EXECUTED ([backtest report](BACKTEST_REPORT.md)); candidates frozen in `config/dvp/frozen-candidates.json` |
 | Phase 4: frozen manifest, 2025 conditional holdout, decisions | EXECUTED. **D/ST PROMISING; QB INCONCLUSIVE; RB, WR, TE, K NOT_USEFUL** ([model card](MODEL_CARD.md)) |
-| Prospective 2026 weeks 12–18 (frozen before they were played) | PLANNED ([plan](PROSPECTIVE_2026.md)) |
-| C00–C05 (player-level, D/ST only if confirmed) | PLANNED ([registry](EXPERIMENT_REGISTRY.md)) |
+| Prospective 2026 weeks 12–18, both levels (frozen before they were played) | FROZEN; scored after the season ([plan](PROSPECTIVE_2026.md)) |
+| Phase 5, C00–C05: D/ST start/sit (the only group past the gate) | EXECUTED. **PROMISING:** +4.4 / +8.5 / +6.6 points of pairwise accuracy (dev / 2024 / 2025). C03 and league lineups BLOCKED ([player-level report](PLAYER_LEVEL_REPORT.md)) |
+| Verify-only: artifacts read back, all 468 committed metrics reproduced, frozen commit matches every frozen hash | PASSED ([verify-receipt.json](verify-receipt.json)) |
 | Canonical targets repaired (R-072): all 5,278 D/ST team-games, every opponent from the schedule | DONE ([targets repair](../targets-repair-r072.md), TASK-20261123-007) |
 
 **Headline so far (repeatability only, not forecasting):** REML variance components on adjusted points, each unit with its own game count (A05).
@@ -43,7 +44,7 @@ An offense's own production at a position settles in 4–7 games, so per game a 
 - **Unshrunk DvP:** makes every position worse.
 - **2025 conditional holdout:** D/ST −4.1%, so D/ST is PROMISING; the positions are not.
 
-Whether any of this improves next-game forecasts over an offense-only baseline is Phase B.
+**Start/sit (Phase C, D/ST):** B06 picks the higher-scoring D/ST in 60–62% of weekly pairs, against B00's 54–56%. That clears the 1.8-point minimum declared before the run, in every period.
 
 ## Running it
 
@@ -71,13 +72,30 @@ POLARS_MAX_THREADS=2 ARBIT_NFLVERSE_PATH=<main>/data/nflverse uv run --env-file 
 # (commit config/dvp/frozen-candidates.json, then the same with --stage validation)
 # Phase 4: freeze (reads the schedule from the database), commit config/dvp/frozen.json, then
 #   ... backtest --stage holdout   (refuses unless every frozen hash matches)
-uv run python scripts/model/dvp.py report --receipts docs/research/dvp
+uv run python scripts/model/dvp.py report --receipts docs/research/dvp   # plots and METRICS.csv
+
+# Phase 5 (C): D/ST start/sit from the frozen forecasts; rule in config/dvp/sitstart.json
+POLARS_MAX_THREADS=2 uv run python scripts/model/dvp.py sitstart --config config/dvp/sitstart.json \
+  --run <main>/artifacts/dvp/<audit run> --receipts docs/research/dvp
+
+# Verify-only: re-read every artifact and reproduce every receipt; writes verify-receipt.json
+POLARS_MAX_THREADS=2 uv run python scripts/model/dvp.py verify --config config/dvp/backtest.json \
+  --run <main>/artifacts/dvp/<audit run> --receipts docs/research/dvp
 
 # The experiment registry, from the receipts
 uv run python scripts/model/dvp.py registry --config config/dvp/base.json --receipts docs/research/dvp
 
 uv run pytest libs/arbit-model/tests/test_dvp_*.py -q
+# On the main machine, ARBIT_DVP_AUDIT_RUN=<main>/artifacts/dvp/<audit run> also checks the real artifacts
 ```
+
+**Reruns are idempotent.**
+- A stage's forecasts are written once. A rerun whose forecasts match within 10⁻⁹ points leaves the file alone; parallel sums move the last bit of some values by up to 7×10⁻¹⁵. A rerun with different forecasts refuses rather than overwrite evidence.
+- Development never rewrites `config/dvp/frozen-candidates.json`. A rerun that selects the same candidates leaves it untouched; one that selects differently stops.
+
+**Frozen stages run from the frozen commit.**
+- `scripts/model/dvp.py` gained reporting, Phase C and verify after the freeze, so on `main` its hash no longer matches `config/dvp/frozen.json`. The holdout command refuses there, as designed.
+- To rerun the holdout, or to score the 2026 window, check out the frozen code (`git worktree add <dir> 165d140`). Every frozen hash matches there (`verify` checks this), and the 2025 holdout reran from it with forecasts equal to within 7×10⁻¹⁵ points (the last bit of polars' parallel sums) and identical results ([BACKTEST_REPORT.md](BACKTEST_REPORT.md#reproduction)).
 
 **Runtime:** the audit takes about 2 s, the reproduction 8 s, the reliability lab about 80 s, the development backtest about 26 s and validation about 8 s. The DvP tests take about 8 s with `POLARS_MAX_THREADS=2`; with the default thread pool, tiny frames make them several times slower.
 
@@ -106,12 +124,29 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [METHODOLOGY.md](METHODOLOGY.md) | Hypotheses, estimators, look-ahead protections, and Phase B's comparator and metrics declared before it runs |
 | [BACKTEST_REPORT.md](BACKTEST_REPORT.md) | Phases 3–4: B00 and every variant on development folds, 2024 and the 2025 conditional holdout; controls, cutoff and availability sensitivity, candidates, decisions |
 | [MODEL_CARD.md](MODEL_CARD.md) | What the forecast is, results by position, intended and unintended use, limits, fallback, eligibility |
-| [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The frozen 2026 weeks 12–18 confirmation and how it will be scored |
+| [PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md) | Phase C: D/ST start/sit decisions, rule declared first, results, what is blocked |
+| [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The frozen 2026 weeks 12–18 confirmation (both levels) and how it will be scored |
+
+## Specification §11 deliverables
+
+| # | Deliverable | Where |
+| --- | --- | --- |
+| 1 | README / RUNBOOK | This file (setup, provenance, commands, runtime, offline behavior) |
+| 2 | Data dictionary, data quality, source provenance | [DATA_DICTIONARY.md](DATA_DICTIONARY.md), [DATA_QUALITY.md](DATA_QUALITY.md), [SOURCE_PROVENANCE.md](SOURCE_PROVENANCE.md) |
+| 3 | Methodology | [METHODOLOGY.md](METHODOLOGY.md) |
+| 4 | Continuity and v0 reproduction | [M3-3_CONTINUITY.md](M3-3_CONTINUITY.md), [V0_REPRODUCTION.md](V0_REPRODUCTION.md), `continuity-manifest.json`, `v0-reproduction.json` |
+| 5 | Experiment registry | [EXPERIMENT_REGISTRY.md](EXPERIMENT_REGISTRY.md), `experiment-registry.json` (the specification's `RESULTS.json`: every record has the §10 fields); seeds and splits in `config/dvp/` |
+| 6 | Reliability report | [RELIABILITY_REPORT.md](RELIABILITY_REPORT.md), `reliability-results.json` |
+| 7 | Backtest report | [BACKTEST_REPORT.md](BACKTEST_REPORT.md), `backtest-*.json` |
+| 8 | Model card | [MODEL_CARD.md](MODEL_CARD.md), with the per-position conclusions table and integrity flags |
+| 9 | Decisions, changelog, handoff | The repository's own records: [decision register](../../project/decision-register.md) (OWN-074, OWN-075, ENG-057–ENG-062), [changelog](../../project/changelog.md), governance handoffs in `docs/project/handoffs/` |
+| 10 | Forecasts, metrics, results, manifests, plots | `artifacts/dvp/<run>/backtest-<stage>/forecasts.parquet` (ignored by git; hashes in the receipts), [METRICS.csv](METRICS.csv), `experiment-registry.json`, `run-manifest.json`, `config/dvp/frozen*.json`, [plots/](plots/) (split scatter, k forest, weight curves, lag decay, carryover, nulls, backtest delta, error by season, calibration, start/sit) |
+| 11 | Projection-exclusion and score-finality audits | [PROJECTION_EXCLUSION_AUDIT.json](PROJECTION_EXCLUSION_AUDIT.json), [SCORE_FINALITY_AUDIT.json](SCORE_FINALITY_AUDIT.json) |
 
 Decisions, risks, history and handoffs live in the repository's own records:
-- the [decision register](../../project/decision-register.md): OWN-074, ENG-057, OWN-075, ENG-058;
-- [known issues](../../project/known-issues.md): R-072 to R-074;
+- the [decision register](../../project/decision-register.md): OWN-074, ENG-057, OWN-075, ENG-058 to ENG-062;
+- [known issues](../../project/known-issues.md): R-072 to R-075;
 - the [changelog](../../project/changelog.md);
-- governance tasks TASK-20261123-005, TASK-20261123-007 and TASK-20261124-001 to -003.
+- governance tasks TASK-20261123-005, TASK-20261123-007 and TASK-20261124-001 to -004.
 
-**Next:** the prospective 2026 scoring after the season, and Phase C for D/ST if it is confirmed.
+**Next:** after the 2026 regular season, score the frozen weeks 12–18 at both levels ([PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)). Any production use of the D/ST term then needs the owner (OWN-074).

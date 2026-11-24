@@ -51,6 +51,21 @@ def test_t31_scoring_path_and_dvp_code_hold_no_provider_projection():
     assert {f["action"] for f in receipt["forbiddenInventory"]} == {"REJECT"}
 
 
+def test_t31_every_dvp_module_is_scanned_and_clean():
+    """New DvP code (Phase C, verify) enters the code scan and holds no provider projection."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("dvp_cli", ROOT / "scripts/model/dvp.py")
+    assert spec is not None and spec.loader is not None
+    cli = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cli)
+    package = ROOT / "libs/arbit-model/src/arbit_model/dvp"
+    expected = {str(p.relative_to(ROOT)) for p in package.glob("*.py") if p.name != "provenance.py"}
+    assert expected <= set(cli.SCANNED)
+    for path in cli.SCANNED:
+        assert scan_code(ROOT / path) == [], path
+
+
 def test_t31_the_scan_finds_a_planted_projection(tmp_path):
     planted = tmp_path / "planted.py"
     planted.write_text(

@@ -1,0 +1,50 @@
+{
+ "baseline": "b00",
+ "candidate": "b06",
+ "decisionRule": "Per period, with b06's accuracy change against b00 on the primary pairs: PROMISING if it is at least 1.8 points and the net points from changed decisions are positive in development, validation and the holdout; NOT_USEFUL if it misses 1.8 points in all three; INCONCLUSIVE otherwise; BLOCKED if an integrity check fails (forecast hashes, common rows, projection dependency). A bootstrap interval for the accuracy change that excludes 0 is reported as stronger evidence, not required.",
+ "forbidden_vendor_projection_dependencies": 0,
+ "format": "arbit-dvp-m3-3-frozen-phase-c-v1",
+ "frozenAt": "2026-11-24T06:57:55.648402+00:00",
+ "groupLevelFreeze": {
+  "path": "config/dvp/frozen.json",
+  "sha256": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6"
+ },
+ "historicalResult": {
+  "label": "PROMISING",
+  "receipt": "docs/research/dvp/sitstart.json",
+  "receiptSha256": "9740e882e019a1216a97ddd3aea21be0fd2d10b1960144f6836a33aed61700a3"
+ },
+ "method": {
+  "config/dvp/sitstart.json": "d0dfe520b4880d4950c52caaa0652cc8dee6847ade823cf6a54def7532be0225",
+  "libs/arbit-model/src/arbit_model/dvp/decisions.py": "3e8976a2f0c52adb14f3bbc3fc406599469a8587fbd7e64dfdd3e812ec8badd6"
+ },
+ "parameters": {
+  "bootstrapBlock": "season-week",
+  "bootstrapReplicates": 2000,
+  "close": 1.0,
+  "seed": 1729,
+  "top": 8,
+  "waiverPoolRanks": [
+   9,
+   24
+  ]
+ },
+ "practicalMinimumAccuracyPp": 1.8,
+ "prospective": {
+  "firstKickoff": "2026-11-26T01:00:00+00:00",
+  "procedure": "After the 2026 regular season: forecast weeks 12-18 with the frozen group-level method (config/dvp/frozen.json, run from its frozen commit), then apply decisions.units, pairs, metrics and decide from this frozen decisions.py with these parameters to the D/ST rows. Confirmation needs b06 to clear the practical minimum with net points gained on that window alone.",
+  "season": 2026,
+  "weeks": [
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18
+  ]
+ },
+ "purpose": "Freeze Phase C (D/ST start/sit) before the prospective 2026 window, so its confirmation is independent like the group-level one in config/dvp/frozen.json.",
+ "workstream_id": "M3-3",
+ "write_to_production": false
+}

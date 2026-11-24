@@ -1,0 +1,264 @@
+{
+ "auditRun": "phase1-audit-20261124T024442Z",
+ "baseline": "b00",
+ "candidate": "b06",
+ "candidates": {
+  "path": "config/dvp/frozen-candidates.json",
+  "sha256": "2b2ce424bc7c61f732a8b1d59eb07d05340678019945bc96fa4e83735e50199e"
+ },
+ "checks": {
+  "development": {
+   "commonRows": 3678,
+   "dstForecastRows": 3678,
+   "forecastsMatchedBy": "bytes",
+   "seasons": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ],
+   "unitsPerGameAreOne": true,
+   "validLabels": 3678
+  },
+  "holdout": {
+   "commonRows": 544,
+   "dstForecastRows": 544,
+   "forecastsMatchedBy": "bytes",
+   "seasons": [
+    2025
+   ],
+   "unitsPerGameAreOne": true,
+   "validLabels": 544
+  },
+  "validation": {
+   "commonRows": 544,
+   "dstForecastRows": 544,
+   "forecastsMatchedBy": "bytes",
+   "seasons": [
+    2024
+   ],
+   "unitsPerGameAreOne": true,
+   "validLabels": 544
+  }
+ },
+ "code": "317361fd5f5d5f65a8e1432379cac899eee2c042+uncommitted",
+ "config": {
+  "path": "config/dvp/sitstart.json",
+  "sha256": "d0dfe520b4880d4950c52caaa0652cc8dee6847ade823cf6a54def7532be0225"
+ },
+ "decision": {
+  "label": "PROMISING",
+  "practicalMinimumPp": 1.8,
+  "reason": "clears 1.8 pp with net points gained in every period: development +4.45 pp, +27362.5 points, validation +8.55 pp, +7978.0 points, holdout +6.62 pp, +5617.5 points"
+ },
+ "forbidden_vendor_projection_dependencies": 0,
+ "format": "arbit-dvp-m3-3-sitstart-v1",
+ "frozenManifest": {
+  "path": "config/dvp/frozen.json",
+  "sha256": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6"
+ },
+ "generatedAt": "2026-11-24T06:56:53.179862+00:00",
+ "holdoutStatus": "CONDITIONALLY_HELD_OUT",
+ "notAvailable": {
+  "leagueLineups": "Arbit holds FFA lineups only for 2026 scoring periods 1-10; earlier seasons have none, and 2026 is not a stage of this study (its weeks 1-11 were known at the freeze). League-constrained lineup evaluation (C05) is therefore not possible on 2016-2025 and is recorded as BLOCKED for that part only.",
+  "roles": "C03 (route, slot, target-share interactions) has no meaning for a D/ST."
+ },
+ "parameters": {
+  "bootstrapBlock": "season-week",
+  "bootstrapReplicates": 2000,
+  "close": 1.0,
+  "seed": 1729,
+  "top": 8,
+  "waiverPoolRanks": [
+   9,
+   24
+  ]
+ },
+ "periods": {
+  "development": {
+   "accuracy": {
+    "b00": 55.678,
+    "b06": 60.126
+   },
+   "actualTies": 2384,
+   "changed": {
+    "candidateRightWhenChanged": 56.88,
+    "count": 17512,
+    "share": 0.3251
+   },
+   "close": {
+    "b00": 52.514,
+    "b06": 58.626,
+    "deltaPp": 6.112,
+    "pairs": 26418,
+    "threshold": 1.0
+   },
+   "deltaPp": 4.448,
+   "deltaPp95": [
+    3.271,
+    5.635
+   ],
+   "pairs": 53867,
+   "pointsFromChanges": {
+    "perChangedDecision": 1.5625,
+    "perWeek": 224.283,
+    "perWeek95": [
+     172.753,
+     279.003
+    ],
+    "total": 27362.5
+   },
+   "spearmanWithinWeek": {
+    "b00": 0.1564,
+    "b06": 0.2802
+   },
+   "top8": {
+    "b00": 58.984,
+    "b06": 66.664,
+    "deltaPerWeek": 7.68
+   },
+   "units": 3678,
+   "waiverPool": {
+    "b00": 52.023,
+    "b06": 59.104,
+    "deltaPp": 7.081,
+    "pairs": 14640,
+    "ranks": [
+     9,
+     24
+    ]
+   },
+   "weeks": 122,
+   "worstCase": {
+    "singleDecision": -40.0,
+    "week": -336.0,
+    "weeksWithNetLoss": 28
+   }
+  },
+  "holdout": {
+   "accuracy": {
+    "b00": 55.336,
+    "b06": 61.953
+   },
+   "actualTies": 375,
+   "changed": {
+    "candidateRightWhenChanged": 58.67,
+    "count": 3062,
+    "share": 0.3835
+   },
+   "close": {
+    "b00": 51.677,
+    "b06": 61.655,
+    "deltaPp": 9.978,
+    "pairs": 4216,
+    "threshold": 1.0
+   },
+   "deltaPp": 6.617,
+   "deltaPp95": [
+    2.563,
+    10.487
+   ],
+   "pairs": 7984,
+   "pointsFromChanges": {
+    "perChangedDecision": 1.8346,
+    "perWeek": 312.083,
+    "perWeek95": [
+     137.283,
+     481.645
+    ],
+    "total": 5617.5
+   },
+   "spearmanWithinWeek": {
+    "b00": 0.152,
+    "b06": 0.3239
+   },
+   "top8": {
+    "b00": 56.111,
+    "b06": 66.611,
+    "deltaPerWeek": 10.5
+   },
+   "units": 544,
+   "waiverPool": {
+    "b00": 55.036,
+    "b06": 64.578,
+    "deltaPp": 9.542,
+    "pairs": 2160,
+    "ranks": [
+     9,
+     24
+    ]
+   },
+   "weeks": 18,
+   "worstCase": {
+    "singleDecision": -34.0,
+    "week": -423.0,
+    "weeksWithNetLoss": 4
+   }
+  },
+  "validation": {
+   "accuracy": {
+    "b00": 53.761,
+    "b06": 62.307
+   },
+   "actualTies": 362,
+   "changed": {
+    "candidateRightWhenChanged": 61.48,
+    "count": 2977,
+    "share": 0.3725
+   },
+   "close": {
+    "b00": 52.328,
+    "b06": 60.566,
+    "deltaPp": 8.238,
+    "pairs": 4197,
+    "threshold": 1.0
+   },
+   "deltaPp": 8.546,
+   "deltaPp95": [
+    4.128,
+    12.546
+   ],
+   "pairs": 7992,
+   "pointsFromChanges": {
+    "perChangedDecision": 2.6799,
+    "perWeek": 443.222,
+    "perWeek95": [
+     237.574,
+     657.569
+    ],
+    "total": 7978.0
+   },
+   "spearmanWithinWeek": {
+    "b00": 0.0891,
+    "b06": 0.3341
+   },
+   "top8": {
+    "b00": 48.667,
+    "b06": 67.778,
+    "deltaPerWeek": 19.111
+   },
+   "units": 544,
+   "waiverPool": {
+    "b00": 52.024,
+    "b06": 62.146,
+    "deltaPp": 10.122,
+    "pairs": 2160,
+    "ranks": [
+     9,
+     24
+    ]
+   },
+   "weeks": 18,
+   "worstCase": {
+    "singleDecision": -24.0,
+    "week": -251.0,
+    "weeksWithNetLoss": 3
+   }
+  }
+ },
+ "polarsMaxThreads": "2",
+ "position": "DST"
+}

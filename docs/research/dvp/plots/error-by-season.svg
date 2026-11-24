@@ -1,0 +1,53 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='720' height='470' viewBox='0 0 720 470' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Best DvP variant vs B00 by season: change in RMSE (points)</title>
+<rect width='720' height='470' fill='#ffffff'/>
+<text x='16' y='24' font-size='15' font-weight='bold' fill='#1a1a1a'>Best DvP variant vs B00 by season: change in RMSE (points)</text>
+<line x1='70' y1='50' x2='70' y2='390' stroke='#e3e3e3'/>
+<text x='70' y='405' text-anchor='middle' fill='#666666'>2017</text>
+<line x1='128.75' y1='50' x2='128.75' y2='390' stroke='#e3e3e3'/>
+<text x='128.75' y='405' text-anchor='middle' fill='#666666'>2018</text>
+<line x1='187.5' y1='50' x2='187.5' y2='390' stroke='#e3e3e3'/>
+<text x='187.5' y='405' text-anchor='middle' fill='#666666'>2019</text>
+<line x1='246.25' y1='50' x2='246.25' y2='390' stroke='#e3e3e3'/>
+<text x='246.25' y='405' text-anchor='middle' fill='#666666'>2020</text>
+<line x1='305' y1='50' x2='305' y2='390' stroke='#e3e3e3'/>
+<text x='305' y='405' text-anchor='middle' fill='#666666'>2021</text>
+<line x1='363.75' y1='50' x2='363.75' y2='390' stroke='#e3e3e3'/>
+<text x='363.75' y='405' text-anchor='middle' fill='#666666'>2022</text>
+<line x1='422.5' y1='50' x2='422.5' y2='390' stroke='#e3e3e3'/>
+<text x='422.5' y='405' text-anchor='middle' fill='#666666'>2023</text>
+<line x1='481.25' y1='50' x2='481.25' y2='390' stroke='#e3e3e3'/>
+<text x='481.25' y='405' text-anchor='middle' fill='#666666'>2024</text>
+<line x1='540' y1='50' x2='540' y2='390' stroke='#e3e3e3'/>
+<text x='540' y='405' text-anchor='middle' fill='#666666'>2025</text>
+<line x1='70' y1='360.87' x2='540' y2='360.87' stroke='#e3e3e3'/>
+<text x='64' y='364.87' text-anchor='end' fill='#666666'>-0.4</text>
+<line x1='70' y1='258.83' x2='540' y2='258.83' stroke='#e3e3e3'/>
+<text x='64' y='262.83' text-anchor='end' fill='#666666'>-0.2</text>
+<line x1='70' y1='156.79' x2='540' y2='156.79' stroke='#e3e3e3'/>
+<text x='64' y='160.79' text-anchor='end' fill='#666666'>0</text>
+<line x1='70' y1='54.74' x2='540' y2='54.74' stroke='#e3e3e3'/>
+<text x='64' y='58.74' text-anchor='end' fill='#666666'>0.2</text>
+<rect x='70' y='50' width='470' height='340' fill='none' stroke='#666666'/>
+<text x='305' y='422' text-anchor='middle' fill='#1a1a1a'>season (2017-2023 development folds, 2024 validation, 2025 holdout)</text>
+<text x='30' y='220' transform='rotate(-90 30 220)' text-anchor='middle' fill='#1a1a1a'>RMSE change, points (negative is better)</text>
+<polyline points='70,242.14 128.75,295.15 187.5,234.85 246.25,270.05 305,262.55 363.75,247.5 422.5,257.04 481.25,364.49 540,288.93' fill='none' stroke='#000000' stroke-width='2'/>
+<polyline points='70,150.66 128.75,154.29 187.5,159.69 246.25,166.22 305,164.13 363.75,163.83 422.5,157.91 481.25,157.76 540,164.13' fill='none' stroke='#E69F00' stroke-width='2'/>
+<polyline points='70,178.01 128.75,196.53 187.5,232.5 246.25,173.93 305,172.4 363.75,194.64 422.5,179.69 481.25,146.89 540,202.24' fill='none' stroke='#0072B2' stroke-width='2'/>
+<polyline points='70,128.21 128.75,194.23 187.5,207.7 246.25,245.15 305,208.27 363.75,211.12 422.5,196.02 481.25,196.43 540,183.83' fill='none' stroke='#009E73' stroke-width='2'/>
+<polyline points='70,164.9 128.75,163.88 187.5,160 246.25,162.45 305,178.37 363.75,170.77 422.5,146.89 481.25,156.94 540,171.84' fill='none' stroke='#CC79A7' stroke-width='2'/>
+<polyline points='70,159.59 128.75,220.82 187.5,188.06 246.25,218.88 305,164.03 363.75,215.71 422.5,278.52 481.25,75.51 540,194.03' fill='none' stroke='#D55E00' stroke-width='2'/>
+<rect x='560' y='55' width='14' height='4' fill='#000000'/>
+<text x='580' y='64' fill='#1a1a1a'>DST</text>
+<rect x='560' y='75' width='14' height='4' fill='#E69F00'/>
+<text x='580' y='84' fill='#1a1a1a'>K</text>
+<rect x='560' y='95' width='14' height='4' fill='#0072B2'/>
+<text x='580' y='104' fill='#1a1a1a'>QB</text>
+<rect x='560' y='115' width='14' height='4' fill='#009E73'/>
+<text x='580' y='124' fill='#1a1a1a'>RB</text>
+<rect x='560' y='135' width='14' height='4' fill='#CC79A7'/>
+<text x='580' y='144' fill='#1a1a1a'>TE</text>
+<rect x='560' y='155' width='14' height='4' fill='#D55E00'/>
+<text x='580' y='164' fill='#1a1a1a'>WR</text>
+<text x='16' y='455' fill='#666666'>Each position&#x27;s best DvP variant as chosen on development; per-season ΔRMSE from the receipts.</text>
+</svg>

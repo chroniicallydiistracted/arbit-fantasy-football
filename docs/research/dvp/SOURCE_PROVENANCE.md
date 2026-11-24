@@ -52,7 +52,7 @@ The scan reads every file that produces or consumes DvP inputs: the DvP package 
 - projection field tokens: `projected_`, `fantasy_points`, ESPN's projection source flag, ffopportunity, DynastyProcess, FantasyPros, expected fantasy points and ECR;
 - imports of ESPN or Sleeper readers.
 
-It found nothing. The receipt holds each scanned file's hash. `provenance.py` names those tokens in order to forbid them, so it is the one file left out. T31 also plants a projection and an ESPN import in a scratch file to show the scan catches both.
+It found nothing. The receipt holds each scanned file's hash. Phase C's `decisions.py` joined the scan list after the audit run. `test_t31_every_dvp_module_is_scanned_and_clean` requires every DvP module to be in the list and scans them all at test time, so new code can't slip past a receipt written earlier. `provenance.py` names those tokens in order to forbid them, so it is the one file left out. T31 also plants a projection and an ESPN import in a scratch file to show the scan catches both.
 
 ## Known projections in Arbit, all rejected
 

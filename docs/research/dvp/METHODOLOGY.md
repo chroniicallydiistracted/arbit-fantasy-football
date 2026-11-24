@@ -118,3 +118,34 @@ The variants (B01–B08 in the registry) differ in how R̂ and k are formed: raw
 **Decision labels** per position and overall (§7): `PROMISING`, `INCONCLUSIVE`, `NOT_USEFUL`, `BLOCKED`. An inconclusive result is never turned into a weight. No production weight changes without the owner.
 
 **Controls:** shuffled defenses, pure-noise defenses and shifted labels must not improve on B00 (B09, T22, T24). Every forecast's ancestry must show `forbidden_vendor_projection_dependencies = 0` (T40).
+
+## Phase C, declared before it ran
+
+The full declaration is `config/dvp/sitstart.json`, committed as `317361f` before any Phase C quantity was computed.
+
+**Gate:** Phase C starts only for a group with a credible group-level signal (§5). That is D/ST alone.
+
+**Unit:** a D/ST is one unit per team, so its group-level forecast is its player-level forecast. Allocation (C01, C02) is the identity.
+
+**C00:** B00. Arbit has no other player projection, and no provider projection is used.
+
+**Decisions:**
+- Every unordered pair of D/STs that both play in a week.
+- Each model starts the higher forecast.
+- A pair the units tied on actual points is excluded; a forecast tie earns 0.5.
+
+**Metrics:**
+- **Primary:** B06's pairwise accuracy minus B00's.
+- **Secondary:** changed choices; actual points gained per changed choice; worst single choice and worst week; within-week Spearman; league top 8; close pairs; and a waiver-pool proxy (an assumption).
+
+**Uncertainty:** week-block bootstrap, 2,000 replicates, seed 1729.
+
+**Practical minimum: 1.8 points of accuracy.** Under a bivariate normal, pairwise accuracy is 0.5 + asin(ρ)/π. Phase B's 1% RMSE cut moves B00's development correlation from 0.1448 to 0.2011, so accuracy rises from 54.6% to 56.4%.
+
+**Rule:**
+- **PROMISING:** at least 1.8 points, with net points gained, in development, 2024 and 2025.
+- **NOT_USEFUL:** below 1.8 in all three.
+- **INCONCLUSIVE:** anything else.
+- **BLOCKED:** an integrity check fails.
+
+The same rule applies to the prospective 2026 window (`config/dvp/frozen-phase-c.json`).
