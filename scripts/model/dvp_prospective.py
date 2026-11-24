@@ -43,7 +43,7 @@ import polars as pl
 from arbit_data.db import UnitOfWork
 from arbit_data.nflverse.objects import ObjectStore
 from arbit_model import teams
-from arbit_model.dvp import asof, decisions, lab, provenance, reliability, shadow
+from arbit_model.dvp import asof, contract, decisions, lab, provenance, reliability, shadow
 from arbit_model.dvp import observations as obs
 from arbit_model.dvp import walkforward as wf
 from arbit_model.inputs import NflverseTables
@@ -272,7 +272,7 @@ def season_observations(
     played = obs.team_games(scheduled)
     cells, athlete_anomalies = obs.position_cells(athlete, played)
     dst, dst_anomalies = obs.dst_cells(defense, played)
-    rows = obs.observations(cells, dst, expected)
+    rows = contract.enforce(obs.observations(cells, dst, expected), expected)
     rows = fz.cli._with_nontd(rows, fz.cli._contribution_cells(store, config, rows))
     admissions = [schedule, *athlete_admissions, *defense_admissions]
     with engine.connect() as c:
@@ -503,7 +503,7 @@ def prepare_season(
     )
     rows, schedule = combine(past, past_schedule, now_rows, now_schedule)
     return Prepared(
-        rows=wf.prepare(rows),
+        rows=shadow.prepare_checked(rows, fz.base["expected_scoring"]),
         schedule=schedule,
         season_rows=now_rows,
         season_schedule=now_schedule,
@@ -829,7 +829,7 @@ def rehearse(args: argparse.Namespace) -> None:
     """2025 through the adapter, against the committed holdout forecasts, then evaluated."""
     fz = load_frozen()
     rows_all, schedule, lineage = history(fz, args.main)
-    rows = wf.prepare(rows_all)
+    rows = shadow.prepare_checked(rows_all, fz.base["expected_scoring"])
     params = wf.fit_fold(rows, 2025, fz.positions)
     targets = shadow.scheduled_targets(schedule, 2025, None, fz.positions)
     frozen = shadow.walk_targets(rows, targets, schedule, params, fz.positions, fz.settings())

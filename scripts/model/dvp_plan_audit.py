@@ -417,7 +417,13 @@ RERUNS = {
     "rerun:finality-audit": ("audit", "SCORE_FINALITY_AUDIT.json", {"/generatedAt", "/runId"}),
     "rerun:continuity": ("audit", "continuity-manifest.json", set()),
     "rerun:v0": ("v0", "v0-reproduction.json", VOLATILE),
-    "rerun:reliability": ("reliability", "reliability-results.json", VOLATILE),
+    # A12's vintage diagnostic reads Arbit's live 2026 capture history, which grows as nflverse
+    # publishes (158 games and 12 versions at the receipt, 162 and 13 on 2026-11-24 23:40 UTC).
+    "rerun:reliability": (
+        "reliability",
+        "reliability-results.json",
+        VOLATILE | {"/results/A12/vintages"},
+    ),
     # Development and validation ran before the freeze added the holdout stage and the decision
     # rule to backtest.json (rerun:config-freeze-only-added), and before receipts gained the
     # content hash of their forecasts.
@@ -1423,12 +1429,26 @@ def _conclusions(ctx: Context) -> Result:
     }
 
 
-@check("docs:prospective", "The prospective 2026 window is frozen and its procedure written down")
+@check(
+    "docs:prospective",
+    "The prospective 2026 window is frozen, its procedure written down and its harness in place",
+)
 def _prospective(ctx: Context) -> Result:
+    # Since owner audit AUD-01 the procedure archives forecasts before kickoff with
+    # dvp_prospective.py, which loads the frozen dvp.py from git at the freeze's code commit.
     text = (RECEIPTS / "PROSPECTIVE_2026.md").read_text()
-    frozen = load(ROOT / "config/dvp/frozen.json")["prospective"]
-    return "165d140" in text and "12" in text and bool(frozen.get("plan")), {
-        "firstKickoff": frozen["firstKickoff"]
+    frozen = load(ROOT / "config/dvp/frozen.json")
+    ledger = RECEIPTS / "prospective" / "2026" / "ledger.jsonl"
+    lines = [json.loads(x) for x in ledger.read_text().splitlines()] if ledger.exists() else []
+    ok = (
+        "dvp_prospective.py" in text
+        and frozen["code"][:7] in text
+        and (ROOT / "config/dvp/prospective.json").exists()
+        and bool(frozen["prospective"].get("plan"))
+    )
+    return ok, {
+        "firstKickoff": frozen["prospective"]["firstKickoff"],
+        "archived": [(x["week"], x["classification"]) for x in lines],
     }
 
 

@@ -4,8 +4,39 @@ Specification §2.1, §3.1, T30–T33, T37, T40. Receipt: [PROJECTION_EXCLUSION_
 
 **Result:**
 - `forbidden_vendor_projection_dependencies = 0` for v0 and for the extension. Status PASSED.
-- No ESPN or other provider's projected fantasy points are read, joined, used as priors or used as fallbacks anywhere in the DvP data path.
+- In the inspected DvP data path, no ESPN or other provider's projected fantasy points are read, joined, used as priors or used as fallbacks. The owner's independent audit (AUD-04) reached the same conclusion.
 - Every fantasy point in it is Arbit's own FFA actual, computed from completed-game nflverse statistics under the league's rules.
+
+**What the firewall proves, and what it doesn't** (owner audit AUD-04):
+- It proves the inspected sources, code and receipts hold no provider projection.
+- It also proves a set of specific contaminations stop the run: unknown columns, unknown sources or source types, wrong scoring hashes, forbidden or unknown values inside permitted columns, and corrupted store objects.
+- It does not prove resistance to every possible contamination. A wrong value that looks exactly like a legitimate FFA actual (the right type, hash, status and timing) would not be detected by lineage checks; only recomputing it from the statistics, as T30 does at audit time, catches that.
+
+## Enforcement at use (owner audit AUD-04, TASK-20261124-007)
+
+Admission checks a source when it enters. The same lineage is checked again wherever observations are fit, forecast or decided on:
+- **Row contract** (`arbit_model.dvp.contract`): it is enforced by `shadow.prepare_checked`, the prospective harness, and every observation read in `dvp.py` (reliability, backtest, sitstart, verify). Every row must have:
+  - its lineage and keys;
+  - an FFA-actual source type and an `observed` row;
+  - the FFA table matching its position and that table's configured scoring hash;
+  - the declared finality rule;
+  - a known status, with finite points if valid and none otherwise;
+  - availability after kickoff and the orientation its position defines;
+  - a unique key.
+  Any breach stops the run with `ROW_CONTRACT`. All 31,668 frozen observations and the 1,956 archived 2026 rows pass.
+- **Store bytes** (`dvp.verified_object`, and the prospective harness's `verify_store`): every content-addressed season manifest and Parquet object is hashed before it is read. Before this, only the index was verified, and other objects were trusted by their digest-named file.
+- **Contamination fixtures** (`test_dvp_contract.py`) plant values inside permitted columns:
+  - forbidden and unknown source types;
+  - generated rows;
+  - another table's source id and a foreign one;
+  - a wrong scoring hash and a different finality basis;
+  - a forecast status and a FLEX position;
+  - NaN points, and points on invalid cells;
+  - availability before kickoff and flipped orientation;
+  - duplicate keys, missing columns and null lineage;
+  - unknown `basis` and `season_type` values in target tables;
+  - a store object whose bytes changed under the same name.
+  Each one stops the pipeline. The earlier unknown-column (T32) and code-scan (T31) tests are kept.
 
 ## The allowlist
 

@@ -149,3 +149,22 @@ The full declaration is `config/dvp/sitstart.json`, committed as `317361f` befor
 - **BLOCKED:** an integrity check fails.
 
 The same rule applies to the prospective 2026 window (`config/dvp/frozen-phase-c.json`).
+
+## After the holdout: exploratory v2 and the prospective harness (owner audit, 2026-11-24)
+
+These came after the 2025 holdout was inspected. They are versioned, never change the frozen candidates, and are labeled by what they can show.
+
+- **Prospective 2026** (AUD-01, [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)):
+  - the frozen estimator, through the adapter `arbit_model.dvp.shadow`, forecasts each window week from the schedule before its kickoff;
+  - the forecasts are archived write-once with a hash-chained ledger and evaluated after the games;
+  - only the complete predeclared window can confirm.
+- **Decoupled stages** (AUD-05, [EXPLORATORY_V2.md](EXPLORATORY_V2.md)):
+  - the target universe comes from the schedule, not from cells whose labels turned out valid;
+  - forecasts are persisted before labels are read;
+  - labels are joined without dropping a target, and invalid labels are reported, not removed.
+- **Row contract** (AUD-04, [SOURCE_PROVENANCE.md](SOURCE_PROVENANCE.md#enforcement-at-use-owner-audit-aud-04-task-20261124-007)): every observation row's lineage is checked where it is fit or forecast, and store objects are hashed before reading.
+- **Exploratory estimators** (AUD-03), declared in `config/dvp/explore-v2.json` before results:
+  - rolling 3/5/8-game residual windows, shrunk by n_m/(n_m + k_REML);
+  - B03 with v0's split-half k fit on training seasons only.
+  Compared with B03, B04, B05 and B06 on common rows with the frozen bootstrap. Descriptive only.
+
