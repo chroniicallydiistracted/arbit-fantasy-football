@@ -167,4 +167,8 @@ These came after the 2025 holdout was inspected. They are versioned, never chang
   - rolling 3/5/8-game residual windows, shrunk by n_m/(n_m + k_REML);
   - B03 with v0's split-half k fit on training seasons only.
   Compared with B03, B04, B05 and B06 on common rows with the frozen bootstrap. Descriptive only.
-
+- **Opportunity and efficiency** (AUD-02), declared in `config/dvp/explore-v3.json` before results ([OPPORTUNITY_EFFICIENCY.md](OPPORTUNITY_EFFICIENCY.md)):
+  - each cell's volume (QB dropbacks + carries, RB carries + targets, WR/TE targets, K attempts, the D/ST's offensive plays) and its efficiency (points per unit of volume, as a ratio of sums);
+  - REML k for each, leave-one-out adjusted;
+  - forecasts through a volume channel (volume residual × the side's expected efficiency), an efficiency channel (efficiency residual × the side's expected volume) and both, each shrunk with its own training-only k.
+  Compared with B00, B03, B06 and the non-touchdown B07 on common rows. Descriptive only.

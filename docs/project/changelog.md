@@ -1,5 +1,24 @@
 # Development Changelog
 
+## 2026-11-24 — DvP owner audit remediation 2: opportunity volume and scoring efficiency (TASK-20261124-008)
+
+- **PR #15 merged** (`7e227ba`): remediations 3–5.
+- **`arbit_model.dvp.opportunity`:**
+  - admits the nflverse player and team statistics each season's FFA targets were built from, through a versioned admission with the firewall's rules (generic fantasy points dropped and recorded);
+  - builds each cell's volume;
+  - reconciles player sums with team statistics: 5,278 of 5,278 team-games equal;
+  - reports coverage: all 43 cells without a statistics row have 0 points and are kept missing;
+  - measures reliability: REML k for points, volume and efficiency allowed.
+- **Reliability results:**
+  - **RB, WR and K:** volume repeats faster than points (RB 17 against 19, WR 24 against 27, K 21 against 51 games).
+  - **D/ST:** efficiency carries its signal (7.2), while plays repeat weakly (19).
+  - **K efficiency** is noise (about 440).
+- **Forecasting (exploratory, `config/dvp/explore-v3.json` declared first):** a volume channel, an efficiency channel and both, with the non-touchdown B07 kept.
+  - Nothing crosses 1% outside D/ST.
+  - For D/ST the efficiency channel equals B03 (correlation 0.99), and B06 stays best.
+  - K's volume channel beats B03 in every period and B06 in 2024 and 2025 (at most −0.53%).
+  - The decoupled pipeline still reproduces v1 exactly. [OPPORTUNITY_EFFICIENCY.md](../research/dvp/OPPORTUNITY_EFFICIENCY.md).
+
 ## 2026-11-24 — DvP owner audit remediations 3–5: row contract, decoupled stages, rolling windows and split-half k (TASK-20261124-007)
 
 - **PR #14 merged** (`4708bde`): the prospective harness. Week 12 was archived before kickoff.

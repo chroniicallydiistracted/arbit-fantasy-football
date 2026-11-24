@@ -1,11 +1,11 @@
 {
   "version": 1,
   "project": "arbit-fantasy-football",
-  "active_task": "TASK-20261124-008",
-  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-007-governance-handoff.md",
+  "active_task": null,
+  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
-  "project_next_action": "Merge the DvP remediations 3-5 PR (branch claude/m3-dvp-remediation-345, TASK-20261124-007). Owner decision pending: install the prospective sweep timer (sh infra/systemd/install-dvp-prospective.sh) or run dvp_prospective.py sweep in each window (week 13: 2026-12-01 12:00 to 12-04 01:15 UTC). Then remediation 2 (A09/B07 opportunity and efficiency), then remediation 7 (rebuilt plan audit with the new status vocabulary) and research eligibility metadata; AUD-06/AUD-07 (simulation suite, threshold wording) as the owner directs. After the season: evaluate the archived 2026 forecasts; D/ST weight decision to the owner (OWN-074).",
+  "project_next_action": "Merge the DvP remediation 2 PR (branch claude/m3-dvp-opportunity, TASK-20261124-008). Owner decision pending on the prospective sweep timer (week 13 window 2026-12-01 12:00 to 12-04 01:15 UTC). Next: remediation 7 (rebuilt plan audit with the owner's status vocabulary, per-variant validation, test coverage map) and research eligibility metadata; AUD-06/AUD-07 (simulation suite, Phase C threshold wording) as the owner directs. After the season: evaluate the archived 2026 forecasts; D/ST weight decision to the owner (OWN-074).",
   "project_next_source": "docs/superpowers/plans/2026-11-09-m3-model.md",
   "as_of": "2026-11-24"
 }
