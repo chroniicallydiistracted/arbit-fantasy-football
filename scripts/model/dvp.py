@@ -910,6 +910,7 @@ def registry(args: argparse.Namespace) -> None:
         ),
     ]
     executed = _phase_a_records(config, receipts, common, descriptive)
+    executed += _phase_b_records(config, receipts, common)
     entries.extend(executed)
     done = {e["experiment_id"].removeprefix("M3-3-") for e in executed}
     for code, hypothesis in PLANNED.items():
@@ -2200,6 +2201,199 @@ def _sensitivity(compare: pl.DataFrame, block: str, reps: int, seed: int) -> dic
     return out
 
 
+def report(args: argparse.Namespace) -> None:
+    """Plots drawn from the backtest receipts alone (nothing is recomputed)."""
+    from arbit_model.dvp import svg
+
+    receipts = args.receipts
+    rows: list[tuple[str, str, float | None, float | None, float | None]] = []
+    for stage in ("development", "validation"):
+        path = receipts / f"backtest-{stage}.json"
+        if not path.exists():
+            continue
+        receipt = json.loads(path.read_text())
+        chosen = receipt.get("selection") or json.loads(
+            (ROOT / receipt["candidates"]["path"]).read_text()
+        )
+        for pos, result in receipt["results"].items():
+            variant = chosen["positions"][pos]["bestDvp"]
+            base = result["b00"]["rmse"]
+            low, high = result[variant]["delta95"]
+            rows.append(
+                (
+                    f"{pos} {variant.upper()} {stage[:3]}",
+                    pos,
+                    100 * result[variant]["relativeDelta"],
+                    100 * low / base,
+                    100 * high / base,
+                )
+            )
+    rows.sort(key=lambda r: (r[1], r[0]))
+    (receipts / "plots").mkdir(parents=True, exist_ok=True)
+    (receipts / "plots" / "backtest-delta.svg").write_text(
+        svg.forest(
+            "Best DvP variant vs the offense-only B00: change in RMSE",
+            rows,
+            xlabel="% change in RMSE (negative is better); 95% block bootstrap",
+            xlim=(-10.0, 4.0),
+            note="dev: 2017-2023 rolling folds (best chosen here); val: 2024 with the choice frozen.",
+            log=False,
+        )
+    )
+    print(f"report: {len(rows)} rows")
+
+
+def _phase_b_records(
+    config: dict[str, Any], receipts: Path, common: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Registry records of the walk-forward, from its receipts (none before it has run)."""
+    from arbit_model.dvp import results as records
+
+    paths = {s: receipts / f"backtest-{s}.json" for s in ("development", "validation")}
+    if not all(p.exists() for p in paths.values()):
+        return []
+    dev = json.loads(paths["development"].read_text())
+    val = json.loads(paths["validation"].read_text())
+    groups = config["position_groups"]
+    selection = dev["selection"]["positions"]
+    evidence = [
+        "docs/research/dvp/backtest-development.json",
+        "docs/research/dvp/backtest-validation.json",
+        "docs/research/dvp/BACKTEST_REPORT.md",
+        "config/dvp/frozen-candidates.json",
+    ]
+    shared = common | {
+        "code_commit": val["code"],
+        "as_of_policy": config["as_of_policy"]["default_cutoff"],
+        "train_validation_test_periods": {
+            "development": dev["seasons"],
+            "validation": val["seasons"],
+            "holdout": "2025, not run (Phase 4 from frozen-candidates.json)",
+        },
+        "holdout_independence_status": "2025 exposed descriptively by v0 and Phase A: conditional "
+        "holdout at best; no 2025 forecast made or inspected",
+        "primary_metric": "RMSE per position on common rows",
+    }
+
+    def stat(receipt: dict[str, Any], name: str) -> dict[str, Any]:
+        return {
+            p: {
+                "rmse": receipt["results"][p][name]["rmse"],
+                "relativeDelta": receipt["results"][p][name]["relativeDelta"],
+                "delta95": receipt["results"][p][name]["delta95"],
+            }
+            for p in groups
+        }
+
+    rows: list[tuple[str, str, list[str], dict[str, Any]]] = [
+        (
+            "B00",
+            "Offense-only next-game forecast from prior FFA actuals: the comparator",
+            ["b00"],
+            {},
+        ),
+        ("B01", "Raw prior-games DvP added to B00, unshrunk", ["b01"], {}),
+        (
+            "B02",
+            "Point-in-time residual DvP added to B00, unshrunk (and with recomputed baselines)",
+            ["b02", "b02r"],
+            {},
+        ),
+        ("B03", "Residual DvP shrunk with k fit on training seasons only", ["b03", "b03r"], {}),
+        (
+            "B04",
+            "Prediction-tuned k on a declared grid (development only)",
+            [f"b04_k{k:g}" for k in (1, 2, 4, 8, 16, 32, 64, 128, 256)],
+            {"parameters": {p: selection[p]["b04Selected"] for p in groups}},
+        ),
+        (
+            "B05",
+            "Recency-weighted DvP with effective sample size",
+            ["b05_h2", "b05_h4", "b05_h8"],
+            {"parameters": {p: selection[p]["b05Selected"] for p in groups}},
+        ),
+        (
+            "B06",
+            "Dynamic DvP with a prior from last season (slope fit on training seasons)",
+            ["b06"],
+            {},
+        ),
+        ("B07", "DvP on non-touchdown points only", ["b07"], {}),
+        (
+            "B09",
+            "Negative controls: shuffled opponents, noise, last week's opponent",
+            ["b09_shuffle", "b09_noise", "b09_lastopp"],
+            {"tests_passed": ["T24"]},
+        ),
+    ]
+    out = []
+    for code, hypothesis, variants, extra in rows:
+        development = {v: stat(dev, v) for v in variants}
+        validation = {v: stat(val, v) for v in variants}
+        out.append(
+            records.record(
+                f"M3-3-{code}",
+                "EXECUTED",
+                hypothesis=hypothesis,
+                estimator="walk-forward, preweek cutoff, forecasts frozen before labels join",
+                sample_count={p: dev["results"][p]["rows"] for p in groups},
+                baseline_metric={
+                    p: {
+                        "development": dev["results"][p]["b00"]["rmse"],
+                        "validation": val["results"][p]["b00"]["rmse"],
+                    }
+                    for p in groups
+                },
+                subgroups={"development": development, "validation": validation},
+                evidence_paths=evidence,
+                reason="See BACKTEST_REPORT.md",
+                next_steps="Phase 4: 2025 conditional holdout from frozen-candidates.json",
+                **(shared | extra),
+            )
+        )
+    out.append(
+        records.record(
+            "M3-3-B08",
+            "EXECUTED",
+            hypothesis="Context-stratified diagnostics of the best DvP variant",
+            estimator="RMSE change by season, week bin and opponent games",
+            subgroups={p: dev["results"][p]["focus"] for p in groups},
+            evidence_paths=evidence,
+            **shared,
+        )
+    )
+    for code, key, hypothesis in (
+        ("B10", "B10_perGame", "Preweek vs per-game cutoff"),
+        ("B12", "B12_delay48h", "Availability of finalized actuals: a 48-hour slower rule"),
+    ):
+        out.append(
+            records.record(
+                f"M3-3-{code}",
+                "EXECUTED",
+                hypothesis=hypothesis,
+                estimator="B00 and B03 rerun under the alternative, compared row by row",
+                subgroups={
+                    "development": dev["sensitivity"][key],
+                    "validation": val["sensitivity"][key],
+                },
+                evidence_paths=evidence,
+                **shared,
+            )
+        )
+    out.append(
+        records.record(
+            "M3-3-B11",
+            "PASSED",
+            hypothesis="A planted provider projection cannot reach a B-phase forecast",
+            estimator="walkforward.prepare fails closed on unknown columns; admission by lineage",
+            tests_passed=["T32", "T33", "B11"],
+            evidence_paths=["libs/arbit-model/tests/test_dvp_walkforward.py"],
+            **shared,
+        )
+    )
+    return out
+
+
 def _pair(value: tuple[float, float] | None) -> list[float] | None:
     return None if value is None else [round(value[0], 4), round(value[1], 4)]
 
@@ -2228,6 +2422,8 @@ def main() -> None:
     b.add_argument("--targets", type=Path, required=True)
     b.add_argument("--run", type=Path, required=True)
     b.add_argument("--receipts", type=Path, required=True)
+    rp = commands.add_parser("report")
+    rp.add_argument("--receipts", type=Path, required=True)
     g = commands.add_parser("registry")
     g.add_argument("--config", type=Path, required=True)
     g.add_argument("--receipts", type=Path, required=True)
@@ -2237,6 +2433,7 @@ def main() -> None:
         "reproduce-v0": reproduce,
         "reliability": reliability,
         "backtest": backtest,
+        "report": report,
         "registry": registry,
     }[args.command](args)
 
