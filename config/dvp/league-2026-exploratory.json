@@ -1,0 +1,33 @@
+{
+  "format": "arbit-dvp-m3-3-league-2026-config-v1",
+  "workstream_id": "M3-3",
+  "requirement": "C05L-2026-EXP (owner audit Phase B, B6): exploratory league-constrained D/ST evaluation on completed 2026 weeks.",
+  "declaredAt": "2026-11-24, before any 2026 league-constrained result was computed (TASK-20261124-009)",
+  "classification": "EXPLORATORY. Weeks 1-11 were observed before the prospective freeze, and these forecasts are reconstructed after the fact (RETROSPECTIVE). Never independent confirmation; never alters the frozen Phase B or Phase C rules.",
+  "weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+  "models": {"baseline": "b00", "candidate": "b06"},
+  "forecasts": "The frozen method through arbit_model.dvp.shadow (as the prospective harness): parameters fit on 2016-2025, each week forecast from the actuals available by its preweek cutoff. 2026 data: the season observations and schedule archived with the 2026 week-12 prospective forecast (artifacts/dvp/prospective/2026/week-12/inputs, hashes in its manifest), final revisions as held on 2026-11-24.",
+  "decisionTime": "The week's preweek cutoff: its first scheduled kickoff, the forecasts' own cutoff.",
+  "ownership": "arbit_model.ffa_history: the draft and every executed add and drop replayed to the decision time. Verified beforehand against every captured period roster (weeks 1-11) and every daily archived snapshot (2026-10-31 to 11-24). Current ownership is never used.",
+  "availability": "On no roster at the decision time and not dropped within two waiver holds (48 hours) before it: FREE_AGENT, claimable at once until the unit's own game locks. Dropped within 24 hours: WAIVERS. Dropped 24-48 hours before: WAIVERS_OR_FREE_AGENT. Both waiver classes are excluded from free-agent streaming.",
+  "decisions": {
+    "start": "Roster-constrained: each FFA team holding two or more D/STs with a game that week. Each model starts its higher forecast; ties break by franchise code.",
+    "stream": "Each FFA team: the highest forecast among its own D/STs with a game and the FREE_AGENT D/STs with a game. Evaluated separately from start.",
+    "streamIncludingWaivers": "The same, also allowing WAIVERS and WAIVERS_OR_FREE_AGENT units: an upper bound, reported separately."
+  },
+  "labels": "Arbit's canonical FFA D/ST actuals (the same archived 2026 observations). ESPN's official D/ST points from the captured lineups are compared with them for rostered units as reconciliation evidence.",
+  "metrics": [
+    "decisions and actionable coverage (decisions with at least two options, of team-weeks)",
+    "changed recommendations (B06 pick differs from B00)",
+    "points from changed recommendations: B06 pick's actual points minus B00's, total and per change",
+    "head-to-head accuracy on changed recommendations (B06 scored more 1, tie 0.5)",
+    "hit rate: the pick scored the most among its options (ties count)",
+    "regret: the best option's points minus the pick's, mean per decision, per model",
+    "managers' actual starts (start decisions): their regret and agreement with each model",
+    "matchup implications (start decisions): the team's official total with each model's pick in place of its started D/ST (ESPN official points), against the opponent's official total; results that differ between B00 and B06 picks"
+  ],
+  "uncertainty": "Week-block bootstrap of points from changed recommendations: 2,000 replicates, seed 1729. Descriptive.",
+  "decisionRule": "None. Descriptive only.",
+  "write_to_production": false,
+  "forbidden_vendor_projection_dependencies": 0
+}

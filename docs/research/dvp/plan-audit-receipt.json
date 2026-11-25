@@ -1,14 +1,14 @@
 {
   "format": "arbit-dvp-m3-3-plan-audit-v1",
-  "generatedAt": "2026-11-24T21:33:28.757070+00:00",
-  "code": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+  "generatedAt": "2026-11-25T02:35:55.766576+00:00",
+  "code": "1b993752fbf68bfb3617d624fba232eea7f8e1a0",
   "specification": {
-    "path": "docs/research/Arbit_FFA_M3_DvP_Plan.md",
+    "path": "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
     "sha256": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d"
   },
   "auditRun": "phase1-audit-20261124T024442Z",
   "reruns": {
-    "code": "db0d80232a7b357f4d3c53a734e02a718d9e9bfe",
+    "code": "3848cadc13058cdbdf40eeb9b37d6573c1a90264",
     "frozenTree": "165d140b0be131cd8b4a6092e6d3928fb3a3c706",
     "steps": [
       {
@@ -16,7 +16,7 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 1.5
+        "seconds": 1.6
       },
       {
         "step": "reproduce-v0",
@@ -30,28 +30,28 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 72.2
+        "seconds": 73.9
       },
       {
         "step": "backtest-development",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 26.1
+        "seconds": 25.9
       },
       {
         "step": "backtest-validation",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 7.0
+        "seconds": 6.7
       },
       {
         "step": "backtest-holdout-frozen-tree",
         "cwd": "frozen-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 4.3
+        "seconds": 5.8
       },
       {
         "step": "backtest-holdout-refused-here",
@@ -72,7 +72,7 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 10.3
+        "seconds": 10.2
       },
       {
         "step": "report",
@@ -93,23 +93,24 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 8.0
+        "seconds": 13.5
       }
     ]
   },
   "tests": {
-    "passed": 157,
+    "passed": 213,
     "failed": 0,
     "skipped": 0
   },
   "status": "PASSED",
   "summary": {
-    "items": 214,
-    "DONE": 209,
+    "items": 221,
+    "DONE": 215,
     "OPEN": 5,
+    "NOT_APPLICABLE": 1,
     "FAILED": 0,
-    "checks": 156,
-    "checksPassed": 156
+    "checks": 164,
+    "checksPassed": 164
   },
   "items": [
     {
@@ -1295,13 +1296,35 @@
       ]
     },
     {
-      "id": "C05L",
+      "id": "C05L-HIST",
       "section": "\u00a75 Phase C",
-      "title": "C05: league-constrained lineup evaluation: BLOCKED (no FFA lineups before 2026)",
+      "title": "C05L-HIST: league-constrained evaluation 2016-2025: NOT_APPLICABLE (FFA began in 2026)",
+      "kind": "not_applicable",
+      "status": "NOT_APPLICABLE",
+      "checks": [
+        "owner:inaugural-season"
+      ]
+    },
+    {
+      "id": "C05L-2026-EXP",
+      "section": "\u00a75 Phase C",
+      "title": "C05L-2026-EXP: exploratory league-constrained D/ST evaluation on completed 2026 weeks",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "league2026:exploratory",
+        "ffa2026:ownership-replay"
+      ]
+    },
+    {
+      "id": "C05L-2026-PRO",
+      "section": "\u00a75 Phase C",
+      "title": "C05L-2026-PRO: prospective league-constrained evaluation, weeks 12-18 (decision-time capture)",
       "kind": "open",
       "status": "OPEN",
       "checks": [
-        "phasec:not-available"
+        "prospective:league-capture",
+        "open:prospective"
       ]
     },
     {
@@ -2482,6 +2505,57 @@
         "open:owner-weight",
         "docs:status-vocabulary"
       ]
+    },
+    {
+      "id": "PB0",
+      "section": "Phase B",
+      "title": "B0: 2026 is FFA's inaugural season, recorded everywhere required",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "owner:inaugural-season"
+      ]
+    },
+    {
+      "id": "PB3",
+      "section": "Phase B",
+      "title": "B1-B3: verified ESPN capability inventory and 2026 coverage matrix, reusing the existing integration",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "ffa2026:inventory",
+        "ffa2026:live-verification"
+      ]
+    },
+    {
+      "id": "PB4",
+      "section": "Phase B",
+      "title": "B4: lineups, statistics and transactions validated",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "ffa2026:validation"
+      ]
+    },
+    {
+      "id": "PB5",
+      "section": "Phase B",
+      "title": "B5: 2026 ownership and availability reconstructed and verified, never from current ownership",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "ffa2026:ownership-replay"
+      ]
+    },
+    {
+      "id": "PB7",
+      "section": "Phase B",
+      "title": "B7: deliverables: inventory, coverage, classifications, retrieval report, results, dispositions, limits",
+      "kind": "done",
+      "status": "DONE",
+      "checks": [
+        "ffa2026:deliverables"
+      ]
     }
   ],
   "checks": {
@@ -2964,10 +3038,16 @@
     },
     "docs:prospective": {
       "id": "docs:prospective",
-      "description": "The prospective 2026 window is frozen and its procedure written down",
+      "description": "The prospective 2026 window is frozen, its procedure written down and its harness in place",
       "passed": true,
       "observed": {
-        "firstKickoff": "2026-11-26T01:00:00+00:00"
+        "firstKickoff": "2026-11-26T01:00:00+00:00",
+        "archived": [
+          [
+            12,
+            "PROSPECTIVE"
+          ]
+        ]
       }
     },
     "docs:status-vocabulary": {
@@ -2976,6 +3056,79 @@
       "passed": true,
       "observed": {
         "modelCard": "Not eligible yet"
+      }
+    },
+    "ffa2026:deliverables": {
+      "id": "ffa2026:deliverables",
+      "description": "Phase B documents and receipts exist",
+      "passed": true,
+      "observed": {
+        "missing": []
+      }
+    },
+    "ffa2026:inventory": {
+      "id": "ffa2026:inventory",
+      "description": "The 2026 inventory covers every finished scoring period with reconciled lineups and read transactions",
+      "passed": true,
+      "observed": {
+        "finished": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "lineupsReconciled": true,
+        "transactionsRead": true
+      }
+    },
+    "ffa2026:live-verification": {
+      "id": "ffa2026:live-verification",
+      "description": "Live re-verification through the guarded integration: scoring reconciles and stored transactions match ESPN",
+      "passed": true,
+      "observed": {
+        "lineups": {
+          "errors": 0,
+          "lineupsChecked": 88,
+          "lineupsMatched": 88,
+          "mismatches": 0,
+          "providerZeroEntries": 227,
+          "rosterEntries": 1448,
+          "verifiedPlayerGames": 1221
+        },
+        "missingFromStore": 0,
+        "statusChanged": 0
+      }
+    },
+    "ffa2026:ownership-replay": {
+      "id": "ffa2026:ownership-replay",
+      "description": "Ownership replayed from the draft and executed moves matches every captured period roster and every daily snapshot",
+      "passed": true,
+      "observed": {
+        "periods": 11,
+        "dailySnapshots": 14
+      }
+    },
+    "ffa2026:validation": {
+      "id": "ffa2026:validation",
+      "description": "Lineup structure, transaction classes, timestamps, duplicates and revisions validated",
+      "passed": true,
+      "observed": {
+        "records": 536,
+        "completedTrades": 0,
+        "waiverClaims": {
+          "CANCELED": 7,
+          "EXECUTED": 52,
+          "FAILED_INVALIDPLAYERSOURCE": 12,
+          "FAILED_ROSTERLIMIT": 2
+        },
+        "revisedAfterFirstObservation": 0
       }
     },
     "finality:recorded": {
@@ -3014,24 +3167,35 @@
         ]
       }
     },
+    "league2026:exploratory": {
+      "id": "league2026:exploratory",
+      "description": "C05L-2026-EXP ran under the rule committed before it, as EXPLORATORY",
+      "passed": true,
+      "observed": {
+        "ruleCommittedAt": "2026-11-24T19:20:57-07:00",
+        "resultAt": "2026-11-25T02:28:28.443860+00:00",
+        "startDecisions": 28,
+        "streamDecisions": 88
+      }
+    },
     "open:modes": {
       "id": "open:modes",
       "description": "NOT BUILT: dry-run and resume modes (the specification asks for them only 'when appropriate')",
       "passed": true,
       "observed": {
         "stageSeconds": {
-          "audit": 1.5,
+          "audit": 1.6,
           "reproduce-v0": 6.9,
-          "reliability": 72.2,
-          "backtest-development": 26.1,
-          "backtest-validation": 7.0,
-          "backtest-holdout-frozen-tree": 4.3,
+          "reliability": 73.9,
+          "backtest-development": 25.9,
+          "backtest-validation": 6.7,
+          "backtest-holdout-frozen-tree": 5.8,
           "backtest-holdout-refused-here": 0.5,
           "sitstart": 0.8,
-          "verify": 10.3,
+          "verify": 10.2,
           "report": 0.5,
           "registry": 0.5,
-          "model-tests": 8.0
+          "model-tests": 13.5
         }
       }
     },
@@ -3050,7 +3214,15 @@
       "observed": {
         "firstKickoff": "2026-11-26T01:00:00+00:00",
         "frozenBeforeIt": true,
-        "auditedAt": "2026-11-24T21:33:28.661630+00:00"
+        "auditedAt": "2026-11-25T02:35:55.671516+00:00"
+      }
+    },
+    "owner:inaugural-season": {
+      "id": "owner:inaugural-season",
+      "description": "OWN-076 records that FFA began in 2026, in the decision register and the source register",
+      "passed": true,
+      "observed": {
+        "OWN-076": true
       }
     },
     "phasec:decision": {
@@ -3117,6 +3289,15 @@
         "configUnchangedSince": true
       }
     },
+    "prospective:league-capture": {
+      "id": "prospective:league-capture",
+      "description": "The prospective archive captures the league's D/ST rosters at forecast time; the harness also records availability",
+      "passed": true,
+      "observed": {
+        "week12Teams": 8,
+        "availabilityCapturedInWeek12": false
+      }
+    },
     "provenance:forbidden-inventory": {
       "id": "provenance:forbidden-inventory",
       "description": "Every reachable forbidden source is inventoried with REJECT or QUARANTINE and a guard",
@@ -3162,7 +3343,7 @@
         "forbiddenInventory": 7,
         "codeScanFiles": {
           "committed": 19,
-          "rerun": 21
+          "rerun": 30
         },
         "unlistedFamilies": []
       }
@@ -3177,6 +3358,9 @@
           "backtest-development.json": 0,
           "backtest-holdout.json": 0,
           "backtest-validation.json": 0,
+          "explore-v2.json": 0,
+          "explore-v3.json": 0,
+          "league-2026-exploratory.json": 0,
           "reliability-results.json": 0,
           "sitstart.json": 0
         },
@@ -3699,7 +3883,7 @@
         "comparable": true,
         "rows": 3256,
         "nonFloatOrMissingDifferences": [],
-        "floatValuesDiffering": 18,
+        "floatValuesDiffering": 32,
         "maxAbsDifference": 7.105427357601002e-15
       }
     },
@@ -3750,7 +3934,7 @@
       "observed": {
         "rows": 31668,
         "columns": 19,
-        "newRun": "phase1-audit-20261124T213110Z"
+        "newRun": "phase1-audit-20261125T023120Z"
       }
     },
     "rerun:projection-audit": {
@@ -3760,9 +3944,18 @@
       "observed": {
         "differingFields": [
           "/code",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/contract.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/decisions.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/explore.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/league.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/opportunity.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/shadow.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/ffa_history.py",
           "/codeScan/files/scripts/model/dvp.py",
+          "/codeScan/files/scripts/model/dvp_explore.py",
+          "/codeScan/files/scripts/model/dvp_league_2026.py",
+          "/codeScan/files/scripts/model/dvp_prospective.py",
           "/generatedAt",
           "/runId"
         ],
@@ -3780,12 +3973,21 @@
     },
     "rerun:reliability": {
       "id": "rerun:reliability",
-      "description": "A fresh rerun reproduces reliability-results.json; only ['/code', '/generatedAt'] may differ",
+      "description": "A fresh rerun reproduces reliability-results.json; only ['/code', '/generatedAt', '/results/A12/vintages'] may differ",
       "passed": true,
       "observed": {
         "differingFields": [
           "/code",
-          "/generatedAt"
+          "/generatedAt",
+          "/results/A12/vintages/byPosition/DST/cells",
+          "/results/A12/vintages/byPosition/K/cells",
+          "/results/A12/vintages/byPosition/QB/cells",
+          "/results/A12/vintages/byPosition/QB/changeVariance",
+          "/results/A12/vintages/byPosition/RB/cells",
+          "/results/A12/vintages/byPosition/TE/cells",
+          "/results/A12/vintages/byPosition/WR/cells",
+          "/results/A12/vintages/games",
+          "/results/A12/vintages/versionsHeld"
         ],
         "unexpected": []
       }
@@ -3819,7 +4021,7 @@
         "audit": [
           0,
           0,
-          1.5
+          1.6
         ],
         "reproduce-v0": [
           0,
@@ -3829,22 +4031,22 @@
         "reliability": [
           0,
           0,
-          72.2
+          73.9
         ],
         "backtest-development": [
           0,
           0,
-          26.1
+          25.9
         ],
         "backtest-validation": [
           0,
           0,
-          7.0
+          6.7
         ],
         "backtest-holdout-frozen-tree": [
           0,
           0,
-          4.3
+          5.8
         ],
         "backtest-holdout-refused-here": [
           1,
@@ -3859,7 +4061,7 @@
         "verify": [
           0,
           0,
-          10.3
+          10.2
         ],
         "report": [
           0,
@@ -3874,7 +4076,7 @@
         "model-tests": [
           0,
           0,
-          8.0
+          13.5
         ]
       }
     },
@@ -4119,10 +4321,11 @@
       "description": "Every test tagged T16 ran and passed",
       "passed": true,
       "observed": {
-        "tests": 1,
-        "passed": 1,
+        "tests": 2,
+        "passed": 2,
         "names": [
-          "test_t16_t17_future_and_own_results_never_change_a_forecast"
+          "test_t16_t17_future_and_own_results_never_change_a_forecast",
+          "test_t16_t17_t20_outcomes_after_a_cutoff_change_neither_targets_nor_forecasts"
         ]
       }
     },
@@ -4131,10 +4334,11 @@
       "description": "Every test tagged T17 ran and passed",
       "passed": true,
       "observed": {
-        "tests": 1,
-        "passed": 1,
+        "tests": 2,
+        "passed": 2,
         "names": [
-          "test_t16_t17_future_and_own_results_never_change_a_forecast"
+          "test_t16_t17_future_and_own_results_never_change_a_forecast",
+          "test_t16_t17_t20_outcomes_after_a_cutoff_change_neither_targets_nor_forecasts"
         ]
       }
     },
@@ -4168,9 +4372,10 @@
       "description": "Every test tagged T20 ran and passed",
       "passed": true,
       "observed": {
-        "tests": 1,
-        "passed": 1,
+        "tests": 2,
+        "passed": 2,
         "names": [
+          "test_t16_t17_t20_outcomes_after_a_cutoff_change_neither_targets_nor_forecasts",
           "test_t19_t20_every_variant_covers_the_same_rows_and_labels_join_only_once_frozen"
         ]
       }
@@ -4243,8 +4448,8 @@
       "description": "Every test tagged T26 ran and passed",
       "passed": true,
       "observed": {
-        "tests": 15,
-        "passed": 15,
+        "tests": 20,
+        "passed": 20,
         "names": [
           "test_c01_c02_t26_the_dst_forecast_row_is_the_opposing_unit_share_one",
           "test_t26_an_unmapped_or_mismatched_unit_fails_closed",
@@ -4439,7 +4644,7 @@
       "description": "Every DvP test ran and passed; none skipped (the real-artifact tests ran)",
       "passed": true,
       "observed": {
-        "passed": 97,
+        "passed": 147,
         "failed": 0,
         "skipped": 0
       }
@@ -4449,7 +4654,7 @@
       "description": "The whole model test suite passed with nothing skipped (the audit's own tests run in CI)",
       "passed": true,
       "observed": {
-        "passed": 157,
+        "passed": 213,
         "failed": 0,
         "skipped": 0
       }

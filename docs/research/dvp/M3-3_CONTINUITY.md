@@ -35,7 +35,7 @@ Specification §0 rule 1, §4 and §9 Phase 0 (T29). Manifest: [continuity-manif
 | 3 | B00–B12 walk-forward; development folds and 2024 validation | EXECUTED ([BACKTEST_REPORT.md](BACKTEST_REPORT.md)) |
 | 4 | Frozen manifest, 2025 conditional holdout, decisions | EXECUTED: D/ST PROMISING ([MODEL_CARD.md](MODEL_CARD.md)) |
 | 4 | 2026 weeks 12–18 prospective confirmation | FROZEN before the games, scored after the season ([PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)) |
-| 5 | C00–C05 player-level start/sit, D/ST (the only group past the gate) | EXECUTED: PROMISING; C03 and league lineups BLOCKED ([PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md)) |
+| 5 | C00–C05 player-level start/sit, D/ST (the only group past the gate) | EXECUTED: PROMISING; C03 BLOCKED. League-constrained evaluation: 2016–2025 NOT_APPLICABLE (OWN-076), 2026 weeks 1–11 exploratory, weeks 12–18 prospective ([LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md)) |
 | — | Verify-only mode: every artifact read back, every receipt reproduced | PASSED ([verify-receipt.json](verify-receipt.json)) |
 
 ## What changed from v0, and what did not

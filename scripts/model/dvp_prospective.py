@@ -393,6 +393,40 @@ def league_capture(engine: Any, schedule_teams: set[str]) -> dict[str, Any]:
         rosters.setdefault(str(team_id), []).append(code(abbreviation))
         slots.setdefault(str(team_id), {})[code(abbreviation)] = slot
     rostered = {u for held_units in rosters.values() for u in held_units}
+    # Decision-time availability of each unrostered D/ST (Phase B, C05L-2026-PRO): a unit dropped
+    # within the league's waiver hold is on waivers, within two holds it may still be.
+    with engine.connect() as c:
+        hours = int(
+            c.execute(
+                text(
+                    "select r.payload->>'waiver_hours' from rule_version r join league_document d on "
+                    "d.rules_hash = r.hash join current_snapshot c on c.snapshot_id = d.snapshot_id"
+                )
+            ).scalar_one()
+        )
+        drops = c.execute(
+            text(
+                "select max(coalesce(t.processed_at, t.proposed_at)) as dropped, n.abbreviation "
+                "from fantasy_transaction t, jsonb_array_elements(t.items) i "
+                "join canonical_entity e on e.id = (i->>'player_id')::uuid and e.kind = 'defense_unit' "
+                "join team_affiliation a on a.entity_id = e.id and a.valid_to is null "
+                "join nfl_team n on n.entity_id = a.team_id "
+                "where t.status = 'EXECUTED' and i->>'type' = 'DROP' group by n.abbreviation"
+            )
+        ).all()
+    captured_at = snapshot.observed_at
+    last_drop = {code(r.abbreviation): r.dropped for r in drops}
+    hold = timedelta(hours=hours)
+    states: dict[str, str] = {}
+    for unit in units:
+        if unit in rostered:
+            states[unit] = "OWNED"
+        elif unit in last_drop and captured_at - last_drop[unit] < hold:
+            states[unit] = "WAIVERS"
+        elif unit in last_drop and captured_at - last_drop[unit] < 2 * hold:
+            states[unit] = "WAIVERS_OR_FREE_AGENT"
+        else:
+            states[unit] = "FREE_AGENT"
     unknown = sorted(u for u in units if u not in schedule_teams)
     if unknown or len(units) != 32:
         raise SystemExit(f"BLOCKED: D/ST codes {unknown} do not map to the schedule's teams")
@@ -403,6 +437,8 @@ def league_capture(engine: Any, schedule_teams: set[str]) -> dict[str, Any]:
         "rosters": {t: sorted(u) for t, u in sorted(rosters.items())},
         "slots": slots,
         "freeAgents": sorted(set(units) - rostered),
+        "availability": dict(sorted(states.items())),
+        "waiverHours": hours,
         "units": len(units),
         "unitsNotInSchedule": unknown,
     }
@@ -785,6 +821,16 @@ def evaluate_frame(
         choices = shadow.league_choices(
             week_rows, capture["rosters"], capture["freeAgents"], models
         )
+        # Phase B: also the free agents claimable at once (captured from week 13; week 12's
+        # capture has no availability states).
+        claimable = [u for u, s in capture.get("availability", {}).items() if s == "FREE_AGENT"]
+        if claimable:
+            only = (
+                shadow.league_choices(week_rows, capture["rosters"], claimable, models)
+                .filter(pl.col("decision") == "stream")
+                .with_columns(pl.lit("streamClaimableOnly").alias("decision"))
+            )
+            choices = pl.concat([choices, only])
         actual = valid.filter((pl.col("position") == obs.DST) & (pl.col("week") == week)).select(
             pl.col("defense").alias("unit"), "points"
         )
@@ -795,23 +841,27 @@ def evaluate_frame(
                 on=f"pick_{model}",
                 how="left",
             )
-        differ = scored.filter(pl.col(f"pick_{models[0]}") != pl.col(f"pick_{models[1]}"))
-        both = differ.filter(
-            pl.col(f"pts_{models[0]}").is_not_null() & pl.col(f"pts_{models[1]}").is_not_null()
-        )
-        gain = [
-            float(b) - float(a)
-            for a, b in both.select(f"pts_{models[0]}", f"pts_{models[1]}").iter_rows()
-        ]
-        league_out[str(week)] = {
-            "decisions": scored.height,
-            "differ": differ.height,
-            "withLabels": both.height,
-            "pointsB06MinusB00": sum(gain),
-            "b06Better": (sum(g > 0 for g in gain) + 0.5 * sum(g == 0 for g in gain)) / len(gain)
-            if gain
-            else None,
-        }
+        per_kind: dict[str, Any] = {}
+        for (kind,), part in scored.group_by(["decision"], maintain_order=True):
+            differ = part.filter(pl.col(f"pick_{models[0]}") != pl.col(f"pick_{models[1]}"))
+            both = differ.filter(
+                pl.col(f"pts_{models[0]}").is_not_null() & pl.col(f"pts_{models[1]}").is_not_null()
+            )
+            gain = [
+                float(b) - float(a)
+                for a, b in both.select(f"pts_{models[0]}", f"pts_{models[1]}").iter_rows()
+            ]
+            per_kind[str(kind)] = {
+                "decisions": part.height,
+                "differ": differ.height,
+                "withLabels": both.height,
+                "pointsB06MinusB00": sum(gain),
+                "b06Better": (sum(g > 0 for g in gain) + 0.5 * sum(g == 0 for g in gain))
+                / len(gain)
+                if gain
+                else None,
+            }
+        league_out[str(week)] = dict(sorted(per_kind.items()))
     if descriptive is not None:
         for value in [*phase_b.values(), phase_c]:
             if "label" in value:

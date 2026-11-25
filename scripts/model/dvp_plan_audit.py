@@ -1491,6 +1491,147 @@ def _open_weight(ctx: Context) -> Result:
 
 
 @check(
+    "owner:inaugural-season",
+    "OWN-076 records that FFA began in 2026, in the decision register and the source register",
+)
+def _inaugural(ctx: Context) -> Result:
+    register = (ROOT / "docs/project/decision-register.md").read_text()
+    sources = (ROOT / "docs/research/source-register.md").read_text()
+    inventory = load(ROOT / "docs/research/ffa-2026-inventory.json")
+    ok = "OWN-076" in register and "inaugural" in register and "OWN-076" in sources
+    return ok and "OWN-076" in inventory["ownerClarification"], {"OWN-076": ok}
+
+
+@check(
+    "ffa2026:inventory",
+    "The 2026 inventory covers every finished scoring period with reconciled lineups and read transactions",
+)
+def _ffa_inventory(ctx: Context) -> Result:
+    inv = load(ROOT / "docs/research/ffa-2026-inventory.json")
+    finished = inv["leagueState"]["finishedScoringPeriods"]
+    lineups = all(inv["lineups"][str(p)]["starterTotalsEqualOfficial"] == 8 for p in finished)
+    reads = all(str(p) in inv["transactionReads"] for p in finished)
+    return lineups and reads, {
+        "finished": finished,
+        "lineupsReconciled": lineups,
+        "transactionsRead": reads,
+    }
+
+
+@check(
+    "ffa2026:live-verification",
+    "Live re-verification through the guarded integration: scoring reconciles and stored transactions match ESPN",
+)
+def _ffa_live(ctx: Context) -> Result:
+    live = load(ROOT / "docs/research/ffa-2026-inventory.json").get("liveVerification")
+    if not live:
+        return False, "no live verification recorded"
+    scoring = live["scoring"]
+    tx = live["transactions"]
+    missing = sum(v["missingFromStoreCount"] for v in tx.values())
+    changed = sum(v["statusChanged"] for v in tx.values())
+    unexplained = {
+        p: v["notInLiveTypes"]
+        for p, v in tx.items()
+        if set(v.get("notInLiveTypes", {})) - {"FUTURE_ROSTER"}
+    }
+    ok = (
+        scoring["success"]
+        and scoring["verificationPassed"]
+        and not missing
+        and not changed
+        and not unexplained
+    )
+    return ok, {"lineups": scoring["totals"], "missingFromStore": missing, "statusChanged": changed}
+
+
+@check(
+    "ffa2026:validation",
+    "Lineup structure, transaction classes, timestamps, duplicates and revisions validated",
+)
+def _ffa_validation(ctx: Context) -> Result:
+    inv = load(ROOT / "docs/research/ffa-2026-inventory.json")
+    tx = inv["transactions"]
+    lineups = all(not v["problems"] for v in inv["lineups"].values())
+    ok = (
+        lineups
+        and tx["records"] == tx["uniqueEspnIds"]
+        and tx["duplicateContentUnderDifferentIds"] == 0
+        and tx["timestamps"]["processedExactlyOnDecidedWaiverClaims"]
+    )
+    keys = ("records", "completedTrades", "waiverClaims", "revisedAfterFirstObservation")
+    return ok, {k: tx[k] for k in keys}
+
+
+@check(
+    "ffa2026:ownership-replay",
+    "Ownership replayed from the draft and executed moves matches every captured period roster and every daily snapshot",
+)
+def _ffa_replay(ctx: Context) -> Result:
+    replay = load(ROOT / "docs/research/ffa-2026-inventory.json")["ownershipReplay"]
+    return replay["allPeriodsVerified"] and replay["allSnapshotsAgree"], {
+        "periods": len(replay["periods"]),
+        "dailySnapshots": len(replay["dailySnapshots"]),
+    }
+
+
+@check(
+    "league2026:exploratory",
+    "C05L-2026-EXP ran under the rule committed before it, as EXPLORATORY",
+)
+def _league2026(ctx: Context) -> Result:
+    receipt = load(ROOT / "docs/research/dvp/league-2026-exploratory.json")
+    declared = git(
+        "log", "--format=%cI", "--diff-filter=A", "--", "config/dvp/league-2026-exploratory.json"
+    )
+    first = declared.splitlines()[-1] if declared else None
+    earlier = first is not None and datetime.fromisoformat(first) < datetime.fromisoformat(
+        receipt["generatedAt"]
+    )
+    ok = (
+        earlier
+        and receipt["classification"].startswith("EXPLORATORY")
+        and receipt["coverage"]["streamDecisions"] > 0
+        and receipt["ownership"]["replayVerifiedForEveryWeek"]
+    )
+    return ok, {
+        "ruleCommittedAt": first,
+        "resultAt": receipt["generatedAt"],
+        "startDecisions": receipt["coverage"]["startDecisions"],
+        "streamDecisions": receipt["coverage"]["streamDecisions"],
+    }
+
+
+@check(
+    "prospective:league-capture",
+    "The prospective archive captures the league's D/ST rosters at forecast time; the harness also records availability",
+)
+def _league_capture(ctx: Context) -> Result:
+    week12 = RECEIPTS / "prospective/2026/week-12/league.json"
+    harness_text = (ROOT / "scripts/model/dvp_prospective.py").read_text()
+    capture = load(week12) if week12.exists() else {}
+    marker = '"availability": dict(sorted(states.items()))'
+    ok = bool(capture.get("rosters")) and marker in harness_text
+    return ok, {
+        "week12Teams": len(capture.get("rosters", {})),
+        "availabilityCapturedInWeek12": "availability" in capture,
+    }
+
+
+@check("ffa2026:deliverables", "Phase B documents and receipts exist")
+def _ffa_deliverables(ctx: Context) -> Result:
+    paths = [
+        "docs/research/FFA_2026_DATA_INVENTORY.md",
+        "docs/research/ffa-2026-inventory.json",
+        "docs/research/dvp/LEAGUE_CONSTRAINED_2026.md",
+        "docs/research/dvp/league-2026-exploratory.json",
+        "config/dvp/league-2026-exploratory.json",
+    ]
+    missing = [p for p in paths if not (ROOT / p).is_file()]
+    return not missing, {"missing": missing}
+
+
+@check(
     "open:modes",
     "NOT BUILT: dry-run and resume modes (the specification asks for them only 'when appropriate')",
 )
@@ -1509,7 +1650,7 @@ class Item:
     section: str
     title: str
     checks: tuple[str, ...]
-    kind: str = "done"  # done | open
+    kind: str = "done"  # done | open | not_applicable
 
 
 def _i(id: str, section: str, title: str, *checks: str, kind: str = "done") -> Item:
@@ -2102,11 +2243,27 @@ ITEMS: tuple[Item, ...] = (
         "phasec:decision",
         "rerun:sitstart",
     ),
+    # C05L, split by the owner's Phase B audit (B6): FFA began in 2026 (OWN-076).
     _i(
-        "C05L",
+        "C05L-HIST",
         "§5 Phase C",
-        "C05: league-constrained lineup evaluation: BLOCKED (no FFA lineups before 2026)",
-        "phasec:not-available",
+        "C05L-HIST: league-constrained evaluation 2016-2025: NOT_APPLICABLE (FFA began in 2026)",
+        "owner:inaugural-season",
+        kind="not_applicable",
+    ),
+    _i(
+        "C05L-2026-EXP",
+        "§5 Phase C",
+        "C05L-2026-EXP: exploratory league-constrained D/ST evaluation on completed 2026 weeks",
+        "league2026:exploratory",
+        "ffa2026:ownership-replay",
+    ),
+    _i(
+        "C05L-2026-PRO",
+        "§5 Phase C",
+        "C05L-2026-PRO: prospective league-constrained evaluation, weeks 12-18 (decision-time capture)",
+        "prospective:league-capture",
+        "open:prospective",
         kind="open",
     ),
     # §6 Statistics
@@ -2517,6 +2674,35 @@ ITEMS: tuple[Item, ...] = (
         "open:owner-weight",
         "docs:status-vocabulary",
     ),
+    # Owner audit Phase B (AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md)
+    _i(
+        "PB0",
+        "Phase B",
+        "B0: 2026 is FFA's inaugural season, recorded everywhere required",
+        "owner:inaugural-season",
+    ),
+    _i(
+        "PB3",
+        "Phase B",
+        "B1-B3: verified ESPN capability inventory and 2026 coverage matrix, reusing the existing integration",
+        "ffa2026:inventory",
+        "ffa2026:live-verification",
+    ),
+    _i(
+        "PB4", "Phase B", "B4: lineups, statistics and transactions validated", "ffa2026:validation"
+    ),
+    _i(
+        "PB5",
+        "Phase B",
+        "B5: 2026 ownership and availability reconstructed and verified, never from current ownership",
+        "ffa2026:ownership-replay",
+    ),
+    _i(
+        "PB7",
+        "Phase B",
+        "B7: deliverables: inventory, coverage, classifications, retrieval report, results, dispositions, limits",
+        "ffa2026:deliverables",
+    ),
 )
 
 
@@ -2542,9 +2728,9 @@ def evaluate(ctx: Context) -> dict[str, Any]:
     for item in ITEMS:
         passed = all(results[c]["passed"] for c in item.checks)
         status = (
-            ("DONE" if passed else "FAILED")
-            if item.kind == "done"
-            else ("OPEN" if passed else "FAILED")
+            {"done": "DONE", "open": "OPEN", "not_applicable": "NOT_APPLICABLE"}[item.kind]
+            if passed
+            else "FAILED"
         )
         items.append(
             {
@@ -2556,7 +2742,10 @@ def evaluate(ctx: Context) -> dict[str, Any]:
                 "checks": list(item.checks),
             }
         )
-    counts = {s: sum(i["status"] == s for i in items) for s in ("DONE", "OPEN", "FAILED")}
+    counts = {
+        s: sum(i["status"] == s for i in items)
+        for s in ("DONE", "OPEN", "NOT_APPLICABLE", "FAILED")
+    }
     return {
         "status": "PASSED" if counts["FAILED"] == 0 else "FAILED",
         "summary": {
@@ -2604,7 +2793,9 @@ def check_command(args: argparse.Namespace) -> None:
     args.out.write_text(json.dumps(receipt, indent=2, default=str) + "\n")
     s = result["summary"]
     print(
-        f"{result['status']}: {s['items']} items ({s['DONE']} done, {s['OPEN']} open, {s['FAILED']} failed); {s['checksPassed']}/{s['checks']} checks passed"
+        f"{result['status']}: {s['items']} items ({s['DONE']} done, {s['OPEN']} open, "
+        f"{s['NOT_APPLICABLE']} not applicable, {s['FAILED']} failed); "
+        f"{s['checksPassed']}/{s['checks']} checks passed"
     )
     for item in result["items"]:
         if item["status"] == "FAILED":

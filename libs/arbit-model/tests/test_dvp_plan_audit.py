@@ -56,7 +56,7 @@ def test_every_check_is_defined_and_used(audit):
     assert used <= set(audit.CHECKS), sorted(used - set(audit.CHECKS))
     assert set(audit.CHECKS) <= used, sorted(set(audit.CHECKS) - used)
     assert all(item.checks for item in audit.ITEMS)
-    assert {item.kind for item in audit.ITEMS} == {"done", "open"}
+    assert {item.kind for item in audit.ITEMS} == {"done", "open", "not_applicable"}
 
 
 def test_every_test_id_names_real_tests():
@@ -145,7 +145,7 @@ def test_the_committed_receipt_passes_and_matches_the_catalog(audit):
     assert {i["id"]: i["checks"] for i in receipt["items"]} == {
         item.id: list(item.checks) for item in audit.ITEMS
     }
-    assert all(i["status"] in ("DONE", "OPEN") for i in receipt["items"])
+    assert all(i["status"] in ("DONE", "OPEN", "NOT_APPLICABLE") for i in receipt["items"])
     assert all(c["passed"] for c in receipt["checks"].values())
     assert set(receipt["checks"]) == set(audit.CHECKS)
     assert receipt["tests"]["failed"] == 0 and receipt["tests"]["skipped"] == 0
@@ -172,6 +172,9 @@ def test_the_scope_document_explains_every_item_and_states_the_counts(audit):
         if item.kind == "open":
             row = next(line for line in text.splitlines() if line.startswith(f"| {item.id} |"))
             assert "OPEN" in row or "BLOCKED" in row or "NOT BUILT" in row, item.id
+        if item.kind == "not_applicable":
+            row = next(line for line in text.splitlines() if line.startswith(f"| {item.id} |"))
+            assert "NOT_APPLICABLE" in row, item.id
     summary = receipt["summary"]
     assert f"{summary['items']} action items" in text
     assert f"{summary['checks']} checks" in text

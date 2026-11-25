@@ -85,7 +85,7 @@ Specification §11 ("before completion"). Repeatability is Phase A; forward bene
 
 - **2025 is conditionally held out.** v0 and the Phase A reliability lab described 2016–2025, 2025 included, though no 2025 forecast or parameter entered selection. Independent confirmation is the prospective 2026 window ([PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)).
 - **Final revisions only.** The actuals are final revisions. Stat corrections that arrived after a cutoff can't be replayed before 2026; they were negligible where measured (A12).
-- **D/ST start/sit is measured on pairs, not on real lineups.** Arbit has FFA lineups only for 2026, so league-constrained lineup evaluation is BLOCKED for 2016–2025 ([PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md)).
+- **D/ST start/sit is measured on pairs for 2016–2025.** FFA began in 2026 (OWN-076), so league-constrained evaluation is NOT_APPLICABLE for those seasons. On the completed 2026 weeks it ran as an exploratory test: 28 start and 88 streaming decisions, too few to measure, with intervals spanning zero. Weeks 12–18 are captured prospectively ([LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md)).
 - **Chance at the 1% scale.** One noise placebo improved 2025 TE RMSE by 0.65%. Changes under 1% can arise by chance, so the threshold is a real guard.
 - **Performance:** with polars' default thread pool the walk-forward is slow on small frames, so runs set `POLARS_MAX_THREADS=2`. Receipts record it.
 
