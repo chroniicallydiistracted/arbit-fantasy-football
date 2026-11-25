@@ -46,11 +46,13 @@ from arbit_model import teams
 from arbit_model.dvp import asof, contract, decisions, lab, provenance, reliability, shadow
 from arbit_model.dvp import observations as obs
 from arbit_model.dvp import walkforward as wf
+from arbit_model.dvp import window as gate
 from arbit_model.inputs import NflverseTables
 from sqlalchemy import create_engine, text
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = ROOT / "config/dvp/prospective.json"
+AMENDMENT = ROOT / "config/dvp/prospective-amendment-1.json"
 FORMAT = "arbit-dvp-m3-3-prospective"
 ESPN_TO_FRANCHISE = {"LAR": "LA", "WSH": "WAS"}
 NO_RESULT_GRACE = timedelta(days=4)
@@ -496,6 +498,33 @@ def write_once(folder: Path, files: dict[str, bytes], keep: Path | None = None) 
         if path.is_file():
             path.chmod(0o444)
     return digests
+
+
+def files_match(folder: Path, files: dict[str, str]) -> bool:
+    """Every file a ledger entry names still has the hash the entry recorded."""
+    try:
+        return all(sha256(folder / name) == digest for name, digest in files.items())
+    except OSError:
+        return False
+
+
+def league_for_evaluation(root: Path, entry: dict[str, Any], folder: Path) -> dict[str, Any]:
+    """The league state a week's descriptive league evaluation uses: the capture archived with the
+    forecasts, replaced by the last decision-time capture before the cutoff when one exists
+    (config/dvp/prospective-amendment-1.json, leagueCapture)."""
+    capture: dict[str, Any] = json.loads((folder / "league.json").read_text())
+    capture["source"] = "forecast-time capture"
+    later = [
+        c
+        for c in read_ledger(root / "captures.jsonl")
+        if c.get("week") == entry["week"] and c.get("observedAt", "") < entry["cutoff"]
+    ]
+    if later:
+        last = later[-1]
+        path = root / last["file"]
+        if sha256(path) == last["sha256"]:
+            capture = json.loads(path.read_text()) | {"source": "last capture before the cutoff"}
+    return capture
 
 
 def export(
@@ -965,30 +994,15 @@ def evaluate(args: argparse.Namespace) -> None:
     if problems:
         raise SystemExit("ledger is broken: " + "; ".join(problems))
     fz = load_frozen()
-    status: dict[str, Any] = {}
     archived: dict[int, pl.DataFrame] = {}
     retrospective: dict[int, pl.DataFrame] = {}
     leagues: dict[int, dict[str, Any]] = {}
     weeks: list[int] = args.weeks or config["weeks"]
-    for week in weeks:
-        found = entries_for(lines, week)
-        prospective = [e for e in found if e["classification"] == "PROSPECTIVE"]
-        if prospective:
-            e = prospective[0]
-            folder = root / e["folder"]
-            for name, digest in e["files"].items():
-                if sha256(folder / name) != digest:
-                    raise SystemExit(f"BLOCKED: {folder / name} does not match the ledger")
-            archived[week] = pl.read_parquet(folder / "forecasts.parquet")
-            leagues[week] = json.loads((folder / "league.json").read_text())
-            status[str(week)] = "PROSPECTIVE"
-        elif any(e["classification"] == "MISSED" for e in found):
-            status[str(week)] = "MISSED"
-        else:
-            status[str(week)] = "PENDING"
-        for e in found:
-            if e["classification"] == "RETROSPECTIVE":
-                retrospective[week] = pl.read_parquet(root / e["folder"] / "forecasts.parquet")
+    publications = read_ledger(root / "publications.jsonl")
+    if shadow.verify_ledger(publications):
+        raise SystemExit(
+            "publications log is broken: " + "; ".join(shadow.verify_ledger(publications))
+        )
     work = Path(tempfile.mkdtemp(prefix=f"dvp-eval-{season}-"))
     labels_store = Path(args.labels) if args.labels else work / "targets"
     if args.labels:
@@ -1001,19 +1015,54 @@ def evaluate(args: argparse.Namespace) -> None:
     labels, label_schedule, label_lineage = season_observations(
         fz, labels_store, digest, season, engine_readonly(), nflverse
     )
-    weeks_done = set(
-        label_schedule.filter(pl.col("status") == "completed").get_column("week").unique().to_list()
-    )
-    predeclared = weeks == config["weeks"]
-    complete = (
-        predeclared
-        and all(status[str(w)] in ("PROSPECTIVE", "MISSED") for w in weeks)
-        and all(w in weeks_done for w in weeks)
-    )
+    now = now_utc()
+    archive_states: dict[int, dict[str, Any]] = {}
+    label_states: dict[int, dict[str, Any]] = {}
+    for week in weeks:
+        found = entries_for(lines, week)
+        matches = {
+            str(e["folder"]): files_match(root / e["folder"], e["files"])
+            for e in found
+            if e["classification"] in ("PROSPECTIVE", "RETROSPECTIVE")
+        }
+        state = gate.archive_state(
+            gate.WeekArchive(
+                week=week,
+                cutoff=cutoff_of(label_schedule, season, week),
+                entries=found,
+                files_match=matches,
+                publications=publications,
+            ),
+            now,
+        )
+        archive_states[week] = state
+        labelled_week = None
+        if state["status"] == gate.PROSPECTIVE:
+            e = next(x for x in found if x["classification"] == "PROSPECTIVE")
+            folder = root / e["folder"]
+            archived[week] = pl.read_parquet(folder / "forecasts.parquet")
+            leagues[week] = league_for_evaluation(root, e, folder)
+            labelled_week = shadow.attach_labels(archived[week], labels)
+        label_states[week] = gate.label_state(
+            week, label_schedule, labelled_week, now, NO_RESULT_GRACE
+        )
+        for e in found:
+            if e["classification"] == "RETROSPECTIVE" and matches.get(str(e["folder"])):
+                retrospective[week] = pl.read_parquet(root / e["folder"] / "forecasts.parquet")
+    window = gate.window_state(weeks, config["weeks"], archive_states, label_states)
+    status = {str(w): archive_states[w]["status"] for w in weeks}
+    complete = window["confirmationAllowed"]
     result: dict[str, Any] = {
         "weeks": status,
-        "predeclaredWindow": predeclared,
+        "archiveStates": {str(w): v for w, v in archive_states.items()},
+        "labelStates": {str(w): v for w, v in label_states.items()},
+        "window": window,
+        "predeclaredWindow": weeks == config["weeks"],
         "windowComplete": complete,
+        "amendment": {
+            "path": "config/dvp/prospective-amendment-1.json",
+            "sha256": sha256(AMENDMENT),
+        },
     }
     if archived:
         frame = pl.concat(list(archived.values()), how="vertical_relaxed")
@@ -1024,7 +1073,7 @@ def evaluate(args: argparse.Namespace) -> None:
             leagues,
             descriptive=None
             if complete
-            else "INTERIM: no label until the predeclared window is complete",
+            else f"{window['status']}: no confirmation label (config/dvp/prospective-amendment-1.json)",
         )
     if retrospective:
         result["retrospectiveOnly"] = evaluate_frame(
@@ -1034,7 +1083,7 @@ def evaluate(args: argparse.Namespace) -> None:
             descriptive="RETROSPECTIVE: made after the cutoff; never a confirmation",
         )
     receipt = {
-        "format": FORMAT + "-evaluation-v1",
+        "format": FORMAT + "-evaluation-v2",
         "generatedAt": now_utc().isoformat(),
         "code": code_version(),
         "season": season,
@@ -1043,12 +1092,13 @@ def evaluate(args: argparse.Namespace) -> None:
         **result,
         "forbidden_vendor_projection_dependencies": 0,
     }
+    predeclared = weeks == config["weeks"]
     name = "evaluation.json" if predeclared else f"evaluation-weeks-{min(weeks)}-{max(weeks)}.json"
     out = Path(args.receipts) / str(season) / name
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(receipt, indent=1, sort_keys=True, default=str) + "\n")
     shutil.rmtree(work, ignore_errors=True)
-    print(json.dumps({"weeks": status, "windowComplete": complete}))
+    print(json.dumps({"weeks": status, "window": window["status"], "windowComplete": complete}))
 
 
 def verify(args: argparse.Namespace) -> None:

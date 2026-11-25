@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-010",
+  "title": "M3-3 final directive: audit reconciliation and prospective operations (Phase A)",
+  "objective": "Reconcile every external audit finding of the owner's final M3-3 directive in a durable register; correct the prospective completion gate, archive transactions and recovery, data readiness, observed availability capture and external evidence publication (AUD-01a-d, PB-AUD-07); declare the evaluation-integrity amendment before the week-12 kickoff; install and verify the owner-authorized timer (DEC-02).",
+  "status": "active",
+  "phase": "review",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md",
+    "docs/research/dvp/AUDIT_RECONCILIATION.md",
+    "docs/research/dvp/audit-findings.json",
+    "config/dvp/prospective-amendment-1.json",
+    "libs/arbit-model/src/arbit_model/dvp/window.py",
+    "libs/arbit-model/src/arbit_model/dvp/archive.py",
+    "libs/arbit-model/src/arbit_model/dvp/evidence.py",
+    "libs/arbit-model/tests/test_dvp_window.py",
+    "libs/arbit-model/tests/test_dvp_archive.py",
+    "libs/arbit-model/tests/test_dvp_evidence.py",
+    "libs/arbit-model/tests/test_dvp_shadow.py",
+    "scripts/model/dvp_prospective.py",
+    "scripts/model/dvp.py",
+    "infra/systemd/arbit-dvp-prospective.service.template",
+    "infra/systemd/arbit-dvp-prospective.timer.template",
+    "infra/systemd/install-dvp-prospective.sh",
+    "docs/research/dvp/PROSPECTIVE_2026.md",
+    "docs/research/dvp/prospective/2026/README.md",
+    "docs/research/dvp/README.md",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-25T03:33:08Z",
+  "updated_at": "2026-11-25T03:33:08Z",
+  "baseline": "2e2520f423b0d4c1e80fca5b5a593e771ac01b2d",
+  "next_action": "Read affected requirements/source and record Review evidence",
+  "sections": {
+    "review": {
+      "summary": "",
+      "files": []
+    },
+    "plan": {
+      "summary": "",
+      "files": []
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}
