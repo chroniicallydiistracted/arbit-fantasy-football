@@ -32,7 +32,7 @@ The rule in [`config/dvp/sitstart.json`](../../../config/dvp/sitstart.json) was 
 | Pairs | Every unordered pair of D/STs that both play in the same week. Each model starts the higher forecast |
 | Ties | A pair whose units scored the same is excluded from accuracy. A forecast tie earns 0.5 |
 | Primary metric | B06's pairwise accuracy minus B00's, in percentage points |
-| Practical minimum | **1.8 points:** the accuracy change implied by Phase B's 1% RMSE minimum at B00's development correlation (0.1448), under a bivariate normal. Only B00 development data entered it |
+| Practical minimum | **1.8 points:** a predeclared practical heuristic, calibrated to Phase B's 1% RMSE minimum at B00's development correlation (0.1448) under a bivariate-normal approximation. Only B00 development data entered it. It is not an exact equivalence: the actual Pearson gives 1.77, and an RMSE change does not fix a ranking change ([AUD-07](THRESHOLDS_AUD07.md)) |
 | Rule | **PROMISING** if the change is ≥ 1.8 points and changed choices gain net points in development, 2024 and 2025. **NOT_USEFUL** if it misses 1.8 in all three. **INCONCLUSIVE** otherwise. **BLOCKED** on an integrity failure |
 | Uncertainty | Week-block bootstrap: 2,000 replicates, seed 1729 |
 | Inputs | Each stage's frozen forecasts, checked against the hash in its receipt. Nothing is fit or tuned |

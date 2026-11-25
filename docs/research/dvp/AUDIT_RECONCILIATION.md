@@ -29,8 +29,8 @@ Started 2026-11-25 in TASK-20261124-010.
 | PB-AUD-06 | Manager starts compared across different decision times | PARTIALLY_AGREE (gap real; no decision affected) | RESOLVED_VERIFIED |
 | PB-AUD-08 | League inputs read from the live database | AGREE | IN_PROGRESS (inputs pinned; the audit rerun is remediation 7) |
 | PB-RESULTS | Phase B v1 totals and the week-11 sensitivity (directive §8) | AGREE (recomputed) | RESOLVED_VERIFIED |
-| AUD-06 | Simulation suite outstanding | AGREE | OPEN |
-| AUD-07 | 1.8-point threshold described as exact | UNVERIFIED (derivation to reproduce) | OPEN |
+| AUD-06 | Simulation suite outstanding | AGREE | RESOLVED_VERIFIED ([report](SIMULATION_AUD06.md)) |
+| AUD-07 | 1.8-point threshold described as exact | AGREE (reproduced; a heuristic, not an equivalence) | RESOLVED_VERIFIED ([report](THRESHOLDS_AUD07.md)) |
 
 No finding has been rejected so far. Three are only partly accepted.
 - **AUD-01b:**
@@ -126,6 +126,21 @@ Details: [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md#corrected-evalu
   - **Samples are unchanged.** Claimable streaming moves from +46 to +110, all from week 9's snapshot-verified pool, a full collision.
   - **The conclusion is unchanged:** inconclusive.
 
+## AUD-06 and AUD-07 (resolved in TASK-20261125-001)
+
+**AUD-06:** a predeclared suite of 33,100 repetitions ran Arbit's own estimators and complete procedure on synthetic leagues with a known signal ([report](SIMULATION_AUD06.md)).
+- **False promotion:** none, without a signal, in 900 position-repetitions.
+- **Strong signals** (like D/ST) were promoted 80–90% of the time; moderate ones (like RB) about 2%. Real QB, RB and WR gains are what a moderate signal produces.
+- **Estimators:** k is recovered within 15–19%, slightly conservatively.
+- **Intervals:** those resting on few blocks undercover. The league bootstrap is the worst, at 77–87%.
+- **Acceptance:** A8 fails and A3 for WR is inconclusive; both are reported, not re-scored.
+- **Earlier conclusions:** none changes, and no material methodological defect was found.
+
+**AUD-07:** the 1.8-point derivation reproduces exactly (1.82) but rests on assumptions the data don't meet, so it is a practical heuristic ([report](THRESHOLDS_AUD07.md)).
+- **D/ST B06** stays PROMISING across thresholds from 0 to 2% and 0 to 3 points.
+- **RB** would be PROMISING at 0.5% or less.
+- **No threshold changed.**
+
 ## Still to do (later tasks of this directive)
 
-AUD-06, AUD-07, the research eligibility registry, and the comprehensive audit (remediation 7, which also reruns the pinned Phase B evaluation for PB-AUD-08). AUD-01a closes when unattended publication is verified with the registered key. Each closes in this register.
+The research eligibility registry, and the comprehensive audit (remediation 7, which also reruns the pinned Phase B evaluation for PB-AUD-08). AUD-01a closes when unattended publication is verified with the registered key. Each closes in this register.

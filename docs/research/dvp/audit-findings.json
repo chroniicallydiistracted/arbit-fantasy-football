@@ -352,17 +352,20 @@
     "No simulation suite exists."
    ],
    "evidence": [
-    "Repository search."
+    "Declared in config/dvp/simulation-v1.json (pushed 88876b8 before running); 33,100 repetitions at cc25e2c, none failed; receipt docs/research/dvp/simulation-v1.json (901da3d)."
    ],
-   "tests": [],
+   "tests": [
+    "libs/arbit-model/tests/test_dvp_simulate.py (7 fast checks of the generator, in CI)",
+    "the suite: E1 11,000, E2 5,100, E3 8,000 (+80,000 truth), U 9,000 repetitions"
+   ],
    "disposition": "AGREE",
    "reasoning": "Outstanding by the owner's own sequencing.",
    "remediationRequired": true,
-   "remediation": "Planned: predeclared SIM-01..SIM-18 suite exercising the actual estimators and the full selection procedure.",
-   "expectedEffect": "May qualify earlier conclusions.",
+   "remediation": "SIM-01..SIM-18 run on Arbit's own estimators and complete procedure. Acceptance: A1, A2, A4, A5, A6, A7 PASS; A3 D/ST PASS, WR INCONCLUSIVE (80.3%, interval straddles 80%); A8 FAIL (league bootstrap coverage 77-87%; the declared null had a slightly negative true gain, reported with a supplementary one-sided check). No false promotion in 900 null position-repetitions; strong signals promoted 80-90%; moderate (k=20) about 2%; k recovered within 15-19% with a conservative upward bias; intervals with few blocks undercover. No earlier conclusion changes; no material methodological defect (docs/research/dvp/SIMULATION_AUD06.md).",
+   "expectedEffect": "Qualifies: QB/RB/WR results are consistent with a moderate true signal below the practical minimum; C05L intervals are too narrow (inconclusive firmer). D/ST B06 supported.",
    "completionCriteria": "Executed suite with receipts and interpretation.",
-   "status": "OPEN",
-   "task": "AUD-06 task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261125-001"
   },
   {
    "id": "AUD-07",
@@ -372,16 +375,20 @@
    "implementationAtReview": [
     "To be located (Phase C decision rule documentation)."
    ],
-   "evidence": [],
-   "tests": [],
-   "disposition": "UNVERIFIED",
-   "reasoning": "Derivation to be reproduced before agreeing.",
+   "evidence": [
+    "docs/research/dvp/threshold-sensitivity-v1.json (declared 88876b8; receipt at e65dcea)"
+   ],
+   "tests": [
+    "The 1% grid row reproduces every frozen holdout label"
+   ],
+   "disposition": "AGREE",
+   "reasoning": "Reproduced exactly (rho 0.1448 -> 0.2011, accuracy 54.63% -> 56.45%, 1.82 points). The derivation rests on bivariate normality, a calibrated forecast, independent pairs and Pearson's correlation; the actual Pearson gives 1.77, the formula mispredicts B00's accuracy (54.81% against 55.68%), and on the actual forecasts RMSE and ranking changes come apart (B01-B02r: RMSE +3.9%, accuracy +3.2-3.4 points; a recalibration: RMSE -0.07%, accuracy 0).",
    "remediationRequired": true,
-   "remediation": "Planned: reproduce the derivation; correct the wording; separately versioned sensitivity grid.",
-   "expectedEffect": "Wording; no change to frozen thresholds.",
+   "remediation": "The 1.8-point minimum documented as a predeclared practical heuristic (PLAYER_LEVEL_REPORT.md corrected; the frozen config's wording and every threshold unchanged); descriptive grid: D/ST B06 PROMISING across 0-2% and 0-3 points; RB PROMISING at <= 0.5% (a consistent sub-threshold gain); QB and WR inconclusive below 1%; TE and K PROMISING only at 0% (docs/research/dvp/THRESHOLDS_AUD07.md).",
+   "expectedEffect": "No label or threshold changes; RB, QB and WR need qualification in the eligibility registry.",
    "completionCriteria": "Derivation and sensitivity receipt.",
-   "status": "OPEN",
-   "task": "AUD-07 task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261125-001"
   }
  ]
 }

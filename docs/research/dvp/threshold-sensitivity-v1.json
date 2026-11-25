@@ -1,0 +1,805 @@
+{
+ "D1": {
+  "assumptions": [
+   "forecast and outcome bivariate normal (the arcsine law for pair concordance)",
+   "a calibrated forecast: MSE = var(y)(1 - rho^2), which holds for the best linear predictor only",
+   "independent random pairs; the real pairs are within weeks and outcomes are integers with ties",
+   "Spearman's 0.1448 used where the formula needs Pearson's correlation"
+  ],
+  "nonUniqueness": {
+   "pairwiseAccuracyChangePp": 0.0,
+   "reading": "A linear recalibration of B00 lowers RMSE but keeps every pair's order, so pairwise accuracy moves by 0 points: an RMSE change does not determine a ranking change.",
+   "recalibration": {
+    "alpha": 1.1261,
+    "beta": 0.8274
+   },
+   "rmseCut": 0.00068
+  },
+  "observedRelation": [
+   {
+    "deltaPp": 3.155,
+    "formulaImpliedPp": null,
+    "relativeRmseChange": 0.03936,
+    "variant": "b01"
+   },
+   {
+    "deltaPp": 3.369,
+    "formulaImpliedPp": null,
+    "relativeRmseChange": 0.03865,
+    "variant": "b02"
+   },
+   {
+    "deltaPp": 3.281,
+    "formulaImpliedPp": null,
+    "relativeRmseChange": 0.03904,
+    "variant": "b02r"
+   },
+   {
+    "deltaPp": 3.848,
+    "formulaImpliedPp": 4.036,
+    "relativeRmseChange": -0.02653,
+    "variant": "b03"
+   },
+   {
+    "deltaPp": 3.757,
+    "formulaImpliedPp": 3.796,
+    "relativeRmseChange": -0.02451,
+    "variant": "b03r"
+   },
+   {
+    "deltaPp": 3.512,
+    "formulaImpliedPp": 0.616,
+    "relativeRmseChange": -0.00302,
+    "variant": "b04_k1"
+   },
+   {
+    "deltaPp": 1.013,
+    "formulaImpliedPp": 1.19,
+    "relativeRmseChange": -0.00617,
+    "variant": "b04_k128"
+   },
+   {
+    "deltaPp": 3.464,
+    "formulaImpliedPp": 3.685,
+    "relativeRmseChange": -0.0236,
+    "variant": "b04_k16"
+   },
+   {
+    "deltaPp": 3.619,
+    "formulaImpliedPp": 2.626,
+    "relativeRmseChange": -0.01546,
+    "variant": "b04_k2"
+   },
+   {
+    "deltaPp": 0.612,
+    "formulaImpliedPp": 0.672,
+    "relativeRmseChange": -0.00331,
+    "variant": "b04_k256"
+   },
+   {
+    "deltaPp": 2.749,
+    "formulaImpliedPp": 2.866,
+    "relativeRmseChange": -0.01721,
+    "variant": "b04_k32"
+   },
+   {
+    "deltaPp": 3.796,
+    "formulaImpliedPp": 3.741,
+    "relativeRmseChange": -0.02406,
+    "variant": "b04_k4"
+   },
+   {
+    "deltaPp": 1.731,
+    "formulaImpliedPp": 1.949,
+    "relativeRmseChange": -0.01083,
+    "variant": "b04_k64"
+   },
+   {
+    "deltaPp": 3.821,
+    "formulaImpliedPp": 4.063,
+    "relativeRmseChange": -0.02676,
+    "variant": "b04_k8"
+   },
+   {
+    "deltaPp": 3.237,
+    "formulaImpliedPp": 3.546,
+    "relativeRmseChange": -0.02247,
+    "variant": "b05_h2"
+   },
+   {
+    "deltaPp": 3.602,
+    "formulaImpliedPp": 3.948,
+    "relativeRmseChange": -0.02579,
+    "variant": "b05_h4"
+   },
+   {
+    "deltaPp": 3.705,
+    "formulaImpliedPp": 4.057,
+    "relativeRmseChange": -0.02671,
+    "variant": "b05_h8"
+   },
+   {
+    "deltaPp": 4.448,
+    "formulaImpliedPp": 4.417,
+    "relativeRmseChange": -0.02985,
+    "variant": "b06"
+   },
+   {
+    "deltaPp": 3.851,
+    "formulaImpliedPp": 4.21,
+    "relativeRmseChange": -0.02803,
+    "variant": "b07"
+   },
+   {
+    "deltaPp": -2.098,
+    "formulaImpliedPp": null,
+    "relativeRmseChange": 0.02643,
+    "variant": "b09_lastopp"
+   },
+   {
+    "deltaPp": -2.771,
+    "formulaImpliedPp": null,
+    "relativeRmseChange": 0.03973,
+    "variant": "b09_noise"
+   },
+   {
+    "deltaPp": -1.046,
+    "formulaImpliedPp": null,
+    "relativeRmseChange": 0.01813,
+    "variant": "b09_shuffle"
+   }
+  ],
+  "original": {
+   "accuracyAfter": 56.45,
+   "accuracyBefore": 54.63,
+   "impliedPp": 1.82,
+   "rho": 0.1448,
+   "rhoAfter1Percent": 0.2011
+  },
+  "pearsonVersusSpearman": {
+   "actualDevelopmentPearsonB00": 0.1504,
+   "actualDevelopmentSpearmanB00": 0.1448,
+   "actualPairwiseAccuracyB00": 55.678,
+   "bivariateNormalPearsonFromSpearman": 0.1515,
+   "formulaAccuracyAtActualPearson": 54.81,
+   "impliedPpWithActualPearson": 1.77,
+   "impliedPpWithThatPearson": 1.76
+  },
+  "rows": 3678
+ },
+ "D2": {
+  "jointDST": {
+   "B0.0000|C0.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0000|C0.5": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0000|C1.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0000|C1.8": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0000|C2.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0000|C3.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0000|C5.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "INCONCLUSIVE"
+   },
+   "B0.0025|C0.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0025|C0.5": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0025|C1.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0025|C1.8": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0025|C2.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0025|C3.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0025|C5.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "INCONCLUSIVE"
+   },
+   "B0.0050|C0.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0050|C0.5": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0050|C1.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0050|C1.8": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0050|C2.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0050|C3.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0050|C5.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "INCONCLUSIVE"
+   },
+   "B0.0100|C0.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0100|C0.5": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0100|C1.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0100|C1.8": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0100|C2.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0100|C3.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0100|C5.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "INCONCLUSIVE"
+   },
+   "B0.0150|C0.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0150|C0.5": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0150|C1.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0150|C1.8": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0150|C2.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0150|C3.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0150|C5.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "INCONCLUSIVE"
+   },
+   "B0.0200|C0.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0200|C0.5": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0200|C1.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0200|C1.8": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0200|C2.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0200|C3.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "PROMISING"
+   },
+   "B0.0200|C5.0": {
+    "phaseB": "PROMISING",
+    "phaseC": "INCONCLUSIVE"
+   },
+   "B0.0300|C0.0": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "PROMISING"
+   },
+   "B0.0300|C0.5": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "PROMISING"
+   },
+   "B0.0300|C1.0": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "PROMISING"
+   },
+   "B0.0300|C1.8": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "PROMISING"
+   },
+   "B0.0300|C2.0": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "PROMISING"
+   },
+   "B0.0300|C3.0": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "PROMISING"
+   },
+   "B0.0300|C5.0": {
+    "phaseB": "INCONCLUSIVE",
+    "phaseC": "INCONCLUSIVE"
+   }
+  },
+  "phaseB": {
+   "DST": {
+    "allPeriodsImprove": true,
+    "bestDvp": "b06",
+    "byThreshold": {
+     "0.0000": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0025": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0050": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0100": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0150": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0200": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0300": {
+      "candidate": "b00",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     }
+    },
+    "relative95": {
+     "development": [
+      -0.0344,
+      -0.02621
+     ],
+     "holdout": [
+      -0.06185,
+      -0.01788
+     ],
+     "validation": [
+      -0.08654,
+      -0.04178
+     ]
+    },
+    "relativeChange": {
+     "development": -0.02985,
+     "holdout": -0.04062,
+     "validation": -0.06362
+    }
+   },
+   "K": {
+    "allPeriodsImprove": true,
+    "bestDvp": "b06",
+    "byThreshold": {
+     "0.0000": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0025": {
+      "candidate": "b00",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 1
+     },
+     "0.0050": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0100": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0150": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0200": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0300": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     }
+    },
+    "relative95": {
+     "development": [
+      -0.00273,
+      0.00062
+     ],
+     "holdout": [
+      -0.00727,
+      0.00053
+     ],
+     "validation": [
+      -0.00562,
+      0.00521
+     ]
+    },
+    "relativeChange": {
+     "development": -0.00117,
+     "holdout": -0.00302,
+     "validation": -0.00039
+    }
+   },
+   "QB": {
+    "allPeriodsImprove": false,
+    "bestDvp": "b06",
+    "byThreshold": {
+     "0.0000": {
+      "candidate": "b06",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     },
+     "0.0025": {
+      "candidate": "b06",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     },
+     "0.0050": {
+      "candidate": "b06",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     },
+     "0.0100": {
+      "candidate": "b00",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 1
+     },
+     "0.0150": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0200": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0300": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     }
+    },
+    "relative95": {
+     "development": [
+      -0.01273,
+      -0.00529
+     ],
+     "holdout": [
+      -0.01907,
+      -0.00299
+     ],
+     "validation": [
+      -0.00573,
+      0.01143
+     ]
+    },
+    "relativeChange": {
+     "development": -0.0085,
+     "holdout": -0.01141,
+     "validation": 0.0026
+    }
+   },
+   "RB": {
+    "allPeriodsImprove": true,
+    "bestDvp": "b06",
+    "byThreshold": {
+     "0.0000": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0025": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0050": {
+      "candidate": "b06",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0100": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0150": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0200": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0300": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     }
+    },
+    "relative95": {
+     "development": [
+      -0.01246,
+      -0.00298
+     ],
+     "holdout": [
+      -0.01617,
+      0.00656
+     ],
+     "validation": [
+      -0.02373,
+      0.00661
+     ]
+    },
+    "relativeChange": {
+     "development": -0.00839,
+     "holdout": -0.00544,
+     "validation": -0.00845
+    }
+   },
+   "TE": {
+    "allPeriodsImprove": true,
+    "bestDvp": "b07",
+    "byThreshold": {
+     "0.0000": {
+      "candidate": "b07",
+      "label": "PROMISING",
+      "periodsMeeting": 3
+     },
+     "0.0025": {
+      "candidate": "b00",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 1
+     },
+     "0.0050": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0100": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0150": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0200": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0300": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     }
+    },
+    "relative95": {
+     "development": [
+      -0.00346,
+      -0.0001
+     ],
+     "holdout": [
+      -0.00681,
+      -0.00027
+     ],
+     "validation": [
+      -0.00377,
+      0.00369
+     ]
+    },
+    "relativeChange": {
+     "development": -0.00189,
+     "holdout": -0.00352,
+     "validation": -4e-05
+    }
+   },
+   "WR": {
+    "allPeriodsImprove": false,
+    "bestDvp": "b06",
+    "byThreshold": {
+     "0.0000": {
+      "candidate": "b06",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     },
+     "0.0025": {
+      "candidate": "b06",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     },
+     "0.0050": {
+      "candidate": "b06",
+      "label": "INCONCLUSIVE",
+      "periodsMeeting": 2
+     },
+     "0.0100": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0150": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0200": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     },
+     "0.0300": {
+      "candidate": "b00",
+      "label": "NOT_USEFUL",
+      "periodsMeeting": 0
+     }
+    },
+    "relative95": {
+     "development": [
+      -0.01188,
+      -0.00327
+     ],
+     "holdout": [
+      -0.01495,
+      0.00268
+     ],
+     "validation": [
+      -0.00011,
+      0.02403
+     ]
+    },
+    "relativeChange": {
+     "development": -0.00743,
+     "holdout": -0.00577,
+     "validation": 0.01207
+    }
+   }
+  },
+  "phaseC": {
+   "DST": {
+    "0.0": {
+     "label": "PROMISING"
+    },
+    "0.5": {
+     "label": "PROMISING"
+    },
+    "1.0": {
+     "label": "PROMISING"
+    },
+    "1.8": {
+     "label": "PROMISING"
+    },
+    "2.0": {
+     "label": "PROMISING"
+    },
+    "3.0": {
+     "label": "PROMISING"
+    },
+    "5.0": {
+     "label": "INCONCLUSIVE"
+    }
+   },
+   "periods": {
+    "development": {
+     "candidateRightWhenChanged": 56.88,
+     "changedShare": 0.3251,
+     "deltaPp": 4.448,
+     "netPoints": 27362.5,
+     "pairs": 53867,
+     "perWeek95": [
+      172.753,
+      279.003
+     ]
+    },
+    "holdout": {
+     "candidateRightWhenChanged": 58.67,
+     "changedShare": 0.3835,
+     "deltaPp": 6.617,
+     "netPoints": 5617.5,
+     "pairs": 7984,
+     "perWeek95": [
+      137.283,
+      481.645
+     ]
+    },
+    "validation": {
+     "candidateRightWhenChanged": 61.48,
+     "changedShare": 0.3725,
+     "deltaPp": 8.546,
+     "netPoints": 7978.0,
+     "pairs": 7992,
+     "perWeek95": [
+      237.574,
+      657.569
+     ]
+    }
+   }
+  }
+ },
+ "classification": "DESCRIPTIVE: never used to choose a threshold; frozen rules unchanged",
+ "code": "e65dceac9c43dfe37fd83d3b49e807b31c773299",
+ "config": {
+  "path": "config/dvp/threshold-sensitivity-v1.json",
+  "sha256": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81"
+ },
+ "format": "arbit-dvp-m3-3-threshold-sensitivity-v1",
+ "frozenThresholds": {
+  "phaseBRelativeRmse": 0.01,
+  "phaseCPp": 1.8
+ },
+ "generatedAt": "2026-11-25T07:29:18.976772+00:00",
+ "write_to_production": false
+}

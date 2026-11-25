@@ -1,0 +1,30 @@
+{
+ "format": "arbit-dvp-m3-3-threshold-sensitivity-v1",
+ "experiment": "AUD-07: interpretation of the frozen thresholds and a descriptive sensitivity analysis",
+ "authority": "Owner final directive §10, DEC-08. TASK-20261125-001.",
+ "declaredAt": "2026-11-25, before this analysis was computed.",
+ "frozenThresholdsUnchanged": {
+  "phaseB": "1% relative RMSE (config/dvp/backtest.json practical_minimum_relative_rmse)",
+  "phaseC": "1.8 points of pairwise accuracy with positive net points (config/dvp/frozen-phase-c.json)",
+  "rule": "Nothing here changes either threshold, any frozen label, or the 2026 confirmation rules. The grid is not an empirically optimal rule and is never used to choose a threshold for 2026."
+ },
+ "D1": {
+  "reproduce": "The original derivation (config/dvp/sitstart.json practicalMinimumDerivation): accuracy = 0.5 + asin(rho)/pi for a bivariate normal forecast and outcome; a 1% RMSE cut moves rho to sqrt(1 - 0.99^2 (1 - rho^2)); rho = B00's development Spearman for D/ST (0.1448).",
+  "examine": [
+   "the relation's assumptions: bivariate normality; a forecast whose MSE is var(y)(1 - rho^2), i.e. calibrated (unbiased, optimal slope); independent pairs",
+   "Pearson against Spearman: for a bivariate normal r = 2 sin(pi rho_s / 6); and the actual Pearson of D/ST B00 in development",
+   "non-uniqueness, shown on the actual development forecasts: recalibrating B00 (the best linear map of B00 to the outcome) cuts RMSE while leaving every pairwise order, so pairwise accuracy, unchanged",
+   "the observed relation: each variant's development RMSE change against its pairwise accuracy change"
+  ]
+ },
+ "D2": {
+  "phaseBGrid": [0.0, 0.0025, 0.005, 0.01, 0.015, 0.02, 0.03],
+  "phaseCGrid": [0.0, 0.5, 1.0, 1.8, 2.0, 3.0, 5.0],
+  "phaseBProcedure": "Per position and threshold t: the development selection as frozen (best DvP variant by development RMSE, unchanged by t), candidate if its development relative change <= -t, then walkforward.decide with that variant's validation and holdout relative changes from the committed receipts.",
+  "phaseCProcedure": "D/ST only (the only group whose Phase C was run): decisions.decide on the committed development, 2024 and 2025 Phase C metrics at each threshold. Other positions: Phase C was never run, because they missed Phase B; reported as not evaluated, not inferred.",
+  "reportedAlongside": ["consistency across the three periods", "the development interval of the RMSE change (relative to B00's RMSE)", "net points from changed decisions", "decision coverage (pairs, changed decisions)", "mean regret", "the joint Phase B and Phase C outcome"]
+ },
+ "D3": "Which findings are robust to the grid, which are sensitive, whether D/ST B06's PROMISING remains supported, what qualifications other positions need, and the governance implications for later slices.",
+ "inputs": ["docs/research/dvp/backtest-development.json", "docs/research/dvp/backtest-validation.json", "docs/research/dvp/backtest-holdout.json", "docs/research/dvp/sitstart.json", "the frozen audit run's development forecasts and observations (D1 only, hash-checked)"],
+ "write_to_production": false
+}
