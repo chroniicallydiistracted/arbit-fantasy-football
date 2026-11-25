@@ -1,5 +1,20 @@
 # Development Changelog
 
+## 2026-11-25 — M3-3 final directive, Phase B corrections (TASK-20261124-011)
+
+- **PR #18 merged** (`b6c25e9`). The prospective timer was installed from main and verified.
+- **Pinned inputs:** `ffa_2026_pin.py` pins the FFA 2026 league inputs ([manifest](../research/ffa-2026-league-inputs-v1.json)).
+- **`ffa_history`:** fails closed on unsupported ownership changes, validates the draft, and adds availability rule v2.
+- **`league`:**
+  - an all-week bootstrap;
+  - feasibility and collisions;
+  - an eligibility-aware matchup counterfactual.
+- **`ffa_2026_inventory.py --content`:** content-level live checks ([receipt](../research/ffa-2026-inventory-v2.json)).
+- **C05L-2026-EXP v2:** declared first, run from the pinned inputs ([receipt](../research/dvp/league-2026-exploratory-v2.json)).
+  - start −6 (−96 to +74);
+  - claimable streaming +110 (−202 to +398): week 9, a full collision;
+  - inconclusive.
+
 ## 2026-11-25 — M3-3 final directive, Phase A: audit reconciliation and prospective operations (TASK-20261124-010)
 
 - **PR #17 merged** (`2e2520f`): owner audit Phase B.

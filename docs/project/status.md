@@ -35,6 +35,15 @@
   - **Alerts:** reach Windows.
   - **The timer:** bounded to the window.
 - **Waiting on the owner:** registering the evidence key as a write deploy key (the permission classifier refused it). Until then the timer's publications fail, alert and retry.
+- **Phase A merged** (PR #18, `b6c25e9`). The timer was installed from main on 2026-11-25 and its first service run verified: week 13 waiting, week 12 captured.
+- **Phase B corrections (TASK-20261124-011, ENG-068):** every Phase B finding is resolved except PB-AUD-08's audit rerun, which is remediation 7.
+  - **Live content:** 536 of 536 transactions content-equal; lineups identical apart from current NFL teams.
+  - **Ownership replay:** fails closed, and equals all 1,522 snapshots.
+  - **Availability rule v2:** 99.3% on held-out snapshots.
+  - **Bootstrap:** all-week, start/sit −96 to +74.
+  - **Feasibility and collisions:** every B06 streaming pick of an unowned unit collides.
+  - **Pinned inputs.**
+  - **C05L-2026-EXP v2:** inconclusive, as before.
 - **Next:** Phase B corrections (PB-AUD-01 to -06, -08), AUD-06, AUD-07, the eligibility registry, then the comprehensive audit.
 
 **Owner audit Phase B (2026-11-25, TASK-20261124-009; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md), OWN-076, ENG-066):**

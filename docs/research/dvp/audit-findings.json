@@ -4,8 +4,21 @@
   "path": "docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md",
   "reviewedMain": "2e2520f423b0d4c1e80fca5b5a593e771ac01b2d"
  },
- "dispositions": ["AGREE", "PARTIALLY_AGREE", "DISAGREE", "ALREADY_RESOLVED", "NOT_APPLICABLE", "UNVERIFIED"],
- "closure": ["OPEN", "IN_PROGRESS", "RESOLVED_VERIFIED", "RESOLVED_PENDING_FUTURE_DATA", "ESCALATED"],
+ "dispositions": [
+  "AGREE",
+  "PARTIALLY_AGREE",
+  "DISAGREE",
+  "ALREADY_RESOLVED",
+  "NOT_APPLICABLE",
+  "UNVERIFIED"
+ ],
+ "closure": [
+  "OPEN",
+  "IN_PROGRESS",
+  "RESOLVED_VERIFIED",
+  "RESOLVED_PENDING_FUTURE_DATA",
+  "ESCALATED"
+ ],
  "report": "docs/research/dvp/AUDIT_RECONCILIATION.md",
  "findings": [
   {
@@ -13,9 +26,18 @@
    "title": "External archival evidence",
    "assertion": "The systemd service runs the harness and exports locally but neither publishes nor externally timestamps the forecast evidence; week 12 relied on a manual GitHub push.",
    "requirement": "Specification §3.4 frozen-before-outcome evidence; AUD-01 prospective confirmation (AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md remediation 1).",
-   "implementationAtReview": ["infra/systemd/arbit-dvp-prospective.service.template:14 exports to artifacts/dvp/prospective/export (git-ignored)", "scripts/model/dvp_prospective.py:501 export() copies files; nothing pushes them"],
-   "evidence": ["The service template at 2e2520f has no publication step.", "GitHub activity API: week 12's files reached GitHub in the push of 168196d to claude/m3-dvp-prospective at 2026-11-24T23:13:15Z, a manual step; their bytes equal the ledger's forecasts.csv, manifest.json and league.json hashes."],
-   "tests": ["libs/arbit-model/tests/test_dvp_evidence.py (6 tests against a local bare remote)", "Live: week 12 commitment published to research-evidence/dvp-prospective, read back equal, GitHub activity timestamp 2026-11-25T03:46:49Z (before the 2026-11-26T01:00Z cutoff)"],
+   "implementationAtReview": [
+    "infra/systemd/arbit-dvp-prospective.service.template:14 exports to artifacts/dvp/prospective/export (git-ignored)",
+    "scripts/model/dvp_prospective.py:501 export() copies files; nothing pushes them"
+   ],
+   "evidence": [
+    "The service template at 2e2520f has no publication step.",
+    "GitHub activity API: week 12's files reached GitHub in the push of 168196d to claude/m3-dvp-prospective at 2026-11-24T23:13:15Z, a manual step; their bytes equal the ledger's forecasts.csv, manifest.json and league.json hashes."
+   ],
+   "tests": [
+    "libs/arbit-model/tests/test_dvp_evidence.py (6 tests against a local bare remote)",
+    "Live: week 12 commitment published to research-evidence/dvp-prospective, read back equal, GitHub activity timestamp 2026-11-25T03:46:49Z (before the 2026-11-26T01:00Z cutoff)"
+   ],
    "disposition": "AGREE",
    "reasoning": "An unattended local export has no independent timestamp; local commit dates are set by the machine.",
    "remediationRequired": true,
@@ -31,9 +53,17 @@
    "title": "Source ingestion and data readiness",
    "assertion": "The harness rebuilds targets from local nflverse files but does not establish that they are refreshed in time.",
    "requirement": "AUD-01; specification §4 data eligibility and point-in-time rules.",
-   "implementationAtReview": ["scripts/model/dvp_prospective.py readiness(): waits for earlier games without a result and completed games with no FFA lines at all"],
-   "evidence": ["The worker's statistics lane (services/worker/src/arbit_worker/daemon.py StatisticsLane) imports changed nflverse files daily; dataset_manifest shows stats_player_week_2026 imported 2026-11-22, -23 and -24 at about 22:50 UTC.", "The old readiness accepted a completed game with any line; a game with 5 of its 12 cells would pass."],
-   "tests": ["test_dvp_window.py::test_readiness_names_the_state_of_every_earlier_game", "Live sweep 2026-11-25: week 13 WAITING with 162 ELIGIBLE_VERIFIED, 1 RETRIEVED_INVALID, 16 AWAITING_RESULT"],
+   "implementationAtReview": [
+    "scripts/model/dvp_prospective.py readiness(): waits for earlier games without a result and completed games with no FFA lines at all"
+   ],
+   "evidence": [
+    "The worker's statistics lane (services/worker/src/arbit_worker/daemon.py StatisticsLane) imports changed nflverse files daily; dataset_manifest shows stats_player_week_2026 imported 2026-11-22, -23 and -24 at about 22:50 UTC.",
+    "The old readiness accepted a completed game with any line; a game with 5 of its 12 cells would pass."
+   ],
+   "tests": [
+    "test_dvp_window.py::test_readiness_names_the_state_of_every_earlier_game",
+    "Live sweep 2026-11-25: week 13 WAITING with 162 ELIGIBLE_VERIFIED, 1 RETRIEVED_INVALID, 16 AWAITING_RESULT"
+   ],
    "disposition": "PARTIALLY_AGREE",
    "reasoning": "The refresh dependency exists (the worker's daily statistics lane) and readiness already waited for results; but completeness was checked per game, not per cell, and the blocking cause was not classified.",
    "remediationRequired": true,
@@ -48,9 +78,17 @@
    "title": "Complete prospective evaluation window",
    "assertion": "A week counted as completed when any of its games was completed; MISSED weeks satisfied the window requirement.",
    "requirement": "AUD-01; DEC-03.",
-   "implementationAtReview": ["scripts/model/dvp_prospective.py:1004-1011 (weeks_done = weeks with any completed game; status PROSPECTIVE or MISSED)"],
-   "evidence": ["Code at 2e2520f, lines cited.", "config/dvp/prospective.json (declared 2026-11-24) itself allowed missed weeks to be excluded with a confirmation still possible: the implementation matched its declaration; the declared rule was too weak.", "The old test test_only_the_complete_prospective_window_can_confirm only checked label replacement."],
-   "tests": ["libs/arbit-model/tests/test_dvp_window.py: 12 gate tests (first game only, several unfinished, labels missing, missed week, retrospective for a missed week, full valid window, subset, timing failure, integrity failure, duplicates, postponed game, invalid labels)"],
+   "implementationAtReview": [
+    "scripts/model/dvp_prospective.py:1004-1011 (weeks_done = weeks with any completed game; status PROSPECTIVE or MISSED)"
+   ],
+   "evidence": [
+    "Code at 2e2520f, lines cited.",
+    "config/dvp/prospective.json (declared 2026-11-24) itself allowed missed weeks to be excluded with a confirmation still possible: the implementation matched its declaration; the declared rule was too weak.",
+    "The old test test_only_the_complete_prospective_window_can_confirm only checked label replacement."
+   ],
+   "tests": [
+    "libs/arbit-model/tests/test_dvp_window.py: 12 gate tests (first game only, several unfinished, labels missing, missed week, retrospective for a missed week, full valid window, subset, timing failure, integrity failure, duplicates, postponed game, invalid labels)"
+   ],
    "disposition": "AGREE",
    "reasoning": "A single completed game marked the week complete, and a missed week could still lead to CONFIRMED.",
    "remediationRequired": true,
@@ -65,9 +103,19 @@
    "title": "Archival transaction integrity",
    "assertion": "Folder creation, persistence, ledger append and publication are separate; an interruption may leave unrecoverable state; generation time does not prove archival before the cutoff.",
    "requirement": "AUD-01.",
-   "implementationAtReview": ["scripts/model/dvp_prospective.py:480-498 write_once: temporary folder renamed into place, files read-only, no fsync, no recovery", "append_ledger: flock and fsync on the ledger only"],
-   "evidence": ["A crash after the rename and before the ledger append left week-WW without an entry; every later run then stopped at 'exists; archived forecasts are never overwritten' and the week would be missed.", "No lock across a run; no archivedAt recorded."],
-   "tests": ["libs/arbit-model/tests/test_dvp_archive.py: 12 tests (failures during staging, before the rename, after it; quarantine; missed-unproven after the cutoff; killed process at three points; concurrent run; fsync coverage)", "test_dvp_evidence.py::test_publication_after_the_ledger_append_is_retried_until_verified", "test_dvp_window.py timing tests (archival after the cutoff is not prospective)"],
+   "implementationAtReview": [
+    "scripts/model/dvp_prospective.py:480-498 write_once: temporary folder renamed into place, files read-only, no fsync, no recovery",
+    "append_ledger: flock and fsync on the ledger only"
+   ],
+   "evidence": [
+    "A crash after the rename and before the ledger append left week-WW without an entry; every later run then stopped at 'exists; archived forecasts are never overwritten' and the week would be missed.",
+    "No lock across a run; no archivedAt recorded."
+   ],
+   "tests": [
+    "libs/arbit-model/tests/test_dvp_archive.py: 12 tests (failures during staging, before the rename, after it; quarantine; missed-unproven after the cutoff; killed process at three points; concurrent run; fsync coverage)",
+    "test_dvp_evidence.py::test_publication_after_the_ledger_append_is_retried_until_verified",
+    "test_dvp_window.py timing tests (archival after the cutoff is not prospective)"
+   ],
    "disposition": "PARTIALLY_AGREE",
    "reasoning": "Staging and atomic rename already existed and the ledger was locked and fsynced; durability, run-level locking, recovery and archival timing were missing.",
    "remediationRequired": true,
@@ -82,9 +130,19 @@
    "title": "Actual prospective availability capture",
    "assertion": "Availability came from drop times and a 24/48-hour rule although snapshots hold ESPN's observed states; freeAgents held every unowned unit; teams without a D/ST were absent; claimable-only evaluation was skipped with an empty free-agent pool; reads came from different moments.",
    "requirement": "Phase B B5, B6 (C05L-2026-PRO).",
-   "implementationAtReview": ["scripts/model/dvp_prospective.py:355-444 league_capture (heuristic states; rosters.setdefault only for held units; separate connections)", "scripts/model/dvp_prospective.py:826-833 (if claimable:)"],
-   "evidence": ["Week 12's capture snapshot (observed 2026-11-24 23:12:13Z, 32 s before the forecast): ESPN reported all 19 unowned D/STs WAIVERS; the heuristic labelled all 19 FREE_AGENT.", "Snapshot history: once a unit's game kicks off, ESPN reports unowned units WAIVERS until Wednesday's processing (e.g. Tue 11-03 15:17 21 waivers, Wed 11-04 13:26 19 free agents).", "All four sub-concerns confirmed in the code cited."],
-   "tests": ["Live supplement for week 12 (rosters equal the original capture; 13 OWNED, 19 WAIVERS observed)", "Live sweep decision-time capture of week 12 (captures/week-12-20261125T030422Z.json)"],
+   "implementationAtReview": [
+    "scripts/model/dvp_prospective.py:355-444 league_capture (heuristic states; rosters.setdefault only for held units; separate connections)",
+    "scripts/model/dvp_prospective.py:826-833 (if claimable:)"
+   ],
+   "evidence": [
+    "Week 12's capture snapshot (observed 2026-11-24 23:12:13Z, 32 s before the forecast): ESPN reported all 19 unowned D/STs WAIVERS; the heuristic labelled all 19 FREE_AGENT.",
+    "Snapshot history: once a unit's game kicks off, ESPN reports unowned units WAIVERS until Wednesday's processing (e.g. Tue 11-03 15:17 21 waivers, Wed 11-04 13:26 19 free agents).",
+    "All four sub-concerns confirmed in the code cited."
+   ],
+   "tests": [
+    "Live supplement for week 12 (rosters equal the original capture; 13 OWNED, 19 WAIVERS observed)",
+    "Live sweep decision-time capture of week 12 (captures/week-12-20261125T030422Z.json)"
+   ],
    "disposition": "AGREE",
    "reasoning": "The heuristic was wrong for the one week captured, in the most common capture window (after Sunday's games, before Wednesday's processing).",
    "remediationRequired": true,
@@ -99,144 +157,203 @@
    "title": "Incomplete live content reconciliation",
    "assertion": "Live transaction verification compared IDs, types and statuses only; lineups were reconciled internally, not against stored captures; the four period-9 FUTURE_ROSTER records were explained without being located.",
    "requirement": "Phase B B3, B4.",
-   "implementationAtReview": ["scripts/model/ffa_2026_inventory.py:271-294 live_checks compares (type, status) per id"],
-   "evidence": ["Code cited: no item, team or timestamp comparison; audit_scoring checks ESPN's lineups against ESPN's totals, not against Arbit's stored captures."],
-   "tests": [],
+   "implementationAtReview": [
+    "scripts/model/ffa_2026_inventory.py:271-294 live_checks compares (type, status) per id"
+   ],
+   "evidence": [
+    "Code cited: no item, team or timestamp comparison; audit_scoring checks ESPN's lineups against ESPN's totals, not against Arbit's stored captures.",
+    "Live re-read 2026-11-25 (receipt docs/research/ffa-2026-inventory-v2.json at 39f763e): 536/536 transactions content-equal by Arbit's own content hash over normalized fields; the union of pages 1-12 equals the stored set; the 4 FUTURE_ROSTER records located on period 8's page. Lineups: 11/11 periods identical in membership, slots, points and positions; differences are only 1-2 players' current NFL team per period (ESPN reports the team at read time)."
+   ],
+   "tests": [
+    "scripts/model/ffa_2026_inventory.py --content (live, read-only identity lookups)"
+   ],
    "disposition": "AGREE",
    "reasoning": "The inventory's completeness claims rest on id-level equality.",
    "remediationRequired": true,
-   "remediation": "Planned (next task): canonical content hashes of normalized transactions (items, teams, statuses, proposed and processed times) compared live versus stored; live lineup entries compared with stored captures (slots, player ids, points); the union of pages compared so FUTURE_ROSTER records are positively located; completeness claims qualified to what was compared.",
+   "remediation": "ffa_2026_inventory.py --content: transactions normalized exactly as stored and compared by content hash, field by field on mismatch, over the union of all pages; lineups rebuilt with the capture's own function and compared by content hash, then field by field (historical fields versus read-time name and NFL team). Completeness claims in FFA_2026_DATA_INVENTORY.md qualified to what was compared.",
    "expectedEffect": "None expected on results; qualifies the inventory.",
    "completionCriteria": "Inventory receipt v2 with content-level comparisons.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "PB-AUD-02",
    "title": "Unsupported ownership changes and effective timestamps",
    "assertion": "Replay ignores trades; an executed waiver without a processed time falls back to its proposal time.",
    "requirement": "Phase B B5; DEC-05.",
-   "implementationAtReview": ["libs/arbit-model/src/arbit_model/ffa_history.py:39 MOVE_TYPES excludes trades", "ffa_history.py:66 when = processed_at or proposed_at"],
-   "evidence": ["Database: all 52 executed waivers carry processed_at; free-agent adds and roster drops carry only proposed_at (ESPN applies them immediately); no executed trade exists (2 canceled proposals, 7 declines)."],
-   "tests": [],
+   "implementationAtReview": [
+    "libs/arbit-model/src/arbit_model/ffa_history.py:39 MOVE_TYPES excludes trades",
+    "ffa_history.py:66 when = processed_at or proposed_at"
+   ],
+   "evidence": [
+    "Database: all 52 executed waivers carry processed_at; free-agent adds and roster drops carry only proposed_at (ESPN applies them immediately); no executed trade exists (2 canceled proposals, 7 declines).",
+    "Item types in 2026: executed ownership changes are only FREEAGENT/WAIVER ADD and DROP and ROSTER DROP; TRADE items appear only on 2 canceled proposals.",
+    "The replay equals all 1,522 archived snapshots at each one's own observation time (league-2026-exploratory-v2.json ownership.everySnapshot)."
+   ],
+   "tests": [
+    "test_ffa_history.py: executed trade and unknown ownership types refused; waiver without processing time refused; conflicting adds reported; simultaneous moves (drop first) and later moves excluded; draft validation; 12 tests"
+   ],
    "disposition": "AGREE",
    "reasoning": "No effect on weeks 1-11 (no trades; no waiver without a processing time), but the replay would silently ignore an executed trade or mis-time a waiver.",
    "remediationRequired": true,
-   "remediation": "Planned: refuse (fail closed) on any executed ownership-changing type outside the supported set and on an executed waiver without processed_at; validate draft uniqueness; verify exact-cutoff states separately; trade replay registered downstream (no observed executed-trade contract to build against).",
-   "expectedEffect": "None on weeks 1-11.",
+   "remediation": "ffa_history.moves fails closed (UnsupportedHistory) on any executed TRADE item, ADD/DROP on an unsupported type, unknown item type, or executed waiver without processed_at; validate_draft refuses duplicates and outside teams; the replay is verified at every snapshot moment. Complete trade replay registered downstream (no executed-trade contract observed).",
+   "expectedEffect": "None on weeks 1-11 (confirmed: identical start/sit decisions).",
    "completionCriteria": "Synthetic tests for trades, missing processing times, conflicts, simultaneity and later transactions.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "PB-AUD-03",
    "title": "Unvalidated historical availability reconstruction",
    "assertion": "The 24/48-hour drop rule ignores scheduled processing and game locks and was not validated against observed snapshot states.",
    "requirement": "Phase B B5; DEC-06.",
-   "implementationAtReview": ["libs/arbit-model/src/arbit_model/ffa_history.py availability()"],
-   "evidence": ["Snapshot history shows game-lock waivers clearing at Wednesday's processing, which the rule cannot represent; week 12's observed states contradict it (PB-AUD-07)."],
-   "tests": [],
+   "implementationAtReview": [
+    "libs/arbit-model/src/arbit_model/ffa_history.py availability()"
+   ],
+   "evidence": [
+    "Snapshot history shows game-lock waivers clearing at Wednesday's processing, which the rule cannot represent; week 12's observed states contradict it (PB-AUD-07).",
+    "Rule v2 (declared in 671b5ef before computing) against every unowned D/ST in every snapshot: holdout (416 snapshots, 7,904 unit-moments) 99.3% agreement, 54 falsely claimable (0.68%); design 98.9%. v1 rule: 22.0% / 29.5%. All 208 over-restrictive cases are waiver-run drops; all 90 falsely claimable cases are Tuesdays (period-wide lock)."
+   ],
+   "tests": [
+    "test_ffa_history.py::test_rule_v2_holds_drops_until_processing_and_locks_started_games_until_wednesday",
+    "league-2026-exploratory-v2.json availabilityValidation"
+   ],
    "disposition": "AGREE",
    "reasoning": "The rule's correctness at the Thursday cutoff (after processing) is plausible but unmeasured.",
    "remediationRequired": true,
-   "remediation": "Planned: compare reconstructed and observed states at every snapshot moment with timing kept; tables of false claimable, over-restrictive and uncertain classifications; classes VERIFIED/RECONSTRUCTED/ESTIMATED/UNKNOWN; improve only where validated.",
-   "expectedEffect": "May change C05L-2026-EXP's claimable pools; to be reported as a versioned correction.",
+   "remediation": "Rule v2 (processing at midnight Pacific on the league's days, drop holds, game locks strictly before the moment) validated on held-out snapshots and passing its declared acceptance; cutoff classes VERIFIED (week 9), RECONSTRUCTED (others), ESTIMATED, UNKNOWN; the two error patterns documented and a rule v3 proposed for future validation, not adopted. An implementation defect found in a trial run (game lock tested with <= at the exact cutoff, contrary to the declared rule) was fixed before the recorded run.",
+   "expectedEffect": "Claimable pools change only in week 9 (VERIFIED from a snapshot: HOU and NYJ free), raising claimable streaming from +46 to +110; three other cutoff states would differ under rule v3, none picked by either model.",
    "completionCriteria": "Comparison tables and a corrected, versioned experiment.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "PB-AUD-04",
    "title": "Bootstrap treatment of zero-change weeks",
    "assertion": "The league bootstrap resampled only weeks with changed decisions; start/sit weeks 7 and 8 were dropped; an all-week recalculation gives about -96 to +74 instead of -90 to +80.",
    "requirement": "Specification statistics (week-block bootstrap of the cumulative difference).",
-   "implementationAtReview": ["libs/arbit-model/src/arbit_model/dvp/league.py:75-110 (gain from changed decisions only; blocks are those weeks)"],
-   "evidence": ["Code cited."],
-   "tests": [],
+   "implementationAtReview": [
+    "libs/arbit-model/src/arbit_model/dvp/league.py:75-110 (gain from changed decisions only; blocks are those weeks)"
+   ],
+   "evidence": [
+    "Code cited.",
+    "Reproduced: v1 start/sit interval -90.05 to +80.00 over 9 blocks (weeks 7 and 8 dropped); all 11 weeks -96.03 to +74.02, matching the reviewer's -96 to +74. Streaming intervals unchanged (every week has changes)."
+   ],
+   "tests": [
+    "test_dvp_league.py::test_the_bootstrap_keeps_zero_change_weeks_as_zero_gain_blocks (deterministic)"
+   ],
    "disposition": "AGREE",
    "reasoning": "For a cumulative difference over all evaluated weeks, a week with no changed decision contributes zero and is a resampling block.",
    "remediationRequired": true,
-   "remediation": "Planned: resample every evaluated week (zero-change weeks as zero), distinguish missing coverage, record block counts; reproduce both intervals; regression tests; feed AUD-06.",
+   "remediation": "league.summarize resamples every evaluated week (zero-change weeks add zero), lists weeks without evaluable decisions as missing coverage, records the block count, method, replicates and seed; the v1 method is kept to reproduce v1.",
    "expectedEffect": "Slightly different intervals; conclusions expected unchanged (all span zero).",
    "completionCriteria": "Both intervals reproduced; corrected receipt.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "PB-AUD-05",
    "title": "Streaming feasibility and shared acquisition constraints",
    "assertion": "Each manager is evaluated independently; several get the same free agent; roster capacity, the D/ST limit and a required drop are ignored.",
    "requirement": "Phase B B6; DEC-06.",
-   "implementationAtReview": ["libs/arbit-model/src/arbit_model/dvp/league.py decide() (STREAM)"],
-   "evidence": ["To be counted (collisions per week)."],
-   "tests": [],
+   "implementationAtReview": [
+    "libs/arbit-model/src/arbit_model/dvp/league.py decide() (STREAM)"
+   ],
+   "evidence": [
+    "B06's 68 picks of unowned units are all in collisions (11 units recommended to several teams in a week); B00 56 of 57. Of B06's 88 claimable picks: 20 held, 11 executable, 57 need a drop; no team at the 3-D/ST limit."
+   ],
+   "tests": [
+    "test_dvp_league.py feasibility and collision tests"
+   ],
    "disposition": "AGREE",
    "reasoning": "The experiment answers a single-manager question; it must say so and report collisions and feasibility.",
    "remediationRequired": true,
-   "remediation": "Planned: classify as an independent single-week evaluation; report shared recommendations and collisions; check capacity, the D/ST limit (3), whether a legal drop exists and locks, from the replayed rosters; unknown feasibility labelled.",
+   "remediation": "Classified as independent single-week, single-manager recommendations; feasibility per pick (HELD, EXECUTABLE, REQUIRES_DROP, REQUIRES_DST_DROP, UNKNOWN) from replayed rosters (capacity 16 non-IR, D/ST limit 3, no game locks at the preweek cutoff); collisions reported; gross points never presented as net value; a competitive acquisition simulator registered as a separate workstream.",
    "expectedEffect": "Descriptive qualifications; gross D/ST points not presented as net roster value.",
    "completionCriteria": "Feasibility and collision tables in the corrected receipt.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "PB-AUD-06",
    "title": "Manager comparison and matchup eligibility",
    "assertion": "Manager starters come from finalized lineups while model decisions use the preweek cutoff; the receipt lacks exact candidate sets.",
    "requirement": "Phase B B6.",
-   "implementationAtReview": ["scripts/model/dvp_league_2026.py manager section; league.decide rows record option counts only"],
-   "evidence": ["Code cited."],
-   "tests": [],
-   "disposition": "AGREE",
-   "reasoning": "A manager may start a unit acquired after the cutoff; such a comparison is not like for like.",
+   "implementationAtReview": [
+    "scripts/model/dvp_league_2026.py manager section; league.decide rows record option counts only"
+   ],
+   "evidence": [
+    "All 28 start decisions strictly comparable: every finalized starter was among the D/STs held at the cutoff. Matchups: 28 eligible picks, 0 unknown, 0 ties."
+   ],
+   "tests": [
+    "test_dvp_league.py::test_matchup_counterfactuals_count_ties_unknowns_and_ineligible_picks_apart"
+   ],
+   "disposition": "PARTIALLY_AGREE",
+   "reasoning": "The method gap was real (no exact candidate sets; manager starters from finalized lineups were not checked against the cutoff options), but the evidence shows no decision affected: all 28 starters were held at the cutoff.",
    "remediationRequired": true,
-   "remediation": "Planned: record each decision's exact eligible set, availability evidence, picks, actual starter, whether it was eligible at the cutoff and later changes; split strictly comparable decisions; matchup counterfactuals check eligibility and handle ties and unknowns.",
-   "expectedEffect": "The 28-decision manager comparison may shrink to the strictly comparable subset.",
+   "remediation": "Each decision records its time, held units, exact option set with availability class and evidence, both picks, feasibility, the actual finalized starter, whether it was an option and held at the cutoff, and each pick's owner at its game; managers split into strictly comparable and different-decision-time sets; matchup_effects_v2 uses only eligible picks and counts ties, unknowns and ineligible picks apart, as individual-decision counterfactuals.",
+   "expectedEffect": "None: the manager comparison and matchup counts are unchanged (201 v 197 v 191; B06 2 losses to wins, 1 win to loss).",
    "completionCriteria": "Corrected receipt with candidate sets and the split.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "PB-AUD-08",
    "title": "Immutable league inputs and reproducible Phase B audit",
    "assertion": "League inputs are read from the current database at run time; the plan audit checks Phase B receipts rather than rerunning them.",
    "requirement": "DEC-04; Phase B B7; remediation 7.",
-   "implementationAtReview": ["scripts/model/dvp_league_2026.py and ffa_2026_inventory.py read the live database", "scripts/model/dvp_plan_audit.py ffa2026:* checks read receipts"],
-   "evidence": ["Code cited."],
-   "tests": [],
+   "implementationAtReview": [
+    "scripts/model/dvp_league_2026.py and ffa_2026_inventory.py read the live database",
+    "scripts/model/dvp_plan_audit.py ffa2026:* checks read receipts"
+   ],
+   "evidence": [
+    "Pinned bundle artifacts/dvp/league-2026/inputs-v1 (manifest c354dcca..., 9 files, read in one read-only repeatable-read transaction); docs/research/ffa-2026-league-inputs-v1.json commits hashes and counts only."
+   ],
+   "tests": [
+    "dvp_league_2026_v2.py verifies every pinned file's hash before use and reads no live database (receipt pinnedInputs.liveDatabaseRead false)"
+   ],
    "disposition": "AGREE",
    "reasoning": "A later transaction revision or stat correction would change a rerun silently.",
    "remediationRequired": true,
-   "remediation": "Planned: pin minimal normalized league inputs (hashed, sanitized) as research artifacts; run the inventory checks and the corrected experiment from them; the final audit reruns them.",
+   "remediation": "ffa_2026_pin.py writes the minimal normalized inputs (transactions, lineups, draft, matchups, rules, snapshots' rosters and D/ST states, D/ST mapping) as a hashed, read-only local bundle; the v2 experiment runs from it alone.",
    "expectedEffect": "Reproducible Phase B results.",
    "completionCriteria": "Rerun from pinned inputs equals the committed receipts.",
-   "status": "OPEN",
-   "task": "next Phase B task and remediation 7"
+   "status": "IN_PROGRESS",
+   "task": "TASK-20261124-011 (pinning, v2); remediation 7 (audit rerun)",
+   "statusNote": "Pinned inputs and the independent execution path exist; the comprehensive audit (remediation 7) reruns the corrected experiment from them and compares with the committed receipt."
   },
   {
    "id": "PB-RESULTS",
    "title": "Phase B v1 totals and interpretation (directive §8)",
    "assertion": "Receipt totals as tabulated; week 11 contributed +92 to streaming; excluding it turns +46 into -46; every interval spans zero.",
    "requirement": "Directive §8.",
-   "implementationAtReview": ["docs/research/dvp/league-2026-exploratory.json at 3848cad"],
-   "evidence": ["To be reproduced in the Phase B task."],
+   "implementationAtReview": [
+    "docs/research/dvp/league-2026-exploratory.json at 3848cad"
+   ],
+   "evidence": [
+    "Recomputed from the v1 receipt: start 28/12/197/191/-6; streaming 88/77/565/611/+46; with waivers 88/78/579/675/+96; managers 201; matchups B06 2 losses to wins and 1 win to loss; week 11 +92 to streaming, +46 to -46 without it; every interval spans zero. All match the reviewer's table."
+   ],
    "tests": [],
-   "disposition": "UNVERIFIED",
-   "reasoning": "Not yet independently recomputed.",
+   "disposition": "AGREE",
+   "reasoning": "Independently recomputed; the reviewer's totals and the week-11 sensitivity are correct. Week 11 stays in the primary result.",
    "remediationRequired": false,
-   "remediation": "Recompute from the receipt and from pinned inputs; report original and corrected samples.",
+   "remediation": "v2 reports original and corrected samples (no decision added or removed), outcomes (claimable streaming +46 to +110, all from week 9's verified pool and a full collision), and the unchanged conclusion: inconclusive.",
    "expectedEffect": "None.",
    "completionCriteria": "Recomputed values recorded.",
-   "status": "OPEN",
-   "task": "next Phase B task"
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011"
   },
   {
    "id": "AUD-06",
    "title": "Statistical simulation and robustness suite",
    "assertion": "Outstanding: the estimators and the selection procedure were never validated against known synthetic signals.",
    "requirement": "Original AUD-06; DEC-08.",
-   "implementationAtReview": ["No simulation suite exists."],
-   "evidence": ["Repository search."],
+   "implementationAtReview": [
+    "No simulation suite exists."
+   ],
+   "evidence": [
+    "Repository search."
+   ],
    "tests": [],
    "disposition": "AGREE",
    "reasoning": "Outstanding by the owner's own sequencing.",
@@ -252,7 +369,9 @@
    "title": "Threshold interpretation and sensitivity",
    "assertion": "The 1.8-point Phase C threshold is described as an exact consequence of the 1% RMSE threshold, though it rests on a bivariate-normal relationship and B00's Spearman correlation.",
    "requirement": "Original AUD-07; DEC-08.",
-   "implementationAtReview": ["To be located (Phase C decision rule documentation)."],
+   "implementationAtReview": [
+    "To be located (Phase C decision rule documentation)."
+   ],
    "evidence": [],
    "tests": [],
    "disposition": "UNVERIFIED",

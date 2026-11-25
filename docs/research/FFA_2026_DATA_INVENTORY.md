@@ -19,6 +19,19 @@ Owner audit Phase B (B1–B5, B7; [requirements](dvp/AUDIT_REMEDIATION_AND_COMPL
 - **2026 ownership at any moment can be rebuilt** from the draft and the executed moves. The replay matches every captured period roster (11 of 11) and every daily archived snapshot (14 of 14), with zero disagreements. Current ownership is never used as history.
 - **Availability** (free agent or waivers) is reconstructed from drops and the 24-hour waiver hold. It is directly observed only in archived snapshots (2026-10-31 to 11-10 and from 11-22).
 
+**Corrections under the owner's final directive** (TASK-20261124-011; receipts [ffa-2026-inventory-v2.json](ffa-2026-inventory-v2.json), [league inputs](ffa-2026-league-inputs-v1.json), [league-2026-exploratory-v2.json](dvp/league-2026-exploratory-v2.json)). They qualify the claims above:
+- **Content-level live reconciliation (PB-AUD-01):**
+  - **Transactions:** all 536 stored transactions are content-equal to ESPN's on 2026-11-25. The comparison covers each record's normalized type, status, period, team, proposed and processed times, related id, and every item's player, teams and slots; it recomputes the same content hash Arbit stored. The union of the 12 pages equals the stored set, and the four FUTURE_ROSTER records are positively located on period 8's page.
+  - **Lineups:** all 11 finalized lineups have identical membership, slots, points and positions. The only differences are 1–2 players per period whose NFL team changed after the capture: ESPN reports a player's current team even for a past period (read-time representation, not a revision).
+- **Ownership at every snapshot (PB-AUD-02):**
+  - The replay equals all 1,522 archived snapshots at each one's own observation time, not only one per day.
+  - It now stops on any ownership change it doesn't support, or on a waiver without a processing time; none exists.
+  - The draft is validated: 128 picks, no player twice, every team in the league.
+- **Availability validated (PB-AUD-03):**
+  - The 24/48-hour rule agrees with ESPN's reported states in only 22–29% of unit-moments, because it ignores game locks.
+  - Rule v2 agrees in 99.3% of held-out moments (see [ownership and availability](#ownership-and-availability-b5)).
+- **Pinned inputs (PB-AUD-08):** the normalized league inputs are pinned as a hashed local bundle. The corrected experiment runs from it alone.
+
 ## Capability inventory
 
 Each capability is reached through Arbit's existing integration: `arbit_data.espn` (guarded client, endpoint contracts, transport pacing), the worker's league lanes, and `arbit_data.league_history`. All reads are cookie-free public reads ([API audit](espn-public-api-audit-2026-10-30.md), [endpoint coverage](espn-endpoint-coverage-2026-10-30.md)).
@@ -109,18 +122,41 @@ Weeks are NFL weeks; FFA scoring period p is NFL week p, one week per matchup pe
 
 **Verification:**
 - **Captured rosters:** in all 11 periods, every player and team equals ESPN's captured roster.
-- **Daily snapshots:** at the last snapshot of each day (14 days), the replay equals the snapshot's owners for every rostered player.
-- **Week 9:** a snapshot 34 minutes before the cutoff agrees for all 32 D/STs.
+- **Every snapshot (final directive):** at each of the 1,522 archived snapshots' own times, the replay equals the snapshot's owners for every rostered player. This replaces the earlier daily check of 14.
+- **Week 9:** a snapshot 34 minutes before the cutoff agrees for all 32 D/STs. No D/ST move and no waiver run fall between it and the cutoff, so its states are VERIFIED for that cutoff.
+- **Fail closed:** an executed ownership change outside free-agent, waiver and roster adds and drops stops the replay, as does an executed waiver without its processing time. Trades: none executed, so no contract exists to replay them; this is downstream work (DEC-05).
 
 **Classes:**
 - **Ownership:**
   - VERIFIED: matches a captured period roster or a snapshot at that moment;
   - RECONSTRUCTED: replayed between verified states;
   - UNKNOWN: there are none.
-- **Availability** of an unrostered player at time T, with the league's 24-hour waiver hold:
+- **Availability (v1, superseded):** an unrostered player at time T, with the league's 24-hour waiver hold:
   - WAIVERS: dropped less than 24 hours before T;
-  - WAIVERS_OR_FREE_AGENT: dropped 24–48 hours before. Claims process on scheduled days, observed mostly early Wednesday UTC, so the player may still be on waivers;
-  - FREE_AGENT: otherwise, claimable at once until the player's own game locks (INDIVIDUAL_GAME).
+  - WAIVERS_OR_FREE_AGENT: dropped 24–48 hours before;
+  - FREE_AGENT: otherwise.
+- **Availability (rule v2, validated):**
+  - **Observed timing:** ESPN processes waivers at midnight Pacific on the league's processing days, never Tuesday. All 74 decided claims were processed at 07:00 UTC before the 2026-11-01 clock change and 08:00 UTC after it. The setting's `waiverProcessHour` of 11 is contradicted by every observation.
+  - **The rule:**
+    - a dropped player is on waivers until the first run at or after the drop plus 24 hours;
+    - an unowned player whose game has kicked off is on waivers until the next Wednesday run;
+    - otherwise the player is a free agent.
+  - **Validated against ESPN's reported state of every unowned D/ST at every snapshot:**
+
+    | Rule | Holdout agreement (7,904 unit-moments) | Holdout falsely claimable | Design agreement (22,425) |
+    | --- | --- | --- | --- |
+    | v2 | **99.3%** | 54 (0.68%) | 98.9% |
+    | v1 | 22.0% | 6,168 | 29.5% |
+
+  - **Remaining errors:**
+    - **All 208 over-restrictive cases:** drops inside a waiver run, which ESPN frees at once.
+    - **All 90 falsely claimable cases are on Tuesdays,** when ESPN puts every unowned unit on waivers, bye teams included.
+    - A refined rule v3 is proposed for validation on future snapshots, not adopted.
+  - **Classes at a cutoff:**
+    - VERIFIED: a snapshot within 6 hours before the cutoff, with nothing in between (week 9);
+    - RECONSTRUCTED: rule v2, which passed its declared holdout test (weeks 1–8, 10–11);
+    - ESTIMATED: if a rule fails its test;
+    - UNKNOWN: no inputs.
 - **Rules applied:** unrostered is never taken to mean claimable, and current ownership is never used for a past moment.
 
 ## Retrieval report
@@ -137,9 +173,9 @@ No completed 2026 period was missing, so no record was newly retrieved. The live
 ## Genuine limitations
 
 - **Snapshot gap (2026-11-11 to 11-21):** no archived roster or pool snapshot exists, because the database was down. Ownership in weeks 10–11 is reconstructed (verified at period ends), not observed at the cutoff.
-- **Historical availability isn't retrievable from ESPN.** It is reconstructed from drops and the waiver hold. The processing day is uncertain for players dropped 24–48 hours earlier.
+- **Historical availability isn't retrievable from ESPN.** It is reconstructed with rule v2 (validated: 99.3% holdout agreement). Rule v2 is over-restrictive for drops made inside a waiver run, which affects three cutoff states in weeks 1–11, none picked by either model, and too permissive on Tuesdays, which affects no Thursday cutoff.
 - **Pregame lineups** exist only from 2026-10-31, in snapshots. Captured lineups are finalized.
-- **Transaction revisions** made before Arbit's first read, or between reads, are not version-preserved.
+- **Transaction revisions** made before Arbit's first read, or between reads, are not version-preserved. A production-grade versioning system is deferred (DEC-04). The exact inputs M3-3 used are preserved as the pinned bundle, and a live content re-read on 2026-11-25 found no stored record differing from ESPN's.
 - **Stat corrections after a capture** would add a capture; none has occurred.
 
 ## Downstream capabilities (for later Arbit slices, not M3-3)
@@ -150,7 +186,10 @@ No completed 2026 period was missing, so no record was newly retrieved. The live
 | Waiver claims with failure reasons (invalid player source, roster limit) | Demand for players; claim-order behavior |
 | Free-agent pool with status, from snapshots (and `kona_player_info` live) | Streaming and waiver advice at decision time |
 | Captured weekly lineups with bench points | Managers' start/sit regret; lineup-advice evaluation |
-| A version-preserving transaction store | Revisions over time (a small, separate change) |
+| A version-preserving transaction store | Revisions over time. Deferred by the owner (DEC-04); M3-3's inputs are pinned instead |
+| Complete trade replay | Ownership through executed trades. Needs an observed executed-trade contract; the replay stops on one until then (DEC-05) |
+| Availability rule v3 | Waiver-run drops as immediate free agents, and Tuesday period locks. To validate on future snapshots before any use |
+| A competitive waiver and acquisition simulator | Priority, competing claims, multi-week value and drop costs. Outside M3-3 (DEC-06) |
 | ESPN percent-owned and draft ranks | Excluded unless the owner decides otherwise: provider popularity and ranking signals |
 | ESPN positional ratings | FORBIDDEN as model inputs |
 
