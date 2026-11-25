@@ -2,7 +2,7 @@
   "version": 1,
   "project": "arbit-fantasy-football",
   "active_task": "TASK-20261124-011",
-  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261124-010-governance-handoff.md",
+  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
   "project_next_action": "Merge the final directive's Phase B PR (branch claude/m3-final-phase-b, TASK-20261124-011). Owner: register ~/.config/arbit/research-evidence/id_ed25519.pub as a write deploy key (timer commitments fail and retry until then; week 13 must verify before 2026-12-04 01:15 UTC). Then: AUD-06 simulation suite, AUD-07 threshold sensitivity, research eligibility registry, remediation 7 comprehensive audit (including the pinned Phase B rerun for PB-AUD-08). Register: docs/research/dvp/audit-findings.json.",
