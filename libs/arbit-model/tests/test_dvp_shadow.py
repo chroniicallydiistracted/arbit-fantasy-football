@@ -212,13 +212,8 @@ def test_league_choices_follow_the_declared_rule():
     assert ("t3", "start") not in rows and rows[("t3", "stream")]["options"] == 2
 
 
-def test_the_archive_is_write_once_and_the_ledger_append_only(harness, tmp_path):
-    folder = tmp_path / "2026" / "week-12"
-    digests = harness.write_once(folder, {"forecasts.csv": b"a,b\n1,2\n"})
-    assert (folder / "forecasts.csv").stat().st_mode & 0o222 == 0
-    with pytest.raises(SystemExit, match="never overwritten"):
-        harness.write_once(folder, {"forecasts.csv": b"other"})
-    assert harness.sha256(folder / "forecasts.csv") == digests["forecasts.csv"]
+def test_the_ledger_is_append_only(harness, tmp_path):
+    """The archive's transaction and recovery are tested in test_dvp_archive.py."""
     ledger = tmp_path / "ledger.jsonl"
     harness.append_ledger(ledger, {"week": 12, "classification": "PROSPECTIVE"})
     harness.append_ledger(ledger, {"week": 13, "classification": "MISSED"})
@@ -229,30 +224,31 @@ def test_the_archive_is_write_once_and_the_ledger_append_only(harness, tmp_path)
         harness.append_ledger(ledger, {"week": 14, "classification": "PROSPECTIVE"})
 
 
-def test_readiness_waits_for_every_earlier_result(harness):
+def test_readiness_is_the_per_game_gate(harness):
+    """The harness's readiness is arbit_model.dvp.window.game_readiness (test_dvp_window.py)."""
     kickoff = datetime(2026, 11, 22, 18, tzinfo=UTC)
     schedule = pl.DataFrame(
         {
-            "season": [2026] * 3,
-            "week": [10, 11, 11],
-            "game_id": ["g1", "g2", "g3"],
-            "kickoff": [kickoff - timedelta(days=7), kickoff, kickoff],
-            "available_at": [kickoff - timedelta(days=6), kickoff + timedelta(days=1)] * 1
-            + [kickoff + timedelta(days=1)],
-            "status": ["completed", "completed", "not_completed"],
+            "season": [2026],
+            "week": [11],
+            "game_id": ["g1"],
+            "kickoff": [kickoff],
+            "available_at": [kickoff + timedelta(hours=18)],
+            "status": ["not_completed"],
         }
     )
-    obs_rows = pl.DataFrame({"season": [2026, 2026], "game_id": ["g1", "g2"]})
-    soon = kickoff + timedelta(days=2)
-    ready, detail = harness.readiness(schedule, obs_rows, 2026, 12, soon)
-    assert not ready and detail["awaitingResult"] == ["g3"]
-    later = kickoff + timedelta(days=5)  # g3 never got a result: recorded, no longer blocking
-    ready, detail = harness.readiness(schedule, obs_rows, 2026, 12, later)
-    assert ready and detail["noResultAfterGrace"] == ["g3"]
-    ready, detail = harness.readiness(schedule, obs_rows.head(1), 2026, 12, later)
-    assert not ready and detail["completedWithoutFfaLines"] == ["g2"]
-    ready, _ = harness.readiness(schedule, obs_rows, 2026, 12, kickoff + timedelta(hours=1))
-    assert not ready  # g2's results aren't available until the next day
+    cells = pl.DataFrame(
+        {"season": [], "game_id": [], "offense": [], "position": [], "status": []},
+        schema={
+            "season": pl.Int64,
+            "game_id": pl.Utf8,
+            "offense": pl.Utf8,
+            "position": pl.Utf8,
+            "status": pl.Utf8,
+        },
+    )
+    ready, detail = harness.readiness(schedule, cells, 2026, 12, kickoff + timedelta(days=1))
+    assert not ready and detail["blocking"] == {"AWAITING_RESULT": ["g1"]}
 
 
 FROZEN_COMMIT = json.loads((ROOT / "config/dvp/frozen.json").read_text())["code"]

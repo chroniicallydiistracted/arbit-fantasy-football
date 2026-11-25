@@ -98,7 +98,7 @@ def archive_state(found: WeekArchive, now: datetime) -> dict[str, Any]:
         published = [
             p
             for p in found.publications
-            if p.get("entrySha256") == entry.get("entrySha256") and p.get("verified")
+            if p.get("ledgerEntrySha256") == entry.get("entrySha256") and p.get("verified")
         ]
         before = [
             p
@@ -245,3 +245,79 @@ def window_state(
     if reasons:
         return {"status": INTERIM, "confirmationAllowed": False, "reasons": reasons}
     return {"status": COMPLETE, "confirmationAllowed": True, "reasons": []}
+
+
+# Readiness of each earlier game before a week is forecast (AUD-01b; amendment readiness.perGame).
+ELIGIBLE_VERIFIED = "ELIGIBLE_VERIFIED"
+RETRIEVED_INVALID = "RETRIEVED_INVALID"
+AWAITING_RESULT = "AWAITING_RESULT"
+POSTPONED_OR_CANCELED = "POSTPONED_OR_CANCELED"
+NOT_YET_AVAILABLE = "NOT_YET_AVAILABLE"
+SOURCE_NOT_YET_PUBLISHED = "SOURCE_NOT_YET_PUBLISHED"
+PUBLISHED_NOT_RETRIEVED = "PUBLISHED_NOT_RETRIEVED"
+DATA_INTEGRITY_FAILURE = "DATA_INTEGRITY_FAILURE"
+READY_STATES = (ELIGIBLE_VERIFIED, RETRIEVED_INVALID, POSTPONED_OR_CANCELED)
+GAME_LENGTH = timedelta(hours=4)  # results can't exist before kickoff + this
+
+
+def game_readiness(
+    schedule: pl.DataFrame,
+    observations: pl.DataFrame,
+    season: int,
+    week: int,
+    now: datetime,
+    grace: timedelta,
+    held_revision: datetime | None,
+    catalog_revision: datetime | None,
+) -> tuple[bool, dict[str, Any]]:
+    """Is every game before `week` complete in the data the frozen method would read?
+
+    `held_revision` is when nflverse last revised the player-statistics file Arbit imported;
+    `catalog_revision` is the newest revision Arbit's catalog has seen. A game's 12 observation
+    cells must all be present; a cell invalid for a recorded reason (a refused line) does not
+    block, as in the frozen data rules."""
+    earlier = schedule.filter((pl.col("season") == season) & (pl.col("week") < week))
+    cells = (
+        observations.filter(pl.col("season") == season)
+        .group_by("game_id")
+        .agg(
+            pl.len().alias("cells"),
+            (pl.col("status") == "valid").sum().alias("valid"),
+            pl.struct("game_id", "offense", "position").is_duplicated().any().alias("dup"),
+        )
+    )
+    found = {r["game_id"]: r for r in cells.iter_rows(named=True)}
+    states: dict[str, str] = {}
+    for game in earlier.iter_rows(named=True):
+        gid, kickoff = game["game_id"], game["kickoff"]
+        row = found.get(gid)
+        if game["status"] != "completed":
+            states[gid] = AWAITING_RESULT if kickoff + grace > now else POSTPONED_OR_CANCELED
+        elif game["available_at"] > now:
+            states[gid] = NOT_YET_AVAILABLE
+        elif row is not None and row["cells"] == PER_GAME_TARGETS and not row["dup"]:
+            states[gid] = ELIGIBLE_VERIFIED if row["valid"] == row["cells"] else RETRIEVED_INVALID
+        elif held_revision is None or held_revision < kickoff + GAME_LENGTH:
+            newer = catalog_revision is not None and (
+                held_revision is None or catalog_revision > held_revision
+            )
+            states[gid] = PUBLISHED_NOT_RETRIEVED if newer else SOURCE_NOT_YET_PUBLISHED
+        else:
+            states[gid] = DATA_INTEGRITY_FAILURE
+    by_state: dict[str, list[str]] = {}
+    for gid, state in sorted(states.items()):
+        by_state.setdefault(state, []).append(gid)
+    counts = {k: len(v) for k, v in sorted(by_state.items())}
+    blocking = {k: v for k, v in by_state.items() if k not in READY_STATES}
+    detail = {
+        "earlierGames": earlier.height,
+        "states": counts,
+        "blocking": blocking,
+        "postponedOrCanceled": by_state.get(POSTPONED_OR_CANCELED, []),
+        "retrievedInvalid": by_state.get(RETRIEVED_INVALID, []),
+        "heldStatisticsRevision": None if held_revision is None else held_revision.isoformat(),
+        "catalogStatisticsRevision": None
+        if catalog_revision is None
+        else catalog_revision.isoformat(),
+    }
+    return not blocking, detail

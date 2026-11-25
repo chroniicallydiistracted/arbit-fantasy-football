@@ -25,6 +25,7 @@ and, for `rehearse` and `evaluate`, their receipts.
 """
 
 import argparse
+import base64
 import fcntl
 import hashlib
 import importlib.util
@@ -34,6 +35,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -43,7 +45,18 @@ import polars as pl
 from arbit_data.db import UnitOfWork
 from arbit_data.nflverse.objects import ObjectStore
 from arbit_model import teams
-from arbit_model.dvp import asof, contract, decisions, lab, provenance, reliability, shadow
+from arbit_model.dvp import (
+    archive,
+    asof,
+    contract,
+    decisions,
+    evidence,
+    lab,
+    league,
+    provenance,
+    reliability,
+    shadow,
+)
 from arbit_model.dvp import observations as obs
 from arbit_model.dvp import walkforward as wf
 from arbit_model.dvp import window as gate
@@ -327,42 +340,91 @@ def combine(
     return rows, schedule
 
 
-def readiness(
-    schedule: pl.DataFrame, observations: pl.DataFrame, season: int, week: int, now: datetime
-) -> tuple[bool, dict[str, Any]]:
-    """Are the inputs the frozen method would use at week W's cutoff all present now?"""
-    earlier = schedule.filter((pl.col("season") == season) & (pl.col("week") < week))
-    done = earlier.filter(pl.col("status") == "completed")
-    pending = earlier.filter(
-        (pl.col("status") != "completed") & (pl.col("kickoff") + NO_RESULT_GRACE > now)
-    )
-    no_result = earlier.filter(
-        (pl.col("status") != "completed") & (pl.col("kickoff") + NO_RESULT_GRACE <= now)
-    )
-    scored = set(observations.filter(pl.col("season") == season).get_column("game_id").to_list())
-    unscored = sorted(set(done.get_column("game_id").to_list()) - scored)
-    latest = done.get_column("available_at").max()
-    detail = {
-        "earlierGames": earlier.height,
-        "completed": done.height,
-        "awaitingResult": pending.get_column("game_id").to_list(),
-        "noResultAfterGrace": no_result.get_column("game_id").to_list(),
-        "completedWithoutFfaLines": unscored,
-        "latestAvailability": str(latest),
-    }
-    ready = bool(not pending.height and not unscored and (latest is None or latest <= now))  # type: ignore[operator]
-    return ready, detail
+STATISTICS_FILE = "stats_player/stats_player_week_{season}"
 
 
-def league_capture(engine: Any, schedule_teams: set[str]) -> dict[str, Any]:
-    """The league's current rosters of D/STs, read-only (config `leagueEvaluation.capture`)."""
+def statistics_revisions(
+    engine: Any, manifests: dict[str, str], season: int
+) -> tuple[datetime | None, datetime | None]:
+    """When nflverse last revised the player-statistics file the build read, and the newest
+    revision Arbit's catalog has seen (to tell 'not yet published' from 'not yet imported')."""
+    key = STATISTICS_FILE.format(season=season)
     with engine.connect() as c:
-        snapshot = c.execute(
+        held = c.execute(
             text(
-                "select s.id, s.observed_at, s.content_hash from league_snapshot s "
-                "join current_snapshot c on c.snapshot_id = s.id"
-            )
-        ).one()
+                "select payload->'source'->>'source_updated_at' from dataset_manifest "
+                "where hash = :h"
+            ),
+            {"h": manifests.get(key, "")},
+        ).scalar()
+        newest = c.execute(
+            text(
+                "select max(a->>'source_updated_at') from nflverse_catalog, "
+                "jsonb_array_elements(payload->'assets') a where a->>'logical_key' = :k"
+            ),
+            {"k": f"nflverse/nflverse-data/{key}"},
+        ).scalar()
+
+    def parse(value: str | None) -> datetime | None:
+        return None if not value else datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+    return parse(held), parse(newest)
+
+
+def readiness(
+    schedule: pl.DataFrame,
+    observations: pl.DataFrame,
+    season: int,
+    week: int,
+    now: datetime,
+    held: datetime | None = None,
+    catalog: datetime | None = None,
+) -> tuple[bool, dict[str, Any]]:
+    """Are the inputs the frozen method would use at week W's cutoff all present now? Every
+    earlier game gets a state (config/dvp/prospective-amendment-1.json, readiness)."""
+    return gate.game_readiness(
+        schedule, observations, season, week, now, NO_RESULT_GRACE, held, catalog
+    )
+
+
+OBSERVED = {"owned": "OWNED", "free_agent": "FREE_AGENT", "waivers": "WAIVERS"}
+CAPTURE_FORMAT = FORMAT + "-league-capture-v2"
+
+
+def league_capture(
+    engine: Any,
+    schedule_teams: set[str],
+    now: datetime,
+    snapshot_id: str | None = None,
+) -> dict[str, Any]:
+    """The league's D/ST state from one snapshot, read in one repeatable-read transaction
+    (config/dvp/prospective-amendment-1.json, leagueCapture).
+
+    Ownership comes from the snapshot's roster entries; availability is what ESPN reported in the
+    same snapshot. Every team is listed, including any holding no D/ST. A unit whose roster entry
+    and reported availability disagree is UNKNOWN and the capture is marked contradictory. A
+    drop-time reconstruction is kept only as a labelled fallback, never as observed."""
+    with engine.connect().execution_options(isolation_level="REPEATABLE READ") as c:
+        if snapshot_id is None:
+            snapshot = c.execute(
+                text(
+                    "select s.id, s.observed_at, s.content_hash, d.rules_hash, d.payload "
+                    "from league_snapshot s join current_snapshot c on c.snapshot_id = s.id "
+                    "join league_document d on d.snapshot_id = s.id"
+                )
+            ).one()
+        else:
+            snapshot = c.execute(
+                text(
+                    "select s.id, s.observed_at, s.content_hash, d.rules_hash, d.payload "
+                    "from league_snapshot s join league_document d on d.snapshot_id = s.id "
+                    "where s.id = :s"
+                ),
+                {"s": snapshot_id},
+            ).one()
+        rules = c.execute(
+            text("select payload from rule_version where hash = :h"), {"h": snapshot.rules_hash}
+        ).scalar_one()
         held = c.execute(
             text(
                 "select r.team_id, n.abbreviation, r.slot from roster_entry r "
@@ -373,74 +435,101 @@ def league_capture(engine: Any, schedule_teams: set[str]) -> dict[str, Any]:
             ),
             {"s": snapshot.id},
         ).all()
-        every = (
-            c.execute(
-                text(
-                    "select n.abbreviation from canonical_entity e "
-                    "join team_affiliation a on a.entity_id = e.id and a.valid_to is null "
-                    "join nfl_team n on n.entity_id = a.team_id where e.kind = 'defense_unit'"
-                )
-            )
-            .scalars()
-            .all()
+        nfl = dict(
+            c.execute(text("select entity_id::text, abbreviation from nfl_team")).tuples().all()
         )
+        drops = c.execute(
+            text(
+                "select max(case when t.type = 'WAIVER' then t.processed_at "
+                "else t.proposed_at end) as dropped, n.abbreviation "
+                "from fantasy_transaction t, jsonb_array_elements(t.items) i "
+                "join canonical_entity e on e.id = (i->>'player_id')::uuid "
+                "and e.kind = 'defense_unit' "
+                "join team_affiliation a on a.entity_id = e.id and a.valid_to is null "
+                "join nfl_team n on n.entity_id = a.team_id "
+                "where t.status = 'EXECUTED' and i->>'type' = 'DROP' "
+                "and (case when t.type = 'WAIVER' then t.processed_at else t.proposed_at end) "
+                "<= :at "
+                "group by n.abbreviation"
+            ),
+            {"at": snapshot.observed_at},
+        ).all()
 
     def code(abbreviation: str) -> str:
         return ESPN_TO_FRANCHISE.get(abbreviation, abbreviation)
 
-    units = sorted({code(a) for a in every})
-    rosters: dict[str, list[str]] = {}
-    slots: dict[str, dict[str, str]] = {}
+    document = snapshot.payload
+    teams = sorted(str(t["id"]) for t in document["teams"])
+    rosters: dict[str, list[str]] = {t: [] for t in teams}
+    slots: dict[str, dict[str, str]] = {t: {} for t in teams}
+    owner: dict[str, str] = {}
     for team_id, abbreviation, slot in held:
-        rosters.setdefault(str(team_id), []).append(code(abbreviation))
-        slots.setdefault(str(team_id), {})[code(abbreviation)] = slot
-    rostered = {u for held_units in rosters.values() for u in held_units}
-    # Decision-time availability of each unrostered D/ST (Phase B, C05L-2026-PRO): a unit dropped
-    # within the league's waiver hold is on waivers, within two holds it may still be.
-    with engine.connect() as c:
-        hours = int(
-            c.execute(
-                text(
-                    "select r.payload->>'waiver_hours' from rule_version r join league_document d on "
-                    "d.rules_hash = r.hash join current_snapshot c on c.snapshot_id = d.snapshot_id"
-                )
-            ).scalar_one()
+        unit = code(abbreviation)
+        rosters.setdefault(str(team_id), []).append(unit)
+        slots.setdefault(str(team_id), {})[unit] = slot
+        owner[unit] = str(team_id)
+    reported: dict[str, tuple[str, str | None]] = {}
+    for player in document["players"]:
+        if player.get("kind") != "defense_unit":
+            continue
+        unit = code(nfl.get(str(player.get("nfl_team_id")), "?"))
+        reported[unit] = (
+            str(player.get("availability")),
+            None if player.get("team_id") is None else str(player.get("team_id")),
         )
-        drops = c.execute(
-            text(
-                "select max(coalesce(t.processed_at, t.proposed_at)) as dropped, n.abbreviation "
-                "from fantasy_transaction t, jsonb_array_elements(t.items) i "
-                "join canonical_entity e on e.id = (i->>'player_id')::uuid and e.kind = 'defense_unit' "
-                "join team_affiliation a on a.entity_id = e.id and a.valid_to is null "
-                "join nfl_team n on n.entity_id = a.team_id "
-                "where t.status = 'EXECUTED' and i->>'type' = 'DROP' group by n.abbreviation"
-            )
-        ).all()
-    captured_at = snapshot.observed_at
-    last_drop = {code(r.abbreviation): r.dropped for r in drops}
-    hold = timedelta(hours=hours)
-    states: dict[str, str] = {}
+    units = sorted(set(reported) | set(owner))
+    availability: dict[str, str] = {}
+    contradictions: list[dict[str, Any]] = []
     for unit in units:
-        if unit in rostered:
-            states[unit] = "OWNED"
-        elif unit in last_drop and captured_at - last_drop[unit] < hold:
-            states[unit] = "WAIVERS"
-        elif unit in last_drop and captured_at - last_drop[unit] < 2 * hold:
-            states[unit] = "WAIVERS_OR_FREE_AGENT"
+        state, team = reported.get(unit, ("missing", None))
+        observed = OBSERVED.get(state, "UNKNOWN")
+        if unit in owner and (observed != "OWNED" or team != owner[unit]):
+            contradictions.append({"unit": unit, "roster": owner[unit], "reported": [state, team]})
+            observed = "UNKNOWN"
+        elif unit not in owner and observed == "OWNED":
+            contradictions.append({"unit": unit, "roster": None, "reported": [state, team]})
+            observed = "UNKNOWN"
+        availability[unit] = observed
+    hours = int(rules["waiver_hours"])
+    last_drop = {code(r.abbreviation): r.dropped for r in drops}
+    fallback: dict[str, str] = {}
+    for unit in units:
+        if unit in owner:
+            fallback[unit] = "OWNED"
+        elif unit in last_drop and snapshot.observed_at - last_drop[unit] < timedelta(hours=hours):
+            fallback[unit] = "WAIVERS"
+        elif unit in last_drop and snapshot.observed_at - last_drop[unit] < timedelta(
+            hours=2 * hours
+        ):
+            fallback[unit] = "WAIVERS_OR_FREE_AGENT"
         else:
-            states[unit] = "FREE_AGENT"
+            fallback[unit] = "FREE_AGENT"
     unknown = sorted(u for u in units if u not in schedule_teams)
     if unknown or len(units) != 32:
-        raise SystemExit(f"BLOCKED: D/ST codes {unknown} do not map to the schedule's teams")
+        raise SystemExit(f"BLOCKED: D/ST universe is not the schedule's 32 teams: {unknown}")
+    rostered = set(owner)
     return {
+        "format": CAPTURE_FORMAT,
         "snapshotId": str(snapshot.id),
         "observedAt": snapshot.observed_at.isoformat(),
         "contentHash": snapshot.content_hash,
+        "rulesHash": snapshot.rules_hash,
+        "capturedAt": now.isoformat(),
+        "snapshotAgeMinutes": round((now - snapshot.observed_at).total_seconds() / 60, 1),
+        "teams": teams,
         "rosters": {t: sorted(u) for t, u in sorted(rosters.items())},
         "slots": slots,
         "freeAgents": sorted(set(units) - rostered),
-        "availability": dict(sorted(states.items())),
+        "availability": availability,
+        "availabilityBasis": "observed: ESPN's reported availability in the same snapshot",
+        "contradictions": contradictions,
+        "reconstructedFallback": {
+            "basis": "drop times and the waiver hold; not observed, used only if observed is UNKNOWN",
+            "states": fallback,
+        },
         "waiverHours": hours,
+        "waiverType": rules.get("waiver_type"),
+        "lineupLockType": rules.get("lineup_lock_type"),
         "units": len(units),
         "unitsNotInSchedule": unknown,
     }
@@ -479,27 +568,6 @@ def entries_for(lines: list[dict[str, Any]], week: int) -> list[dict[str, Any]]:
     return [e for e in lines if e.get("week") == week]
 
 
-def write_once(folder: Path, files: dict[str, bytes], keep: Path | None = None) -> dict[str, str]:
-    """Write a week's files to a temporary folder, then rename it into place. Refuses if the
-    folder exists. Files become read-only. Returns each file's SHA-256."""
-    if folder.exists():
-        raise SystemExit(f"{folder} exists; archived forecasts are never overwritten")
-    folder.parent.mkdir(parents=True, exist_ok=True)
-    temporary = Path(tempfile.mkdtemp(prefix=f".{folder.name}.", dir=folder.parent))
-    digests = {}
-    for name, data in files.items():
-        (temporary / name).parent.mkdir(parents=True, exist_ok=True)
-        (temporary / name).write_bytes(data)
-        digests[name] = sha256_bytes(data)
-    if keep is not None:
-        shutil.move(str(keep), str(temporary / "inputs"))
-    os.rename(temporary, folder)  # fails if another run created it meanwhile
-    for path in folder.rglob("*"):
-        if path.is_file():
-            path.chmod(0o444)
-    return digests
-
-
 def files_match(folder: Path, files: dict[str, str]) -> bool:
     """Every file a ledger entry names still has the hash the entry recorded."""
     try:
@@ -514,6 +582,17 @@ def league_for_evaluation(root: Path, entry: dict[str, Any], folder: Path) -> di
     (config/dvp/prospective-amendment-1.json, leagueCapture)."""
     capture: dict[str, Any] = json.loads((folder / "league.json").read_text())
     capture["source"] = "forecast-time capture"
+    if capture.get("format") != CAPTURE_FORMAT:
+        # A capture from before amendment 1 (week 12) has no observed availability; a separately
+        # versioned supplement read from the same snapshot may supply it.
+        for record in read_ledger(root / "supplements.jsonl"):
+            path = root / record["file"]
+            if record.get("week") == entry["week"] and sha256(path) == record["sha256"]:
+                observed = json.loads(path.read_text())["capture"]
+                capture["availability"] = observed["availability"]
+                capture["availabilityBasis"] = "SUPPLEMENTAL: " + observed["availabilityBasis"]
+                capture["teams"] = observed["teams"]
+                capture["source"] = "forecast-time capture with supplemental observed availability"
     later = [
         c
         for c in read_ledger(root / "captures.jsonl")
@@ -600,7 +679,11 @@ def csv_bytes(frame: pl.DataFrame) -> bytes:
     return frame.sort(list(shadow.KEYS)).write_csv().encode()
 
 
-def run_forecast(args: argparse.Namespace, week: int, classification: str) -> int:
+def run_forecast(
+    args: argparse.Namespace, week: int, classification: str
+) -> tuple[int, dict[str, Any]]:
+    """Forecast and archive one week. Returns (0 archived, 2 waiting, 3 missed) and what was
+    found. Call under `archive.exclusive`."""
     config = json.loads(CONFIG.read_text())
     season = int(args.season or config["season"])
     root = archive_root(args, season)
@@ -614,10 +697,27 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
         e["classification"] in ("PROSPECTIVE", "MISSED") for e in previous
     ):
         print(f"week {week}: already {previous[0]['classification']}; nothing to do")
-        return 0
+        return 0, {"week": week, "state": previous[0]["classification"]}
     fz = load_frozen()
     started = now_utc()
     work = Path(tempfile.mkdtemp(prefix=f"dvp-{season}-w{week}-"))
+    try:
+        return _forecast_in(args, fz, season, root, ledger, week, classification, started, work)
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+
+def _forecast_in(
+    args: argparse.Namespace,
+    fz: Frozen,
+    season: int,
+    root: Path,
+    ledger: Path,
+    week: int,
+    classification: str,
+    started: datetime,
+    work: Path,
+) -> tuple[int, dict[str, Any]]:
     prep = prepare_season(
         fz,
         args,
@@ -626,6 +726,7 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
         f"M3-3 DvP {classification.lower()} forecast, {season} week {week} (TASK-20261124-006)",
     )
     cutoff = cutoff_of(prep.schedule, season, week)
+    info: dict[str, Any] = {"week": week, "cutoff": cutoff.isoformat()}
     if classification == "PROSPECTIVE" and started >= cutoff:
         entry = append_ledger(
             ledger,
@@ -638,16 +739,19 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
                 "reason": "no forecast was archived before the cutoff",
             },
         )
-        print(
-            f"week {week}: cutoff {cutoff} has passed; recorded MISSED ({entry['entrySha256'][:12]})"
-        )
-        shutil.rmtree(work, ignore_errors=True)
-        return 3
-    ready, detail = readiness(prep.schedule, prep.season_rows, season, week, started)
+        print(f"week {week}: cutoff {cutoff} passed; recorded MISSED ({entry['entrySha256'][:12]})")
+        return 3, info | {"state": "MISSED"}
+    engine = engine_readonly()
+    held, catalog = statistics_revisions(
+        engine, prep.lineage["season"]["nflverseManifests"], season
+    )
+    ready, detail = readiness(prep.schedule, prep.season_rows, season, week, started, held, catalog)
+    info["readiness"] = detail
     if classification == "PROSPECTIVE" and not ready:
-        print(f"week {week}: inputs not complete yet; retry later: {json.dumps(detail)}")
-        shutil.rmtree(work, ignore_errors=True)
-        return 2
+        print(
+            f"week {week}: inputs not complete yet; retry later: {json.dumps(detail['blocking'])}"
+        )
+        return 2, info | {"state": "WAITING"}
     frame, params = forecast_frame(fz, prep.rows, prep.schedule, season, week)
     week_games = prep.season_schedule.filter(pl.col("week") == week)
     playing = set(week_games.get_column("home").to_list()) | set(
@@ -656,9 +760,10 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
     every_team = set(prep.season_schedule.get_column("home").to_list()) | set(
         prep.season_schedule.get_column("away").to_list()
     )
-    league = league_capture(engine_readonly(), every_team)
-    league["playingThisWeek"] = sorted(playing)
     generated = now_utc()
+    league = league_capture(engine, every_team, generated)
+    league["playingThisWeek"] = sorted(playing)
+    league["week"] = week
     if classification == "PROSPECTIVE" and generated >= cutoff:
         raise SystemExit(
             "the cutoff passed while forecasting; nothing archived (rerun records MISSED)"
@@ -673,7 +778,7 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
     forecasts_csv = csv_bytes(frame)
     league_json = (json.dumps(league, indent=1, sort_keys=True) + "\n").encode()
     manifest: dict[str, Any] = {
-        "format": FORMAT + "-forecast-v1",
+        "format": FORMAT + "-forecast-v2",
         "classification": classification,
         "season": season,
         "week": week,
@@ -684,6 +789,10 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
         "code": code_version(),
         "adapter": shadow.ADAPTER,
         "config": {"path": "config/dvp/prospective.json", "sha256": sha256(CONFIG)},
+        "amendment": {
+            "path": "config/dvp/prospective-amendment-1.json",
+            "sha256": sha256(AMENDMENT),
+        },
         "frozen": fz.verification,
         "readiness": detail,
         "parameters": params,
@@ -705,7 +814,12 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
             "parquetSha256": sha256(parquet),
             "contentSha256": shadow.content_sha256(frame),
         },
-        "league": {"sha256": sha256_bytes(league_json), "snapshotObservedAt": league["observedAt"]},
+        "league": {
+            "sha256": sha256_bytes(league_json),
+            "snapshotObservedAt": league["observedAt"],
+            "snapshotAgeMinutes": league["snapshotAgeMinutes"],
+            "contradictions": len(league["contradictions"]),
+        },
         "labels": "none: forecast-only; labels are joined only by `evaluate` after the games",
         "forbidden_vendor_projection_dependencies": 0,
         "write_to_production": False,
@@ -722,7 +836,22 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
         "manifest.json": manifest_json,
         "league.json": league_json,
     }
-    digests = write_once(folder, files, keep=inputs)
+    stored = archive.commit(folder, files, now_utc, inputs=inputs)
+    archived_at: datetime = stored["archivedAt"]
+    if classification == "PROSPECTIVE" and archived_at >= cutoff:
+        append_ledger(
+            ledger,
+            {
+                "season": season,
+                "week": week,
+                "classification": "MISSED",
+                "recordedAt": now_utc().isoformat(),
+                "cutoff": cutoff.isoformat(),
+                "folder": folder.name,
+                "reason": "archival completed at or after the cutoff; kept as evidence only",
+            },
+        )
+        return 3, info | {"state": "MISSED"}
     entry = append_ledger(
         ledger,
         {
@@ -731,47 +860,447 @@ def run_forecast(args: argparse.Namespace, week: int, classification: str) -> in
             "classification": classification,
             "recordedAt": now_utc().isoformat(),
             "generatedAt": generated.isoformat(),
+            "archivedAt": archived_at.isoformat(),
             "cutoff": cutoff.isoformat(),
             "folder": folder.name,
-            "files": digests,
+            "files": stored["files"],
             "contentSha256": manifest["forecasts"]["contentSha256"],
             "code": manifest["code"],
         },
     )
     if args.export:
         export(args, season, folder.name, files, ledger)
-    shutil.rmtree(work, ignore_errors=True)
     print(
-        f"week {week}: {classification} archived at {generated:%Y-%m-%d %H:%M:%S} UTC, "
+        f"week {week}: {classification} archived at {archived_at:%Y-%m-%d %H:%M:%S} UTC, "
         f"{manifest['minutesBeforeCutoff']} minutes before the cutoff; {frame.height} rows; "
         f"ledger {entry['entrySha256'][:12]}"
     )
-    return 0
+    return 0, info | {"state": "ARCHIVED", "entrySha256": entry["entrySha256"]}
+
+
+def recover_archive(args: argparse.Namespace, season: int) -> list[dict[str, Any]]:
+    """Resolve an interrupted run's leftovers (archive.recover) and record each resolution."""
+    root = archive_root(args, season)
+    ledger = root / "ledger.jsonl"
+    lines = read_ledger(ledger)
+    now = now_utc()
+    actions = archive.recover(root, lines, {}, now)
+    for action in actions:
+        if action["action"] == "recover":
+            m = action["manifest"]
+            append_ledger(
+                ledger,
+                {
+                    "season": season,
+                    "week": action["week"],
+                    "classification": m["classification"],
+                    "recordedAt": now.isoformat(),
+                    "generatedAt": m["generatedAt"],
+                    "archivedAt": now.isoformat(),
+                    "archivedAtBasis": "recovered: the archive existed no later than this time",
+                    "cutoff": m["cutoff"],
+                    "folder": action["folder"],
+                    "files": action["files"],
+                    "contentSha256": m["forecasts"]["contentSha256"],
+                    "code": m["code"],
+                    "recovered": True,
+                },
+            )
+        elif action["action"] == "missed-unproven":
+            append_ledger(
+                ledger,
+                {
+                    "season": season,
+                    "week": action["week"],
+                    "classification": "MISSED",
+                    "recordedAt": now.isoformat(),
+                    "folder": action["folder"],
+                    "reason": "an archive without a ledger entry was found after the cutoff; "
+                    "durable archival before the cutoff is not proven",
+                },
+            )
+    return actions
 
 
 def forecast(args: argparse.Namespace) -> None:
-    sys.exit(run_forecast(args, args.week, "PROSPECTIVE"))
+    season = int(args.season or json.loads(CONFIG.read_text())["season"])
+    with archive.exclusive(archive_root(args, season)):
+        recover_archive(args, season)
+        code, _ = run_forecast(args, args.week, "PROSPECTIVE")
+        publish_pending(args, season)
+    sys.exit(code)
 
 
 def reconstruct(args: argparse.Namespace) -> None:
-    sys.exit(run_forecast(args, args.week, "RETROSPECTIVE"))
+    season = int(args.season or json.loads(CONFIG.read_text())["season"])
+    with archive.exclusive(archive_root(args, season)):
+        code, _ = run_forecast(args, args.week, "RETROSPECTIVE")
+    sys.exit(code)
+
+
+ALERT_WINDOW = timedelta(hours=18)
+
+
+def write_status(root: Path, record: dict[str, Any]) -> None:
+    """status.json beside the ledger, replaced atomically on every run."""
+    root.mkdir(parents=True, exist_ok=True)
+    temporary = root / ".status.json.tmp"
+    temporary.write_text(json.dumps(record, indent=1, sort_keys=True, default=str) + "\n")
+    os.replace(temporary, root / "status.json")
+
+
+def alert(root: Path, title: str, message: str) -> None:
+    """An actionable alert: the service journal, alerts.jsonl beside the ledger, and a Windows
+    notification on this PC when Windows is reachable from WSL."""
+    print(f"ALERT: {title}: {message}", file=sys.stderr)
+    root.mkdir(parents=True, exist_ok=True)
+    with (root / "alerts.jsonl").open("a") as handle:
+        handle.write(json.dumps({"at": now_utc().isoformat(), "title": title, "message": message}))
+        handle.write("\n")
+    powershell = shutil.which("powershell.exe")
+    if powershell is None or os.environ.get("ARBIT_DVP_NO_TOAST"):
+        return
+
+    def quoted(value: str) -> str:
+        return "'" + value.replace("'", "''")[:240] + "'"
+
+    script = (
+        "[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, "
+        "ContentType = WindowsRuntime] > $null;"
+        "$x = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent("
+        "[Windows.UI.Notifications.ToastTemplateType]::ToastText02);"
+        "$t = $x.GetElementsByTagName('text');"
+        f"$null = $t.Item(0).AppendChild($x.CreateTextNode({quoted('Arbit research: ' + title)}));"
+        f"$null = $t.Item(1).AppendChild($x.CreateTextNode({quoted(message)}));"
+        "$app = '{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\WindowsPowerShell\\v1.0\\powershell.exe';"
+        "[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($app)"
+        ".Show([Windows.UI.Notifications.ToastNotification]::new($x))"
+    )
+    encoded = base64.b64encode(script.encode("utf-16-le")).decode()
+    subprocess.run(  # noqa: S603
+        [powershell, "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
+        capture_output=True,
+        timeout=60,
+        check=False,
+    )
 
 
 def sweep(args: argparse.Namespace) -> None:
-    """Forecast each window week when ready; record misses. Exits 0 unless something failed."""
+    """Forecast each window week when ready, record misses, capture the league before each
+    archived week's cutoff and publish pending commitments. Safe to run repeatedly; one run at a
+    time. Exits 0 unless something failed."""
     config = json.loads(CONFIG.read_text())
-    codes = []
-    for week in config["weeks"]:
-        lines = read_ledger(
-            archive_root(args, int(args.season or config["season"])) / "ledger.jsonl"
-        )
-        if any(e["classification"] in ("PROSPECTIVE", "MISSED") for e in entries_for(lines, week)):
+    season = int(args.season or config["season"])
+    root = archive_root(args, season)
+    status: dict[str, Any] = {"run": now_utc().isoformat(), "code": code_version(), "weeks": {}}
+    failed = False
+    try:
+        with archive.exclusive(root):
+            status["recovery"] = recover_archive(args, season)
+            for action in status["recovery"]:
+                if action["action"] in ("quarantined", "missed-unproven"):
+                    alert(root, "archive recovery", json.dumps(action, default=str)[:200])
+            for week in config["weeks"]:
+                lines = read_ledger(root / "ledger.jsonl")
+                done = [
+                    e
+                    for e in entries_for(lines, week)
+                    if e["classification"] in ("PROSPECTIVE", "MISSED")
+                ]
+                if done:
+                    status["weeks"][str(week)] = {"state": done[0]["classification"]}
+                    continue
+                code, info = run_forecast(args, week, "PROSPECTIVE")
+                status["weeks"][str(week)] = info
+                if code == 3:
+                    alert(root, f"week {week} missed", f"cutoff {info['cutoff']} passed")
+                if code == 2:
+                    left = datetime.fromisoformat(info["cutoff"]) - now_utc()
+                    if left < ALERT_WINDOW:
+                        alert(
+                            root,
+                            f"week {week} not ready",
+                            f"{left.total_seconds() / 3600:.1f} h to the cutoff; blocking: "
+                            + json.dumps(info["readiness"]["blocking"])[:160],
+                        )
+                    break  # later weeks need this week's results first
+            status["captures"] = capture_pending(args, season)
+            status["publications"] = publish_pending(args, season)
+            for record in status["publications"]:
+                if not record.get("verified"):
+                    left = datetime.fromisoformat(record["cutoff"]) - now_utc()
+                    if left < ALERT_WINDOW:
+                        alert(
+                            root,
+                            f"week {record['week']} commitment not verified",
+                            f"{record.get('result')}: {record.get('error') or ''}"[:200],
+                        )
+            status["outcome"] = "OK"
+    except archive.Busy as error:
+        status["outcome"] = "BUSY"
+        status["error"] = str(error)
+        print(str(error))
+    except (SystemExit, Exception) as error:  # noqa: BLE001 - every failure is reported
+        failed = True
+        status["outcome"] = "FORECAST_EXECUTION_FAILURE"
+        status["error"] = f"{type(error).__name__}: {error}"[:500]
+        alert(root, "sweep failed", status["error"][:200])
+    if status["outcome"] != "BUSY":
+        write_status(root, status)
+    print(json.dumps({k: status.get(k) for k in ("outcome", "weeks")}, default=str))
+    if failed:
+        sys.exit(1)
+
+
+# --- decision-time league captures, supplements and external evidence ---------------------------
+
+
+def _write_once(path: Path, data: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("xb") as handle:  # refuses an existing file
+        handle.write(data)
+        handle.flush()
+        os.fsync(handle.fileno())
+    path.chmod(0o444)
+    return sha256_bytes(data)
+
+
+def _schedule_teams(folder: Path, week: int) -> tuple[set[str], list[str]]:
+    schedule = pl.read_parquet(folder / "inputs/schedule-season.parquet")
+    every = set(schedule.get_column("home").to_list()) | set(schedule.get_column("away").to_list())
+    games = schedule.filter(pl.col("week") == week)
+    playing = set(games.get_column("home").to_list()) | set(games.get_column("away").to_list())
+    return every, sorted(playing)
+
+
+def capture_pending(args: argparse.Namespace, season: int) -> list[dict[str, Any]]:
+    """For each archived week whose cutoff hasn't passed, record the league as it stands when its
+    snapshot changed since the last capture (the decision-time state)."""
+    root = archive_root(args, season)
+    captures_log = root / "captures.jsonl"
+    now = now_utc()
+    out = []
+    for e in read_ledger(root / "ledger.jsonl"):
+        if e["classification"] != "PROSPECTIVE" or datetime.fromisoformat(e["cutoff"]) <= now:
             continue
-        code = run_forecast(args, week, "PROSPECTIVE")
-        codes.append((week, code))
-        if code == 2:
-            break  # later weeks need this week's results first
-    print(json.dumps({"sweep": codes}))
+        folder = root / e["folder"]
+        every, playing = _schedule_teams(folder, e["week"])
+        capture = league_capture(engine_readonly(), every, now)
+        capture |= {"week": e["week"], "playingThisWeek": playing}
+        earlier = [c for c in read_ledger(captures_log) if c.get("week") == e["week"]]
+        last = earlier[-1]["snapshotId"] if earlier else None
+        if last is None:
+            last = json.loads((folder / "league.json").read_text()).get("snapshotId")
+        if capture["snapshotId"] == last:
+            continue
+        observed = datetime.fromisoformat(capture["observedAt"])
+        name = f"captures/week-{e['week']:02d}-{observed:%Y%m%dT%H%M%SZ}.json"
+        data = (json.dumps(capture, indent=1, sort_keys=True) + "\n").encode()
+        digest = _write_once(root / name, data)
+        record = append_ledger(
+            captures_log,
+            {
+                "week": e["week"],
+                "file": name,
+                "sha256": digest,
+                "snapshotId": capture["snapshotId"],
+                "observedAt": capture["observedAt"],
+                "capturedAt": capture["capturedAt"],
+                "contradictions": len(capture["contradictions"]),
+            },
+        )
+        out.append({"week": e["week"], "file": name, "entrySha256": record["entrySha256"]})
+    return out
+
+
+def evidence_settings() -> tuple[str | None, str | None, dict[str, str]]:
+    remote = os.environ.get("ARBIT_EVIDENCE_REMOTE")
+    slug = os.environ.get("ARBIT_EVIDENCE_SLUG")
+    key = os.environ.get("ARBIT_EVIDENCE_KEY")
+    env = {"GIT_SSH_COMMAND": f"ssh -i {key} -o IdentitiesOnly=yes -o BatchMode=yes"} if key else {}
+    return remote, slug, env
+
+
+def publish_pending(args: argparse.Namespace, season: int) -> list[dict[str, Any]]:
+    """Publish and verify the commitment of every prospective archive without a verified one.
+    Each attempt is recorded in publications.jsonl; nothing is regenerated."""
+    root = archive_root(args, season)
+    log = root / "publications.jsonl"
+    branch = json.loads(AMENDMENT.read_text())["externalEvidence"]["branch"]
+    verified = {p["ledgerEntrySha256"] for p in read_ledger(log) if p.get("verified")}
+    remote, slug, env = evidence_settings()
+    clone = root.parent / "evidence-clone"
+    out = []
+    for e in read_ledger(root / "ledger.jsonl"):
+        if e["classification"] != "PROSPECTIVE" or e["entrySha256"] in verified:
+            continue
+        folder = root / e["folder"]
+        record: dict[str, Any] = {
+            "kind": "github-branch",
+            "week": e["week"],
+            "ledgerEntrySha256": e["entrySha256"],
+            "attemptAt": now_utc().isoformat(),
+            "ref": f"refs/heads/{branch}",
+            "cutoff": e["cutoff"],
+            "verified": False,
+        }
+        if not files_match(folder, e["files"]):
+            record |= {"result": "archive-mismatch", "error": "the archive no longer matches"}
+        elif not remote or not slug:
+            record |= {"result": "not-configured", "error": "ARBIT_EVIDENCE_REMOTE/SLUG unset"}
+        else:
+            payload = (
+                json.dumps(evidence.commitment(e, sha256(AMENDMENT)), indent=1, sort_keys=True)
+                + "\n"
+            ).encode()
+            commitment_path, csv_path = evidence.paths_for(e)
+            files = {commitment_path: payload, csv_path: (folder / "forecasts.csv").read_bytes()}
+            expected = {path: sha256_bytes(data) for path, data in files.items()}
+            try:
+                pushed = evidence.publish(
+                    clone,
+                    remote,
+                    branch,
+                    files,
+                    f"M3-3 DvP prospective commitment: {season} week {e['week']}",
+                    env,
+                )
+                problems = evidence.verify_remote(clone, branch, pushed["commit"], expected, env)
+                stamp, activity = None, None
+                for attempt in range(6):
+                    if problems:
+                        break
+                    stamp, activity = evidence.external_timestamp(
+                        clone, pushed["commit"], evidence.read_activity(slug, branch)
+                    )
+                    if stamp or attempt == 5:
+                        break
+                    time.sleep(10)
+                record |= {
+                    "commit": pushed["commit"],
+                    "files": expected,
+                    "remoteProblems": problems,
+                    "externalTimestamp": stamp,
+                    "activityId": None if activity is None else activity.get("id"),
+                    "verified": bool(stamp) and not problems,
+                    "beforeCutoff": evidence.before(stamp, datetime.fromisoformat(e["cutoff"])),
+                    "result": "verified"
+                    if stamp and not problems
+                    else ("remote-mismatch" if problems else "pushed-awaiting-timestamp"),
+                }
+            except (
+                evidence.PublicationError,
+                OSError,
+                subprocess.SubprocessError,
+                ValueError,
+            ) as error:
+                record |= {"result": "failed", "error": str(error)[:300]}
+        append_ledger(log, record)
+        out.append(record)
+    return out
+
+
+def publish(args: argparse.Namespace) -> None:
+    season = int(args.season or json.loads(CONFIG.read_text())["season"])
+    with archive.exclusive(archive_root(args, season)):
+        records = publish_pending(args, season)
+    print(json.dumps(records, indent=1, default=str))
+    if any(not r.get("verified") for r in records):
+        sys.exit(1)
+
+
+def record_prior(args: argparse.Namespace) -> None:
+    """Record a week's earlier external publication (week 12's GitHub push) once verified:
+    GitHub's activity record of the push, and the pushed files equal to the ledger's hashes."""
+    season = int(args.season or json.loads(CONFIG.read_text())["season"])
+    root = archive_root(args, season)
+    _, slug, _ = evidence_settings()
+    slug = slug or args.slug
+    entry = next(
+        e
+        for e in read_ledger(root / "ledger.jsonl")
+        if e.get("week") == args.week and e["classification"] == "PROSPECTIVE"
+    )
+    problems = []
+    for name in ("forecasts.csv", "manifest.json", "league.json"):
+        shown = subprocess.run(
+            ["git", "show", f"{args.commit}:{args.path}/{name}"],
+            cwd=ROOT,
+            capture_output=True,
+            check=False,
+        )
+        if shown.returncode != 0 or sha256_bytes(shown.stdout) != entry["files"][name]:
+            problems.append(f"{name} at {args.commit[:12]} differs from the ledger")
+    stamp, activity = evidence.external_timestamp(
+        ROOT, args.commit, evidence.read_activity(slug, args.ref)
+    )
+    record = {
+        "kind": "prior-github-push",
+        "week": args.week,
+        "ledgerEntrySha256": entry["entrySha256"],
+        "attemptAt": now_utc().isoformat(),
+        "ref": f"refs/heads/{args.ref}",
+        "commit": args.commit,
+        "path": args.path,
+        "remoteProblems": problems,
+        "externalTimestamp": stamp,
+        "activityId": None if activity is None else activity.get("id"),
+        "cutoff": entry["cutoff"],
+        "verified": bool(stamp) and not problems,
+        "beforeCutoff": evidence.before(stamp, datetime.fromisoformat(entry["cutoff"])),
+        "result": "verified" if stamp and not problems else "not-verified",
+    }
+    with archive.exclusive(root):
+        append_ledger(root / "publications.jsonl", record)
+    print(json.dumps(record, indent=1, default=str))
+
+
+def supplement(args: argparse.Namespace) -> None:
+    """A separately versioned record of the availability ESPN reported in the snapshot a week's
+    original capture used (PB-AUD-07). The original archive is not touched."""
+    season = int(args.season or json.loads(CONFIG.read_text())["season"])
+    root = archive_root(args, season)
+    entry = next(
+        e
+        for e in read_ledger(root / "ledger.jsonl")
+        if e.get("week") == args.week and e["classification"] == "PROSPECTIVE"
+    )
+    folder = root / entry["folder"]
+    original = json.loads((folder / "league.json").read_text())
+    every, playing = _schedule_teams(folder, args.week)
+    now = now_utc()
+    capture = league_capture(engine_readonly(), every, now, snapshot_id=original["snapshotId"])
+    same = {t: u for t, u in capture["rosters"].items() if u} == original["rosters"]
+    record = {
+        "format": FORMAT + "-league-supplement-v1",
+        "classification": "SUPPLEMENTAL",
+        "season": season,
+        "week": args.week,
+        "createdAt": now.isoformat(),
+        "basis": "Read after the forecast from the stored snapshot the week's original capture "
+        "named; the original archive is unchanged. Observed availability as ESPN reported it in "
+        "that snapshot.",
+        "forecastArchive": {
+            "folder": entry["folder"],
+            "entrySha256": entry["entrySha256"],
+            "leagueSha256": entry["files"]["league.json"],
+        },
+        "rostersEqualOriginal": same,
+        "capture": capture | {"week": args.week, "playingThisWeek": playing},
+    }
+    data = (json.dumps(record, indent=1, sort_keys=True) + "\n").encode()
+    name = f"supplements/week-{args.week:02d}-availability-v1.json"
+    with archive.exclusive(root):
+        digest = _write_once(root / name, data)
+        append_ledger(
+            root / "supplements.jsonl",
+            {"week": args.week, "file": name, "sha256": digest, "kind": "observed-availability"},
+        )
+    if args.export:
+        target = Path(args.export) / str(season) / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+    print(json.dumps({"file": name, "sha256": digest, "rostersEqualOriginal": same}))
 
 
 # --- evaluation ----------------------------------------------------------------------------------
@@ -846,51 +1375,7 @@ def evaluate_frame(
         }
     league_out: dict[str, Any] = {}
     for week, capture in sorted((leagues or {}).items()):
-        week_rows = labelled.filter(pl.col("week") == week)
-        choices = shadow.league_choices(
-            week_rows, capture["rosters"], capture["freeAgents"], models
-        )
-        # Phase B: also the free agents claimable at once (captured from week 13; week 12's
-        # capture has no availability states).
-        claimable = [u for u, s in capture.get("availability", {}).items() if s == "FREE_AGENT"]
-        if claimable:
-            only = (
-                shadow.league_choices(week_rows, capture["rosters"], claimable, models)
-                .filter(pl.col("decision") == "stream")
-                .with_columns(pl.lit("streamClaimableOnly").alias("decision"))
-            )
-            choices = pl.concat([choices, only])
-        actual = valid.filter((pl.col("position") == obs.DST) & (pl.col("week") == week)).select(
-            pl.col("defense").alias("unit"), "points"
-        )
-        scored = choices
-        for model in models:
-            scored = scored.join(
-                actual.rename({"unit": f"pick_{model}", "points": f"pts_{model}"}),
-                on=f"pick_{model}",
-                how="left",
-            )
-        per_kind: dict[str, Any] = {}
-        for (kind,), part in scored.group_by(["decision"], maintain_order=True):
-            differ = part.filter(pl.col(f"pick_{models[0]}") != pl.col(f"pick_{models[1]}"))
-            both = differ.filter(
-                pl.col(f"pts_{models[0]}").is_not_null() & pl.col(f"pts_{models[1]}").is_not_null()
-            )
-            gain = [
-                float(b) - float(a)
-                for a, b in both.select(f"pts_{models[0]}", f"pts_{models[1]}").iter_rows()
-            ]
-            per_kind[str(kind)] = {
-                "decisions": part.height,
-                "differ": differ.height,
-                "withLabels": both.height,
-                "pointsB06MinusB00": sum(gain),
-                "b06Better": (sum(g > 0 for g in gain) + 0.5 * sum(g == 0 for g in gain))
-                / len(gain)
-                if gain
-                else None,
-            }
-        league_out[str(week)] = dict(sorted(per_kind.items()))
+        league_out[str(week)] = league_week(labelled, valid, capture, week, models)
     if descriptive is not None:
         for value in [*phase_b.values(), phase_c]:
             if "label" in value:
@@ -902,6 +1387,69 @@ def evaluate_frame(
         "phaseC": phase_c,
         "league": league_out,
     }
+
+
+LEAGUE_KINDS = {
+    # kind: (decision, which unowned units join the held ones)
+    "rosterOnly": (league.START, ()),
+    "unownedPool": (league.STREAM, ("FREE_AGENT", "WAIVERS", "UNKNOWN", "*")),
+    "claimablePool": (league.STREAM, ("FREE_AGENT",)),
+    "claimableWithWaivers": (league.STREAM, ("FREE_AGENT", "WAIVERS")),
+}
+
+
+def league_week(
+    labelled: pl.DataFrame,
+    valid: pl.DataFrame,
+    capture: dict[str, Any],
+    week: int,
+    models: tuple[str, str],
+) -> dict[str, Any]:
+    """The descriptive league evaluation of one week (amendment 1, leagueCapture.evaluation):
+    roster-only starts; streaming from every unowned unit, from those observed free agents (even
+    when there are none), and with those on waivers; teams without a decision listed."""
+    dst = labelled.filter((pl.col("position") == obs.DST) & (pl.col("week") == week))
+    forecasts = {
+        m: dict(zip(dst.get_column("defense"), dst.get_column(m), strict=True)) for m in models
+    }
+    actual = valid.filter((pl.col("position") == obs.DST) & (pl.col("week") == week))
+    points = dict(zip(actual.get_column("defense"), actual.get_column("points"), strict=True))
+    playing = set(capture.get("playingThisWeek", [])) & set(forecasts[models[0]])
+    teams = capture.get("teams") or sorted(capture["rosters"])
+    holdings = {t: capture["rosters"].get(t, []) for t in teams}
+    availability = capture.get("availability", {})
+    observed = capture.get("format") == CAPTURE_FORMAT or str(
+        capture.get("availabilityBasis", "")
+    ).startswith("SUPPLEMENTAL")
+    out: dict[str, Any] = {"source": capture.get("source"), "observedAvailability": observed}
+    for name, (kind, states) in LEAGUE_KINDS.items():
+        if "*" in states:
+            pool = list(capture["freeAgents"])
+        elif not states:
+            pool = []
+        elif not observed:
+            out[name] = {"skipped": "no observed availability for this week"}
+            continue
+        else:
+            pool = sorted(u for u, st in availability.items() if st in states)
+        rows = league.decide(week, holdings, pool, playing, forecasts, points, kind)
+        a, b = models
+        differ = [r for r in rows if r[f"pick_{a}"] != r[f"pick_{b}"]]
+        both = [r for r in differ if r[f"points_{a}"] is not None and r[f"points_{b}"] is not None]
+        gain = [float(r[f"points_{b}"]) - float(r[f"points_{a}"]) for r in both]
+        out[name] = {
+            "decisions": len(rows),
+            "poolSize": len(pool),
+            "differ": len(differ),
+            "withLabels": len(both),
+            "pointsB06MinusB00": sum(gain),
+            "b06Better": (sum(g > 0 for g in gain) + 0.5 * sum(g == 0 for g in gain)) / len(gain)
+            if gain
+            else None,
+            "teamsWithoutDecision": league.without_decision(holdings, pool, playing, kind),
+            "decisionRows": rows,
+        }
+    return out
 
 
 def rehearse(args: argparse.Namespace) -> None:
@@ -1119,7 +1667,25 @@ def verify(args: argparse.Namespace) -> None:
                 for name in ("forecasts.csv", "manifest.json", "league.json"):
                     if sha256(exported / name) != e["files"][name]:
                         problems.append(f"export {e['folder']}/{name} differs from the archive")
-    print(json.dumps({"entries": len(lines), "problems": problems}))
+    # The other append-only logs: hash chains, and each capture or supplement file's bytes.
+    for log in ("captures.jsonl", "supplements.jsonl", "publications.jsonl"):
+        records = read_ledger(root / log)
+        problems += [f"{log}: {p}" for p in shadow.verify_ledger(records)]
+        for r in records:
+            if "file" in r and sha256(root / r["file"]) != r["sha256"]:
+                problems.append(f"{r['file']} does not match {log}")
+    prospective = {e["entrySha256"]: e for e in lines if e["classification"] == "PROSPECTIVE"}
+    published = {
+        p["ledgerEntrySha256"]
+        for p in read_ledger(root / "publications.jsonl")
+        if p.get("verified") and p.get("beforeCutoff")
+    }
+    unpublished = sorted(e["week"] for h, e in prospective.items() if h not in published)
+    print(
+        json.dumps(
+            {"entries": len(lines), "problems": problems, "withoutPreCutoffCommitment": unpublished}
+        )
+    )
     if problems:
         sys.exit(1)
 
@@ -1149,6 +1715,15 @@ def main() -> None:
     )
     e.add_argument("--receipts", type=Path, default=ROOT / "docs/research/dvp/prospective")
     commands.add_parser("verify")
+    commands.add_parser("publish", help="publish and verify pending external commitments")
+    c = commands.add_parser("record-prior", help="record a verified earlier external publication")
+    c.add_argument("--week", type=int, required=True)
+    c.add_argument("--commit", required=True)
+    c.add_argument("--ref", required=True, help="the branch GitHub recorded the push to")
+    c.add_argument("--path", required=True, help="the folder holding the week's files")
+    c.add_argument("--slug", default="chroniicallydiistracted/arbit-fantasy-football")
+    u = commands.add_parser("supplement", help="observed availability from a week's snapshot")
+    u.add_argument("--week", type=int, required=True)
     args = parser.parse_args()
     args.main = args.main.resolve()
     {
@@ -1158,6 +1733,9 @@ def main() -> None:
         "rehearse": rehearse,
         "evaluate": evaluate,
         "verify": verify,
+        "publish": publish,
+        "record-prior": record_prior,
+        "supplement": supplement,
     }[args.command](args)
 
 

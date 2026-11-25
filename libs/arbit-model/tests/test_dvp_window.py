@@ -30,7 +30,7 @@ def entry(week, **overrides):
 
 def published(week, hours_before=24, verified=True):
     return {
-        "entrySha256": f"e{week}",
+        "ledgerEntrySha256": f"e{week}",
         "verified": verified,
         "kind": "github-branch",
         "externalTimestamp": (CUT[week] - timedelta(hours=hours_before)).isoformat(),
@@ -216,3 +216,79 @@ def test_the_amendment_leaves_the_original_declaration_and_frozen_rules_unchange
     gate_states = amendment["completionGate"]["window"]
     assert set(gate_states) == {w.BLOCKED, w.INTERIM, w.INCOMPLETE_WINDOW, w.COMPLETE}
     assert amendment["write_to_production"] is False
+
+
+def readiness_case():
+    kickoff = datetime(2026, 11, 22, 18, tzinfo=UTC)
+    games = pl.DataFrame(
+        {
+            "season": [2026] * 4,
+            "week": [11] * 4,
+            "game_id": ["a", "b", "c", "d"],
+            "kickoff": [kickoff] * 4,
+            "available_at": [kickoff + timedelta(hours=18)] * 4,
+            "status": ["completed", "completed", "completed", "not_completed"],
+        }
+    )
+    cells = []
+    for gid, n, invalid in (("a", 12, 0), ("b", 12, 1), ("c", 5, 0)):
+        for i in range(n):
+            cells.append(
+                {
+                    "season": 2026,
+                    "game_id": gid,
+                    "offense": f"T{i % 2}",
+                    "position": f"P{i // 2}",
+                    "status": "invalid_refused_line" if i < invalid else "valid",
+                }
+            )
+    return kickoff, games, pl.DataFrame(cells)
+
+
+def test_readiness_names_the_state_of_every_earlier_game():
+    kickoff, games, cells = readiness_case()
+    now = kickoff + timedelta(days=2)
+    # The held statistics file predates game c's results; the catalog knows nothing newer.
+    held = kickoff - timedelta(hours=1)
+    ready, detail = w.game_readiness(games, cells, 2026, 12, now, GRACE, held, held)
+    assert not ready
+    assert detail["states"] == {
+        w.AWAITING_RESULT: 1,
+        w.ELIGIBLE_VERIFIED: 1,
+        w.RETRIEVED_INVALID: 1,
+        w.SOURCE_NOT_YET_PUBLISHED: 1,
+    }
+    # A newer revision is in the catalog but wasn't imported.
+    _, detail = w.game_readiness(
+        games, cells, 2026, 12, now, GRACE, held, kickoff + timedelta(hours=10)
+    )
+    assert detail["blocking"][w.PUBLISHED_NOT_RETRIEVED] == ["c"]
+    # The held file postdates the game, yet cells are missing: an integrity failure.
+    late = kickoff + timedelta(hours=9)
+    _, detail = w.game_readiness(games, cells, 2026, 12, now, GRACE, late, late)
+    assert detail["blocking"][w.DATA_INTEGRITY_FAILURE] == ["c"]
+    # Long after kickoff, the unfinished game is recorded and stops blocking.
+    full = cells.filter(pl.col("game_id") != "c")
+    ready, detail = w.game_readiness(
+        games.filter(pl.col("game_id") != "c"),
+        full,
+        2026,
+        12,
+        kickoff + timedelta(days=5),
+        GRACE,
+        late,
+        late,
+    )
+    assert ready and detail["postponedOrCanceled"] == ["d"] and detail["retrievedInvalid"] == ["b"]
+    # A final game is not usable before its results are available under the rule.
+    ready, detail = w.game_readiness(
+        games.filter(pl.col("game_id") == "a"),
+        full,
+        2026,
+        12,
+        kickoff + timedelta(hours=6),
+        GRACE,
+        late,
+        late,
+    )
+    assert not ready and detail["blocking"] == {w.NOT_YET_AVAILABLE: ["a"]}
