@@ -5,18 +5,26 @@ This audit holds every action item of the owner's [DvP specification v1.1](Arbit
 - the code and model logic that carries it out;
 - the audit check that proves it, with what the check observed.
 
-TASK-20261124-005, 2026-11-24. Rebuilt 2026-11-25 in TASK-20261124-009, after the owner's Phase B audit: C05L is split three ways and the Phase B items are added.
+TASK-20261124-005, 2026-11-24. Rebuilt 2026-11-25:
+- in TASK-20261124-009, after the owner's Phase B audit;
+- in TASK-20261125-003 (remediation 7), as the final development gate of the owner's [final directive](M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md). That added the directive's requirements and completion statuses, semantic reruns and negative controls.
 
-**Result: PASSED.**
-- The specification and the owner's Phase B requirements break into **221 action items**:
-  - 215 are done;
-  - 5 are open, each for a reason this document states;
-  - 1 is not applicable: C05L-HIST, because FFA began in 2026 (OWN-076).
-- **164 checks** prove them, and every check passed.
-- The model suite passed with no failures and nothing skipped: 213 tests, including every one of T01–T40.
-- Machine-readable receipt: [plan-audit-receipt.json](plan-audit-receipt.json).
-  - It was written by `scripts/model/dvp_plan_audit.py` at commit `1b99375`; the stages reran at `3848cad`.
-  - It holds the SHA-256 of the specification it audited (`240a538c…`).
+**Result: PASSED. M3-3's development phase is complete.**
+- **The inventory has 257 action items:** the specification, the owner's first remediation requirements (AUD-01–07), Phase B (B0–B8), and the final directive (AUD-01a–d, PB-AUD-01–08, DEC-01–10, eligibility, findings).
+  - **252 COMPLETE_VERIFIED.**
+  - **2 PENDING_FUTURE_DATA:** P4P and C05L-2026-PRO, the 2026 weeks 12–18 outcomes. Their collection is operational and verified (P4P-INFRA, C05L-2026-PRO-INFRA).
+  - **1 DEFERRED_APPROVAL:** P5W, the owner's D/ST weight decision.
+  - **2 NOT_APPLICABLE:** C05L-HIST (OWN-076) and C03 (Phase C is D/ST-only).
+  - **None BLOCKED_EXTERNAL, PARTIAL, NOT_IMPLEMENTED or FAILED.**
+- **192 checks** prove them, and every check passed.
+- **All 18 negative controls were detected:** each plants a defect the audit must catch.
+- **The model suite** passed with no failures and nothing skipped: 272 tests, including T01–T40.
+- **31 rerun steps** all exited as expected. They include exploratory v2 and v3, the corrected Phase B evaluation from pinned inputs, thresholds, a simulation sample with resume, the simulation summary, prospective verify and a live ESPN content re-read.
+- **Machine-readable receipt:** [plan-audit-receipt.json](plan-audit-receipt.json).
+  - Written by `scripts/model/dvp_plan_audit.py` (with `dvp_plan_audit_directive.py`) at `ea103b1`; the stages reran at the same commit.
+  - It holds the SHA-256 of every governing document, the data snapshot identifiers, the artifact hashes, the frozen-method verification, the outcomes, the finding dispositions and the overall assessment.
+
+**Development complete is not production-ready.** The independent 2026 confirmation needs the remaining games. No feature is production-eligible (the research eligibility registry).
 
 **What "proof" means here:**
 - **Reruns, not recited receipts.** Every stage was rerun from scratch copies of the committed audit run and receipts:
@@ -25,11 +33,7 @@ TASK-20261124-005, 2026-11-24. Rebuilt 2026-11-25 in TASK-20261124-009, after th
 - **Field-by-field comparison.** Each rerun was compared field by field with its committed receipt. The only fields allowed to differ are the run time, the code commit, the run ID and the byte hashes of Parquet files. Fields added to receipts after the original runs were also allowed. The audit fails on any other difference.
 - **Untouched evidence.** The committed audit run and `config/dvp` were hashed before and after the reruns, and nothing in them changed.
 
-**Not proved here, because the specification leaves it open:**
-- the prospective 2026 confirmation;
-- the owner's decision on a D/ST production weight.
-
-The [open items](#open-items) section lists all five.
+**Not proved here, because it can't be yet:** the prospective 2026 outcomes (future data), and the owner's decision on a D/ST production weight (approval). The [open items](#open-items) section lists them.
 
 ## How to read the tables
 
@@ -76,11 +80,11 @@ The study runs as one chain. Each step reads only the output of the step before 
 
 ## The reruns behind this audit
 
-From `plan-audit-receipt.json` → `reruns`. Run on 2026-11-25 with `POLARS_MAX_THREADS=2`.
+From `plan-audit-receipt.json` → `reruns`. Run on 2026-11-25 with `POLARS_MAX_THREADS=2`, at `ea103b1`. The rows below are the original stages; the [final directive section](#final-directive-reconciled-requirements-remediation-7) lists the reruns it added.
 
 | Step | Tree | Exit (expected) | Seconds | Compared with the committed receipt |
 | --- | --- | --- | --- | --- |
-| audit | this tree (`3848cad`) | 0 (0) | 1.6 | Equal except code, time and run ID. The observation table is identical: 31,668 rows and 19 columns (`rerun:audit`, `rerun:observations`). The projection audit now scans 30 files, up from 19, because later DvP modules joined the scan list. It still finds 0 projections (`rerun:projection-audit`) |
+| audit | this tree (`ea103b1`) | 0 (0) | 1.6 | Equal except code, time and run ID. The observation table is identical: 31,668 rows and 19 columns (`rerun:audit`, `rerun:observations`). The projection audit now scans 30 files, up from 19, because later DvP modules joined the scan list. It still finds 0 projections (`rerun:projection-audit`) |
 | reproduce-v0 | this tree | 0 (0) | 6.9 | Equal except code and time (`rerun:v0`) |
 | reliability | this tree | 0 (0) | 73.9 | Equal except code and time, apart from A12's live vintage diagnostic. That diagnostic reads Arbit's growing 2026 capture history and is allowed to grow (`rerun:reliability`) |
 | backtest development | this tree | 0 (0) | 25.9 | Results, selection, sensitivity and folds equal. The forecasts matched within 10⁻⁹, so the file was left byte-identical (`rerun:development`, `rerun:forecasts-development`) |
@@ -91,7 +95,7 @@ From `plan-audit-receipt.json` → `reruns`. Run on 2026-11-25 with `POLARS_MAX_
 | verify | this tree | 0 (0) | 10.2 | Equal except code and time; PASSED (`rerun:verify`, `verify:passed`) |
 | report | this tree | 0 (0) | 0.5 | `METRICS.csv` and all 15 plots byte-identical (`rerun:report-files`) |
 | registry | this tree | 0 (0) | 0.5 | `experiment-registry.json` identical (`rerun:registry`) |
-| model tests | this tree | 0 (0) | 13.5 | 213 passed, 0 failed, 0 skipped. The real-artifact tests ran against the audit run |
+| model tests | this tree | 0 (0) | 14.5 | 272 passed, 0 failed, 0 skipped. The real-artifact tests ran against the audit run |
 
 Why some fields may differ:
 - **Byte hashes.** polars' parallel group-by returns rows in varying order, and its parallel sums move the last bit of some floats. Every metric is order-free and rounded far above that noise. The receipts written since TASK-20261124-004 also carry a content hash.
@@ -538,6 +542,13 @@ The audit is only as good as its ability to fail. Each control plants one defect
 | A research factor marked production-eligible without approvals | `elig:registry` |
 
 ## Corrections made by this audit
+
+**Remediation 7 (TASK-20261125-003):** its first full run failed, and caught three things:
+- **A regression.** Phase E had added a docstring to `feature_specs.py`, a v0 file that must stay byte-identical (`v0:bytes`, `rerun:continuity`, `open:owner-weight`). It is restored to its v0 bytes; the note lives in AGENTS.md and the eligibility documents.
+- **A weak check.** The "missing estimator variant" control went undetected, because `backtest:variants` only checked variant families across all groups. It now requires every configured variant for every group in every stage.
+- **The audit's own code.** The planted projection token in the controls tripped the T31 scan. It is assembled at run time now.
+
+The second run passed everything.
 
 - **Stale audit run IDs.** [DATA_QUALITY.md](DATA_QUALITY.md) and [V0_REPRODUCTION.md](V0_REPRODUCTION.md) named audit run `phase1-audit-20261124T021910Z` (code `bc414a0`), but their receipts come from `phase1-audit-20261124T024442Z` (code `3a1fe11`). Every later stage reads that run. The two runs built identical observation tables (31,668 rows, compared after sorting), so no number changes. Both documents now name the right run.
 - **The project's next action** still said to merge PR #12, which is merged. It is now current ([status](../../project/status.md)).

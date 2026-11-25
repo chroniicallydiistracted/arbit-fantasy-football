@@ -1,14 +1,33 @@
 {
-  "format": "arbit-dvp-m3-3-plan-audit-v1",
-  "generatedAt": "2026-11-25T02:35:55.766576+00:00",
-  "code": "1b993752fbf68bfb3617d624fba232eea7f8e1a0",
+  "format": "arbit-dvp-m3-3-plan-audit-v2",
+  "generatedAt": "2026-11-25T09:39:13.729160+00:00",
+  "code": "ea103b11348cf46be720fb46f76a64aaa72b895a",
+  "inventoryVersion": "final-directive-v1",
   "specification": {
     "path": "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
     "sha256": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d"
   },
+  "documents": {
+    "specification": {
+      "path": "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
+      "sha256": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d"
+    },
+    "remediationRequirements": {
+      "path": "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md",
+      "sha256": "a44896905ee59048a24c41c1209cbc9ccaf71d762acdd9c2691fa8f653de3a96"
+    },
+    "phaseBRequirements": {
+      "path": "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md",
+      "sha256": "c4de95677acc0c912816f283a1630b03717f53bc410636844f66a54b871453da"
+    },
+    "finalDirective": {
+      "path": "docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md",
+      "sha256": "136595d4358c1eb29d95bd591b5bf81525ab25f3b8890814a8002ba778e6ebb8"
+    }
+  },
   "auditRun": "phase1-audit-20261124T024442Z",
   "reruns": {
-    "code": "3848cadc13058cdbdf40eeb9b37d6573c1a90264",
+    "code": "ea103b11348cf46be720fb46f76a64aaa72b895a",
     "frozenTree": "165d140b0be131cd8b4a6092e6d3928fb3a3c706",
     "steps": [
       {
@@ -16,42 +35,42 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 1.6
+        "seconds": 1.7
       },
       {
         "step": "reproduce-v0",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 6.9
+        "seconds": 7.0
       },
       {
         "step": "reliability",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 73.9
+        "seconds": 72.1
       },
       {
         "step": "backtest-development",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 25.9
+        "seconds": 25.4
       },
       {
         "step": "backtest-validation",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 6.7
+        "seconds": 6.6
       },
       {
         "step": "backtest-holdout-frozen-tree",
         "cwd": "frozen-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 5.8
+        "seconds": 4.1
       },
       {
         "step": "backtest-holdout-refused-here",
@@ -65,14 +84,14 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 0.8
+        "seconds": 0.7
       },
       {
         "step": "verify",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 10.2
+        "seconds": 10.1
       },
       {
         "step": "report",
@@ -86,39 +105,176 @@
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 0.5
+        "seconds": 0.6
       },
       {
         "step": "model-tests",
         "cwd": "this-tree",
         "exit": 0,
         "expectedExit": 0,
-        "seconds": 13.5
+        "seconds": 14.5
+      },
+      {
+        "step": "explore-v2-development",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 5.0
+      },
+      {
+        "step": "explore-v2-validation",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 2.1
+      },
+      {
+        "step": "explore-v2-holdout",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 2.0
+      },
+      {
+        "step": "explore-v2-evaluate",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 11.4
+      },
+      {
+        "step": "explore-v3-opportunity",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 25.0
+      },
+      {
+        "step": "explore-v3-development",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 6.0
+      },
+      {
+        "step": "explore-v3-validation",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 2.2
+      },
+      {
+        "step": "explore-v3-holdout",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 2.2
+      },
+      {
+        "step": "explore-v3-evaluate",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 13.2
+      },
+      {
+        "step": "league-2026-v2",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 2.5
+      },
+      {
+        "step": "thresholds",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 4.0
+      },
+      {
+        "step": "simulation-sample-E1",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 11.8
+      },
+      {
+        "step": "simulation-sample-E2",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 40.4
+      },
+      {
+        "step": "simulation-sample-E3",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 1.5
+      },
+      {
+        "step": "simulation-sample-U",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 2.5
+      },
+      {
+        "step": "sim-resume",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.5
+      },
+      {
+        "step": "simulation-summary",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 1.2
+      },
+      {
+        "step": "prospective-verify",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.5
+      },
+      {
+        "step": "ffa-content-live",
+        "cwd": "this-tree",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 50.2
       }
     ]
   },
   "tests": {
-    "passed": 213,
+    "passed": 272,
     "failed": 0,
     "skipped": 0
   },
   "status": "PASSED",
   "summary": {
-    "items": 221,
-    "DONE": 215,
-    "OPEN": 5,
-    "NOT_APPLICABLE": 1,
+    "items": 257,
+    "COMPLETE_VERIFIED": 252,
+    "PARTIAL": 0,
+    "BLOCKED_EXTERNAL": 0,
+    "PENDING_FUTURE_DATA": 2,
+    "NOT_APPLICABLE": 2,
+    "DEFERRED_APPROVAL": 1,
+    "NOT_IMPLEMENTED": 0,
     "FAILED": 0,
-    "checks": 164,
-    "checksPassed": 164
+    "checks": 192,
+    "checksPassed": 192
   },
   "items": [
     {
       "id": "R01",
       "section": "\u00a70.1",
       "title": "Resume M3-3 from v0: inventory, verify and continue it",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T29",
         "v0:bytes",
@@ -130,8 +286,8 @@
       "id": "R02",
       "section": "\u00a70.2",
       "title": "Read AGENTS.md and inspect scoring, contracts, tests and v0 before changing anything",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:4",
         "test:T29"
@@ -141,8 +297,8 @@
       "id": "R03",
       "section": "\u00a70.3",
       "title": "Use Arbit's canonical FFA actuals under the league's rules only",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T30",
         "audit:checks",
@@ -153,8 +309,8 @@
       "id": "R04",
       "section": "\u00a70.4",
       "title": "Exclude every provider projection by schema, lineage and executable tests",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T31",
         "test:T32",
@@ -168,8 +324,8 @@
       "id": "R05",
       "section": "\u00a70.5",
       "title": "B00 and every variant forecast only from eligible completed-game actuals",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T38",
         "test:B11",
@@ -180,8 +336,8 @@
       "id": "R06",
       "section": "\u00a70.6",
       "title": "Realized data counts only once completed and available by the cutoff",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T15",
         "test:T34",
@@ -193,8 +349,8 @@
       "id": "R07",
       "section": "\u00a70.7",
       "title": "Isolated branch; no production write, weight change or canonical-table replacement",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T26",
         "config:no-production",
@@ -205,8 +361,8 @@
       "id": "R08",
       "section": "\u00a70.8",
       "title": "Preserve v0 untouched; extend through versioned experiments",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:bytes",
         "test:T29",
@@ -217,8 +373,8 @@
       "id": "R09",
       "section": "\u00a70.9",
       "title": "nflverse is the statistical foundation; no paid, opaque or projected inputs",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "provenance:passed",
         "provenance:forbidden-inventory"
@@ -228,8 +384,8 @@
       "id": "R10",
       "section": "\u00a70.10",
       "title": "Report repeatability, forecasting, player-level impact and shrinkage separately",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions",
         "registry:A05",
@@ -241,8 +397,8 @@
       "id": "R11",
       "section": "\u00a70.11",
       "title": "Every forecast uses inputs and parameters available at its cutoff; vintage limits documented",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T16",
         "test:T17",
@@ -254,8 +410,8 @@
       "id": "R12",
       "section": "\u00a70.12",
       "title": "No fabrication; unavailable inputs disable experiments, recorded as BLOCKED",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C03",
         "phasec:not-available",
@@ -266,8 +422,8 @@
       "id": "R13",
       "section": "\u00a70.13",
       "title": "Durable documentation so a fresh agent can resume",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:1",
         "deliverable:9",
@@ -278,8 +434,8 @@
       "id": "R14",
       "section": "\u00a70.14",
       "title": "Use the status vocabulary; never claim unrun tests; never promote without approval",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:complete",
         "test:dvp-all",
@@ -290,8 +446,8 @@
       "id": "RQ1",
       "section": "\u00a71",
       "title": "RQ1 measure: is there a repeatable position-specific defensive tendency?",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A01",
         "registry:A05",
@@ -303,8 +459,8 @@
       "id": "RQ2",
       "section": "\u00a71",
       "title": "RQ2 explain noise: trait vs schedule, offense, randomness, transient conditions",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A03",
         "registry:A05",
@@ -317,8 +473,8 @@
       "id": "RQ3",
       "section": "\u00a71",
       "title": "RQ3 evidence strength by position and sample size; v0 conversion vs variance models",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A04",
         "registry:A05",
@@ -330,8 +486,8 @@
       "id": "RQ4",
       "section": "\u00a71",
       "title": "RQ4 forecast: does pre-week defensive information improve next-game forecasts?",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B00",
         "registry:B03",
@@ -343,8 +499,8 @@
       "id": "RQ5",
       "section": "\u00a71",
       "title": "RQ5 add value over the offense-only baseline, consistently",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:decisions",
         "backtest:dev-folds",
@@ -355,8 +511,8 @@
       "id": "RQ6",
       "section": "\u00a71",
       "title": "RQ6 translate (conditional): player-level forecasts and pairwise start/sit",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "phasec:decision",
         "registry:C04",
@@ -367,8 +523,8 @@
       "id": "RQ7",
       "section": "\u00a71",
       "title": "RQ7 operationalize (conditional): estimator, shrinkage, freshness, fallback; approval-gated",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions",
         "docs:prospective",
@@ -379,8 +535,8 @@
       "id": "D01",
       "section": "\u00a72",
       "title": "position: groups from the league configuration; FB as RB; K and D/ST in scope; negatives kept",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:positions",
         "test:T02",
@@ -391,8 +547,8 @@
       "id": "D02",
       "section": "\u00a72",
       "title": "game and team_game: completed regular-season games, exactly two team-games each",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:reconciliation",
         "test:T06"
@@ -402,8 +558,8 @@
       "id": "D03",
       "section": "\u00a72",
       "title": "offense and defense: the offense's points by group are the opposing defense's points allowed",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T07",
         "test:T01"
@@ -413,8 +569,8 @@
       "id": "D04",
       "section": "\u00a72",
       "title": "D/ST special case: the opposing D/ST's points against the offense (offense vulnerability)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T07",
         "audit:examples"
@@ -424,8 +580,8 @@
       "id": "D05",
       "section": "\u00a72",
       "title": "true zero vs missing or invalid",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T03",
         "audit:cells"
@@ -435,8 +591,8 @@
       "id": "D06",
       "section": "\u00a72",
       "title": "delta: points less a stated offense expectation; positive means the defense allowed more",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T08",
         "registry:A03"
@@ -446,8 +602,8 @@
       "id": "D07",
       "section": "\u00a72",
       "title": "defense-season: no presumption that a trait survives seasons",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A07",
         "reliability:experiments"
@@ -457,8 +613,8 @@
       "id": "D08",
       "section": "\u00a72",
       "title": "forecast cutoff: pre-week default; per-game is a separate experiment; never mixed",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T15",
         "test:T35",
@@ -469,8 +625,8 @@
       "id": "D09",
       "section": "\u00a72",
       "title": "game count n: eligible games, not calendar weeks; byes and cancellations add no exposure",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T10",
         "test:T34"
@@ -480,8 +636,8 @@
       "id": "H01",
       "section": "\u00a72.1",
       "title": "Scoring truth: FFA rules, Arbit's canonical actuals, nflverse raw stats for reconciliation",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T30",
         "audit:checks"
@@ -491,8 +647,8 @@
       "id": "H02",
       "section": "\u00a72.1",
       "title": "Pregame features: only previously completed actuals and realized stats; priors from actuals",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T38",
         "test:T15"
@@ -502,8 +658,8 @@
       "id": "H03",
       "section": "\u00a72.1",
       "title": "Prohibited everywhere: ESPN and vendor projections, rankings, forecasts, copied points-allowed tables",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T31",
         "test:T32",
@@ -514,8 +670,8 @@
       "id": "H04",
       "section": "\u00a72.1",
       "title": "Arbit forecasts are outputs with traceable ancestry, never fed back as actuals",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T36",
         "test:T20"
@@ -525,8 +681,8 @@
       "id": "H05",
       "section": "\u00a72.1",
       "title": "Mandatory row metadata: source, type, lineage, IDs, status, finality, scoring hash, feature_as_of",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:observation-lineage",
         "test:T36"
@@ -536,8 +692,8 @@
       "id": "H06",
       "section": "\u00a72.1",
       "title": "Enforcement by allowlist and typed schemas; unknowns fail closed; machine-readable exclusion audit",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T33",
         "test:T32",
@@ -548,8 +704,8 @@
       "id": "E01",
       "section": "\u00a72.2",
       "title": "Prior-week completed FFA points: eligible",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T34",
         "test:T25"
@@ -559,8 +715,8 @@
       "id": "E02",
       "section": "\u00a72.2",
       "title": "Prior completed-game nflverse stats for validating actuals: eligible under the as-of rule",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T30",
         "finality:recorded"
@@ -570,8 +726,8 @@
       "id": "E03",
       "section": "\u00a72.2",
       "title": "This week's Thursday result: only under a per-game cutoff",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T35",
         "test:T15"
@@ -581,8 +737,8 @@
       "id": "E04",
       "section": "\u00a72.2",
       "title": "Game underway, delayed or unfinished at the cutoff: never",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T34"
       ]
@@ -591,8 +747,8 @@
       "id": "E05",
       "section": "\u00a72.2",
       "title": "Game completed after the cutoff: label only, never a feature",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T16",
         "test:T17",
@@ -603,8 +759,8 @@
       "id": "E06",
       "section": "\u00a72.2",
       "title": "ESPN projected points, even pregame: never",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T32",
         "test:B11"
@@ -614,8 +770,8 @@
       "id": "E07",
       "section": "\u00a72.2",
       "title": "Vendor projections renamed opponent_expected: never",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T32",
         "test:T33"
@@ -625,8 +781,8 @@
       "id": "E08",
       "section": "\u00a72.2",
       "title": "Arbit B00 from prior actuals: allowed as output and comparator",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T38",
         "registry:B00"
@@ -636,8 +792,8 @@
       "id": "E09",
       "section": "\u00a72.2",
       "title": "Two isolated views (features as of T, targets after T), joined only after forecasts are written",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T36",
         "test:T20"
@@ -647,8 +803,8 @@
       "id": "S01",
       "section": "\u00a73.1",
       "title": "canonical_ffa_player_week: Arbit's FFA target store (index 6ffb62fb)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:checks",
         "test:T30",
@@ -659,8 +815,8 @@
       "id": "S02",
       "section": "\u00a73.1",
       "title": "canonical_ffa_dst_week: one D/ST line per completed team-game",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:cells",
         "test:T07"
@@ -670,8 +826,8 @@
       "id": "S03",
       "section": "\u00a73.1",
       "title": "nfl_schedule: schedule_games.parquet, completed regular-season games only",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:seasons",
         "test:T06"
@@ -681,8 +837,8 @@
       "id": "S04",
       "section": "\u00a73.1",
       "title": "team_game_position and defense_game_position: observations.parquet",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:observation-lineage",
         "rerun:observations",
@@ -693,8 +849,8 @@
       "id": "S05",
       "section": "\u00a73.1",
       "title": "historical_cutoff_index: per-game cutoffs and feature_as_of",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T15",
         "test:T35"
@@ -704,8 +860,8 @@
       "id": "S06",
       "section": "\u00a73.1",
       "title": "experiment_registry: every experiment with config, hashes, seed and status",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:complete",
         "rerun:registry"
@@ -715,8 +871,8 @@
       "id": "S07",
       "section": "\u00a73.1",
       "title": "source_provenance_allowlist: admitted sources with ancestry and scoring hash",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "provenance:passed",
         "test:T33"
@@ -726,8 +882,8 @@
       "id": "S08",
       "section": "\u00a73.1",
       "title": "prohibited_source_audit: reject or quarantine inventory of forbidden sources",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "provenance:forbidden-inventory",
         "test:T31"
@@ -737,8 +893,8 @@
       "id": "S09",
       "section": "\u00a73.1",
       "title": "No new scoring engine: reuse stored FFA actuals; recompute only to audit",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:checks",
         "test:T30"
@@ -748,8 +904,8 @@
       "id": "S10",
       "section": "\u00a73.2",
       "title": "Supplementary sources only with lineage; component stats for A09 and B07",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "provenance:passed",
         "registry:A09",
@@ -760,8 +916,8 @@
       "id": "Q01",
       "section": "\u00a73.3",
       "title": "5,278 completed team-games verified against the schedule (canceled BUF-CIN excluded)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:reconciliation",
         "audit:seasons",
@@ -772,8 +928,8 @@
       "id": "Q02",
       "section": "\u00a73.3",
       "title": "320 defense-seasons audited per filter",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:validated",
         "audit:seasons"
@@ -783,8 +939,8 @@
       "id": "Q03",
       "section": "\u00a73.3",
       "title": "Two team-games per game, offense-defense symmetry, D/ST reverse orientation; no postseason or phantom zeros",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:reconciliation",
         "test:T06",
@@ -796,8 +952,8 @@
       "id": "Q04",
       "section": "\u00a73.3",
       "title": "Team renames and relocations, trades, duplicates, multi-position mapping, negatives, corrections",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:checks",
         "test:T05",
@@ -809,8 +965,8 @@
       "id": "Q05",
       "section": "\u00a73.3",
       "title": "Hand-checked samples: zero TE, multi-WR, traded player, D/ST turnover, canceled game",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:examples",
         "audit:checks"
@@ -820,8 +976,8 @@
       "id": "Q06",
       "section": "\u00a73.3",
       "title": "Data quality report and machine-readable anomalies; invalid rows blocked",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:2",
         "audit:cells"
@@ -831,8 +987,8 @@
       "id": "Q07",
       "section": "\u00a73.3",
       "title": "Finality and availability at every cutoff; conservative fallback declared",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "finality:recorded",
         "rerun:finality-audit",
@@ -844,8 +1000,8 @@
       "id": "Q08",
       "section": "\u00a73.3",
       "title": "Full projection-lineage scan over v0 and every new input",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "provenance:passed",
         "rerun:projection-audit",
@@ -856,8 +1012,8 @@
       "id": "V01",
       "section": "\u00a74.1",
       "title": "Position sums per complete team-game; FB as RB; valid zeros",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T01",
         "test:T02",
@@ -868,8 +1024,8 @@
       "id": "V02",
       "section": "\u00a74.2",
       "title": "Defense inversion with the separate D/ST interpretation",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T07"
       ]
@@ -878,8 +1034,8 @@
       "id": "V03",
       "section": "\u00a74.3",
       "title": "Same-season leave-one-game-out offense adjustment; singletons handled",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T08"
       ]
@@ -888,8 +1044,8 @@
       "id": "V04",
       "section": "\u00a74.4",
       "title": "Odd vs even NFL calendar weeks; at least 4 games per half; unequal halves recorded",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T09",
         "test:T10"
@@ -899,8 +1055,8 @@
       "id": "V05",
       "section": "\u00a74.5",
       "title": "Split-half Pearson and Spearman, raw and adjusted, counts and intervals, scatter plots",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:validated",
         "deliverable:10"
@@ -910,8 +1066,8 @@
       "id": "V06",
       "section": "\u00a74.6",
       "title": "Reproduce v0 r, single-game reliability, k and w(n); explain WR 44.1 vs 42.63",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:reproduced",
         "v0:wr-k",
@@ -923,8 +1079,8 @@
       "id": "V07",
       "section": "\u00a74",
       "title": "Freeze v0: outputs, hashes, config and a discrepancy report; lineage audited",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:bytes",
         "rerun:continuity",
@@ -936,8 +1092,8 @@
       "id": "X00",
       "section": "\u00a75",
       "title": "Every experiment states hypothesis, estimator, data, cutoff, ancestry, comparator, metric, interval, conclusion",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:complete"
       ]
@@ -946,8 +1102,8 @@
       "id": "A00",
       "section": "\u00a75 Phase A",
       "title": "A00: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A00",
         "reliability:experiments"
@@ -957,8 +1113,8 @@
       "id": "A01",
       "section": "\u00a75 Phase A",
       "title": "A01: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A01",
         "rerun:v0"
@@ -968,8 +1124,8 @@
       "id": "A02",
       "section": "\u00a75 Phase A",
       "title": "A02: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A02",
         "reliability:experiments"
@@ -979,8 +1135,8 @@
       "id": "A03",
       "section": "\u00a75 Phase A",
       "title": "A03: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A03",
         "reliability:experiments"
@@ -990,8 +1146,8 @@
       "id": "A04",
       "section": "\u00a75 Phase A",
       "title": "A04: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A04",
         "reliability:experiments"
@@ -1001,8 +1157,8 @@
       "id": "A05",
       "section": "\u00a75 Phase A",
       "title": "A05: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A05",
         "reliability:experiments"
@@ -1012,8 +1168,8 @@
       "id": "A06",
       "section": "\u00a75 Phase A",
       "title": "A06: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A06",
         "reliability:experiments"
@@ -1023,8 +1179,8 @@
       "id": "A07",
       "section": "\u00a75 Phase A",
       "title": "A07: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A07",
         "reliability:experiments"
@@ -1034,8 +1190,8 @@
       "id": "A08",
       "section": "\u00a75 Phase A",
       "title": "A08: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A08",
         "reliability:experiments"
@@ -1045,8 +1201,8 @@
       "id": "A09",
       "section": "\u00a75 Phase A",
       "title": "A09: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A09",
         "reliability:experiments"
@@ -1056,8 +1212,8 @@
       "id": "A10",
       "section": "\u00a75 Phase A",
       "title": "A10: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A10",
         "reliability:experiments"
@@ -1067,8 +1223,8 @@
       "id": "A11",
       "section": "\u00a75 Phase A",
       "title": "A11: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A11",
         "rerun:v0"
@@ -1078,8 +1234,8 @@
       "id": "A12",
       "section": "\u00a75 Phase A",
       "title": "A12: reliability experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A12",
         "reliability:experiments"
@@ -1089,8 +1245,8 @@
       "id": "B00",
       "section": "\u00a75 Phase B",
       "title": "B00: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B00",
         "backtest:variants"
@@ -1100,8 +1256,8 @@
       "id": "B01",
       "section": "\u00a75 Phase B",
       "title": "B01: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B01",
         "backtest:variants"
@@ -1111,8 +1267,8 @@
       "id": "B02",
       "section": "\u00a75 Phase B",
       "title": "B02: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B02",
         "backtest:variants"
@@ -1122,8 +1278,8 @@
       "id": "B03",
       "section": "\u00a75 Phase B",
       "title": "B03: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B03",
         "backtest:variants"
@@ -1133,8 +1289,8 @@
       "id": "B04",
       "section": "\u00a75 Phase B",
       "title": "B04: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B04",
         "backtest:variants"
@@ -1144,8 +1300,8 @@
       "id": "B05",
       "section": "\u00a75 Phase B",
       "title": "B05: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B05",
         "backtest:variants"
@@ -1155,8 +1311,8 @@
       "id": "B06",
       "section": "\u00a75 Phase B",
       "title": "B06: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B06",
         "backtest:variants"
@@ -1166,8 +1322,8 @@
       "id": "B07",
       "section": "\u00a75 Phase B",
       "title": "B07: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B07",
         "backtest:variants"
@@ -1177,8 +1333,8 @@
       "id": "B08",
       "section": "\u00a75 Phase B",
       "title": "B08: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B08",
         "backtest:b08-focus"
@@ -1188,8 +1344,8 @@
       "id": "B09",
       "section": "\u00a75 Phase B",
       "title": "B09: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B09",
         "backtest:variants"
@@ -1199,8 +1355,8 @@
       "id": "B10",
       "section": "\u00a75 Phase B",
       "title": "B10: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B10",
         "backtest:sensitivity"
@@ -1210,8 +1366,8 @@
       "id": "B11",
       "section": "\u00a75 Phase B",
       "title": "B11: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B11",
         "test:B11"
@@ -1221,8 +1377,8 @@
       "id": "B12",
       "section": "\u00a75 Phase B",
       "title": "B12: walk-forward experiment",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B12",
         "backtest:sensitivity"
@@ -1232,8 +1388,8 @@
       "id": "C00",
       "section": "\u00a75 Phase C",
       "title": "C00: Arbit-computed baseline (B00), no DvP",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C00",
         "phasec:decision"
@@ -1243,8 +1399,8 @@
       "id": "C01",
       "section": "\u00a75 Phase C",
       "title": "C01: group adjustment allocated by player share (one D/ST per team: share 1)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C01",
         "test:phase-c"
@@ -1254,8 +1410,8 @@
       "id": "C02",
       "section": "\u00a75 Phase C",
       "title": "C02: allocation methods compared (identical for D/ST)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C02",
         "test:phase-c"
@@ -1264,19 +1420,20 @@
     {
       "id": "C03",
       "section": "\u00a75 Phase C",
-      "title": "C03: route, slot and target-share interactions: BLOCKED (no meaning for D/ST)",
-      "kind": "open",
-      "status": "OPEN",
+      "title": "C03: route, slot and target-share interactions: NOT_APPLICABLE (Phase C is D/ST-only; roles have no meaning for a D/ST)",
+      "kind": "not_applicable",
+      "status": "NOT_APPLICABLE",
       "checks": [
-        "registry:C03"
+        "registry:C03",
+        "na:c03-dst-only"
       ]
     },
     {
       "id": "C04",
       "section": "\u00a75 Phase C",
       "title": "C04: historical same-position start/sit pairs; close-call subgroup separate",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C04",
         "phasec:decision",
@@ -1287,8 +1444,8 @@
       "id": "C05",
       "section": "\u00a75 Phase C",
       "title": "C05: decisions and errors vs baseline: accuracy, ties, points, changes, regret",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C05",
         "phasec:decision",
@@ -1309,8 +1466,8 @@
       "id": "C05L-2026-EXP",
       "section": "\u00a75 Phase C",
       "title": "C05L-2026-EXP: exploratory league-constrained D/ST evaluation on completed 2026 weeks",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "league2026:exploratory",
         "ffa2026:ownership-replay"
@@ -1319,9 +1476,9 @@
     {
       "id": "C05L-2026-PRO",
       "section": "\u00a75 Phase C",
-      "title": "C05L-2026-PRO: prospective league-constrained evaluation, weeks 12-18 (decision-time capture)",
-      "kind": "open",
-      "status": "OPEN",
+      "title": "C05L-2026-PRO: prospective league-constrained evaluation, weeks 12-18: outcomes after the games",
+      "kind": "pending_future_data",
+      "status": "PENDING_FUTURE_DATA",
       "checks": [
         "prospective:league-capture",
         "open:prospective"
@@ -1331,8 +1488,8 @@
       "id": "M01",
       "section": "\u00a76",
       "title": "Research estimator: residuals, odd/even means, correlations with intervals; hierarchical form",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A01",
         "registry:A05",
@@ -1343,8 +1500,8 @@
       "id": "M02",
       "section": "\u00a76",
       "title": "Forecast estimator: O_hat + w * R_hist; point-in-time vs recomputed residuals both tested",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:B02",
         "registry:B03",
@@ -1355,8 +1512,8 @@
       "id": "M03",
       "section": "\u00a76",
       "title": "Unequal split sizes: expected correlation from each unit's own half sizes; no negative k",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T11",
         "test:T12"
@@ -1366,8 +1523,8 @@
       "id": "M04",
       "section": "\u00a76",
       "title": "Clustered resampling (season and unit-season blocks), 2,000 seeded replicates, multiple comparisons",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T13",
         "reliability:experiments",
@@ -1378,8 +1535,8 @@
       "id": "M05",
       "section": "\u00a76",
       "title": "Shrinkage w(n) is credibility inside DvP, not a Sit/Start weight",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions",
         "registry:A05"
@@ -1389,8 +1546,8 @@
       "id": "M06",
       "section": "\u00a76",
       "title": "Distribution: means vs robust estimates; RMSE beside MAE; winsorizing and trimming",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A10",
         "backtest:variants"
@@ -1400,8 +1557,8 @@
       "id": "M07",
       "section": "\u00a76",
       "title": "Conditional dependence between groups examined, not assumed independent",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A04",
         "reliability:experiments"
@@ -1411,8 +1568,8 @@
       "id": "K01",
       "section": "\u00a77",
       "title": "Phase A metrics: split-half r, variance components, k, w(n), intervals, decay",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "reliability:experiments",
         "reliability:a05"
@@ -1422,8 +1579,8 @@
       "id": "K02",
       "section": "\u00a77",
       "title": "Phase B metrics: per-position RMSE and paired delta vs B00 on matching rows; MAE, bias, calibration, rank",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:variants",
         "verify:passed",
@@ -1434,8 +1591,8 @@
       "id": "K03",
       "section": "\u00a77",
       "title": "Phase C metrics: pairwise accuracy, points from changed choices, number of changes",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "phasec:decision"
       ]
@@ -1444,8 +1601,8 @@
       "id": "K04",
       "section": "\u00a77",
       "title": "Baseline parity: common eligible rows; coverage differences surfaced",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T19",
         "verify:passed"
@@ -1455,8 +1612,8 @@
       "id": "K05",
       "section": "\u00a77",
       "title": "Predeclared decision rule: PROMISING, INCONCLUSIVE, NOT USEFUL, BLOCKED",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:decisions",
         "test:phase4-rule",
@@ -1467,8 +1624,8 @@
       "id": "K06",
       "section": "\u00a77",
       "title": "Practical minimum declared from development data only",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:practical-minimum",
         "phasec:rule-first"
@@ -1478,8 +1635,8 @@
       "id": "K07",
       "section": "\u00a77",
       "title": "2025 conditionally confirmatory at best; no retuning to 2025",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:holdout-status",
         "backtest:timeline",
@@ -1490,8 +1647,8 @@
       "id": "T01",
       "section": "\u00a78",
       "title": "Test T01",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T01"
       ]
@@ -1500,8 +1657,8 @@
       "id": "T02",
       "section": "\u00a78",
       "title": "Test T02",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T02"
       ]
@@ -1510,8 +1667,8 @@
       "id": "T03",
       "section": "\u00a78",
       "title": "Test T03",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T03"
       ]
@@ -1520,8 +1677,8 @@
       "id": "T04",
       "section": "\u00a78",
       "title": "Test T04",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T04"
       ]
@@ -1530,8 +1687,8 @@
       "id": "T05",
       "section": "\u00a78",
       "title": "Test T05",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T05"
       ]
@@ -1540,8 +1697,8 @@
       "id": "T06",
       "section": "\u00a78",
       "title": "Test T06",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T06"
       ]
@@ -1550,8 +1707,8 @@
       "id": "T07",
       "section": "\u00a78",
       "title": "Test T07",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T07"
       ]
@@ -1560,8 +1717,8 @@
       "id": "T08",
       "section": "\u00a78",
       "title": "Test T08",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T08"
       ]
@@ -1570,8 +1727,8 @@
       "id": "T09",
       "section": "\u00a78",
       "title": "Test T09",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T09"
       ]
@@ -1580,8 +1737,8 @@
       "id": "T10",
       "section": "\u00a78",
       "title": "Test T10",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T10"
       ]
@@ -1590,8 +1747,8 @@
       "id": "T11",
       "section": "\u00a78",
       "title": "Test T11",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T11"
       ]
@@ -1600,8 +1757,8 @@
       "id": "T12",
       "section": "\u00a78",
       "title": "Test T12",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T12"
       ]
@@ -1610,8 +1767,8 @@
       "id": "T13",
       "section": "\u00a78",
       "title": "Test T13",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T13"
       ]
@@ -1620,8 +1777,8 @@
       "id": "T14",
       "section": "\u00a78",
       "title": "Test T14",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T14"
       ]
@@ -1630,8 +1787,8 @@
       "id": "T15",
       "section": "\u00a78",
       "title": "Test T15",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T15"
       ]
@@ -1640,8 +1797,8 @@
       "id": "T16",
       "section": "\u00a78",
       "title": "Test T16",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T16"
       ]
@@ -1650,8 +1807,8 @@
       "id": "T17",
       "section": "\u00a78",
       "title": "Test T17",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T17"
       ]
@@ -1660,8 +1817,8 @@
       "id": "T18",
       "section": "\u00a78",
       "title": "Test T18",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T18"
       ]
@@ -1670,8 +1827,8 @@
       "id": "T19",
       "section": "\u00a78",
       "title": "Test T19",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T19"
       ]
@@ -1680,8 +1837,8 @@
       "id": "T20",
       "section": "\u00a78",
       "title": "Test T20",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T20"
       ]
@@ -1690,8 +1847,8 @@
       "id": "T21",
       "section": "\u00a78",
       "title": "Test T21",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T21"
       ]
@@ -1700,8 +1857,8 @@
       "id": "T22",
       "section": "\u00a78",
       "title": "Test T22",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T22"
       ]
@@ -1710,8 +1867,8 @@
       "id": "T23",
       "section": "\u00a78",
       "title": "Test T23",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T23"
       ]
@@ -1720,8 +1877,8 @@
       "id": "T24",
       "section": "\u00a78",
       "title": "Test T24",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T24"
       ]
@@ -1730,8 +1887,8 @@
       "id": "T25",
       "section": "\u00a78",
       "title": "Test T25",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T25"
       ]
@@ -1740,8 +1897,8 @@
       "id": "T26",
       "section": "\u00a78",
       "title": "Test T26",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T26"
       ]
@@ -1750,8 +1907,8 @@
       "id": "T27",
       "section": "\u00a78",
       "title": "Test T27",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T27"
       ]
@@ -1760,8 +1917,8 @@
       "id": "T28",
       "section": "\u00a78",
       "title": "Test T28",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T28"
       ]
@@ -1770,8 +1927,8 @@
       "id": "T29",
       "section": "\u00a78",
       "title": "Test T29",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T29"
       ]
@@ -1780,8 +1937,8 @@
       "id": "T30",
       "section": "\u00a78",
       "title": "Test T30",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T30"
       ]
@@ -1790,8 +1947,8 @@
       "id": "T31",
       "section": "\u00a78",
       "title": "Test T31",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T31"
       ]
@@ -1800,8 +1957,8 @@
       "id": "T32",
       "section": "\u00a78",
       "title": "Test T32",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T32"
       ]
@@ -1810,8 +1967,8 @@
       "id": "T33",
       "section": "\u00a78",
       "title": "Test T33",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T33"
       ]
@@ -1820,8 +1977,8 @@
       "id": "T34",
       "section": "\u00a78",
       "title": "Test T34",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T34"
       ]
@@ -1830,8 +1987,8 @@
       "id": "T35",
       "section": "\u00a78",
       "title": "Test T35",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T35"
       ]
@@ -1840,8 +1997,8 @@
       "id": "T36",
       "section": "\u00a78",
       "title": "Test T36",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T36"
       ]
@@ -1850,8 +2007,8 @@
       "id": "T37",
       "section": "\u00a78",
       "title": "Test T37",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T37"
       ]
@@ -1860,8 +2017,8 @@
       "id": "T38",
       "section": "\u00a78",
       "title": "Test T38",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T38"
       ]
@@ -1870,8 +2027,8 @@
       "id": "T39",
       "section": "\u00a78",
       "title": "Test T39",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T39"
       ]
@@ -1880,8 +2037,8 @@
       "id": "T40",
       "section": "\u00a78",
       "title": "Test T40",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T40"
       ]
@@ -1890,8 +2047,8 @@
       "id": "T00",
       "section": "\u00a78",
       "title": "T29-T40 executed as gates; the full DvP suite passes with nothing skipped",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:dvp-all",
         "test:model-suite"
@@ -1901,8 +2058,8 @@
       "id": "P0",
       "section": "\u00a79",
       "title": "Phase 0: continuity, audit, v0 reproduced, no projection dependency (T29-T33, T37-T38)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:audit",
         "rerun:v0",
@@ -1915,8 +2072,8 @@
       "id": "P1",
       "section": "\u00a79",
       "title": "Phase 1: projection-free completed-game pipeline; T01-T07 and T30-T40 pass",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:observations",
         "audit:checks",
@@ -1928,8 +2085,8 @@
       "id": "P2",
       "section": "\u00a79",
       "title": "Phase 2: reliability lab A00-A12 reproducible",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:reliability",
         "reliability:experiments"
@@ -1939,8 +2096,8 @@
       "id": "P3",
       "section": "\u00a79",
       "title": "Phase 3: walk-forward B00-B12, development folds, 2024 validation, candidates committed",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:development",
         "rerun:validation",
@@ -1953,8 +2110,8 @@
       "id": "P4",
       "section": "\u00a79",
       "title": "Phase 4: frozen manifest, 2025 conditional holdout, labels per position",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:holdout-frozen-tree",
         "rerun:forecasts-holdout",
@@ -1967,9 +2124,9 @@
     {
       "id": "P4P",
       "section": "\u00a79",
-      "title": "Phase 4 prospective: 2026 weeks 12-18 frozen before kickoff; scored after the season",
-      "kind": "open",
-      "status": "OPEN",
+      "title": "Phase 4 prospective: 2026 weeks 12-18 outcomes, scored after the season (collection: P4P-INFRA)",
+      "kind": "pending_future_data",
+      "status": "PENDING_FUTURE_DATA",
       "checks": [
         "open:prospective",
         "backtest:timeline"
@@ -1979,8 +2136,8 @@
       "id": "P5",
       "section": "\u00a79",
       "title": "Phase 5: C00-C05 where justified; promotion only with approval",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:sitstart",
         "phasec:decision",
@@ -1991,8 +2148,8 @@
       "id": "P5W",
       "section": "\u00a79",
       "title": "Promotion: the owner's decision on a D/ST production weight (OWN-074)",
-      "kind": "open",
-      "status": "OPEN",
+      "kind": "deferred_approval",
+      "status": "DEFERRED_APPROVAL",
       "checks": [
         "open:owner-weight"
       ]
@@ -2001,8 +2158,8 @@
       "id": "G01",
       "section": "\u00a79",
       "title": "Repository structure adapted: scripts/model/dvp.py, config/dvp, arbit_model.dvp, tests, docs, artifacts",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "cli:commands",
         "deliverable:5"
@@ -2012,8 +2169,8 @@
       "id": "G02",
       "section": "\u00a79",
       "title": "CLI contracts: audit, reproduce-v0, reliability, backtest x3, report; pytest",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "cli:commands",
         "rerun:steps"
@@ -2023,8 +2180,8 @@
       "id": "G03",
       "section": "\u00a79",
       "title": "The holdout requires a frozen, verified manifest; it refuses elsewhere",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:holdout-refused-here",
         "test:T18",
@@ -2035,8 +2192,8 @@
       "id": "G04",
       "section": "\u00a79",
       "title": "Verify-only mode",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "verify:passed",
         "rerun:verify"
@@ -2046,8 +2203,8 @@
       "id": "G05",
       "section": "\u00a79",
       "title": "Atomic writes and idempotent reruns",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:forecasts-development",
         "rerun:forecasts-validation",
@@ -2058,19 +2215,20 @@
     {
       "id": "G06",
       "section": "\u00a79",
-      "title": "Dry-run and resume modes: not built (stages are separate commands of 1-75 s)",
-      "kind": "open",
-      "status": "OPEN",
+      "title": "Dry-run, verify-only and resume modes where appropriate: verify-only commands; resumable long runs; idempotent reruns on scratch copies serve as dry runs",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
-        "open:modes"
+        "open:modes",
+        "g06:modes"
       ]
     },
     {
       "id": "F01",
       "section": "\u00a710",
       "title": "Explicit config with the specification's keys",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "config:spec-keys"
       ]
@@ -2079,8 +2237,8 @@
       "id": "F02",
       "section": "\u00a710",
       "title": "Every experiment record carries the \u00a710 fields",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:complete"
       ]
@@ -2089,8 +2247,8 @@
       "id": "F03",
       "section": "\u00a710",
       "title": "Assertions fail if an external projected-point dependency is detected",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T40",
         "receipts:no-projection"
@@ -2100,8 +2258,8 @@
       "id": "O01",
       "section": "\u00a711",
       "title": "Deliverable 1",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:1"
       ]
@@ -2110,8 +2268,8 @@
       "id": "O02",
       "section": "\u00a711",
       "title": "Deliverable 2",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:2"
       ]
@@ -2120,8 +2278,8 @@
       "id": "O03",
       "section": "\u00a711",
       "title": "Deliverable 3",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:3"
       ]
@@ -2130,8 +2288,8 @@
       "id": "O04",
       "section": "\u00a711",
       "title": "Deliverable 4",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:4"
       ]
@@ -2140,8 +2298,8 @@
       "id": "O05",
       "section": "\u00a711",
       "title": "Deliverable 5",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:5"
       ]
@@ -2150,8 +2308,8 @@
       "id": "O06",
       "section": "\u00a711",
       "title": "Deliverable 6",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:6"
       ]
@@ -2160,8 +2318,8 @@
       "id": "O07",
       "section": "\u00a711",
       "title": "Deliverable 7",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:7"
       ]
@@ -2170,8 +2328,8 @@
       "id": "O08",
       "section": "\u00a711",
       "title": "Deliverable 8",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:8"
       ]
@@ -2180,8 +2338,8 @@
       "id": "O09",
       "section": "\u00a711",
       "title": "Deliverable 9",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:9"
       ]
@@ -2190,8 +2348,8 @@
       "id": "O10",
       "section": "\u00a711",
       "title": "Deliverable 10",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:10"
       ]
@@ -2200,8 +2358,8 @@
       "id": "O11",
       "section": "\u00a711",
       "title": "Deliverable 11",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:11"
       ]
@@ -2210,8 +2368,8 @@
       "id": "O10F",
       "section": "\u00a711",
       "title": "FORECASTS.parquet per stage, hashed in its receipt (git-ignored artifacts)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "deliverable:forecasts"
       ]
@@ -2220,8 +2378,8 @@
       "id": "Z01",
       "section": "\u00a711",
       "title": "Before completion: whole relevant suite including T29-T40",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:dvp-all",
         "test:model-suite"
@@ -2231,8 +2389,8 @@
       "id": "Z02",
       "section": "\u00a711",
       "title": "Before completion: original M3-3 artifacts unchanged",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:bytes",
         "verify:passed"
@@ -2242,8 +2400,8 @@
       "id": "Z03",
       "section": "\u00a711",
       "title": "Before completion: reproduce from the pinned configuration",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "rerun:steps",
         "rerun:report-files",
@@ -2255,8 +2413,8 @@
       "id": "Z04",
       "section": "\u00a711",
       "title": "Before completion: inspect an independently generated sample for sign, units and joins",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "verify:sample",
         "verify:passed"
@@ -2266,8 +2424,8 @@
       "id": "Z05",
       "section": "\u00a711",
       "title": "Before completion: per-position conclusion table with the specified columns",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions"
       ]
@@ -2276,8 +2434,8 @@
       "id": "Z06",
       "section": "\u00a711",
       "title": "Before completion: report provenance, finality, zero projections and holdout status",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions",
         "provenance:passed",
@@ -2289,8 +2447,8 @@
       "id": "L01",
       "section": "\u00a712",
       "title": "v0 discovered and preserved",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:bytes",
         "test:T29"
@@ -2300,8 +2458,8 @@
       "id": "L02",
       "section": "\u00a712",
       "title": "Inputs canonical, completed, point-in-time, projection-free",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "provenance:passed",
         "finality:recorded",
@@ -2312,8 +2470,8 @@
       "id": "L03",
       "section": "\u00a712",
       "title": "v0 reproducible",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "v0:reproduced",
         "rerun:v0"
@@ -2323,8 +2481,8 @@
       "id": "L04",
       "section": "\u00a712",
       "title": "Reliability and uncertainty estimated; forward test run even where the signal is weak",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "reliability:a05",
         "backtest:variants"
@@ -2334,8 +2492,8 @@
       "id": "L05",
       "section": "\u00a712",
       "title": "Forward comparison decides per position: production effect 0 where not useful",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:decisions",
         "open:owner-weight"
@@ -2345,8 +2503,8 @@
       "id": "L06",
       "section": "\u00a712",
       "title": "Robust to eras, perturbations, coverage, leakage: PROMISING at team-position level (D/ST)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:A10",
         "test:T28",
@@ -2358,8 +2516,8 @@
       "id": "L07",
       "section": "\u00a712",
       "title": "Player-level A/B improves start/sit: recommend controlled integration after approval",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "phasec:decision",
         "open:owner-weight"
@@ -2369,8 +2527,8 @@
       "id": "L08",
       "section": "\u00a712",
       "title": "2025 status labeled accurately (CONDITIONALLY_HELD_OUT)",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:holdout-status"
       ]
@@ -2379,8 +2537,8 @@
       "id": "W01",
       "section": "\u00a713",
       "title": "32 teams x 10 seasons are not 320 independent units: clustered intervals",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T13",
         "v0:validated"
@@ -2390,8 +2548,8 @@
       "id": "W02",
       "section": "\u00a713",
       "title": "v0 used 2025: never called untouched; no 2025-derived parameters",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "backtest:holdout-status",
         "test:T18"
@@ -2401,8 +2559,8 @@
       "id": "W03",
       "section": "\u00a713",
       "title": "v0's same-season adjustment is retrospective only; backtests are point-in-time",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T17",
         "registry:B02"
@@ -2412,8 +2570,8 @@
       "id": "W04",
       "section": "\u00a713",
       "title": "Only actuals available by each cutoff inform forecasts; labels separate",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T36",
         "test:T15"
@@ -2423,8 +2581,8 @@
       "id": "W05",
       "section": "\u00a713",
       "title": "Odd/even can hide midseason change: chronological tests added",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "test:T23",
         "registry:A06"
@@ -2434,8 +2592,8 @@
       "id": "W06",
       "section": "\u00a713",
       "title": "w(8) is within-DvP shrinkage, not a model weight",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions"
       ]
@@ -2444,8 +2602,8 @@
       "id": "W07",
       "section": "\u00a713",
       "title": "Group totals measure matchup context, not a player's share",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "registry:C01"
       ]
@@ -2454,8 +2612,8 @@
       "id": "W08",
       "section": "\u00a713",
       "title": "A null group result does not exclude player-level signals; repeatability is not usefulness",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "docs:conclusions",
         "registry:A05",
@@ -2466,8 +2624,8 @@
       "id": "W09",
       "section": "\u00a713",
       "title": "Each position evaluated independently; no WR k reused for other groups",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "reliability:a05",
         "backtest:dev-folds"
@@ -2477,8 +2635,8 @@
       "id": "W10",
       "section": "\u00a713",
       "title": "Source availability through 2025 verified; canonical data take precedence",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "audit:seasons",
         "finality:recorded"
@@ -2488,8 +2646,8 @@
       "id": "W11",
       "section": "\u00a713",
       "title": "Stat corrections: final revisions only, limitation reported",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "finality:recorded",
         "registry:A12"
@@ -2499,8 +2657,8 @@
       "id": "W12",
       "section": "\u00a713",
       "title": "No production merge from correlations; only confirmatory incremental value",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "open:owner-weight",
         "docs:status-vocabulary"
@@ -2510,8 +2668,8 @@
       "id": "PB0",
       "section": "Phase B",
       "title": "B0: 2026 is FFA's inaugural season, recorded everywhere required",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "owner:inaugural-season"
       ]
@@ -2520,8 +2678,8 @@
       "id": "PB3",
       "section": "Phase B",
       "title": "B1-B3: verified ESPN capability inventory and 2026 coverage matrix, reusing the existing integration",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "ffa2026:inventory",
         "ffa2026:live-verification"
@@ -2531,8 +2689,8 @@
       "id": "PB4",
       "section": "Phase B",
       "title": "B4: lineups, statistics and transactions validated",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "ffa2026:validation"
       ]
@@ -2541,8 +2699,8 @@
       "id": "PB5",
       "section": "Phase B",
       "title": "B5: 2026 ownership and availability reconstructed and verified, never from current ownership",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "ffa2026:ownership-replay"
       ]
@@ -2551,14 +2709,504 @@
       "id": "PB7",
       "section": "Phase B",
       "title": "B7: deliverables: inventory, coverage, classifications, retrieval report, results, dispositions, limits",
-      "kind": "done",
-      "status": "DONE",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
       "checks": [
         "ffa2026:deliverables"
+      ]
+    },
+    {
+      "id": "AUD-01",
+      "section": "Final directive",
+      "title": "AUD-01: the 2026 confirmation is truly prospective (remediation 1)",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud01c:gate",
+        "aud01a:evidence",
+        "dec:frozen-unchanged"
+      ]
+    },
+    {
+      "id": "AUD-01a",
+      "section": "Final directive",
+      "title": "AUD-01a: external archival evidence, published and verified before each cutoff",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud01a:evidence"
+      ]
+    },
+    {
+      "id": "AUD-01b",
+      "section": "Final directive",
+      "title": "AUD-01b: data readiness established per game with stated causes",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud01b:readiness"
+      ]
+    },
+    {
+      "id": "AUD-01c",
+      "section": "Final directive",
+      "title": "AUD-01c: the completion gate never confirms an incomplete window",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud01c:gate"
+      ]
+    },
+    {
+      "id": "AUD-01d",
+      "section": "Final directive",
+      "title": "AUD-01d: archival transactions recover without regeneration",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud01d:archive"
+      ]
+    },
+    {
+      "id": "AUD-02",
+      "section": "Final directive",
+      "title": "AUD-02: opportunity volume and efficiency (exploratory v3) reproduce",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "rerun:explore-v3"
+      ]
+    },
+    {
+      "id": "AUD-03",
+      "section": "Final directive",
+      "title": "AUD-03: rolling windows and split-half k (exploratory v2) reproduce",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "rerun:explore-v2"
+      ]
+    },
+    {
+      "id": "AUD-04",
+      "section": "Final directive",
+      "title": "AUD-04: row contract and provenance enforced wherever observations are used",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "provenance:passed",
+        "code:no-projection"
+      ]
+    },
+    {
+      "id": "AUD-05",
+      "section": "Final directive",
+      "title": "AUD-05: decoupled historical stages reproduce v1 on valid rows",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "rerun:explore-v2"
+      ]
+    },
+    {
+      "id": "AUD-06",
+      "section": "Final directive",
+      "title": "AUD-06: the simulation suite executed, reproducible from its raw results and seeds",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud06:acceptance",
+        "rerun:simulation-sample",
+        "rerun:simulation-summary"
+      ]
+    },
+    {
+      "id": "AUD-07",
+      "section": "Final directive",
+      "title": "AUD-07: threshold derivation qualified; sensitivity reproduces; thresholds frozen",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud07:frozen-thresholds",
+        "rerun:thresholds"
+      ]
+    },
+    {
+      "id": "PB-AUD-01",
+      "section": "Final directive",
+      "title": "PB-AUD-01: live content-level reconciliation",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb01:content"
+      ]
+    },
+    {
+      "id": "PB-AUD-02",
+      "section": "Final directive",
+      "title": "PB-AUD-02: fail-closed ownership replay verified at every snapshot",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb02:fail-closed"
+      ]
+    },
+    {
+      "id": "PB-AUD-03",
+      "section": "Final directive",
+      "title": "PB-AUD-03: availability reconstruction validated against observed states",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb03:availability"
+      ]
+    },
+    {
+      "id": "PB-AUD-04",
+      "section": "Final directive",
+      "title": "PB-AUD-04: all-week bootstrap blocks",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb04:all-weeks"
+      ]
+    },
+    {
+      "id": "PB-AUD-05",
+      "section": "Final directive",
+      "title": "PB-AUD-05: streaming feasibility and collisions reported",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb05:feasibility"
+      ]
+    },
+    {
+      "id": "PB-AUD-06",
+      "section": "Final directive",
+      "title": "PB-AUD-06: exact eligible decision sets; comparable manager decisions",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb06:eligible-options"
+      ]
+    },
+    {
+      "id": "PB-AUD-07",
+      "section": "Final directive",
+      "title": "PB-AUD-07: observed availability captured at decision time",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb07:capture"
+      ]
+    },
+    {
+      "id": "PB-AUD-08",
+      "section": "Final directive",
+      "title": "PB-AUD-08: immutable league inputs; the corrected evaluation reruns from them",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb08:pinned",
+        "rerun:league-v2"
+      ]
+    },
+    {
+      "id": "PB-B1B2",
+      "section": "Phase B",
+      "title": "B1-B2: eligible ESPN league data used through the existing integration, no projections",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb01:content",
+        "code:no-projection"
+      ]
+    },
+    {
+      "id": "PB-B6",
+      "section": "Phase B",
+      "title": "B6: C05L split; the corrected exploratory evaluation reproduces",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "rerun:league-v2",
+        "owner:inaugural-season"
+      ]
+    },
+    {
+      "id": "PB-B8",
+      "section": "Phase B",
+      "title": "B8: no projections, production writes, weight changes or league changes",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "code:no-projection",
+        "elig:registry",
+        "receipts:no-projection"
+      ]
+    },
+    {
+      "id": "P4P-INFRA",
+      "section": "\u00a79",
+      "title": "Prospective collection infrastructure operational: timer, gate, archive, evidence",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "timer:operational",
+        "timer:retires",
+        "aud01a:evidence",
+        "aud01c:gate",
+        "aud01d:archive"
+      ]
+    },
+    {
+      "id": "C05L-2026-PRO-INFRA",
+      "section": "\u00a75 Phase C",
+      "title": "C05L-2026-PRO collection: decision-time league captures with observed availability",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb07:capture"
+      ]
+    },
+    {
+      "id": "DEC-01",
+      "section": "Owner decisions",
+      "title": "DEC-01: inaugural season; pre-2026 league evaluation not applicable",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "owner:inaugural-season"
+      ]
+    },
+    {
+      "id": "DEC-02",
+      "section": "Owner decisions",
+      "title": "DEC-02: the research timer installed, safeguarded and bounded",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "timer:operational",
+        "timer:retires"
+      ]
+    },
+    {
+      "id": "DEC-03",
+      "section": "Owner decisions",
+      "title": "DEC-03: frozen methods, candidates, thresholds and window preserved",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "dec:frozen-unchanged",
+        "aud07:frozen-thresholds"
+      ]
+    },
+    {
+      "id": "DEC-04",
+      "section": "Owner decisions",
+      "title": "DEC-04: exact research inputs preserved; versioning deferred",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb08:pinned"
+      ]
+    },
+    {
+      "id": "DEC-05",
+      "section": "Owner decisions",
+      "title": "DEC-05: unsupported ownership changes refused",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb02:fail-closed"
+      ]
+    },
+    {
+      "id": "DEC-06",
+      "section": "Owner decisions",
+      "title": "DEC-06: realistic decision sets; unowned never assumed claimable",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "pb03:availability",
+        "pb06:eligible-options"
+      ]
+    },
+    {
+      "id": "DEC-07",
+      "section": "Owner decisions",
+      "title": "DEC-07: B06 kept as the promising historical candidate; no production influence",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "elig:registry"
+      ]
+    },
+    {
+      "id": "DEC-08",
+      "section": "Owner decisions",
+      "title": "DEC-08: AUD-06 and AUD-07 implemented and executed",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "aud06:acceptance",
+        "rerun:thresholds"
+      ]
+    },
+    {
+      "id": "DEC-09",
+      "section": "Owner decisions",
+      "title": "DEC-09: remediation 7 and eligibility metadata complete",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "elig:registry",
+        "findings:reconciled"
+      ]
+    },
+    {
+      "id": "DEC-10",
+      "section": "Owner decisions",
+      "title": "DEC-10: scope controlled; leads recorded, not expanded",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "elig:registry"
+      ]
+    },
+    {
+      "id": "ELIG",
+      "section": "\u00a711 eligibility",
+      "title": "Research eligibility registry with fail-closed production gate",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "elig:registry"
+      ]
+    },
+    {
+      "id": "FINDINGS",
+      "section": "\u00a73 reconciliation",
+      "title": "Every external finding independently reconciled and closed",
+      "kind": "complete",
+      "status": "COMPLETE_VERIFIED",
+      "checks": [
+        "findings:reconciled"
       ]
     }
   ],
   "checks": {
+    "aud01a:evidence": {
+      "id": "aud01a:evidence",
+      "description": "Every prospective archive is intact and has a verified external commitment before its cutoff",
+      "passed": true,
+      "observed": {
+        "verify": {
+          "entries": 1,
+          "problems": [],
+          "withoutPreCutoffCommitment": []
+        },
+        "prospectiveWeeks": [
+          12
+        ],
+        "withoutBranchCommitment": []
+      }
+    },
+    "aud01b:readiness": {
+      "id": "aud01b:readiness",
+      "description": "Per-game readiness: week 12's archived inputs are ready at its forecast time; a game missing cells blocks",
+      "passed": true,
+      "observed": {
+        "week12Ready": true,
+        "states": {
+          "ELIGIBLE_VERIFIED": 162,
+          "RETRIEVED_INVALID": 1
+        },
+        "brokenBlocking": [
+          "DATA_INTEGRITY_FAILURE"
+        ]
+      }
+    },
+    "aud01c:gate": {
+      "id": "aud01c:gate",
+      "description": "The completion gate: first-game-only, unfinished games, missing labels, a missed week, a retrospective for a missed week, timing and integrity failures and subsets never confirm",
+      "passed": true,
+      "observed": {
+        "complete window": true,
+        "first game only": true,
+        "labels missing": true,
+        "missed week": true,
+        "retrospective for missed": true,
+        "commitment after cutoff": true,
+        "integrity failure": true,
+        "subset": true
+      }
+    },
+    "aud01d:archive": {
+      "id": "aud01d:archive",
+      "description": "Archive transaction: crashes at each step are recovered without regeneration; a concurrent run is refused",
+      "passed": true,
+      "observed": {
+        "before_rename": true,
+        "after_rename": true,
+        "after the cutoff": true,
+        "concurrent refused": true
+      }
+    },
+    "aud06:acceptance": {
+      "id": "aud06:acceptance",
+      "description": "The simulation suite ran every declared scenario with no failed repetition; acceptance recorded as declared",
+      "passed": true,
+      "observed": {
+        "E2": [
+          "SIM-01",
+          "SIM-02",
+          "SIM-03",
+          "SIM-04",
+          "SIM-05",
+          "SIM-06",
+          "SIM-07",
+          "SIM-08",
+          "SIM-09",
+          "SIM-10",
+          "SIM-11",
+          "SIM-12",
+          "SIM-13a",
+          "SIM-13b",
+          "SIM-14a",
+          "SIM-14b",
+          "SIM-16"
+        ],
+        "failed": 0,
+        "acceptance": [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5",
+          "A6",
+          "A7",
+          "A8"
+        ]
+      }
+    },
+    "aud07:frozen-thresholds": {
+      "id": "aud07:frozen-thresholds",
+      "description": "The 1% grid row reproduces every frozen label; the frozen thresholds are unchanged",
+      "passed": true,
+      "observed": {
+        "grid1Percent": {
+          "DST": "PROMISING",
+          "K": "NOT_USEFUL",
+          "QB": "INCONCLUSIVE",
+          "RB": "NOT_USEFUL",
+          "TE": "NOT_USEFUL",
+          "WR": "NOT_USEFUL"
+        },
+        "derivationPp": 1.82
+      }
+    },
     "audit:cells": {
       "id": "audit:cells",
       "description": "Cell status: every group's cells are valid or carry an explicit invalid status",
@@ -2815,18 +3463,8 @@
             "TE",
             "WR"
           ],
-          "variants": 23,
-          "families": [
-            "b00",
-            "b01",
-            "b02",
-            "b03",
-            "b04",
-            "b05",
-            "b06",
-            "b07",
-            "b09"
-          ]
+          "variantsPerGroup": 23,
+          "missing": {}
         },
         "validation": {
           "groups": [
@@ -2837,18 +3475,8 @@
             "TE",
             "WR"
           ],
-          "variants": 23,
-          "families": [
-            "b00",
-            "b01",
-            "b02",
-            "b03",
-            "b04",
-            "b05",
-            "b06",
-            "b07",
-            "b09"
-          ]
+          "variantsPerGroup": 23,
+          "missing": {}
         },
         "holdout": {
           "groups": [
@@ -2859,18 +3487,8 @@
             "TE",
             "WR"
           ],
-          "variants": 23,
-          "families": [
-            "b00",
-            "b01",
-            "b02",
-            "b03",
-            "b04",
-            "b05",
-            "b06",
-            "b07",
-            "b09"
-          ]
+          "variantsPerGroup": 23,
+          "missing": {}
         }
       }
     },
@@ -2889,6 +3507,15 @@
         "sitstart",
         "verify"
       ]
+    },
+    "code:no-projection": {
+      "id": "code:no-projection",
+      "description": "No file in the DvP code scan imports a provider projection or a provider-league reader",
+      "passed": true,
+      "observed": {
+        "files": 40,
+        "findings": []
+      }
     },
     "config:no-production": {
       "id": "config:no-production",
@@ -2910,6 +3537,16 @@
         "seasons": true,
         "experimentMethods": true,
         "lineagePolicy": true
+      }
+    },
+    "dec:frozen-unchanged": {
+      "id": "dec:frozen-unchanged",
+      "description": "The frozen methods verify by hash, the original prospective declaration is unchanged, and the week-12 archive matches its ledger (DEC-03)",
+      "passed": true,
+      "observed": {
+        "frozenFilesVerified": 22,
+        "originalDeclarationUnchanged": true,
+        "week12ArchiveIntact": true
       }
     },
     "deliverable:1": {
@@ -3058,6 +3695,19 @@
         "modelCard": "Not eligible yet"
       }
     },
+    "elig:registry": {
+      "id": "elig:registry",
+      "description": "The research eligibility registry loads, classifies as directed, makes nothing production-eligible, and the gate refuses DvP features in production",
+      "passed": true,
+      "observed": {
+        "entries": 10,
+        "refusedInProduction": [
+          "b06",
+          "opp_dvp_RB_adj_shrunk",
+          "dvp_unregistered"
+        ]
+      }
+    },
     "ffa2026:deliverables": {
       "id": "ffa2026:deliverables",
       "description": "Phase B documents and receipts exist",
@@ -3152,6 +3802,16 @@
         "rule": "statistics: 12:00 UTC the day after the game day (retrospective; final revisions only)"
       }
     },
+    "findings:reconciled": {
+      "id": "findings:reconciled",
+      "description": "Every external finding has a disposition, reasoning, remediation and evidence, and is closed",
+      "passed": true,
+      "observed": {
+        "findings": 15,
+        "open": [],
+        "incomplete": []
+      }
+    },
     "frozen:commit-matches": {
       "id": "frozen:commit-matches",
       "description": "The frozen commit's files match every hash in config/dvp/frozen.json (verify)",
@@ -3167,6 +3827,19 @@
         ]
       }
     },
+    "g06:modes": {
+      "id": "g06:modes",
+      "description": "Modes where appropriate: verify-only commands exist; long runs resume without repeating work",
+      "passed": true,
+      "observed": {
+        "simulationJobsFirstRun": [
+          40
+        ],
+        "simulationJobsRerun": [
+          0
+        ]
+      }
+    },
     "league2026:exploratory": {
       "id": "league2026:exploratory",
       "description": "C05L-2026-EXP ran under the rule committed before it, as EXPLORATORY",
@@ -3178,24 +3851,54 @@
         "streamDecisions": 88
       }
     },
+    "na:c03-dst-only": {
+      "id": "na:c03-dst-only",
+      "description": "Evidence for C03 not applicable: Phase C ran for D/ST only, the one group past Phase B",
+      "passed": true,
+      "observed": {
+        "phaseCPosition": "DST",
+        "groupsPastPhaseB": [
+          "DST"
+        ]
+      }
+    },
     "open:modes": {
       "id": "open:modes",
       "description": "NOT BUILT: dry-run and resume modes (the specification asks for them only 'when appropriate')",
       "passed": true,
       "observed": {
         "stageSeconds": {
-          "audit": 1.6,
-          "reproduce-v0": 6.9,
-          "reliability": 73.9,
-          "backtest-development": 25.9,
-          "backtest-validation": 6.7,
-          "backtest-holdout-frozen-tree": 5.8,
+          "audit": 1.7,
+          "reproduce-v0": 7.0,
+          "reliability": 72.1,
+          "backtest-development": 25.4,
+          "backtest-validation": 6.6,
+          "backtest-holdout-frozen-tree": 4.1,
           "backtest-holdout-refused-here": 0.5,
-          "sitstart": 0.8,
-          "verify": 10.2,
+          "sitstart": 0.7,
+          "verify": 10.1,
           "report": 0.5,
-          "registry": 0.5,
-          "model-tests": 13.5
+          "registry": 0.6,
+          "model-tests": 14.5,
+          "explore-v2-development": 5.0,
+          "explore-v2-validation": 2.1,
+          "explore-v2-holdout": 2.0,
+          "explore-v2-evaluate": 11.4,
+          "explore-v3-opportunity": 25.0,
+          "explore-v3-development": 6.0,
+          "explore-v3-validation": 2.2,
+          "explore-v3-holdout": 2.2,
+          "explore-v3-evaluate": 13.2,
+          "league-2026-v2": 2.5,
+          "thresholds": 4.0,
+          "simulation-sample-E1": 11.8,
+          "simulation-sample-E2": 40.4,
+          "simulation-sample-E3": 1.5,
+          "simulation-sample-U": 2.5,
+          "sim-resume": 0.5,
+          "simulation-summary": 1.2,
+          "prospective-verify": 0.5,
+          "ffa-content-live": 50.2
         }
       }
     },
@@ -3214,7 +3917,7 @@
       "observed": {
         "firstKickoff": "2026-11-26T01:00:00+00:00",
         "frozenBeforeIt": true,
-        "auditedAt": "2026-11-25T02:35:55.671516+00:00"
+        "auditedAt": "2026-11-25T09:39:12.551762+00:00"
       }
     },
     "owner:inaugural-season": {
@@ -3223,6 +3926,110 @@
       "passed": true,
       "observed": {
         "OWN-076": true
+      }
+    },
+    "pb01:content": {
+      "id": "pb01:content",
+      "description": "Live content re-read: every stored transaction content-equal and located; lineups equal in their historical fields",
+      "passed": true,
+      "observed": {
+        "contentEqual": 536,
+        "storedNotLive": 0,
+        "liveNotStored (new source records)": 0,
+        "lineupsWithHistoricalDifferences": []
+      }
+    },
+    "pb02:fail-closed": {
+      "id": "pb02:fail-closed",
+      "description": "The ownership replay refuses an executed trade and a waiver without a processing time, and equals every archived snapshot",
+      "passed": true,
+      "observed": {
+        "refused": [
+          "TRADE_ACCEPT",
+          "WAIVER"
+        ],
+        "snapshotsAgree": 1522,
+        "disagree": 0
+      }
+    },
+    "pb03:availability": {
+      "id": "pb03:availability",
+      "description": "Rule v2 passed its predeclared holdout test; cutoff classes are VERIFIED or RECONSTRUCTED",
+      "passed": true,
+      "observed": {
+        "holdout": {
+          "agreement": 0.9932,
+          "falseClaimableRate": 0.0068
+        },
+        "classes": {
+          "1": "RECONSTRUCTED",
+          "10": "RECONSTRUCTED",
+          "11": "RECONSTRUCTED",
+          "2": "RECONSTRUCTED",
+          "3": "RECONSTRUCTED",
+          "4": "RECONSTRUCTED",
+          "5": "RECONSTRUCTED",
+          "6": "RECONSTRUCTED",
+          "7": "RECONSTRUCTED",
+          "8": "RECONSTRUCTED",
+          "9": "VERIFIED"
+        }
+      }
+    },
+    "pb04:all-weeks": {
+      "id": "pb04:all-weeks",
+      "description": "The league bootstrap resamples every evaluated week, zero-change weeks included",
+      "passed": true,
+      "observed": {
+        "bad": {},
+        "startZeroChangeWeeks": [
+          7,
+          8
+        ]
+      }
+    },
+    "pb05:feasibility": {
+      "id": "pb05:feasibility",
+      "description": "Streaming recommendations carry feasibility classes and collisions for every decision",
+      "passed": true,
+      "observed": {
+        "streamClaimable/b00": 88,
+        "streamClaimable/b06": 88,
+        "streamWithWaivers/b00": 88,
+        "streamWithWaivers/b06": 88,
+        "unownedPool/b00": 88,
+        "unownedPool/b06": 88
+      }
+    },
+    "pb06:eligible-options": {
+      "id": "pb06:eligible-options",
+      "description": "Every option of a claimable decision was held or a free agent at the cutoff; managers split into comparable and different-time sets",
+      "passed": true,
+      "observed": {
+        "ineligibleOptions": [],
+        "managersSplit": 28
+      }
+    },
+    "pb07:capture": {
+      "id": "pb07:capture",
+      "description": "Decision-time league captures: chained, ESPN's observed availability for all 32 D/STs and every team; week 12's supplement recorded",
+      "passed": true,
+      "observed": {
+        "captures": 1,
+        "problems": [],
+        "supplements": [
+          "supplements/week-12-availability-v1.json"
+        ]
+      }
+    },
+    "pb08:pinned": {
+      "id": "pb08:pinned",
+      "description": "The pinned league bundle matches its committed manifest file by file; the corrected run read no live database",
+      "passed": true,
+      "observed": {
+        "files": 9,
+        "mismatched": [],
+        "liveDatabaseRead": false
       }
     },
     "phasec:decision": {
@@ -3343,7 +4150,7 @@
         "forbiddenInventory": 7,
         "codeScanFiles": {
           "committed": 19,
-          "rerun": 30
+          "rerun": 40
         },
         "unlistedFamilies": []
       }
@@ -3360,6 +4167,7 @@
           "backtest-validation.json": 0,
           "explore-v2.json": 0,
           "explore-v3.json": 0,
+          "league-2026-exploratory-v2.json": 0,
           "league-2026-exploratory.json": 0,
           "reliability-results.json": 0,
           "sitstart.json": 0
@@ -3854,6 +4662,26 @@
         "unexpected": []
       }
     },
+    "rerun:explore-v2": {
+      "id": "rerun:explore-v2",
+      "description": "Exploratory v2 rerun from scratch equals its committed receipt",
+      "passed": true,
+      "observed": {
+        "differ": 95,
+        "added": 91,
+        "unexpected": []
+      }
+    },
+    "rerun:explore-v3": {
+      "id": "rerun:explore-v3",
+      "description": "Exploratory v3 (opportunity) rerun equals its committed receipt",
+      "passed": true,
+      "observed": {
+        "differ": 4,
+        "added": 0,
+        "unexpected": []
+      }
+    },
     "rerun:finality-audit": {
       "id": "rerun:finality-audit",
       "description": "A fresh rerun reproduces SCORE_FINALITY_AUDIT.json; only ['/generatedAt', '/runId'] may differ",
@@ -3883,7 +4711,7 @@
         "comparable": true,
         "rows": 3256,
         "nonFloatOrMissingDifferences": [],
-        "floatValuesDiffering": 32,
+        "floatValuesDiffering": 18,
         "maxAbsDifference": 7.105427357601002e-15
       }
     },
@@ -3927,6 +4755,16 @@
         "receiptUntouched": true
       }
     },
+    "rerun:league-v2": {
+      "id": "rerun:league-v2",
+      "description": "The corrected C05L-2026-EXP v2, rerun from the pinned league inputs, equals its receipt",
+      "passed": true,
+      "observed": {
+        "differ": 2,
+        "added": 0,
+        "unexpected": []
+      }
+    },
     "rerun:observations": {
       "id": "rerun:observations",
       "description": "The rerun audit rebuilds the same observation table",
@@ -3934,7 +4772,7 @@
       "observed": {
         "rows": 31668,
         "columns": 19,
-        "newRun": "phase1-audit-20261125T023120Z"
+        "newRun": "phase1-audit-20261125T093338Z"
       }
     },
     "rerun:projection-audit": {
@@ -3944,18 +4782,28 @@
       "observed": {
         "differingFields": [
           "/code",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/archive.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/contract.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/decisions.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/evidence.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/explore.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/league.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/opportunity.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/shadow.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/simulate.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+          "/codeScan/files/libs/arbit-model/src/arbit_model/dvp/window.py",
           "/codeScan/files/libs/arbit-model/src/arbit_model/ffa_history.py",
           "/codeScan/files/scripts/model/dvp.py",
           "/codeScan/files/scripts/model/dvp_explore.py",
           "/codeScan/files/scripts/model/dvp_league_2026.py",
+          "/codeScan/files/scripts/model/dvp_league_2026_v2.py",
+          "/codeScan/files/scripts/model/dvp_plan_audit_directive.py",
           "/codeScan/files/scripts/model/dvp_prospective.py",
+          "/codeScan/files/scripts/model/dvp_simulate.py",
+          "/codeScan/files/scripts/model/dvp_simulate_summary.py",
+          "/codeScan/files/scripts/model/dvp_thresholds.py",
+          "/codeScan/files/scripts/model/ffa_2026_pin.py",
           "/generatedAt",
           "/runId"
         ],
@@ -4001,6 +4849,26 @@
         "differ": []
       }
     },
+    "rerun:simulation-sample": {
+      "id": "rerun:simulation-sample",
+      "description": "A deterministic sample of every AUD-06 experiment and scenario reruns identically",
+      "passed": true,
+      "observed": {
+        "compared": 274,
+        "mismatched": 0,
+        "examples": []
+      }
+    },
+    "rerun:simulation-summary": {
+      "id": "rerun:simulation-summary",
+      "description": "The AUD-06 receipt regenerated from the raw results equals the committed receipt",
+      "passed": true,
+      "observed": {
+        "differ": 2,
+        "added": 0,
+        "unexpected": []
+      }
+    },
     "rerun:sitstart": {
       "id": "rerun:sitstart",
       "description": "A fresh rerun reproduces sitstart.json; only ['/code', '/generatedAt'] may differ",
@@ -4021,32 +4889,32 @@
         "audit": [
           0,
           0,
-          1.6
+          1.7
         ],
         "reproduce-v0": [
           0,
           0,
-          6.9
+          7.0
         ],
         "reliability": [
           0,
           0,
-          73.9
+          72.1
         ],
         "backtest-development": [
           0,
           0,
-          25.9
+          25.4
         ],
         "backtest-validation": [
           0,
           0,
-          6.7
+          6.6
         ],
         "backtest-holdout-frozen-tree": [
           0,
           0,
-          5.8
+          4.1
         ],
         "backtest-holdout-refused-here": [
           1,
@@ -4056,12 +4924,12 @@
         "sitstart": [
           0,
           0,
-          0.8
+          0.7
         ],
         "verify": [
           0,
           0,
-          10.2
+          10.1
         ],
         "report": [
           0,
@@ -4071,13 +4939,118 @@
         "registry": [
           0,
           0,
-          0.5
+          0.6
         ],
         "model-tests": [
           0,
           0,
-          13.5
+          14.5
+        ],
+        "explore-v2-development": [
+          0,
+          0,
+          5.0
+        ],
+        "explore-v2-validation": [
+          0,
+          0,
+          2.1
+        ],
+        "explore-v2-holdout": [
+          0,
+          0,
+          2.0
+        ],
+        "explore-v2-evaluate": [
+          0,
+          0,
+          11.4
+        ],
+        "explore-v3-opportunity": [
+          0,
+          0,
+          25.0
+        ],
+        "explore-v3-development": [
+          0,
+          0,
+          6.0
+        ],
+        "explore-v3-validation": [
+          0,
+          0,
+          2.2
+        ],
+        "explore-v3-holdout": [
+          0,
+          0,
+          2.2
+        ],
+        "explore-v3-evaluate": [
+          0,
+          0,
+          13.2
+        ],
+        "league-2026-v2": [
+          0,
+          0,
+          2.5
+        ],
+        "thresholds": [
+          0,
+          0,
+          4.0
+        ],
+        "simulation-sample-E1": [
+          0,
+          0,
+          11.8
+        ],
+        "simulation-sample-E2": [
+          0,
+          0,
+          40.4
+        ],
+        "simulation-sample-E3": [
+          0,
+          0,
+          1.5
+        ],
+        "simulation-sample-U": [
+          0,
+          0,
+          2.5
+        ],
+        "sim-resume": [
+          0,
+          0,
+          0.5
+        ],
+        "simulation-summary": [
+          0,
+          0,
+          1.2
+        ],
+        "prospective-verify": [
+          0,
+          0,
+          0.5
+        ],
+        "ffa-content-live": [
+          0,
+          0,
+          50.2
         ]
+      }
+    },
+    "rerun:thresholds": {
+      "id": "rerun:thresholds",
+      "description": "AUD-07's threshold analysis rerun equals its receipt",
+      "passed": true,
+      "observed": {
+        "differ": 2,
+        "added": 0,
+        "unexpected": []
       }
     },
     "rerun:v0": {
@@ -4448,8 +5421,8 @@
       "description": "Every test tagged T26 ran and passed",
       "passed": true,
       "observed": {
-        "tests": 20,
-        "passed": 20,
+        "tests": 24,
+        "passed": 24,
         "names": [
           "test_c01_c02_t26_the_dst_forecast_row_is_the_opposing_unit_share_one",
           "test_t26_an_unmapped_or_mismatched_unit_fails_closed",
@@ -4644,7 +5617,7 @@
       "description": "Every DvP test ran and passed; none skipped (the real-artifact tests ran)",
       "passed": true,
       "observed": {
-        "passed": 147,
+        "passed": 194,
         "failed": 0,
         "skipped": 0
       }
@@ -4654,7 +5627,7 @@
       "description": "The whole model test suite passed with nothing skipped (the audit's own tests run in CI)",
       "passed": true,
       "observed": {
-        "passed": 213,
+        "passed": 272,
         "failed": 0,
         "skipped": 0
       }
@@ -4677,6 +5650,30 @@
         "names": [
           "test_phase4_decision_rule"
         ]
+      }
+    },
+    "timer:operational": {
+      "id": "timer:operational",
+      "description": "The owner-authorized timer is enabled, bounded to the research window, and its last run succeeded within 13 hours",
+      "passed": true,
+      "observed": {
+        "enabled": "enabled",
+        "calendar": [
+          "OnCalendar=2026-11,12-* 00/6:17:00 UTC",
+          "OnCalendar=2027-01-01..15 00/6:17:00 UTC"
+        ],
+        "lastRun": "2026-11-25T06:19:33.089250+00:00",
+        "lastOutcome": "OK"
+      }
+    },
+    "timer:retires": {
+      "id": "timer:retires",
+      "description": "The sweep disables the timer once every week is final and committed (DEC-02), and not before",
+      "passed": true,
+      "observed": {
+        "beforeCommitment": "OPEN",
+        "complete": "COMPLETE",
+        "weekStillOpen": "OPEN"
       }
     },
     "v0:bytes": {
@@ -4768,5 +5765,353 @@
         "validation": 6
       }
     }
-  }
+  },
+  "negativeControls": {
+    "allDetected": true,
+    "controls": [
+      {
+        "control": "missing required estimator variant",
+        "detectedBy": "backtest:variants",
+        "detected": true
+      },
+      {
+        "control": "missing position or stage",
+        "detectedBy": "backtest:variants",
+        "detected": true
+      },
+      {
+        "control": "required experiment not executed",
+        "detectedBy": "registry:complete",
+        "detected": true
+      },
+      {
+        "control": "required test skipped",
+        "detectedBy": "test:T26",
+        "detected": true
+      },
+      {
+        "control": "stale receipt",
+        "detectedBy": "rerun:reliability",
+        "detected": true
+      },
+      {
+        "control": "modified frozen artifact",
+        "detectedBy": "audit:frozen-outputs",
+        "detected": true
+      },
+      {
+        "control": "prohibited provider projection dependency",
+        "detectedBy": "code:no-projection",
+        "detected": true
+      },
+      {
+        "control": "incorrect source lineage",
+        "detectedBy": "audit:observation-lineage",
+        "detected": true
+      },
+      {
+        "control": "incorrect historical ownership",
+        "detectedBy": "pb02:fail-closed",
+        "detected": true
+      },
+      {
+        "control": "incorrect availability classification",
+        "detectedBy": "rerun:league-v2",
+        "detected": true
+      },
+      {
+        "control": "ineligible decision option",
+        "detectedBy": "pb06:eligible-options",
+        "detected": true
+      },
+      {
+        "control": "zero-change weeks omitted from the bootstrap",
+        "detectedBy": "pb04:all-weeks",
+        "detected": true
+      },
+      {
+        "control": "missing normalized league input artifact",
+        "detectedBy": "pb08:pinned",
+        "detected": true
+      },
+      {
+        "control": "incorrect prospective week completion",
+        "detectedBy": "aud01c:gate",
+        "detected": true
+      },
+      {
+        "control": "missed forecast classified as prospective",
+        "detectedBy": "aud01c:gate",
+        "detected": true
+      },
+      {
+        "control": "unsupported ownership-changing transaction",
+        "detectedBy": "pb02:fail-closed",
+        "detected": true
+      },
+      {
+        "control": "blocked requirement without evidence",
+        "detectedBy": "evaluate (evidence rule)",
+        "detected": true
+      },
+      {
+        "control": "research factor marked production-eligible",
+        "detectedBy": "elig:registry",
+        "detected": true
+      }
+    ]
+  },
+  "findingReconciliation": {
+    "AUD-01a": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "AUD-01b": {
+      "disposition": "PARTIALLY_AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "AUD-01c": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "AUD-01d": {
+      "disposition": "PARTIALLY_AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-07": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_PENDING_FUTURE_DATA"
+    },
+    "PB-AUD-01": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-02": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-03": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-04": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-05": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-06": {
+      "disposition": "PARTIALLY_AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-AUD-08": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "PB-RESULTS": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "AUD-06": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    },
+    "AUD-07": {
+      "disposition": "AGREE",
+      "status": "RESOLVED_VERIFIED"
+    }
+  },
+  "dataSnapshots": {
+    "auditRun": "phase1-audit-20261124T024442Z",
+    "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d",
+    "pinnedLeagueInputs": "c354dcca71c8e82fecf6602662d57dd763c835dfcc5fa833b2fd02e866a58c48",
+    "simulationConfig": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+    "prospectiveLedgerHead": "1c9e33aa04070617777be1e6c8cbd92bc1aa46f517ba4d18ec56309a9a5bad4c"
+  },
+  "artifactHashes": {
+    "audit-receipt.json": "d905f30d14582322f5070e8df2560a2481fc7da7346158d6479d8308d2cd05bc",
+    "reliability-results.json": "b55e69e1a419336061870a1c69950b7ee8cff4c4a79b46132af5ea13799d645a",
+    "backtest-development.json": "18e7bceb116401d39a4e0114607c2d1dfdbe82b707f31de0074654ff50564530",
+    "backtest-validation.json": "1131dfafeaf2bfe38af4faef62c1479fc4a2142ee02ee8fb8c86a92cf4e8d855",
+    "backtest-holdout.json": "04751ef7f1fa4165691b6e42a56618c421113903c04930cce1cdaf21737e429a",
+    "sitstart.json": "9740e882e019a1216a97ddd3aea21be0fd2d10b1960144f6836a33aed61700a3",
+    "explore-v2.json": "929f1d2884efa1d333e289d1fb3dc8a274bf1b7155b49d03dd34dac0395a1e1c",
+    "explore-v3.json": "a9970986aca843a25da299a2d58c2f33f7d27932d5966828b75c9363a2aeeef1",
+    "league-2026-exploratory.json": "e93b01ec5c5c2f5160e1f6e50c5806646e726e9ed472bbaa18191b8c9c8bcdf6",
+    "league-2026-exploratory-v2.json": "7616543158e6019b69aa86c658916303a56e6ea607e18e30acb623aa4568fc9e",
+    "simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+    "threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+    "audit-findings.json": "d9e94c5e6dba2d09a30eaa5d276116629b00364bf6b95f71430da8781094a349"
+  },
+  "frozenVerification": {
+    "frozenFilesVerified": 22,
+    "originalDeclarationUnchanged": true,
+    "week12ArchiveIntact": true
+  },
+  "experimentOutcomes": {
+    "phaseB": {
+      "DST": "PROMISING",
+      "K": "NOT_USEFUL",
+      "QB": "INCONCLUSIVE",
+      "RB": "NOT_USEFUL",
+      "TE": "NOT_USEFUL",
+      "WR": "NOT_USEFUL"
+    },
+    "phaseC": {
+      "label": "PROMISING",
+      "practicalMinimumPp": 1.8,
+      "reason": "clears 1.8 pp with net points gained in every period: development +4.45 pp, +27362.5 points, validation +8.55 pp, +7978.0 points, holdout +6.62 pp, +5617.5 points"
+    },
+    "c05l2026ExpV2": {
+      "start": {
+        "decisions": 28,
+        "pointsFromChanges": -6.0,
+        "pointsFromChanges95": [
+          -96.03,
+          74.02
+        ]
+      },
+      "streamClaimable": {
+        "decisions": 88,
+        "pointsFromChanges": 110.0,
+        "pointsFromChanges95": [
+          -202.07,
+          398.02
+        ]
+      },
+      "streamWithWaivers": {
+        "decisions": 88,
+        "pointsFromChanges": 96.0,
+        "pointsFromChanges95": [
+          -214.1,
+          386.0
+        ]
+      },
+      "unownedPool": {
+        "decisions": 88,
+        "pointsFromChanges": 96.0,
+        "pointsFromChanges95": [
+          -214.1,
+          386.0
+        ]
+      }
+    },
+    "aud06Acceptance": {
+      "A1": {
+        "perPosition": {
+          "DST": "PASS",
+          "WR": "PASS"
+        },
+        "phaseBandC": "PASS"
+      },
+      "A2": "PASS",
+      "A3": {
+        "DST": "PASS",
+        "WR": "INCONCLUSIVE"
+      },
+      "A4": {
+        "SIM-03/DST": {
+          "convergence": "PASS",
+          "medianRelativeError": 0.1802,
+          "relativeError": "PASS"
+        },
+        "SIM-03/WR": {
+          "convergence": "PASS",
+          "medianRelativeError": 0.1899,
+          "relativeError": "PASS"
+        },
+        "SIM-04/DST": {
+          "convergence": "PASS",
+          "medianRelativeError": 0.1524,
+          "relativeError": "PASS"
+        },
+        "SIM-04/WR": {
+          "convergence": "PASS",
+          "medianRelativeError": 0.1512,
+          "relativeError": "PASS"
+        }
+      },
+      "A5": {
+        "DST": "PASS",
+        "WR": "PASS"
+      },
+      "A6": {
+        "SIM-01/DST/b09_lastopp": "PASS",
+        "SIM-01/DST/b09_noise": "PASS",
+        "SIM-01/DST/b09_shuffle": "PASS",
+        "SIM-01/WR/b09_lastopp": "PASS",
+        "SIM-01/WR/b09_noise": "PASS",
+        "SIM-01/WR/b09_shuffle": "PASS",
+        "SIM-04/DST/b09_lastopp": "PASS",
+        "SIM-04/DST/b09_noise": "PASS",
+        "SIM-04/DST/b09_shuffle": "PASS",
+        "SIM-04/WR/b09_lastopp": "PASS",
+        "SIM-04/WR/b09_noise": "PASS",
+        "SIM-04/WR/b09_shuffle": "PASS"
+      },
+      "A7": {
+        "independent": "PASS",
+        "season3 (limitation, not a criterion)": 0.734,
+        "season5 (limitation, not a criterion)": 0.865,
+        "season7 (limitation, not a criterion)": 0.904,
+        "sharedGame": "PASS",
+        "temporalAR (limitation, not a criterion)": 0.91,
+        "unequalExposure": "PASS",
+        "weekShock": "PASS",
+        "weekShockRowBlocks (limitation, not a criterion)": 0.958
+      },
+      "A8": {
+        "SIM-17-alt/start/coverage": "FAIL",
+        "SIM-17-alt/stream/coverage": "FAIL",
+        "SIM-17-null/start/coverage": "FAIL",
+        "SIM-17-null/start/falsePositive (declared, two-sided)": "FAIL",
+        "SIM-17-null/start/falsePromotion (supplementary, one-sided)": "PASS",
+        "SIM-17-null/stream/coverage": "FAIL",
+        "SIM-17-null/stream/falsePositive (declared, two-sided)": "FAIL",
+        "SIM-17-null/stream/falsePromotion (supplementary, one-sided)": "PASS",
+        "SIM-18-alt/start/coverage": "FAIL",
+        "SIM-18-alt/stream/coverage": "FAIL",
+        "SIM-18-null/start/coverage": "FAIL",
+        "SIM-18-null/start/falsePositive (declared, two-sided)": "PASS",
+        "SIM-18-null/start/falsePromotion (supplementary, one-sided)": "PASS",
+        "SIM-18-null/stream/coverage": "FAIL",
+        "SIM-18-null/stream/falsePositive (declared, two-sided)": "FAIL",
+        "SIM-18-null/stream/falsePromotion (supplementary, one-sided)": "PASS"
+      }
+    },
+    "aud07": {
+      "accuracyAfter": 56.45,
+      "accuracyBefore": 54.63,
+      "impliedPp": 1.82,
+      "rho": 0.1448,
+      "rhoAfter1Percent": 0.2011
+    },
+    "eligibility": {
+      "M3-3.DST.B06": "PROMISING_HISTORICAL_CANDIDATE",
+      "M3-3.DST.LEAGUE": "INCONCLUSIVE",
+      "M3-3.QB.AGG": "INCONCLUSIVE",
+      "M3-3.RB.AGG": "TESTED_METHODS_UNSUPPORTED",
+      "M3-3.WR.AGG": "TESTED_METHODS_UNSUPPORTED",
+      "M3-3.TE.AGG": "TESTED_METHODS_UNSUPPORTED",
+      "M3-3.K.AGG": "TESTED_METHODS_UNSUPPORTED",
+      "M3-3.K.VOLUME": "EXPLORATORY_FUTURE_LEAD",
+      "M3-3.OPPORTUNITY": "EXPLORATORY",
+      "LEGACY.DVP": "LEGACY_DEFINITION_ONLY"
+    }
+  },
+  "remainingBlockers": [],
+  "pendingFutureData": [
+    "C05L-2026-PRO",
+    "P4P"
+  ],
+  "deferredApprovals": [
+    "P5W"
+  ],
+  "notApplicable": [
+    "C03",
+    "C05L-HIST"
+  ],
+  "overallAssessment": "M3-3 development phase COMPLETE: every achievable requirement is COMPLETE_VERIFIED; what remains is future data (the 2026 weeks 12-18 outcomes), the owner's approval (a D/ST production weight) or not applicable. Not production-ready; independent 2026 confirmation pending."
 }

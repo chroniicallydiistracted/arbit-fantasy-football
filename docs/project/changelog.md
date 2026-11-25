@@ -1,12 +1,26 @@
 # Development Changelog
 
+## 2026-11-25 — M3-3 final directive remediation 7: the comprehensive plan audit (TASK-20261125-003)
+
+- **PR #21 merged** (`5e082cc`).
+- **The audit is extended, not replaced** (`scripts/model/dvp_plan_audit.py` with `dvp_plan_audit_directive.py`):
+  - **Statuses:** the directive's completion statuses, with an evidence rule for any claim short of completion.
+  - **Inventory:** 36 directive requirements (AUD-01..07, AUD-01a–d, PB-AUD-01..08, B1/B2/B6/B8, DEC-01..10, ELIG, FINDINGS), each with a semantic check.
+  - **New reruns:** exploratory v2 and v3; the corrected Phase B evaluation from pinned inputs; thresholds; a deterministic simulation sample, with resume; the simulation summary; prospective verify; and the live content re-read.
+  - **Negative controls:** 18, each detected.
+  - **Receipt:** a fresh one with documents, data snapshots, artifact hashes, outcomes, dispositions and the overall assessment.
+- **Caught by the audit:**
+  - a Phase E docstring in the v0 file `feature_specs.py`, now restored to its v0 bytes;
+  - `backtest:variants` checking only variant families, now every variant for every group.
+- **PB-AUD-08 closed.**
+
 ## 2026-11-25 — M3-3 final directive Phase E: research eligibility registry (TASK-20261125-002)
 
 - **PR #20 merged** (`dd8e1d6`).
 - **The owner registered the evidence deploy key.** Unattended publication was verified from the timer's service context, which closes AUD-01a.
 - **Registry and gate:** `config/model/research-eligibility.json` and `arbit_model.eligibility`, with a fail-closed `check_assembly`. Explained in [RESEARCH_ELIGIBILITY.md](../research/dvp/RESEARCH_ELIGIBILITY.md).
 - **Rules:**
-  - `feature_specs` and `AGENTS.md` now point production assembly at the gate.
+  - `AGENTS.md` points production assembly at the gate. A note added to `feature_specs` was reverted in TASK-20261125-003, because that file must stay byte-identical to v0.
   - No feature is activated, and no legacy constant changes.
 
 ## 2026-11-25 — M3-3 final directive: AUD-06 simulation suite and AUD-07 thresholds (TASK-20261125-001)

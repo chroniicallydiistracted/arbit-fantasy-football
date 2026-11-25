@@ -28,7 +28,6 @@
     "docs/project/decision-register.md",
     "docs/project/status.md",
     "docs/project/changelog.md",
-    "docs/project/roadmap.md",
     "docs/governance/state.json",
     "docs/project/handoffs/2026-11-25-task-20261125-003-governance-handoff.md",
     "libs/arbit-model/src/arbit_model/feature_specs.py"
