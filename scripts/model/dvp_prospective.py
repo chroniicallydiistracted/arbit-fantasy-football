@@ -435,9 +435,12 @@ def league_capture(
             ),
             {"s": snapshot.id},
         ).all()
-        nfl = dict(
-            c.execute(text("select entity_id::text, abbreviation from nfl_team")).tuples().all()
-        )
+        nfl = {
+            str(entity): str(abbreviation)
+            for entity, abbreviation in c.execute(
+                text("select entity_id::text, abbreviation from nfl_team")
+            )
+        }
         drops = c.execute(
             text(
                 "select max(case when t.type = 'WAIVER' then t.processed_at "
@@ -609,13 +612,14 @@ def league_for_evaluation(root: Path, entry: dict[str, Any], folder: Path) -> di
 def export(
     args: argparse.Namespace, season: int, week_folder: str, files: dict[str, bytes], ledger: Path
 ) -> None:
-    """Copy a week's forecasts, manifest and league capture, and the ledger, for committing."""
+    """Copy a week's forecasts and manifest, and the ledger, for committing. The league capture
+    holds per-team rosters, so it stays in the local archive; the manifest carries its hash."""
     target = Path(args.export) / str(season)
     folder = target / week_folder
     if folder.exists():
         raise SystemExit(f"{folder} exists; exported forecasts are never overwritten")
     folder.mkdir(parents=True)
-    for name in ("forecasts.csv", "manifest.json", "league.json"):
+    for name in ("forecasts.csv", "manifest.json"):
         if name in files:
             (folder / name).write_bytes(files[name])
     shutil.copyfile(ledger, target / "ledger.jsonl")
@@ -1127,7 +1131,12 @@ def publish_pending(args: argparse.Namespace, season: int) -> list[dict[str, Any
     root = archive_root(args, season)
     log = root / "publications.jsonl"
     branch = json.loads(AMENDMENT.read_text())["externalEvidence"]["branch"]
-    verified = {p["ledgerEntrySha256"] for p in read_ledger(log) if p.get("verified")}
+    # Every archive gets its evidence-branch commitment, even one with other verified evidence.
+    verified = {
+        p["ledgerEntrySha256"]
+        for p in read_ledger(log)
+        if p.get("verified") and p.get("kind") == "github-branch"
+    }
     remote, slug, env = evidence_settings()
     clone = root.parent / "evidence-clone"
     out = []
@@ -1286,6 +1295,14 @@ def supplement(args: argparse.Namespace) -> None:
             "leagueSha256": entry["files"]["league.json"],
         },
         "rostersEqualOriginal": same,
+        "snapshotAgeAtForecastMinutes": round(
+            (
+                datetime.fromisoformat(entry["generatedAt"])
+                - datetime.fromisoformat(capture["observedAt"])
+            ).total_seconds()
+            / 60,
+            1,
+        ),
         "capture": capture | {"week": args.week, "playingThisWeek": playing},
     }
     data = (json.dumps(record, indent=1, sort_keys=True) + "\n").encode()
@@ -1296,10 +1313,6 @@ def supplement(args: argparse.Namespace) -> None:
             root / "supplements.jsonl",
             {"week": args.week, "file": name, "sha256": digest, "kind": "observed-availability"},
         )
-    if args.export:
-        target = Path(args.export) / str(season) / name
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(data)
     print(json.dumps({"file": name, "sha256": digest, "rostersEqualOriginal": same}))
 
 
@@ -1665,7 +1678,7 @@ def verify(args: argparse.Namespace) -> None:
             exported = Path(args.export) / str(season) / e["folder"] if args.export else None
             if exported is not None and exported.exists():
                 for name in ("forecasts.csv", "manifest.json", "league.json"):
-                    if sha256(exported / name) != e["files"][name]:
+                    if (exported / name).exists() and sha256(exported / name) != e["files"][name]:
                         problems.append(f"export {e['folder']}/{name} differs from the archive")
     # The other append-only logs: hash chains, and each capture or supplement file's bytes.
     for log in ("captures.jsonl", "supplements.jsonl", "publications.jsonl"):
