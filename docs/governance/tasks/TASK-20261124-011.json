@@ -3,7 +3,7 @@
   "id": "TASK-20261124-011",
   "title": "M3-3 final directive Phase B: corrected league-constrained evaluation from pinned inputs",
   "objective": "Resolve PB-AUD-01 to -06 and -08 and verify the Phase B v1 results: content-level live reconciliation, fail-closed ownership replay verified at every snapshot moment, availability reconstruction validated against observed snapshot states, all-week bootstrap, streaming feasibility and collisions, exact decision sets and comparable manager decisions, immutable pinned league inputs; a separately versioned corrected C05L-2026-EXP (v2) declared before it is computed, v1 preserved.",
-  "status": "active",
+  "status": "completed",
   "phase": "handoff",
   "change_class": "model",
   "requirements": [
@@ -39,7 +39,7 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T04:03:58Z",
-  "updated_at": "2026-11-25T04:20:52Z",
+  "updated_at": "2026-11-25T04:21:08Z",
   "baseline": "b6c25e98c01ea0189bdfdd24a85e8d54da0b57d1",
   "next_action": "Merge the Phase B PR after CI. Then AUD-06 (simulation suite), AUD-07 (threshold sensitivity), research eligibility registry, remediation 7 (comprehensive audit including the pinned Phase B rerun). Owner: register the evidence deploy key.",
   "sections": {
@@ -378,6 +378,122 @@
         "docs/governance/state.json": "DYNAMIC-STATE",
         "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md": "MISSING"
       }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-25T04:20:52Z",
+      "exit_code": 0,
+      "duration_seconds": 0.174,
+      "stdout_stderr_sha256": "4fcc565f3690d663145ebb0e9e54946553822e850b9900f0d74060752fc046bd",
+      "git_head": "d477d64c2a1a1154dd8f1912c4c106284ef340ad",
+      "scope_sha256": {
+        "config/dvp/league-2026-exploratory-v2.json": "526778fb63448c4c7dbc92ddfe3f84273488816ce09fdd382fb596cfa68433da",
+        "scripts/model/ffa_2026_pin.py": "5f9d546c3ea8bd1563683359496931bc30ac254b72fc2a28a902b8d121a51cde",
+        "scripts/model/ffa_2026_inventory.py": "6a6aeec62c7802a6010c7bacb00ce8c5101a92c349816d5566284f7c9ec726f0",
+        "scripts/model/dvp_league_2026_v2.py": "1389448a6b0a700be1ea95aa607e69341fcf4f22d2985f55c7acd66c30a65adb",
+        "libs/arbit-model/src/arbit_model/ffa_history.py": "172e10ccfbe31b43280df64018ff448ab467641f1184a64dd69bb9384db787de",
+        "libs/arbit-model/src/arbit_model/dvp/league.py": "2121dd40261a08038341f437507ca799187572abfcb0ed9cca31bd5b598fcdcd",
+        "libs/arbit-model/tests/test_ffa_history.py": "724be9d50bc2199f592101b28aa7e343091ae5bfb8b4b547ad02c38629cb7f9d",
+        "libs/arbit-model/tests/test_dvp_league.py": "4b3c4897779ee1ebbf420c8f669fc41a0ac3ff65c210dba35aa22a84091c69bd",
+        "scripts/model/dvp.py": "e5c26a4a9a71ab709cc8f69224da9cdbcd81c1c200c1440b51da4c6b01f8268f",
+        "docs/research/ffa-2026-inventory-v2.json": "3a1ee3af1c1dd5ef73a67c1f66e4e9923c1feb6ca0ccc16c9fbcd34a6be9dbf4",
+        "docs/research/ffa-2026-league-inputs-v1.json": "6a8ce564a87dd352e965d68a40e73da6b031f63efedbde420d04a11b1c374bbb",
+        "docs/research/dvp/league-2026-exploratory-v2.json": "7616543158e6019b69aa86c658916303a56e6ea607e18e30acb623aa4568fc9e",
+        "docs/research/FFA_2026_DATA_INVENTORY.md": "ebc70a0249acf477528296ca936b04e802575f73435147116320163e6c5158f5",
+        "docs/research/dvp/LEAGUE_CONSTRAINED_2026.md": "b7e292dac69c15080fa1a25add1de539bc642eff6a35e77a4abf76616a8a2ec8",
+        "docs/research/dvp/audit-findings.json": "fb0df833e2b7c5311d6e4854be3ba6d3df2c39f21669b18da40363408e5db93a",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "83ba4d7897a1f509f046886d039944f96d430b82b1238e73f0ec50fabcdee801",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "bd1db11b464cde96d0e7215352a1a7c36b1401ef9dc5709d3cc5e0ba276bb5fb",
+        "docs/research/dvp/README.md": "a1e0b690cf503456e25818e737eff894b184ce6b4c63b7aabe513c82a174fdfb",
+        "docs/project/decision-register.md": "6c793244b109c7a287fd072c0cee72f3538aec316f77e714c5cea2ed8a20e25d",
+        "docs/project/status.md": "fb5cce2ed9a341d932a5b8e3724e087988a7e12a3143ad35b353767b2c523dbc",
+        "docs/project/changelog.md": "a1b38ff9639a190c0844dadde0fcba756d4b17fb3da3cd077c2d571922091353",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md": "d2f64d7a13bb3a89a591c6395651fbe2b91d152d90fecfbbb313f3fcd95faaf9"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-25T04:21:07Z",
+      "exit_code": 0,
+      "duration_seconds": 14.548,
+      "stdout_stderr_sha256": "66accac2eb25a7695f262cd3d1e2ab62ea62cbc94dddb4341a876eafd11e777e",
+      "git_head": "d477d64c2a1a1154dd8f1912c4c106284ef340ad",
+      "scope_sha256": {
+        "config/dvp/league-2026-exploratory-v2.json": "526778fb63448c4c7dbc92ddfe3f84273488816ce09fdd382fb596cfa68433da",
+        "scripts/model/ffa_2026_pin.py": "5f9d546c3ea8bd1563683359496931bc30ac254b72fc2a28a902b8d121a51cde",
+        "scripts/model/ffa_2026_inventory.py": "6a6aeec62c7802a6010c7bacb00ce8c5101a92c349816d5566284f7c9ec726f0",
+        "scripts/model/dvp_league_2026_v2.py": "1389448a6b0a700be1ea95aa607e69341fcf4f22d2985f55c7acd66c30a65adb",
+        "libs/arbit-model/src/arbit_model/ffa_history.py": "172e10ccfbe31b43280df64018ff448ab467641f1184a64dd69bb9384db787de",
+        "libs/arbit-model/src/arbit_model/dvp/league.py": "2121dd40261a08038341f437507ca799187572abfcb0ed9cca31bd5b598fcdcd",
+        "libs/arbit-model/tests/test_ffa_history.py": "724be9d50bc2199f592101b28aa7e343091ae5bfb8b4b547ad02c38629cb7f9d",
+        "libs/arbit-model/tests/test_dvp_league.py": "4b3c4897779ee1ebbf420c8f669fc41a0ac3ff65c210dba35aa22a84091c69bd",
+        "scripts/model/dvp.py": "e5c26a4a9a71ab709cc8f69224da9cdbcd81c1c200c1440b51da4c6b01f8268f",
+        "docs/research/ffa-2026-inventory-v2.json": "3a1ee3af1c1dd5ef73a67c1f66e4e9923c1feb6ca0ccc16c9fbcd34a6be9dbf4",
+        "docs/research/ffa-2026-league-inputs-v1.json": "6a8ce564a87dd352e965d68a40e73da6b031f63efedbde420d04a11b1c374bbb",
+        "docs/research/dvp/league-2026-exploratory-v2.json": "7616543158e6019b69aa86c658916303a56e6ea607e18e30acb623aa4568fc9e",
+        "docs/research/FFA_2026_DATA_INVENTORY.md": "ebc70a0249acf477528296ca936b04e802575f73435147116320163e6c5158f5",
+        "docs/research/dvp/LEAGUE_CONSTRAINED_2026.md": "b7e292dac69c15080fa1a25add1de539bc642eff6a35e77a4abf76616a8a2ec8",
+        "docs/research/dvp/audit-findings.json": "fb0df833e2b7c5311d6e4854be3ba6d3df2c39f21669b18da40363408e5db93a",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "83ba4d7897a1f509f046886d039944f96d430b82b1238e73f0ec50fabcdee801",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "bd1db11b464cde96d0e7215352a1a7c36b1401ef9dc5709d3cc5e0ba276bb5fb",
+        "docs/research/dvp/README.md": "a1e0b690cf503456e25818e737eff894b184ce6b4c63b7aabe513c82a174fdfb",
+        "docs/project/decision-register.md": "6c793244b109c7a287fd072c0cee72f3538aec316f77e714c5cea2ed8a20e25d",
+        "docs/project/status.md": "fb5cce2ed9a341d932a5b8e3724e087988a7e12a3143ad35b353767b2c523dbc",
+        "docs/project/changelog.md": "a1b38ff9639a190c0844dadde0fcba756d4b17fb3da3cd077c2d571922091353",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md": "d2f64d7a13bb3a89a591c6395651fbe2b91d152d90fecfbbb313f3fcd95faaf9"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-25T04:21:08Z",
+      "exit_code": 0,
+      "duration_seconds": 1.448,
+      "stdout_stderr_sha256": "01878cfede9563633ae6130888da38a93dbdd44af6e43ef0b5d893e2714d6477",
+      "git_head": "d477d64c2a1a1154dd8f1912c4c106284ef340ad",
+      "scope_sha256": {
+        "config/dvp/league-2026-exploratory-v2.json": "526778fb63448c4c7dbc92ddfe3f84273488816ce09fdd382fb596cfa68433da",
+        "scripts/model/ffa_2026_pin.py": "5f9d546c3ea8bd1563683359496931bc30ac254b72fc2a28a902b8d121a51cde",
+        "scripts/model/ffa_2026_inventory.py": "6a6aeec62c7802a6010c7bacb00ce8c5101a92c349816d5566284f7c9ec726f0",
+        "scripts/model/dvp_league_2026_v2.py": "1389448a6b0a700be1ea95aa607e69341fcf4f22d2985f55c7acd66c30a65adb",
+        "libs/arbit-model/src/arbit_model/ffa_history.py": "172e10ccfbe31b43280df64018ff448ab467641f1184a64dd69bb9384db787de",
+        "libs/arbit-model/src/arbit_model/dvp/league.py": "2121dd40261a08038341f437507ca799187572abfcb0ed9cca31bd5b598fcdcd",
+        "libs/arbit-model/tests/test_ffa_history.py": "724be9d50bc2199f592101b28aa7e343091ae5bfb8b4b547ad02c38629cb7f9d",
+        "libs/arbit-model/tests/test_dvp_league.py": "4b3c4897779ee1ebbf420c8f669fc41a0ac3ff65c210dba35aa22a84091c69bd",
+        "scripts/model/dvp.py": "e5c26a4a9a71ab709cc8f69224da9cdbcd81c1c200c1440b51da4c6b01f8268f",
+        "docs/research/ffa-2026-inventory-v2.json": "3a1ee3af1c1dd5ef73a67c1f66e4e9923c1feb6ca0ccc16c9fbcd34a6be9dbf4",
+        "docs/research/ffa-2026-league-inputs-v1.json": "6a8ce564a87dd352e965d68a40e73da6b031f63efedbde420d04a11b1c374bbb",
+        "docs/research/dvp/league-2026-exploratory-v2.json": "7616543158e6019b69aa86c658916303a56e6ea607e18e30acb623aa4568fc9e",
+        "docs/research/FFA_2026_DATA_INVENTORY.md": "ebc70a0249acf477528296ca936b04e802575f73435147116320163e6c5158f5",
+        "docs/research/dvp/LEAGUE_CONSTRAINED_2026.md": "b7e292dac69c15080fa1a25add1de539bc642eff6a35e77a4abf76616a8a2ec8",
+        "docs/research/dvp/audit-findings.json": "fb0df833e2b7c5311d6e4854be3ba6d3df2c39f21669b18da40363408e5db93a",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "83ba4d7897a1f509f046886d039944f96d430b82b1238e73f0ec50fabcdee801",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "bd1db11b464cde96d0e7215352a1a7c36b1401ef9dc5709d3cc5e0ba276bb5fb",
+        "docs/research/dvp/README.md": "a1e0b690cf503456e25818e737eff894b184ce6b4c63b7aabe513c82a174fdfb",
+        "docs/project/decision-register.md": "6c793244b109c7a287fd072c0cee72f3538aec316f77e714c5cea2ed8a20e25d",
+        "docs/project/status.md": "fb5cce2ed9a341d932a5b8e3724e087988a7e12a3143ad35b353767b2c523dbc",
+        "docs/project/changelog.md": "a1b38ff9639a190c0844dadde0fcba756d4b17fb3da3cd077c2d571922091353",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md": "d2f64d7a13bb3a89a591c6395651fbe2b91d152d90fecfbbb313f3fcd95faaf9"
+      }
     }
   ],
   "journal": [
@@ -393,5 +509,6 @@
       "note": "Availability rule v3 (waiver-run drops free at once; all unowned units on waivers from Tuesday until Wednesday's run) to be validated on future snapshots before any use; not adopted post hoc.",
       "evidence": "docs/research/FFA_2026_DATA_INVENTORY.md"
     }
-  ]
+  ],
+  "closed_at": "2026-11-25T04:21:08Z"
 }
