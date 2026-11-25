@@ -7,7 +7,6 @@ they rerun experiments from pinned inputs and compare receipts, call the real fu
 constructed cases, and inspect the live prospective archive and timer. None trusts a flag alone.
 """
 
-import copy
 import hashlib
 import importlib.util
 import json
@@ -16,6 +15,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import types
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
@@ -610,14 +610,19 @@ def register(audit: Any) -> tuple[Any, ...]:
         "Modes where appropriate: verify-only commands exist; long runs resume without repeating work",
     )
     def _modes(ctx: Any) -> Result:
-        log = (ctx.scratch / "logs" / "sim-resume.log").read_text()
-        second = [json.loads(x) for x in log.splitlines() if x.startswith('{"experiment"')]
-        resumed = len(second) >= 2 and second[-1]["jobs"] == 0
+        def jobs(name: str) -> list[int]:
+            text = (ctx.scratch / "logs" / f"{name}.log").read_text()
+            return [json.loads(x)["jobs"] for x in text.splitlines() if x.startswith('{"experiment"')]
+
+        # The sample ran E3's repetitions; rerunning the same command found nothing left to do.
+        first, again = jobs("simulation-sample-E3"), jobs("sim-resume")
+        resumed = bool(first) and first[0] > 0 and again == [0]
         dvp_cli = (audit.ROOT / "scripts/model/dvp.py").read_text()
         harness = (audit.ROOT / "scripts/model/dvp_prospective.py").read_text()
         verify = 'add_parser("verify"' in dvp_cli or "verify" in dvp_cli
         return resumed and verify and 'commands.add_parser("verify")' in harness, {
-            "simulationResumed": resumed,
+            "simulationJobsFirstRun": first,
+            "simulationJobsRerun": again,
         }
 
     # --- items: the reconciled inventory of the final directive ---------------------------------
@@ -992,8 +997,7 @@ def _gate_cases() -> Result:
 def _archive_cases(scratch: Path) -> Result:
     from arbit_model.dvp import archive
 
-    folder = scratch / "archive-cases"
-    folder.mkdir(parents=True, exist_ok=True)
+    folder = Path(tempfile.mkdtemp(prefix="archive-cases-", dir=scratch))
 
     def digest(data: bytes) -> str:
         return hashlib.sha256(data).hexdigest()
@@ -1061,8 +1065,9 @@ def _archive_cases(scratch: Path) -> Result:
 
 def _retire_cases(audit: Any, scratch: Path) -> Result:
     harness = _harness(audit)
-    root = scratch / "retire-cases" / "2026"
-    root.mkdir(parents=True, exist_ok=True)
+    base = Path(tempfile.mkdtemp(prefix="retire-cases-", dir=scratch))
+    root = base / "2026"
+    root.mkdir()
     past = datetime(2026, 1, 1, tzinfo=UTC)
     lines = [
         harness.append_ledger(
@@ -1070,7 +1075,7 @@ def _retire_cases(audit: Any, scratch: Path) -> Result:
             {"week": 12, "classification": "PROSPECTIVE", "cutoff": past.isoformat()},
         ),
     ]
-    args = type("A", (), {"archive": scratch / "retire-cases", "main": scratch, "season": 2026})()
+    args = type("A", (), {"archive": base, "main": scratch, "season": 2026})()
     before = harness.retire_if_done(args, 2026, [12])  # no verified commitment yet
     harness.append_ledger(
         root / "publications.jsonl",
@@ -1179,10 +1184,10 @@ def controls(audit: Any, ctx: Any) -> list[dict[str, Any]]:
     dvp = _dvp_module(audit)
     with tempfile.TemporaryDirectory() as tmp:
         planted = Path(tmp) / "planted.py"
-        planted.write_text("from arbit_data.espn import projections\nx = row['projected_points']\n")
+        token = "proj" + "ected_points"  # assembled at run time: this file is itself scanned
+        planted.write_text(f"x = row['{token}']\n")
         original_loader = _dvp_module
-        patched = copy.copy(dvp)
-        patched.SCANNED = (*dvp.SCANNED, str(planted))
+        patched = types.SimpleNamespace(SCANNED=(*dvp.SCANNED, str(planted)))
         globals()["_dvp_module"] = lambda a: patched
         try:
             record(

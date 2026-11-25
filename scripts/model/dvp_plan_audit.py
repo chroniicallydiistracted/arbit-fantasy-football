@@ -1061,18 +1061,22 @@ def _variants(results: dict[str, Any]) -> set[str]:
     "Development, validation and holdout score B00 and every DvP variant and control for every group",
 )
 def _bt_variants(ctx: Context) -> Result:
+    """Every configured variant, for every group, in every stage (strengthened in remediation 7:
+    a family present somewhere no longer hides a variant missing for one group)."""
+    config = load(ROOT / "config/dvp/backtest.json")
+    expected = {"b00", "b01", "b02", "b02r", "b03", "b03r", "b06", "b07", *config["controls"]}
+    expected |= {f"b04_k{k:g}" for k in config["k_grid"]}
+    expected |= {f"b05_h{h:g}" for h in config["half_lives"]}
     out, ok = {}, True
     for s in STAGES:
         r = ctx.committed(f"backtest-{s}.json")["results"]
-        groups = sorted(r)
-        names = _variants(r)
-        families = sorted({n.split("_")[0][:3] for n in names})
-        out[s] = {"groups": groups, "variants": len(names), "families": families}
-        ok = (
-            ok
-            and set(groups) >= set(GROUPS)
-            and {"b00", "b01", "b02", "b03", "b04", "b05", "b06", "b07", "b09"} <= set(families)
-        )
+        missing = {
+            g: sorted(expected - {k for k, v in r.get(g, {}).items() if isinstance(v, dict)})
+            for g in GROUPS
+        }
+        missing = {g: m for g, m in missing.items() if m}
+        out[s] = {"groups": sorted(r), "variantsPerGroup": len(expected), "missing": missing}
+        ok = ok and set(r) >= set(GROUPS) and not missing
     return ok, out
 
 
