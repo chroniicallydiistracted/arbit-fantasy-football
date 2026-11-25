@@ -4,7 +4,7 @@
   "title": "M3-3 final directive Phase E: research eligibility registry and fail-closed assembly check",
   "objective": "Record every M3-3 DvP feature's research evidence, classification and production eligibility in one machine-readable registry extending arbit_model.feature_specs, with a fail-closed check at the model assembly boundary, so no later agent mistakes a feature's existence, historical reliability, research promise or prospective confirmation for production eligibility. No feature is activated and no production behavior or legacy constant changes. Also close AUD-01a now that unattended publication is verified with the owner-registered key.",
   "status": "active",
-  "phase": "implement",
+  "phase": "handoff",
   "change_class": "model",
   "requirements": [
     "MD-002",
@@ -32,9 +32,9 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T09:06:57Z",
-  "updated_at": "2026-11-25T09:09:42Z",
+  "updated_at": "2026-11-25T09:11:28Z",
   "baseline": "dd8e1d64432cb3f134a5e9228373a54a07772a8c",
-  "next_action": "Record implement evidence",
+  "next_action": "Merge the Phase E PR after CI, then remediation 7: the comprehensive plan audit (reconciled inventory, directive statuses, semantic checks, reruns from pinned inputs incl. PB-AUD-08, negative controls, fresh receipt).",
   "sections": {
     "review": {
       "summary": "Inspected the existing feature registry (arbit_model.feature_specs: FEATURES with definitions, units, windows, sources and SHRINKAGE constants; legacy DvP columns opp_dvp_{QB..K}_{pg,pg_shrunk,adj,adj_shrunk,opps_pg} and opp_off_dst_allowed_*) and its consumers (team_features only; no production model assembles them). Collected each feature's evidence from the committed receipts (reliability-results A05/A07, backtest receipts, sitstart, league v2, explore-v3, simulation-v1, threshold-sensitivity-v1). Verified the owner-registered deploy key from the timer's service context (AUD-01a).",
@@ -60,19 +60,258 @@
       ]
     },
     "validation": {
-      "summary": "",
-      "files": []
+      "summary": "All seven checks pass. test_eligibility.py (6): the directive's classifications recorded and nothing production-eligible; every legacy DvP feature_specs column governed and every registry pattern matching a real column; legacy shrinkage constants unchanged; production assembly refuses legacy columns, estimator columns, entry ids and unregistered DvP-like names while passing other features; research use reports; a registry claiming eligibility without recorded approvals, or with a missing evidence kind or unknown classification, fails to load. AUD-01a verified live: deploy key read-write, systemd-run publication over SSH with read-back and GitHub timestamp.",
+      "files": [
+        "libs/arbit-model/tests/test_eligibility.py"
+      ]
     },
     "documentation": {
-      "summary": "",
-      "files": []
+      "summary": "RESEARCH_ELIGIBILITY.md; MODEL_CARD.md eligibility note; DvP README; audit-findings.json (AUD-01a resolved, eligibility requirement resolved) and AUDIT_RECONCILIATION.md; decision register ENG-070; AGENTS.md rule; feature_specs note; status; changelog; next action.",
+      "files": [
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md",
+        "docs/research/dvp/audit-findings.json",
+        "docs/project/decision-register.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md",
+        "AGENTS.md"
+      ]
     },
     "handoff": {
-      "path": null,
-      "next_action": "",
-      "unresolved": ""
+      "path": "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md",
+      "next_action": "Merge the Phase E PR after CI, then remediation 7: the comprehensive plan audit (reconciled inventory, directive statuses, semantic checks, reruns from pinned inputs incl. PB-AUD-08, negative controls, fresh receipt).",
+      "unresolved": "Remediation 7 and PB-AUD-08's audit rerun; prospective weeks 13-18 (future data)."
     }
   },
-  "checks": [],
+  "checks": [
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-25T09:09:42Z",
+      "exit_code": 0,
+      "duration_seconds": 0.165,
+      "stdout_stderr_sha256": "a17f6745e4f2f6755a71cc19f87ae2fd4161548796a1494c5cef1b7f5e0cfc7c",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-25T09:09:59Z",
+      "exit_code": 0,
+      "duration_seconds": 16.613,
+      "stdout_stderr_sha256": "847fdc2fe5d7e226655f870fd9a1ce1faba4b06f634387cc656250357cb08022",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-25T09:10:01Z",
+      "exit_code": 0,
+      "duration_seconds": 1.86,
+      "stdout_stderr_sha256": "173e473933a98d58f101464389496b1ac3431de03ab98b4c2ffc3eea5a1d0fc9",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "lint",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "at": "2026-11-25T09:10:01Z",
+      "exit_code": 0,
+      "duration_seconds": 0.058,
+      "stdout_stderr_sha256": "98733c3446b52dc3e6b6943142b19a142025d9727521f6abc3783a20e4b6d3c6",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "format",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "at": "2026-11-25T09:10:01Z",
+      "exit_code": 0,
+      "duration_seconds": 0.046,
+      "stdout_stderr_sha256": "0ccd40004adb6a6768747e829f98877ee39c1da053df52031678efa047bf185c",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "types",
+      "argv": [
+        "uv",
+        "run",
+        "mypy",
+        "libs/arbit-model/src",
+        "scripts/model/dvp.py",
+        "scripts/model/dvp_plan_audit.py",
+        "scripts/model/dvp_prospective.py"
+      ],
+      "at": "2026-11-25T09:10:08Z",
+      "exit_code": 0,
+      "duration_seconds": 7.286,
+      "stdout_stderr_sha256": "9d4d7e2a1d327e172e77feaa5ce9c52048e1c0cd4529d29acf1e814c347b343e",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    },
+    {
+      "name": "python-suite",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "at": "2026-11-25T09:11:16Z",
+      "exit_code": 0,
+      "duration_seconds": 67.814,
+      "stdout_stderr_sha256": "b1a07fd6eb0305410b98730b2d2ef34cb1565d175ff74ba4085b6a2ede27a06e",
+      "git_head": "a6b447654bc00cb2858f1790c725c6cc6ffa1851",
+      "scope_sha256": {
+        "config/model/research-eligibility.json": "ac6e1ad1b2b02ab17179c170435a58822d15ef386c89377f690c86337655fe40",
+        "libs/arbit-model/src/arbit_model/eligibility.py": "fd4b9dde92e991a54a1717bf35bb0defe842c8a258cec2183a6809377768c0c3",
+        "libs/arbit-model/tests/test_eligibility.py": "973365f5bd75dd186e48748631633123b654face564462206fdda3525ac48f55",
+        "libs/arbit-model/src/arbit_model/feature_specs.py": "515269a9b0d3fafe6a4c4d3486d5148b845ad35ff66bc7d67b86bd632c0af6ff",
+        "AGENTS.md": "2295e70c2b29e0e8f84ae50af62722a85be0900881ed6a6ee891313b2551ee31",
+        "docs/research/dvp/RESEARCH_ELIGIBILITY.md": "9a24a8abc535031ca809a65386ae7fc2c671c8d5d59134e5735cb6e0dc2297bc",
+        "docs/research/dvp/audit-findings.json": "26b2fcb3528010b156f4c1fb5c64ebe9ecc7a413aeb764812975b8d811b738f0",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "d8adc1463bb448f13ae9c88cac8451de94a9e2e6e58bc2c7aca012ccce752a91",
+        "docs/research/dvp/README.md": "9863321ad2643c2371ffeb4b732b859587333f8d1431c20c96d9ccc856e9bb31",
+        "docs/research/dvp/MODEL_CARD.md": "a746381f94548539f06841bcabb4b6f64495c96746a05a4e9b6ab84393570121",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/project/decision-register.md": "5f88da2db28e491809e91826f7da2867a7d3ec52179889550dc78bf3e124eaed",
+        "docs/project/status.md": "f398dceebabb96a99de6f107930d0c830db581690bd5c0c08400eeb5e47a3b3c",
+        "docs/project/changelog.md": "dfce94a1705d9e6af2897d34bfd81a2258906ce87c4ac762e5d8026c63712952",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md": "MISSING"
+      }
+    }
+  ],
   "journal": []
 }
