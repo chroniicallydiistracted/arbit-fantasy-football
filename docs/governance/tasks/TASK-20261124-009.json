@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-009",
+  "title": "M3-3 owner audit Phase B: FFA 2026 data coverage, ownership reconstruction, league-constrained D/ST evaluation",
+  "objective": "Owner Phase B requirements (AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md): record that 2026 is FFA's inaugural season (owner decision, source docs, knowledge base, research audit); inventory and verify the ESPN data capabilities Arbit already reaches through its existing guarded integration, with a 2026 season and scoring-period coverage matrix, eligibility and temporal-integrity classes; validate lineups, rosters, player statistics and transactions; reconstruct 2026 ownership and availability from the draft and executed transactions, verified against every captured period roster and archived snapshots; split C05L into C05L-HIST (NOT_APPLICABLE), C05L-2026-EXP (run the exploratory league-constrained D/ST start/sit and streaming evaluation of B00 vs B06 on weeks 1-11) and C05L-2026-PRO (continue the prospective capture with decision-time availability); document limitations and downstream ESPN capabilities. Read-only: no provider projections, migrations, league changes, transactions or weights.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md",
+    "libs/arbit-model/src/arbit_model/ffa_history.py",
+    "libs/arbit-model/src/arbit_model/dvp/league.py",
+    "scripts/model/ffa_2026_inventory.py",
+    "scripts/model/dvp_league_2026.py",
+    "scripts/model/dvp_prospective.py",
+    "scripts/model/dvp.py",
+    "scripts/model/dvp_plan_audit.py",
+    "config/dvp/league-2026-exploratory.json",
+    "libs/arbit-model/tests/test_ffa_history.py",
+    "libs/arbit-model/tests/test_dvp_league.py",
+    "libs/arbit-model/tests/test_dvp_shadow.py",
+    "libs/arbit-model/tests/test_dvp_plan_audit.py",
+    "docs/research/ffa-2026-inventory.json",
+    "docs/research/FFA_2026_DATA_INVENTORY.md",
+    "docs/research/dvp/league-2026-exploratory.json",
+    "docs/research/dvp/LEAGUE_CONSTRAINED_2026.md",
+    "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+    "docs/research/dvp/plan-audit-receipt.json",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md",
+    "docs/research/dvp/MODEL_CARD.md",
+    "docs/research/dvp/SOURCE_PROVENANCE.md",
+    "docs/research/dvp/PROSPECTIVE_2026.md",
+    "docs/research/dvp/README.md",
+    "docs/research/source-register.md",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-24-task-20261124-009-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-25T02:16:24Z",
+  "updated_at": "2026-11-25T02:27:04Z",
+  "baseline": "947e91ad7c592bef602f542f55e275be3dac1b76",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Phase B (owner audit): read the requirements in full and inspected the ESPN audit docs, endpoint coverage, arbit_data.espn (client, reader with HISTORICAL_AVAILABILITY_UNSUPPORTED, scoring_audit), league_history (reconciled lineup captures, transaction store), league_store/snapshots, rule_version and the worker's history lanes. Database: lineups captured and reconciled 8/8 for periods 1-11; transactions read for periods 1-12 (536 records, unique ids, 0 revised after first observation, no completed trades: 2 canceled proposals, 7 declines; waivers 52 executed, 14 failed, 7 canceled); 128 draft picks; 56 matchups (44 with results); 1,520 snapshots from 2026-10-31 with an 11-day gap (2026-11-11 to 11-21, the database outage). Rules: 24-hour waivers, INDIVIDUAL_GAME locks, D/ST limit 3; in-season trades allowed (deadline 2026-12-02, 3 vetoes; the isTradingEnabled=false flag is under draftSettings). Replaying the draft and executed adds and drops reproduces every captured period roster exactly; draft transaction items carry the team on the transaction, not the item.",
+      "files": [
+        "docs/research/espn-public-api-audit-2026-10-30.md",
+        "docs/research/espn-endpoint-coverage-2026-10-30.md",
+        "libs/arbit-data/src/arbit_data/league_history.py",
+        "libs/arbit-data/src/arbit_data/espn/reader.py",
+        "libs/arbit-data/src/arbit_data/espn/scoring_audit.py",
+        "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md"
+      ]
+    },
+    "plan": {
+      "summary": "1) OWN-076 (inaugural season) in the decision register, source register, knowledge base and audit. 2) arbit_model.ffa_history: ownership replay from the draft and executed moves, verification against captured period rosters and snapshots, availability classes with the waiver hold. 3) scripts/model/ffa_2026_inventory.py: capabilities, coverage matrix, lineup and transaction validation, ownership replay with daily snapshot checks, D/ST state at each preweek cutoff, optional live re-verification through the existing guarded client (scoring audit, transaction re-reads; nothing stored). 4) config/dvp/league-2026-exploratory.json declared and pushed first; arbit_model.dvp.league and scripts/model/dvp_league_2026.py run C05L-2026-EXP (start, stream, stream with waivers; managers; matchup effects). 5) Prospective harness captures D/ST availability at decision time and reports league results per decision kind (C05L-2026-PRO). 6) Plan audit: C05L split (HIST not applicable, 2026-EXP done, 2026-PRO open), Phase B items, new kind; receipt regenerated. 7) Documents and records.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/ffa_history.py",
+        "libs/arbit-model/src/arbit_model/dvp/league.py",
+        "scripts/model/ffa_2026_inventory.py",
+        "scripts/model/dvp_league_2026.py",
+        "config/dvp/league-2026-exploratory.json",
+        "scripts/model/dvp_plan_audit.py"
+      ]
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}
