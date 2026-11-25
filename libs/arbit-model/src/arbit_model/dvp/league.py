@@ -63,6 +63,29 @@ def decide(
     return out
 
 
+def without_decision(
+    holdings: Mapping[str, Sequence[str]],
+    free_agents: Sequence[str],
+    playing: set[str],
+    kind: str,
+) -> dict[str, str]:
+    """Teams `decide` skips for this kind, each with its reason, so none is omitted silently."""
+    out = {}
+    for team, held in sorted(holdings.items()):
+        own = sorted({u for u in held if u in playing})
+        pool = {u for u in free_agents if u in playing}
+        if kind == START and len(own) < 2:
+            if not held:
+                out[team] = "holds no D/ST"
+            elif not own:
+                out[team] = "every D/ST it holds is on bye"
+            else:
+                out[team] = "holds one playing D/ST"
+        elif kind != START and not own and not pool:
+            out[team] = "no playing D/ST held and none in the pool"
+    return out
+
+
 def summarize(
     table: pl.DataFrame, base: str, candidate: str, reps: int, seed: int
 ) -> dict[str, Any]:

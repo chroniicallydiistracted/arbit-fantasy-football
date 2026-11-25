@@ -145,6 +145,8 @@ Runs are timestamped and never overwrite earlier ones. Receipts name the code co
 | [MODEL_CARD.md](MODEL_CARD.md) | What the forecast is, results by position, intended and unintended use, limits, fallback, eligibility |
 | [PLAYER_LEVEL_REPORT.md](PLAYER_LEVEL_REPORT.md) | Phase C: D/ST start/sit decisions, rule declared first, results, what is blocked |
 | [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) | The 2026 weeks 12–18 confirmation (both levels): forecasts archived before kickoff, the harness, the window's status and the evaluation |
+| [AUDIT_RECONCILIATION.md](AUDIT_RECONCILIATION.md), [audit-findings.json](audit-findings.json) | Independent reconciliation of every external finding of the owner's final directive, with closure status |
+| [M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md](M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md) | The owner's final directive (OWN-077) |
 | [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md) | C05L split by the owner's Phase B audit: 2016–2025 not applicable, completed 2026 weeks exploratory, weeks 12–18 prospective |
 | [AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md](AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md) | The owner's Phase B requirements (FFA 2026 data and league-constrained evaluation) |
 | [OPPORTUNITY_EFFICIENCY.md](OPPORTUNITY_EFFICIENCY.md) | Owner audit remediation 2: volume allowed vs efficiency allowed, their repeatability and forecasting value (exploratory) |

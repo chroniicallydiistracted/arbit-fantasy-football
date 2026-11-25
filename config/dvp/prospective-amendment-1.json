@@ -1,0 +1,96 @@
+{
+  "format": "arbit-dvp-m3-3-prospective-amendment-v1",
+  "amends": {
+    "path": "config/dvp/prospective.json",
+    "sha256": "e07d7d55746eda97a347de86ce9f53ecd157e0b8bdba58ef1490a6d19b4e4d8c",
+    "unchanged": "The original declaration stays as it was; the week-12 archive records its hash. This file adds to it and, where the two differ, governs from now on."
+  },
+  "authority": "Owner directive docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md: DEC-02 (timer), DEC-03 (operational and evaluation-integrity corrections only), AUD-01a-d, PB-AUD-07. Recorded as OWN-077. TASK-20261124-010.",
+  "declaredAt": "2026-11-25, before the first 2026 week-12 kickoff (2026-11-26 01:00 UTC) and before any 2026 week 12-18 outcome existed. The commit that adds this file is pushed to GitHub before that kickoff, which timestamps it.",
+  "unchangedByThisAmendment": [
+    "The frozen B00 and B06 methods, every frozen hash (config/dvp/frozen.json, config/dvp/frozen-phase-c.json), the frozen candidates and the frozen dvp.py loaded from git by hash.",
+    "Thresholds: Phase B 1% relative RMSE; Phase C 1.8 percentage points of pairwise accuracy with net points gained.",
+    "The window: 2026 weeks 12-18, the preweek cutoff, the adapter arbit-dvp-shadow-v1.",
+    "The week-12 archive and its ledger entry."
+  ],
+  "completionGate": {
+    "module": "libs/arbit-model/src/arbit_model/dvp/window.py",
+    "weekArchive": {
+      "PROSPECTIVE": "A ledger entry whose files still match it; generated before the cutoff; durably archived before the cutoff; and a verified external commitment to the same ledger entry timestamped before the cutoff (externalEvidence).",
+      "PENDING": "Before the cutoff: no archive yet, or archived and awaiting its external commitment.",
+      "MISSED": "The cutoff passed without a qualifying archive, including an archive that cannot be shown to precede the cutoff. Kept as evidence, never prospective.",
+      "BLOCKED": "Two prospective entries for a week, a week both archived and missed, or an archive that no longer matches its ledger."
+    },
+    "weekLabels": {
+      "AWAITING_GAMES": "A scheduled game is not final, or its results are not yet available under the timing rule (12:00 UTC the day after the game).",
+      "LABELS_INCOMPLETE": "Every game is final but an archived forecast on a final game has no label, a final game has no archived forecasts, a game has other than 12 targets, or forecasts name a game not on the schedule.",
+      "LABELLED": "Every scheduled game is final or recorded postponed or canceled (no result 4 days after kickoff), and every forecast on a final game has a label: valid, or invalid for a recorded reason (excluded from metrics, as before)."
+    },
+    "window": {
+      "BLOCKED": "Any week BLOCKED.",
+      "INTERIM": "A subset of the predeclared weeks, or any week PENDING or not LABELLED. Descriptive only.",
+      "INCOMPLETE_WINDOW": "Any predeclared week MISSED. Descriptive only, even after every game. Supersedes the original rule that excluded missed weeks and still allowed a confirmation.",
+      "COMPLETE": "Every predeclared week PROSPECTIVE and LABELLED. Only then do the frozen Phase B and Phase C rules assign CONFIRMED or NOT_CONFIRMED, each separately."
+    },
+    "separateEvaluations": "RETROSPECTIVE reconstructions and the 2025 REHEARSAL are evaluated apart and never confirm."
+  },
+  "externalEvidence": {
+    "mechanism": "A commitment (the ledger entry, its SHA-256 and every archived file's SHA-256, plus the forecasts CSV, which holds NFL teams and numbers only) is committed to the branch research-evidence/dvp-prospective of this public repository and pushed with a write deploy key for this repository only. GitHub's repository activity API records the push time; that time, not the commit's local date, is the external timestamp. The pushed bytes are fetched back and compared with the local archive.",
+    "neverPublished": "League rosters, team or member identifiers, database details, credentials and raw provider payloads. The league capture is committed only as its SHA-256.",
+    "branch": "research-evidence/dvp-prospective",
+    "neverMerged": "The evidence branch is never merged into main and never needs main's checks; publication never touches a development branch.",
+    "attempts": "Every attempt is appended to publications.jsonl (hash-chained) with its time, result and failure reason. A failed publication is retried on each run without regenerating or overwriting any forecast.",
+    "week12": "Week 12 predates this mechanism. Its external evidence is GitHub's record of the push of commit 168196d488 to branch claude/m3-dvp-prospective at 2026-11-24T23:13:15Z (repository activity API), whose docs/research/dvp/prospective/2026/week-12 files equal the ledger's forecasts.csv, manifest.json and league.json hashes. It is recorded once as a verified prior-publication entry."
+  },
+  "archiveTransaction": {
+    "module": "libs/arbit-model/src/arbit_model/dvp/archive.py",
+    "steps": [
+      "One run at a time: an exclusive lock on the season folder; a second run exits.",
+      "Stage every file in a hidden staging folder beside the archive; fsync each file and the folder.",
+      "Rename the staging folder to week-WW in one step; fsync the parent. archivedAt is recorded after this.",
+      "Append the ledger entry (fsync). It carries generatedAt, archivedAt and the file hashes.",
+      "Publish the external commitment; record the attempt."
+    ],
+    "recovery": {
+      "staging folder left behind": "Removed and recorded; nothing was archived.",
+      "archive without a ledger entry, before the cutoff": "Its files are checked against its own manifest; if they agree the ledger entry is appended (recovered) and publication proceeds. Never regenerated.",
+      "archive without a ledger entry, after the cutoff": "Recorded MISSED with the reason; the folder is kept as unproven evidence.",
+      "archive that disagrees with its own manifest": "Moved aside as quarantine and recorded; the week is forecast again if the cutoff hasn't passed.",
+      "ledger entry without a verified publication": "Publication retried; the archive is never regenerated.",
+      "ledger entry whose files no longer match": "BLOCKED and alerted."
+    },
+    "cutoff": "A run that would finish archiving at or after the cutoff archives nothing and records MISSED."
+  },
+  "readiness": {
+    "perGame": {
+      "ELIGIBLE_VERIFIED": "Final in the schedule, past the timing rule, and all 12 observation cells present and valid.",
+      "RETRIEVED_INVALID": "Final with all 12 cells present, some invalid for a recorded reason (for example a refused line). Does not block, as before.",
+      "SOURCE_NOT_YET_PUBLISHED": "Final, but the statistics file Arbit holds was published by nflverse before the game's results were available.",
+      "PUBLISHED_NOT_RETRIEVED": "A newer nflverse statistics file is in Arbit's catalog than the one imported.",
+      "AWAITING_RESULT": "Not final yet, within 4 days of kickoff.",
+      "POSTPONED_OR_CANCELED": "Not final 4 days after kickoff. Recorded; does not block.",
+      "NOT_YET_AVAILABLE": "Final, but before 12:00 UTC the next day.",
+      "DATA_INTEGRITY_FAILURE": "Final, with a statistics file published after the game, yet cells are missing or duplicated."
+    },
+    "ready": "Every earlier game is ELIGIBLE_VERIFIED, RETRIEVED_INVALID or POSTPONED_OR_CANCELED.",
+    "dependency": "nflverse files are imported by the worker's statistics lane (daily catalog check and import). The harness never imports or writes data itself; it reads what the lane stored and reports which state blocks it.",
+    "runOutcomes": "Each run writes status.json beside the ledger: READY_ARCHIVED, WAITING (with each blocking game's state), MISSED, BLOCKED or FORECAST_EXECUTION_FAILURE (with the error). A run that ends waiting within 18 hours of a cutoff, or fails, raises an alert."
+  },
+  "leagueCapture": {
+    "from": "Week 13. Week 12's archive is not rewritten; a separate supplemental record gives the availability observed in the snapshot week 12 captured.",
+    "snapshot": "One league snapshot read in one repeatable-read transaction: ownership, the D/ST universe, ESPN's observed availability for every D/ST, the rule version and the transactions all come from that read, with the snapshot's id, observation time, content hash and rules hash, and its age at forecast time.",
+    "teams": "All teams in the league document, including any holding no D/ST.",
+    "availability": "OWNED (on a team in the snapshot), FREE_AGENT, WAIVERS and UNKNOWN, as ESPN reported them in that snapshot. The universe must be exactly the 32 D/STs; a unit owned but reported available, or available but on a roster, is UNKNOWN and the capture is marked contradictory. Drop-time reconstruction is recorded only as a separately labelled fallback, never as observed.",
+    "decisionTimeCapture": "Each run between a week's archive and its cutoff also records the league as it stands (when the snapshot changed), so the last capture before the cutoff gives the decision-time state. Each capture is hash-chained in captures.jsonl.",
+    "evaluation": {
+      "rosterOnly": "Start: each team holding two or more playing D/STs picks one.",
+      "unownedPool": "Stream: held playing D/STs plus every unowned one (the original stream rule).",
+      "claimablePool": "Stream: held playing D/STs plus those observed FREE_AGENT, evaluated even when no free agent exists (held units only).",
+      "claimableWithWaivers": "Upper bound: also units observed on WAIVERS.",
+      "teamsWithoutDecision": "Listed per kind with the reason (no D/ST, one D/ST, all on bye)."
+    },
+    "status": "Descriptive and exploratory as before: never part of the frozen confirmation."
+  },
+  "write_to_production": false,
+  "forbidden_vendor_projection_dependencies": 0
+}

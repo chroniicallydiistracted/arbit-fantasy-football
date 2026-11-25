@@ -1610,7 +1610,9 @@ def _league_capture(ctx: Context) -> Result:
     week12 = RECEIPTS / "prospective/2026/week-12/league.json"
     harness_text = (ROOT / "scripts/model/dvp_prospective.py").read_text()
     capture = load(week12) if week12.exists() else {}
-    marker = '"availability": dict(sorted(states.items()))'
+    # A source marker, kept until remediation 7 replaces it with a behavioral check (final
+    # directive F3): the capture is the observed-availability v2 (amendment 1, PB-AUD-07).
+    marker = 'CAPTURE_FORMAT = FORMAT + "-league-capture-v2"'
     ok = bool(capture.get("rosters")) and marker in harness_text
     return ok, {
         "week12Teams": len(capture.get("rosters", {})),

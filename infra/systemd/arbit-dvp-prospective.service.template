@@ -1,6 +1,6 @@
 [Unit]
 Description=Arbit M3-3 DvP prospective forecasts: archive each window week before its kickoff (research only)
-After=network-online.target docker.service
+After=network-online.target
 Wants=network-online.target
 
 [Service]
@@ -8,9 +8,17 @@ Type=oneshot
 WorkingDirectory=@ROOT@
 Environment=PATH=@PATH@
 Environment=POLARS_MAX_THREADS=2
-# Forecasts each 2026 week 12-18 once its inputs are complete and before its cutoff; records a
-# week whose cutoff passed unarchived as MISSED. Read-only against the database. Writes only
-# artifacts/dvp/prospective/ (git-ignored); config/dvp/prospective.json declares the rest.
+Environment=ARBIT_DVP_TIMER_UNIT=arbit-dvp-prospective.timer
+# Publication settings (ARBIT_EVIDENCE_REMOTE, ARBIT_EVIDENCE_SLUG, ARBIT_EVIDENCE_KEY): no secrets;
+# the key it names is a write deploy key for this repository only.
+EnvironmentFile=-%h/.config/arbit/research-evidence/env
+# Each run: recover an interrupted run; forecast each 2026 week 12-18 once its inputs are complete
+# and before its cutoff, or record it MISSED; capture the league before each archived week's
+# cutoff; publish and verify pending commitments; write status.json; alert on trouble.
+# Read-only against the database (server-enforced read-only transactions). Writes only
+# artifacts/dvp/prospective/ (git-ignored) and the evidence branch. Declared in
+# config/dvp/prospective.json and config/dvp/prospective-amendment-1.json.
 ExecStart=@UV@ run --frozen --env-file .env.local python scripts/model/dvp_prospective.py --export @ROOT@/artifacts/dvp/prospective/export sweep
 NoNewPrivileges=true
-TimeoutStartSec=900
+TimeoutStartSec=1800
+Nice=10
