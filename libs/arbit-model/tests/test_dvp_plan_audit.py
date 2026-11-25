@@ -56,7 +56,10 @@ def test_every_check_is_defined_and_used(audit):
     assert used <= set(audit.CHECKS), sorted(used - set(audit.CHECKS))
     assert set(audit.CHECKS) <= used, sorted(set(audit.CHECKS) - used)
     assert all(item.checks for item in audit.ITEMS)
-    assert {item.kind for item in audit.ITEMS} == {"done", "open", "not_applicable"}
+    assert {item.kind for item in audit.ITEMS} <= set(audit.KIND_STATUS)
+    assert {"complete", "pending_future_data", "not_applicable", "deferred_approval"} <= {
+        item.kind for item in audit.ITEMS
+    }
 
 
 def test_every_test_id_names_real_tests():
@@ -70,25 +73,37 @@ def test_every_test_id_names_real_tests():
     assert set(range(1, 41)) <= tagged, sorted(set(range(1, 41)) - tagged)
 
 
-def test_an_open_item_never_counts_as_done(audit, monkeypatch):
+def test_statuses_need_proof_and_a_claim_short_of_completion_needs_evidence(audit, monkeypatch):
     checks = {
         "pass": ("passes", lambda ctx: (True, 1)),
         "fail": ("fails", lambda ctx: (False, 0)),
         "boom": ("raises", lambda ctx: 1 / 0),
+        "open:state": ("records the open state", lambda ctx: (True, "evidence")),
     }
     items = (
-        audit.Item("D1", "§x", "done and proven", ("pass",)),
+        audit.Item("D1", "§x", "complete and proven", ("pass",)),
         audit.Item("D2", "§x", "claimed but failing", ("pass", "fail")),
-        audit.Item("O1", "§x", "open, state recorded", ("pass",), "open"),
+        audit.Item(
+            "O1", "§x", "pending, evidence recorded", ("open:state",), "pending_future_data"
+        ),
+        audit.Item("O2", "§x", "blocked without evidence", ("pass",), "blocked_external"),
+        audit.Item("O3", "§x", "awaiting approval", ("open:state",), "deferred_approval"),
         audit.Item("E1", "§x", "a check that cannot run", ("boom",)),
     )
     monkeypatch.setattr(audit, "CHECKS", checks)
     monkeypatch.setattr(audit, "ITEMS", items)
     result = audit.evaluate(None)
     status = {i["id"]: i["status"] for i in result["items"]}
-    assert status == {"D1": "DONE", "D2": "FAILED", "O1": "OPEN", "E1": "FAILED"}
+    assert status == {
+        "D1": "COMPLETE_VERIFIED",
+        "D2": "FAILED",
+        "O1": "PENDING_FUTURE_DATA",
+        "O2": "FAILED",
+        "O3": "DEFERRED_APPROVAL",
+        "E1": "FAILED",
+    }
     assert result["status"] == "FAILED"
-    assert result["summary"]["DONE"] == 1 and result["summary"]["OPEN"] == 1
+    assert result["summary"]["COMPLETE_VERIFIED"] == 1
     assert "ZeroDivisionError" in result["checks"]["boom"]["observed"]
 
 
@@ -145,7 +160,11 @@ def test_the_committed_receipt_passes_and_matches_the_catalog(audit):
     assert {i["id"]: i["checks"] for i in receipt["items"]} == {
         item.id: list(item.checks) for item in audit.ITEMS
     }
-    assert all(i["status"] in ("DONE", "OPEN", "NOT_APPLICABLE") for i in receipt["items"])
+    assert all(i["status"] in audit.STATUSES and i["status"] != "FAILED" for i in receipt["items"])
+    assert receipt["negativeControls"]["allDetected"]
+    assert len(receipt["negativeControls"]["controls"]) >= 18
+    assert receipt["overallAssessment"].startswith("M3-3 development phase COMPLETE")
+    assert receipt["remainingBlockers"] == []
     assert all(c["passed"] for c in receipt["checks"].values())
     assert set(receipt["checks"]) == set(audit.CHECKS)
     assert receipt["tests"]["failed"] == 0 and receipt["tests"]["skipped"] == 0
@@ -169,12 +188,8 @@ def test_the_scope_document_explains_every_item_and_states_the_counts(audit):
     missing = [item.id for item in audit.ITEMS if f"| {item.id} |" not in text]
     assert not missing, missing
     for item in audit.ITEMS:
-        if item.kind == "open":
-            row = next(line for line in text.splitlines() if line.startswith(f"| {item.id} |"))
-            assert "OPEN" in row or "BLOCKED" in row or "NOT BUILT" in row, item.id
-        if item.kind == "not_applicable":
-            row = next(line for line in text.splitlines() if line.startswith(f"| {item.id} |"))
-            assert "NOT_APPLICABLE" in row, item.id
+        row = next(line for line in text.splitlines() if line.startswith(f"| {item.id} |"))
+        assert audit.KIND_STATUS[item.kind] in row, item.id
     summary = receipt["summary"]
     assert f"{summary['items']} action items" in text
     assert f"{summary['checks']} checks" in text

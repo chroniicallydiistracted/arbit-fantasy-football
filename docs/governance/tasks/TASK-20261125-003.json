@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "id": "TASK-20261125-003",
+  "title": "M3-3 final directive remediation 7: comprehensive plan-completion audit",
+  "objective": "Extend the plan audit into the final development gate: a reconciled requirement inventory (specification, AUD-01..07, AUD-01a-d, B0-B8, PB-AUD-01..08, owner decisions DEC-01..10, eligibility), the directive's completion statuses with an evidence rule, semantic checks, reruns from pinned inputs (exploratory v2/v3, the corrected Phase B evaluation, thresholds, a deterministic simulation sample and summary, prospective archive verification, live content verification), negative controls proving the audit detects failure, and a fresh receipt with the overall assessment.",
+  "status": "active",
+  "phase": "review",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "scripts/model/dvp_plan_audit.py",
+    "scripts/model/dvp_plan_audit_directive.py",
+    "scripts/model/dvp_simulate.py",
+    "scripts/model/dvp_simulate_summary.py",
+    "libs/arbit-model/tests/test_dvp_plan_audit.py",
+    "docs/research/dvp/plan-audit-receipt.json",
+    "docs/research/dvp/PLAN_COMPLETION_SCOPE.md",
+    "docs/research/dvp/audit-findings.json",
+    "docs/research/dvp/AUDIT_RECONCILIATION.md",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/M3-3_CONTINUITY.md",
+    "scripts/model/dvp.py",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/project/roadmap.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-25-task-20261125-003-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-25T09:19:44Z",
+  "updated_at": "2026-11-25T09:19:44Z",
+  "baseline": "5e082ccdf622011c92fbe49ac19f4382c329be4b",
+  "next_action": "Read affected requirements/source and record Review evidence",
+  "sections": {
+    "review": {
+      "summary": "",
+      "files": []
+    },
+    "plan": {
+      "summary": "",
+      "files": []
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}

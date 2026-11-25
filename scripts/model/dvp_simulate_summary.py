@@ -447,7 +447,9 @@ def plots(
     return written
 
 
-def main(root: Path, config: Path, out: Path) -> None:
+def main(root: Path, config: Path, out: Path, target: Path | None = None) -> None:
+    """Summarize the raw results in `out`. `target` (default the committed receipt) lets the
+    plan audit regenerate the receipt into scratch and compare."""
     e1 = summarize_e1(load(out / "E1"))
     e2 = summarize_e2(load(out / "E2"))
     truth = json.loads((out / "league-truth.json").read_text())
@@ -470,9 +472,15 @@ def main(root: Path, config: Path, out: Path) -> None:
         "U": u,
         "leagueTruth": truth,
         "acceptance": acceptance(e1, e2, e3, u),
-        "plots": plots(root / "docs/research/dvp/plots/simulation", e1, e2, e3, u),
+        "plots": plots(
+            (target.parent / "plots" if target else root / "docs/research/dvp/plots/simulation"),
+            e1,
+            e2,
+            e3,
+            u,
+        ),
         "write_to_production": False,
     }
-    target = root / "docs/research/dvp/simulation-v1.json"
+    target = target or root / "docs/research/dvp/simulation-v1.json"
     target.write_text(json.dumps(receipt, indent=1, sort_keys=True, default=str) + "\n")
     print(json.dumps(receipt["acceptance"], indent=1)[:3000])
