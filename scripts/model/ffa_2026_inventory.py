@@ -398,18 +398,80 @@ def live_content_checks(
             raise SystemExit(f"period {period}: the lineup read returned no league document")
         rows = _lineup_rows(response.payload, SEASON, period, int(cap["matchup_period"]))
         slots = Counter(r["slot"] for r in rows)
+        equal = _hash(rows) == cap["content_hash"]
         lineups[str(period)] = {
             "liveEntries": len(rows),
             "slots": dict(sorted(slots.items())),
-            "contentEqualToCapture": _hash(rows) == cap["content_hash"],
+            "contentEqualToCapture": equal,
             "receiptSha256": response.receipt.sha256,
         }
+        if not equal:
+            lineups[str(period)]["fieldDifferences"] = _lineup_field_differences(
+                engine, cap["id"], rows, native_ref, _kind
+            )
     return {
         "startedAt": started.isoformat(),
         "finishedAt": datetime.now(UTC).isoformat(),
         "transactions": transactions,
         "lineups": lineups,
         "requests": read_through + len(periods),
+    }
+
+
+def _lineup_field_differences(
+    engine: Any, capture_id: str, rows: list[dict[str, Any]], native_ref: Any, kind: Any
+) -> dict[str, Any]:
+    """Field by field: the live rows against the stored capture's entries. Membership, slot and
+    points are the historical lineup; the display name and NFL team are read as of now (ESPN
+    returns a player's current name and team even for a past period)."""
+    with engine.connect() as c:
+        stored = {
+            (str(r.team_id), str(r.player_id)): r
+            for r in c.execute(
+                text(
+                    "select team_id, player_id, slot, official_points, display_name, position, "
+                    "nfl_team_espn_id from fantasy_lineup_entry where capture_id = :c"
+                ),
+                {"c": capture_id},
+            )
+        }
+    refs = {native_ref("fantasy_team", r["team"], SEASON) for r in rows} | {
+        native_ref(kind(r["player"]), r["player"], SEASON) for r in rows
+    }
+    ids = _aliases(engine, refs)
+    live = {}
+    for r in rows:
+        team = ids.get(native_ref("fantasy_team", r["team"], SEASON))
+        player = ids.get(native_ref(kind(r["player"]), r["player"], SEASON))
+        live[(str(team), str(player))] = r
+    diffs: Counter[str] = Counter()
+    for key in live.keys() & stored.keys():
+        a, b = live[key], stored[key]
+        if a["slot"] != b.slot:
+            diffs["slot"] += 1
+        if (a["points"] is None) != (b.official_points is None) or (
+            a["points"] is not None and Decimal(str(a["points"])) != Decimal(str(b.official_points))
+        ):
+            diffs["points"] += 1
+        if a["position"] != b.position:
+            diffs["position"] += 1
+        if a["name"] != b.display_name:
+            diffs["displayNameNow"] += 1
+        if a["pro_team"] != b.nfl_team_espn_id:
+            diffs["nflTeamNow"] += 1
+    historical = (
+        len(live.keys() - stored.keys())
+        + len(stored.keys() - live.keys())
+        + diffs["slot"]
+        + diffs["points"]
+        + diffs["position"]
+    )
+    return {
+        "onlyLive": len(live.keys() - stored.keys()),
+        "onlyStored": len(stored.keys() - live.keys()),
+        "differences": dict(sorted(diffs.items())),
+        "historicalLineupDiffers": historical > 0,
+        "classification": "REVISION" if historical else "READ_TIME_REPRESENTATION_ONLY",
     }
 
 
@@ -662,6 +724,11 @@ def main() -> None:
                 "unresolvedIdentities": tx["unresolvedIdentities"],
                 "lineupPeriodsEqual": sum(
                     v["contentEqualToCapture"] for v in content["lineups"].values()
+                ),
+                "lineupPeriodsWithHistoricalDifferences": sorted(
+                    p
+                    for p, v in content["lineups"].items()
+                    if v.get("fieldDifferences", {}).get("historicalLineupDiffers")
                 ),
                 "lineupPeriods": len(content["lineups"]),
             },
