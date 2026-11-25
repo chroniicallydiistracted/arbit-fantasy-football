@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "id": "TASK-20261125-002",
+  "title": "M3-3 final directive Phase E: research eligibility registry and fail-closed assembly check",
+  "objective": "Record every M3-3 DvP feature's research evidence, classification and production eligibility in one machine-readable registry extending arbit_model.feature_specs, with a fail-closed check at the model assembly boundary, so no later agent mistakes a feature's existence, historical reliability, research promise or prospective confirmation for production eligibility. No feature is activated and no production behavior or legacy constant changes. Also close AUD-01a now that unattended publication is verified with the owner-registered key.",
+  "status": "active",
+  "phase": "implement",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "config/model/research-eligibility.json",
+    "libs/arbit-model/src/arbit_model/eligibility.py",
+    "libs/arbit-model/tests/test_eligibility.py",
+    "libs/arbit-model/src/arbit_model/feature_specs.py",
+    "AGENTS.md",
+    "docs/research/dvp/RESEARCH_ELIGIBILITY.md",
+    "docs/research/dvp/audit-findings.json",
+    "docs/research/dvp/AUDIT_RECONCILIATION.md",
+    "docs/research/dvp/README.md",
+    "docs/research/dvp/MODEL_CARD.md",
+    "scripts/model/dvp.py",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-25T09:06:57Z",
+  "updated_at": "2026-11-25T09:09:42Z",
+  "baseline": "dd8e1d64432cb3f134a5e9228373a54a07772a8c",
+  "next_action": "Record implement evidence",
+  "sections": {
+    "review": {
+      "summary": "Inspected the existing feature registry (arbit_model.feature_specs: FEATURES with definitions, units, windows, sources and SHRINKAGE constants; legacy DvP columns opp_dvp_{QB..K}_{pg,pg_shrunk,adj,adj_shrunk,opps_pg} and opp_off_dst_allowed_*) and its consumers (team_features only; no production model assembles them). Collected each feature's evidence from the committed receipts (reliability-results A05/A07, backtest receipts, sitstart, league v2, explore-v3, simulation-v1, threshold-sensitivity-v1). Verified the owner-registered deploy key from the timer's service context (AUD-01a).",
+      "files": [
+        "libs/arbit-model/src/arbit_model/feature_specs.py",
+        "docs/research/dvp/reliability-results.json"
+      ]
+    },
+    "plan": {
+      "summary": "1) A machine-readable registry (config/model/research-eligibility.json) with the directive's fields and initial classifications. 2) arbit_model.eligibility: load with validation (required fields, evidence kinds, classifications, no production eligibility without recorded approvals), governing() by entry id, feature_specs patterns and estimator columns, check_assembly failing closed for production and reporting for research. 3) Tests. 4) feature_specs note and an AGENTS.md rule pointing production assembly at the gate; no feature activated, no constant changed. 5) Docs and records; close AUD-01a.",
+      "files": [
+        "config/model/research-eligibility.json",
+        "libs/arbit-model/src/arbit_model/eligibility.py"
+      ]
+    },
+    "implementation": {
+      "summary": "config/model/research-eligibility.json (10 entries); arbit_model/eligibility.py (load, governing, check_assembly, classifications, covered; RegistryError, IneligibleFeature; DVP_LIKE pattern for unregistered DvP-like names); feature_specs docstring note; AGENTS.md rule.",
+      "files": [
+        "config/model/research-eligibility.json",
+        "libs/arbit-model/src/arbit_model/eligibility.py",
+        "libs/arbit-model/src/arbit_model/feature_specs.py",
+        "AGENTS.md"
+      ]
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}

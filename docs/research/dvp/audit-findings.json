@@ -32,7 +32,8 @@
    ],
    "evidence": [
     "The service template at 2e2520f has no publication step.",
-    "GitHub activity API: week 12's files reached GitHub in the push of 168196d to claude/m3-dvp-prospective at 2026-11-24T23:13:15Z, a manual step; their bytes equal the ledger's forecasts.csv, manifest.json and league.json hashes."
+    "GitHub activity API: week 12's files reached GitHub in the push of 168196d to claude/m3-dvp-prospective at 2026-11-24T23:13:15Z, a manual step; their bytes equal the ledger's forecasts.csv, manifest.json and league.json hashes.",
+    "gh repo deploy-key list: \"Arbit research evidence\" read-write; ssh -T authenticates as the repository; a systemd-run publish over SSH returned the evidence-branch head 959ff9e with no read-back problems and GitHub timestamp 2026-11-25T03:46:49Z."
    ],
    "tests": [
     "libs/arbit-model/tests/test_dvp_evidence.py (6 tests against a local bare remote)",
@@ -44,8 +45,8 @@
    "remediation": "arbit_model.dvp.evidence: a sanitized commitment (ledger entry and file hashes, forecasts CSV; league capture as a hash only) committed from a dedicated clone to research-evidence/dvp-prospective, read back and compared, with GitHub's repository activity record as the timestamp. Attempts, results and failures are hash-chained in publications.jsonl; failed publication is retried without regenerating. Week 12's earlier push recorded as verified prior evidence.",
    "expectedEffect": "None on forecasts; a week counts as prospective only with a verified external commitment before its cutoff (amendment 1).",
    "completionCriteria": "Commitments for every archived week verified before its cutoff; the timer publishes unattended with a repository-scoped credential.",
-   "status": "IN_PROGRESS",
-   "statusNote": "Mechanism built and verified live for week 12. The repository-scoped deploy key is generated locally but its registration on GitHub needs the owner (the permission classifier refused the registration); until then the timer's publications fail visibly, alert and retry.",
+   "status": "RESOLVED_VERIFIED",
+   "statusNote": "The owner registered the repository-scoped write deploy key on 2026-11-25; unattended publication was verified from a systemd user service with the service environment: SSH fetch and push with the key, read-back equal to the archive, GitHub activity timestamp found.",
    "task": "TASK-20261124-010"
   },
   {
@@ -390,5 +391,12 @@
    "status": "RESOLVED_VERIFIED",
    "task": "TASK-20261125-001"
   }
- ]
+ ],
+ "eligibility": {
+  "requirement": "DEC-09 research eligibility metadata (directive §11)",
+  "status": "RESOLVED_VERIFIED",
+  "registry": "config/model/research-eligibility.json",
+  "gate": "libs/arbit-model/src/arbit_model/eligibility.py",
+  "task": "TASK-20261125-002"
+ }
 }
