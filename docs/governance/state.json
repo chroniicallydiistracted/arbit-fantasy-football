@@ -1,11 +1,11 @@
 {
   "version": 1,
   "project": "arbit-fantasy-football",
-  "active_task": "TASK-20261125-003",
-  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md",
+  "active_task": null,
+  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261125-003-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
-  "project_next_action": "Merge the Phase E PR (branch claude/m3-final-phase-e, TASK-20261125-002). Then remediation 7: the comprehensive plan audit with a reconciled requirement inventory (original spec, AUD-01..07, AUD-01a-d, B0-B8, PB-AUD-01..08, owner decisions, eligibility), the directive's completion statuses, semantic checks, reruns from pinned inputs (including PB-AUD-08's Phase B rerun), negative controls and a fresh receipt. The prospective timer runs unattended with the registered key; week 13 window 2026-12-01 12:00 to 12-04 01:15 UTC.",
+  "project_next_action": "M3-3 development is complete (TASK-20261125-003, remediation 7 PASSED). Nothing to build for M3-3: the prospective timer collects 2026 weeks 13-18 (week 13 window 2026-12-01 12:00 to 12-04 01:15 UTC). After the regular season, evaluate P4P and C05L-2026-PRO with the frozen rules, then the owner decides the D/ST weight (P5W). Otherwise resume the roadmap: the sit/start advisor (ADR-007).",
   "project_next_source": "docs/superpowers/plans/2026-11-09-m3-model.md",
-  "as_of": "2026-11-24"
+  "as_of": "2026-11-25"
 }
