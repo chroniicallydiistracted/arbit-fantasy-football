@@ -1,0 +1,107 @@
+{
+ "format": "arbit-dvp-m3-3-simulation-v1",
+ "experiment": "AUD-06: statistical simulation and robustness suite for M3-3 DvP",
+ "authority": "Owner final directive §9 (docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md), DEC-08. TASK-20261125-001.",
+ "declaredAt": "2026-11-25, before any simulation in this suite was run. Acceptance criteria are not changed after results; a change would be a new version with its reason.",
+ "purpose": "Do Arbit's actual estimators and its complete development-selection-validation-decision procedure behave correctly when the true defensive signal is known? Results qualify, never change, the frozen 2026 methodology (§5.4).",
+ "code": {
+  "generator": "libs/arbit-model/src/arbit_model/dvp/simulate.py",
+  "runner": "scripts/model/dvp_simulate.py",
+  "actualImplementations": "Every estimator and rule is Arbit's own code, unmodified: walkforward.prepare, fit_fold, metrics, decide; shadow.scheduled_targets, walk_targets, forecast_only, attach_labels; explore.make_extra (rolling 3/5/8, split-half k) and make_opportunity_extra (volume, efficiency, both); lab.adjust, groups, reml_components, bootstrap_components; reliability.halves, split_half; opportunity.reliability; the development selection _select of scripts/model/dvp.py; decisions.units, pairs, metrics, decide; league.decide, summarize."
+ },
+ "league": {
+  "teams": 32,
+  "weeksPerSeason": 17,
+  "seasons": [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+  "split": {"training only": [2016], "development": [2017, 2018, 2019, 2020, 2021, 2022, 2023], "validation": [2024], "holdout": [2025]},
+  "schedule": "Every team plays every week (16 games a week) except where a scenario says otherwise; the first game of each week is Thursday night (the preweek cutoff); results are available at 12:00 UTC the next day, as in the real data.",
+  "positions": {
+   "default": ["WR", "DST"],
+   "SIM-16": ["QB", "RB", "WR", "TE", "K", "DST"],
+   "orientation": "Offensive positions: points allowed by the defense (the studied unit is the defense). D/ST: points the D/ST scores, driven by the opposing offense's vulnerability (the studied unit is the offense), as in the real observations."
+  }
+ },
+ "dataGeneratingProcess": {
+  "points": "y = mu_p + a(side, season) + d(studied unit, season, week) + e_nontd + e_td. nontd = y - e_td - td_mean: the defensive trait d lives entirely in the non-touchdown part; e_td is pure noise (touchdown variance).",
+  "means": {"QB": 18, "RB": 22, "WR": 30, "TE": 9, "K": 8, "DST": 6},
+  "noiseSd": {"QB": 7, "RB": 8, "WR": 10, "TE": 6, "K": 4, "DST": 6},
+  "touchdownShareOfNoiseVariance": 0.4,
+  "sideStrengthSd": {"QB": 3, "RB": 3, "WR": 4, "TE": 2, "K": 1.5, "DST": 1.5},
+  "trait": "d ~ N(0, sd_d) per studied unit and season; sd_d = noiseSd / sqrt(k_true), so k_true = noise variance / trait variance per game (the quantity REML estimates). k_true = infinity means sd_d = 0.",
+  "persistence": "Across seasons both a and d follow an AR(1) with correlation rho (base 0.5): x_s = rho x_{s-1} + sqrt(1 - rho^2) z.",
+  "volume": "Per cell: volume ~ max(1, N(v_p, 0.25 v_p)) with v_p = mu_p / 1.5; efficiency = y / volume, so points = volume x efficiency exactly (the opportunity estimators' identity). In SIM-14 the trait enters through volume or through efficiency only.",
+  "oracle": "The true conditional mean mu_p + a + d (known only to the simulation): a research reference, never an eligible input."
+ },
+ "scenarios": {
+  "SIM-01": {"name": "Pure noise", "kTrue": "inf", "kind": "null"},
+  "SIM-02": {"name": "Weak signal", "kTrue": 60},
+  "SIM-03": {"name": "Moderate signal", "kTrue": 20},
+  "SIM-04": {"name": "Strong signal", "kTrue": 8},
+  "SIM-05": {"name": "Abrupt midseason change", "kTrue": 8, "violation": "the trait is redrawn independently at week 9 of every season"},
+  "SIM-06": {"name": "Gradual drift", "kTrue": 8, "violation": "the trait follows a within-season AR(1) with weekly correlation 0.85 (stationary sd as SIM-04)"},
+  "SIM-07": {"name": "Unequal exposure", "kTrue": 20, "violation": "each team-season loses 0-6 of its games at random (status invalid), so units differ in games observed"},
+  "SIM-08": {"name": "Random missing", "kTrue": 20, "violation": "15% of cells missing completely at random"},
+  "SIM-09": {"name": "Informative missing", "kTrue": 20, "violation": "cells whose noise exceeds one sd are missing with probability 0.5 (not at random)"},
+  "SIM-10": {"name": "Correlated errors", "kTrue": 20, "violation": "a game shock shared by both sides and positions (sd 0.4 x noise sd) and a league-wide week shock (sd 0.3 x noise sd)"},
+  "SIM-11": {"name": "Heavy tails", "kTrue": 20, "violation": "noise is Student t with 3 degrees of freedom, scaled to the same variance"},
+  "SIM-12": {"name": "Unequal schedule", "kTrue": 20, "violation": "teams in 4 strength tiers by side strength play 60% of games within their tier"},
+  "SIM-13a": {"name": "Full turnover", "kTrue": 8, "persistence": 0.0},
+  "SIM-13b": {"name": "High persistence", "kTrue": 8, "persistence": 0.9},
+  "SIM-14a": {"name": "Signal in volume only", "kTrue": 8, "channel": "volume"},
+  "SIM-14b": {"name": "Signal in efficiency only", "kTrue": 8, "channel": "efficiency"},
+  "SIM-15": {"name": "Placebo and shuffled-opponent controls", "uses": ["SIM-01", "SIM-04"], "measure": "B09 controls' development improvement and selection"},
+  "SIM-16": {"name": "Multiple competing null predictors", "kTrue": "inf", "positions": "all six", "measure": "family-wise false candidacy and promotion across positions and estimator families"},
+  "SIM-17": {"name": "Small-sample league-constrained evaluation", "measure": "8 teams, 11 weeks: power, false positives and interval coverage of the cumulative B06-minus-B00 points"},
+  "SIM-18": {"name": "Zero-change weeks and shared manager decisions", "measure": "coverage of the changed-weeks and all-weeks bootstraps and a naive decision-level bootstrap"}
+ },
+ "experiments": {
+  "E1": {
+   "what": "Estimator recovery per position and season: REML (lab.reml_components on leave-one-out adjusted unit frames), split-half r and Spearman-Brown k (reliability.halves/split_half), season-cluster bootstrap interval of k (lab.bootstrap_components).",
+   "scenarios": ["SIM-01", "SIM-02", "SIM-03", "SIM-04", "SIM-07", "SIM-08", "SIM-09", "SIM-10", "SIM-11", "SIM-14a", "SIM-14b"],
+   "data": "Seven seasons (the development span) per repetition.",
+   "reps": 1000,
+   "intervalReps": {"repetitions": 200, "bootstrapReplicates": 200}
+  },
+  "E2": {
+   "what": "The complete procedure: development folds 2017-2023 (each fit on earlier seasons), the development selection, validation 2024, holdout 2025, walkforward.decide at 1%; Phase C (decisions) on D/ST in all three periods at 1.8 points; every frozen and exploratory variant plus the oracle.",
+   "scenarios": ["SIM-01", "SIM-02", "SIM-03", "SIM-04", "SIM-05", "SIM-06", "SIM-07", "SIM-08", "SIM-09", "SIM-10", "SIM-11", "SIM-12", "SIM-13a", "SIM-13b", "SIM-14a", "SIM-14b", "SIM-16"],
+   "reps": 300,
+   "metricsBootstrapReplicates": 50,
+   "note": "Selection and decide use point estimates only, so the metrics bootstrap inside E2 is reduced to 50 replicates (it does not affect any label); interval coverage is studied in U."
+  },
+  "E3": {
+   "what": "SIM-17 and SIM-18 with league.decide and league.summarize: an 8-team league, 2 D/STs held per team (5 teams) or 1 (3 teams), 18 free agents, 11 weeks; forecasts with a known correlation to the true points (B00 rho 0.15; B06 rho 0.15 under the null, 0.22 under the alternative).",
+   "reps": 2000,
+   "bootstrapReplicates": 1000
+  },
+  "U": {
+   "what": "Interval coverage of walkforward.metrics' block bootstrap of the RMSE difference, with a known true difference: y = s + e, forecast A = 0, forecast B = c s, so the population RMSE difference is exact.",
+   "conditions": ["independent rows, week blocks", "week-clustered shocks, week blocks", "week-clustered shocks, row-level blocks (deliberate violation)", "season-clustered effects, season blocks (7 blocks)", "season blocks with 3 and 5 blocks", "shared-game pairs, week blocks", "temporal AR(1) across weeks, week blocks", "unequal exposure, week blocks"],
+   "reps": 1000,
+   "bootstrapReplicates": 1000,
+   "deviation": "1,000 instead of the frozen 2,000 replicates per interval, for budget; Monte Carlo error of a quantile at 1,000 is small relative to the coverage question."
+  }
+ },
+ "randomStreams": "numpy SeedSequence(20261125) spawned per experiment, scenario and repetition; each repetition spawns separate children for data generation, the walk's own seed (Settings.seed, used by B09 controls), permutations, and bootstrap seeds.",
+ "measurements": "True and estimated signal and noise variance, reliability and k; bias, variance and MSE of log k; boundary and non-convergence rates; interval coverage and width; forecast RMSE and MAE per variant and the oracle; incremental improvement over B00; candidate selection and the selected family; Phase B and Phase C labels; false positive, power, correct rejection, correct candidate recovery and false promotion frequencies; winner's curse (development minus validation improvement of the selected variant); Monte Carlo standard errors on every frequency.",
+ "acceptance": {
+  "A1": "Null (SIM-01): Phase B PROMISING at most 5% per position, and Phase B and Phase C both PROMISING for D/ST at most 5%.",
+  "A2": "Multiple nulls (SIM-16): any of six positions PROMISING at most 10%.",
+  "A3": "Strong signal (SIM-04): D/ST Phase B PROMISING at least 80%. Moderate and weak reported.",
+  "A4": "k recovery (E1): for k_true 8 and 20 with independent normal noise, median |k_hat / k_true - 1| at most 0.25 and REML convergence at least 95%. Null: share of unidentified k (infinite or boundary) reported.",
+  "A5": "Candidate recovery (SIM-04): the selected variant is a shrunk one (b03, b03r, b04, b05, b06, b07 families) in at least 90% of repetitions where a candidate is selected.",
+  "A6": "Controls (SIM-15): each B09 control cuts development RMSE by 1% in at most 5% of repetitions, null and signal.",
+  "A7": "Coverage (U): 92-98% where the bootstrap block matches the dependence and there are at least 10 blocks; other conditions reported as limitations.",
+  "A8": "League (SIM-17/18): under the null the all-weeks interval excludes zero at most 7%; its coverage of the true expected gain 90-98%."
+ },
+ "inconclusive": "A criterion is INCONCLUSIVE when its Monte Carlo 95% interval straddles the threshold, or when more than 5% of a scenario's repetitions fail to run (each failure is recorded).",
+ "budget": {
+  "wallClock": "at most 6 hours on this PC",
+  "workers": "8 processes, POLARS_MAX_THREADS=1 each",
+  "rule": "If a pilot of 5 repetitions per E2 scenario predicts more than the budget, E2 repetitions are reduced uniformly to no fewer than 200 and the reduction is recorded. No other reduction is allowed."
+ },
+ "classificationOfFindings": ["SOFTWARE_DEFECT", "MATHEMATICAL_LIMITATION", "MODEL_ASSUMPTION", "INSUFFICIENT_SAMPLE", "CONFIGURATION", "INTERPRETATION"],
+ "frozenMethodology": "Unchanged whatever the results. A material defect is recorded and escalated, never silently corrected in the ongoing 2026 experiment (§5.4).",
+ "write_to_production": false,
+ "forbidden_vendor_projection_dependencies": 0
+}

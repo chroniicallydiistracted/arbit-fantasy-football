@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "id": "TASK-20261125-001",
+  "title": "M3-3 final directive: AUD-06 simulation suite and AUD-07 threshold interpretation",
+  "objective": "Implement and execute the predeclared statistical simulation suite (SIM-01 to SIM-18) exercising Arbit's actual DvP estimators and the complete development-selection-validation-decision procedure against known data-generating processes, with uncertainty validation; reproduce and correct the interpretation of the 1.8-point Phase C threshold and run a separately versioned descriptive threshold sensitivity, without changing any frozen threshold, method or the 2026 confirmation.",
+  "status": "active",
+  "phase": "review",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "config/dvp/simulation-v1.json",
+    "config/dvp/threshold-sensitivity-v1.json",
+    "libs/arbit-model/src/arbit_model/dvp/simulate.py",
+    "libs/arbit-model/tests/test_dvp_simulate.py",
+    "scripts/model/dvp_simulate.py",
+    "scripts/model/dvp_thresholds.py",
+    "scripts/model/dvp.py",
+    "docs/research/dvp/simulation-v1.json",
+    "docs/research/dvp/threshold-sensitivity-v1.json",
+    "docs/research/dvp/SIMULATION_AUD06.md",
+    "docs/research/dvp/THRESHOLDS_AUD07.md",
+    "docs/research/dvp/plots/simulation",
+    "docs/research/dvp/audit-findings.json",
+    "docs/research/dvp/AUDIT_RECONCILIATION.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/PLAYER_LEVEL_REPORT.md",
+    "docs/research/dvp/README.md",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-25T07:16:35Z",
+  "updated_at": "2026-11-25T07:16:35Z",
+  "baseline": "5469c590585fe9760ff3856f2d5d6f1ada13b0bb",
+  "next_action": "Read affected requirements/source and record Review evidence",
+  "sections": {
+    "review": {
+      "summary": "",
+      "files": []
+    },
+    "plan": {
+      "summary": "",
+      "files": []
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}
