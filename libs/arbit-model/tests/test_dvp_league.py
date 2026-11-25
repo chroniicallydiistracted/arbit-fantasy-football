@@ -74,3 +74,112 @@ def test_matchup_effects_count_results_that_change():
     assert effects["resultsDifferBetweenModels"] == 1 and effects["candidateWins"] == 1
     assert effects["resultDiffersFromActual"] == {"b00": 0, "b06": 1}
     assert effects["againstActual"]["b06"] == {"lossesToWins": 1, "winsToLosses": 0, "other": 0}
+
+
+# Final directive PB-AUD-04 to -06.
+
+
+def weekly(gains):
+    """One decision per week; a gain of 0 means the models agreed that week."""
+    rows = []
+    for week, gain in enumerate(gains, start=1):
+        rows.append(
+            {
+                "week": week,
+                "team": "t1",
+                "kind": league.START,
+                "options": 2,
+                "labelled": True,
+                "best": 10.0,
+                "pick_b00": "AAA",
+                "points_b00": 5.0,
+                "pick_b06": "AAA" if gain == 0 else "BBB",
+                "points_b06": 5.0 + gain,
+            }
+        )
+    return pl.DataFrame(rows)
+
+
+def test_the_bootstrap_keeps_zero_change_weeks_as_zero_gain_blocks():
+    table = weekly([10.0, 0.0, 0.0, -4.0])
+    corrected = league.summarize(table, "b00", "b06", 500, 1729, weeks=[1, 2, 3, 4, 5])
+    original = league.summarize(table, "b00", "b06", 500, 1729, blocks=league.CHANGED_WEEKS)
+    assert corrected["pointsFromChanges"] == original["pointsFromChanges"] == 6.0
+    assert corrected["bootstrap"]["blocks"] == 4 and original["bootstrap"]["blocks"] == 2
+    assert corrected["zeroChangeWeeks"] == [2, 3]
+    assert corrected["weeksWithoutEvaluableDecisions"] == [5]  # missing coverage, not a block
+    # Resampling zero weeks puts more mass at moderate totals than resampling only 10 and -4.
+    assert corrected["pointsFromChanges95"] != original["pointsFromChanges95"]
+    # Deterministic: the same seed gives the same interval.
+    again = league.summarize(table, "b00", "b06", 500, 1729, weeks=[1, 2, 3, 4, 5])
+    assert again["pointsFromChanges95"] == corrected["pointsFromChanges95"]
+
+
+def test_feasibility_classes():
+    held = ["AAA", "BBB"]
+    assert league.feasibility("AAA", held, 16, 16, 3) == league.HELD
+    assert league.feasibility("CCC", held, 15, 16, 3) == league.EXECUTABLE
+    assert league.feasibility("CCC", held, 16, 16, 3) == league.REQUIRES_DROP
+    assert league.feasibility("CCC", [*held, "DDD"], 15, 16, 3) == league.REQUIRES_DST_DROP
+    assert league.feasibility("CCC", held, None, 16, 3) == league.UNKNOWN_FEASIBILITY
+
+
+def test_collisions_count_unowned_units_recommended_to_several_teams():
+    rows = [
+        {"week": 1, "team": "t1", "held": ["AAA"], "pick_b06": "ZZZ"},
+        {"week": 1, "team": "t2", "held": ["BBB"], "pick_b06": "ZZZ"},
+        {"week": 1, "team": "t3", "held": ["CCC"], "pick_b06": "CCC"},  # its own unit
+        {"week": 2, "team": "t1", "held": ["AAA"], "pick_b06": "ZZZ"},
+    ]
+    result = league.collisions(rows, "b06")
+    assert result["sharedUnits"] == 1 and result["decisionsInCollision"] == 2
+    assert result["byWeek"] == {"1": {"ZZZ": ["t1", "t2"]}}
+
+
+def test_matchup_counterfactuals_count_ties_unknowns_and_ineligible_picks_apart():
+    starts = [
+        {
+            "week": 3,
+            "team": "t1",
+            "optionUnits": ["AAA", "BBB"],
+            "pick_b00": "AAA",
+            "pick_b06": "BBB",
+        },
+        {
+            "week": 3,
+            "team": "t2",
+            "optionUnits": ["CCC", "DDD"],
+            "pick_b00": "CCC",
+            "pick_b06": "DDD",
+        },
+        {"week": 3, "team": "t3", "optionUnits": ["EEE"], "pick_b00": "EEE", "pick_b06": "FFF"},
+    ]
+    lineups = pl.DataFrame(
+        {
+            "week": [3, 3],
+            "team": ["t1", "t2"],
+            "slot": ["DST", "DST"],
+            "points": [3.0, 4.0],
+        }
+    )
+    matchups = [
+        {
+            "winner": "away",
+            "scoringPeriods": [3],
+            "home": {"team": "t1", "officialPoints": "100.00"},
+            "away": {"team": "t2", "officialPoints": "105.00"},
+        },
+        {
+            "winner": "home",
+            "scoringPeriods": [3],
+            "home": {"team": "t3", "officialPoints": "90.00"},
+            "away": {"team": "t4", "officialPoints": "80.00"},
+        },
+    ]
+    points = {(3, "AAA"): 3.0, (3, "BBB"): 8.0, (3, "CCC"): 4.0}  # DDD unknown
+    effects = league.matchup_effects_v2(starts, lineups, matchups, points, "b00", "b06")
+    assert effects["counted"] == 1 and effects["unknownPoints"] == 1
+    assert effects["ineligiblePick"] == 1
+    # t1: actual 100 v 105 (L). B06's BBB: 100 - 3 + 8 = 105, a tie.
+    assert effects["againstActual"]["b06"]["toTies"] == 1
+    assert effects["resultsDifferBetweenModels"]["candidateWins"] == 1

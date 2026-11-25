@@ -77,6 +77,8 @@ SCANNED = (
     "scripts/model/dvp_prospective.py",
     "scripts/model/dvp_explore.py",
     "scripts/model/dvp_league_2026.py",
+    "scripts/model/dvp_league_2026_v2.py",
+    "scripts/model/ffa_2026_pin.py",
     "scripts/model/defense_position_study.py",
     "scripts/model/ffa_signal_study.py",
     "scripts/model/build_targets.py",

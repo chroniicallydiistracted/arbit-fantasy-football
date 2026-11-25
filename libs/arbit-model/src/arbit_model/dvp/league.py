@@ -86,10 +86,26 @@ def without_decision(
     return out
 
 
+ALL_WEEKS = "all_weeks"  # v2 (final directive PB-AUD-04): every evaluated week is a block
+CHANGED_WEEKS = "changed_weeks"  # v1: only weeks where a decision changed
+
+
 def summarize(
-    table: pl.DataFrame, base: str, candidate: str, reps: int, seed: int
+    table: pl.DataFrame,
+    base: str,
+    candidate: str,
+    reps: int,
+    seed: int,
+    *,
+    blocks: str = ALL_WEEKS,
+    weeks: Sequence[int] | None = None,
 ) -> dict[str, Any]:
-    """The declared metrics for one decision kind (rows with every option labelled)."""
+    """The declared metrics for one decision kind (rows with every option labelled).
+
+    The bootstrap resamples week blocks of the cumulative B06-minus-B00 points. With ALL_WEEKS
+    every week with an evaluated decision is a block, a week with no changed decision adding zero;
+    weeks in `weeks` with no evaluable decision are listed as missing coverage. CHANGED_WEEKS
+    reproduces v1, which resampled only weeks where a decision changed."""
     if table.is_empty():
         return {"decisions": 0}
     rows = table.filter(pl.col("labelled"))
@@ -118,23 +134,183 @@ def summarize(
             "hitRate": round(float((regret <= 1e-9).mean()), 4),  # type: ignore[arg-type]
             "meanRegret": round(float(regret.mean()), 3),  # type: ignore[arg-type]
         }
-    if gain.size and reps > 0:
-        weeks = changed.get_column("week").to_numpy()
-        labels = np.unique(weeks)
-        members = [np.flatnonzero(weeks == w) for w in labels]
+    evaluated = sorted(set(rows.get_column("week").to_list()))
+    changed_weeks = sorted(set(changed.get_column("week").to_list()))
+    out["evaluatedWeeks"] = len(evaluated)
+    out["zeroChangeWeeks"] = sorted(set(evaluated) - set(changed_weeks))
+    if weeks is not None:
+        out["weeksWithoutEvaluableDecisions"] = sorted(set(weeks) - set(evaluated))
+    if blocks == CHANGED_WEEKS:
+        if gain.size and reps > 0:
+            week_of = changed.get_column("week").to_numpy()
+            labels = np.unique(week_of)
+            members = [np.flatnonzero(week_of == w) for w in labels]
+            rng = np.random.default_rng(seed)
+            totals = [
+                float(
+                    gain[
+                        np.concatenate(
+                            [members[i] for i in rng.integers(0, labels.size, labels.size)]
+                        )
+                    ].sum()
+                )
+                for _ in range(reps)
+            ]
+            out["pointsFromChanges95"] = [
+                round(float(q), 2) for q in np.quantile(totals, [0.025, 0.975])
+            ]
+            out["bootstrap"] = {"method": CHANGED_WEEKS, "blocks": int(labels.size)}
+        return out
+    if evaluated and reps > 0:
+        per_week = {w: 0.0 for w in evaluated}
+        for w, g in zip(changed.get_column("week").to_list(), gain.tolist(), strict=True):
+            per_week[w] += g
+        values = np.array([per_week[w] for w in evaluated])
         rng = np.random.default_rng(seed)
         totals = [
-            float(
-                gain[
-                    np.concatenate([members[i] for i in rng.integers(0, labels.size, labels.size)])
-                ].sum()
-            )
-            for _ in range(reps)
+            float(values[rng.integers(0, values.size, values.size)].sum()) for _ in range(reps)
         ]
         out["pointsFromChanges95"] = [
             round(float(q), 2) for q in np.quantile(totals, [0.025, 0.975])
         ]
+        out["bootstrap"] = {
+            "method": ALL_WEEKS,
+            "blocks": int(values.size),
+            "reps": reps,
+            "seed": seed,
+        }
     return out
+
+
+# Feasibility of a streaming pick (final directive PB-AUD-05). Independent single-week,
+# single-manager recommendations: no waiver priority, competition or multi-week value.
+HELD = "HELD"
+EXECUTABLE = "EXECUTABLE"
+REQUIRES_DROP = "REQUIRES_DROP"
+REQUIRES_DST_DROP = "REQUIRES_DST_DROP"
+UNKNOWN_FEASIBILITY = "UNKNOWN"
+
+
+def feasibility(
+    pick: str, held: Sequence[str], roster_size: int | None, capacity: int, dst_limit: int
+) -> str:
+    """Can the team act on `pick` at the preweek cutoff (no player game-locked then)?"""
+    if pick in held:
+        return HELD
+    if roster_size is None:
+        return UNKNOWN_FEASIBILITY
+    if len(held) >= dst_limit:
+        return REQUIRES_DST_DROP
+    if roster_size < capacity:
+        return EXECUTABLE
+    return REQUIRES_DROP
+
+
+def collisions(rows: Sequence[Mapping[str, Any]], model: str) -> dict[str, Any]:
+    """Unowned units one model recommends to more than one team in the same week: only one team
+    could acquire each."""
+    picked: dict[tuple[int, str], list[str]] = {}
+    for r in rows:
+        if r[f"pick_{model}"] not in r.get("held", ()):
+            picked.setdefault((r["week"], r[f"pick_{model}"]), []).append(r["team"])
+    shared = {k: sorted(v) for k, v in picked.items() if len(v) > 1}
+    return {
+        "unownedPicks": sum(len(v) for v in picked.values()),
+        "sharedUnits": len(shared),
+        "decisionsInCollision": sum(len(v) for v in shared.values()),
+        "byWeek": {
+            str(w): {unit: teams for (week, unit), teams in shared.items() if week == w}
+            for w in sorted({week for week, _ in shared})
+        },
+    }
+
+
+def matchup_effects_v2(
+    starts: Sequence[Mapping[str, Any]],
+    lineups: pl.DataFrame,
+    matchups: Sequence[Mapping[str, Any]],
+    points: Mapping[tuple[int, str], float],
+    base: str,
+    candidate: str,
+) -> dict[str, Any]:
+    """Individual-decision counterfactual for start decisions (final directive PB-AUD-06): the
+    team's official total minus the started D/ST's official points plus the pick's actual FFA
+    points (`points`: (week, unit) -> canonical label), the opponent's official total held fixed.
+    Only picks among the team's options at the cutoff (`optionUnits`) count; ties, unknown points and ineligible
+    picks are counted apart. Not a change in league win probability."""
+    opponent: dict[tuple[int, str], tuple[float, float]] = {}
+    for match in matchups:
+        if not match.get("winner") or len(match["scoringPeriods"]) != 1:
+            continue
+        week = match["scoringPeriods"][0]
+        home, away = match["home"], match["away"]
+        hp, ap = float(home["officialPoints"]), float(away["officialPoints"])
+        opponent[(week, home["team"])] = (hp, ap)
+        opponent[(week, away["team"])] = (ap, hp)
+    started: dict[tuple[int, str], float | None] = {}
+    for entry in lineups.iter_rows(named=True):
+        if entry["slot"] == "DST":
+            value = entry["points"]
+            started[(entry["week"], entry["team"])] = None if value is None else float(value)
+
+    def result(own: float, other: float) -> str:
+        return "W" if own > other else ("L" if own < other else "T")
+
+    counts = {"counted": 0, "noMatchupResult": 0, "unknownPoints": 0, "ineligiblePick": 0}
+    outcomes: dict[str, dict[str, int]] = {
+        model: {"lossesToWins": 0, "winsToLosses": 0, "toTies": 0, "fromTies": 0, "unchanged": 0}
+        for model in (base, candidate)
+    }
+    differ = {"candidateWins": 0, "baseWins": 0, "other": 0}
+    for r in starts:
+        key = (r["week"], r["team"])
+        if key not in opponent:
+            counts["noMatchupResult"] += 1
+            continue
+        if any(r[f"pick_{model}"] not in r["optionUnits"] for model in (base, candidate)):
+            counts["ineligiblePick"] += 1
+            continue
+        pick_points = {
+            model: points.get((r["week"], r[f"pick_{model}"])) for model in (base, candidate)
+        }
+        actual_dst = started.get(key, 0.0)
+        if actual_dst is None or any(v is None for v in pick_points.values()):
+            counts["unknownPoints"] += 1
+            continue
+        own, other = opponent[key]
+        actual = result(own, other)
+        outcome = {
+            model: result(own - actual_dst + float(v), other)  # type: ignore[arg-type]
+            for model, v in pick_points.items()
+        }
+        counts["counted"] += 1
+        for model in (base, candidate):
+            change = (actual, outcome[model])
+            name = (
+                "unchanged"
+                if actual == outcome[model]
+                else "lossesToWins"
+                if change == ("L", "W")
+                else "winsToLosses"
+                if change == ("W", "L")
+                else "toTies"
+                if outcome[model] == "T"
+                else "fromTies"
+            )
+            outcomes[model][name] += 1
+        if outcome[base] != outcome[candidate]:
+            if outcome[candidate] == "W" or (outcome[candidate] == "T" and outcome[base] == "L"):
+                differ["candidateWins"] += 1
+            elif outcome[base] == "W" or (outcome[base] == "T" and outcome[candidate] == "L"):
+                differ["baseWins"] += 1
+            else:
+                differ["other"] += 1
+    return {
+        "kind": "individual-decision counterfactual; opponent's actual total held fixed",
+        **counts,
+        "againstActual": outcomes,
+        "resultsDifferBetweenModels": differ,
+    }
 
 
 def matchup_effects(

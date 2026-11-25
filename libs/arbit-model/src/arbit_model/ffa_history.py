@@ -22,6 +22,18 @@ trusted.
   scheduled days, so he may still be on waivers. Treated as not immediately claimable;
 - `FREE_AGENT`: otherwise. A free agent can be added until his own game locks (INDIVIDUAL_GAME).
 
+**Fail closed** (final directive PB-AUD-02, DEC-05): `moves` refuses an executed transaction
+that changes ownership in a way the replay doesn't support (a TRADE item, an ADD or DROP on a type
+other than FREEAGENT, WAIVER or ROSTER, an unknown item type) and an executed waiver without its
+processing time; `validate_draft` refuses a draft naming a player twice or a team outside the
+league. No executed trade exists in 2026 to establish a trade contract, so trade replay is
+downstream work.
+
+**Rule v2** (`availability_v2`, config/dvp/league-2026-exploratory-v2.json): ESPN processes
+waivers at midnight Pacific on the league's processing days (never Tuesday). A dropped player is on
+waivers until the first processing moment at or after the drop plus the hold; an unowned player
+whose game has kicked off is on waivers until the first Wednesday processing after the kickoff.
+
 **Classes:**
 - `VERIFIED`: matches a captured period roster or an archived snapshot at that moment;
 - `RECONSTRUCTED`: replayed between verified states;
@@ -30,16 +42,26 @@ trusted.
 Pure functions: no database or network access here.
 """
 
+import bisect
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import Any
+from zoneinfo import ZoneInfo
 
 EXECUTED = "EXECUTED"
 MOVE_TYPES = frozenset({"FREEAGENT", "WAIVER", "ROSTER"})
 FREE_AGENT = "FREE_AGENT"
 WAIVERS = "WAIVERS"
 UNCERTAIN = "WAIVERS_OR_FREE_AGENT"
+OWNERSHIP_ITEMS = frozenset({"ADD", "DROP", "TRADE", "DRAFT"})
+KNOWN_ITEMS = OWNERSHIP_ITEMS | {"LINEUP"}
+PACIFIC = ZoneInfo("America/Los_Angeles")
+DAYS = ("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")
+
+
+class UnsupportedHistory(ValueError):
+    """The transaction log holds something the replay can't apply faithfully."""
 
 
 @dataclass(frozen=True)
@@ -58,15 +80,41 @@ def moves(transactions: Iterable[Mapping[str, Any]]) -> list[Move]:
     """Executed adds and drops in effective-time order (a drop before an add at the same time).
 
     Proposals, declines, cancellations and failed waiver claims change no roster and are left
-    out; lineup-slot changes don't change ownership. Raises on an executed move without a time."""
+    out; lineup-slot changes don't change ownership; the draft comes from the draft picks.
+    Fails closed (UnsupportedHistory) on an executed ownership change the replay doesn't
+    support and on an executed waiver without its processing time."""
     out = []
     for t in transactions:
-        if t["status"] != EXECUTED or t["type"] not in MOVE_TYPES:
+        if t["status"] != EXECUTED:
             continue
-        when = t.get("processed_at") or t.get("proposed_at")
+        items = list(t["items"])
+        types = {str(i["type"]) for i in items}
+        if types - KNOWN_ITEMS:
+            raise UnsupportedHistory(
+                f"executed {t['type']} {t['espn_id']}: unknown item types {sorted(types - KNOWN_ITEMS)}"
+            )
+        changes = types & OWNERSHIP_ITEMS
+        if t["type"] == "DRAFT" and changes <= {"DRAFT"}:
+            continue
+        if not changes:
+            continue
+        if t["type"] not in MOVE_TYPES or changes - {"ADD", "DROP"}:
+            raise UnsupportedHistory(
+                f"executed {t['type']} {t['espn_id']} changes ownership through "
+                f"{sorted(changes)}, which the replay does not support"
+            )
+        if t["type"] == "WAIVER":
+            when = t.get("processed_at")
+            if when is None:
+                raise UnsupportedHistory(
+                    f"executed waiver {t['espn_id']} has no processing time; its proposal time "
+                    "is not its effective time"
+                )
+        else:
+            when = t.get("processed_at") or t.get("proposed_at")
         if when is None:
             raise ValueError(f"executed transaction {t['espn_id']} has no time")
-        for item in t["items"]:
+        for item in items:
             if item["type"] not in ("ADD", "DROP"):
                 continue
             out.append(
@@ -82,6 +130,21 @@ def moves(transactions: Iterable[Mapping[str, Any]]) -> list[Move]:
                 )
             )
     return sorted(out, key=lambda m: (m.when, 0 if m.kind == "DROP" else 1, m.transaction))
+
+
+def validate_draft(draft: Sequence[tuple[str, str]], teams: Iterable[str]) -> list[str]:
+    """Problems with the draft as a starting state: a player drafted twice or a team outside the
+    league. [] when sound."""
+    problems = []
+    league = set(teams)
+    seen: set[str] = set()
+    for player, team in draft:
+        if player in seen:
+            problems.append(f"{player} drafted twice")
+        seen.add(player)
+        if team not in league:
+            problems.append(f"{player} drafted by a team outside the league")
+    return problems
 
 
 @dataclass
@@ -186,3 +249,61 @@ def snapshot_agreement(
         else:
             disagree += 1
     return {"agree": agree, "disagree": disagree}
+
+
+def processing_moments(
+    start: date, end: date, days: Sequence[str], zone: ZoneInfo = PACIFIC
+) -> list[datetime]:
+    """Midnight (in `zone`) of every processing day between `start` and `end` inclusive."""
+    allowed = {DAYS.index(d) for d in days}
+    out = []
+    day = start
+    while day <= end:
+        if day.weekday() in allowed:
+            out.append(datetime.combine(day, time(0), tzinfo=zone))
+        day += timedelta(days=1)
+    return out
+
+
+def _first_at_or_after(moments: Sequence[datetime], when: datetime) -> datetime | None:
+    index = bisect.bisect_left(moments, when)
+    return moments[index] if index < len(moments) else None
+
+
+def availability_v2(
+    universe: Iterable[str],
+    owners: Mapping[str, str],
+    all_moves: Sequence[Move],
+    when: datetime,
+    hold: timedelta,
+    moments: Sequence[datetime],
+    kickoffs: Mapping[str, Sequence[datetime]],
+) -> dict[str, tuple[str, str]]:
+    """Each player's (state, reason) at `when` under rule v2. `moments` are the sorted processing
+    moments; `kickoffs` maps a player to its NFL games' kickoffs. States: `OWNED:<team>`,
+    `WAIVERS` (a drop hold or a game lock not yet cleared) or `FREE_AGENT`."""
+    wednesdays = [m for m in moments if m.astimezone(PACIFIC).weekday() == 2]
+    last_drop: dict[str, datetime] = {}
+    for move in all_moves:
+        if move.kind == "DROP" and move.when <= when:
+            last_drop[move.player] = move.when
+    out = {}
+    for player in universe:
+        if player in owners:
+            out[player] = (f"OWNED:{owners[player]}", "on a roster")
+            continue
+        dropped = last_drop.get(player)
+        if dropped is not None:
+            clears = _first_at_or_after(moments, dropped + hold)
+            if clears is None or when < clears:
+                out[player] = (WAIVERS, f"drop hold until {clears}")
+                continue
+        # Strictly before: at a preweek cutoff (the first kickoff itself) no game has started.
+        started = [k for k in kickoffs.get(player, ()) if k < when]
+        if started:
+            clears = _first_at_or_after(wednesdays, max(started))
+            if clears is None or when < clears:
+                out[player] = (WAIVERS, f"game lock until {clears}")
+                continue
+        out[player] = (FREE_AGENT, "no hold or lock in force")
+    return out

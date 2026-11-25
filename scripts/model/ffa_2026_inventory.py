@@ -256,6 +256,163 @@ def transaction_checks(data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _aliases(engine: Any, refs: set[Any]) -> dict[Any, Any]:
+    """Native ESPN references to Arbit's canonical ids, read-only (resolve_native would create a
+    missing identity; this reports it instead)."""
+    if not refs:
+        return {}
+    with engine.connect() as c:
+        rows = c.execute(
+            text(
+                "select provider, kind, scope, external_id, entity_id from entity_alias "
+                "where valid_to is null"
+            )
+        ).all()
+    found = {(r.provider, r.kind, r.scope, r.external_id): r.entity_id for r in rows}
+    return {
+        ref: found[(ref.provider, ref.entity_kind, ref.scope, ref.external_id)]
+        for ref in refs
+        if (ref.provider, ref.entity_kind, ref.scope, ref.external_id) in found
+    }
+
+
+def live_content_checks(
+    engine: Any, data: dict[str, Any], periods: list[int], read_through: int
+) -> dict[str, Any]:
+    """Content-level re-verification through the existing guarded integration (final directive
+    PB-AUD-01); nothing is stored.
+
+    - Transactions: every period's page is read and the pages' union taken. Each live record is
+      normalized exactly as Arbit stores it (league_history.store_transactions: type, status,
+      period, team, proposed and processed times, related id, items with players, teams and
+      slots) using read-only identity lookups, and its content hash compared with the stored
+      one; a mismatch is compared field by field. Each stored record is positively located on a
+      page.
+    - Lineups: each finished period is read as the capture reads it, its rows built by the
+      capture's own function and hashed, and compared with the stored capture's content hash
+      (team, player, slot, points, name, position, NFL team of every starter, bench and IR
+      entry)."""
+    from arbit_data.espn.client import EspnClient
+    from arbit_data.espn.endpoints import Endpoint, EndpointOptions
+    from arbit_data.espn.normalize import native_ref
+    from arbit_data.espn.transport import EspnTransport
+    from arbit_data.league_history import (
+        LINEUP_VIEWS,
+        _hash,
+        _items,
+        _kind,
+        _lineup_rows,
+        _when,
+        fetch_transactions,
+    )
+
+    client = EspnClient(EspnTransport())
+    started = datetime.now(UTC)
+    stored = {t["espn_id"]: t for t in data["transactions"]}
+    union: dict[str, tuple[int, Any]] = {}
+    pages: dict[str, Any] = {}
+    located: dict[str, list[int]] = {}
+    for period in range(1, read_through + 1):
+        page, receipt = fetch_transactions(client, SEASON, period)
+        pages[str(period)] = {"records": len(page.transactions), "receiptSha256": receipt}
+        for t in page.transactions:
+            union.setdefault(t.id, (period, t))
+            located.setdefault(t.id, []).append(period)
+    refs = set()
+    for _, t in union.values():
+        if t.team_id > 0:
+            refs.add(native_ref("fantasy_team", t.team_id, SEASON))
+        for item in t.items:
+            if item.player_id != 0:
+                refs.add(native_ref(_kind(item.player_id), item.player_id, SEASON))
+            for team in (item.from_team_id, item.to_team_id):
+                if team > 0:
+                    refs.add(native_ref("fantasy_team", team, SEASON))
+    ids = _aliases(engine, refs)
+    unknown_identities = len(refs - set(ids))
+    equal = 0
+    differ: list[dict[str, Any]] = []
+    unresolved = 0
+    for espn_id, (_, t) in sorted(union.items()):
+        if espn_id not in stored:
+            continue
+        try:
+            values = {
+                "scoring_period": t.scoring_period_id,
+                "type": t.type,
+                "status": t.status,
+                "team_id": ids[native_ref("fantasy_team", t.team_id, SEASON)]
+                if t.team_id > 0
+                else None,
+                "proposed_at": _when(t.proposed_date),
+                "processed_at": _when(t.process_date),
+                "related_espn_id": t.related_transaction_id,
+                "items": _items(t, ids, SEASON),
+            }
+        except KeyError:
+            unresolved += 1
+            continue
+        if _hash(values) == stored[espn_id]["content_hash"]:
+            equal += 1
+            continue
+        mine = stored[espn_id]
+        fields = [
+            k
+            for k in ("scoring_period", "type", "status", "proposed_at", "processed_at")
+            if values[k] != mine[k]
+        ]
+        if json.loads(json.dumps(values["items"], default=str)) != mine["items"]:
+            fields.append("items")
+        differ.append({"espnId": espn_id, "type": t.type, "fields": fields})
+    future = {i: located.get(i, []) for i, t in stored.items() if t["type"] == "FUTURE_ROSTER"}
+    transactions = {
+        "pagesRead": pages,
+        "liveRecords": len(union),
+        "storedRecords": len(stored),
+        "contentEqual": equal,
+        "contentDiffers": differ,
+        "unresolvedIdentities": unresolved,
+        "unknownIdentityRefs": unknown_identities,
+        "liveNotStored": sorted(set(union) - set(stored)),
+        "storedNotLive": sorted(set(stored) - set(union)),
+        "futureRosterRecordsLocatedOnPages": future,
+        "note": "A page also carries the next period's lineup moves (FUTURE_ROSTER); each record is "
+        "located on the pages that returned it.",
+    }
+    captures = {}
+    for cap in data["captures"]:
+        captures[int(cap["scoring_period"])] = cap
+    lineups: dict[str, Any] = {}
+    for period in periods:
+        cap = captures[period]
+        response = client.fetch(
+            Endpoint.LEAGUE,
+            EndpointOptions(
+                season=SEASON,
+                views=LINEUP_VIEWS,
+                scoring_period=period,
+                matchup_period=int(cap["matchup_period"]),
+            ),
+        )
+        if not isinstance(response.payload, dict):
+            raise SystemExit(f"period {period}: the lineup read returned no league document")
+        rows = _lineup_rows(response.payload, SEASON, period, int(cap["matchup_period"]))
+        slots = Counter(r["slot"] for r in rows)
+        lineups[str(period)] = {
+            "liveEntries": len(rows),
+            "slots": dict(sorted(slots.items())),
+            "contentEqualToCapture": _hash(rows) == cap["content_hash"],
+            "receiptSha256": response.receipt.sha256,
+        }
+    return {
+        "startedAt": started.isoformat(),
+        "finishedAt": datetime.now(UTC).isoformat(),
+        "transactions": transactions,
+        "lineups": lineups,
+        "requests": read_through + len(periods),
+    }
+
+
 def live_checks(data: dict[str, Any], periods: list[int]) -> dict[str, Any]:
     """Re-verify through the existing guarded integration; nothing is stored."""
     from arbit_data.espn.client import EspnClient
@@ -326,6 +483,12 @@ def main() -> None:
     parser.add_argument("--main", type=Path, default=ROOT)
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--out", type=Path, default=ROOT / "docs/research/ffa-2026-inventory.json")
+    parser.add_argument(
+        "--content",
+        type=Path,
+        help="write only the content-level live re-verification (PB-AUD-01) to this receipt; the "
+        "v1 inventory receipt is left as it is",
+    )
     args = parser.parse_args()
     engine = create_engine(
         os.environ["ARBIT_DATABASE_URL"],
@@ -480,6 +643,33 @@ def main() -> None:
         "dstAtPreweekCutoff": dst_states,
         "sourceHealth": [{k: str(v) for k, v in h.items()} for h in data["health"]],
     }
+    if args.content:
+        read_through = max(int(r["scoring_period"]) for r in data["reads"])
+        content = live_content_checks(engine, data, finished, read_through)
+        tx = content["transactions"]
+        receipt = {
+            "format": "arbit-ffa-2026-inventory-content-v2",
+            "generatedAt": datetime.now(UTC).isoformat(),
+            "code": code_version(),
+            "scope": f"transaction pages 1-{read_through}; finalized lineups of periods {finished}",
+            "liveContent": content,
+            "summary": {
+                "transactionsContentEqual": tx["contentEqual"],
+                "transactionsCompared": tx["contentEqual"] + len(tx["contentDiffers"]),
+                "transactionsDiffering": len(tx["contentDiffers"]),
+                "liveNotStored": len(tx["liveNotStored"]),
+                "storedNotLive": len(tx["storedNotLive"]),
+                "unresolvedIdentities": tx["unresolvedIdentities"],
+                "lineupPeriodsEqual": sum(
+                    v["contentEqualToCapture"] for v in content["lineups"].values()
+                ),
+                "lineupPeriods": len(content["lineups"]),
+            },
+            "stored": "nothing: read-only identity lookups, no writes",
+        }
+        args.content.write_text(json.dumps(receipt, indent=1, sort_keys=True, default=str) + "\n")
+        print(json.dumps(receipt["summary"]))
+        return
     if args.live:
         report["liveVerification"] = live_checks(data, finished)
     args.out.write_text(json.dumps(report, indent=1, sort_keys=True, default=str) + "\n")
