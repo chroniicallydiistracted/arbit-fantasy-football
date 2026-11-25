@@ -1,0 +1,3596 @@
+{
+ "byWeek": {
+  "start": {
+   "1": {
+    "actionable": 3,
+    "b00": {
+     "hitRate": 0.3333,
+     "meanRegret": 3.667,
+     "points": 2.0
+    },
+    "b06": {
+     "hitRate": 0.3333,
+     "meanRegret": 1.333,
+     "points": 9.0
+    },
+    "candidateRightWhenChanged": 0.5,
+    "changed": 2,
+    "changedShare": 0.6667,
+    "decisions": 3,
+    "fullyLabelled": 3,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 7.0,
+    "pointsPerChange": 3.5
+   },
+   "10": {
+    "actionable": 2,
+    "b00": {
+     "hitRate": 0.5,
+     "meanRegret": 3.5,
+     "points": 20.0
+    },
+    "b06": {
+     "hitRate": 0.5,
+     "meanRegret": 8.5,
+     "points": 10.0
+    },
+    "candidateRightWhenChanged": 0.5,
+    "changed": 2,
+    "changedShare": 1.0,
+    "decisions": 2,
+    "fullyLabelled": 2,
+    "meanOptions": 2.0,
+    "pointsFromChanges": -10.0,
+    "pointsPerChange": -5.0
+   },
+   "11": {
+    "actionable": 2,
+    "b00": {
+     "hitRate": 0.5,
+     "meanRegret": 4.5,
+     "points": 14.0
+    },
+    "b06": {
+     "hitRate": 1.0,
+     "meanRegret": 0.0,
+     "points": 23.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 1,
+    "changedShare": 0.5,
+    "decisions": 2,
+    "fullyLabelled": 2,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 9.0,
+    "pointsPerChange": 9.0
+   },
+   "2": {
+    "actionable": 3,
+    "b00": {
+     "hitRate": 0.6667,
+     "meanRegret": 1.667,
+     "points": 27.0
+    },
+    "b06": {
+     "hitRate": 0.3333,
+     "meanRegret": 5.333,
+     "points": 16.0
+    },
+    "candidateRightWhenChanged": 0.0,
+    "changed": 1,
+    "changedShare": 0.3333,
+    "decisions": 3,
+    "fullyLabelled": 3,
+    "meanOptions": 2.0,
+    "pointsFromChanges": -11.0,
+    "pointsPerChange": -11.0
+   },
+   "3": {
+    "actionable": 3,
+    "b00": {
+     "hitRate": 1.0,
+     "meanRegret": 0.0,
+     "points": 42.0
+    },
+    "b06": {
+     "hitRate": 0.3333,
+     "meanRegret": 9.667,
+     "points": 13.0
+    },
+    "candidateRightWhenChanged": 0.0,
+    "changed": 2,
+    "changedShare": 0.6667,
+    "decisions": 3,
+    "fullyLabelled": 3,
+    "meanOptions": 2.0,
+    "pointsFromChanges": -29.0,
+    "pointsPerChange": -14.5
+   },
+   "4": {
+    "actionable": 3,
+    "b00": {
+     "hitRate": 0.6667,
+     "meanRegret": 2.333,
+     "points": 19.0
+    },
+    "b06": {
+     "hitRate": 1.0,
+     "meanRegret": 0.0,
+     "points": 26.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 1,
+    "changedShare": 0.3333,
+    "decisions": 3,
+    "fullyLabelled": 3,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 7.0,
+    "pointsPerChange": 7.0
+   },
+   "5": {
+    "actionable": 4,
+    "b00": {
+     "hitRate": 0.5,
+     "meanRegret": 4.75,
+     "points": 44.0
+    },
+    "b06": {
+     "hitRate": 0.25,
+     "meanRegret": 6.5,
+     "points": 37.0
+    },
+    "candidateRightWhenChanged": 0.0,
+    "changed": 1,
+    "changedShare": 0.25,
+    "decisions": 4,
+    "fullyLabelled": 4,
+    "meanOptions": 2.0,
+    "pointsFromChanges": -7.0,
+    "pointsPerChange": -7.0
+   },
+   "6": {
+    "actionable": 2,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 7.0,
+     "points": -1.0
+    },
+    "b06": {
+     "hitRate": 0.5,
+     "meanRegret": 5.0,
+     "points": 3.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 1,
+    "changedShare": 0.5,
+    "decisions": 2,
+    "fullyLabelled": 2,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 4.0,
+    "pointsPerChange": 4.0
+   },
+   "7": {
+    "actionable": 2,
+    "b00": {
+     "hitRate": 0.5,
+     "meanRegret": 1.0,
+     "points": 11.0
+    },
+    "b06": {
+     "hitRate": 0.5,
+     "meanRegret": 1.0,
+     "points": 11.0
+    },
+    "candidateRightWhenChanged": null,
+    "changed": 0,
+    "changedShare": 0.0,
+    "decisions": 2,
+    "fullyLabelled": 2,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 0.0,
+    "pointsPerChange": null
+   },
+   "8": {
+    "actionable": 1,
+    "b00": {
+     "hitRate": 1.0,
+     "meanRegret": 0.0,
+     "points": 5.0
+    },
+    "b06": {
+     "hitRate": 1.0,
+     "meanRegret": 0.0,
+     "points": 5.0
+    },
+    "candidateRightWhenChanged": null,
+    "changed": 0,
+    "changedShare": 0.0,
+    "decisions": 1,
+    "fullyLabelled": 1,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 0.0,
+    "pointsPerChange": null
+   },
+   "9": {
+    "actionable": 3,
+    "b00": {
+     "hitRate": 0.6667,
+     "meanRegret": 8.0,
+     "points": 14.0
+    },
+    "b06": {
+     "hitRate": 1.0,
+     "meanRegret": 0.0,
+     "points": 38.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 1,
+    "changedShare": 0.3333,
+    "decisions": 3,
+    "fullyLabelled": 3,
+    "meanOptions": 2.0,
+    "pointsFromChanges": 24.0,
+    "pointsPerChange": 24.0
+   }
+  },
+  "stream": {
+   "1": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 19.125,
+     "points": 7.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 13.0,
+     "points": 56.0
+    },
+    "candidateRightWhenChanged": 0.875,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 21.38,
+    "pointsFromChanges": 49.0,
+    "pointsPerChange": 6.125
+   },
+   "10": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.125,
+     "meanRegret": 10.75,
+     "points": 35.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 8.25,
+     "points": 55.0
+    },
+    "candidateRightWhenChanged": 0.75,
+    "changed": 4,
+    "changedShare": 0.5,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 17.25,
+    "pointsFromChanges": 20.0,
+    "pointsPerChange": 5.0
+   },
+   "11": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 13.875,
+     "points": -7.0
+    },
+    "b06": {
+     "hitRate": 0.125,
+     "meanRegret": 2.375,
+     "points": 85.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 18.12,
+    "pointsFromChanges": 92.0,
+    "pointsPerChange": 11.5
+   },
+   "2": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 11.75,
+     "points": 106.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 21.0,
+     "points": 32.0
+    },
+    "candidateRightWhenChanged": 0.125,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 21.38,
+    "pointsFromChanges": -74.0,
+    "pointsPerChange": -9.25
+   },
+   "3": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 13.25,
+     "points": 4.0
+    },
+    "b06": {
+     "hitRate": 0.125,
+     "meanRegret": 9.5,
+     "points": 34.0
+    },
+    "candidateRightWhenChanged": 0.75,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 22.38,
+    "pointsFromChanges": 30.0,
+    "pointsPerChange": 3.75
+   },
+   "4": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 10.25,
+     "points": 46.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 15.75,
+     "points": 2.0
+    },
+    "candidateRightWhenChanged": 0.1667,
+    "changed": 6,
+    "changedShare": 0.75,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 21.38,
+    "pointsFromChanges": -44.0,
+    "pointsPerChange": -7.333
+   },
+   "5": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 7.375,
+     "points": 88.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 4.375,
+     "points": 112.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 3,
+    "changedShare": 0.375,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 18.5,
+    "pointsFromChanges": 24.0,
+    "pointsPerChange": 8.0
+   },
+   "6": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 10.25,
+     "points": 70.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 5.875,
+     "points": 105.0
+    },
+    "candidateRightWhenChanged": 0.8125,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 18.25,
+    "pointsFromChanges": 35.0,
+    "pointsPerChange": 4.375
+   },
+   "7": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 23.25,
+     "points": 38.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 27.375,
+     "points": 5.0
+    },
+    "candidateRightWhenChanged": 0.125,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 18.25,
+    "pointsFromChanges": -33.0,
+    "pointsPerChange": -4.125
+   },
+   "8": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 9.0,
+     "points": 96.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 9.375,
+     "points": 93.0
+    },
+    "candidateRightWhenChanged": 0.375,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 19.12,
+    "pointsFromChanges": -3.0,
+    "pointsPerChange": -0.375
+   },
+   "9": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 5.25,
+     "points": 82.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 11.5,
+     "points": 32.0
+    },
+    "candidateRightWhenChanged": 0.0,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 18.38,
+    "pointsFromChanges": -50.0,
+    "pointsPerChange": -6.25
+   }
+  },
+  "streamIncludingWaivers": {
+   "1": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 19.125,
+     "points": 7.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 13.0,
+     "points": 56.0
+    },
+    "candidateRightWhenChanged": 0.875,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 22.38,
+    "pointsFromChanges": 49.0,
+    "pointsPerChange": 6.125
+   },
+   "10": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.125,
+     "meanRegret": 9.0,
+     "points": 49.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 8.25,
+     "points": 55.0
+    },
+    "candidateRightWhenChanged": 0.6,
+    "changed": 5,
+    "changedShare": 0.625,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 19.25,
+    "pointsFromChanges": 6.0,
+    "pointsPerChange": 1.2
+   },
+   "11": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 13.875,
+     "points": -7.0
+    },
+    "b06": {
+     "hitRate": 0.125,
+     "meanRegret": 2.375,
+     "points": 85.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 18.12,
+    "pointsFromChanges": 92.0,
+    "pointsPerChange": 11.5
+   },
+   "2": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 11.75,
+     "points": 106.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 21.0,
+     "points": 32.0
+    },
+    "candidateRightWhenChanged": 0.125,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 22.38,
+    "pointsFromChanges": -74.0,
+    "pointsPerChange": -9.25
+   },
+   "3": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 13.25,
+     "points": 4.0
+    },
+    "b06": {
+     "hitRate": 0.125,
+     "meanRegret": 9.5,
+     "points": 34.0
+    },
+    "candidateRightWhenChanged": 0.75,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 22.38,
+    "pointsFromChanges": 30.0,
+    "pointsPerChange": 3.75
+   },
+   "4": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 10.25,
+     "points": 46.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 15.75,
+     "points": 2.0
+    },
+    "candidateRightWhenChanged": 0.1667,
+    "changed": 6,
+    "changedShare": 0.75,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 22.38,
+    "pointsFromChanges": -44.0,
+    "pointsPerChange": -7.333
+   },
+   "5": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 7.375,
+     "points": 88.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 4.375,
+     "points": 112.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 3,
+    "changedShare": 0.375,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 19.5,
+    "pointsFromChanges": 24.0,
+    "pointsPerChange": 8.0
+   },
+   "6": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 10.25,
+     "points": 70.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 5.875,
+     "points": 105.0
+    },
+    "candidateRightWhenChanged": 0.8125,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 19.25,
+    "pointsFromChanges": 35.0,
+    "pointsPerChange": 4.375
+   },
+   "7": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 23.25,
+     "points": 38.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 27.375,
+     "points": 5.0
+    },
+    "candidateRightWhenChanged": 0.125,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 19.25,
+    "pointsFromChanges": -33.0,
+    "pointsPerChange": -4.125
+   },
+   "8": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 9.0,
+     "points": 96.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 9.375,
+     "points": 93.0
+    },
+    "candidateRightWhenChanged": 0.375,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 20.12,
+    "pointsFromChanges": -3.0,
+    "pointsPerChange": -0.375
+   },
+   "9": {
+    "actionable": 8,
+    "b00": {
+     "hitRate": 0.0,
+     "meanRegret": 5.25,
+     "points": 82.0
+    },
+    "b06": {
+     "hitRate": 0.0,
+     "meanRegret": 3.5,
+     "points": 96.0
+    },
+    "candidateRightWhenChanged": 1.0,
+    "changed": 8,
+    "changedShare": 1.0,
+    "decisions": 8,
+    "fullyLabelled": 8,
+    "meanOptions": 20.38,
+    "pointsFromChanges": 14.0,
+    "pointsPerChange": 1.75
+   }
+  }
+ },
+ "classification": "EXPLORATORY. Weeks 1-11 were observed before the prospective freeze, and these forecasts are reconstructed after the fact (RETROSPECTIVE). Never independent confirmation; never alters the frozen Phase B or Phase C rules.",
+ "code": "3848cadc13058cdbdf40eeb9b37d6573c1a90264",
+ "config": {
+  "path": "config/dvp/league-2026-exploratory.json",
+  "sha256": "d061bcbfb1aab8a9b5920d79d9be1cd3a1ff011ce272940a841606f1c2bad0f5"
+ },
+ "coverage": {
+  "startDecisions": 28,
+  "streamDecisions": 88,
+  "teamWeeks": 88
+ },
+ "decisionRule": "none: descriptive and exploratory",
+ "decisions": {
+  "start": [
+   {
+    "best": 1.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LA",
+    "pick_b06": "LAC",
+    "points_b00": 1.0,
+    "points_b06": 0.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 1
+   },
+   {
+    "best": 8.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 5.0,
+    "points_b06": 5.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 1
+   },
+   {
+    "best": 4.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "GB",
+    "points_b00": -4.0,
+    "points_b06": 4.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 1
+   },
+   {
+    "best": 9.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LAC",
+    "pick_b06": "LAC",
+    "points_b00": 4.0,
+    "points_b06": 4.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 2
+   },
+   {
+    "best": 16.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "BAL",
+    "points_b00": 16.0,
+    "points_b06": 5.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 2
+   },
+   {
+    "best": 7.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 7.0,
+    "points_b06": 7.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 2
+   },
+   {
+    "best": 13.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LAC",
+    "pick_b06": "SF",
+    "points_b00": 13.0,
+    "points_b06": 0.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 3
+   },
+   {
+    "best": 19.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 19.0,
+    "points_b06": 19.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 3
+   },
+   {
+    "best": 10.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "GB",
+    "points_b00": 10.0,
+    "points_b06": -6.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 3
+   },
+   {
+    "best": 6.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LAC",
+    "pick_b06": "LAC",
+    "points_b00": 6.0,
+    "points_b06": 6.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 4
+   },
+   {
+    "best": 10.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 10.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 4
+   },
+   {
+    "best": 10.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "GB",
+    "points_b00": 3.0,
+    "points_b06": 10.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 4
+   },
+   {
+    "best": 20.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LAC",
+    "pick_b06": "LAC",
+    "points_b00": 5.0,
+    "points_b06": 5.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 5
+   },
+   {
+    "best": 11.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "SEA",
+    "pick_b06": "JAX",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 5
+   },
+   {
+    "best": 13.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 13.0,
+    "points_b06": 13.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 5
+   },
+   {
+    "best": 19.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 15.0,
+    "points_b06": 15.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 5
+   },
+   {
+    "best": 5.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LAC",
+    "pick_b06": "SF",
+    "points_b00": 1.0,
+    "points_b06": 5.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 6
+   },
+   {
+    "best": 8.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": -2.0,
+    "points_b06": -2.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 6
+   },
+   {
+    "best": 11.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 11.0,
+    "points_b06": 11.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 7
+   },
+   {
+    "best": 2.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 0.0,
+    "points_b06": 0.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 7
+   },
+   {
+    "best": 5.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 5.0,
+    "points_b06": 5.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 8
+   },
+   {
+    "best": 19.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "LAC",
+    "pick_b06": "SF",
+    "points_b00": -5.0,
+    "points_b06": 19.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 9
+   },
+   {
+    "best": 6.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 6.0,
+    "points_b06": 6.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 9
+   },
+   {
+    "best": 13.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "CHI",
+    "pick_b06": "CHI",
+    "points_b00": 13.0,
+    "points_b06": 13.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 9
+   },
+   {
+    "best": 6.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "SF",
+    "pick_b06": "LAC",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 10
+   },
+   {
+    "best": 21.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "BAL",
+    "points_b00": 21.0,
+    "points_b06": 4.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "SF",
+    "pick_b06": "SF",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 11
+   },
+   {
+    "best": 9.0,
+    "kind": "start",
+    "labelled": true,
+    "options": 2,
+    "pick_b00": "MIN",
+    "pick_b06": "BAL",
+    "points_b00": 0.0,
+    "points_b06": 9.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 11
+   }
+  ],
+  "stream": [
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "DEN",
+    "pick_b06": "MIA",
+    "points_b00": 2.0,
+    "points_b06": 6.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "CLE",
+    "pick_b06": "JAX",
+    "points_b00": -1.0,
+    "points_b06": 14.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "SEA",
+    "pick_b06": "MIA",
+    "points_b00": 14.0,
+    "points_b06": 6.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "HOU",
+    "pick_b06": "MIA",
+    "points_b00": -4.0,
+    "points_b06": 6.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 1
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "PIT",
+    "pick_b06": "TB",
+    "points_b00": 8.0,
+    "points_b06": 4.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "JAX",
+    "pick_b06": "TB",
+    "points_b00": 1.0,
+    "points_b06": 4.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "SEA",
+    "pick_b06": "TB",
+    "points_b00": 10.0,
+    "points_b06": 4.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "HOU",
+    "pick_b06": "TB",
+    "points_b00": 7.0,
+    "points_b06": 4.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 2
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "KC",
+    "points_b00": 0.0,
+    "points_b06": 7.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "NO",
+    "points_b00": 0.0,
+    "points_b06": 2.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "NO",
+    "points_b00": 0.0,
+    "points_b06": 2.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "CAR",
+    "points_b00": 0.0,
+    "points_b06": 6.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "NO",
+    "points_b00": 0.0,
+    "points_b06": 2.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "SEA",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": 2.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 3
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "MIN",
+    "points_b00": 0.0,
+    "points_b06": 19.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "GB",
+    "points_b00": 0.0,
+    "points_b06": -6.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 3
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "JAX",
+    "pick_b06": "PIT",
+    "points_b00": 4.0,
+    "points_b06": 5.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "SEA",
+    "pick_b06": "SEA",
+    "points_b00": 12.0,
+    "points_b06": 12.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 10.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 4
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "DEN",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 5
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "DEN",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "PIT",
+    "pick_b06": "DEN",
+    "points_b00": 1.0,
+    "points_b06": 14.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "DEN",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "NE",
+    "pick_b06": "DEN",
+    "points_b00": 6.0,
+    "points_b06": 14.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "SEA",
+    "pick_b06": "DEN",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 13.0,
+    "points_b06": 13.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 5
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 15.0,
+    "points_b06": 15.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 5
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "PIT",
+    "points_b00": 11.0,
+    "points_b06": 11.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "SEA",
+    "pick_b06": "KC",
+    "points_b00": 6.0,
+    "points_b06": 14.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "BAL",
+    "points_b00": 11.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "HOU",
+    "pick_b06": "KC",
+    "points_b00": -2.0,
+    "points_b06": 14.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 6
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "CLE",
+    "points_b00": 3.0,
+    "points_b06": 5.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "SEA",
+    "pick_b06": "TEN",
+    "points_b00": 9.0,
+    "points_b06": 0.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "MIN",
+    "pick_b06": "TEN",
+    "points_b00": 11.0,
+    "points_b06": 0.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 7
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "PIT",
+    "points_b00": 15.0,
+    "points_b06": 16.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "SEA",
+    "pick_b06": "LA",
+    "points_b00": 1.0,
+    "points_b06": 11.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "MIN",
+    "pick_b06": "LA",
+    "points_b00": 5.0,
+    "points_b06": 11.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 8
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "NO",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 9
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "NO",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "NO",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "NO",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "NO",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "SEA",
+    "pick_b06": "NO",
+    "points_b00": 10.0,
+    "points_b06": 4.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "MIN",
+    "pick_b06": "NO",
+    "points_b00": 6.0,
+    "points_b06": 4.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "NO",
+    "points_b00": 11.0,
+    "points_b06": 4.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 9
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 5.0,
+    "points_b06": 5.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "SF",
+    "pick_b06": "KC",
+    "points_b00": -1.0,
+    "points_b06": 9.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "PIT",
+    "pick_b06": "KC",
+    "points_b00": -7.0,
+    "points_b06": 9.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "JAX",
+    "pick_b06": "JAX",
+    "points_b00": 3.0,
+    "points_b06": 3.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 10
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "NE",
+    "pick_b06": "KC",
+    "points_b00": -2.0,
+    "points_b06": 9.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "SEA",
+    "pick_b06": "SEA",
+    "points_b00": 12.0,
+    "points_b06": 12.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 10
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "MIN",
+    "pick_b06": "BAL",
+    "points_b00": 21.0,
+    "points_b06": 4.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "GB",
+    "pick_b06": "GB",
+    "points_b00": 4.0,
+    "points_b06": 4.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 10
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": -1.0,
+    "points_b06": 15.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 11
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "MIN",
+    "pick_b06": "BUF",
+    "points_b00": 0.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 11
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 11
+   }
+  ],
+  "streamIncludingWaivers": [
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "DEN",
+    "pick_b06": "MIA",
+    "points_b00": 2.0,
+    "points_b06": 6.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "CLE",
+    "pick_b06": "JAX",
+    "points_b00": -1.0,
+    "points_b06": 14.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "SEA",
+    "pick_b06": "MIA",
+    "points_b00": 14.0,
+    "points_b06": 6.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "CLE",
+    "pick_b06": "MIA",
+    "points_b00": -1.0,
+    "points_b06": 6.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 1
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "HOU",
+    "pick_b06": "MIA",
+    "points_b00": -4.0,
+    "points_b06": 6.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 1
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "PIT",
+    "pick_b06": "TB",
+    "points_b00": 8.0,
+    "points_b06": 4.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "TB",
+    "points_b00": 1.0,
+    "points_b06": 4.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "SEA",
+    "pick_b06": "TB",
+    "points_b00": 10.0,
+    "points_b06": 4.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "TB",
+    "points_b00": 20.0,
+    "points_b06": 4.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 2
+   },
+   {
+    "best": 25.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "HOU",
+    "pick_b06": "TB",
+    "points_b00": 7.0,
+    "points_b06": 4.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 2
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "KC",
+    "points_b00": 0.0,
+    "points_b06": 7.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "NO",
+    "points_b00": 0.0,
+    "points_b06": 2.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "NO",
+    "points_b00": 0.0,
+    "points_b06": 2.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "CAR",
+    "points_b00": 0.0,
+    "points_b06": 6.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "NE",
+    "pick_b06": "NO",
+    "points_b00": 0.0,
+    "points_b06": 2.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "SEA",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": 2.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 3
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "MIN",
+    "points_b00": 0.0,
+    "points_b06": 19.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 3
+   },
+   {
+    "best": 13.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "NE",
+    "pick_b06": "GB",
+    "points_b00": 0.0,
+    "points_b06": -6.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 3
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "PIT",
+    "points_b00": 4.0,
+    "points_b06": 5.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 22,
+    "pick_b00": "SEA",
+    "pick_b06": "SEA",
+    "points_b00": 12.0,
+    "points_b06": 12.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 10.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 4
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 23,
+    "pick_b00": "JAX",
+    "pick_b06": "NO",
+    "points_b00": 4.0,
+    "points_b06": -5.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 4
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "DEN",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 5
+   },
+   {
+    "best": 20.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "DEN",
+    "pick_b06": "DEN",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "PIT",
+    "pick_b06": "DEN",
+    "points_b00": 1.0,
+    "points_b06": 14.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "DEN",
+    "points_b00": 14.0,
+    "points_b06": 14.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "NE",
+    "pick_b06": "DEN",
+    "points_b00": 6.0,
+    "points_b06": 14.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "SEA",
+    "pick_b06": "DEN",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 5
+   },
+   {
+    "best": 18.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "MIN",
+    "pick_b06": "MIN",
+    "points_b00": 13.0,
+    "points_b06": 13.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 5
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 15.0,
+    "points_b06": 15.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 5
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "PIT",
+    "points_b00": 11.0,
+    "points_b06": 11.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "KC",
+    "points_b00": 11.0,
+    "points_b06": 14.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "SEA",
+    "pick_b06": "KC",
+    "points_b00": 6.0,
+    "points_b06": 14.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "BAL",
+    "points_b00": 11.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 6
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "HOU",
+    "pick_b06": "KC",
+    "points_b00": -2.0,
+    "points_b06": 14.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 6
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "CLE",
+    "points_b00": 3.0,
+    "points_b06": 5.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "SEA",
+    "pick_b06": "TEN",
+    "points_b00": 9.0,
+    "points_b06": 0.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "MIN",
+    "pick_b06": "TEN",
+    "points_b00": 11.0,
+    "points_b06": 0.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 7
+   },
+   {
+    "best": 28.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "DEN",
+    "pick_b06": "TEN",
+    "points_b00": 3.0,
+    "points_b06": 0.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 7
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "PIT",
+    "points_b00": 15.0,
+    "points_b06": 16.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "SEA",
+    "pick_b06": "LA",
+    "points_b00": 1.0,
+    "points_b06": 11.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "MIN",
+    "pick_b06": "LA",
+    "points_b00": 5.0,
+    "points_b06": 11.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 8
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "LA",
+    "points_b00": 15.0,
+    "points_b06": 11.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 8
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": 11.0,
+    "points_b06": 12.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 9
+   },
+   {
+    "best": 19.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": 11.0,
+    "points_b06": 12.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": 11.0,
+    "points_b06": 12.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": 11.0,
+    "points_b06": 12.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": 11.0,
+    "points_b06": 12.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "SEA",
+    "pick_b06": "HOU",
+    "points_b00": 10.0,
+    "points_b06": 12.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "MIN",
+    "pick_b06": "HOU",
+    "points_b00": 6.0,
+    "points_b06": 12.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 9
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 21,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": 11.0,
+    "points_b06": 12.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 9
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "HOU",
+    "pick_b06": "HOU",
+    "points_b00": 5.0,
+    "points_b06": 5.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "CLE",
+    "pick_b06": "KC",
+    "points_b00": 5.0,
+    "points_b06": 9.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "PIT",
+    "pick_b06": "KC",
+    "points_b00": -7.0,
+    "points_b06": 9.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "JAX",
+    "pick_b06": "JAX",
+    "points_b00": 3.0,
+    "points_b06": 3.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 10
+   },
+   {
+    "best": 16.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "CLE",
+    "pick_b06": "KC",
+    "points_b00": 5.0,
+    "points_b06": 9.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "SEA",
+    "pick_b06": "SEA",
+    "points_b00": 12.0,
+    "points_b06": 12.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 10
+   },
+   {
+    "best": 21.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 20,
+    "pick_b00": "MIN",
+    "pick_b06": "BAL",
+    "points_b00": 21.0,
+    "points_b06": 4.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 10
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "CLE",
+    "pick_b06": "GB",
+    "points_b00": 5.0,
+    "points_b06": 4.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 10
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "HOU",
+    "points_b00": -1.0,
+    "points_b06": 15.0,
+    "team": "366ec856-5fae-4b81-8096-d3d9ec110249",
+    "week": 11
+   },
+   {
+    "best": 14.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "54e49c44-5158-4d38-abfc-28a066c83c54",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "768524aa-6978-4de3-b931-3fd98595c66b",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "86831e99-e42e-4b26-9f59-33cf10262fe5",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 17,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "8b1c13cb-d193-4eee-ac0f-fee67d808c89",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "8f4c74f5-2bcf-4a0e-b115-3cdc3ee347ef",
+    "week": 11
+   },
+   {
+    "best": 12.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 19,
+    "pick_b00": "MIN",
+    "pick_b06": "BUF",
+    "points_b00": 0.0,
+    "points_b06": 10.0,
+    "team": "b23a6090-e041-4430-91c8-12fcdf39f157",
+    "week": 11
+   },
+   {
+    "best": 15.0,
+    "kind": "stream",
+    "labelled": true,
+    "options": 18,
+    "pick_b00": "TB",
+    "pick_b06": "BUF",
+    "points_b00": -1.0,
+    "points_b06": 10.0,
+    "team": "bfb0db9f-45e8-40af-a213-c70eda2499b0",
+    "week": 11
+   }
+  ]
+ },
+ "forbidden_vendor_projection_dependencies": 0,
+ "forecastLineage": {
+  "forecastsContentSha256": "f93441ede2187045d2fa1b7661335b7bc6a49e11f18e3bd4de9446fc569a25b8",
+  "history": {
+   "auditOutputs": {
+    "observations.parquet": "98c98e5a26f8f8a17239d1d0931f9cadb2aa99b163c3561558d3bcb082450f58",
+    "schedule_games.parquet": "9d89cc226f9360dcb18061ef39b01f05ba91f4fbd3e39be60e0ee2eb96d8031f"
+   },
+   "auditRun": "phase1-audit-20261124T024442Z",
+   "objectsVerified": 41,
+   "targetsIndex": "6ffb62fb907b21e13afdd509d16bf77977289dc7d939e8e106d96aa112cc164d"
+  },
+  "inputs": {
+   "observations-season.parquet": "0e09227faeaf395c180a2a14e00ce60eafc64475ce8d7dfae08d5d36ab85beba",
+   "schedule-season.parquet": "8ead98805ba5da009bc6fe67fa8cc261b984e5935b234d1dad1e68877701847b"
+  },
+  "parameters": {
+   "kDvp": {
+    "DST": 7.232,
+    "K": 50.512,
+    "QB": 24.216,
+    "RB": 19.476,
+    "TE": 37.425,
+    "WR": 26.691
+   },
+   "kNonTd": {
+    "DST": 6.38,
+    "K": 50.597,
+    "QB": 18.444,
+    "RB": 19.726,
+    "TE": 37.843,
+    "WR": 22.794
+   },
+   "kOwn": {
+    "DST": 17.348,
+    "K": 21.975,
+    "QB": 6.526,
+    "RB": 6.614,
+    "TE": 4.421,
+    "WR": 4.235
+   },
+   "leaguePrev": {
+    "DST": 5.789,
+    "K": 8.241,
+    "QB": 16.295,
+    "RB": 22.225,
+    "TE": 13.248,
+    "WR": 30.689
+   },
+   "season": 2026,
+   "slopeDvp": {
+    "DST": 0.397,
+    "K": 0.146,
+    "QB": 0.298,
+    "RB": 0.278,
+    "TE": 0.157,
+    "WR": 0.229
+   },
+   "slopeOwn": {
+    "DST": 0.32,
+    "K": 0.206,
+    "QB": 0.454,
+    "RB": 0.421,
+    "TE": 0.481,
+    "WR": 0.453
+   },
+   "training": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  "seasonTargetsIndex": "2e153c07e93dabaf8269f5978ca1e77370bcd89633b368357d2f14d99c0bbd26",
+  "weekTwelveManifest": "98f2161a04daa961abf17dab520f1402e71c16eced7ae0ff47690fcb30a5176c"
+ },
+ "format": "arbit-dvp-m3-3-league-2026-v1",
+ "frozen": {
+  "allMatch": true,
+  "filesVerified": 22,
+  "frozenSha256": "1ef59583969473651ea917b29f66aa8dce5daeb41272690b6f436b0a6a49fcc6",
+  "groupLevelCode": "f75868b725795cb50ca71c20f80fd383f670669b",
+  "phaseCSha256": "39bd0bc038312b18ffd630db9c8c24cf609e40122ff1987822a52c55a63c400e"
+ },
+ "generatedAt": "2026-11-25T02:28:28.443860+00:00",
+ "labels": {
+  "espnOfficialAgainstCanonicalForLineupDst": {
+   "byeNoGame": 9,
+   "equal": 116
+  },
+  "source": "canonical FFA D/ST actuals (archived 2026 observations)"
+ },
+ "managers": {
+  "agreesWith": {
+   "b00": 0.5,
+   "b06": 0.6429
+  },
+  "managerHitRate": 0.6071,
+  "managerMeanRegret": 3.357,
+  "managerPoints": 201.0,
+  "startDecisionsWithManagerStart": 28
+ },
+ "matchups": {
+  "againstActual": {
+   "b00": {
+    "lossesToWins": 0,
+    "other": 0,
+    "winsToLosses": 1
+   },
+   "b06": {
+    "lossesToWins": 2,
+    "other": 0,
+    "winsToLosses": 1
+   }
+  },
+  "baseWins": 0,
+  "candidateWins": 2,
+  "missingOfficialPoints": 0,
+  "resultDiffersFromActual": {
+   "b00": 1,
+   "b06": 3
+  },
+  "resultsDifferBetweenModels": 2,
+  "startDecisionsWithResults": 28
+ },
+ "ownership": {
+  "availabilityAtCutoff": {
+   "1": {
+    "byes": [],
+    "cutoff": "2026-09-10T00:20:00+00:00",
+    "freeAgents": 20,
+    "owned": 11,
+    "waiverWire": 1
+   },
+   "10": {
+    "byes": [
+     "CHI",
+     "DEN",
+     "PHI",
+     "TB"
+    ],
+    "cutoff": "2026-11-13T01:15:00+00:00",
+    "freeAgents": 19,
+    "owned": 11,
+    "waiverWire": 2
+   },
+   "11": {
+    "byes": [
+     "ATL",
+     "CLE",
+     "GB",
+     "LA",
+     "NE",
+     "SEA"
+    ],
+    "cutoff": "2026-11-20T01:15:00+00:00",
+    "freeAgents": 20,
+    "owned": 12,
+    "waiverWire": 0
+   },
+   "2": {
+    "byes": [],
+    "cutoff": "2026-09-18T00:15:00+00:00",
+    "freeAgents": 20,
+    "owned": 11,
+    "waiverWire": 1
+   },
+   "3": {
+    "byes": [],
+    "cutoff": "2026-09-25T00:15:00+00:00",
+    "freeAgents": 21,
+    "owned": 11,
+    "waiverWire": 0
+   },
+   "4": {
+    "byes": [],
+    "cutoff": "2026-10-02T00:15:00+00:00",
+    "freeAgents": 20,
+    "owned": 11,
+    "waiverWire": 1
+   },
+   "5": {
+    "byes": [
+     "CAR",
+     "KC"
+    ],
+    "cutoff": "2026-10-09T00:15:00+00:00",
+    "freeAgents": 18,
+    "owned": 12,
+    "waiverWire": 2
+   },
+   "6": {
+    "byes": [
+     "CIN",
+     "DET",
+     "MIA",
+     "MIN"
+    ],
+    "cutoff": "2026-10-16T00:15:00+00:00",
+    "freeAgents": 19,
+    "owned": 11,
+    "waiverWire": 2
+   },
+   "7": {
+    "byes": [
+     "BUF",
+     "JAX",
+     "LAC",
+     "WAS"
+    ],
+    "cutoff": "2026-10-23T00:15:00+00:00",
+    "freeAgents": 20,
+    "owned": 11,
+    "waiverWire": 1
+   },
+   "8": {
+    "byes": [
+     "HOU",
+     "NO",
+     "NYG",
+     "SF"
+    ],
+    "cutoff": "2026-10-30T00:15:00+00:00",
+    "freeAgents": 20,
+    "owned": 11,
+    "waiverWire": 1
+   },
+   "9": {
+    "byes": [
+     "PIT",
+     "TEN"
+    ],
+    "cutoff": "2026-11-06T01:15:00+00:00",
+    "freeAgents": 18,
+    "owned": 12,
+    "waiverWire": 2
+   }
+  },
+  "periods": {
+   "1": {
+    "captured": 129,
+    "extraInReplay": 0,
+    "matched": 129,
+    "missingFromReplay": 0,
+    "reconstructed": 129,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "10": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "11": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "2": {
+    "captured": 130,
+    "extraInReplay": 0,
+    "matched": 130,
+    "missingFromReplay": 0,
+    "reconstructed": 130,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "3": {
+    "captured": 130,
+    "extraInReplay": 0,
+    "matched": 130,
+    "missingFromReplay": 0,
+    "reconstructed": 130,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "4": {
+    "captured": 131,
+    "extraInReplay": 0,
+    "matched": 131,
+    "missingFromReplay": 0,
+    "reconstructed": 131,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "5": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "6": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "7": {
+    "captured": 132,
+    "extraInReplay": 0,
+    "matched": 132,
+    "missingFromReplay": 0,
+    "reconstructed": 132,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "8": {
+    "captured": 132,
+    "extraInReplay": 0,
+    "matched": 132,
+    "missingFromReplay": 0,
+    "reconstructed": 132,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "9": {
+    "captured": 132,
+    "extraInReplay": 0,
+    "matched": 132,
+    "missingFromReplay": 0,
+    "reconstructed": 132,
+    "replayProblems": 0,
+    "verified": true
+   }
+  },
+  "replayVerifiedForEveryWeek": true
+ },
+ "results": {
+  "start": {
+   "actionable": 28,
+   "b00": {
+    "hitRate": 0.5714,
+    "meanRegret": 3.5,
+    "points": 197.0
+   },
+   "b06": {
+    "hitRate": 0.5714,
+    "meanRegret": 3.714,
+    "points": 191.0
+   },
+   "candidateRightWhenChanged": 0.5,
+   "changed": 12,
+   "changedShare": 0.4286,
+   "decisions": 28,
+   "fullyLabelled": 28,
+   "meanOptions": 2.0,
+   "pointsFromChanges": -6.0,
+   "pointsFromChanges95": [
+    -90.05,
+    80.0
+   ],
+   "pointsPerChange": -0.5
+  },
+  "stream": {
+   "actionable": 88,
+   "b00": {
+    "hitRate": 0.0114,
+    "meanRegret": 12.193,
+    "points": 565.0
+   },
+   "b06": {
+    "hitRate": 0.0227,
+    "meanRegret": 11.67,
+    "points": 611.0
+   },
+   "candidateRightWhenChanged": 0.513,
+   "changed": 77,
+   "changedShare": 0.875,
+   "decisions": 88,
+   "fullyLabelled": 88,
+   "meanOptions": 19.49,
+   "pointsFromChanges": 46.0,
+   "pointsFromChanges95": [
+    -280.12,
+    360.02
+   ],
+   "pointsPerChange": 0.597
+  },
+  "streamIncludingWaivers": {
+   "actionable": 88,
+   "b00": {
+    "hitRate": 0.0114,
+    "meanRegret": 12.034,
+    "points": 579.0
+   },
+   "b06": {
+    "hitRate": 0.0227,
+    "meanRegret": 10.943,
+    "points": 675.0
+   },
+   "candidateRightWhenChanged": 0.609,
+   "changed": 78,
+   "changedShare": 0.8864,
+   "decisions": 88,
+   "fullyLabelled": 88,
+   "meanOptions": 20.49,
+   "pointsFromChanges": 96.0,
+   "pointsFromChanges95": [
+    -214.1,
+    386.0
+   ],
+   "pointsPerChange": 1.231
+  }
+ },
+ "write_to_production": false
+}

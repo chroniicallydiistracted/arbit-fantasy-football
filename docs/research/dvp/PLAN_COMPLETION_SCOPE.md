@@ -5,14 +5,17 @@ This audit holds every action item of the owner's [DvP specification v1.1](Arbit
 - the code and model logic that carries it out;
 - the audit check that proves it, with what the check observed.
 
-TASK-20261124-005, 2026-11-24.
+TASK-20261124-005, 2026-11-24. Rebuilt 2026-11-25 in TASK-20261124-009, after the owner's Phase B audit: C05L is split three ways and the Phase B items are added.
 
 **Result: PASSED.**
-- The specification breaks into **214 action items**. 209 are done, and 5 are open, each for a reason this document states.
-- **156 checks** prove them, and every check passed.
-- The model suite passed with no failures and nothing skipped: 157 tests, including every one of T01–T40.
+- The specification and the owner's Phase B requirements break into **221 action items**:
+  - 215 are done;
+  - 5 are open, each for a reason this document states;
+  - 1 is not applicable: C05L-HIST, because FFA began in 2026 (OWN-076).
+- **164 checks** prove them, and every check passed.
+- The model suite passed with no failures and nothing skipped: 213 tests, including every one of T01–T40.
 - Machine-readable receipt: [plan-audit-receipt.json](plan-audit-receipt.json).
-  - It was written by `scripts/model/dvp_plan_audit.py` at commit `db0d802`.
+  - It was written by `scripts/model/dvp_plan_audit.py` at commit `a24996c`; the stages reran at `3848cad`.
   - It holds the SHA-256 of the specification it audited (`240a538c…`).
 
 **What "proof" means here:**
@@ -33,7 +36,7 @@ The [open items](#open-items) section lists all five.
 | Column | Meaning |
 | --- | --- |
 | ID | The item's ID in the audit receipt (`items[].id`). R = §0 rule, RQ = research question, D = definition, H = §2.1 boundary, E = §2.2 eligibility, S = dataset, Q = reconciliation, V = v0, X/A/B/C = experiments, M = statistics, K = metrics and decisions, T = tests, P = phase, G = CLI and modes, F = config, O = deliverable, Z = before completion, L = §12 decision logic, W = §13 caveat |
-| Status | **DONE:** every check passed. **OPEN / BLOCKED / NOT BUILT:** not done, and the reason is recorded and checked |
+| Status | **DONE:** every check passed. **OPEN / BLOCKED / NOT BUILT:** not done, and the reason is recorded and checked. **NOT_APPLICABLE:** the requirement can't apply, and the owner's reason is recorded and checked |
 | Logic | Where the code is and what it computes. Module paths are under `libs/arbit-model/src/arbit_model/`; `dvp.py` is `scripts/model/dvp.py` |
 | Proof | The audit checks (receipt key `checks`), with what they observed |
 
@@ -73,22 +76,22 @@ The study runs as one chain. Each step reads only the output of the step before 
 
 ## The reruns behind this audit
 
-From `plan-audit-receipt.json` → `reruns`. Run on 2026-11-24 with `POLARS_MAX_THREADS=2`.
+From `plan-audit-receipt.json` → `reruns`. Run on 2026-11-25 with `POLARS_MAX_THREADS=2`.
 
 | Step | Tree | Exit (expected) | Seconds | Compared with the committed receipt |
 | --- | --- | --- | --- | --- |
-| audit | this tree (`db0d802`) | 0 (0) | 1.5 | Equal except code, time and run ID. The observation table is identical: 31,668 rows and 19 columns (`rerun:audit`, `rerun:observations`). The projection audit now scans 21 files, up from 19, because walkforward.py and decisions.py were added later. It still finds 0 projections (`rerun:projection-audit`) |
+| audit | this tree (`3848cad`) | 0 (0) | 1.6 | Equal except code, time and run ID. The observation table is identical: 31,668 rows and 19 columns (`rerun:audit`, `rerun:observations`). The projection audit now scans 30 files, up from 19, because later DvP modules joined the scan list. It still finds 0 projections (`rerun:projection-audit`) |
 | reproduce-v0 | this tree | 0 (0) | 6.9 | Equal except code and time (`rerun:v0`) |
-| reliability | this tree | 0 (0) | 72.2 | Equal except code and time: every A00–A12 number (`rerun:reliability`) |
-| backtest development | this tree | 0 (0) | 26.1 | Results, selection, sensitivity and folds equal. The forecasts matched within 10⁻⁹, so the file was left byte-identical (`rerun:development`, `rerun:forecasts-development`) |
-| backtest validation | this tree | 0 (0) | 7.0 | The same (`rerun:validation`, `rerun:forecasts-validation`) |
-| backtest holdout | frozen tree `165d140` | 0 (0) | 4.3 | Equal except time and the Parquet byte hash. The forecasts match within 7.1×10⁻¹⁵ points: 18 values differ in the last bit (`rerun:holdout-frozen-tree`, `rerun:forecasts-holdout`) |
+| reliability | this tree | 0 (0) | 73.9 | Equal except code and time, apart from A12's live vintage diagnostic. That diagnostic reads Arbit's growing 2026 capture history and is allowed to grow (`rerun:reliability`) |
+| backtest development | this tree | 0 (0) | 25.9 | Results, selection, sensitivity and folds equal. The forecasts matched within 10⁻⁹, so the file was left byte-identical (`rerun:development`, `rerun:forecasts-development`) |
+| backtest validation | this tree | 0 (0) | 6.7 | The same (`rerun:validation`, `rerun:forecasts-validation`) |
+| backtest holdout | frozen tree `165d140` | 0 (0) | 5.8 | Equal except time and the Parquet byte hash. The forecasts match within 7.1×10⁻¹⁵ points: 32 values differ in the last bit; the count varies from run to run (`rerun:holdout-frozen-tree`, `rerun:forecasts-holdout`) |
 | backtest holdout | this tree | **1 (1)** | 0.5 | Refused: "frozen manifest does not match: scripts/model/dvp.py changed". Receipt untouched (`rerun:holdout-refused-here`) |
 | sitstart | this tree | 0 (0) | 0.8 | Equal except code and time (`rerun:sitstart`) |
-| verify | this tree | 0 (0) | 10.3 | Equal except code and time; PASSED (`rerun:verify`, `verify:passed`) |
+| verify | this tree | 0 (0) | 10.2 | Equal except code and time; PASSED (`rerun:verify`, `verify:passed`) |
 | report | this tree | 0 (0) | 0.5 | `METRICS.csv` and all 15 plots byte-identical (`rerun:report-files`) |
 | registry | this tree | 0 (0) | 0.5 | `experiment-registry.json` identical (`rerun:registry`) |
-| model tests | this tree | 0 (0) | 8.0 | 157 passed, 0 failed, 0 skipped. The real-artifact tests ran against the audit run |
+| model tests | this tree | 0 (0) | 13.5 | 213 passed, 0 failed, 0 skipped. The real-artifact tests ran against the audit run |
 
 Why some fields may differ:
 - **Byte hashes.** polars' parallel group-by returns rows in varying order, and its parallel sums move the last bit of some floats. Every metric is order-free and rounded far above that noise. The receipts written since TASK-20261124-004 also carry a content hash.
@@ -111,7 +114,7 @@ Why some fields may differ:
 | R11 | Every forecast uses inputs and parameters available at its cutoff; vintage limits documented | DONE | `walkforward.fit_fold` fits on seasons before s. `check_stage` refuses the holdout outside a verified holdout stage. The score finality audit states the final-revision limitation | `test:T16`–`T18`, `finality:recorded` (PASSED_WITH_LIMITATION) |
 | R12 | No fabrication; unavailable inputs disable experiments, recorded as BLOCKED | DONE | C03 and league-lineup evaluation are BLOCKED with reasons. Each stage's exit code is recorded | `registry:C03` (BLOCKED), `phasec:not-available`, `rerun:steps` |
 | R13 | Durable documentation so a fresh agent can resume | DONE | Runbook, reports, decision register, changelog, handoffs, and the prospective procedure | `deliverable:1`, `deliverable:9`, `docs:prospective` |
-| R14 | Use the status vocabulary; never claim unrun tests; never promote without approval | DONE | `results.STATUSES` holds the specification's words. The model card says "Not eligible yet" | `registry:complete`, `test:dvp-all` (97 passed, 0 skipped), `docs:status-vocabulary` |
+| R14 | Use the status vocabulary; never claim unrun tests; never promote without approval | DONE | `results.STATUSES` holds the specification's words. The model card says "Not eligible yet" | `registry:complete`, `test:dvp-all` (147 passed, 0 skipped), `docs:status-vocabulary` |
 
 ## §1 Research questions
 
@@ -277,7 +280,9 @@ Why some fields may differ:
 | C03 | Route, slot and target-share interactions | BLOCKED | No meaning for a D/ST, and the gate was not met for QB–TE. Recorded, not run | `registry:C03` (BLOCKED, with reason) |
 | C04 | Historical same-position start/sit pairs; close-call subgroup separate | DONE | `decisions.pairs` covers every same-week pair (`metrics … close`, `pool`). The primary metric uses all pairs, not only close calls | `registry:C04`, `phasec:decision`, `test:phase-c` |
 | C05 | Decisions and errors: accuracy, ties, points, changes, regret | DONE | `decisions.metrics`: accuracy, changed choices, points from changes (total, per change, per week with interval), worst single choice and worst week | `registry:C05`, `phasec:decision`, `rerun:sitstart` |
-| C05L | C05: lineups under the league's roster rules | BLOCKED | Arbit holds FFA lineups only for 2026 periods 1–10. No earlier season has any | `phasec:not-available` |
+| C05L-HIST | C05L on 2016–2025: lineups under the league's roster rules | NOT_APPLICABLE | FFA began in 2026 (OWN-076, the owner's Phase B clarification). The unrestricted D/ST pairwise evaluation stands for those seasons | `owner:inaugural-season` |
+| C05L-2026-EXP | C05L on completed 2026 weeks 1–11, exploratory | DONE | `arbit_model.ffa_history` replays the draft and executed moves to each preweek cutoff: who held and who could claim each D/ST. `arbit_model.dvp.league` scores the frozen B00 and B06 start and stream picks; the rule was committed first (`07505d9`). Start (28 decisions): −6 points (−90 to +80); stream (88): +46 (−280 to +360). Too few decisions to measure ([LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md)) | `league2026:exploratory`, `ffa2026:ownership-replay` (11 periods, 14 daily snapshots) |
+| C05L-2026-PRO | C05L on weeks 12–18, prospective | OPEN | Each prospective archive captures the D/ST rosters at forecast time, and from week 13 each unit's availability. Evaluated descriptively after the games | `prospective:league-capture`, `open:prospective` |
 
 Phase C results (`phasec:decision`, `sitstart.json`):
 
@@ -332,17 +337,17 @@ Every test runs in CI without paid APIs. The audit ran them against the real aud
 | T13 | Fixed seed gives the same draws; a new seed changes only the draws | DONE | Four tests across reliability, lab and walk-forward | `test:T13` (4) |
 | T14 | Non-convergence and boundary cases recognized | DONE | Boundary estimate, pure noise, grid-edge maximum | `test:T14` (3) |
 | T15 | No outcome after the cutoff in features | DONE | `test_t15_a_thursday_result_reaches_sunday_only_under_per_game_cutoffs` | `test:T15` (1) |
-| T16 | Future data deleted or perturbed: earlier forecasts identical | DONE | `test_t16_t17_future_and_own_results_never_change_a_forecast` | `test:T16` (1) |
-| T17 | No target result, season-end mean or holdout outcome in training | DONE | Same test as T16 | `test:T17` (1) |
+| T16 | Future data deleted or perturbed: earlier forecasts identical | DONE | `test_t16_t17_future_and_own_results_never_change_a_forecast`; with schedule targets, `test_t16_t17_t20_outcomes_after_a_cutoff_change_neither_targets_nor_forecasts` (AUD-05) | `test:T16` (2) |
+| T17 | No target result, season-end mean or holdout outcome in training | DONE | The same two tests as T16 | `test:T17` (2) |
 | T18 | Split integrity; no tuning on 2025 | DONE | `test_t18_fold_parameters_come_from_earlier_seasons_only`, `test_t18_the_holdout_runs_only_as_a_verified_holdout_stage` | `test:T18` (2) |
 | T19 | Identical eligible rows for every variant | DONE | `test_t19_t20_every_variant_covers_the_same_rows_and_labels_join_only_once_frozen` | `test:T19` (1) |
-| T20 | Forecasts stored before outcomes merge; 1:1 join | DONE | Same test as T19 | `test:T20` (1) |
+| T20 | Forecasts stored before outcomes merge; 1:1 join | DONE | The T19 test, and the AUD-05 test above | `test:T20` (2) |
 | T21 | Synthetic stable effect recovered | DONE | Walk-forward and reliability versions | `test:T21` (2) |
 | T22 | Pure-noise defenses give no systematic gain | DONE | Walk-forward and reliability versions | `test:T22` (2) |
 | T23 | Mid-season trait shift detected by temporal methods | DONE | `test_t23_a_mid_season_shift_is_seen_by_halves_and_lags_not_by_odd_even` | `test:T23` (1) |
 | T24 | Permutations and placebos give no stable uplift | DONE | Lab nulls and walk-forward placebos | `test:T24` (2) |
 | T25 | Cold starts, no-history weeks, season boundary | DONE | `test_t25_week_one_is_the_prior_and_nothing_is_missing` | `test:T25` (1) |
-| T26 | ID compatibility; no writing to prediction weights | DONE | Franchise codes and FFA groups on real forecasts; D/ST unit mapping fails closed; every engine read-only; no write statement, commit or `feature_specs` import | `test:T26` (15, including parametrized cases) |
+| T26 | ID compatibility; no writing to prediction weights | DONE | Franchise codes and FFA groups on real forecasts; D/ST unit mapping fails closed; every engine read-only; no write statement, commit or `feature_specs` import | `test:T26` (20, including parametrized cases) |
 | T27 | Artifacts, hashes, manifests and metrics read back and reproduce | DONE | Content hash ignores order and noise; reruns never overwrite; round trip; receipt schemas; verify coverage; real holdout reproduces | `test:T27` (8) |
 | T28 | Single outlier game or season omitted: effect quantified | DONE | `test_t28_one_extreme_unit_season_is_found_and_its_effect_measured` | `test:T28` (1) |
 | T29 | Continuity manifest | DONE | v0 byte identity; exact and independent reproduction; every experiment registered | `test:T29` (3) |
@@ -357,7 +362,7 @@ Every test runs in CI without paid APIs. The audit ran them against the real aud
 | T38 | B00 prior rebuilt from final FFA scores only | DONE | `test_t38_a_prior_comes_only_from_observed_ffa_actuals` | `test:T38` (1) |
 | T39 | Late corrections and future values never change an earlier forecast | DONE | `test_t39_later_corrections_and_results_never_change_an_earlier_view` | `test:T39` (1) |
 | T40 | `forbidden_vendor_projection_dependencies == 0`, or results invalid | DONE | `results.enforce` invalidates; the committed registry has 0 | `test:T40` (2) |
-| T00 | T29–T40 executed as gates; the full suite passes with nothing skipped | DONE | All 97 DvP tests and 157 model tests ran | `test:dvp-all` (97 / 0 / 0), `test:model-suite` (157 / 0 / 0) |
+| T00 | T29–T40 executed as gates; the full suite passes with nothing skipped | DONE | All 147 DvP tests and 213 model tests ran | `test:dvp-all` (147 / 0 / 0), `test:model-suite` (213 / 0 / 0) |
 
 ## §9 Execution sequence, structure and CLI
 
@@ -448,8 +453,22 @@ None of these counts as done. Each one's check proves its state is recorded hone
 | P4P prospective 2026 weeks 12–18 | The games haven't been played. The first kickoff is 2026-11-26 01:00 UTC. Both levels were frozen before it | After the regular season: rebuild the targets with 2026, then forecast and score weeks 12–18 from the frozen commit `165d140` ([PROSPECTIVE_2026.md](PROSPECTIVE_2026.md)) |
 | P5W D/ST production weight | Approval is the owner's (OWN-074). The specification forbids promotion without it | The owner's decision after P4P |
 | C03 role interactions | BLOCKED: no meaning for a D/ST, and the gate wasn't met for other groups | Only if a position other than D/ST ever passes the group-level gate |
-| C05L lineups under league rules | BLOCKED: no FFA lineups before 2026 | Lineup history for the seasons studied, which doesn't exist |
+| C05L-2026-PRO league-constrained weeks 12–18 | PENDING_FUTURE_DATA: captured at each forecast; the games haven't been played | Evaluation after the season, descriptive. (C05L-HIST is NOT_APPLICABLE, not open: FFA began in 2026, OWN-076) |
 | G06 dry-run and resume | NOT BUILT; judged not appropriate for stages of a few seconds (above) | The owner asks for them |
+
+## Owner audit Phase B: FFA 2026 data and league-constrained evaluation
+
+The owner's Phase B requirements ([AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md](AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md)), TASK-20261124-009. Details: [FFA 2026 data inventory](../FFA_2026_DATA_INVENTORY.md) and [C05L](LEAGUE_CONSTRAINED_2026.md).
+
+| ID | Plan action | Status | Logic | Proof |
+| --- | --- | --- | --- | --- |
+| PB0 | B0: 2026 is FFA's inaugural season, recorded in the owner decisions, source docs, knowledge base and research audit | DONE | OWN-076 in the decision register, SRC-39 in the source register, the inventory's clarification, and the agent knowledge base | `owner:inaugural-season` |
+| PB3 | B1–B3: verified ESPN capability inventory and 2026 coverage, reusing the existing integration | DONE | `scripts/model/ffa_2026_inventory.py` reads Arbit's stored league records read-only. With `--live` it re-verifies through `scoring_audit.audit_scoring` and `league_history.fetch_transactions` (`EspnClient(EspnTransport())`; nothing stored). Periods 1–11: lineups reconciled 8/8 each; transactions equal to ESPN's (4 next-week lineup moves paged with period 8 explained) | `ffa2026:inventory`, `ffa2026:live-verification` (88/88 lineups, 0 missing, 0 status changes) |
+| PB4 | B4: lineups, rosters, statistics and transactions validated | DONE | Slots, FLEX eligibility and IR within limits; starter totals equal the official matchup totals. Only weekly actual stat blocks are stored, never projections. Trades, waiver outcomes and timestamps classified; IDs unique; no duplicates; 0 revisions observed | `ffa2026:validation` |
+| PB5 | B5: 2026 ownership and availability reconstructed and verified, never from current ownership | DONE | `arbit_model.ffa_history.replay` (draft + 260 executed adds and drops) equals every captured period roster (11/11) and every daily snapshot (14/14). Availability classes from drops and the 24-hour waiver hold | `ffa2026:ownership-replay` |
+| PB7 | B7: deliverables | DONE | Inventory, coverage matrix, eligibility and temporal classes, retrieval report, exploratory results, C05L dispositions, limitations, downstream capabilities | `ffa2026:deliverables` |
+
+B6 (C05L) is in the §5 table: C05L-HIST, C05L-2026-EXP and C05L-2026-PRO. B8's completion condition is met: the capabilities and coverage are verified, the achievable league-constrained experiment ran, and the limitations are documented.
 
 ## Corrections made by this audit
 

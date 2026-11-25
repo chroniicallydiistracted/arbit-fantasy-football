@@ -38,7 +38,10 @@ Every record has `forbidden_vendor_projection_dependencies = 0`.
 | M3-3-C02 | EXECUTED | Additive vs proportional vs opportunity × efficiency: identical for a share of 1 | Same |
 | M3-3-C03 | BLOCKED | Role interactions (slot, outside, target share): no meaning for a D/ST | Same |
 | M3-3-C04 | EXECUTED, decision PROMISING | Pairwise D/ST start/sit accuracy, B06 vs B00: +4.4 (dev), +8.5 (2024), +6.6 (2025) points; minimum 1.8 declared first | Same; `config/dvp/sitstart.json` |
-| M3-3-C05 | EXECUTED, decision PROMISING | Points per changed choice +1.6 to +2.7; worst single choice −40; league top-8 +8 to +19 points a week. League-constrained lineups BLOCKED (no league history before 2026) | Same |
+| M3-3-C05 | EXECUTED, decision PROMISING | Points per changed choice +1.6 to +2.7; worst single choice −40; league top-8 +8 to +19 points a week. League-constrained evaluation split by the owner's Phase B audit; see the C05L rows | Same |
+| M3-3-C05L-HIST | NOT_APPLICABLE | League-constrained evaluation on 2016–2025: FFA began in 2026 (OWN-076); the unrestricted pairwise evaluation stands for those seasons | [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md) |
+| M3-3-C05L-2026-EXP | EXECUTED, EXPLORATORY | Completed 2026 weeks 1–11, frozen B00 vs B06 on decision sets rebuilt at each cutoff: start (28 decisions) −6 points (−90 to +80); stream (88) +46 (−280 to +360). Too few decisions to measure | Same, `league-2026-exploratory.json` |
+| M3-3-C05L-2026-PRO | PENDING_FUTURE_DATA | Weeks 12–18: rosters and availability captured at each forecast; descriptive evaluation after the games | Same; [PROSPECTIVE_2026.md](PROSPECTIVE_2026.md) |
 
 | M3-3-V2-DECOUPLED | EXECUTED, EXPLORATORY | Owner audit AUD-05: development, 2024 and 2025 through separate stages (schedule targets, contract-checked features, forecast-only outputs persisted before labels, keep-every-target join, coverage). Frozen variants reproduce v1 exactly on valid rows | [EXPLORATORY_V2.md](EXPLORATORY_V2.md), `explore-v2.json` |
 | M3-3-V2-B05W | EXECUTED, EXPLORATORY | Owner audit AUD-03: rolling 3-, 5- and 8-game residual windows with REML-k shrinkage. Shorter windows are worse; none beats B03 or B06 | Same |

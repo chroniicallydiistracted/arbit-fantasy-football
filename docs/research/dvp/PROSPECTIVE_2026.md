@@ -47,7 +47,7 @@ None of the window's games had been played at any of these times.
    - parameters are fit on 2016–2025;
    - the walk covers weeks 1 to W, because the residuals need each earlier week's point-in-time B00.
    - Only week W is archived.
-5. **Capture the league's D/ST rosters,** read-only from the current snapshot.
+5. **Capture the league's D/ST rosters,** read-only from the current snapshot. From week 13 the capture also records each unrostered D/ST's availability: FREE_AGENT, WAIVERS (dropped within the 24-hour hold) or WAIVERS_OR_FREE_AGENT (dropped 24–48 hours earlier). This is C05L-2026-PRO in the owner's Phase B audit ([LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md)).
 6. **Archive once.** `forecasts.parquet`, `forecasts.csv`, `manifest.json`, `league.json`, and the inputs (the 2026 observations, schedule and targets store) go into `artifacts/dvp/prospective/2026/week-WW/`.
    - The folder is created by an atomic rename and refuses a second write; its files are read-only.
    - A ledger line holds every file's SHA-256 and the previous line's hash.

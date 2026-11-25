@@ -1,5 +1,19 @@
 # Development Changelog
 
+## 2026-11-25 — Owner audit Phase B: FFA 2026 data, ownership replay and league-constrained D/ST evaluation (TASK-20261124-009)
+
+- **PR #16 merged** (`947e91a`): remediation 2.
+- **OWN-076:** 2026 is FFA's inaugural season. ESPN actuals and league-management records from 2026 on are eligible; provider projections stay forbidden.
+- **`arbit_model.ffa_history`:** replays the draft and executed adds and drops to any moment and verifies the result against captured period rosters and snapshots. It also classifies an unrostered player's availability from drops and the waiver hold.
+- **`scripts/model/ffa_2026_inventory.py`:** the 2026 inventory. It covers capabilities and coverage, lineup and transaction validation, the ownership replay, and D/ST state at each preweek cutoff. An optional live re-verification goes through the existing guarded client and stores nothing ([inventory](../research/FFA_2026_DATA_INVENTORY.md)).
+- **C05L-2026-EXP:** the rule was declared first (`config/dvp/league-2026-exploratory.json`, `07505d9`). `arbit_model.dvp.league` and `scripts/model/dvp_league_2026.py` compare the frozen B00 and B06 on rebuilt decision sets ([report](../research/dvp/LEAGUE_CONSTRAINED_2026.md)):
+  - **Start:** −6 points.
+  - **Streaming:** +46 points.
+  - **Managers' starts:** 201 points, against 197 for B00 and 191 for B06.
+  - Every interval spans zero.
+- **Prospective harness:** the capture now records each unrostered D/ST's availability. The evaluation reports league results per decision kind, with a free-agents-only streaming variant.
+- **Plan audit:** C05L split into HIST (NOT_APPLICABLE), 2026-EXP and 2026-PRO, with the Phase B items added. 221 items, 164 checks, all passed.
+
 ## 2026-11-24 — DvP owner audit remediation 2: opportunity volume and scoring efficiency (TASK-20261124-008)
 
 - **PR #15 merged** (`7e227ba`): remediations 3–5.

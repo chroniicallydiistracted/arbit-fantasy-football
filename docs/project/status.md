@@ -21,7 +21,21 @@
   - the database was backed up first, and no migration was pending.
 - **On `main` since PR #14 (`4708bde`):** owner audit remediation 1, the DvP prospective harness (TASK-20261124-006). Offline research.
 - **On `main` since PR #15 (`7e227ba`):** owner audit remediations 3–5 (TASK-20261124-007). Offline research.
-- **Not yet on `main`:** owner audit remediation 2, opportunity and efficiency (TASK-20261124-008, branch `claude/m3-dvp-opportunity`). Offline research.
+- **On `main` since PR #16 (`947e91a`):** owner audit remediation 2, opportunity and efficiency (TASK-20261124-008). Offline research.
+- **Not yet on `main`:** owner audit Phase B, FFA 2026 data and league-constrained evaluation (TASK-20261124-009, branch `claude/m3-ffa-2026-league`). Offline research; it runs in no service.
+
+**Owner audit Phase B (2026-11-25, TASK-20261124-009; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md), OWN-076, ENG-066):**
+- **2026 is FFA's inaugural season (OWN-076).** No earlier FFA seasons exist, and their absence is not a gap. Recorded in the decision register, the source register (SRC-39), AGENTS.md and the plan audit.
+- **ESPN 2026 data ([inventory](../research/FFA_2026_DATA_INVENTORY.md)):**
+  - Every finished period (1–11) is held in full: lineups reconciled 8/8 a period, 536 transactions, the draft and matchup results. Nothing had to be retrieved.
+  - A live re-read through the existing guarded integration matched: 88/88 lineups, and transactions equal to ESPN's.
+  - **Correction:** in-season trades are enabled (deadline 2026-12-02, 3 veto votes). None has been completed; the `isTradingEnabled: false` flag belongs to the draft settings.
+- **Ownership reconstructed:** replaying the draft and 260 executed adds and drops reproduces every captured period roster (11/11) and every daily snapshot (14/14). Availability comes from drops and the 24-hour waiver hold.
+- **C05L split:**
+  - **HIST (2016–2025):** NOT_APPLICABLE.
+  - **2026-EXP (weeks 1–11):** done, exploratory. Start decisions (28): B06 −6 points (−90 to +80). Streaming (88): +46 (−280 to +360). Too few decisions to measure ([report](../research/dvp/LEAGUE_CONSTRAINED_2026.md)).
+  - **2026-PRO:** the prospective archive captures D/ST availability from week 13.
+- **Plan audit rebuilt:** 221 items: 215 done, 5 open, 1 not applicable. All 164 checks passed.
 
 **Owner's independent DvP audit (2026-11-24; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md)):** seven findings, AUD-01 to AUD-07, with remediations 1–7.
 - **Remediation 1 (AUD-01), done in TASK-20261124-006 ([procedure](../research/dvp/PROSPECTIVE_2026.md), ENG-063):** the 2026 weeks 12–18 confirmation is now truly prospective. Forecasts are archived before each week's kickoff and evaluated after the games.
@@ -40,13 +54,13 @@
 - **Repaired:** moving the specification into `docs/research/dvp` had broken four links, the audit's path and a task record, so `main` CI was red.
 
 **DvP plan completion audit (2026-11-24, TASK-20261124-005; [scope document](../research/dvp/PLAN_COMPLETION_SCOPE.md)):** every action item of the owner's specification, checked against rerun evidence.
-- **Result: PASSED.** 214 items: 209 done and 5 open, each open one with its reason. All 156 checks passed, and 157 model tests passed with none skipped.
+- **Result: PASSED.** 214 items: 209 done and 5 open, each open one with its reason. All 156 checks passed, and 157 model tests passed with none skipped. (Rebuilt 2026-11-25 for Phase B: 221 items, 164 checks, 213 tests.)
 - **How it was checked:** `scripts/model/dvp_plan_audit.py` reran every stage on scratch copies, the 2025 holdout from the frozen commit. Each rerun equals its committed receipt apart from run time, code, run ID and Parquet byte order. The receipt is [plan-audit-receipt.json](../research/dvp/plan-audit-receipt.json).
 - **Corrected:** two DvP documents named an earlier audit run than their receipts. That run built an identical observation table, so no number changed.
 - **Open:**
   - the prospective 2026 weeks 12–18 scoring;
   - the owner's D/ST weight decision;
-  - C03 and league-lineup evaluation, both BLOCKED;
+  - C03 BLOCKED. League-lineup evaluation was later split by Phase B: 2016–2025 not applicable, 2026 weeks 1–11 exploratory, weeks 12–18 prospective;
   - dry-run and resume modes, not built.
 
 **DvP plan completion (2026-11-24, TASK-20261124-004, ENG-062; [player-level report](../research/dvp/PLAYER_LEVEL_REPORT.md)):** an item-by-item audit of the owner's specification found Phase 5 (C00–C05) unrun though D/ST had passed its gate, T26 and T27 missing, no verify-only mode, and some §11 outputs missing. All are now done.

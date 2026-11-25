@@ -43,11 +43,13 @@
     "docs/project/status.md",
     "docs/project/changelog.md",
     "docs/governance/state.json",
-    "docs/project/handoffs/2026-11-24-task-20261124-009-governance-handoff.md"
+    "docs/project/handoffs/2026-11-24-task-20261124-009-governance-handoff.md",
+    "docs/research/dvp/M3-3_CONTINUITY.md",
+    "AGENTS.md"
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T02:16:24Z",
-  "updated_at": "2026-11-25T02:27:04Z",
+  "updated_at": "2026-11-25T02:35:24Z",
   "baseline": "947e91ad7c592bef602f542f55e275be3dac1b76",
   "next_action": "Record implement evidence",
   "sections": {
@@ -92,5 +94,18 @@
     }
   },
   "checks": [],
-  "journal": []
+  "journal": [
+    {
+      "at": "2026-11-25T02:30:34Z",
+      "kind": "correction",
+      "note": "Scope extended by hand with docs/research/dvp/M3-3_CONTINUITY.md, whose inventory still called league lineups BLOCKED.",
+      "evidence": "docs/research/dvp/M3-3_CONTINUITY.md"
+    },
+    {
+      "at": "2026-11-25T02:35:24Z",
+      "kind": "correction",
+      "note": "Scope extended by hand with AGENTS.md: B0 asks for the inaugural-season fact in the persistent knowledge base, and AGENTS.md is the cross-agent rule that says never to guess first-season history.",
+      "evidence": "AGENTS.md"
+    }
+  ]
 }

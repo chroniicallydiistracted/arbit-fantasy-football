@@ -66,10 +66,13 @@ The rule in [`config/dvp/sitstart.json`](../../../config/dvp/sitstart.json) was 
 
 ## What is not available
 
-- **League-constrained lineups (part of C05):** BLOCKED.
-  - Arbit holds FFA lineups only for 2026 scoring periods 1–10, and none for 2016–2025.
-  - 2026 is not a stage of this study: its weeks 1–11 were known at the freeze.
-  - So the pairwise and top-8 measures stand in for real lineups.
+- **League-constrained evaluation (part of C05)** was split by the owner's Phase B audit (OWN-076: 2026 is FFA's inaugural season), [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md):
+  - **C05L-HIST (2016–2025): NOT_APPLICABLE.** FFA didn't exist, so the pairwise and top-8 measures here are the legitimate method for those seasons.
+  - **C05L-2026-EXP: done, exploratory.**
+    - Weeks 1–11 used rosters and claimable free agents rebuilt at each cutoff.
+    - Start decisions (28): −6 points; streaming (88): +46 points.
+    - Both intervals span zero widely: too few decisions to measure.
+  - **C05L-2026-PRO: pending,** with weeks 12–18 captured prospectively.
 - **The waiver-pool subgroup is an assumption:** that an 8-team league rosters the top 8 by B00. It is reported, not used in the rule.
 - **C03 (route, slot or target-share roles):** BLOCKED. It has no meaning for a D/ST.
 

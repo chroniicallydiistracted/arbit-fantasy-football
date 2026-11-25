@@ -27,6 +27,13 @@ Specification §2.1, §3.1, T30–T33, T37, T40. Receipt: [PROJECTION_EXCLUSION_
 | `nflverse.stats_player` | REALIZED_NFL_STAT | game, season, week, season type, team, player, position, attempts, sacks suffered, carries, targets, receptions, FG and PAT attempts | The `stats_player_week_<season>` manifest each season's FFA targets were built from (index `6ffb62fb…`); bytes re-hashed | `fantasy_points`, `fantasy_points_ppr` (catalog rule generic-fantasy-points) |
 | `nflverse.stats_team` | REALIZED_NFL_STAT | game, season, week, season type, team, attempts, sacks suffered, carries, interceptions thrown, fumbles lost | The pinned `stats_team_week_<season>` manifest | None |
 
+## ESPN league-management data (owner audit Phase B, OWN-076)
+
+The owner confirmed that ESPN actuals and league-management records are eligible: lineups, rosters, matchup results, schedules, the draft and transactions. The projection prohibition covers only ESPN's and other providers' projections. In this research they are used only as follows:
+- **DvP forecast inputs:** unchanged. Only Arbit's canonical FFA actuals from nflverse statistics, and the schedule. No ESPN value enters a forecast.
+- **League-constrained evaluation (C05L-2026):** Arbit's stored league records (draft, executed transactions, captured lineups, matchup totals) define who held and could claim which D/ST, and ESPN's official points are reconciliation evidence. The script reads the database, not ESPN, and stays in the code scan.
+- **The FFA 2026 inventory** (`scripts/model/ffa_2026_inventory.py`) reads ESPN through the existing guarded integration to verify the stored records, so it imports ESPN readers. It is not DvP model code and is outside the DvP scan list. Arbit's readers keep ESPN actual stat blocks only (`statSourceId 0`).
+
 ## Enforcement at use (owner audit AUD-04, TASK-20261124-007)
 
 Admission checks a source when it enters. The same lineage is checked again wherever observations are fit, forecast or decided on:

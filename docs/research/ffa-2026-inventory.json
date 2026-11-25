@@ -1,0 +1,1070 @@
+{
+ "code": "e57ebc49d3d3eb0fa4eb24ffa9458253db04de9f",
+ "dstAtPreweekCutoff": {
+  "1": {
+   "counts": {
+    "FREE_AGENT": 20,
+    "OWNED": 11,
+    "WAIVERS": 1
+   },
+   "cutoff": "2026-09-10T00:20:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "10": {
+   "counts": {
+    "FREE_AGENT": 19,
+    "OWNED": 11,
+    "WAIVERS": 1,
+    "WAIVERS_OR_FREE_AGENT": 1
+   },
+   "cutoff": "2026-11-13T01:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "11": {
+   "counts": {
+    "FREE_AGENT": 20,
+    "OWNED": 12
+   },
+   "cutoff": "2026-11-20T01:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "12": {
+   "counts": {
+    "FREE_AGENT": 19,
+    "OWNED": 13
+   },
+   "cutoff": "2026-11-26T01:00:00+00:00",
+   "cutoffInTheFuture": true,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "2": {
+   "counts": {
+    "FREE_AGENT": 20,
+    "OWNED": 11,
+    "WAIVERS_OR_FREE_AGENT": 1
+   },
+   "cutoff": "2026-09-18T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "3": {
+   "counts": {
+    "FREE_AGENT": 21,
+    "OWNED": 11
+   },
+   "cutoff": "2026-09-25T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "4": {
+   "counts": {
+    "FREE_AGENT": 20,
+    "OWNED": 11,
+    "WAIVERS_OR_FREE_AGENT": 1
+   },
+   "cutoff": "2026-10-02T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "5": {
+   "counts": {
+    "FREE_AGENT": 18,
+    "OWNED": 12,
+    "WAIVERS": 1,
+    "WAIVERS_OR_FREE_AGENT": 1
+   },
+   "cutoff": "2026-10-09T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "6": {
+   "counts": {
+    "FREE_AGENT": 19,
+    "OWNED": 11,
+    "WAIVERS": 1,
+    "WAIVERS_OR_FREE_AGENT": 1
+   },
+   "cutoff": "2026-10-16T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "7": {
+   "counts": {
+    "FREE_AGENT": 20,
+    "OWNED": 11,
+    "WAIVERS": 1
+   },
+   "cutoff": "2026-10-23T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "8": {
+   "counts": {
+    "FREE_AGENT": 20,
+    "OWNED": 11,
+    "WAIVERS_OR_FREE_AGENT": 1
+   },
+   "cutoff": "2026-10-30T00:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "RECONSTRUCTED",
+   "replayProblems": 0,
+   "snapshot": null
+  },
+  "9": {
+   "counts": {
+    "FREE_AGENT": 18,
+    "OWNED": 12,
+    "WAIVERS_OR_FREE_AGENT": 2
+   },
+   "cutoff": "2026-11-06T01:15:00+00:00",
+   "cutoffInTheFuture": false,
+   "ownershipClass": "VERIFIED_BY_SNAPSHOT",
+   "replayProblems": 0,
+   "snapshot": {
+    "allPlayers": {
+     "agree": 132,
+     "disagree": 0
+    },
+    "dstOwnership": {
+     "agree": 32,
+     "disagree": 0
+    },
+    "hoursBeforeCutoff": 0.56,
+    "snapshotObservedAt": "2026-11-06T00:41:08.587426+00:00"
+   }
+  }
+ },
+ "format": "arbit-ffa-2026-inventory-v1",
+ "generatedAt": "2026-11-25T02:27:10.754750+00:00",
+ "leagueState": {
+  "currentMatchupPeriod": 12,
+  "currentScoringPeriod": 12,
+  "currentSnapshot": "2026-11-24 23:22:46.665058+00:00",
+  "draftPicks": 128,
+  "draftPicksAgreeWithDraftTransactions": true,
+  "finishedScoringPeriods": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "matchups": 56,
+  "matchupsWithResults": 44
+ },
+ "lineups": {
+  "1": {
+   "capturedAt": "2026-11-09 01:49:57.238704+00:00",
+   "captures": 1,
+   "entries": 129,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 55,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 2,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 124
+   },
+   "teams": 8
+  },
+  "10": {
+   "capturedAt": "2026-11-22 22:45:10.887979+00:00",
+   "captures": 1,
+   "entries": 133,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 56,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 5,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 110
+   },
+   "teams": 8
+  },
+  "11": {
+   "capturedAt": "2026-11-24 08:01:08.678354+00:00",
+   "captures": 1,
+   "entries": 133,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 56,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 5,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 99
+   },
+   "teams": 8
+  },
+  "2": {
+   "capturedAt": "2026-11-09 01:50:19.648508+00:00",
+   "captures": 1,
+   "entries": 130,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 56,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 2,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 119
+   },
+   "teams": 8
+  },
+  "3": {
+   "capturedAt": "2026-11-09 01:50:42.042425+00:00",
+   "captures": 1,
+   "entries": 130,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 55,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 3,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 119
+   },
+   "teams": 8
+  },
+  "4": {
+   "capturedAt": "2026-11-09 01:51:15.468022+00:00",
+   "captures": 1,
+   "entries": 131,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 54,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 5,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 117
+   },
+   "teams": 8
+  },
+  "5": {
+   "capturedAt": "2026-11-09 01:51:37.879426+00:00",
+   "captures": 1,
+   "entries": 133,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 56,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 5,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 111
+   },
+   "teams": 8
+  },
+  "6": {
+   "capturedAt": "2026-11-09 01:52:00.337938+00:00",
+   "captures": 1,
+   "entries": 133,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 55,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 6,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 100
+   },
+   "teams": 8
+  },
+  "7": {
+   "capturedAt": "2026-11-09 01:52:31.649323+00:00",
+   "captures": 1,
+   "entries": 132,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 53,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 7,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 107
+   },
+   "teams": 8
+  },
+  "8": {
+   "capturedAt": "2026-11-09 01:52:54.258654+00:00",
+   "captures": 1,
+   "entries": 132,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 55,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 5,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 103
+   },
+   "teams": 8
+  },
+  "9": {
+   "capturedAt": "2026-11-10 15:19:37.715506+00:00",
+   "captures": 1,
+   "entries": 132,
+   "matchupPeriodEqualsScoringPeriod": true,
+   "problems": [],
+   "slots": {
+    "BENCH": 55,
+    "DST": 8,
+    "FLEX": 8,
+    "IR": 5,
+    "K": 8,
+    "QB": 8,
+    "RB": 16,
+    "TE": 8,
+    "WR": 16
+   },
+   "starterTotalsEqualOfficial": 8,
+   "storedVerification": {
+    "lineupsChecked": 8,
+    "lineupsMatched": 8,
+    "verifiedPlayerGames": 112
+   },
+   "teams": 8
+  }
+ },
+ "liveVerification": {
+  "finishedAt": "2026-11-25T02:27:57.973889+00:00",
+  "scoring": {
+   "issues": [],
+   "periods": [
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 1,
+     "verifiedPlayerGames": 124
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 2,
+     "verifiedPlayerGames": 119
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 3,
+     "verifiedPlayerGames": 119
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 4,
+     "verifiedPlayerGames": 117
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 5,
+     "verifiedPlayerGames": 111
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 6,
+     "verifiedPlayerGames": 100
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 7,
+     "verifiedPlayerGames": 107
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 8,
+     "verifiedPlayerGames": 103
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 9,
+     "verifiedPlayerGames": 112
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 10,
+     "verifiedPlayerGames": 110
+    },
+    {
+     "errors": 0,
+     "lineupsChecked": 8,
+     "lineupsMatched": 8,
+     "mismatches": 0,
+     "scoringPeriod": 11,
+     "verifiedPlayerGames": 99
+    }
+   ],
+   "success": true,
+   "totals": {
+    "errors": 0,
+    "lineupsChecked": 88,
+    "lineupsMatched": 88,
+    "mismatches": 0,
+    "providerZeroEntries": 227,
+    "rosterEntries": 1448,
+    "verifiedPlayerGames": 1221
+   },
+   "verificationPassed": true
+  },
+  "startedAt": "2026-11-25T02:27:10.841242+00:00",
+  "transactions": {
+   "1": {
+    "live": 44,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "a9f4aa5680853cd5cc32692ecbf25adc2f4d72457ccd900d4b22d927b0f75783",
+    "statusChanged": 0,
+    "stored": 44
+   },
+   "10": {
+    "live": 61,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "37b50b78b83df9668cc3401a8914650e5d3c2555c20a07ec69ef91939dd06bd6",
+    "statusChanged": 0,
+    "stored": 61
+   },
+   "11": {
+    "live": 39,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "4c911eec526aa1ccfca1ddf28f1b261b7923100d556ef6deecae2036fe954473",
+    "statusChanged": 0,
+    "stored": 39
+   },
+   "2": {
+    "live": 28,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "f3f35e49db9a660af82f18c018b2d9ad061a267eab5524ae40f77f002017720f",
+    "statusChanged": 0,
+    "stored": 28
+   },
+   "3": {
+    "live": 53,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "ffb0f61aaecf8117db172df309d0024e06c9fbff3c71e85d29f91dd842726e5e",
+    "statusChanged": 0,
+    "stored": 53
+   },
+   "4": {
+    "live": 35,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "cdcd7338c293f82a18ae92d82234e0ea0ea82bfc542b3df1ba49c9aa512b8625",
+    "statusChanged": 0,
+    "stored": 35
+   },
+   "5": {
+    "live": 51,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "4b1790ef896a415e483d1952f4e2ebe0754b7eaf1b5a31bdfb40d17940eecd12",
+    "statusChanged": 0,
+    "stored": 51
+   },
+   "6": {
+    "live": 64,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "d163790d169c01c9cc584edca29dfb6e395ab65712a9221e72deb42a2dab504f",
+    "statusChanged": 0,
+    "stored": 64
+   },
+   "7": {
+    "live": 54,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "b6a58c688065750d60dd41a2b74d6bc892a174eb786df1009b2509c2f8e5d86c",
+    "statusChanged": 0,
+    "stored": 54
+   },
+   "8": {
+    "live": 61,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 0,
+    "notInLiveTypes": {},
+    "receiptSha256": "65990364110f300f6d744b62550660e0c0fbfc145d5e0da4beeaee5f8a60cab3",
+    "statusChanged": 0,
+    "stored": 61
+   },
+   "9": {
+    "live": 40,
+    "missingFromStore": [],
+    "missingFromStoreCount": 0,
+    "notInLive": 4,
+    "notInLiveTypes": {
+     "FUTURE_ROSTER": 4
+    },
+    "receiptSha256": "3f6fb6f56808b7480d417d9b95377b4f21832752add67fe4662da05822dc065c",
+    "statusChanged": 0,
+    "stored": 44
+   }
+  }
+ },
+ "ownerClarification": "OWN-076: 2026 is FFA's inaugural season; no FFA league history exists before it. Historical NFL seasons 2016-2025 are studied under the current FFA scoring rules.",
+ "ownershipReplay": {
+  "allPeriodsVerified": true,
+  "allSnapshotsAgree": true,
+  "byType": {
+   "FREEAGENT/ADD": 80,
+   "FREEAGENT/DROP": 63,
+   "ROSTER/DROP": 22,
+   "WAIVER/ADD": 52,
+   "WAIVER/DROP": 43
+  },
+  "dailySnapshots": {
+   "2026-10-31": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-10-31T05:57:26.058802+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-01": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-01T23:59:59.716655+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-02": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-02T04:29:33.017537+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-03": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-03T23:07:12.340302+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-04": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-04T23:57:37.806763+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-05": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-05T23:58:56.922579+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-06": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-06T20:58:37.816929+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-07": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-07T23:49:39.124751+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-08": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-08T23:59:51.273656+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-09": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-09T23:56:12.425376+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-10": {
+    "agree": 129,
+    "disagree": 0,
+    "observedAt": "2026-11-10T17:21:36.354067+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-22": {
+    "agree": 133,
+    "disagree": 0,
+    "observedAt": "2026-11-22T23:59:05.888306+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-23": {
+    "agree": 133,
+    "disagree": 0,
+    "observedAt": "2026-11-23T23:58:19.368359+00:00",
+    "replayProblems": 0
+   },
+   "2026-11-24": {
+    "agree": 132,
+    "disagree": 0,
+    "observedAt": "2026-11-24T23:22:46.665058+00:00",
+    "replayProblems": 0
+   }
+  },
+  "moves": 260,
+  "periods": {
+   "1": {
+    "captured": 129,
+    "extraInReplay": 0,
+    "matched": 129,
+    "missingFromReplay": 0,
+    "reconstructed": 129,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "10": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "11": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "2": {
+    "captured": 130,
+    "extraInReplay": 0,
+    "matched": 130,
+    "missingFromReplay": 0,
+    "reconstructed": 130,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "3": {
+    "captured": 130,
+    "extraInReplay": 0,
+    "matched": 130,
+    "missingFromReplay": 0,
+    "reconstructed": 130,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "4": {
+    "captured": 131,
+    "extraInReplay": 0,
+    "matched": 131,
+    "missingFromReplay": 0,
+    "reconstructed": 131,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "5": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "6": {
+    "captured": 133,
+    "extraInReplay": 0,
+    "matched": 133,
+    "missingFromReplay": 0,
+    "reconstructed": 133,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "7": {
+    "captured": 132,
+    "extraInReplay": 0,
+    "matched": 132,
+    "missingFromReplay": 0,
+    "reconstructed": 132,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "8": {
+    "captured": 132,
+    "extraInReplay": 0,
+    "matched": 132,
+    "missingFromReplay": 0,
+    "reconstructed": 132,
+    "replayProblems": 0,
+    "verified": true
+   },
+   "9": {
+    "captured": 132,
+    "extraInReplay": 0,
+    "matched": 132,
+    "missingFromReplay": 0,
+    "reconstructed": 132,
+    "replayProblems": 0,
+    "verified": true
+   }
+  }
+ },
+ "rules": {
+  "acquisitionBudgetInUse": false,
+  "dstRosterLimit": 3,
+  "lineupLock": "INDIVIDUAL_GAME",
+  "lineupSlots": {
+   "BENCH": 7,
+   "DST": 1,
+   "FLEX": 1,
+   "IR": 1,
+   "K": 1,
+   "QB": 1,
+   "RB": 2,
+   "TE": 1,
+   "WR": 2
+  },
+  "tradeDeadline": "2026-12-02T17:00:00+00:00",
+  "tradeVetoVotes": 3,
+  "waiverHours": 24,
+  "waiverProcessDays": [
+   "MONDAY",
+   "WEDNESDAY",
+   "THURSDAY",
+   "FRIDAY",
+   "SATURDAY",
+   "SUNDAY"
+  ],
+  "waiverType": "WAIVERS_TRADITIONAL"
+ },
+ "season": 2026,
+ "snapshots": {
+  "byDay": {
+   "2026-10-31": 1,
+   "2026-11-01": 95,
+   "2026-11-02": 113,
+   "2026-11-03": 63,
+   "2026-11-04": 28,
+   "2026-11-05": 31,
+   "2026-11-06": 87,
+   "2026-11-07": 15,
+   "2026-11-08": 316,
+   "2026-11-09": 192,
+   "2026-11-10": 165,
+   "2026-11-22": 54,
+   "2026-11-23": 200,
+   "2026-11-24": 160
+  },
+  "count": 1520,
+  "first": "2026-10-31 05:57:26.058802+00:00",
+  "gapDays": [
+   "2026-11-11",
+   "2026-11-12",
+   "2026-11-13",
+   "2026-11-14",
+   "2026-11-15",
+   "2026-11-16",
+   "2026-11-17",
+   "2026-11-18",
+   "2026-11-19",
+   "2026-11-20",
+   "2026-11-21"
+  ],
+  "last": "2026-11-24 23:22:46.665058+00:00"
+ },
+ "sourceHealth": [
+  {
+   "consecutive_failures": "0",
+   "error_code": "None",
+   "last_success_at": "2026-11-25 02:22:23.864734+00:00",
+   "source": "espn.league"
+  },
+  {
+   "consecutive_failures": "0",
+   "error_code": "None",
+   "last_success_at": "2026-11-25 02:27:05.864794+00:00",
+   "source": "espn.league.lineups"
+  },
+  {
+   "consecutive_failures": "0",
+   "error_code": "None",
+   "last_success_at": "2026-11-25 02:25:45.534462+00:00",
+   "source": "espn.league.transactions"
+  },
+  {
+   "consecutive_failures": "0",
+   "error_code": "None",
+   "last_success_at": "2026-11-24 16:19:32.541493+00:00",
+   "source": "espn.nfl.plays"
+  },
+  {
+   "consecutive_failures": "0",
+   "error_code": "None",
+   "last_success_at": "2026-11-25 02:22:28.796253+00:00",
+   "source": "espn.nfl.scoreboard"
+  },
+  {
+   "consecutive_failures": "0",
+   "error_code": "None",
+   "last_success_at": "2026-11-24 22:45:31.972423+00:00",
+   "source": "espn.nfl.teams"
+  }
+ ],
+ "transactionReads": {
+  "1": {
+   "count": 44,
+   "lastReadAt": "2026-11-09 01:49:33.195978+00:00"
+  },
+  "10": {
+   "count": 61,
+   "lastReadAt": "2026-11-24 07:58:44.006072+00:00"
+  },
+  "11": {
+   "count": 39,
+   "lastReadAt": "2026-11-25 02:23:24.374460+00:00"
+  },
+  "12": {
+   "count": 1,
+   "lastReadAt": "2026-11-25 02:25:45.530184+00:00"
+  },
+  "2": {
+   "count": 28,
+   "lastReadAt": "2026-11-09 01:49:59.518738+00:00"
+  },
+  "3": {
+   "count": 53,
+   "lastReadAt": "2026-11-09 01:50:21.873581+00:00"
+  },
+  "4": {
+   "count": 35,
+   "lastReadAt": "2026-11-09 01:50:44.414210+00:00"
+  },
+  "5": {
+   "count": 51,
+   "lastReadAt": "2026-11-09 01:51:17.712080+00:00"
+  },
+  "6": {
+   "count": 64,
+   "lastReadAt": "2026-11-09 01:51:40.165898+00:00"
+  },
+  "7": {
+   "count": 54,
+   "lastReadAt": "2026-11-09 01:52:02.677831+00:00"
+  },
+  "8": {
+   "count": 66,
+   "lastReadAt": "2026-11-10 15:19:18.858178+00:00"
+  },
+  "9": {
+   "count": 40,
+   "lastReadAt": "2026-11-10 18:04:20.405937+00:00"
+  }
+ },
+ "transactions": {
+  "byTypeAndStatus": {
+   "DRAFT/EXECUTED": 9,
+   "FREEAGENT/EXECUTED": 80,
+   "FUTURE_ROSTER/EXECUTED": 4,
+   "ROSTER/EXECUTED": 361,
+   "TRADE_DECLINE/EXECUTED": 7,
+   "TRADE_PROPOSAL/CANCELED": 2,
+   "WAIVER/CANCELED": 7,
+   "WAIVER/EXECUTED": 52,
+   "WAIVER/FAILED_INVALIDPLAYERSOURCE": 12,
+   "WAIVER/FAILED_ROSTERLIMIT": 2
+  },
+  "completedTrades": 0,
+  "drops": 128,
+  "duplicateContentUnderDifferentIds": 0,
+  "freeAgentAdds": 80,
+  "records": 536,
+  "revisedAfterFirstObservation": 0,
+  "storage": "One row per ESPN transaction id; a changed record is updated in place (content hash and last_changed_at), so earlier versions are not kept.",
+  "timestamps": {
+   "firstObserved": 536,
+   "processed": 66,
+   "processedExactlyOnDecidedWaiverClaims": true,
+   "proposed": 536
+  },
+  "tradeDeclines": 7,
+  "tradeProposals": 2,
+  "uniqueEspnIds": 536,
+  "waiverClaims": {
+   "CANCELED": 7,
+   "EXECUTED": 52,
+   "FAILED_INVALIDPLAYERSOURCE": 12,
+   "FAILED_ROSTERLIMIT": 2
+  }
+ }
+}
