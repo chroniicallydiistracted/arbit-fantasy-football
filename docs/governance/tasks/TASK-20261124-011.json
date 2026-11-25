@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "id": "TASK-20261124-011",
+  "title": "M3-3 final directive Phase B: corrected league-constrained evaluation from pinned inputs",
+  "objective": "Resolve PB-AUD-01 to -06 and -08 and verify the Phase B v1 results: content-level live reconciliation, fail-closed ownership replay verified at every snapshot moment, availability reconstruction validated against observed snapshot states, all-week bootstrap, streaming feasibility and collisions, exact decision sets and comparable manager decisions, immutable pinned league inputs; a separately versioned corrected C05L-2026-EXP (v2) declared before it is computed, v1 preserved.",
+  "status": "active",
+  "phase": "review",
+  "change_class": "model",
+  "requirements": [
+    "MD-002",
+    "MD-004",
+    "DATA-002",
+    "GOVAI-013"
+  ],
+  "scope_files": [
+    "config/dvp/league-2026-exploratory-v2.json",
+    "scripts/model/ffa_2026_pin.py",
+    "scripts/model/ffa_2026_inventory.py",
+    "scripts/model/dvp_league_2026_v2.py",
+    "libs/arbit-model/src/arbit_model/ffa_history.py",
+    "libs/arbit-model/src/arbit_model/dvp/league.py",
+    "libs/arbit-model/tests/test_ffa_history.py",
+    "libs/arbit-model/tests/test_dvp_league.py",
+    "scripts/model/dvp.py",
+    "docs/research/ffa-2026-inventory-v2.json",
+    "docs/research/ffa-2026-league-inputs-v1.json",
+    "docs/research/dvp/league-2026-exploratory-v2.json",
+    "docs/research/FFA_2026_DATA_INVENTORY.md",
+    "docs/research/dvp/LEAGUE_CONSTRAINED_2026.md",
+    "docs/research/dvp/audit-findings.json",
+    "docs/research/dvp/AUDIT_RECONCILIATION.md",
+    "docs/research/dvp/EXPERIMENT_REGISTRY.md",
+    "docs/research/dvp/README.md",
+    "docs/project/decision-register.md",
+    "docs/project/status.md",
+    "docs/project/changelog.md",
+    "docs/governance/state.json",
+    "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md"
+  ],
+  "deleted_files": [],
+  "created_at": "2026-11-25T04:03:58Z",
+  "updated_at": "2026-11-25T04:03:58Z",
+  "baseline": "b6c25e98c01ea0189bdfdd24a85e8d54da0b57d1",
+  "next_action": "Read affected requirements/source and record Review evidence",
+  "sections": {
+    "review": {
+      "summary": "",
+      "files": []
+    },
+    "plan": {
+      "summary": "",
+      "files": []
+    },
+    "implementation": {
+      "summary": "",
+      "files": []
+    },
+    "validation": {
+      "summary": "",
+      "files": []
+    },
+    "documentation": {
+      "summary": "",
+      "files": []
+    },
+    "handoff": {
+      "path": null,
+      "next_action": "",
+      "unresolved": ""
+    }
+  },
+  "checks": [],
+  "journal": []
+}

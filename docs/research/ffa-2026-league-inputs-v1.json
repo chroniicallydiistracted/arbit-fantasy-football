@@ -1,0 +1,70 @@
+{
+ "ancestry": {
+  "dst": "canonical_entity defense_unit -> team_affiliation -> nfl_team (LAR->LA, WSH->WAS)",
+  "league.json": "current league_document (draft_picks, matchups, team ids) and its rule_version",
+  "lineups": "fantasy_lineup_capture/entry (finalized period lineups reconciled to ESPN totals)",
+  "snapshots": "league_snapshot, roster_entry and each snapshot's league_document players (D/ST only)",
+  "transactions": "fantasy_transaction (mTransactions2, every period read; one row per ESPN id, updated in place)"
+ },
+ "bundle": "artifacts/dvp/league-2026/inputs-v1 (local, git-ignored)",
+ "currentSnapshot": {
+  "contentHash": "bacbabf3e422cdcdb6d849292ddb0a38c6780b96f264dfc30622b55bc01c4b3d",
+  "observedAt": "2026-11-25T03:04:22.682899+00:00",
+  "rulesHash": "723dac8f74da3fa1248b3a284cd97d8c7324fa300f8d9a6ba15ab10de0ceb808",
+  "snapshotId": "2f61c46a-00bb-4c38-9e7c-4274141548ac"
+ },
+ "external": {
+  "schedule and 2026 observations": {
+   "inputs": {
+    "observations-season.parquet": "0e09227faeaf395c180a2a14e00ce60eafc64475ce8d7dfae08d5d36ab85beba",
+    "schedule-season.parquet": "8ead98805ba5da009bc6fe67fa8cc261b984e5935b234d1dad1e68877701847b"
+   },
+   "path": "artifacts/dvp/prospective/2026/week-12/inputs"
+  }
+ },
+ "files": {
+  "dst.parquet": {
+   "rows": 32,
+   "sha256": "a68006cfd9c6e9d9c11b9f9f38952756b1390c7fa0f9168c0b7edbccf0b3d64d"
+  },
+  "league.json": {
+   "draftPicks": 128,
+   "sha256": "e8f81457df64100837564f36255182c1b7b4bedf6f42e5e4035895f2f81e4fd1"
+  },
+  "lineup_captures.parquet": {
+   "rows": 11,
+   "sha256": "403d8f845fab5852d9d079b9c65e1f79c7c45077bd2218c671ec85151022ec43"
+  },
+  "lineup_entries.parquet": {
+   "rows": 1448,
+   "sha256": "bf076f43cae56f25d7a4ad56fa500c36506a30cf619bbbdd29a439c60742d366"
+  },
+  "snapshot_dst.parquet": {
+   "rows": 48704,
+   "sha256": "976d8aa4173cd28f2fb4ffe8ecfa45c3bf504989f9a63b20a463848571e7a910"
+  },
+  "snapshot_rosters.parquet": {
+   "rows": 201301,
+   "sha256": "cc1c327f4a48fca665c92d8464ab3592934c8dc0b9b48b3d7c76c67a0c15b224"
+  },
+  "snapshots.parquet": {
+   "rows": 1522,
+   "sha256": "210002d65a3756ffce4e52b84a11da37af15359f0ec2ba3ce1ace7165f0a5514"
+  },
+  "transaction_reads.parquet": {
+   "rows": 12,
+   "sha256": "dfaeff72db548c2c9eb43a39764f0af8fee3660308ddd79d6d12abfcbff3fd67"
+  },
+  "transactions.parquet": {
+   "rows": 536,
+   "sha256": "0b72a12ed2c52e67a74f70baccc97773983a9cb492699159a76f5bbc995099b1"
+  }
+ },
+ "format": "arbit-ffa-2026-league-inputs-v1",
+ "manifestSha256": "c354dcca71c8e82fecf6602662d57dd763c835dfcc5fa833b2fd02e866a58c48",
+ "privacy": "Local bundle only. This manifest holds hashes and counts; no names, managers or member identifiers.",
+ "readAt": "2026-11-25T04:04:48.317678+00:00",
+ "readMode": "one read-only repeatable-read transaction",
+ "version": "v1",
+ "write_to_production": false
+}

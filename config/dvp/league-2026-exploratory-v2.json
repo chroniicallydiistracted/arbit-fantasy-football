@@ -1,0 +1,77 @@
+{
+ "format": "arbit-dvp-m3-3-league-2026-exploratory-v2",
+ "experiment": "C05L-2026-EXP v2: the corrected exploratory league-constrained D/ST evaluation on completed 2026 weeks 1-11",
+ "authority": "Owner final directive PB-AUD-02 to -06 and -08 (docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md); OWN-077 DEC-04/05/06. TASK-20261124-011.",
+ "declaredAt": "2026-11-25, before any v2 result was computed. The v1 rule (config/dvp/league-2026-exploratory.json) and the v1 receipt (docs/research/dvp/league-2026-exploratory.json) are preserved unchanged.",
+ "classification": "EXPLORATORY and RETROSPECTIVE: weeks 1-11 were known before the prospective freeze and the forecasts are reconstructed with the frozen method. Never a confirmation; never changes the frozen Phase B or Phase C rules; no production influence (DEC-07).",
+ "weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+ "models": {"baseline": "b00", "candidate": "b06"},
+ "inputs": {
+  "league": "The pinned bundle artifacts/dvp/league-2026/inputs-v1, manifest docs/research/ffa-2026-league-inputs-v1.json (manifest SHA-256 c354dcca71c8e82fecf6602662d57dd763c835dfcc5fa833b2fd02e866a58c48). Every file's hash is verified before use; nothing is read from the live database.",
+  "forecasts": "The frozen B00 and B06 through the prospective adapter, from the week-12 archive's hash-checked 2026 inputs and the frozen 2016-2025 history, as in v1.",
+  "labels": "Canonical FFA D/ST actuals from the same archived 2026 observations; ESPN's official D/ST points only as reconciliation."
+ },
+ "decisionTime": "The week's preweek cutoff: its first scheduled kickoff. No week-W game has started, so no player is game-locked at that moment.",
+ "ownership": {
+  "replay": "arbit_model.ffa_history: the draft picks plus executed FREEAGENT, WAIVER and ROSTER adds and drops, in effective-time order. Effective time: a waiver's processed_at (required: an executed waiver without one stops the run); otherwise the time made (proposed_at), as ESPN applies free-agent moves and drops at once.",
+  "failClosed": "The run stops on: an executed transaction whose type or items would change ownership outside the supported set (any TRADE item, any ADD or DROP on another type, any unknown item type); a draft that names a player twice or a team outside the league; any replay inconsistency (dropping a player not held, adding one already held). Complete trade replay is downstream work (DEC-05): no executed trade exists to establish its contract.",
+  "verification": "The replay is compared with every archived snapshot at that snapshot's own observation time (not only period ends or one snapshot a day), and with every captured period roster."
+ },
+ "availability": {
+  "classes": {
+   "VERIFIED": "An archived snapshot observed within 6 hours before the cutoff, with no D/ST add, drop or waiver processing between the snapshot and the cutoff: ESPN's reported state is used.",
+   "RECONSTRUCTED": "Rule v2 below, used only if it passes its validation; otherwise ESTIMATED.",
+   "ESTIMATED": "Rule v2 when its validation fails the acceptance criterion.",
+   "UNKNOWN": "A unit whose state cannot be determined (no rule input); excluded from claimable pools."
+  },
+  "ruleV2": {
+   "processingMoments": "00:00 America/Los_Angeles on the league's processing days (Monday, Wednesday, Thursday, Friday, Saturday, Sunday; never Tuesday). Basis: every one of the 74 decided waiver claims was processed at 07:00 UTC before the 2026-11-01 clock change and 08:00 UTC after it, that is midnight Pacific; the rule's waiverProcessHour of 11 is recorded but contradicted by all observed processing.",
+   "dropHold": "A unit dropped at time d is WAIVERS until the first processing moment at or after d + 24 hours (the league's waiver hours).",
+   "gameLock": "An unowned unit whose NFL game has kicked off is WAIVERS until the first Wednesday processing moment after that kickoff (observed: Sunday-game units cleared at Wednesday's run, not Monday's).",
+   "otherwise": "FREE_AGENT.",
+   "fallbackOld": "The v1 24/48-hour rule is reported beside it for comparison only."
+  },
+  "validation": {
+   "against": "ESPN's reported availability for every unowned D/ST in every archived snapshot, at the snapshot's own time, with ownership from the same snapshot.",
+   "split": "Design: snapshots observed through 2026-11-10 (the rule was formed from these transitions). Holdout: snapshots from 2026-11-22 onward. Reported separately.",
+   "tables": "Observed versus reconstructed counts for rule v2 and the v1 rule; false claimable (reconstructed FREE_AGENT, observed WAIVERS); over-restrictive (reconstructed WAIVERS, observed FREE_AGENT); uncertain (v1's WAIVERS_OR_FREE_AGENT).",
+   "acceptance": "Rule v2 is RECONSTRUCTED if on the holdout its agreement with observed states is at least 99% and its false-claimable rate at most 1% of unowned unit-moments; otherwise ESTIMATED.",
+   "decisionMoments": "Also reported for snapshots observed between a Wednesday processing moment and the next kickoff, the moments most like a preweek cutoff."
+  }
+ },
+ "decisions": {
+  "start": "rosterOnly: each team holding two or more D/STs with a game picks one; each model starts its higher forecast (ties by franchise code).",
+  "streamClaimable": "Held playing D/STs plus unowned playing units classified FREE_AGENT (VERIFIED or RECONSTRUCTED/ESTIMATED); evaluated even if no free agent exists.",
+  "streamWithWaivers": "Upper bound: also units classified WAIVERS.",
+  "unownedPool": "Held plus every unowned playing unit (the most permissive set; never claimable as a whole).",
+  "eligibleSet": "Every decision records the decision time, the units held, the eligible options with each one's availability class and evidence, both picks, the actual finalized starter, whether that starter was among the options at the cutoff, and whether ownership of the picks or the starter changed after the cutoff."
+ },
+ "feasibility": {
+  "scope": "Independent single-week, single-manager recommendations. Not a simultaneous league-wide acquisition strategy: no waiver priority, competition or multi-week value is modelled (DEC-06).",
+  "capacity": "16 non-IR players (the lineup slots less IR; never exceeded in 1,522 archived snapshots), D/ST limit 3 (rosterSettings.positionLimits).",
+  "classes": {
+   "HELD": "The pick is already on the team.",
+   "EXECUTABLE": "An open roster slot and fewer than 3 D/STs.",
+   "REQUIRES_DROP": "A full roster: another player must be dropped. At the preweek cutoff no player is game-locked, so a legal drop exists; its cost is not modelled.",
+   "REQUIRES_DST_DROP": "The team already holds 3 D/STs: one must go.",
+   "UNKNOWN": "The roster at the cutoff cannot be established."
+  },
+  "collisions": "Per week and model: unowned units recommended to more than one team (only one could acquire each), and the teams involved.",
+  "points": "Gross D/ST points only; never net roster-management value."
+ },
+ "managers": {
+  "strictlyComparable": "The finalized starter was among the team's options at the cutoff (held, or claimable for streaming kinds).",
+  "differentDecisionTime": "The finalized starter was acquired after the cutoff or was not an option then: reported apart, never pooled with the comparable set."
+ },
+ "matchups": {
+  "rule": "Individual-decision counterfactual: the team's official total minus the started D/ST's official points plus the pick's, against the opponent's official total held fixed. Only picks that were eligible options at the cutoff. Ties, unknown points and ineligible picks are counted separately. Not a change in league win probability."
+ },
+ "uncertainty": {
+  "method": "Week-block bootstrap of the cumulative B06-minus-B00 points, 2,000 replicates, seed 1729.",
+  "blocks": "Every evaluated week is a block, including weeks with no changed decision (they contribute zero). Weeks with no evaluable decision are listed as missing coverage, not blocks. The number of blocks is recorded. The v1 method (blocks only where decisions changed) is reproduced beside it."
+ },
+ "comparison": "Original (v1) and corrected (v2) samples and outcomes side by side, with every added or removed decision and its reason.",
+ "decisionRule": "none: descriptive and exploratory",
+ "write_to_production": false,
+ "forbidden_vendor_projection_dependencies": 0
+}
