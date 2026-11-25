@@ -21,18 +21,18 @@ Started 2026-11-25 in TASK-20261124-010.
 | AUD-01c | Window completion: any completed game, missed weeks accepted | AGREE | RESOLVED_VERIFIED |
 | AUD-01d | Archive steps not transactional or recoverable | PARTIALLY_AGREE | RESOLVED_VERIFIED |
 | PB-AUD-07 | Prospective availability from a heuristic, incomplete captures | AGREE | RESOLVED_PENDING_FUTURE_DATA (from week 13) |
-| PB-AUD-01 | Live reconciliation by id, type and status only | AGREE | OPEN |
-| PB-AUD-02 | Trades and waiver timing in the ownership replay | AGREE (no effect on weeks 1–11) | OPEN |
-| PB-AUD-03 | Availability rule not validated against snapshots | AGREE | OPEN |
-| PB-AUD-04 | Bootstrap drops zero-change weeks | AGREE (interval to be reproduced) | OPEN |
-| PB-AUD-05 | Streaming ignores shared acquisitions and roster feasibility | AGREE | OPEN |
-| PB-AUD-06 | Manager starts compared across different decision times | AGREE | OPEN |
-| PB-AUD-08 | League inputs read from the live database | AGREE | OPEN |
-| PB-RESULTS | Phase B v1 totals and the week-11 sensitivity (directive §8) | UNVERIFIED (to recompute) | OPEN |
+| PB-AUD-01 | Live reconciliation by id, type and status only | AGREE | RESOLVED_VERIFIED |
+| PB-AUD-02 | Trades and waiver timing in the ownership replay | AGREE (no effect on weeks 1–11) | RESOLVED_VERIFIED |
+| PB-AUD-03 | Availability rule not validated against snapshots | AGREE | RESOLVED_VERIFIED |
+| PB-AUD-04 | Bootstrap drops zero-change weeks | AGREE (reproduced: −96.03 to +74.02) | RESOLVED_VERIFIED |
+| PB-AUD-05 | Streaming ignores shared acquisitions and roster feasibility | AGREE | RESOLVED_VERIFIED |
+| PB-AUD-06 | Manager starts compared across different decision times | PARTIALLY_AGREE (gap real; no decision affected) | RESOLVED_VERIFIED |
+| PB-AUD-08 | League inputs read from the live database | AGREE | IN_PROGRESS (inputs pinned; the audit rerun is remediation 7) |
+| PB-RESULTS | Phase B v1 totals and the week-11 sensitivity (directive §8) | AGREE (recomputed) | RESOLVED_VERIFIED |
 | AUD-06 | Simulation suite outstanding | AGREE | OPEN |
 | AUD-07 | 1.8-point threshold described as exact | UNVERIFIED (derivation to reproduce) | OPEN |
 
-No finding has been rejected so far. Two are only partly accepted.
+No finding has been rejected so far. Three are only partly accepted.
 - **AUD-01b:**
   - The refresh dependency the reviewer asked about already exists: the worker's statistics lane imports changed nflverse files daily, and imported the 2026 player statistics on 2026-11-22, -23 and -24.
   - The harness already waited for every earlier result.
@@ -93,6 +93,39 @@ No finding has been rejected so far. Two are only partly accepted.
   - the 00:17 run falls inside the PC's daily 00:10–00:35 UTC wake window;
   - disables itself once every week is final and every commitment is verified.
 
+- **PB-AUD-06:** the method gap was real. The receipt lacked exact candidate sets, and starters were not checked against the cutoff. But the evidence shows no decision was affected: all 28 finalized starters were held at the cutoff.
+
+## Phase B corrections (resolved in TASK-20261124-011)
+
+Details: [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md#corrected-evaluation-v2-final-directive-2026-11-25) and [FFA_2026_DATA_INVENTORY.md](../FFA_2026_DATA_INVENTORY.md).
+
+- **§8 recomputed (PB-RESULTS):**
+  - every total in the reviewer's table matches;
+  - week 11 contributes +92 to streaming, and +46 becomes −46 without it;
+  - the all-week start/sit interval is −96.03 to +74.02, as the reviewer computed.
+- **PB-AUD-08:**
+  - **The bundle:** the normalized league inputs are pinned in one read-only transaction as a hashed local bundle (manifest `c354dcca…`), and the corrected experiment runs from it alone.
+  - **Still to do:** remediation 7 reruns the experiment from the bundle and compares.
+- **PB-AUD-01 (live content):**
+  - 536 of 536 transactions are content-equal, and the union of pages equals the store.
+  - The four FUTURE_ROSTER records are located on period 8's page.
+  - All 11 lineups have identical membership, slots, points and positions. The only differences are players' current NFL teams.
+- **PB-AUD-02 (ownership):**
+  - The replay now fails closed on unsupported ownership changes and on waivers without a processing time, and validates the draft.
+  - It equals all 1,522 snapshots at their own times.
+- **PB-AUD-03 (availability rule v2):**
+  - **Validation:** 99.3% holdout agreement against ESPN's reported states, against 22% for v1.
+  - **Its errors** are two documented patterns: waiver-run drops and Tuesday locks. A rule v3 is proposed for future validation, not adopted.
+  - **A defect caught in a trial run:** the game lock compared with ≤ at the exact cutoff. It was fixed to the declared rule before the recorded run.
+- **PB-AUD-04:** the bootstrap uses every evaluated week. Zero-change weeks count as zero, and the block counts are recorded.
+- **PB-AUD-05:**
+  - Every B06 recommendation of an unowned unit collides with another team's; 57 of its 88 claimable picks need a drop.
+  - Streaming is reported as independent single-manager recommendations only.
+- **C05L-2026-EXP v2:**
+  - **The rule** was declared and pushed in `671b5ef` before computing. v1 is preserved.
+  - **Samples are unchanged.** Claimable streaming moves from +46 to +110, all from week 9's snapshot-verified pool, a full collision.
+  - **The conclusion is unchanged:** inconclusive.
+
 ## Still to do (later tasks of this directive)
 
-PB-AUD-01 to -06 and -08, the §8 recomputation, AUD-06, AUD-07, the research eligibility registry, and the comprehensive audit (remediation 7). Each closes in this register.
+AUD-06, AUD-07, the research eligibility registry, and the comprehensive audit (remediation 7, which also reruns the pinned Phase B evaluation for PB-AUD-08). AUD-01a closes when unattended publication is verified with the registered key. Each closes in this register.

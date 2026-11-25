@@ -1,12 +1,21 @@
 {
- "code": "84a9119921acc44438e64483627162d495690445",
+ "code": "39f763eaf050b333b91de81dd825dffbd7ee4792",
  "format": "arbit-ffa-2026-inventory-content-v2",
- "generatedAt": "2026-11-25T04:14:54.003239+00:00",
+ "generatedAt": "2026-11-25T04:16:09.893076+00:00",
  "liveContent": {
-  "finishedAt": "2026-11-25T04:14:53.999895+00:00",
+  "finishedAt": "2026-11-25T04:16:09.890549+00:00",
   "lineups": {
    "1": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 1
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 129,
     "receiptSha256": "fab36dc1a82619ff7530f3b330c4e9ebd05e0f36c4aed8d4a0363414c6e33cc4",
     "slots": {
@@ -55,6 +64,15 @@
    },
    "2": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 1
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 130,
     "receiptSha256": "f56eb77167e6b7e639a0cab68b5952d047b5e9308fe9a58e8792e2e00d803b73",
     "slots": {
@@ -71,6 +89,15 @@
    },
    "3": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 1
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 130,
     "receiptSha256": "4d09f54e7aafe9b5acbcfa2925cf44d6f7d3f5305cecf3e4afd2208c73f623f2",
     "slots": {
@@ -87,6 +114,15 @@
    },
    "4": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 1
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 131,
     "receiptSha256": "b7d4947cb7cc9f65a5751b64803592e859f6dd81ab754d530aee0e4353eb18d2",
     "slots": {
@@ -103,6 +139,15 @@
    },
    "5": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 1
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 133,
     "receiptSha256": "f41d8a66b07600118679068b3788751d801db5c850f501be9203d462965812e8",
     "slots": {
@@ -119,6 +164,15 @@
    },
    "6": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 2
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 133,
     "receiptSha256": "89eedf4e5763a58df15521e8785224c690e8268cc42a49ccfb163fa52f525634",
     "slots": {
@@ -135,6 +189,15 @@
    },
    "7": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 2
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 132,
     "receiptSha256": "5d22861ff30713605981e760f28e6488eb111b1dbd87b33e4c3336eff7dae35a",
     "slots": {
@@ -151,6 +214,15 @@
    },
    "8": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 2
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 132,
     "receiptSha256": "7ce6d7db732952414a04df9af66c06f448e7a5802a0428ce02cc925195c7bdf0",
     "slots": {
@@ -167,6 +239,15 @@
    },
    "9": {
     "contentEqualToCapture": false,
+    "fieldDifferences": {
+     "classification": "READ_TIME_REPRESENTATION_ONLY",
+     "differences": {
+      "nflTeamNow": 1
+     },
+     "historicalLineupDiffers": false,
+     "onlyLive": 0,
+     "onlyStored": 0
+    },
     "liveEntries": 132,
     "receiptSha256": "1554990f61d0100a966a7d395eecce77bb3ff1fb0e0f83da516c881d0ad96ac4",
     "slots": {
@@ -183,7 +264,7 @@
    }
   },
   "requests": 23,
-  "startedAt": "2026-11-25T04:14:08.333486+00:00",
+  "startedAt": "2026-11-25T04:15:24.454873+00:00",
   "transactions": {
    "contentDiffers": [],
    "contentEqual": 536,
@@ -265,6 +346,7 @@
  "summary": {
   "lineupPeriods": 11,
   "lineupPeriodsEqual": 2,
+  "lineupPeriodsWithHistoricalDifferences": [],
   "liveNotStored": 0,
   "storedNotLive": 0,
   "transactionsCompared": 536,

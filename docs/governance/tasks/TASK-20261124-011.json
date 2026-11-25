@@ -4,7 +4,7 @@
   "title": "M3-3 final directive Phase B: corrected league-constrained evaluation from pinned inputs",
   "objective": "Resolve PB-AUD-01 to -06 and -08 and verify the Phase B v1 results: content-level live reconciliation, fail-closed ownership replay verified at every snapshot moment, availability reconstruction validated against observed snapshot states, all-week bootstrap, streaming feasibility and collisions, exact decision sets and comparable manager decisions, immutable pinned league inputs; a separately versioned corrected C05L-2026-EXP (v2) declared before it is computed, v1 preserved.",
   "status": "active",
-  "phase": "review",
+  "phase": "implement",
   "change_class": "model",
   "requirements": [
     "MD-002",
@@ -39,21 +39,35 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T04:03:58Z",
-  "updated_at": "2026-11-25T04:03:58Z",
+  "updated_at": "2026-11-25T04:19:12Z",
   "baseline": "b6c25e98c01ea0189bdfdd24a85e8d54da0b57d1",
-  "next_action": "Read affected requirements/source and record Review evidence",
+  "next_action": "Record implement evidence",
   "sections": {
     "review": {
-      "summary": "",
-      "files": []
+      "summary": "Reconciled PB-AUD-01 to -06, -08 and the section 8 numbers against code at 2e2520f, the database and ESPN: live checks compared only id, type and status; the replay ignored trades and would fall back to proposal time for a waiver (no case in data: 52/52 executed waivers have processed_at; trade items only on 2 canceled proposals); the availability rule ignored game locks and processing times (ESPN processes at midnight Pacific; all unowned units go on waivers after their game until Wednesday); the bootstrap dropped zero-change weeks (reproduced -90.05/+80.00 vs -96.03/+74.02); streaming picks collide; decision receipts lacked candidate sets; inputs were read live. Observed rosters never exceed 16 non-IR players; D/ST limit 3.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/ffa_history.py",
+        "libs/arbit-model/src/arbit_model/dvp/league.py",
+        "scripts/model/ffa_2026_inventory.py",
+        "scripts/model/dvp_league_2026.py"
+      ]
     },
     "plan": {
-      "summary": "",
-      "files": []
+      "summary": "1) Pin the normalized league inputs (one read-only transaction; hashed local bundle; committed manifest). 2) Declare C05L-2026-EXP v2 (fail-closed replay verified at every snapshot; availability rule v2 with predeclared holdout acceptance; cutoff classes; all-week bootstrap; feasibility and collisions; exact decision sets; comparable managers; eligibility-aware matchups; v1 comparison) and push before computing. 3) Implement in ffa_history, league, a v2 script reading only the bundle, and content-level live checks in the inventory. 4) Recorded runs from clean commits. 5) Docs and register closure.",
+      "files": [
+        "config/dvp/league-2026-exploratory-v2.json",
+        "scripts/model/ffa_2026_pin.py",
+        "scripts/model/dvp_league_2026_v2.py"
+      ]
     },
     "implementation": {
-      "summary": "",
-      "files": []
+      "summary": "ffa_2026_pin.py (bundle inputs-v1, manifest c354dcca, 9 files); ffa_history: UnsupportedHistory, validate_draft, processing_moments, availability_v2 (lock strictly before the moment); league: summarize blocks ALL_WEEKS/CHANGED_WEEKS with block counts and missing coverage, feasibility, collisions, matchup_effects_v2; dvp_league_2026_v2.py (pinned bundle only; ownership at every snapshot; availability validation design/holdout/decision moments; cutoff classes; four decision kinds with exact option sets, evidence, feasibility, owner at game; managers split; matchups; v1 comparison); ffa_2026_inventory.py --content (read-only alias lookups; transactions by Arbit's content hash over the union of pages; lineups by capture hash then field by field). A trial exposed the game lock compared with <= at the exact cutoff, contrary to the declared rule; fixed before the recorded run (trial output discarded). Receipts: ffa-2026-inventory-v2.json and league-2026-exploratory-v2.json at 39f763e.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/ffa_history.py",
+        "libs/arbit-model/src/arbit_model/dvp/league.py",
+        "scripts/model/dvp_league_2026_v2.py",
+        "scripts/model/ffa_2026_inventory.py"
+      ]
     },
     "validation": {
       "summary": "",
