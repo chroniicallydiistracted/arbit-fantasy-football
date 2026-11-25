@@ -581,9 +581,13 @@ def main() -> None:
         (OUT / "league-truth.json").write_text(json.dumps(out, indent=1) + "\n")
         print(json.dumps(out))
     else:
-        import dvp_simulate_summary  # type: ignore[import-not-found]
-
-        dvp_simulate_summary.main(ROOT, CONFIG, OUT)
+        spec = importlib.util.spec_from_file_location(
+            "dvp_simulate_summary", ROOT / "scripts/model/dvp_simulate_summary.py"
+        )
+        assert spec is not None and spec.loader is not None
+        summary = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(summary)
+        summary.main(ROOT, CONFIG, OUT)
 
 
 if __name__ == "__main__":
