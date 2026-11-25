@@ -250,6 +250,7 @@ def summarize_e3(results: dict[str, list[dict[str, Any]]], truth: dict[str, Any]
                 ints = [x[method] for x in rows if x[method]]
                 m[method] = {
                     "excludesZero": rate(sum(lo > 0 or hi < 0 for lo, hi in ints), len(ints)),
+                    "entirelyAboveZero": rate(sum(lo > 0 for lo, _ in ints), len(ints)),
                     "coversTruth": rate(sum(lo <= true_value <= hi for lo, hi in ints), len(ints)),
                     "medianWidth": q([hi - lo for lo, hi in ints], 0.5),
                 }
@@ -337,8 +338,15 @@ def acceptance(
     for case in ("SIM-17-null", "SIM-18-null"):
         for kind in ("start", "stream"):
             if case in e3:
-                a8[f"{case}/{kind}/falsePositive"] = verdict(
+                # As declared (two-sided). The null B06 adds noise only, so its true gain is
+                # slightly negative (league-truth.json): excluding zero below it is a correct
+                # detection, not a false positive.
+                a8[f"{case}/{kind}/falsePositive (declared, two-sided)"] = verdict(
                     e3[case][kind]["allWeeks95"]["excludesZero"], at_most=0.07
+                )
+                # Supplementary, labelled: falsely showing B06 better (interval above zero).
+                a8[f"{case}/{kind}/falsePromotion (supplementary, one-sided)"] = verdict(
+                    e3[case][kind]["allWeeks95"]["entirelyAboveZero"], at_most=0.07
                 )
     for case in e3:
         for kind in ("start", "stream"):

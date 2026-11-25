@@ -790,6 +790,7 @@
   }
  },
  "classification": "DESCRIPTIVE: never used to choose a threshold; frozen rules unchanged",
+ "code": "e65dceac9c43dfe37fd83d3b49e807b31c773299",
  "config": {
   "path": "config/dvp/threshold-sensitivity-v1.json",
   "sha256": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81"
@@ -799,6 +800,6 @@
   "phaseBRelativeRmse": 0.01,
   "phaseCPp": 1.8
  },
- "generatedAt": "2026-11-25T07:27:38.281014+00:00",
+ "generatedAt": "2026-11-25T07:29:18.976772+00:00",
  "write_to_production": false
 }
