@@ -958,12 +958,22 @@ def alert(root: Path, title: str, message: str) -> None:
     notification on this PC when Windows is reachable from WSL."""
     print(f"ALERT: {title}: {message}", file=sys.stderr)
     root.mkdir(parents=True, exist_ok=True)
-    with (root / "alerts.jsonl").open("a") as handle:
-        handle.write(json.dumps({"at": now_utc().isoformat(), "title": title, "message": message}))
-        handle.write("\n")
-    powershell = shutil.which("powershell.exe")
-    if powershell is None or os.environ.get("ARBIT_DVP_NO_TOAST"):
-        return
+    record: dict[str, Any] = {"at": now_utc().isoformat(), "title": title, "message": message}
+    try:
+        record["notification"] = _notify(title, message)
+    finally:
+        with (root / "alerts.jsonl").open("a") as handle:
+            handle.write(json.dumps(record) + "\n")
+
+
+def _notify(title: str, message: str) -> str:
+    """A Windows notification through PowerShell; returns what happened."""
+    fallback = Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
+    powershell = shutil.which("powershell.exe") or (str(fallback) if fallback.exists() else None)
+    if os.environ.get("ARBIT_DVP_NO_TOAST"):
+        return "disabled"
+    if powershell is None:
+        return "powershell.exe not reachable"
 
     def quoted(value: str) -> str:
         return "'" + value.replace("'", "''")[:240] + "'"
@@ -980,13 +990,19 @@ def alert(root: Path, title: str, message: str) -> None:
         "[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($app)"
         ".Show([Windows.UI.Notifications.ToastNotification]::new($x))"
     )
-    encoded = base64.b64encode(script.encode("utf-16-le")).decode()
-    subprocess.run(  # noqa: S603
-        [powershell, "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
-        capture_output=True,
-        timeout=60,
-        check=False,
-    )
+    encoded = base64.b64encode((script + "; 'shown'").encode("utf-16-le")).decode()
+    try:
+        done = subprocess.run(  # noqa: S603
+            [powershell, "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded],
+            capture_output=True,
+            timeout=60,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError) as error:
+        return f"failed: {error}"[:200]
+    if done.returncode == 0 and b"shown" in done.stdout:
+        return "shown"
+    return f"failed ({done.returncode}): {done.stderr.decode(errors='replace')[-160:]}"
 
 
 def sweep(args: argparse.Namespace) -> None:
@@ -1030,6 +1046,7 @@ def sweep(args: argparse.Namespace) -> None:
                     break  # later weeks need this week's results first
             status["captures"] = capture_pending(args, season)
             status["publications"] = publish_pending(args, season)
+            status["window"] = retire_if_done(args, season, config["weeks"])
             for record in status["publications"]:
                 if not record.get("verified"):
                     left = datetime.fromisoformat(record["cutoff"]) - now_utc()
@@ -1054,6 +1071,38 @@ def sweep(args: argparse.Namespace) -> None:
     print(json.dumps({k: status.get(k) for k in ("outcome", "weeks")}, default=str))
     if failed:
         sys.exit(1)
+
+
+def retire_if_done(args: argparse.Namespace, season: int, weeks: list[int]) -> str:
+    """When every window week is final (archived or missed), every cutoff has passed and every
+    archive has a verified commitment, the timer has nothing left to do: it is disabled
+    (amendment 1; DEC-02: the timer does not outlive its research)."""
+    root = archive_root(args, season)
+    lines = read_ledger(root / "ledger.jsonl")
+    now = now_utc()
+    final = {
+        e["week"]
+        for e in lines
+        if e["classification"] in ("PROSPECTIVE", "MISSED")
+        and datetime.fromisoformat(e["cutoff"]) <= now
+    }
+    verified = {
+        p["ledgerEntrySha256"]
+        for p in read_ledger(root / "publications.jsonl")
+        if p.get("verified") and p.get("kind") == "github-branch"
+    }
+    unpublished = [
+        e
+        for e in lines
+        if e["classification"] == "PROSPECTIVE" and e["entrySha256"] not in verified
+    ]
+    if set(weeks) - final or unpublished:
+        return "OPEN"
+    unit = os.environ.get("ARBIT_DVP_TIMER_UNIT")
+    if unit:
+        subprocess.run(["systemctl", "--user", "disable", "--now", unit], check=False)  # noqa: S603,S607
+        alert(root, "research window complete", f"every week is final; {unit} disabled")
+    return "COMPLETE"
 
 
 # --- decision-time league captures, supplements and external evidence ---------------------------

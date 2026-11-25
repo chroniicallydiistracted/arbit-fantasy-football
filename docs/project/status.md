@@ -22,7 +22,20 @@
 - **On `main` since PR #14 (`4708bde`):** owner audit remediation 1, the DvP prospective harness (TASK-20261124-006). Offline research.
 - **On `main` since PR #15 (`7e227ba`):** owner audit remediations 3–5 (TASK-20261124-007). Offline research.
 - **On `main` since PR #16 (`947e91a`):** owner audit remediation 2, opportunity and efficiency (TASK-20261124-008). Offline research.
-- **Not yet on `main`:** owner audit Phase B, FFA 2026 data and league-constrained evaluation (TASK-20261124-009, branch `claude/m3-ffa-2026-league`). Offline research; it runs in no service.
+- **On `main` since PR #17 (`2e2520f`):** owner audit Phase B (TASK-20261124-009). Offline research.
+- **Not yet on `main`:** the final directive's Phase A, prospective operations (TASK-20261124-010, branch `claude/m3-final-phase-a`).
+
+**Owner's final M3-3 directive (2026-11-25; [directive](../research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md), OWN-077):** every external finding is reconciled in [AUDIT_RECONCILIATION.md](../research/dvp/AUDIT_RECONCILIATION.md) and [audit-findings.json](../research/dvp/audit-findings.json).
+- **Phase A, prospective operations (TASK-20261124-010, ENG-067):**
+  - **Gate correction:** amendment 1 was declared and pushed before the first week-12 kickoff. A missed week makes the window INCOMPLETE_WINDOW, and confirmation needs all seven weeks prospective, externally committed before their cutoffs and fully labelled.
+  - **Archive:** crash-safe, with recovery.
+  - **Commitments:** published to `research-evidence/dvp-prospective`; week 12's was verified live at 03:46:49 UTC.
+  - **Readiness:** a state for every earlier game.
+  - **League capture:** ESPN's observed availability. Week 12's capture had called 19 waiver units free agents.
+  - **Alerts:** reach Windows.
+  - **The timer:** bounded to the window.
+- **Waiting on the owner:** registering the evidence key as a write deploy key (the permission classifier refused it). Until then the timer's publications fail, alert and retry.
+- **Next:** Phase B corrections (PB-AUD-01 to -06, -08), AUD-06, AUD-07, the eligibility registry, then the comprehensive audit.
 
 **Owner audit Phase B (2026-11-25, TASK-20261124-009; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md), OWN-076, ENG-066):**
 - **2026 is FFA's inaugural season (OWN-076).** No earlier FFA seasons exist, and their absence is not a gap. Recorded in the decision register, the source register (SRC-39), AGENTS.md and the plan audit.

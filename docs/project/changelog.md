@@ -1,5 +1,19 @@
 # Development Changelog
 
+## 2026-11-25 — M3-3 final directive, Phase A: audit reconciliation and prospective operations (TASK-20261124-010)
+
+- **PR #17 merged** (`2e2520f`): owner audit Phase B.
+- **Reconciliation register:** [AUDIT_RECONCILIATION.md](../research/dvp/AUDIT_RECONCILIATION.md) and [audit-findings.json](../research/dvp/audit-findings.json) record a disposition for every external finding. None was rejected; AUD-01b and AUD-01d are only partly accepted.
+- **Amendment 1** (`config/dvp/prospective-amendment-1.json`), pushed in `463a6c0` at 03:37 UTC, before the first week-12 kickoff:
+  - `arbit_model.dvp.window` is the completion gate, with archive, label and window states;
+  - every earlier game gets a readiness state.
+- **`arbit_model.dvp.archive`:** a locked, fsynced, atomic archive with recovery.
+- **`arbit_model.dvp.evidence`:** external commitments, read back and timestamped by GitHub.
+- **League capture v2:** observed availability, every team, decision-time captures; a week-12 supplement.
+- **Alerts:** to the journal, `alerts.jsonl` and Windows.
+- **The timer:** six-hourly, bounded to the window, and self-retiring.
+- **OWN-077:** DEC-01 to DEC-10 recorded.
+
 ## 2026-11-25 — Owner audit Phase B: FFA 2026 data, ownership replay and league-constrained D/ST evaluation (TASK-20261124-009)
 
 - **PR #16 merged** (`947e91a`): remediation 2.

@@ -4,7 +4,7 @@
   "title": "M3-3 final directive: audit reconciliation and prospective operations (Phase A)",
   "objective": "Reconcile every external audit finding of the owner's final M3-3 directive in a durable register; correct the prospective completion gate, archive transactions and recovery, data readiness, observed availability capture and external evidence publication (AUD-01a-d, PB-AUD-07); declare the evaluation-integrity amendment before the week-12 kickoff; install and verify the owner-authorized timer (DEC-02).",
   "status": "active",
-  "phase": "review",
+  "phase": "implement",
   "change_class": "model",
   "requirements": [
     "MD-002",
@@ -35,25 +35,42 @@
     "docs/project/decision-register.md",
     "docs/project/status.md",
     "docs/project/changelog.md",
-    "docs/governance/state.json"
+    "docs/governance/state.json",
+    "scripts/model/dvp_plan_audit.py",
+    "libs/arbit-model/src/arbit_model/dvp/league.py",
+    "docs/project/handoffs/2026-11-25-task-20261124-010-governance-handoff.md"
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T03:33:08Z",
-  "updated_at": "2026-11-25T03:33:08Z",
+  "updated_at": "2026-11-25T03:53:48Z",
   "baseline": "2e2520f423b0d4c1e80fca5b5a593e771ac01b2d",
-  "next_action": "Read affected requirements/source and record Review evidence",
+  "next_action": "Record implement evidence",
   "sections": {
     "review": {
-      "summary": "",
-      "files": []
+      "summary": "Read the owner's final directive in full (1,689 lines). Reconciled Phase A findings against the code at 2e2520f, the live database and GitHub: the service template exported locally only (AUD-01a); readiness accepted a completed game with any line and named no cause (AUD-01b); evaluate counted a week complete on any completed game and accepted MISSED weeks, as the original declaration allowed (AUD-01c); write_once had staging and atomic rename but no fsync, lock, archivedAt or recovery, and a crash after the rename would block the week until its cutoff (AUD-01d); week 12's capture labelled 19 unowned D/STs free agents while ESPN reported all 19 on waivers in the same snapshot, freeAgents held every unowned unit, empty teams were absent and claimable-only evaluation was skipped without free agents (PB-AUD-07). Host: WSL2 with linger on; the Windows wake task wakes the PC at 00:10 and 16:55 UTC daily and starts WSL; powershell.exe interop works from systemd services. Only waiver claims carry processed_at (52/52 executed).",
+      "files": [
+        "docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md",
+        "scripts/model/dvp_prospective.py",
+        "infra/systemd/arbit-dvp-prospective.service.template"
+      ]
     },
     "plan": {
-      "summary": "",
-      "files": []
+      "summary": "1) Register every external finding (audit-findings.json, AUDIT_RECONCILIATION.md). 2) Before the week-12 kickoff: declare and push prospective amendment 1 with the completion gate (window.py) and tests. 3) archive.py (lock, fsync, atomic rename, archivedAt, recovery) with failure injection. 4) evidence.py (sanitized commitment, dedicated clone and branch, read-back, GitHub activity timestamp) and publications.jsonl; record week 12's prior push. 5) Per-game readiness states. 6) League capture v2 (one snapshot, every team, observed availability, contradictions, labelled fallback), decision-time captures, week-12 supplement, four evaluation kinds. 7) status.json, alerts (journal, alerts.jsonl, Windows notification), self-retiring timer bounded to the window. 8) Docs, OWN-077, ENG-067. 9) Merge, then install the timer from main and verify the chain.",
+      "files": [
+        "config/dvp/prospective-amendment-1.json",
+        "libs/arbit-model/src/arbit_model/dvp/window.py",
+        "libs/arbit-model/src/arbit_model/dvp/archive.py",
+        "libs/arbit-model/src/arbit_model/dvp/evidence.py"
+      ]
     },
     "implementation": {
-      "summary": "",
-      "files": []
+      "summary": "window.py (archive_state, label_state, window_state, game_readiness); archive.py (exclusive, commit, self_consistent, recover); evidence.py (commitment, publish, verify_remote, read_activity, external_timestamp); dvp_prospective.py: league_capture v2, statistics_revisions, run_forecast via archive.commit with archivedAt and cutoff check, recover_archive, sweep with lock, status.json, alerts, capture_pending, publish_pending, retire_if_done; commands publish, record-prior, supplement; evaluate through the gate with league_week (rosterOnly, unownedPool, claimablePool, claimableWithWaivers); export without league.json. league.py without_decision. Unit templates (UTC calendar bounded to 2027-01-15, EnvironmentFile for evidence settings) and installer (linger check, key creation, registration check). Live: record-prior week 12 verified (23:13:15Z); evidence branch commitment 959ff9e verified (03:46:49Z); week-12 supplement (13 OWNED, 19 WAIVERS); sweep OK (week 13 waiting on 16 games, week-12 decision-time capture).",
+      "files": [
+        "scripts/model/dvp_prospective.py",
+        "libs/arbit-model/src/arbit_model/dvp/league.py",
+        "infra/systemd/install-dvp-prospective.sh",
+        "infra/systemd/arbit-dvp-prospective.timer.template"
+      ]
     },
     "validation": {
       "summary": "",
@@ -70,5 +87,12 @@
     }
   },
   "checks": [],
-  "journal": []
+  "journal": [
+    {
+      "at": "2026-11-25T03:53:31Z",
+      "kind": "correction",
+      "note": "Scope extended by hand: dvp_plan_audit.py (its league-capture check named a removed source line), league.py (without_decision helper for the league evaluation) and the dated handoff path.",
+      "evidence": "scripts/model/dvp_plan_audit.py"
+    }
+  ]
 }

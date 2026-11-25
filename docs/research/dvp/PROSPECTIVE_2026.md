@@ -41,17 +41,36 @@ None of the window's games had been played at any of these times.
 2. **Assemble the data.**
    - **2016–2025:** the frozen audit run's observations and schedule, hash-checked.
    - **2026:** a fresh `build_targets.py` of 2026 alone, into the week's archive, from the nflverse files Arbit holds at that moment. Every object's bytes are verified against its digest, and the rows are admitted through the projection firewall.
-3. **Check readiness.** Every game of weeks before W must have a result and FFA lines, and the time must be past each one's availability (12:00 UTC the next day). Otherwise the run waits and retries.
+3. **Check readiness** (amendment 1, AUD-01b). Every game of weeks before W gets a state:
+   - **Ready:** ELIGIBLE_VERIFIED (all 12 cells present and valid), RETRIEVED_INVALID (all present, some invalid for a recorded reason) or POSTPONED_OR_CANCELED (no result 4 days after kickoff, recorded).
+   - **Blocking:** AWAITING_RESULT, NOT_YET_AVAILABLE (before 12:00 UTC the next day), SOURCE_NOT_YET_PUBLISHED, PUBLISHED_NOT_RETRIEVED (nflverse has a newer statistics file than the one the worker's statistics lane imported) or DATA_INTEGRITY_FAILURE.
+   - Any blocking game makes the run wait and retry.
 4. **Forecast with the frozen estimator** through the adapter `arbit_model.dvp.shadow`:
    - targets come from the schedule, so no score or label is needed;
    - parameters are fit on 2016–2025;
    - the walk covers weeks 1 to W, because the residuals need each earlier week's point-in-time B00.
    - Only week W is archived.
-5. **Capture the league's D/ST rosters,** read-only from the current snapshot. From week 13 the capture also records each unrostered D/ST's availability: FREE_AGENT, WAIVERS (dropped within the 24-hour hold) or WAIVERS_OR_FREE_AGENT (dropped 24–48 hours earlier). This is C05L-2026-PRO in the owner's Phase B audit ([LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md)).
-6. **Archive once.** `forecasts.parquet`, `forecasts.csv`, `manifest.json`, `league.json`, and the inputs (the 2026 observations, schedule and targets store) go into `artifacts/dvp/prospective/2026/week-WW/`.
-   - The folder is created by an atomic rename and refuses a second write; its files are read-only.
-   - A ledger line holds every file's SHA-256 and the previous line's hash.
-7. **Export** the forecasts, manifest, league capture and ledger to [`prospective/2026/`](prospective/2026) for committing. A push to GitHub gives an external timestamp.
+5. **Capture the league** (amendment 1, PB-AUD-07; C05L-2026-PRO in [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md)). From week 13:
+   - one snapshot is read in one read-only, repeatable-read transaction;
+   - every team is listed, including any with no D/ST;
+   - all 32 D/STs get ESPN's own reported state in that snapshot: OWNED, FREE_AGENT, WAIVERS or UNKNOWN, where UNKNOWN covers a roster entry and a reported state that disagree;
+   - the drop-time rule is kept only as a labelled fallback;
+   - the snapshot's id, time, hash, rules hash and age are recorded.
+
+   Week 12's capture, made before this, has rosters only. A separate supplement gives the states ESPN reported in that same snapshot: all 19 unowned units were on waivers.
+6. **Archive once** (amendment 1, AUD-01d). `forecasts.parquet`, `forecasts.csv`, `manifest.json`, `league.json` and the inputs (the 2026 observations, schedule and targets store) go into `artifacts/dvp/prospective/2026/week-WW/`.
+   - The run holds the season's lock throughout.
+   - Files are staged and fsynced, then the folder is renamed into place in one step and the parent fsynced. `archivedAt` is taken after that.
+   - The folder refuses a second write, and its files are read-only.
+   - A ledger line holds every file's SHA-256, `generatedAt`, `archivedAt` and the previous line's hash.
+   - Archival that would finish at or after the cutoff is recorded MISSED.
+7. **Publish a commitment** (amendment 1, AUD-01a):
+   - **What:** the ledger entry, its hash and every file's hash, plus the forecasts CSV.
+   - **Where:** branch `research-evidence/dvp-prospective`, from a dedicated clone, with a key that writes to this repository only.
+   - **Checks:** it is read back and compared. GitHub's activity record of the push is the external timestamp.
+   - **Record:** every attempt goes to `publications.jsonl`; failures retry each run.
+8. **Until the cutoff,** each run records the league again whenever the snapshot changed (`captures.jsonl`). The last capture before the cutoff is the decision-time state.
+9. **Export** the forecasts, manifest and ledger to [`prospective/2026/`](prospective/2026). The league capture holds per-team rosters and stays local; its hash is in the manifest and the commitment.
 
 **The adapter is the frozen estimator.**
 - On synthetic seasons, given the frozen walk's targets, it reproduces `walkforward.walk` bit for bit (`test_dvp_shadow.py`).
@@ -63,7 +82,7 @@ None of the window's games had been played at any of these times.
 
 | Week | Cutoff (UTC) | Inputs complete from (UTC) | Status |
 | --- | --- | --- | --- |
-| 12 | 2026-11-26 01:00 | (weeks 1–11 done) | **PROSPECTIVE:** archived 2026-11-24 23:12:45. GitHub recorded the push of `168196d` at 23:13:15 |
+| 12 | 2026-11-26 01:00 | (weeks 1–11 done) | **PROSPECTIVE:** archived 2026-11-24 23:12:45. External evidence, both verified: GitHub recorded the push of `168196d` at 23:13:15; the evidence-branch commitment `959ff9e` at 2026-11-25 03:46:49 |
 | 13 | 2026-12-04 01:15 | 2026-12-01 12:00 | Pending |
 | 14 | 2026-12-11 01:15 | 2026-12-08 12:00 | Pending |
 | 15 | 2026-12-18 01:15 | 2026-12-15 12:00 | Pending |
@@ -73,9 +92,43 @@ None of the window's games had been played at any of these times.
 
 The "inputs complete" times assume nflverse publishes the week's statistics by then. If it hasn't, the harness waits.
 
-**Running weeks 13–18 on time.** A systemd user timer runs the `sweep` every six hours from the main checkout (`infra/systemd/arbit-dvp-prospective.*.template`, installed by `sh infra/systemd/install-dvp-prospective.sh`). It needs the owner's approval to install, because it outlives a session. Without it, someone must run `sweep` in each week's window.
+**Missed weeks** are recorded in the ledger as `MISSED`. Under amendment 1 a missed week makes the window INCOMPLETE_WINDOW: descriptive only. A later reconstruction is stored apart as `RETROSPECTIVE`, evaluated separately and never counted.
 
-**Missed weeks** are recorded in the ledger as `MISSED` and excluded. A later reconstruction is stored apart as `RETROSPECTIVE`, evaluated separately and never counted.
+## Operations (owner-authorized timer, OWN-077 DEC-02)
+
+**The timer:** `arbit-dvp-prospective.timer`, a systemd user timer installed by `sh infra/systemd/install-dvp-prospective.sh` from the main checkout.
+- **Schedule:**
+  - runs at 00:17, 06:17, 12:17 and 18:17 UTC, from 2026-11-25 to 2027-01-15;
+  - a run missed while the PC slept fires at the next wake (`Persistent=true`);
+  - the PC's wake task (`infra/windows/arbit-wake.ps1`) wakes it daily at 00:10–00:35 and 16:55–17:20 UTC and starts WSL, so every day has at least two runs;
+  - user services survive logout (linger is on).
+- **Shutdown:** it disables itself once every window week is final and every commitment verified.
+- **Each run** (`sweep`):
+  - recovers an interrupted run;
+  - forecasts a ready week or records a missed one;
+  - captures the league before each archived week's cutoff;
+  - publishes pending commitments;
+  - writes `artifacts/dvp/prospective/2026/status.json`.
+
+**Alerts:**
+- **Raised for:** a failure, a missed week, a week still not ready within 18 hours of its cutoff, an unverified commitment within 18 hours of its cutoff, or a recovery that quarantined or missed an archive.
+- **Where they go:** the service journal (`journalctl --user -u arbit-dvp-prospective`), `alerts.jsonl` beside the ledger, and a Windows notification, whose delivery result is recorded.
+
+**Least privilege:**
+- **Database:** sessions are read-only on the server.
+- **Publication:** uses `~/.config/arbit/research-evidence/id_ed25519`. The owner registers it once as a write deploy key for this repository: `gh repo deploy-key add ~/.config/arbit/research-evidence/id_ed25519.pub --allow-write --title "Arbit research evidence"`. Until then, publication fails, alerts and retries.
+- **Scope:** the service never touches the app, the league, weights or main.
+
+**Manual procedures** (from the main checkout, with `uv run --env-file .env.local python scripts/model/dvp_prospective.py`):
+
+| Situation | Command |
+| --- | --- |
+| See the state | `sh infra/systemd/install-dvp-prospective.sh --check`; `cat artifacts/dvp/prospective/2026/status.json` |
+| Run now | `systemctl --user start arbit-dvp-prospective.service` (or `... sweep`) |
+| A commitment failed | `... publish` (retries; never regenerates) |
+| Check everything | `... verify` (ledger, captures, supplements and publications chains; files; exports; weeks without a pre-cutoff commitment) |
+| An interrupted run | The next run recovers it. A staging folder is removed. An archive without a ledger entry is recorded before its cutoff, or recorded MISSED after it. An inconsistent archive is quarantined. |
+| Stop the timer | `sh infra/systemd/install-dvp-prospective.sh --remove` |
 
 ## How it will be evaluated
 
@@ -87,12 +140,27 @@ The "inputs complete" times assume nflverse publishes the week's statistics by t
    - D/ST B06 is **CONFIRMED** if it cuts RMSE by at least 1%, otherwise **NOT_CONFIRMED**.
    - For positions whose frozen candidate is B00, the best DvP variant is reported and never promoted.
 5. **Phase C,** on the same D/ST rows: the frozen `decisions.py` with the frozen parameters, as one period. Confirmation needs B06 to clear 1.8 points of pairwise accuracy with net points gained.
-6. **League-constrained D/ST choices:** exploratory and descriptive only.
-   - **Start:** among a team's rostered D/STs.
-   - **Stream:** among its rostered D/STs and those on no roster.
-   - For each, the points of B06's pick minus B00's pick.
+6. **League-constrained D/ST choices:** exploratory and descriptive only, from the last league capture before each cutoff.
+   - **rosterOnly:** start among a team's rostered D/STs.
+   - **unownedPool:** stream among its rostered D/STs and every unowned one.
+   - **claimablePool:** stream among its rostered D/STs and those ESPN reported as free agents. It is evaluated even when there are none.
+   - **claimableWithWaivers:** stream with the units on waivers as well.
+   - Teams without a decision are listed with the reason.
+   - For each kind: the points of B06's pick minus B00's pick.
 
-Until all seven weeks are archived or missed and labeled, results are **INTERIM** and carry no label. Rehearsals and reconstructions are labeled as such and never say CONFIRMED.
+**The completion gate** (amendment 1, [`window.py`](../../../libs/arbit-model/src/arbit_model/dvp/window.py)):
+- **A week is PROSPECTIVE** only when all of these hold:
+  - its archive matches its ledger entry;
+  - it was generated before the cutoff, and durably archived before it;
+  - a verified external commitment predates the cutoff.
+- **A week is LABELLED** only when every scheduled game is final (or recorded postponed or canceled) and every archived forecast on a final game has a label: valid, or invalid for a recorded reason.
+- **The window:**
+  - **COMPLETE** when all seven weeks are PROSPECTIVE and LABELLED. Only then does each frozen rule (Phase B and Phase C, separately) say CONFIRMED or NOT_CONFIRMED.
+  - **INCOMPLETE_WINDOW** if any week was missed.
+  - **BLOCKED** if any archive conflicts.
+  - **INTERIM** otherwise.
+
+Rehearsals and reconstructions are labeled as such and never say CONFIRMED.
 
 **Checked on real data before the window:**
 - **2025 rehearsal:** equivalence, plus the evaluation of 2025 weeks 12–18 with real labels. Its labels say REHEARSAL.
