@@ -2793,7 +2793,9 @@ def check_command(args: argparse.Namespace) -> None:
     args.out.write_text(json.dumps(receipt, indent=2, default=str) + "\n")
     s = result["summary"]
     print(
-        f"{result['status']}: {s['items']} items ({s['DONE']} done, {s['OPEN']} open, {s['FAILED']} failed); {s['checksPassed']}/{s['checks']} checks passed"
+        f"{result['status']}: {s['items']} items ({s['DONE']} done, {s['OPEN']} open, "
+        f"{s['NOT_APPLICABLE']} not applicable, {s['FAILED']} failed); "
+        f"{s['checksPassed']}/{s['checks']} checks passed"
     )
     for item in result["items"]:
         if item["status"] == "FAILED":
