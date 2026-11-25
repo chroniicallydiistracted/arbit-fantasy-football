@@ -2,10 +2,10 @@
   "version": 1,
   "project": "arbit-fantasy-football",
   "active_task": null,
-  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md",
+  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261125-002-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
-  "project_next_action": "Merge the AUD-06/AUD-07 PR (branch claude/m3-final-aud06-07, TASK-20261125-001). Owner: register ~/.config/arbit/research-evidence/id_ed25519.pub as a write deploy key before 2026-12-04 01:15 UTC (week 13). Then Phase E (research eligibility registry extending arbit_model.feature_specs, fail-closed at model assembly; draft notes in the task handoff) and remediation 7 (comprehensive audit with semantic checks, negative controls, the pinned Phase B rerun for PB-AUD-08, fresh receipt). Register: docs/research/dvp/audit-findings.json.",
+  "project_next_action": "Merge the Phase E PR (branch claude/m3-final-phase-e, TASK-20261125-002). Then remediation 7: the comprehensive plan audit with a reconciled requirement inventory (original spec, AUD-01..07, AUD-01a-d, B0-B8, PB-AUD-01..08, owner decisions, eligibility), the directive's completion statuses, semantic checks, reruns from pinned inputs (including PB-AUD-08's Phase B rerun), negative controls and a fresh receipt. The prospective timer runs unattended with the registered key; week 13 window 2026-12-01 12:00 to 12-04 01:15 UTC.",
   "project_next_source": "docs/superpowers/plans/2026-11-09-m3-model.md",
   "as_of": "2026-11-24"
 }

@@ -16,7 +16,7 @@ Started 2026-11-25 in TASK-20261124-010.
 
 | ID | Finding | Disposition | Closure |
 | --- | --- | --- | --- |
-| AUD-01a | No unattended external timestamp for archives | AGREE | IN_PROGRESS: built and verified live; the deploy key needs the owner's registration |
+| AUD-01a | No unattended external timestamp for archives | AGREE | RESOLVED_VERIFIED: the owner registered the deploy key; unattended publication verified from the timer's service context |
 | AUD-01b | Data readiness not established | PARTIALLY_AGREE | RESOLVED_VERIFIED |
 | AUD-01c | Window completion: any completed game, missed weeks accepted | AGREE | RESOLVED_VERIFIED |
 | AUD-01d | Archive steps not transactional or recoverable | PARTIALLY_AGREE | RESOLVED_VERIFIED |
@@ -141,6 +141,10 @@ Details: [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md#corrected-evalu
 - **RB** would be PROMISING at 0.5% or less.
 - **No threshold changed.**
 
+## Research eligibility (resolved in TASK-20261125-002)
+
+[RESEARCH_ELIGIBILITY.md](RESEARCH_ELIGIBILITY.md): one registry records every M3-3 DvP feature's evidence, classification and production status. A fail-closed gate refuses any production model assembly that uses a DvP feature not made eligible with recorded approvals; none is. AUD-01a is closed: the owner registered the deploy key, and unattended publication was verified.
+
 ## Still to do (later tasks of this directive)
 
-The research eligibility registry, and the comprehensive audit (remediation 7, which also reruns the pinned Phase B evaluation for PB-AUD-08). AUD-01a closes when unattended publication is verified with the registered key. Each closes in this register.
+The comprehensive audit (remediation 7, which also reruns the pinned Phase B evaluation for PB-AUD-08). AUD-01a closes when unattended publication is verified with the registered key. Each closes in this register.

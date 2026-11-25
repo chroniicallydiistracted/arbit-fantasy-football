@@ -53,6 +53,9 @@
     - few-block intervals undercover.
   - **The thresholds:** 1.8 points is a practical heuristic (1.82 reproduced). D/ST B06 stays PROMISING across a reasonable grid.
   - **No earlier conclusion changes.**
+- **AUD-06/07 merged** (PR #20, `dd8e1d6`).
+- **The owner registered the evidence deploy key;** unattended publication is verified, which closes AUD-01a.
+- **Phase E (TASK-20261125-002, ENG-070):** the research eligibility registry and a fail-closed production gate. No M3-3 feature is production-eligible.
 - **Next:** Phase B corrections (PB-AUD-01 to -06, -08), AUD-06, AUD-07, the eligibility registry, then the comprehensive audit.
 
 **Owner audit Phase B (2026-11-25, TASK-20261124-009; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md), OWN-076, ENG-066):**

@@ -1,5 +1,14 @@
 # Development Changelog
 
+## 2026-11-25 — M3-3 final directive Phase E: research eligibility registry (TASK-20261125-002)
+
+- **PR #20 merged** (`dd8e1d6`).
+- **The owner registered the evidence deploy key.** Unattended publication was verified from the timer's service context, which closes AUD-01a.
+- **Registry and gate:** `config/model/research-eligibility.json` and `arbit_model.eligibility`, with a fail-closed `check_assembly`. Explained in [RESEARCH_ELIGIBILITY.md](../research/dvp/RESEARCH_ELIGIBILITY.md).
+- **Rules:**
+  - `feature_specs` and `AGENTS.md` now point production assembly at the gate.
+  - No feature is activated, and no legacy constant changes.
+
 ## 2026-11-25 — M3-3 final directive: AUD-06 simulation suite and AUD-07 thresholds (TASK-20261125-001)
 
 - **PR #19 merged** (`5469c59`).

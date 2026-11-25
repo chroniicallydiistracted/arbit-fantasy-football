@@ -111,3 +111,5 @@ Until then, `feature_specs` keeps v0's constants. No advisor uses this.
 | Receipts | [backtest-development.json](backtest-development.json), [backtest-validation.json](backtest-validation.json), [backtest-holdout.json](backtest-holdout.json), [sitstart.json](sitstart.json), [verify-receipt.json](verify-receipt.json), [METRICS.csv](METRICS.csv) |
 | Frozen method and decision rule | `config/dvp/frozen.json`; Phase C: `config/dvp/sitstart.json`, `config/dvp/frozen-phase-c.json` |
 | Reports | [BACKTEST_REPORT.md](BACKTEST_REPORT.md), [RELIABILITY_REPORT.md](RELIABILITY_REPORT.md), [METHODOLOGY.md](METHODOLOGY.md) |
+
+**Eligibility:** D/ST B06 is a PROMISING_HISTORICAL_CANDIDATE and is not production-eligible. The registry is [config/model/research-eligibility.json](../../../config/model/research-eligibility.json), and [RESEARCH_ELIGIBILITY.md](RESEARCH_ELIGIBILITY.md) explains it. Production assembly is gated by `arbit_model.eligibility.check_assembly`.
