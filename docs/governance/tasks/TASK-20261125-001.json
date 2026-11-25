@@ -34,11 +34,12 @@
     "docs/project/status.md",
     "docs/project/changelog.md",
     "docs/governance/state.json",
-    "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md"
+    "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md",
+    "scripts/model/dvp_simulate_summary.py"
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T07:16:35Z",
-  "updated_at": "2026-11-25T07:16:35Z",
+  "updated_at": "2026-11-25T07:29:10Z",
   "baseline": "5469c590585fe9760ff3856f2d5d6f1ada13b0bb",
   "next_action": "Read affected requirements/source and record Review evidence",
   "sections": {
@@ -69,5 +70,12 @@
     }
   },
   "checks": [],
-  "journal": []
+  "journal": [
+    {
+      "at": "2026-11-25T07:29:10Z",
+      "kind": "correction",
+      "note": "Scope extended by hand with scripts/model/dvp_simulate_summary.py (the suite's summarizer, split from the runner).",
+      "evidence": "scripts/model/dvp_simulate_summary.py"
+    }
+  ]
 }

@@ -70,6 +70,7 @@ SCANNED = (
     "libs/arbit-model/src/arbit_model/dvp/simulate.py",
     "scripts/model/dvp_simulate.py",
     "scripts/model/dvp_thresholds.py",
+    "scripts/model/dvp_simulate_summary.py",
     "libs/arbit-model/src/arbit_model/dvp/contract.py",
     "libs/arbit-model/src/arbit_model/dvp/explore.py",
     "libs/arbit-model/src/arbit_model/dvp/opportunity.py",

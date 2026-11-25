@@ -14,6 +14,7 @@ import argparse
 import hashlib
 import json
 import math
+import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -212,6 +213,9 @@ def main() -> None:
     receipt: dict[str, Any] = {
         "format": "arbit-dvp-m3-3-threshold-sensitivity-v1",
         "generatedAt": datetime.now(UTC).isoformat(),
+        "code": subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
+        ).stdout.strip(),
         "config": {"path": "config/dvp/threshold-sensitivity-v1.json", "sha256": sha256(CONFIG)},
         "frozenThresholds": {"phaseBRelativeRmse": 0.01, "phaseCPp": 1.8},
         "D1": d1_out,
