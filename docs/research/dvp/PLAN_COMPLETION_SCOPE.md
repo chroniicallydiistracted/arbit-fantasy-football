@@ -15,7 +15,7 @@ TASK-20261124-005, 2026-11-24. Rebuilt 2026-11-25 in TASK-20261124-009, after th
 - **164 checks** prove them, and every check passed.
 - The model suite passed with no failures and nothing skipped: 213 tests, including every one of T01–T40.
 - Machine-readable receipt: [plan-audit-receipt.json](plan-audit-receipt.json).
-  - It was written by `scripts/model/dvp_plan_audit.py` at commit `a24996c`; the stages reran at `3848cad`.
+  - It was written by `scripts/model/dvp_plan_audit.py` at commit `1b99375`; the stages reran at `3848cad`.
   - It holds the SHA-256 of the specification it audited (`240a538c…`).
 
 **What "proof" means here:**

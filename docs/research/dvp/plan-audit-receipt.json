@@ -1,7 +1,7 @@
 {
   "format": "arbit-dvp-m3-3-plan-audit-v1",
-  "generatedAt": "2026-11-25T02:34:02.985211+00:00",
-  "code": "a24996c1835d8207109d33a36d2c22c810b34d76",
+  "generatedAt": "2026-11-25T02:35:55.766576+00:00",
+  "code": "1b993752fbf68bfb3617d624fba232eea7f8e1a0",
   "specification": {
     "path": "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
     "sha256": "240a538cd91f659a772e15d07dabaf95ba97430e47fd77567f0ca19b0e13d00d"
@@ -3214,7 +3214,7 @@
       "observed": {
         "firstKickoff": "2026-11-26T01:00:00+00:00",
         "frozenBeforeIt": true,
-        "auditedAt": "2026-11-25T02:34:02.878578+00:00"
+        "auditedAt": "2026-11-25T02:35:55.671516+00:00"
       }
     },
     "owner:inaugural-season": {
