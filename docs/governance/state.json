@@ -2,7 +2,7 @@
   "version": 1,
   "project": "arbit-fantasy-football",
   "active_task": "TASK-20261125-001",
-  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261124-011-governance-handoff.md",
+  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
   "project_next_action": "Merge the AUD-06/AUD-07 PR (branch claude/m3-final-aud06-07, TASK-20261125-001). Owner: register ~/.config/arbit/research-evidence/id_ed25519.pub as a write deploy key before 2026-12-04 01:15 UTC (week 13). Then Phase E (research eligibility registry extending arbit_model.feature_specs, fail-closed at model assembly; draft notes in the task handoff) and remediation 7 (comprehensive audit with semantic checks, negative controls, the pinned Phase B rerun for PB-AUD-08, fresh receipt). Register: docs/research/dvp/audit-findings.json.",

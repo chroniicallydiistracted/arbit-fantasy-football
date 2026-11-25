@@ -4,7 +4,7 @@
   "title": "M3-3 final directive: AUD-06 simulation suite and AUD-07 threshold interpretation",
   "objective": "Implement and execute the predeclared statistical simulation suite (SIM-01 to SIM-18) exercising Arbit's actual DvP estimators and the complete development-selection-validation-decision procedure against known data-generating processes, with uncertainty validation; reproduce and correct the interpretation of the 1.8-point Phase C threshold and run a separately versioned descriptive threshold sensitivity, without changing any frozen threshold, method or the 2026 confirmation.",
   "status": "active",
-  "phase": "validate",
+  "phase": "handoff",
   "change_class": "model",
   "requirements": [
     "MD-002",
@@ -39,9 +39,9 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T07:16:35Z",
-  "updated_at": "2026-11-25T08:42:24Z",
+  "updated_at": "2026-11-25T08:44:14Z",
   "baseline": "5469c590585fe9760ff3856f2d5d6f1ada13b0bb",
-  "next_action": "Record validate evidence",
+  "next_action": "Merge the AUD-06/07 PR after CI. Then Phase E (eligibility registry) and remediation 7 (comprehensive audit). Owner: register the evidence deploy key before 2026-12-04 01:15 UTC.",
   "sections": {
     "review": {
       "summary": "AUD-06 had no simulation suite; AUD-07's derivation (config/dvp/sitstart.json practicalMinimumDerivation) uses 0.5+asin(rho)/pi with D/ST B00's development Spearman 0.1448. Read the actual estimator, selection and decision code to exercise it unchanged: walkforward (prepare, fit_fold, walk, metrics, decide), shadow (scheduled_targets, walk_targets with extra hooks, forecast_only, attach_labels), explore (make_extra, make_opportunity_extra), lab (adjust, groups, reml_components, bootstrap_components), reliability (halves, split_half), opportunity.reliability, the frozen dvp.py _select, decisions (units, pairs, metrics, decide), league (decide, summarize). Pilot: about 5.7 s per full-procedure repetition on 8 workers.",
@@ -68,17 +68,28 @@
       ]
     },
     "validation": {
-      "summary": "",
-      "files": []
+      "summary": "All seven checks pass (foundation, model-tests, point-in-time, ruff check, ruff format, mypy over arbit-model and twelve model scripts, full pytest). Model suite includes test_dvp_simulate.py (7 deterministic generator checks: schema and orientation, determinism, oracle and non-touchdown noise, REML recovery and null, missingness and exposure, the known RMSE difference, the volume identity). The expensive suite ran separately at cc25e2c, not in CI: 33,100 repetitions, 0 failed; acceptance A1, A2, A4, A5, A6, A7 PASS, A3 D/ST PASS and WR INCONCLUSIVE, A8 FAIL (reported). AUD-07: the 1% grid row reproduces every frozen holdout label; the derivation reproduces 1.82 points.",
+      "files": [
+        "docs/research/dvp/simulation-v1.json",
+        "docs/research/dvp/threshold-sensitivity-v1.json",
+        "libs/arbit-model/tests/test_dvp_simulate.py"
+      ]
     },
     "documentation": {
-      "summary": "",
-      "files": []
+      "summary": "SIMULATION_AUD06.md (design, acceptance, E1, E2, uncertainty, effect on earlier conclusions, limitations, governance implications, reproduction); THRESHOLDS_AUD07.md (D1 derivation reproduced and qualified, D2 grid, D3 conclusions); PLAYER_LEVEL_REPORT.md practical-minimum wording; plots/simulation (4 SVG); audit-findings.json and AUDIT_RECONCILIATION.md (AUD-06, AUD-07 resolved); EXPERIMENT_REGISTRY (AUD06, AUD07 rows); DvP README; decision register ENG-069; status; changelog; next action.",
+      "files": [
+        "docs/research/dvp/SIMULATION_AUD06.md",
+        "docs/research/dvp/THRESHOLDS_AUD07.md",
+        "docs/research/dvp/audit-findings.json",
+        "docs/project/decision-register.md",
+        "docs/project/status.md",
+        "docs/project/changelog.md"
+      ]
     },
     "handoff": {
-      "path": null,
-      "next_action": "",
-      "unresolved": ""
+      "path": "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md",
+      "next_action": "Merge the AUD-06/07 PR after CI. Then Phase E (eligibility registry) and remediation 7 (comprehensive audit). Owner: register the evidence deploy key before 2026-12-04 01:15 UTC.",
+      "unresolved": "Deploy key (owner). Phase E, remediation 7, PB-AUD-08's audit rerun. A8 fails and A3 for WR is inconclusive (reported limitations, no defect)."
     }
   },
   "checks": [
@@ -367,6 +378,292 @@
         "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
         "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
       }
+    },
+    {
+      "name": "foundation",
+      "argv": [
+        "python",
+        "scripts/validate_foundation.py"
+      ],
+      "at": "2026-11-25T08:42:36Z",
+      "exit_code": 0,
+      "duration_seconds": 0.175,
+      "stdout_stderr_sha256": "24569610f1938358d0c297ccfcebf341d06ec227418b706a32c3839e0768046a",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
+    },
+    {
+      "name": "model-tests",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-model/tests"
+      ],
+      "at": "2026-11-25T08:42:52Z",
+      "exit_code": 0,
+      "duration_seconds": 15.399,
+      "stdout_stderr_sha256": "3a783271210cd4fd7b60f477d6e5f6575760dae04f551c62b3a8516b0d1c69b1",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
+    },
+    {
+      "name": "point-in-time",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "libs/arbit-data/tests/test_nfl_availability.py",
+        "tests/integration/test_nflverse_provenance.py"
+      ],
+      "at": "2026-11-25T08:42:53Z",
+      "exit_code": 0,
+      "duration_seconds": 1.472,
+      "stdout_stderr_sha256": "ed8668431f13ca8253596def935c4a63dbd6ffa9aded074e30bfa7ae751f9446",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
+    },
+    {
+      "name": "lint",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "at": "2026-11-25T08:42:53Z",
+      "exit_code": 0,
+      "duration_seconds": 0.04,
+      "stdout_stderr_sha256": "98733c3446b52dc3e6b6943142b19a142025d9727521f6abc3783a20e4b6d3c6",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
+    },
+    {
+      "name": "format",
+      "argv": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "at": "2026-11-25T08:42:53Z",
+      "exit_code": 0,
+      "duration_seconds": 0.037,
+      "stdout_stderr_sha256": "d65d1849237d5f64b980d3add6001f7f9057674694ba95ccad4930ca1b5c9d7f",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
+    },
+    {
+      "name": "types",
+      "argv": [
+        "uv",
+        "run",
+        "mypy",
+        "libs/arbit-model/src",
+        "scripts/model/dvp.py",
+        "scripts/model/dvp_plan_audit.py",
+        "scripts/model/dvp_prospective.py",
+        "scripts/model/dvp_explore.py",
+        "scripts/model/dvp_league_2026.py",
+        "scripts/model/dvp_league_2026_v2.py",
+        "scripts/model/ffa_2026_inventory.py",
+        "scripts/model/ffa_2026_pin.py",
+        "scripts/model/dvp_simulate.py",
+        "scripts/model/dvp_simulate_summary.py",
+        "scripts/model/dvp_thresholds.py"
+      ],
+      "at": "2026-11-25T08:42:54Z",
+      "exit_code": 0,
+      "duration_seconds": 0.544,
+      "stdout_stderr_sha256": "a8206929f371883d5b2bd94e4228612bfa996ab227f4f6ce3c8502f3ffbc8fc9",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
+    },
+    {
+      "name": "python-suite",
+      "argv": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "at": "2026-11-25T08:44:01Z",
+      "exit_code": 0,
+      "duration_seconds": 66.583,
+      "stdout_stderr_sha256": "86fef5b5ab8e37a3e4711cd63484df8d8b90d809b0a132c5e8ceeb1ee5cddec3",
+      "git_head": "ed29c3bdf7c4e0602561ef5e390340334ae8b772",
+      "scope_sha256": {
+        "config/dvp/simulation-v1.json": "7a7db8fb0162ae8b3d8992409811eb3182a39ddf068f299a5a14ee9eecf44eaf",
+        "config/dvp/threshold-sensitivity-v1.json": "4eb89b1573467dfe86cac0702506293611e02dbbdbc08ad3033e78afd6b9ba81",
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py": "f35066a2f5aff0e168b188b48796b3d8f16ef42c4a81a53ad183226e7d8efde8",
+        "libs/arbit-model/tests/test_dvp_simulate.py": "d5cd28c2ff3f315a7a75aa220132f0620e96c0fd1191b3cbabd8ee1859973a87",
+        "scripts/model/dvp_simulate.py": "bc91de19f45d6b4d50a3c0ccc629a7e7671ab7c0b25d7e53a970aee1a8e1dc70",
+        "scripts/model/dvp_thresholds.py": "c253b67f93ebf623cb48d55d152c8613bc6dcdf670a0f4b9b1554c8c0fd9c6b4",
+        "scripts/model/dvp.py": "b86b61e6b48e8cc528bd026ab2ac1309eb90aa58850a8b7341e9fd3a041612f1",
+        "docs/research/dvp/simulation-v1.json": "aeae846df39304f4560a95633c3c93c2c15ede05919ff269043246be1a19d85f",
+        "docs/research/dvp/threshold-sensitivity-v1.json": "2f3113f00dfd7fdf3b138354c995606cefc8a32bda4e5236ab7ec4773eb8132d",
+        "docs/research/dvp/SIMULATION_AUD06.md": "94e748ff0ebfb39a0a469f82cb5662e121a5da59ab95de2d492d8bcd32741df7",
+        "docs/research/dvp/THRESHOLDS_AUD07.md": "867b5d9489fc1183cef9927ad92c0b9e68252edd926fbd20a99f7b7845a1a4ae",
+        "docs/research/dvp/plots/simulation": "MISSING",
+        "docs/research/dvp/audit-findings.json": "18e0fecc9c5b852577325b69395a00fde6efe7cc098457b7b68a698d1dc49279",
+        "docs/research/dvp/AUDIT_RECONCILIATION.md": "63f97a1a177040ed8aa784c2ee53b7d415d1ba5e5bcda79519f385e9becf55b6",
+        "docs/research/dvp/EXPERIMENT_REGISTRY.md": "95a08bc9442eb18de5771ecfeeda60155042585d8dcfa96e88f3e9107460affc",
+        "docs/research/dvp/PLAYER_LEVEL_REPORT.md": "4aa84ef71d37b19f3385da477c5cddf27435f7f626e72f43c4d73b4d859dc046",
+        "docs/research/dvp/README.md": "8374fbfc5ef87c8332dceb8e7dae358cb0302a752e2e738209a20d8b827fae91",
+        "docs/project/decision-register.md": "2f56b74d92c91c4520ce01377baf0f3fe97f9859673da437d50756f8d1792393",
+        "docs/project/status.md": "561d2250f5d5dc27304cfac40deb4c1a3fb7237cf3a5cd2c9b21c16098242d72",
+        "docs/project/changelog.md": "814cec7ad7414e83f43603ac0b0e84b8897c1539109adaacbd223472a0eedf93",
+        "docs/governance/state.json": "DYNAMIC-STATE",
+        "docs/project/handoffs/2026-11-25-task-20261125-001-governance-handoff.md": "MISSING",
+        "scripts/model/dvp_simulate_summary.py": "a7367a449e8cbcd6c08aadbddb8c22996979f0fe2f4ecbba137f4b469f7a8e56"
+      }
     }
   ],
   "journal": [
@@ -375,6 +672,18 @@
       "kind": "correction",
       "note": "Scope extended by hand with scripts/model/dvp_simulate_summary.py (the suite's summarizer, split from the runner).",
       "evidence": "scripts/model/dvp_simulate_summary.py"
+    },
+    {
+      "at": "2026-11-25T08:44:14Z",
+      "kind": "correction",
+      "note": "A8's declared null makes B06 add noise, so its true league gain is slightly negative (league-truth.json); the declared two-sided false-positive check is reported as declared (FAIL in 3 of 4) beside a labelled one-sided supplementary check (PASS); the criterion itself was not changed.",
+      "evidence": "docs/research/dvp/simulation-v1.json"
+    },
+    {
+      "at": "2026-11-25T08:44:14Z",
+      "kind": "next_step",
+      "note": "Phase E: extend arbit_model.feature_specs with a research eligibility registry (config/model/research-eligibility.json) covering D/ST B06, D/ST league-constrained utility, QB-K aggregate DvP with AUD-06/07 qualifications, K opportunity volume, other opportunity variants, and every legacy opp_dvp_* / opp_off_dst_* feature; a fail-closed check at model assembly; tests.",
+      "evidence": "not yet verified"
     }
   ]
 }
