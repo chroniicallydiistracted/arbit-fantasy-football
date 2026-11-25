@@ -1,8 +1,8 @@
 {
   "version": 1,
   "project": "arbit-fantasy-football",
-  "active_task": "TASK-20261124-009",
-  "latest_handoff": "docs/project/handoffs/2026-11-24-task-20261124-008-governance-handoff.md",
+  "active_task": null,
+  "latest_handoff": "docs/project/handoffs/2026-11-25-task-20261124-009-governance-handoff.md",
   "release_claim": "Not inferred. Consult actual runtime evidence and owner authorization.",
   "notes": "2026-11-23: running worker on d9f95ec with seven lanes; 2026 weeks 1-10 complete. See status 'Running now' and 'Open work'.",
   "project_next_action": "Merge the owner audit Phase B PR (branch claude/m3-ffa-2026-league, TASK-20261124-009). Owner decision pending on the prospective sweep timer (week 13 window 2026-12-01 12:00 to 12-04 01:15 UTC; the capture now records D/ST availability). Next: remediation 7 (the full status-vocabulary rebuild of the plan audit, per-variant validation, test coverage map) and research eligibility metadata; AUD-06/AUD-07 (simulation suite, Phase C threshold wording) as the owner directs. After the season: evaluate the archived 2026 forecasts and C05L-2026-PRO; D/ST weight decision to the owner (OWN-074).",
