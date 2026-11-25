@@ -5,11 +5,6 @@ Shrinkage constants are games for half signal, measured with one method (split h
 team-season, Spearman-Brown): team rates in the signal study, defense against the position in its
 own study. A shrunk value is (n·x + k·m) / (n + k) after n games, toward the league mean m, or
 n / (n + k) of an adjusted value, toward zero.
-
-A definition here establishes nothing about predictive value. The defense-against-position
-columns (opp_dvp_*, opp_off_dst_allowed_*) are governed by the research eligibility registry
-(config/model/research-eligibility.json, arbit_model.eligibility): none is production-eligible, and
-a production model assembly must pass its features through eligibility.check_assembly.
 """
 
 from collections.abc import Mapping

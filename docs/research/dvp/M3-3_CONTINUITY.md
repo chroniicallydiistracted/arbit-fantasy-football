@@ -53,6 +53,13 @@ Specification §0 rule 1, §4 and §9 Phase 0 (T29). Manifest: [continuity-manif
 
   Whether DvP gets a weight at all, and with which k, is for Phase B (B03/B04), measured against the offense-only B00.
 
+## Completion state (2026-11-25)
+
+The development phase is complete: the [plan completion audit](PLAN_COMPLETION_SCOPE.md) passes every check under the owner's final directive (TASK-20261125-003). Three things remain, none of them development:
+- **Future data:** the prospective 2026 weeks 12–18 outcomes (P4P) and the league-constrained evaluation for weeks 12–18 (C05L-2026-PRO). The timer collects them, and after the regular season they are evaluated with the frozen rules.
+- **The owner's approval:** a D/ST production weight (P5W). The [research eligibility registry](RESEARCH_ELIGIBILITY.md) keeps every M3-3 feature out of production until then.
+- **Not production-ready:** independent 2026 confirmation is still pending.
+
 ## Records
 
 The repository's own records are kept rather than parallel copies:

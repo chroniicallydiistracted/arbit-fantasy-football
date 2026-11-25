@@ -27,7 +27,7 @@ Started 2026-11-25 in TASK-20261124-010.
 | PB-AUD-04 | Bootstrap drops zero-change weeks | AGREE (reproduced: −96.03 to +74.02) | RESOLVED_VERIFIED |
 | PB-AUD-05 | Streaming ignores shared acquisitions and roster feasibility | AGREE | RESOLVED_VERIFIED |
 | PB-AUD-06 | Manager starts compared across different decision times | PARTIALLY_AGREE (gap real; no decision affected) | RESOLVED_VERIFIED |
-| PB-AUD-08 | League inputs read from the live database | AGREE | IN_PROGRESS (inputs pinned; the audit rerun is remediation 7) |
+| PB-AUD-08 | League inputs read from the live database | AGREE | RESOLVED_VERIFIED (inputs pinned; the comprehensive audit reruns the evaluation from them) |
 | PB-RESULTS | Phase B v1 totals and the week-11 sensitivity (directive §8) | AGREE (recomputed) | RESOLVED_VERIFIED |
 | AUD-06 | Simulation suite outstanding | AGREE | RESOLVED_VERIFIED ([report](SIMULATION_AUD06.md)) |
 | AUD-07 | 1.8-point threshold described as exact | AGREE (reproduced; a heuristic, not an equivalence) | RESOLVED_VERIFIED ([report](THRESHOLDS_AUD07.md)) |
@@ -145,6 +145,17 @@ Details: [LEAGUE_CONSTRAINED_2026.md](LEAGUE_CONSTRAINED_2026.md#corrected-evalu
 
 [RESEARCH_ELIGIBILITY.md](RESEARCH_ELIGIBILITY.md): one registry records every M3-3 DvP feature's evidence, classification and production status. A fail-closed gate refuses any production model assembly that uses a DvP feature not made eligible with recorded approvals; none is. AUD-01a is closed: the owner registered the deploy key, and unattended publication was verified.
 
-## Still to do (later tasks of this directive)
+## Remediation 7: the comprehensive audit (TASK-20261125-003)
 
-The comprehensive audit (remediation 7, which also reruns the pinned Phase B evaluation for PB-AUD-08). AUD-01a closes when unattended publication is verified with the registered key. Each closes in this register.
+The plan audit now covers the whole directive ([PLAN_COMPLETION_SCOPE.md](PLAN_COMPLETION_SCOPE.md), [receipt](plan-audit-receipt.json)).
+- **Statuses:** the directive's completion statuses.
+- **Checks:** behaviour-based, with reruns from pinned inputs.
+- **Negative controls:** 18 planted defects, every one detected.
+- **What its first run caught:**
+  - a Phase E change to the v0 file `feature_specs.py`, now reverted;
+  - an existing check too coarse to see a missing variant, now strengthened.
+- **PB-AUD-08** is closed by its rerun of the corrected evaluation from the pinned bundle.
+
+## Still to do
+
+Nothing from the directive remains open except what waits for data or approval: the 2026 weeks 12–18 outcomes (PENDING_FUTURE_DATA) and the owner's D/ST weight decision (DEFERRED_APPROVAL).

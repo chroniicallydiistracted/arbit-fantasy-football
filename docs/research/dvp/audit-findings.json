@@ -311,7 +311,8 @@
     "Pinned bundle artifacts/dvp/league-2026/inputs-v1 (manifest c354dcca..., 9 files, read in one read-only repeatable-read transaction); docs/research/ffa-2026-league-inputs-v1.json commits hashes and counts only."
    ],
    "tests": [
-    "dvp_league_2026_v2.py verifies every pinned file's hash before use and reads no live database (receipt pinnedInputs.liveDatabaseRead false)"
+    "dvp_league_2026_v2.py verifies every pinned file's hash before use and reads no live database (receipt pinnedInputs.liveDatabaseRead false)",
+    "scripts/model/dvp_plan_audit.py rerun step league-2026-v2; checks rerun:league-v2 and pb08:pinned; negative control: a missing bundle file is detected"
    ],
    "disposition": "AGREE",
    "reasoning": "A later transaction revision or stat correction would change a rerun silently.",
@@ -319,9 +320,9 @@
    "remediation": "ffa_2026_pin.py writes the minimal normalized inputs (transactions, lineups, draft, matchups, rules, snapshots' rosters and D/ST states, D/ST mapping) as a hashed, read-only local bundle; the v2 experiment runs from it alone.",
    "expectedEffect": "Reproducible Phase B results.",
    "completionCriteria": "Rerun from pinned inputs equals the committed receipts.",
-   "status": "IN_PROGRESS",
-   "task": "TASK-20261124-011 (pinning, v2); remediation 7 (audit rerun)",
-   "statusNote": "Pinned inputs and the independent execution path exist; the comprehensive audit (remediation 7) reruns the corrected experiment from them and compares with the committed receipt."
+   "status": "RESOLVED_VERIFIED",
+   "task": "TASK-20261124-011 (pinning, v2); TASK-20261125-003 (audit rerun)",
+   "statusNote": "Remediation 7 (TASK-20261125-003): the comprehensive audit reruns the corrected evaluation from the pinned bundle and compares it with the committed receipt (rerun:league-v2), and verifies the bundle file by file against its manifest (pb08:pinned)."
   },
   {
    "id": "PB-RESULTS",

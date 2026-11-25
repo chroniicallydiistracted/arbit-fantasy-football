@@ -24,6 +24,7 @@ connections (T26).
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 import re
@@ -44,7 +45,7 @@ import polars as pl
 ROOT = Path(__file__).resolve().parents[2]
 RECEIPTS = ROOT / "docs/research/dvp"
 SPEC = ROOT / "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md"
-FORMAT = "arbit-dvp-m3-3-plan-audit-v1"
+FORMAT = "arbit-dvp-m3-3-plan-audit-v2"
 AUDIT_RUN = "phase1-audit-20261124T024442Z"
 FORECAST_KEY = ("season", "week", "game_id", "offense", "position")
 TOLERANCE = 1e-9  # dvp.FORECAST_TOLERANCE
@@ -92,6 +93,97 @@ def _copy_receipts(scratch: Path, name: str, *, committed: bool) -> Path:
 
 def _tree_hashes(folder: Path) -> dict[str, str]:
     return {str(p.relative_to(folder)): sha256(p) for p in sorted(folder.rglob("*")) if p.is_file()}
+
+
+def _directive_steps(
+    args: argparse.Namespace, scratch: Path, main: Path, env_file: str
+) -> list[tuple[str, Path, list[str], int]]:
+    """Reruns the final directive adds: exploratory v2/v3, the corrected Phase B evaluation from
+    pinned inputs, thresholds, a deterministic simulation sample (rerun once more: resume), the
+    simulation summary from raw results, the prospective archive's verify, and (with --live) the
+    content-level re-read through the guarded ESPN client."""
+    out = scratch / "receipts" / "directive"
+    out.mkdir(parents=True, exist_ok=True)
+    py = ["uv", "run", "--env-file", env_file, "python"]
+    steps: list[tuple[str, Path, list[str], int]] = []
+    for version in ("v2", "v3"):
+        explore = [*py, "scripts/model/dvp_explore.py", "--main", str(main)]
+        explore += ["--config", f"config/dvp/explore-{version}.json"]
+        explore += ["--out", str(scratch / f"explore-{version}"), "--run", "audit"]
+        if version == "v3":
+            steps.append((f"explore-{version}-opportunity", ROOT, [*explore, "opportunity"], 0))
+        for stage in STAGES:
+            steps.append(
+                (f"explore-{version}-{stage}", ROOT, [*explore, "forecast", "--stage", stage], 0)
+            )
+        steps.append(
+            (f"explore-{version}-evaluate", ROOT, [*explore, "evaluate", "--receipts", str(out)], 0)
+        )
+    league = [*py, "scripts/model/dvp_league_2026_v2.py", "--main", str(main)]
+    steps.append(
+        (
+            "league-2026-v2",
+            ROOT,
+            [*league, "--out", str(out / "league-2026-exploratory-v2.json")],
+            0,
+        )
+    )
+    thresholds = [*py, "scripts/model/dvp_thresholds.py", "--main", str(main)]
+    steps.append(
+        ("thresholds", ROOT, [*thresholds, "--out", str(out / "threshold-sensitivity-v1.json")], 0)
+    )
+    sample = {
+        "E1": (
+            "SIM-01,SIM-02,SIM-03,SIM-04,SIM-07,SIM-08,SIM-09,SIM-10,SIM-11,SIM-14a,SIM-14b",
+            10,
+        ),
+        "E2": (
+            "SIM-01,SIM-02,SIM-03,SIM-04,SIM-05,SIM-06,SIM-07,SIM-08,SIM-09,SIM-10,SIM-11,"
+            "SIM-12,SIM-13a,SIM-13b,SIM-14a,SIM-14b,SIM-16",
+            2,
+        ),
+        "E3": ("SIM-17-null,SIM-17-alt,SIM-18-null,SIM-18-alt", 10),
+        "U": (
+            "independent,weekShock,weekShockRowBlocks,season7,season5,season3,sharedGame,"
+            "temporalAR,unequalExposure",
+            10,
+        ),
+    }
+    simulate = ["env", f"ARBIT_SIM_OUT={scratch / 'sim'}", *py, "scripts/model/dvp_simulate.py"]
+    for experiment, (scenarios, reps) in sample.items():
+        steps.append(
+            (
+                f"simulation-sample-{experiment}",
+                ROOT,
+                [*simulate, "run", "--experiment", experiment, "--scenarios", scenarios]
+                + ["--reps", str(reps), "--workers", "8"],
+                0,
+            )
+        )
+    steps.append(
+        (
+            "sim-resume",
+            ROOT,
+            [*simulate, "run", "--experiment", "E3", "--scenarios", sample["E3"][0]]
+            + ["--reps", "10", "--workers", "2"],
+            0,
+        )
+    )
+    summarize = ["env", f"ARBIT_SIM_OUT={main / 'artifacts/dvp/simulation-v1'}", *py]
+    summarize += [
+        "scripts/model/dvp_simulate.py",
+        "summarize",
+        "--out",
+        str(out / "simulation-v1.json"),
+    ]
+    steps.append(("simulation-summary", ROOT, summarize, 0))
+    verify = [*py, "scripts/model/dvp_prospective.py", "--main", str(main), "verify"]
+    steps.append(("prospective-verify", ROOT, verify, 0))
+    if args.live:
+        content = [*py, "scripts/model/ffa_2026_inventory.py", "--main", str(main)]
+        content += ["--content", str(out / "ffa-2026-inventory-content.json")]
+        steps.append(("ffa-content-live", ROOT, content, 0))
+    return steps
 
 
 def rerun(args: argparse.Namespace) -> None:
@@ -213,6 +305,7 @@ def rerun(args: argparse.Namespace) -> None:
             0,
         ),
     ]
+    steps += _directive_steps(args, scratch, main, env_file)
     record = []
     for name, cwd, argv, expected in steps:
         env = {**os.environ, **data, "ARBIT_DVP_AUDIT_RUN": str(run)}
@@ -238,6 +331,7 @@ def rerun(args: argparse.Namespace) -> None:
     after = {"run": _tree_hashes(run), "config": _tree_hashes(ROOT / "config/dvp")}
     manifest = {
         "format": FORMAT + "-reruns",
+        "mainPath": str(main),
         "code": git("rev-parse", "HEAD"),
         "frozenTree": git("rev-parse", "HEAD", cwd=frozen_tree),
         "run": run.name,
@@ -967,18 +1061,22 @@ def _variants(results: dict[str, Any]) -> set[str]:
     "Development, validation and holdout score B00 and every DvP variant and control for every group",
 )
 def _bt_variants(ctx: Context) -> Result:
+    """Every configured variant, for every group, in every stage (strengthened in remediation 7:
+    a family present somewhere no longer hides a variant missing for one group)."""
+    config = load(ROOT / "config/dvp/backtest.json")
+    expected = {"b00", "b01", "b02", "b02r", "b03", "b03r", "b06", "b07", *config["controls"]}
+    expected |= {f"b04_k{k:g}" for k in config["k_grid"]}
+    expected |= {f"b05_h{h:g}" for h in config["half_lives"]}
     out, ok = {}, True
     for s in STAGES:
         r = ctx.committed(f"backtest-{s}.json")["results"]
-        groups = sorted(r)
-        names = _variants(r)
-        families = sorted({n.split("_")[0][:3] for n in names})
-        out[s] = {"groups": groups, "variants": len(names), "families": families}
-        ok = (
-            ok
-            and set(groups) >= set(GROUPS)
-            and {"b00", "b01", "b02", "b03", "b04", "b05", "b06", "b07", "b09"} <= set(families)
-        )
+        missing = {
+            g: sorted(expected - {k for k, v in r.get(g, {}).items() if isinstance(v, dict)})
+            for g in GROUPS
+        }
+        missing = {g: m for g, m in missing.items() if m}
+        out[s] = {"groups": sorted(r), "variantsPerGroup": len(expected), "missing": missing}
+        ok = ok and set(r) >= set(GROUPS) and not missing
     return ok, out
 
 
@@ -1646,16 +1744,32 @@ def _open_modes(ctx: Context) -> Result:
 # --- the plan -----------------------------------------------------------------------------------
 
 
+# Completion statuses (owner final directive §12 F2), distinct from research outcomes: an executed
+# experiment that found NOT_USEFUL is COMPLETE_VERIFIED.
+KIND_STATUS = {
+    "complete": "COMPLETE_VERIFIED",
+    "partial": "PARTIAL",
+    "blocked_external": "BLOCKED_EXTERNAL",
+    "pending_future_data": "PENDING_FUTURE_DATA",
+    "not_applicable": "NOT_APPLICABLE",
+    "deferred_approval": "DEFERRED_APPROVAL",
+    "not_implemented": "NOT_IMPLEMENTED",
+}
+STATUSES = (*KIND_STATUS.values(), "FAILED")
+EVIDENCE_PREFIXES = ("open:", "na:", "evidence:", "owner:")
+
+
 @dataclass(frozen=True)
 class Item:
     id: str
     section: str
     title: str
     checks: tuple[str, ...]
-    kind: str = "done"  # done | open | not_applicable
+    # The completion class claimed (final directive §12 F2); the audit proves it or says FAILED.
+    kind: str = "complete"
 
 
-def _i(id: str, section: str, title: str, *checks: str, kind: str = "done") -> Item:
+def _i(id: str, section: str, title: str, *checks: str, kind: str = "complete") -> Item:
     return Item(id, section, title, checks, kind)
 
 
@@ -2225,9 +2339,10 @@ ITEMS: tuple[Item, ...] = (
     _i(
         "C03",
         "§5 Phase C",
-        "C03: route, slot and target-share interactions: BLOCKED (no meaning for D/ST)",
+        "C03: route, slot and target-share interactions: NOT_APPLICABLE (Phase C is D/ST-only; roles have no meaning for a D/ST)",
         "registry:C03",
-        kind="open",
+        "na:c03-dst-only",
+        kind="not_applicable",
     ),
     _i(
         "C04",
@@ -2263,10 +2378,10 @@ ITEMS: tuple[Item, ...] = (
     _i(
         "C05L-2026-PRO",
         "§5 Phase C",
-        "C05L-2026-PRO: prospective league-constrained evaluation, weeks 12-18 (decision-time capture)",
+        "C05L-2026-PRO: prospective league-constrained evaluation, weeks 12-18: outcomes after the games",
         "prospective:league-capture",
         "open:prospective",
-        kind="open",
+        kind="pending_future_data",
     ),
     # §6 Statistics
     _i(
@@ -2433,10 +2548,10 @@ ITEMS: tuple[Item, ...] = (
     _i(
         "P4P",
         "§9",
-        "Phase 4 prospective: 2026 weeks 12-18 frozen before kickoff; scored after the season",
+        "Phase 4 prospective: 2026 weeks 12-18 outcomes, scored after the season (collection: P4P-INFRA)",
         "open:prospective",
         "backtest:timeline",
-        kind="open",
+        kind="pending_future_data",
     ),
     _i(
         "P5",
@@ -2451,7 +2566,7 @@ ITEMS: tuple[Item, ...] = (
         "§9",
         "Promotion: the owner's decision on a D/ST production weight (OWN-074)",
         "open:owner-weight",
-        kind="open",
+        kind="deferred_approval",
     ),
     _i(
         "G01",
@@ -2488,9 +2603,9 @@ ITEMS: tuple[Item, ...] = (
     _i(
         "G06",
         "§9",
-        "Dry-run and resume modes: not built (stages are separate commands of 1-75 s)",
+        "Dry-run, verify-only and resume modes where appropriate: verify-only commands; resumable long runs; idempotent reruns on scratch copies serve as dry runs",
         "open:modes",
-        kind="open",
+        "g06:modes",
     ),
     # §10
     _i("F01", "§10", "Explicit config with the specification's keys", "config:spec-keys"),
@@ -2708,6 +2823,36 @@ ITEMS: tuple[Item, ...] = (
 )
 
 
+def _load_directive() -> Any:
+    """The final directive's extension (scripts/model/dvp_plan_audit_directive.py)."""
+    spec = importlib.util.spec_from_file_location(
+        "dvp_plan_audit_directive", ROOT / "scripts/model/dvp_plan_audit_directive.py"
+    )
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["dvp_plan_audit_directive"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+class _Audit:
+    """This module seen through its own globals: the directive reads and patches the audit's
+    names (RECEIPTS, ITEMS, sha256) as the audit's functions see them."""
+
+    def __init__(self, names: dict[str, Any]) -> None:
+        object.__setattr__(self, "_names", names)
+
+    def __getattr__(self, name: str) -> Any:
+        return self._names[name]
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        self._names[name] = value
+
+
+_directive = _load_directive()
+ITEMS = ITEMS + _directive.register(_Audit(globals()))
+
+
 def _run_check(ctx: Context, check_id: str) -> dict[str, Any]:
     description, fn = CHECKS[check_id]
     try:
@@ -2729,11 +2874,11 @@ def evaluate(ctx: Context) -> dict[str, Any]:
     items = []
     for item in ITEMS:
         passed = all(results[c]["passed"] for c in item.checks)
-        status = (
-            {"done": "DONE", "open": "OPEN", "not_applicable": "NOT_APPLICABLE"}[item.kind]
-            if passed
-            else "FAILED"
+        # A claim short of completion needs a check that records its evidence (§12 F5).
+        unproven = item.kind != "complete" and not any(
+            c.startswith(EVIDENCE_PREFIXES) for c in item.checks
         )
+        status = KIND_STATUS[item.kind] if passed and not unproven else "FAILED"
         items.append(
             {
                 "id": item.id,
@@ -2744,10 +2889,7 @@ def evaluate(ctx: Context) -> dict[str, Any]:
                 "checks": list(item.checks),
             }
         )
-    counts = {
-        s: sum(i["status"] == s for i in items)
-        for s in ("DONE", "OPEN", "NOT_APPLICABLE", "FAILED")
-    }
+    counts = {s: sum(i["status"] == s for i in items) for s in STATUSES}
     return {
         "status": "PASSED" if counts["FAILED"] == 0 else "FAILED",
         "summary": {
@@ -2761,11 +2903,56 @@ def evaluate(ctx: Context) -> dict[str, Any]:
     }
 
 
+DOCUMENTS = {
+    "specification": "docs/research/dvp/Arbit_FFA_M3_DvP_Plan.md",
+    "remediationRequirements": "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md",
+    "phaseBRequirements": "docs/research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md",
+    "finalDirective": "docs/research/dvp/M3-3_AUDIT_REMEDIATION_AND_COMPLETION_DIRECTIVE_FINAL.md",
+}
+ARTIFACTS = (
+    "audit-receipt.json",
+    "reliability-results.json",
+    "backtest-development.json",
+    "backtest-validation.json",
+    "backtest-holdout.json",
+    "sitstart.json",
+    "explore-v2.json",
+    "explore-v3.json",
+    "league-2026-exploratory.json",
+    "league-2026-exploratory-v2.json",
+    "simulation-v1.json",
+    "threshold-sensitivity-v1.json",
+    "audit-findings.json",
+)
+
+
+def _outcomes() -> dict[str, Any]:
+    holdout = load(RECEIPTS / "backtest-holdout.json")["decisions"]["positions"]
+    league = load(RECEIPTS / "league-2026-exploratory-v2.json")["results"]
+    return {
+        "phaseB": {p: v["label"] for p, v in holdout.items()},
+        "phaseC": load(RECEIPTS / "sitstart.json")["decision"],
+        "c05l2026ExpV2": {
+            k: {x: v.get(x) for x in ("decisions", "pointsFromChanges", "pointsFromChanges95")}
+            for k, v in league.items()
+        },
+        "aud06Acceptance": load(RECEIPTS / "simulation-v1.json")["acceptance"],
+        "aud07": load(RECEIPTS / "threshold-sensitivity-v1.json")["D1"]["original"],
+        "eligibility": {
+            e["id"]: e["researchClassification"]
+            for e in load(ROOT / "config/model/research-eligibility.json")["entries"]
+        },
+    }
+
+
 def check_command(args: argparse.Namespace) -> None:
     scratch: Path = args.scratch.resolve()
     reruns = load(scratch / "reruns.json")
     ctx = Context(scratch=scratch, reruns=reruns, junit=_junit(scratch / "junit.xml"))
     result = evaluate(ctx)
+    controls = _directive.controls(_Audit(globals()), ctx)
+    detected = all(c["detected"] for c in controls)
+    status = "PASSED" if result["status"] == "PASSED" and detected else "FAILED"
     dirty = subprocess.run(
         ["git", "status", "--porcelain", "--untracked-files=no", "--", ".", ":(exclude)docs"],
         cwd=ROOT,
@@ -2773,11 +2960,19 @@ def check_command(args: argparse.Namespace) -> None:
         text=True,
         check=True,
     ).stdout.strip()
+    findings = load(RECEIPTS / "audit-findings.json")["findings"]
+    by_status = {
+        s: [i["id"] for i in result["items"] if i["status"] == s]
+        for s in ("BLOCKED_EXTERNAL", "PENDING_FUTURE_DATA", "DEFERRED_APPROVAL", "NOT_APPLICABLE")
+    }
+    ledger = (Path(reruns["mainPath"]) / "artifacts/dvp/prospective/2026/ledger.jsonl").read_text()
     receipt = {
         "format": FORMAT,
         "generatedAt": datetime.now(UTC).isoformat(),
         "code": git("rev-parse", "HEAD") + ("+uncommitted" if dirty else ""),
+        "inventoryVersion": "final-directive-v1",
         "specification": {"path": str(SPEC.relative_to(ROOT)), "sha256": sha256(SPEC)},
+        "documents": {k: {"path": v, "sha256": sha256(ROOT / v)} for k, v in DOCUMENTS.items()},
         "auditRun": reruns["run"],
         "reruns": {
             "code": reruns["code"],
@@ -2791,19 +2986,53 @@ def check_command(args: argparse.Namespace) -> None:
             k: sum(o == k for o in ctx.junit.values()) for k in ("passed", "failed", "skipped")
         },
         **result,
+        "status": status,
+        "negativeControls": {"allDetected": detected, "controls": controls},
+        "findingReconciliation": {
+            f["id"]: {"disposition": f["disposition"], "status": f["status"]} for f in findings
+        },
+        "dataSnapshots": {
+            "auditRun": reruns["run"],
+            "targetsIndex": load(ROOT / "config/dvp/base.json")["targets_index"],
+            "pinnedLeagueInputs": load(ROOT / "docs/research/ffa-2026-league-inputs-v1.json")[
+                "manifestSha256"
+            ],
+            "simulationConfig": sha256(ROOT / "config/dvp/simulation-v1.json"),
+            "prospectiveLedgerHead": json.loads(ledger.strip().splitlines()[-1])["entrySha256"],
+        },
+        "artifactHashes": {name: sha256(RECEIPTS / name) for name in ARTIFACTS},
+        "frozenVerification": result["checks"]["dec:frozen-unchanged"]["observed"],
+        "experimentOutcomes": _outcomes(),
+        "remainingBlockers": by_status["BLOCKED_EXTERNAL"],
+        "pendingFutureData": by_status["PENDING_FUTURE_DATA"],
+        "deferredApprovals": by_status["DEFERRED_APPROVAL"],
+        "notApplicable": by_status["NOT_APPLICABLE"],
+        "overallAssessment": (
+            "M3-3 development phase COMPLETE: every achievable requirement is COMPLETE_VERIFIED; "
+            "what remains is future data (the 2026 weeks 12-18 outcomes), the owner's approval "
+            "(a D/ST production weight) or not applicable. Not production-ready; independent "
+            "2026 confirmation pending."
+            if status == "PASSED" and not by_status["BLOCKED_EXTERNAL"]
+            else "M3-3 development phase NOT complete: see FAILED items, undetected controls or "
+            "blockers."
+        ),
     }
     args.out.write_text(json.dumps(receipt, indent=2, default=str) + "\n")
     s = result["summary"]
     print(
-        f"{result['status']}: {s['items']} items ({s['DONE']} done, {s['OPEN']} open, "
-        f"{s['NOT_APPLICABLE']} not applicable, {s['FAILED']} failed); "
-        f"{s['checksPassed']}/{s['checks']} checks passed"
+        f"{status}: {s['items']} items ("
+        + ", ".join(f"{s[k]} {k}" for k in STATUSES if s[k])
+        + f"); {s['checksPassed']}/{s['checks']} checks passed; "
+        f"{sum(c['detected'] for c in controls)}/{len(controls)} negative controls detected"
     )
     for item in result["items"]:
         if item["status"] == "FAILED":
             failed = [c for c in item["checks"] if not result["checks"][c]["passed"]]
             print(f"  FAILED {item['id']} {item['title']}: {failed}")
-    if result["status"] != "PASSED":
+    for c in controls:
+        if not c["detected"]:
+            print(f"  UNDETECTED control: {c['control']} ({c['detectedBy']})")
+    if status != "PASSED":
         sys.exit(1)
 
 
@@ -2819,6 +3048,11 @@ def main() -> None:
         "--frozen-tree", type=Path, required=True, help="a worktree at the holdout's code"
     )
     r.add_argument("--scratch", type=Path, required=True, help="an empty directory for the reruns")
+    r.add_argument(
+        "--live",
+        action="store_true",
+        help="also re-read ESPN's records for the content-level check (current-source verification)",
+    )
     c = commands.add_parser("check", help="evaluate every plan item and write the receipt")
     c.add_argument("--scratch", type=Path, required=True)
     c.add_argument("--out", type=Path, default=RECEIPTS / "plan-audit-receipt.json")

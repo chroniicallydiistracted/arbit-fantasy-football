@@ -34,9 +34,9 @@
   - **League capture:** ESPN's observed availability. Week 12's capture had called 19 waiver units free agents.
   - **Alerts:** reach Windows.
   - **The timer:** bounded to the window.
-- **Waiting on the owner:** registering the evidence key as a write deploy key (the permission classifier refused it). Until then the timer's publications fail, alert and retry.
+- **Evidence deploy key:** the permission classifier refused to register it, so the owner registered it on 2026-11-25. Unattended publication has worked since (below).
 - **Phase A merged** (PR #18, `b6c25e9`). The timer was installed from main on 2026-11-25 and its first service run verified: week 13 waiting, week 12 captured.
-- **Phase B corrections (TASK-20261124-011, ENG-068):** every Phase B finding is resolved except PB-AUD-08's audit rerun, which is remediation 7.
+- **Phase B corrections (TASK-20261124-011, ENG-068):** every Phase B finding is resolved. PB-AUD-08's audit rerun closed in remediation 7.
   - **Live content:** 536 of 536 transactions content-equal; lineups identical apart from current NFL teams.
   - **Ownership replay:** fails closed, and equals all 1,522 snapshots.
   - **Availability rule v2:** 99.3% on held-out snapshots.
@@ -56,7 +56,19 @@
 - **AUD-06/07 merged** (PR #20, `dd8e1d6`).
 - **The owner registered the evidence deploy key;** unattended publication is verified, which closes AUD-01a.
 - **Phase E (TASK-20261125-002, ENG-070):** the research eligibility registry and a fail-closed production gate. No M3-3 feature is production-eligible.
-- **Next:** Phase B corrections (PB-AUD-01 to -06, -08), AUD-06, AUD-07, the eligibility registry, then the comprehensive audit.
+- **Phase E merged** (PR #21, `5e082cc`).
+- **Remediation 7 (TASK-20261125-003, ENG-071; [scope document](../research/dvp/PLAN_COMPLETION_SCOPE.md)):** the plan audit is extended to the whole directive.
+  - **Result: PASSED.** 257 action items:
+    - 252 COMPLETE_VERIFIED;
+    - 2 PENDING_FUTURE_DATA (P4P, C05L-2026-PRO: the 2026 weeks 12–18 outcomes);
+    - 1 DEFERRED_APPROVAL (P5W, the owner's D/ST weight);
+    - 2 NOT_APPLICABLE (C05L-HIST, C03).
+  - **Checks:** 192 of 192 passed. All 18 negative controls were detected. 272 model tests passed with none skipped. 31 rerun steps exited as expected, including the live ESPN content re-read (536 of 536 content-equal).
+  - **The first run caught:**
+    - a Phase E docstring in the v0 file `feature_specs.py`, which is reverted;
+    - a variant check too coarse to see one group's missing variant, which is strengthened.
+  - **Every external finding is closed.** M3-3's development phase is complete; it is not production-ready.
+- **Next:** nothing to build. The timer collects weeks 13–18, with week 13's window 2026-12-01 12:00 to 12-04 01:15 UTC. After the regular season, evaluate P4P and C05L-2026-PRO with the frozen rules; then comes the owner's D/ST weight decision.
 
 **Owner audit Phase B (2026-11-25, TASK-20261124-009; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md), OWN-076, ENG-066):**
 - **2026 is FFA's inaugural season (OWN-076).** No earlier FFA seasons exist, and their absence is not a gap. Recorded in the decision register, the source register (SRC-39), AGENTS.md and the plan audit.
@@ -69,7 +81,7 @@
   - **HIST (2016–2025):** NOT_APPLICABLE.
   - **2026-EXP (weeks 1–11):** done, exploratory. Start decisions (28): B06 −6 points (−90 to +80). Streaming (88): +46 (−280 to +360). Too few decisions to measure ([report](../research/dvp/LEAGUE_CONSTRAINED_2026.md)).
   - **2026-PRO:** the prospective archive captures D/ST availability from week 13.
-- **Plan audit rebuilt:** 221 items: 215 done, 5 open, 1 not applicable. All 164 checks passed.
+- **Plan audit rebuilt:** 221 items: 215 done, 5 open, 1 not applicable. All 164 checks passed. (Superseded by remediation 7: 257 items, 192 checks.)
 
 **Owner's independent DvP audit (2026-11-24; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS.md)):** seven findings, AUD-01 to AUD-07, with remediations 1–7.
 - **Remediation 1 (AUD-01), done in TASK-20261124-006 ([procedure](../research/dvp/PROSPECTIVE_2026.md), ENG-063):** the 2026 weeks 12–18 confirmation is now truly prospective. Forecasts are archived before each week's kickoff and evaluated after the games.
@@ -84,7 +96,7 @@
   - **Data:** player and team statistics admitted through a versioned admission and reconciled exactly (5,278 of 5,278 team-games).
   - **Reliability:** volume allowed repeats faster than points for RB, WR and K. Per-play efficiency carries the whole D/ST signal.
   - **Forecasting (exploratory):** no channel crosses 1% outside D/ST, and for D/ST B06 stays best. K's volume channel beats B03 in every period and B06 in 2024 and 2025, but only by 0.1–0.5%.
-- **Still open:** remediation 6 (the simulation suite, AUD-06), the threshold wording (AUD-07), remediation 7 (the rebuilt plan audit) and the research eligibility metadata.
+- **Since closed:** remediation 6 (the simulation suite, AUD-06), the threshold wording (AUD-07), remediation 7 (the rebuilt plan audit) and the research eligibility metadata. All closed on 2026-11-25 under the final directive.
 - **Repaired:** moving the specification into `docs/research/dvp` had broken four links, the audit's path and a task record, so `main` CI was red.
 
 **DvP plan completion audit (2026-11-24, TASK-20261124-005; [scope document](../research/dvp/PLAN_COMPLETION_SCOPE.md)):** every action item of the owner's specification, checked against rerun evidence.

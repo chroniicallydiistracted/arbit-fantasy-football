@@ -569,7 +569,8 @@ def main() -> None:
     t = commands.add_parser("truth")
     t.add_argument("--reps", type=int, default=20000)
     t.add_argument("--workers", type=int, default=8)
-    commands.add_parser("summarize")
+    m = commands.add_parser("summarize")
+    m.add_argument("--out", type=Path, help="default: docs/research/dvp/simulation-v1.json")
     args = parser.parse_args()
     if args.command == "run":
         run(args.experiment, args.scenarios.split(","), args.reps, args.workers)
@@ -587,7 +588,7 @@ def main() -> None:
         assert spec is not None and spec.loader is not None
         summary = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(summary)
-        summary.main(ROOT, CONFIG, OUT)
+        summary.main(ROOT, CONFIG, OUT, args.out)
 
 
 if __name__ == "__main__":
