@@ -153,6 +153,9 @@ def matchup_effects(
     counted = differ = missing = 0
     flips: dict[str, int] = {"candidateWins": 0, "baseWins": 0}
     changes_actual = {base: 0, candidate: 0}
+    against_actual = {
+        m: {"lossesToWins": 0, "winsToLosses": 0, "other": 0} for m in (base, candidate)
+    }
     for r in starts.iter_rows(named=True):
         key = (r["week"], r["team"])
         if key not in opponent:
@@ -171,6 +174,15 @@ def matchup_effects(
         counted += 1
         for model in (base, candidate):
             changes_actual[model] += outcome[model] != actual
+            if outcome[model] != actual:
+                direction = (
+                    "lossesToWins"
+                    if (actual, outcome[model]) == ("L", "W")
+                    else "winsToLosses"
+                    if (actual, outcome[model]) == ("W", "L")
+                    else "other"
+                )
+                against_actual[model][direction] += 1
         if outcome[base] != outcome[candidate]:
             differ += 1
             if outcome[candidate] == "W" or (outcome[candidate] == "T" and outcome[base] == "L"):
@@ -183,4 +195,5 @@ def matchup_effects(
         "resultsDifferBetweenModels": differ,
         **flips,
         "resultDiffersFromActual": changes_actual,
+        "againstActual": against_actual,
     }

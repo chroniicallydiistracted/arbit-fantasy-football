@@ -73,3 +73,4 @@ def test_matchup_effects_count_results_that_change():
     # Actual 100 with BBB started (3). B00 starts BBB: still 100, a loss. B06 starts AAA: 107, a win.
     assert effects["resultsDifferBetweenModels"] == 1 and effects["candidateWins"] == 1
     assert effects["resultDiffersFromActual"] == {"b00": 0, "b06": 1}
+    assert effects["againstActual"]["b06"] == {"lossesToWins": 1, "winsToLosses": 0, "other": 0}
