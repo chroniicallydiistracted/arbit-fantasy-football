@@ -1,0 +1,133 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='720' height='966' viewBox='0 0 720 966' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>Phase B PROMISING rate by scenario (Monte Carlo 95%)</title>
+<rect width='720' height='966' fill='#ffffff'/>
+<text x='16' y='24' font-size='15' font-weight='bold' fill='#1a1a1a'>Phase B PROMISING rate by scenario (Monte Carlo 95%)</text>
+<line x1='230' y1='50' x2='230' y2='886' stroke='#e3e3e3'/>
+<text x='230' y='901' text-anchor='middle' fill='#666666'>0</text>
+<line x1='322' y1='50' x2='322' y2='886' stroke='#e3e3e3'/>
+<text x='322' y='901' text-anchor='middle' fill='#666666'>0.2</text>
+<line x1='414' y1='50' x2='414' y2='886' stroke='#e3e3e3'/>
+<text x='414' y='901' text-anchor='middle' fill='#666666'>0.4</text>
+<line x1='506' y1='50' x2='506' y2='886' stroke='#e3e3e3'/>
+<text x='506' y='901' text-anchor='middle' fill='#666666'>0.6</text>
+<line x1='598' y1='50' x2='598' y2='886' stroke='#e3e3e3'/>
+<text x='598' y='901' text-anchor='middle' fill='#666666'>0.8</text>
+<line x1='690' y1='50' x2='690' y2='886' stroke='#e3e3e3'/>
+<text x='690' y='901' text-anchor='middle' fill='#666666'>1</text>
+<text x='460' y='918' text-anchor='middle' fill='#1a1a1a'>share of repetitions</text>
+<text x='222' y='65' text-anchor='end' fill='#1a1a1a'>SIM-01 DST</text>
+<line x1='230' y1='61' x2='235.8' y2='61' stroke='#000000' stroke-width='2'/>
+<circle cx='230' cy='61' r='4' fill='#000000'/>
+<text x='222' y='87' text-anchor='end' fill='#1a1a1a'>SIM-01 WR</text>
+<line x1='230' y1='83' x2='235.8' y2='83' stroke='#D55E00' stroke-width='2'/>
+<circle cx='230' cy='83' r='4' fill='#D55E00'/>
+<text x='222' y='109' text-anchor='end' fill='#1a1a1a'>SIM-02 DST</text>
+<line x1='230' y1='105' x2='235.8' y2='105' stroke='#000000' stroke-width='2'/>
+<circle cx='230' cy='105' r='4' fill='#000000'/>
+<text x='222' y='131' text-anchor='end' fill='#1a1a1a'>SIM-02 WR</text>
+<line x1='230' y1='127' x2='235.8' y2='127' stroke='#D55E00' stroke-width='2'/>
+<circle cx='230' cy='127' r='4' fill='#D55E00'/>
+<text x='222' y='153' text-anchor='end' fill='#1a1a1a'>SIM-03 DST</text>
+<line x1='233.27' y1='149' x2='247.66' y2='149' stroke='#000000' stroke-width='2'/>
+<circle cx='237.68' cy='149' r='4' fill='#000000'/>
+<text x='222' y='175' text-anchor='end' fill='#1a1a1a'>SIM-03 WR</text>
+<line x1='232.39' y1='171' x2='245.55' y2='171' stroke='#D55E00' stroke-width='2'/>
+<circle cx='236.12' cy='171' r='4' fill='#D55E00'/>
+<text x='222' y='197' text-anchor='end' fill='#1a1a1a'>SIM-04 DST</text>
+<line x1='605.45' y1='193' x2='641.56' y2='193' stroke='#000000' stroke-width='2'/>
+<circle cx='625.6' cy='193' r='4' fill='#000000'/>
+<text x='222' y='219' text-anchor='end' fill='#1a1a1a'>SIM-04 WR</text>
+<line x1='577.12' y1='215' x2='618.42' y2='215' stroke='#D55E00' stroke-width='2'/>
+<circle cx='599.52' cy='215' r='4' fill='#D55E00'/>
+<text x='222' y='241' text-anchor='end' fill='#1a1a1a'>SIM-05 DST</text>
+<line x1='270.48' y1='237' x2='304.38' y2='237' stroke='#000000' stroke-width='2'/>
+<circle cx='285.2' cy='237' r='4' fill='#000000'/>
+<text x='222' y='263' text-anchor='end' fill='#1a1a1a'>SIM-05 WR</text>
+<line x1='250.06' y1='259' x2='276.32' y2='259' stroke='#D55E00' stroke-width='2'/>
+<circle cx='260.68' cy='259' r='4' fill='#D55E00'/>
+<text x='222' y='285' text-anchor='end' fill='#1a1a1a'>SIM-06 DST</text>
+<line x1='238.37' y1='281' x2='257.74' y2='281' stroke='#000000' stroke-width='2'/>
+<circle cx='245.32' cy='281' r='4' fill='#000000'/>
+<text x='222' y='307' text-anchor='end' fill='#1a1a1a'>SIM-06 WR</text>
+<line x1='239.48' y1='303' x2='259.67' y2='303' stroke='#D55E00' stroke-width='2'/>
+<circle cx='246.88' cy='303' r='4' fill='#D55E00'/>
+<text x='222' y='329' text-anchor='end' fill='#1a1a1a'>SIM-07 DST</text>
+<line x1='233.27' y1='325' x2='247.66' y2='325' stroke='#000000' stroke-width='2'/>
+<circle cx='237.68' cy='325' r='4' fill='#000000'/>
+<text x='222' y='351' text-anchor='end' fill='#1a1a1a'>SIM-07 WR</text>
+<line x1='231.56' y1='347' x2='243.34' y2='347' stroke='#D55E00' stroke-width='2'/>
+<circle cx='234.6' cy='347' r='4' fill='#D55E00'/>
+<text x='222' y='373' text-anchor='end' fill='#1a1a1a'>SIM-08 DST</text>
+<line x1='230.28' y1='369' x2='238.56' y2='369' stroke='#000000' stroke-width='2'/>
+<circle cx='231.52' cy='369' r='4' fill='#000000'/>
+<text x='222' y='395' text-anchor='end' fill='#1a1a1a'>SIM-08 WR</text>
+<line x1='230.83' y1='391' x2='241.04' y2='391' stroke='#D55E00' stroke-width='2'/>
+<circle cx='233.08' cy='391' r='4' fill='#D55E00'/>
+<text x='222' y='417' text-anchor='end' fill='#1a1a1a'>SIM-09 DST</text>
+<line x1='257.51' y1='413' x2='287.04' y2='413' stroke='#000000' stroke-width='2'/>
+<circle cx='269.88' cy='413' r='4' fill='#000000'/>
+<text x='222' y='439' text-anchor='end' fill='#1a1a1a'>SIM-09 WR</text>
+<line x1='242.88' y1='435' x2='265.33' y2='435' stroke='#D55E00' stroke-width='2'/>
+<circle cx='251.48' cy='435' r='4' fill='#D55E00'/>
+<text x='222' y='461' text-anchor='end' fill='#1a1a1a'>SIM-10 DST</text>
+<line x1='230.28' y1='457' x2='238.56' y2='457' stroke='#000000' stroke-width='2'/>
+<circle cx='231.52' cy='457' r='4' fill='#000000'/>
+<text x='222' y='483' text-anchor='end' fill='#1a1a1a'>SIM-10 WR</text>
+<line x1='230' y1='479' x2='235.8' y2='479' stroke='#D55E00' stroke-width='2'/>
+<circle cx='230' cy='479' r='4' fill='#D55E00'/>
+<text x='222' y='505' text-anchor='end' fill='#1a1a1a'>SIM-11 DST</text>
+<line x1='239.48' y1='501' x2='259.67' y2='501' stroke='#000000' stroke-width='2'/>
+<circle cx='246.88' cy='501' r='4' fill='#000000'/>
+<text x='222' y='527' text-anchor='end' fill='#1a1a1a'>SIM-11 WR</text>
+<line x1='237.31' y1='523' x2='255.76' y2='523' stroke='#D55E00' stroke-width='2'/>
+<circle cx='243.8' cy='523' r='4' fill='#D55E00'/>
+<text x='222' y='549' text-anchor='end' fill='#1a1a1a'>SIM-12 DST</text>
+<line x1='233.27' y1='545' x2='247.66' y2='545' stroke='#000000' stroke-width='2'/>
+<circle cx='237.68' cy='545' r='4' fill='#000000'/>
+<text x='222' y='571' text-anchor='end' fill='#1a1a1a'>SIM-12 WR</text>
+<line x1='237.31' y1='567' x2='255.76' y2='567' stroke='#D55E00' stroke-width='2'/>
+<circle cx='243.8' cy='567' r='4' fill='#D55E00'/>
+<text x='222' y='593' text-anchor='end' fill='#1a1a1a'>SIM-13a DST</text>
+<line x1='612.21' y1='589' x2='646.9' y2='589' stroke='#000000' stroke-width='2'/>
+<circle cx='631.72' cy='589' r='4' fill='#000000'/>
+<text x='222' y='615' text-anchor='end' fill='#1a1a1a'>SIM-13a WR</text>
+<line x1='602.05' y1='611' x2='638.89' y2='611' stroke='#D55E00' stroke-width='2'/>
+<circle cx='622.52' cy='611' r='4' fill='#D55E00'/>
+<text x='222' y='637' text-anchor='end' fill='#1a1a1a'>SIM-13b DST</text>
+<line x1='625.97' y1='633' x2='657.39' y2='633' stroke='#000000' stroke-width='2'/>
+<circle cx='644' cy='633' r='4' fill='#000000'/>
+<text x='222' y='659' text-anchor='end' fill='#1a1a1a'>SIM-13b WR</text>
+<line x1='602.05' y1='655' x2='638.89' y2='655' stroke='#D55E00' stroke-width='2'/>
+<circle cx='622.52' cy='655' r='4' fill='#D55E00'/>
+<text x='222' y='681' text-anchor='end' fill='#1a1a1a'>SIM-14a DST</text>
+<line x1='567.32' y1='677' x2='610.05' y2='677' stroke='#000000' stroke-width='2'/>
+<circle cx='590.32' cy='677' r='4' fill='#000000'/>
+<text x='222' y='703' text-anchor='end' fill='#1a1a1a'>SIM-14a WR</text>
+<line x1='572.19' y1='699' x2='614.24' y2='699' stroke='#D55E00' stroke-width='2'/>
+<circle cx='594.92' cy='699' r='4' fill='#D55E00'/>
+<text x='222' y='725' text-anchor='end' fill='#1a1a1a'>SIM-14b DST</text>
+<line x1='593.68' y1='721' x2='632.13' y2='721' stroke='#000000' stroke-width='2'/>
+<circle cx='614.88' cy='721' r='4' fill='#000000'/>
+<text x='222' y='747' text-anchor='end' fill='#1a1a1a'>SIM-14b WR</text>
+<line x1='527.11' y1='743' x2='574.59' y2='743' stroke='#D55E00' stroke-width='2'/>
+<circle cx='552' cy='743' r='4' fill='#D55E00'/>
+<text x='222' y='769' text-anchor='end' fill='#1a1a1a'>SIM-16 DST</text>
+<line x1='230' y1='765' x2='235.8' y2='765' stroke='#000000' stroke-width='2'/>
+<circle cx='230' cy='765' r='4' fill='#000000'/>
+<text x='222' y='791' text-anchor='end' fill='#1a1a1a'>SIM-16 K</text>
+<line x1='230' y1='787' x2='235.8' y2='787' stroke='#E69F00' stroke-width='2'/>
+<circle cx='230' cy='787' r='4' fill='#E69F00'/>
+<text x='222' y='813' text-anchor='end' fill='#1a1a1a'>SIM-16 QB</text>
+<line x1='230' y1='809' x2='235.8' y2='809' stroke='#0072B2' stroke-width='2'/>
+<circle cx='230' cy='809' r='4' fill='#0072B2'/>
+<text x='222' y='835' text-anchor='end' fill='#1a1a1a'>SIM-16 RB</text>
+<line x1='230' y1='831' x2='235.8' y2='831' stroke='#009E73' stroke-width='2'/>
+<circle cx='230' cy='831' r='4' fill='#009E73'/>
+<text x='222' y='857' text-anchor='end' fill='#1a1a1a'>SIM-16 TE</text>
+<line x1='230' y1='853' x2='235.8' y2='853' stroke='#CC79A7' stroke-width='2'/>
+<circle cx='230' cy='853' r='4' fill='#CC79A7'/>
+<text x='222' y='879' text-anchor='end' fill='#1a1a1a'>SIM-16 WR</text>
+<line x1='230' y1='875' x2='235.8' y2='875' stroke='#D55E00' stroke-width='2'/>
+<circle cx='230' cy='875' r='4' fill='#D55E00'/>
+<text x='16' y='954' fill='#666666'>Null scenarios should sit near 0; strong signals near 1.</text>
+</svg>

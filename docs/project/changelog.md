@@ -1,5 +1,18 @@
 # Development Changelog
 
+## 2026-11-25 — M3-3 final directive: AUD-06 simulation suite and AUD-07 thresholds (TASK-20261125-001)
+
+- **PR #19 merged** (`5469c59`).
+- **AUD-06** ([report](../research/dvp/SIMULATION_AUD06.md), [receipt](../research/dvp/simulation-v1.json)):
+  - `config/dvp/simulation-v1.json` was declared first.
+  - `arbit_model.dvp.simulate` is the generator; `scripts/model/dvp_simulate.py` and `dvp_simulate_summary.py` run and summarize.
+  - 33,100 repetitions, none failed.
+  - Acceptance: A1, A2, A4–A7 pass; A3 passes for D/ST and is inconclusive for WR; A8 fails (league bootstrap coverage).
+- **AUD-07** ([report](../research/dvp/THRESHOLDS_AUD07.md), [receipt](../research/dvp/threshold-sensitivity-v1.json)):
+  - the derivation is reproduced and qualified, with a descriptive grid;
+  - the 1.8-point wording is corrected in PLAYER_LEVEL_REPORT.md;
+  - the frozen config is unchanged.
+
 ## 2026-11-25 — M3-3 final directive, Phase B corrections (TASK-20261124-011)
 
 - **PR #18 merged** (`b6c25e9`). The prospective timer was installed from main and verified.

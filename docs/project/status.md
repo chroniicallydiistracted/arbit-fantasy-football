@@ -44,6 +44,15 @@
   - **Feasibility and collisions:** every B06 streaming pick of an unowned unit collides.
   - **Pinned inputs.**
   - **C05L-2026-EXP v2:** inconclusive, as before.
+- **Phase B merged** (PR #19, `5469c59`).
+- **AUD-06 and AUD-07 (TASK-20261125-001, ENG-069):**
+  - **The simulation suite** (33,100 repetitions on Arbit's own procedure):
+    - no false promotion without a signal;
+    - D/ST-strength signals promoted 80–90%;
+    - moderate signals, like the real QB, RB and WR gains, stay below the 1% minimum;
+    - few-block intervals undercover.
+  - **The thresholds:** 1.8 points is a practical heuristic (1.82 reproduced). D/ST B06 stays PROMISING across a reasonable grid.
+  - **No earlier conclusion changes.**
 - **Next:** Phase B corrections (PB-AUD-01 to -06, -08), AUD-06, AUD-07, the eligibility registry, then the comprehensive audit.
 
 **Owner audit Phase B (2026-11-25, TASK-20261124-009; [requirements](../research/dvp/AUDIT_REMEDIATION_AND_COMPLETION_REQUIREMENTS_PHASE-B.md), OWN-076, ENG-066):**

@@ -1,0 +1,46 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='720' height='328' viewBox='0 0 720 328' font-family='Helvetica, Arial, sans-serif' font-size='12'>
+<title>walkforward.metrics 95% interval coverage</title>
+<rect width='720' height='328' fill='#ffffff'/>
+<text x='16' y='24' font-size='15' font-weight='bold' fill='#1a1a1a'>walkforward.metrics 95% interval coverage</text>
+<line x1='230' y1='50' x2='230' y2='248' stroke='#e3e3e3'/>
+<text x='230' y='263' text-anchor='middle' fill='#666666'>0.5</text>
+<line x1='322' y1='50' x2='322' y2='248' stroke='#e3e3e3'/>
+<text x='322' y='263' text-anchor='middle' fill='#666666'>0.6</text>
+<line x1='414' y1='50' x2='414' y2='248' stroke='#e3e3e3'/>
+<text x='414' y='263' text-anchor='middle' fill='#666666'>0.7</text>
+<line x1='506' y1='50' x2='506' y2='248' stroke='#e3e3e3'/>
+<text x='506' y='263' text-anchor='middle' fill='#666666'>0.8</text>
+<line x1='598' y1='50' x2='598' y2='248' stroke='#e3e3e3'/>
+<text x='598' y='263' text-anchor='middle' fill='#666666'>0.9</text>
+<line x1='690' y1='50' x2='690' y2='248' stroke='#e3e3e3'/>
+<text x='690' y='263' text-anchor='middle' fill='#666666'>1</text>
+<text x='460' y='280' text-anchor='middle' fill='#1a1a1a'>coverage</text>
+<text x='222' y='65' text-anchor='end' fill='#1a1a1a'>independent</text>
+<line x1='611.52' y1='61' x2='640.32' y2='61' stroke='#000000' stroke-width='2'/>
+<circle cx='627.44' cy='61' r='4' fill='#000000'/>
+<text x='222' y='87' text-anchor='end' fill='#1a1a1a'>season3</text>
+<line x1='419.34' y1='83' x2='469.66' y2='83' stroke='#000000' stroke-width='2'/>
+<circle cx='445.28' cy='83' r='4' fill='#000000'/>
+<text x='222' y='109' text-anchor='end' fill='#1a1a1a'>season5</text>
+<line x1='545.01' y1='105' x2='584.02' y2='105' stroke='#000000' stroke-width='2'/>
+<circle cx='565.8' cy='105' r='4' fill='#000000'/>
+<text x='222' y='131' text-anchor='end' fill='#1a1a1a'>season7</text>
+<line x1='583.46' y1='127' x2='617.04' y2='127' stroke='#000000' stroke-width='2'/>
+<circle cx='601.68' cy='127' r='4' fill='#000000'/>
+<text x='222' y='153' text-anchor='end' fill='#1a1a1a'>sharedGame</text>
+<line x1='599.38' y1='149' x2='630.48' y2='149' stroke='#000000' stroke-width='2'/>
+<circle cx='616.4' cy='149' r='4' fill='#000000'/>
+<text x='222' y='175' text-anchor='end' fill='#1a1a1a'>temporalAR</text>
+<line x1='589.44' y1='171' x2='622.1' y2='171' stroke='#000000' stroke-width='2'/>
+<circle cx='607.2' cy='171' r='4' fill='#000000'/>
+<text x='222' y='197' text-anchor='end' fill='#1a1a1a'>unequalExposure</text>
+<line x1='607.48' y1='193' x2='637.01' y2='193' stroke='#000000' stroke-width='2'/>
+<circle cx='623.76' cy='193' r='4' fill='#000000'/>
+<text x='222' y='219' text-anchor='end' fill='#1a1a1a'>weekShock</text>
+<line x1='611.52' y1='215' x2='640.32' y2='215' stroke='#000000' stroke-width='2'/>
+<circle cx='627.44' cy='215' r='4' fill='#000000'/>
+<text x='222' y='241' text-anchor='end' fill='#1a1a1a'>weekShockRowBlocks</text>
+<line x1='638.2' y1='237' x2='661.3' y2='237' stroke='#000000' stroke-width='2'/>
+<circle cx='651.36' cy='237' r='4' fill='#000000'/>
+<text x='16' y='316' fill='#666666'>Nominal 0.95.</text>
+</svg>

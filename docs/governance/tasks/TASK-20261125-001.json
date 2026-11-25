@@ -4,7 +4,7 @@
   "title": "M3-3 final directive: AUD-06 simulation suite and AUD-07 threshold interpretation",
   "objective": "Implement and execute the predeclared statistical simulation suite (SIM-01 to SIM-18) exercising Arbit's actual DvP estimators and the complete development-selection-validation-decision procedure against known data-generating processes, with uncertainty validation; reproduce and correct the interpretation of the 1.8-point Phase C threshold and run a separately versioned descriptive threshold sensitivity, without changing any frozen threshold, method or the 2026 confirmation.",
   "status": "active",
-  "phase": "review",
+  "phase": "implement",
   "change_class": "model",
   "requirements": [
     "MD-002",
@@ -39,21 +39,33 @@
   ],
   "deleted_files": [],
   "created_at": "2026-11-25T07:16:35Z",
-  "updated_at": "2026-11-25T07:29:10Z",
+  "updated_at": "2026-11-25T08:40:56Z",
   "baseline": "5469c590585fe9760ff3856f2d5d6f1ada13b0bb",
-  "next_action": "Read affected requirements/source and record Review evidence",
+  "next_action": "Record implement evidence",
   "sections": {
     "review": {
-      "summary": "",
-      "files": []
+      "summary": "AUD-06 had no simulation suite; AUD-07's derivation (config/dvp/sitstart.json practicalMinimumDerivation) uses 0.5+asin(rho)/pi with D/ST B00's development Spearman 0.1448. Read the actual estimator, selection and decision code to exercise it unchanged: walkforward (prepare, fit_fold, walk, metrics, decide), shadow (scheduled_targets, walk_targets with extra hooks, forecast_only, attach_labels), explore (make_extra, make_opportunity_extra), lab (adjust, groups, reml_components, bootstrap_components), reliability (halves, split_half), opportunity.reliability, the frozen dvp.py _select, decisions (units, pairs, metrics, decide), league (decide, summarize). Pilot: about 5.7 s per full-procedure repetition on 8 workers.",
+      "files": [
+        "config/dvp/sitstart.json",
+        "libs/arbit-model/src/arbit_model/dvp/walkforward.py",
+        "scripts/model/dvp.py"
+      ]
     },
     "plan": {
-      "summary": "",
-      "files": []
+      "summary": "1) Declare and push config/dvp/simulation-v1.json (scenarios SIM-01..18, DGP, truth, reps, streams, measurements, acceptance A1-A8, inconclusive rule, budget) and config/dvp/threshold-sensitivity-v1.json before running. 2) Generator arbit_model.dvp.simulate in the real schemas with tests. 3) Runner (E1, E2, E3, U; resumable; spawned workers) and summarizer (acceptance with Monte Carlo intervals, plots). 4) Pilot against the budget, then the full suite. 5) AUD-07 script: reproduce the derivation, Pearson/Spearman, non-uniqueness on the actual forecasts, the descriptive grid from committed receipts. 6) Reports, register closure, records.",
+      "files": [
+        "config/dvp/simulation-v1.json",
+        "config/dvp/threshold-sensitivity-v1.json"
+      ]
     },
     "implementation": {
-      "summary": "",
-      "files": []
+      "summary": "simulate.py (Scenario, SCENARIOS, generate with traits, persistence, abrupt/drift, exposure, MCAR/MNAR, shocks, heavy tails, tiers, volume/efficiency channels, oracle; known_difference); dvp_simulate.py (E1 estimator recovery, E2 complete procedure with every frozen and exploratory variant and Phase C, E3 league with all-week, changed-week and naive bootstraps and a separate truth, U bootstrap coverage; SeedSequence streams; resumable JSONL; frozen _select from git); dvp_simulate_summary.py (measurements, acceptance A1-A8 with the declared two-sided A8 check plus a labelled one-sided supplement, plots via arbit_model.dvp.svg); dvp_thresholds.py (D1, D2). Full suite ran at cc25e2c (33,100 repetitions, 0 failed); summary at 901da3d; thresholds at e65dcea.",
+      "files": [
+        "libs/arbit-model/src/arbit_model/dvp/simulate.py",
+        "scripts/model/dvp_simulate.py",
+        "scripts/model/dvp_simulate_summary.py",
+        "scripts/model/dvp_thresholds.py"
+      ]
     },
     "validation": {
       "summary": "",
